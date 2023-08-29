@@ -1,0 +1,139 @@
+{% extends 'base.html' %}
+
+{% block head %}
+<title>LIGYSIS</title>
+
+<script src="/static/js/jmol/jsmol/JSmol.min.js"></script>
+<script src="/static/js/jmol/jsmol/js/Jmol2.js"></script>
+<script>jmolInitialize("/static/js/jmol/jsmol");</script>
+<script src="https://www.kryogenix.org/code/browser/sorttable/sorttable.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+
+<link rel="stylesheet" href="/static/css/styles.css">
+{% endblock%}
+
+{% block body %}
+<h1 style="text-align: center">LIGYSIS WEB SERVER</h1>
+
+
+<!--
+<script>
+jmolApplet(800, "script /static/scripts/load.txt", "0");
+
+
+
+
+</script>
+
+<script>
+    jmolScript()
+</script>
+
+<script language="JavaScript" type="text/javascript">
+jmolRadio('restrict protein; cartoons; color structure;', "", false );
+</script>
+-->
+
+<div>
+    <table class="sortable hoverTable">
+        <thead>
+            <tr class="table__header">
+                {% for header in headings %}
+                <th class="table__cell">{{ header }}</th>
+                {% endfor %}
+            </tr>
+        </thead>
+        <tbody>
+            {% for i in range(data["lab"]|length) %}
+                <tr class="table__row" style="color: {{ colors[loop.index0] }}" id="{{ data['lab'][loop.index0] }}">
+                    {% for k in data.keys() %}
+                        <td class="table__cell">{{ data[k][i] }}</td>
+                    {% endfor %}
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+
+
+
+
+<div>
+    <label for="xAxisTitle">Select X Axis:</label>
+    <select id="xAxisTitle">
+        <option value="none" selected disabled hidden>Select an Option</option>
+        {% for header in headings[1:] %}
+        <option value="{{ header }}">{{ header }}</option>
+        {% endfor %}
+    </select>
+</div>
+
+<div>
+    <label for="yAxisTitle">Select Y Axis:</label>
+    <select id="yAxisTitle">
+        <option value="none" selected disabled hidden>Select an Option</option>
+        {% for header in headings[1:] %}
+        <option value="{{ header }}">{{ header }}</option>
+        {% endfor %}
+    </select>
+</div>
+
+<div>
+    <canvas id="chartCanvas" width="600" height="400"></canvas>
+    <script>
+        const chartX = "an_shenk"
+        const chartY = "MES"
+        const chartLab = "lab"
+        const chartData = {{ data | tojson }}
+        const chartColors = {{ colors | tojson }}
+        const chartCtx = document.getElementById("chartCanvas").getContext("2d")
+    </script>
+    <script src="/static/js/binding_sites_chart.js"></script>
+</div>
+
+<div>
+    <script>
+        myChart.canvas.addEventListener("click", function (event) {
+            var activePoints = myChart.getElementsAtEventForMode(event, 'point', myChart.options);
+            if (activePoints.length > 0) {
+                var firstPoint = activePoints[0];
+                var label = chartData.lab[firstPoint.index];
+                if (bs_ress_table.style.display === 'none') {
+                    bs_ress_table.style.display = 'table';
+                } else {
+                    bs_ress_table.style.display = 'none';
+                }
+                
+            } else {
+                console.log("NO bs selected")
+            }
+        });
+    </script>
+</div>
+
+
+
+<div>
+    <table class="sortable hoverTable" id="bs_ress_table">
+        <thead>
+            <tr class="table__header">
+                {% for header in cc %}
+                <th class="table__cell">{{ header }}</th>
+                {% endfor %}
+            </tr>
+        </thead>
+        <tbody>
+            {% for i in range(data2["UniProt_ResNum"]|length) %}
+                <tr class="table__row" style="color: {{ colors[0] }}" id="{{ data2['UniProt_ResNum'][loop.index0] }}">
+                    {% for k in data2.keys() %}
+                        <td class="table__cell">{{ data2[k][i] }}</td>
+                    {% endfor %}
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+
+
+{% endblock%}

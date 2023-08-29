@@ -1,0 +1,17 @@
+{% extends 'base.html' %}
+
+{% block head %}
+<title>LIGYSIS</title>
+{% endblock%}
+
+{% block body %}
+<h1 style="text-align: center">LIGYSIS WEB SERVER</h1>
+
+<div class="form">
+    <form action="/" method="POST">
+        <input type="text"  name="content" id="content">
+        <input type="submit" value="Visualise protein!">
+    </form>
+</div>
+
+{% endblock%}

@@ -1,0 +1,52 @@
+{% extends 'base.html' %}
+
+{% block head %}
+<title>LIGYSIS</title>
+{% endblock%}
+
+{% block body %}
+<h1 style="text-align: center">LIGYSIS WEB SERVER</h1>
+
+<style>
+    #app {
+        position: absolute;
+        left: 100px;
+        top: 100px;
+        width: 1600px;
+        height: 800px;
+    }
+</style>
+<!-- 
+    molstar.js and .css are obtained from
+    - the folder build/viewer after cloning and building the molstar package 
+    - from the build/viewer folder in the Mol* NPM package
+-->
+<link rel="stylesheet" type="text/css" href="/static/css/molstar.css" />
+<script type="text/javascript" src="/static/js/molstar.js"></script>
+
+<div id="app"></div>
+
+<script type="text/javascript">
+    molstar.Viewer.create('app', {
+        layoutIsExpanded: false,
+        layoutShowControls: false,
+        layoutShowRemoteState: false,
+        layoutShowSequence: false,
+        layoutShowLog: false,
+        layoutShowLeftPanel: true,
+
+        viewportShowExpand: true,
+        viewportShowSelectionMode: false,
+        viewportShowAnimation: false,
+
+        pdbProvider: 'rcsb',
+        emdbProvider: 'rcsb',
+    }).then(viewer => {
+        viewer.loadStructureFromUrl('/static/data/{{task.content}}', format='pdb');
+        <!-- viewer.loadPdb('7bv2'); THIS LINE IS COMMMENTED-->
+        <!-- viewer.loadEmdb('EMD-30210', { detail: 6 });  THIS LINE IS COMMMENTED-->
+
+    });
+</script>
+
+{% endblock%}

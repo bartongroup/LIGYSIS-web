@@ -1,0 +1,38 @@
+.table {
+    border-spacing: 0;
+    margin: 1rem;
+    background-color: #f5f5f5;
+}
+
+.sorttable {
+    border-spacing: 0;
+    margin: 1rem;
+    background-color: #f5f5f5;
+}
+
+.table__header {
+    text-align: center;
+}
+
+.table__cell {
+    padding: 8px;
+}
+
+th, td {
+    border: 1px solid black;
+    text-align: center;
+}
+
+tr:hover {
+    background-color: #ffff99;
+    font-weight: bold;
+}
+
+.highlighted-row {
+    background-color: #ffff99; /* or any highlighting style you prefer */
+    font-weight: bold;
+}
+
+#bs_ress_table {
+    display: none; /* Start with table hidden */
+}
