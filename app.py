@@ -3,7 +3,7 @@
 import pickle
 import pandas as pd
 
-from flask import Flask, render_template, url_for, request, redirect
+from flask import Flask, render_template, url_for, request, redirect, jsonify
 
 ### FUNCTIONS ###
 
@@ -65,6 +65,27 @@ def results(prot_id):
     data2 = prot_ress.to_dict(orient="list")
     
     return render_template('structure.html', data = data1, headings = headings, data2 = data2, cc = cc, colors = colors)
+
+
+
+@app.route('/get_table', methods=['POST'])
+def get_table():
+
+    ids = ['P78540_1_0', 'P78540_1_1', 'P78540_1_2', 'P78540_1_3']
+
+    data_point_index = request.json.get('index', None)
+
+    lab = ids[data_point_index]
+
+    prot_ress = bss_ress.query('bs_id == @lab')[cc]
+
+    data2 = prot_ress.to_dict(orient="list")
+
+    # Your logic here to select the right DataFrame based on data_point_index
+
+    return jsonify(data2)
+
+
 
 ### LAUNCHING SERVER ###
 

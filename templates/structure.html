@@ -87,12 +87,13 @@ jmolRadio('restrict protein; cartoons; color structure;', "", false );
         const chartLab = "lab"
         const chartData = {{ data | tojson }}
         const chartColors = {{ colors | tojson }}
+        const cc = {{ cc | tojson }}
         const chartCtx = document.getElementById("chartCanvas").getContext("2d")
     </script>
     <script src="/static/js/binding_sites_chart.js"></script>
 </div>
 
-<div>
+<!-- <div>
     <script>
         myChart.canvas.addEventListener("click", function (event) {
             var activePoints = myChart.getElementsAtEventForMode(event, 'point', myChart.options);
@@ -110,9 +111,11 @@ jmolRadio('restrict protein; cartoons; color structure;', "", false );
             }
         });
     </script>
+</div> -->
+
+<div id="table-container">
+    <!-- Table will be inserted here -->
 </div>
-
-
 
 <div>
     <table class="sortable hoverTable" id="bs_ress_table">
