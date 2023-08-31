@@ -23,7 +23,7 @@ th, td {
     text-align: center;
 }
 
-tr:hover {
+tbody tr:hover {
     background-color: #ffff99;
     font-weight: bold;
 }
@@ -36,3 +36,45 @@ tr:hover {
 #bs_ress_table {
     display: none; /* Start with table hidden */
 }
+
+#chart-container {
+    position: relative;
+}
+
+.axis-dropdown {
+    position: absolute;
+    z-index: 2;  /* Higher than the chart canvas */
+}
+
+.x-axis-dropdown {
+    left: 17%;  /* Approximate center */
+    bottom: 0;  /* At the bottom of the container */
+    transform: translateX(-50%);  /* Centering adjustment */
+}
+
+.y-axis-dropdown {
+    left: 0;  /* At the left edge of the container */
+    top: 56%;  /* Approximate middle */
+    transform: translateY(-50%) rotate(-90deg);  /* Centering adjustment and rotation */
+    transform-origin: left top;  /* Sets the origin for the rotation */
+}
+
+.axis-dropdown2 {
+    position: absolute;
+    z-index: 2;  /* Higher than the chart canvas */
+}
+
+.x-axis-dropdown2 {
+    left: 34%;  /* Approximate center */
+    bottom: 0;  /* At the bottom of the container */
+    transform: translateX(-50%);  /* Centering adjustment */
+}
+
+.y-axis-dropdown2 {
+    left: 0;  /* At the left edge of the container */
+    top: 100%;  /* Approximate middle */
+    transform: translateY(-50%) rotate(-90deg);  /* Centering adjustment and rotation */
+    transform-origin: left top;  /* Sets the origin for the rotation */
+}
+
+

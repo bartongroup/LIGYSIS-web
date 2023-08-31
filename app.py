@@ -71,19 +71,15 @@ def results(prot_id):
 @app.route('/get_table', methods=['POST'])
 def get_table():
 
-    ids = ['P78540_1_0', 'P78540_1_1', 'P78540_1_2', 'P78540_1_3']
-
-    data_point_index = request.json.get('index', None)
-
-    lab = ids[data_point_index]
+    lab = request.json.get('label', None)
 
     prot_ress = bss_ress.query('bs_id == @lab')[cc]
 
-    data2 = prot_ress.to_dict(orient="list")
+    site_data = prot_ress.to_dict(orient="list")
 
     # Your logic here to select the right DataFrame based on data_point_index
 
-    return jsonify(data2)
+    return jsonify(site_data)
 
 
 

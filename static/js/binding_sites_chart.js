@@ -1,3 +1,9 @@
+let myChart;
+let newChart;
+
+const chartCtx = document.getElementById("chartCanvas").getContext("2d");
+const newChartCtx = document.getElementById('newChartCanvas').getContext('2d');
+
 const chartConfig = {
     type: "scatter",
     data: {
@@ -17,8 +23,11 @@ const chartConfig = {
     options: {
         onClick: function(event, array) {
             if (array.length > 0) {
+
                 // Get the index of the clicked data point
-                var index = array[0].index;
+                let index = array[0].index;
+                let pointLabel = chartData[chartLab][index];
+                let pointColor = chartColors[index];
 
                 $('#bs_ress_table').show();
     
@@ -27,33 +36,135 @@ const chartConfig = {
                     type: 'POST',
                     url: '/get_table',
                     contentType: 'application/json;charset=UTF-8',
-                    data: JSON.stringify({'index': index}),
+                    data: JSON.stringify({'label': pointLabel}),
                     success: function(response) {
-                        var keyOrder = cc;
+                        const keyOrder = cc;
 
-                        console.log("Server response: ", response);  // Debug line
                         // Get your table and tbody element
-                        var tableBody = $('#bs_ress_table tbody');
+                        let tableBody = $('#bs_ress_table tbody'); 
     
                         // Empty the current tbody
                         tableBody.empty();
     
                         // Iterate over the new data and fill the tbody
                         for (var i = 0; i < response[keyOrder[0]].length; i++) {
-                            var newRow = $('<tr class="table__row">');
+                            let newRow = $('<tr class="table__row">');
+
+                            // Assign ID dynamically
+                            newRow.attr('id', response["UniProt_ResNum"][i]);
             
                             // Second loop to iterate through keys (columns)
                             $.each(keyOrder, function(j, key) {
                                 newRow.append('<td class="table__cell">' + response[key][i] + '</td>');
                             });
+
+                            // Set the background color of the new row
+                            newRow.css('color', pointColor);
             
                             tableBody.append(newRow);
                         }
+                        // Data for the new chart
+                        let newChartData = response;
+                        let newChartConfig = {
+                            type: "scatter",
+                            data: {
+                                labels: newChartData[newChartX],
+                                datasets: [
+                                    {
+                                        label: "Binding residues",
+                                        radius: 8,
+                                        data: newChartData[newChartY],
+                                        backgroundColor: pointColor,
+                                        borderColor: "black",
+                                        borderWidth: 2,
+                                        lineTension: 0.1
+                                    }
+                                ]
+                            },
+                            options: {
+                                onHover: function(event, chartElement) {
+                                    if (chartElement.length > 0) {
+                                        let firstPoint = chartElement[0];
+                                        let pointLabel = newChartData[newChartLab][firstPoint.index];
+                                        highlightTableRow(pointLabel);
+                                    } else {
+                                        clearHighlightedRow();
+                                    }
+                                },
+                                responsive: false,
+                                scales: {
+                                    x: {
+                                        title: {
+                                            display: true,
+                                            align: "center",
+                                            text: newChartX,
+                                        },
+                                    },
+                                    y: {
+                                        title: {
+                                            display: true,
+                                            align: "center",
+                                            text: newChartY,
+                                        },
+                                    }
+                                },
+                                plugins: {
+                                    tooltip: {
+                                        callbacks: {
+                                            title: function(context) {
+                                                let dataIndex = context[0].dataIndex; // Assuming you are only hovering over a single point
+                                                return newChartData[newChartLab][dataIndex]; // Use the 'UniProt_ResNum' property from your data
+                                            },
+                                        }
+                                    }
+                                }
+                            },
+                        };
+                        
+                        if (newChart) {
+                            newChart.destroy();
+                        }
+
+                        newChart = new Chart(newChartCtx, newChartConfig);
+
+                        const xAxisTitleDropdown = document.getElementById("xAxisTitle2");
+                        const yAxisTitleDropdown = document.getElementById("yAxisTitle2");
+                    
+                        xAxisTitleDropdown.value = newChart.options.scales.x.title.text;
+                        yAxisTitleDropdown.value = newChart.options.scales.y.title.text;
+                    
+                        let selectedXAxisTitle = xAxisTitleDropdown.value;
+                        let selectedYAxisTitle = yAxisTitleDropdown.value;
+                    
+                        xAxisTitleDropdown.addEventListener("change", function () {
+                            selectedXAxisTitle = xAxisTitleDropdown.value;
+                            newChart.options.scales.x.title.text = selectedXAxisTitle;
+                            newChart.data.labels = newChartData[selectedXAxisTitle];
+                            newChart.update();
+                        });
+                    
+                        yAxisTitleDropdown.addEventListener("change", function () {
+                            selectedYAxisTitle = yAxisTitleDropdown.value;
+                            newChart.data.datasets[0].data = newChartData[selectedYAxisTitle];
+                            newChart.options.scales.y.title.text = selectedYAxisTitle;
+                            newChart.update();
+                        });
+
+
                     }
                 });
             } else {
                 // Hide the table if no data point is clicked
                 $('#bs_ress_table').hide(); // or use .css("display", "none") to hide it
+            }
+        },
+        onHover: function(event, chartElement) {
+            if (chartElement.length > 0) {
+                let firstPoint = chartElement[0];
+                let pointLabel = chartData[chartLab][firstPoint.index];
+                highlightTableRow(pointLabel);
+            } else {
+                clearHighlightedRow();
             }
         },
         responsive: false,
@@ -62,28 +173,23 @@ const chartConfig = {
                 title: {
                     display: true,
                     align: "center",
-                    text: "Nshenkin",
+                    text: chartX,
                 },
-                <!-- suggestedMin: 0, -->
-                <!-- suggestedMax: 100, -->
             },
             y: {
                 title: {
                     display: true,
                     align: "center",
-                    text: "MES",
+                    text: chartY,
                 },
-                <!-- type:"logarithmic", -->
-                <!-- suggestedMin: 0.2, -->
-                <!-- suggestedMax: 5, -->
             }
         },
         plugins: {
             tooltip: {
                 callbacks: {
                     title: function(context) {
-                        const dataIndex = context[0].dataIndex; // Assuming you are only hovering over a single point
-                        return chartData.lab[dataIndex]; // Use the 'lab' property from your data
+                        let dataIndex = context[0].dataIndex; // Assuming you are only hovering over a single point
+                        return chartData[chartLab][dataIndex]; // Use the 'lab' property from your data
                     },
                 }
             }
@@ -91,11 +197,17 @@ const chartConfig = {
     }
 };
 
-const myChart = new Chart(chartCtx, chartConfig);
+myChart = new Chart(chartCtx, chartConfig);
+
+// THIS IS THE EVENT LISTENER THAT CHANGES THE AXES OF THE BINDING SITES PLOTS ACCORDING TO DROPDOWNS
 
 document.addEventListener("DOMContentLoaded", function () {
     const xAxisTitleDropdown = document.getElementById("xAxisTitle");
     const yAxisTitleDropdown = document.getElementById("yAxisTitle");
+
+    xAxisTitleDropdown.value = myChart.options.scales.x.title.text;
+    yAxisTitleDropdown.value = myChart.options.scales.y.title.text;
+
     let selectedXAxisTitle = xAxisTitleDropdown.value;
     let selectedYAxisTitle = yAxisTitleDropdown.value;
 
@@ -115,21 +227,8 @@ document.addEventListener("DOMContentLoaded", function () {
     
 });
 
-myChart.canvas.addEventListener("mousemove", function (event) {
-    var activePoints = myChart.getElementsAtEventForMode(event, 'point', myChart.options);
-    if (activePoints.length > 0) {
-        var firstPoint = activePoints[0];
-        var label = chartData.lab[firstPoint.index];
-        var tooltipTitle = label
-        highlightTableRow(tooltipTitle);
-    } else {
-        clearHighlightedRow();
-    }
-});
-
-function highlightTableRow(tooltipTitle) {
-    var rowId = tooltipTitle; // Assuming row ID matches the tooltip title
-    var row = document.getElementById(rowId);
+function highlightTableRow(pointLabel) {
+    var row = document.getElementById(pointLabel);
     if (row) {
         row.classList.add("highlighted-row");
     }
@@ -141,4 +240,5 @@ function clearHighlightedRow() {
         highlightedRow.classList.remove("highlighted-row");
     }
 }
+
 

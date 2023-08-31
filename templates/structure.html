@@ -1,6 +1,7 @@
 {% extends 'base.html' %}
 
 {% block head %}
+
 <title>LIGYSIS results</title>
 
 <script src="/static/js/jmol/jsmol/JSmol.min.js"></script>
@@ -9,31 +10,16 @@
 <script src="https://www.kryogenix.org/code/browser/sorttable/sorttable.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
-
 <link rel="stylesheet" href="/static/css/styles.css">
+
 {% endblock %}
 
 {% block body %}
 <h1 style="text-align: center">LIGYSIS WEB SERVER</h1>
 
-
-<!--
-<script>
+<!-- <script>
 jmolApplet(800, "script /static/scripts/load.txt", "0");
-
-
-
-
-</script>
-
-<script>
-    jmolScript()
-</script>
-
-<script language="JavaScript" type="text/javascript">
-jmolRadio('restrict protein; cartoons; color structure;', "", false );
-</script>
--->
+</script> -->
 
 <div>
     <table class="sortable hoverTable">
@@ -56,66 +42,72 @@ jmolRadio('restrict protein; cartoons; color structure;', "", false );
     </table>
 </div>
 
+<br/>
+<br/>
+<br/>
+<br/>
+<br/>
+<br/>
+<br/>
+<br/>
+<br/>
+<br/>
 
-
-
-<div>
-    <label for="xAxisTitle">Select X Axis:</label>
-    <select id="xAxisTitle">
-        <option value="none" selected disabled hidden>Select an Option</option>
-        {% for header in headings[1:] %}
-        <option value="{{ header }}">{{ header }}</option>
-        {% endfor %}
-    </select>
-</div>
-
-<div>
-    <label for="yAxisTitle">Select Y Axis:</label>
-    <select id="yAxisTitle">
-        <option value="none" selected disabled hidden>Select an Option</option>
-        {% for header in headings[1:] %}
-        <option value="{{ header }}">{{ header }}</option>
-        {% endfor %}
-    </select>
-</div>
-
-<div>
+<div id="chart-container" style="position: relative;">
     <canvas id="chartCanvas" width="600" height="400"></canvas>
-    <script>
+    <select id="xAxisTitle" class="axis-dropdown x-axis-dropdown">
+        {% for header in headings[1:] %}
+        <option value="{{ header }}">{{ header }}</option>
+        {% endfor %}
+    </select>
+    <select id="yAxisTitle" class="axis-dropdown y-axis-dropdown">
+        {% for header in headings[1:] %}
+        <option value="{{ header }}">{{ header }}</option>
+        {% endfor %}
+    </select>
+
+    <script> // some variable definitions
         const chartX = "an_shenk"
         const chartY = "MES"
         const chartLab = "lab"
         const chartData = {{ data | tojson }}
         const chartColors = {{ colors | tojson }}
+
+        const newChartX = "abs_norm_shenkin"
+        const newChartY = "oddsratio"
+        const newChartLab = "UniProt_ResNum"
         const cc = {{ cc | tojson }}
-        const chartCtx = document.getElementById("chartCanvas").getContext("2d")
+
     </script>
+
+    <canvas id="newChartCanvas" width="400" height="400"></canvas>
+
+    <select id="xAxisTitle2" class="axis-dropdown2 x-axis-dropdown2">
+        {% for header in cc[1:] %}
+        <option value="{{ header }}">{{ header }}</option>
+        {% endfor %}
+    </select>
+    <select id="yAxisTitle2" class="axis-dropdown2 y-axis-dropdown2">
+        {% for header in cc[1:] %}
+        <option value="{{ header }}">{{ header }}</option>
+        {% endfor %}
+    </select>
+
+
     <script src="/static/js/binding_sites_chart.js"></script>
+
 </div>
 
-<!-- <div>
-    <script>
-        myChart.canvas.addEventListener("click", function (event) {
-            var activePoints = myChart.getElementsAtEventForMode(event, 'point', myChart.options);
-            if (activePoints.length > 0) {
-                var firstPoint = activePoints[0];
-                var label = chartData.lab[firstPoint.index];
-                if (bs_ress_table.style.display === 'none') {
-                    bs_ress_table.style.display = 'table';
-                } else {
-                    bs_ress_table.style.display = 'none';
-                }
-                
-            } else {
-                console.log("NO bs selected")
-            }
-        });
-    </script>
-</div> -->
-
-<div id="table-container">
-    <!-- Table will be inserted here -->
-</div>
+<br/>
+<br/>
+<br/>
+<br/>
+<br/>
+<br/>
+<br/>
+<br/>
+<br/>
+<br/>
 
 <div>
     <table class="sortable hoverTable" id="bs_ress_table">
@@ -128,7 +120,7 @@ jmolRadio('restrict protein; cartoons; color structure;', "", false );
         </thead>
         <tbody>
             {% for i in range(data2["UniProt_ResNum"]|length) %}
-                <tr class="table__row" style="color: {{ colors[0] }}" id="{{ data2['UniProt_ResNum'][loop.index0] }}">
+                <tr class="table__row" id="{{ data2['UniProt_ResNum'][i] }}">
                     {% for k in data2.keys() %}
                         <td class="table__cell">{{ data2[k][i] }}</td>
                     {% endfor %}
