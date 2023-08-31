@@ -63,6 +63,24 @@ const chartConfig = {
             
                             tableBody.append(newRow);
                         }
+
+                        $('table#bs_ress_table tbody').on('mouseover', 'tr', function () {
+                            let pointLabel = this.id;
+                    
+                            // Find the corresponding index in the data
+                            let index = newChartData[newChartLab].indexOf(pointLabel);
+                    
+                            if (index !== -1) {
+                                // Programmatically trigger hover state on the chart point
+                                newChart.getDatasetMeta(0).data[index].draw('hover');
+                            }
+                        });
+                    
+                        $('table#bs_ress_table tbody').on('mouseout', 'tr', function () {
+                            // Clear hover states on all points
+                            newChart.update();
+                        });
+
                         // Data for the new chart
                         let newChartData = response;
                         let newChartConfig = {
@@ -198,6 +216,33 @@ const chartConfig = {
 };
 
 myChart = new Chart(chartCtx, chartConfig);
+
+
+$('table#bss_table tbody').on('mouseover', 'tr', function () {
+
+    let rowId = this.id;  // Assuming the row's ID attribute contains the corresponding data point ID
+    // Find index of the data point in your chart data
+    
+    let index = chartData['lab'].indexOf(rowId);
+
+    if (index !== -1) {
+        myChart.getDatasetMeta(0).data[index].options.borderColor = "gold"; // change other styles if you wish
+        myChart.getDatasetMeta(0).data[index].options.radius = 16;
+        myChart.getDatasetMeta(0).data[index].options.borderWidth = 10; // change other styles if you wish
+        myChart.render();
+    }
+}).on('mouseout', 'tr', function () {
+    // Reset the style changes to clear all hover effects
+    myChart.data.datasets[0].data.forEach(function(point, i) {
+        myChart.getDatasetMeta(0).data[i].options.borderColor = "black"; // reset to original size or other default values
+        myChart.getDatasetMeta(0).data[i].options.borderWidth = 1;
+        myChart.getDatasetMeta(0).data[i].options.radius = 12;
+    });
+    myChart.render();
+});
+
+
+
 
 // THIS IS THE EVENT LISTENER THAT CHANGES THE AXES OF THE BINDING SITES PLOTS ACCORDING TO DROPDOWNS
 
