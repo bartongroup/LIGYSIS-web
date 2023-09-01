@@ -6,7 +6,6 @@
 
 <script src="/static/js/jmol/jsmol/JSmol.min.js"></script>
 <script src="/static/js/jmol/jsmol/js/Jmol2.js"></script>
-<script>jmolInitialize("/static/js/jmol/jsmol");</script>
 <script src="https://www.kryogenix.org/code/browser/sorttable/sorttable.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
@@ -16,112 +15,100 @@
 
 {% block body %}
 <h1 style="text-align: center">LIGYSIS WEB SERVER</h1>
+<div class="flexbox-container">
+    <div class="flexbox-item flexbox-item-1">
+        <script src="/static/js/jsmol_applet.js"></script>
+    </div>
 
-<!-- <script>
-jmolApplet(800, "script /static/scripts/load.txt", "0");
-</script> -->
-
-<div>
-    <table class="sortable hoverTable" id="bss_table">
-        <thead>
-            <tr class="table__header">
-                {% for header in headings %}
-                <th class="table__cell">{{ header }}</th>
-                {% endfor %}
-            </tr>
-        </thead>
-        <tbody>
-            {% for i in range(data["lab"]|length) %}
-                <tr class="table__row" style="color: {{ colors[loop.index0] }}" id="{{ data['lab'][loop.index0] }}">
-                    {% for k in data.keys() %}
-                        <td class="table__cell">{{ data[k][i] }}</td>
+    <div class="flexbox-item flexbox-item-2">
+        <table class="sortable hoverTable" id="bss_table">
+            <thead>
+                <tr class="table__header">
+                    {% for header in headings %}
+                    <th class="table__cell">{{ header }}</th>
                     {% endfor %}
                 </tr>
-            {% endfor %}
-        </tbody>
-    </table>
-</div>
-
-<br/>
-<br/>
-<br/>
-
-<div id="chart-container" style="position: relative;">
-    <canvas id="chartCanvas" width="600" height="400"></canvas>
-    <select id="xAxisTitle" class="axis-dropdown x-axis-dropdown">
-        {% for header in headings[1:] %}
-        <option value="{{ header }}">{{ header }}</option>
-        {% endfor %}
-    </select>
-    <select id="yAxisTitle" class="axis-dropdown y-axis-dropdown">
-        {% for header in headings[1:] %}
-        <option value="{{ header }}">{{ header }}</option>
-        {% endfor %}
-    </select>
-
-    <script> // some variable definitions
-        const chartX = "an_shenk"
-        const chartY = "MES"
-        const chartLab = "lab"
-        const chartData = {{ data | tojson }}
-        const chartColors = {{ colors | tojson }}
-
-        const newChartX = "abs_norm_shenkin"
-        const newChartY = "oddsratio"
-        const newChartLab = "UniProt_ResNum"
-        const cc = {{ cc | tojson }}
-
-    </script>
-
-    <canvas id="newChartCanvas" width="400" height="400"></canvas>
-
-    <select id="xAxisTitle2" class="axis-dropdown2 x-axis-dropdown2">
-        {% for header in cc[1:] %}
-        <option value="{{ header }}">{{ header }}</option>
-        {% endfor %}
-    </select>
-    <select id="yAxisTitle2" class="axis-dropdown2 y-axis-dropdown2">
-        {% for header in cc[1:] %}
-        <option value="{{ header }}">{{ header }}</option>
-        {% endfor %}
-    </select>
-
-
-    <script src="/static/js/binding_sites_chart.js"></script>
-
-</div>
-
-<br/>
-<br/>
-<br/>
-<br/>
-<br/>
-<br/>
-<br/>
-<br/>
-<br/>
-<br/>
-
-<div>
-    <table class="sortable hoverTable" id="bs_ress_table">
-        <thead>
-            <tr class="table__header">
-                {% for header in cc %}
-                <th class="table__cell">{{ header }}</th>
+            </thead>
+            <tbody>
+                {% for i in range(data["lab"]|length) %}
+                    <tr class="table__row" style="color: {{ colors[loop.index0] }}" id="{{ data['lab'][loop.index0] }}">
+                        {% for k in data.keys() %}
+                            <td class="table__cell">{{ data[k][i] }}</td>
+                        {% endfor %}
+                    </tr>
                 {% endfor %}
-            </tr>
-        </thead>
-        <tbody>
-            {% for i in range(data2["UniProt_ResNum"]|length) %}
-                <tr class="table__row" id="{{ data2['UniProt_ResNum'][i] }}">
-                    {% for k in data2.keys() %}
-                        <td class="table__cell">{{ data2[k][i] }}</td>
+            </tbody>
+        </table>
+    </div>
+
+    <!-- <div id="chart-container" style="position: absolute;"> -->
+        <div class="flexbox-item flexbox-item-3">
+            <canvas id="chartCanvas" width="600" height="300"></canvas>
+            <select id="xAxisTitle" class="axis-dropdown x-axis-dropdown">
+                {% for header in headings[1:] %}
+                <option value="{{ header }}">{{ header }}</option>
+                {% endfor %}
+            </select>
+            <select id="yAxisTitle" class="axis-dropdown y-axis-dropdown">
+                {% for header in headings[1:] %}
+                <option value="{{ header }}">{{ header }}</option>
+                {% endfor %}
+            </select>
+        
+            <script> // some variable definitions
+                const chartX = "an_shenk"
+                const chartY = "MES"
+                const chartLab = "lab"
+                const chartData = {{ data | tojson }}
+                const chartColors = {{ colors | tojson }}
+        
+                const newChartX = "abs_norm_shenkin"
+                const newChartY = "oddsratio"
+                const newChartLab = "UniProt_ResNum"
+                const cc = {{ cc | tojson }}
+
+                const bs_ress_dict = {{ bs_ress_dict | tojson }}
+            </script>
+        </div>
+
+        <div class="flexbox-item flexbox-item-4">
+            <canvas id="newChartCanvas" width="600" height="300"></canvas>
+
+            <select id="xAxisTitle2" class="axis-dropdown2 x-axis-dropdown2">
+                <option selected hidden>What is your name?</option>
+                {% for header in cc[1:] %}
+                <option value="{{ header }}">{{ header }}</option>
+                {% endfor %}
+            </select>
+            <select id="yAxisTitle2" class="axis-dropdown2 y-axis-dropdown2">
+                {% for header in cc[1:] %}
+                <option value="{{ header }}">{{ header }}</option>
+                {% endfor %}
+            </select>
+        </div>
+
+        <script src="/static/js/binding_sites_chart.js"></script>
+    <!-- </div> -->
+
+    <div class="flexbox-item flexbox-item-5">
+        <table class="sortable hoverTable" id="bs_ress_table">
+            <thead>
+                <tr class="table__header">
+                    {% for header in cc %}
+                    <th class="table__cell">{{ header }}</th>
                     {% endfor %}
                 </tr>
-            {% endfor %}
-        </tbody>
-    </table>
+            </thead>
+            <tbody>
+                {% for i in range(data2["UniProt_ResNum"]|length) %}
+                    <tr class="table__row" id="{{ data2['UniProt_ResNum'][i] }}">
+                        {% for k in data2.keys() %}
+                            <td class="table__cell">{{ data2[k][i] }}</td>
+                        {% endfor %}
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
 </div>
-
-
 {% endblock%}
