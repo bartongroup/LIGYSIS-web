@@ -27,6 +27,13 @@ bss_ress["bs_id"] = bss_ress.up_acc + "_" + bss_ress.seg_id.astype(str) + "_" + 
 bss_ress.UniProt_ResNum = bss_ress.UniProt_ResNum.astype(int)
 bss_ress = bss_ress.drop_duplicates(["up_acc", "seg_id", "binding_sites", "UniProt_ResNum"]) # drop duplicate residues within the binding site
 
+bs_ress_dict =  {
+    "BS0": [83, 84],
+    "BS1": [24, 26, 58, 61, 62, 63, 323],
+    "BS2": [107, 133, 134, 135, 136, 245, 290],
+    "BS3": [120, 143, 145, 147, 149, 155, 156, 160, 161, 200, 202, 205, 251, 253, 265, 296]
+}
+
 ### SOME FIXED VARIABLES ###
 
 colors = load_pickle("./static/data/sample_colors_hex.pkl")
@@ -64,7 +71,7 @@ def results(prot_id):
 
     data2 = prot_ress.to_dict(orient="list")
     
-    return render_template('structure.html', data = data1, headings = headings, data2 = data2, cc = cc, colors = colors)
+    return render_template('structure.html', data = data1, headings = headings, data2 = data2, cc = cc, colors = colors, bs_ress_dict = bs_ress_dict)
 
 
 

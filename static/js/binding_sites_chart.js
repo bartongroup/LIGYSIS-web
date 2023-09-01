@@ -4,6 +4,19 @@ let newChart;
 const chartCtx = document.getElementById("chartCanvas").getContext("2d");
 const newChartCtx = document.getElementById('newChartCanvas').getContext('2d');
 
+const myChartLims = {
+    an_shenk: {sugMin: 0, sugMax: 50, min: 0, max: 100},
+    MES: {sugMin: 0, sugMax: 2, min: 0, max: 5},
+    RSA: {sugMin: 0, sugMax: 50, min: 0, max: 100},
+    n_ress: {sugMin: 1, sugMax: 25, min: 1, max: 70}
+};
+const newChartLims = {
+    abs_norm_shenkin: {sugMin: 0, sugMax: 50, min: 0, max: 100},
+    oddsratio: {sugMin: 0, sugMax: 2, min: 0, max: 5},
+    RSA: {sugMin: 0, sugMax: 75, min: 0, max: 100},
+    pvalue: {sugMin: 0.1, sugMax: 0.75, min: 0, max: 1}
+};
+
 const chartConfig = {
     type: "scatter",
     data: {
@@ -40,6 +53,8 @@ const chartConfig = {
                     success: function(response) {
                         const keyOrder = cc;
 
+                        // let newChartData = response;
+
                         // Get your table and tbody element
                         let tableBody = $('#bs_ress_table tbody'); 
     
@@ -51,7 +66,7 @@ const chartConfig = {
                             let newRow = $('<tr class="table__row">');
 
                             // Assign ID dynamically
-                            newRow.attr('id', response["UniProt_ResNum"][i]);
+                            newRow.attr('id', response[newChartLab][i]);
             
                             // Second loop to iterate through keys (columns)
                             $.each(keyOrder, function(j, key) {
@@ -65,24 +80,30 @@ const chartConfig = {
                         }
 
                         $('table#bs_ress_table tbody').on('mouseover', 'tr', function () {
-                            let pointLabel = this.id;
-                    
-                            // Find the corresponding index in the data
-                            let index = newChartData[newChartLab].indexOf(pointLabel);
-                    
+
+                            let rowId = Number(this.id);  // Assuming the row's ID attribute contains the corresponding data point ID
+                            // Find index of the data point in your chart data
+                        
+                            let index = response[newChartLab].indexOf(rowId);
+                        
                             if (index !== -1) {
-                                // Programmatically trigger hover state on the chart point
-                                newChart.getDatasetMeta(0).data[index].draw('hover');
+                                newChart.getDatasetMeta(0).data[index].options.borderColor = "gold"; // change other styles if you wish
+                                newChart.getDatasetMeta(0).data[index].options.radius = 16;
+                                newChart.getDatasetMeta(0).data[index].options.borderWidth = 10; // change other styles if you wish
+                                newChart.render();
                             }
-                        });
-                    
-                        $('table#bs_ress_table tbody').on('mouseout', 'tr', function () {
-                            // Clear hover states on all points
-                            newChart.update();
+                        }).on('mouseout', 'tr', function () {
+                            // Reset the style changes to clear all hover effects
+                            newChart.data.datasets[0].data.forEach(function(point, i) {
+                                newChart.getDatasetMeta(0).data[i].options.borderColor = "black"; // reset to original size or other default values
+                                newChart.getDatasetMeta(0).data[i].options.borderWidth = 1;
+                                newChart.getDatasetMeta(0).data[i].options.radius = 8;
+                            });
+                            newChart.render();
                         });
 
                         // Data for the new chart
-                        let newChartData = response;
+                        var newChartData = response;
                         let newChartConfig = {
                             type: "scatter",
                             data: {
@@ -117,6 +138,8 @@ const chartConfig = {
                                             align: "center",
                                             text: newChartX,
                                         },
+                                        suggestedMin: newChartLims[newChartX]["sugMin"],
+                                        suggestedMax: newChartLims[newChartX]["sugMax"],
                                     },
                                     y: {
                                         title: {
@@ -124,6 +147,8 @@ const chartConfig = {
                                             align: "center",
                                             text: newChartY,
                                         },
+                                        suggestedMin: newChartLims[newChartY]["sugMin"],
+                                        suggestedMax: newChartLims[newChartY]["sugMax"],
                                     }
                                 },
                                 plugins: {
@@ -156,8 +181,10 @@ const chartConfig = {
                     
                         xAxisTitleDropdown.addEventListener("change", function () {
                             selectedXAxisTitle = xAxisTitleDropdown.value;
-                            newChart.options.scales.x.title.text = selectedXAxisTitle;
                             newChart.data.labels = newChartData[selectedXAxisTitle];
+                            newChart.options.scales.x.title.text = selectedXAxisTitle;
+                            newChart.options.scales.x.suggestedMin = newChartLims[selectedXAxisTitle]["sugMin"];
+                            newChart.options.scales.x.suggestedMax = newChartLims[selectedXAxisTitle]["sugMax"];
                             newChart.update();
                         });
                     
@@ -165,6 +192,8 @@ const chartConfig = {
                             selectedYAxisTitle = yAxisTitleDropdown.value;
                             newChart.data.datasets[0].data = newChartData[selectedYAxisTitle];
                             newChart.options.scales.y.title.text = selectedYAxisTitle;
+                            newChart.options.scales.y.suggestedMin = newChartLims[selectedYAxisTitle]["sugMin"];
+                            newChart.options.scales.y.suggestedMax = newChartLims[selectedYAxisTitle]["sugMax"]; 
                             newChart.update();
                         });
 
@@ -193,6 +222,8 @@ const chartConfig = {
                     align: "center",
                     text: chartX,
                 },
+                suggestedMin: myChartLims[chartX]["sugMin"],
+                suggestedMax: myChartLims[chartX]["sugMax"],
             },
             y: {
                 title: {
@@ -200,6 +231,8 @@ const chartConfig = {
                     align: "center",
                     text: chartY,
                 },
+                suggestedMin: myChartLims[chartY]["sugMin"],
+                suggestedMax: myChartLims[chartY]["sugMax"],
             }
         },
         plugins: {
@@ -222,8 +255,8 @@ $('table#bss_table tbody').on('mouseover', 'tr', function () {
 
     let rowId = this.id;  // Assuming the row's ID attribute contains the corresponding data point ID
     // Find index of the data point in your chart data
-    
-    let index = chartData['lab'].indexOf(rowId);
+
+    let index = chartData[chartLab].indexOf(rowId);
 
     if (index !== -1) {
         myChart.getDatasetMeta(0).data[index].options.borderColor = "gold"; // change other styles if you wish
@@ -244,6 +277,8 @@ $('table#bss_table tbody').on('mouseover', 'tr', function () {
 
 
 
+
+
 // THIS IS THE EVENT LISTENER THAT CHANGES THE AXES OF THE BINDING SITES PLOTS ACCORDING TO DROPDOWNS
 
 document.addEventListener("DOMContentLoaded", function () {
@@ -258,8 +293,10 @@ document.addEventListener("DOMContentLoaded", function () {
 
     xAxisTitleDropdown.addEventListener("change", function () {
         selectedXAxisTitle = xAxisTitleDropdown.value;
-        myChart.options.scales.x.title.text = selectedXAxisTitle;
         myChart.data.labels = chartData[selectedXAxisTitle];
+        myChart.options.scales.x.title.text = selectedXAxisTitle;
+        myChart.options.scales.x.suggestedMin = myChartLims[selectedXAxisTitle]["sugMin"];
+        myChart.options.scales.x.suggestedMax = myChartLims[selectedXAxisTitle]["sugMax"]; 
         myChart.update();
     });
 
@@ -267,6 +304,8 @@ document.addEventListener("DOMContentLoaded", function () {
         selectedYAxisTitle = yAxisTitleDropdown.value;
         myChart.data.datasets[0].data = chartData[selectedYAxisTitle];
         myChart.options.scales.y.title.text = selectedYAxisTitle;
+        myChart.options.scales.y.suggestedMin = myChartLims[selectedYAxisTitle]["sugMin"];
+        myChart.options.scales.y.suggestedMax = myChartLims[selectedYAxisTitle]["sugMax"];
         myChart.update();
     });
     

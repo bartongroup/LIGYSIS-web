@@ -34,47 +34,92 @@ tbody tr:hover {
 }
 
 #bs_ress_table {
-    display: none; /* Start with table hidden */
+    display: table; /* Start with table hidden */
 }
 
+/*
 #chart-container {
-    position: relative;
+    position: absolute;
 }
 
 .axis-dropdown {
     position: absolute;
-    z-index: 2;  /* Higher than the chart canvas */
+    z-index: 2; 
 }
 
 .x-axis-dropdown {
-    left: 17%;  /* Approximate center */
-    bottom: 0;  /* At the bottom of the container */
-    transform: translateX(-50%);  /* Centering adjustment */
+    left: 17%;  
+    bottom: 0;  
+    transform: translateX(-50%);  
 }
 
 .y-axis-dropdown {
-    left: 0;  /* At the left edge of the container */
-    top: 56%;  /* Approximate middle */
-    transform: translateY(-50%) rotate(-90deg);  /* Centering adjustment and rotation */
-    transform-origin: left top;  /* Sets the origin for the rotation */
+    left: 0;  
+    top: 56%; 
+    transform: translateY(-50%) rotate(-90deg); 
+    transform-origin: left top;  
 }
 
 .axis-dropdown2 {
     position: absolute;
-    z-index: 2;  /* Higher than the chart canvas */
-}
+    z-index: 2; 
 
+}
 .x-axis-dropdown2 {
-    left: 34%;  /* Approximate center */
-    bottom: 0;  /* At the bottom of the container */
-    transform: translateX(-50%);  /* Centering adjustment */
+    left: 34%;  
+    bottom: 0;  
+    transform: translateX(-50%);  
 }
 
 .y-axis-dropdown2 {
-    left: 0;  /* At the left edge of the container */
-    top: 100%;  /* Approximate middle */
-    transform: translateY(-50%) rotate(-90deg);  /* Centering adjustment and rotation */
-    transform-origin: left top;  /* Sets the origin for the rotation */
+    left: 0;  At the left edge of the container
+    top: 100%;  
+    transform: translateY(-50%) rotate(-90deg); 
+    transform-origin: left top;  Sets the origin for the rotation
+} */
+
+
+.flexbox-container {
+    display: flex;
+    flex-direction: row;
+    justify-content:space-between;
+    align-items: flex-start;
+    flex-wrap: wrap;
+
 }
 
+.flexbox-item{
+    margin: 10px;
+    border: 3px solid #333;
+    background-color: white;
+}
 
+.flexbox-item-1{
+    width: 350;
+    height: 350px;
+    order: 3;
+}
+
+.flexbox-item-2{
+    width: 400px;
+    height: 350px;
+    order: 2;
+}
+
+.flexbox-item-3{
+    width: 600px;
+    height: 350px;
+    order: 1;
+}
+
+.flexbox-item-4{
+    width: 600px;
+    height: 350px;
+    order: 4;
+}
+
+.flexbox-item-5{
+    width: 800px;
+    height: 350px;
+    order: 5;
+}
