@@ -43,7 +43,7 @@
 
     <!-- <div id="chart-container" style="position: absolute;"> -->
         <div class="flexbox-item flexbox-item-3">
-            <canvas id="chartCanvas" width="600" height="300"></canvas>
+            <canvas id="chartCanvas" width="400" height="350"></canvas>
             <select id="xAxisTitle" class="axis-dropdown x-axis-dropdown">
                 {% for header in headings[1:] %}
                 <option value="{{ header }}">{{ header }}</option>
@@ -100,13 +100,13 @@
                 </tr>
             </thead>
             <tbody>
-                {% for i in range(data2["UniProt_ResNum"]|length) %}
+                <!-- {% for i in range(data2["UniProt_ResNum"]|length) %}
                     <tr class="table__row" id="{{ data2['UniProt_ResNum'][i] }}">
                         {% for k in data2.keys() %}
                             <td class="table__cell">{{ data2[k][i] }}</td>
                         {% endfor %}
                     </tr>
-                {% endfor %}
+                {% endfor %} -->
             </tbody>
         </table>
     </div>

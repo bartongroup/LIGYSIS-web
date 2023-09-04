@@ -34,7 +34,7 @@ tbody tr:hover {
 }
 
 #bs_ress_table {
-    display: table; /* Start with table hidden */
+    display: none; /* Start with table hidden */
 }
 
 /*
@@ -95,8 +95,8 @@ tbody tr:hover {
 }
 
 .flexbox-item-1{
-    width: 350;
-    height: 350px;
+    width: 600px;
+    height: 500px;
     order: 3;
 }
 
@@ -107,7 +107,7 @@ tbody tr:hover {
 }
 
 .flexbox-item-3{
-    width: 600px;
+    width: 400px;
     height: 350px;
     order: 1;
 }

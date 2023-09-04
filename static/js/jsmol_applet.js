@@ -1,58 +1,69 @@
-jmolInitialize("/static/js/jmol/jsmol");
-
-var Info = {
+const Info = {
     color: "#FFFFFF",
-    height: 350,
-    width: 350,
+    height: 500,
+    width: 600,
     use: "HTML5",
     j2sPath: "/static/js/jmol/jsmol/j2s",
     script: "script /static/scripts/load.txt",
 }; // information to initiate jmol applet
 
-const applet = Jmol.getApplet("jmolApplet", Info); // jmolApplet is the string ID of this Jmol applet
+jmolInitialize("/static/js/jmol/jsmol"); // initialise Jmol applet
 
-function jmolScriptCallback() {
+const applet = Jmol.getApplet("jmolApplet", Info); // "jmolApplet" is the string ID of this Jmol applet
 
-    let x = Jmol.evaluateVar(applet, "_atomHovered");
+var isHovered = false; // boolean to check if an atom is hovered
 
-    console.log(x);
+Jmol.script(applet, "set HoverCallback 'jmolScriptCallback'"); // calls jmolScriptCallback when an atom is hovered
 
-    var atom = Jmol.getPropertyAsArray(applet, "atomInfo", `{${x}}`);
+function jmolScriptCallback() { // this function is called when an atom is hovered
 
-    var resNum = atom[0].resno;
+    var atom = Jmol.evaluateVar(applet, "_atomHovered"); // gets the atom hovered
 
-    console.log(resNum);
+    if (atom != -1) { // if an atom is hovered set isHovered to true
+        isHovered = true;
+    }
 
-    var b = 0;
-    for (const [k, v] of Object.entries(bs_ress_dict)) {
+    var atomInfo = Jmol.getPropertyAsArray(applet, "atomInfo", `{${atom}}`); // gets the atom info of the hovered atom
+
+    var resNum = atomInfo[0].resno; // gets the residue number of the hovered atom
+
+    var b = 0; // boolean to check if the residue number is in any binding site
+
+    clearHighlightedRow(); // clears highlighted table row before highlighting another one (2 rows will never be highlighted)
+
+    for (const [k, v] of Object.entries(bs_ress_dict)) { // iterates through dictionary of residue numbers and their corresponding binding sites
         if (v.includes(resNum)) {
-            console.log(k);
-            highlightTableRow("P78540_1_1");
+            highlightTableRow(k); // highlights the table row of the binding site
             b = 1;
             break;
         }
     }
-    if (b == 0) {
+    if (b == 0) { // clears highlight row if the residue number is not in any binding site
         clearHighlightedRow();
     }
-
-
-    
 }
 
-Jmol.script(applet, "set HoverCallback 'jmolScriptCallback'"); // calls jmolScriptCallback when an atom is hovered
-clearHighlightedRow();
-
-function highlightTableRow(pointLabel) {
+function highlightTableRow(pointLabel) { // highlights the table row of the binding site
     var row = document.getElementById(pointLabel);
     if (row) {
         row.classList.add("highlighted-row");
     }
 }
 
-function clearHighlightedRow() {
+function clearHighlightedRow() {   // clears the highlighted table row
     var highlightedRow = document.querySelector(".highlighted-row");
     if (highlightedRow) {
         highlightedRow.classList.remove("highlighted-row");
     }
 }
+
+function whenNotHovering() {    // clears highlighted table row when not hovering over an atom
+    clearHighlightedRow();
+}
+
+setInterval(function() {   // checks if an atom is hovered every 100ms
+    if (!isHovered) {
+        whenNotHovering(); // execute your code when not hovering over an atom
+    }
+    isHovered = false; // reset the flag
+}, 100); // this interval has to be longer than hoverDelay in Jmol
