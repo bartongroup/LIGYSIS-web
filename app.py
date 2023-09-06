@@ -1,9 +1,12 @@
 ### PACKAGE IMPORTS ###
 
+import os
 import pickle
 import pandas as pd
 
 from flask import Flask, render_template, url_for, request, redirect, jsonify
+
+from config import DATA_FOLDER
 
 ### FUNCTIONS ###
 
@@ -17,8 +20,8 @@ def load_pickle(f_in):
 
 ### READING INPUT DATA ###
 
-bss_data = pd.read_pickle("./static/data/bss_data.pkl")
-bss_ress = pd.read_pickle("./static/data/all_bs_ress_v2_08_2023.pkl")
+bss_data = pd.read_pickle(os.path.join(DATA_FOLDER, "bss_data.pkl"))
+bss_ress = pd.read_pickle(os.path.join(DATA_FOLDER, "all_bs_ress_v2_08_2023.pkl"))
 
 ### FORMATTING DATA ###
 
@@ -36,7 +39,7 @@ bs_ress_dict =  {
 
 ### SOME FIXED VARIABLES ###
 
-colors = load_pickle("./static/data/sample_colors_hex.pkl")
+colors = load_pickle(os.path.join(DATA_FOLDER, "sample_colors_hex.pkl"))
 
 headings = bss_data.columns.tolist()
 
