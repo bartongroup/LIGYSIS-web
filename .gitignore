@@ -1,4 +1,4 @@
-static/js/jmol
+#static/js/jmol
 node_modules
 .DS_Store
 .vscode

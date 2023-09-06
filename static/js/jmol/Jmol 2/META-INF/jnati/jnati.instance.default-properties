@@ -1,0 +1,13 @@
+
+# OS/Arch.
+${jnati.artefactId}.osarch = ${jnati.osarch}
+${jnati.artefactId}.${jnati.artefactVersion}.osarch = ${${jnati.artefactId}.osarch}
+
+# Configuration files
+${jnati.artefactId}.settingsFile = ${jnati.dir}/${jnati.artefactId}.properties
+${jnati.artefactId}.${jnati.artefactVersion}.settingsFile = ${jnati.dir}/${jnati.artefactId}.${jnati.artefactVersion}.properties
+
+# download locations, separated by semicolons. Actual semicolons in URLs should
+# be written '%3B'
+${jnati.artefactId}.repositoryUrls = ${jnati.repositoryUrls}
+${jnati.artefactId}.${jnati.artefactVersion}.repositoryUrls = ${${jnati.artefactId}.repositoryUrls}

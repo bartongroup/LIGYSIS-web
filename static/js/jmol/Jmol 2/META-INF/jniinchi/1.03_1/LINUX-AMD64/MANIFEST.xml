@@ -1,0 +1,3 @@
+<manifest id="jniinchi" version="1.03_1" platform="LINUX-AMD64" >
+  <file library="true">libJniInchi-1.03_1-LINUX-AMD64.so</file>
+</manifest>
