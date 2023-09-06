@@ -9,5 +9,3 @@ package-lock.json
 package.json
 static/css/molstar.css
 static/js/molstar.js
-static/data/all_bs_ress_v2_08_2023.pkl
-static/data/bss_data.pkl
