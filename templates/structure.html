@@ -9,7 +9,9 @@
 <script src="https://www.kryogenix.org/code/browser/sorttable/sorttable.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
-<link rel="stylesheet" href="/static/css/styles.css">
+<script src="/static/js/event_functions.js"></script>
+
+<link rel="stylesheet" href="/static/css/main.css">
 
 {% endblock %}
 
@@ -39,28 +41,6 @@
                 {% endfor %}
             </tbody>
         </table>
-
-
-        <!-- <script>
-            var rows = document.querySelectorAll('#bss_table tr');
-        
-            rows.forEach(row => {
-                row.addEventListener('mouseover', function() {
-                    // this.setAttribute('data-hovered', 'true');
-                    // console.log(`row ${row.id} hovered now`);
-                    isRowHovered = true;
-                });
-        
-                row.addEventListener('mouseout', function() {
-                    //this.setAttribute('data-hovered', 'false');
-                    //console.log(`row ${row.id} not hovered anymore`);
-                    isRowHovered = true;
-                });
-            });
-
-        </script> -->
-
-
     </div>
 
     <!-- <div id="chart-container" style="position: absolute;"> -->
@@ -109,7 +89,8 @@
             </select>
         </div>
 
-        <script src="/static/js/binding_sites_chart.js"></script>
+        <script src="/static/js/charts.js"></script>
+        <!-- <script src="/static/js/table_listeners.js"></script> -->
     <!-- </div> -->
 
     <div class="flexbox-item flexbox-item-5">
@@ -121,22 +102,12 @@
                     {% endfor %}
                 </tr>
             </thead>
-            <tbody>
-                <!-- {% for i in range(data2["UniProt_ResNum"]|length) %}
-                    <tr class="table__row" id="{{ data2['UniProt_ResNum'][i] }}">
-                        {% for k in data2.keys() %}
-                            <td class="table__cell">{{ data2[k][i] }}</td>
-                        {% endfor %}
-                    </tr>
-                {% endfor %} -->
-            </tbody>
+            <tbody></tbody>
         </table>
     </div>
 </div>
 
 
-
-<script src="/static/js/jsmol_events.js"></script>
-
+<script src="/static/js/table_listeners.js"></script>
 
 {% endblock%}
