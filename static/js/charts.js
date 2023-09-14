@@ -124,6 +124,9 @@ const chartConfig = {
                                     }
                                 },
                                 plugins: {
+                                    legend: {
+                                        display: false,
+                                    },
                                     tooltip: {
                                         callbacks: {
                                             title: function(context) {
@@ -192,6 +195,9 @@ const chartConfig = {
             }
         },
         plugins: {
+            legend: {
+                display: false,
+            },
             tooltip: {
                 callbacks: {
                     title: function(context) {

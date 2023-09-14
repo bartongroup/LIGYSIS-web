@@ -104,6 +104,7 @@ tbody tr:hover {
     width: 400px;
     height: 350px;
     order: 2;
+    overflow-y: auto; /* Show scrollbar when content exceeds height */
 }
 
 .flexbox-item-3{
@@ -122,4 +123,5 @@ tbody tr:hover {
     width: 800px;
     height: 350px;
     order: 5;
+    overflow-y: auto; /* Show scrollbar when content exceeds height */
 }

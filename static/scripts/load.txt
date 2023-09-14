@@ -1,4 +1,5 @@
 load /static/data/P78540.pdb;
+set platformSpeed 1;
 set hermiteLevel 1;
 set highResolution ON;
 set ribbonBorder ON;

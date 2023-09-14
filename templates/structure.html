@@ -11,7 +11,7 @@
 
 <script src="/static/js/event_functions.js"></script>
 
-<link rel="stylesheet" href="/static/css/main.css">
+<!-- <link rel="stylesheet" href="/static/css/main.css"> -->
 
 {% endblock %}
 
@@ -19,7 +19,7 @@
 <h1 style="text-align: center">LIGYSIS WEB SERVER</h1>
 <div class="flexbox-container">
     <div class="flexbox-item flexbox-item-1">
-        <script src="/static/js/jsmol_applet.js"></script>
+        <!-- <script src="/static/js/jsmol_applet.js"></script> -->
     </div>
 
     <div class="flexbox-item flexbox-item-2">
@@ -77,12 +77,13 @@
             <canvas id="newChartCanvas" width="600" height="300"></canvas>
 
             <select id="xAxisTitle2" class="axis-dropdown2 x-axis-dropdown2">
-                <option selected hidden>What is your name?</option>
+                <option selected hidden>abs_norm_shenkin</option>
                 {% for header in cc[1:] %}
                 <option value="{{ header }}">{{ header }}</option>
                 {% endfor %}
             </select>
             <select id="yAxisTitle2" class="axis-dropdown2 y-axis-dropdown2">
+                <option selected hidden>oddsratio</option>
                 {% for header in cc[1:] %}
                 <option value="{{ header }}">{{ header }}</option>
                 {% endfor %}
