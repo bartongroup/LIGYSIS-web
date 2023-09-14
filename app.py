@@ -91,8 +91,6 @@ def get_table():
 
     return jsonify(site_data)
 
-
-
 ### LAUNCHING SERVER ###
 
 if __name__ == "__main__":
