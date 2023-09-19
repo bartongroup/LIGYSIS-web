@@ -8,13 +8,65 @@
     {% block head %}{% endblock%}
 </head>
 <body>
+    <header>
+        <a href="/">
+            <img class="header-logo" src="/static/images/LIGYSIS_logo_v2.png" alt="LIGYSIS logo">
+        </a>
+        <nav>
+            <ul class="nav__links">
+                <li><a href="#">Home</a></li>
+                <li><a href="#">About</a></li>
+                <li><a href="#">Results</a></li>
+            </ul>
+        </nav>
+        <a class="cta" href="#"><button>Contact</button></a>
+    </header>
+
+
+    <!-- <div class="topnav">
+        <a class="active" href="#home">Home</a>
+        <a href="#news">News</a>
+        <a href="#contact">Contact</a>
+        <a href="#about">About</a>
+    </div> -->
+
+
     {% block body %}{% endblock%}
 
 
-
-
-<p><strong><a href="https://doi.org/10.21203/rs.3.rs-3185838/v1">Classification of likely functional state for ligand binding sites identified from fragment screening</a></strong><br />
-    Utgés JS, MacGowan SA, Ives CM &amp; Barton GJ.<br /><em>Research Square</em><br />
-    DOI: <a href="https://doi.org/10.21203/rs.3.rs-3185838/v1">10.21203/rs.3.rs-3185838/v1</a></p>
+    <footer>
+        <div class="row">
+            <div class="col">
+                <a href="http://www.compbio.dundee.ac.uk/">
+                    <img src="/static/images/BG_logo.svg" class="footer-logo" alt="Barton Group logo">
+                </a>
+            </div>
+            <div class="col">
+                <a href="https://www.dundee.ac.uk/">
+                    <img src="/static/images/UoD_logo.svg" class="footer-logo" alt="University of Dundee logo"> 
+                </a>
+            </div>
+            <div class="col">
+                <a href="http://www.eastscotbiodtp.ac.uk/">
+                    <img src="/static/images/EASTBIO_logo_nobg.png" class="footer-logo" alt="EASTBIO DTP logo">
+                </a>
+            </div>
+            <div class="col">
+                <a href="https://www.ukri.org/councils/bbsrc/">
+                    <img src="/static/images/BBSRC_logo.gif" class="footer-logo" alt="BBSRC logo">
+                </a>  
+            </div>            
+        </div>
+        <hr>
+        <p class="citation"><strong><a href="https://doi.org/10.21203/rs.3.rs-3185838/v1">Classification of likely functional state for ligand binding sites identified from fragment screening</a></strong><br />
+            Utgés JS, MacGowan SA, Ives CM &amp; Barton GJ.<br /><em>Research Square</em><br/>
+            DOI:<a href="https://doi.org/10.21203/rs.3.rs-3185838/v1">10.21203/rs.3.rs-3185838/v1</a>
+        </p>
+        <hr>
+        <p class="copyright">LIGYSIS © 2023 <a href="http://www.compbio.dundee.ac.uk/">The Barton Group</a> -
+            <a href="http://www.lifesci.dundee.ac.uk/research/cb">Division of Computational Biology</a>,
+            <a href="http://www.lifesci.dundee.ac.uk/">School of Life Sciences</a>, <a href="http://www.dundee.ac.uk/">University of Dundee</a>, UK.</p></div>
+        </p>
+    </footer>
 </body>
 </html>

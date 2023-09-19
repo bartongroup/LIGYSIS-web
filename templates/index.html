@@ -7,23 +7,17 @@
 {% endblock%}
 
 {% block body %}
-<h1 style="text-align: center">LIGYSIS WEB SERVER</h1>
+<!-- <a href="http://www.compbio.dundee.ac.uk/"> -->
+<!-- <img src="static/images/LIGYSIS_logo_v0.png" alt="LIGYSIS logo" width="224" height="300"> -->
+<!-- </a> -->
+<h1 style="text-align: center">A Ligand Binding Site Analysis Server</h1>
 
-<div class="form">
+
+<div class="input-form">
     <form action="/" method="POST">
         <input type="text"  name="content" id="content">
         <input type="submit" value="Visualise protein!">
     </form>
 </div>
-
-<footer>
-    <div class="footer-container">
-        <img src="static/images/BG_logo.svg">
-        <img src="static/images/UoD_logo.svg">
-        <img src="static/images/EASTBIO_logo.png">
-        <img src="static/images/BBSRC_logo.gif">
-        
-    </div>
-</footer>
 
 {% endblock%}

@@ -1,3 +1,158 @@
+@import url('https://fonts.googleapis.com/css2?family=Roboto+Slab:wght@500&display=swap');
+
+*{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Roboto Slab', sans-serif;
+    /* background-color: white; */
+}
+
+li, a , button {
+    font-family: 'Roboto Slab', sans-serif;
+    font-size: 16px;
+    font-weight: 500;
+    text-decoration: none;
+    color: black;
+}
+
+header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 15px 2%;
+}
+
+.header-logo {
+
+    align-self: flex-start;
+    cursor: pointer;
+    max-height: 100px;
+}
+
+.nav {
+    display: flex;
+    justify-content: center;
+    justify-self: center;
+}
+
+.nav__links {
+    list-style: none;
+    display: flex;
+}
+
+.nav__links li {
+    display: inline-block;
+    padding: 0px 20px;
+
+}
+
+.nav__links li a {
+    transition: all 0.3s ease 0s;
+}
+
+.nav__links li a:hover {
+    color: rgba(74, 9, 131, 0.7);
+}
+
+button {
+    padding: 9px 25px;
+    background-color: rgba(74, 9, 131, 0.7);
+    border: none;
+    border-radius: 50px;
+    cursor: pointer;
+    transition: all 0.3s ease 0s;
+}
+
+button:hover {
+    background-color: rgba(74, 9, 131, 0.4);
+}
+
+footer {
+    width: 100%;
+    background-color: white;;
+    /* background: linear-gradient(rgb(173, 0, 0), rgba(152, 68, 225, 0.8)); */
+    bottom: 0;
+    padding: 30px 0 15px;
+    border-top-left-radius: 105px;
+    border-top-right-radius: 105px;
+    font-size: 13px;
+    line-height: 20px;
+    position: fixed;
+    border-color: rgba(74, 9, 131, 0.8);
+    border-style: solid;
+    border-width: 5px;
+}
+
+.input-form {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    margin: 20px 0;
+}
+
+.footer-logo {
+    cursor: pointer;
+    max-height: 75px;
+}
+
+.footer-image {
+    max-width: 100px;  /* or any desired value */
+    height: auto;     /* to maintain the aspect ratio */
+}
+
+.row {
+    display: flex;
+    flex-wrap: wrap;
+    margin: auto;
+    width: 85%;
+    align-items: flex-start;
+    justify-content: space-between;
+    padding: 0 4px;
+}
+
+.col {
+    flex-basis: 25%;
+    padding: 10px;
+}
+
+hr {
+    width: 100%;
+    border: 0;
+    border-bottom: 5px solid rgba(74, 9, 131, 0.8);
+    margin: 10px auto;
+}
+
+.citation {
+    text-align: center;
+    color: black;
+    font-size: 14px;
+}
+
+.copyright {
+    text-align: center;
+    color: black;
+    font-size: 14px;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 .table {
     border-spacing: 0;
     margin: 1rem;
