@@ -1,0 +1,22 @@
+{% extends 'base.html' %}
+
+{% block head %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/index.css') }}">
+
+<title>LIGYSIS</title>
+
+{% endblock%}
+
+{% block body %}
+
+<h1 style="padding: 25px 50px; text-align: center">A Ligand Binding Site Analysis Server</h1>
+<div class="input-form">
+    <form action="/" method="POST">
+        <input type="text"  size="40" name="content" id="content" placeholder="Input a single UniProtKB ID"><br><br>
+        <!-- <p class="pull-left">&nbsp;Example: Try UniProt ID <a id="link1">O96013</a>, <a id="link2">Q96E09</a> or <a id="link3">Q7Z309</a></p> -->
+        <div class="col-md-6">
+            <button id="reset" type="reset">Clear</button>&nbsp;&nbsp;<button type="submit">Submit</button>&nbsp;&nbsp;
+        </div>
+    </form>
+</div>
+{% endblock%}

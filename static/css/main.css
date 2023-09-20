@@ -111,6 +111,7 @@ footer {
     flex-direction: column;
     justify-content: center;
     align-items: center;
+    text-align: center;
     /* margin: 20px 0; */
     padding: 50px 50px;
 }
