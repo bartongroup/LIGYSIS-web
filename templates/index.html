@@ -4,20 +4,19 @@
 <link rel="stylesheet" href="{{ url_for('static', filename='css/index.css') }}">
 
 <title>LIGYSIS</title>
+
 {% endblock%}
 
 {% block body %}
-<!-- <a href="http://www.compbio.dundee.ac.uk/"> -->
-<!-- <img src="static/images/LIGYSIS_logo_v0.png" alt="LIGYSIS logo" width="224" height="300"> -->
-<!-- </a> -->
-<h1 style="text-align: center">A Ligand Binding Site Analysis Server</h1>
 
-
+<h1 style="padding: 25px 50px; text-align: center">A Ligand Binding Site Analysis Server</h1>
 <div class="input-form">
     <form action="/" method="POST">
-        <input type="text"  name="content" id="content">
-        <input type="submit" value="Visualise protein!">
+        <input type="text"  name="content" id="content" placeholder="Input a single UniProtKB ID">
+        <!-- <p class="pull-left">&nbsp;Example: Try UniProt ID <a id="link1">O96013</a>, <a id="link2">Q96E09</a> or <a id="link3">Q7Z309</a></p> -->
+        <div class="col-md-6" style="padding-left: 30px;">
+            <button id="reset" type="reset" class="btn btn-default">Clear</button>&nbsp;&nbsp;<button type="submit" class="btn btn-primary">Submit</button>&nbsp;&nbsp;
+        </div>
     </form>
 </div>
-
 {% endblock%}
