@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Roboto+Slab:wght@500&display=swap');
+/* @import url('https://fonts.googleapis.com/css2?family=Roboto+Slab:wght@500&display=swap');
 
 *{
     margin: 0;
@@ -9,8 +9,6 @@
 }
 
 body {
-    /* min-height: 400px; */
-    /* margin-bottom: 100px; */
     clear: both;
 }
 
@@ -19,7 +17,6 @@ li, a , button {
     font-size: 16px;
     font-weight: 500;
     text-decoration: none;
-    /* color: black; */
 }
 
 a:link {
@@ -43,12 +40,10 @@ a:link, a:visited {
 }
 
 header {
-    /* border: 25px solid rgba(74, 9, 131, 0.8); */
     display: flex;
     justify-content: space-between;
     align-items: center;
     padding: 15px 2%;
-    /* margin: 50px; */
 }
 
 #header-logo {
@@ -103,7 +98,7 @@ footer {
     font-size: 13px;
     line-height: 20px;
     position: fixed;
-    /* text-align: center; */
+
 }
 
 .input-form {
@@ -112,7 +107,6 @@ footer {
     justify-content: center;
     align-items: center;
     text-align: center;
-    /* margin: 20px 0; */
     padding: 50px 50px;
 }
 
@@ -124,11 +118,9 @@ footer {
 .row {
     display: flex;
     flex-wrap: wrap;
-    /* margin: 10px; */
     align-items: center;
     justify-content: center;
     padding: 10px 50px;
-    /* text-align: center; */
 }
 
 .col {
@@ -138,7 +130,6 @@ footer {
 }
 
 #citation {
-    /* margin: 10px; */
     text-align: center;
     color: black;
     font-size: 14px;
@@ -146,22 +137,28 @@ footer {
 }
 
 #copyright {
-    /* margin: 10px; */
     text-align: center;
     color: black;
     font-size: 13px;
     padding: 10px 50px;
 }
 
-/* hr {
+hr {
     width: 100%;
     border: 0;
     border-bottom: 5px solid rgba(74, 9, 131, 0.8);
     margin: 10px auto;
-} */
+}
+ */
+.container {
+    padding-left: 5%;
+    padding-right: 5%;
+}
 
-
-
+.home {
+    padding: 30px 15px;
+    text-align: left;
+}
 
 
 

@@ -56,7 +56,7 @@ app = Flask(__name__)
 def index():
     if request.method == 'POST':
 
-        prot_id = request.form['content']
+        prot_id = request.form['proteinId']
 
         return redirect(url_for('results', prot_id = prot_id)) # renders update page
 
@@ -76,7 +76,9 @@ def results(prot_id):
     
     return render_template('structure.html', data = data1, headings = headings, data2 = data2, cc = cc, colors = colors, bs_ress_dict = bs_ress_dict)
 
-
+@app.route('/about')
+def about():
+    return render_template('about.html')
 
 @app.route('/get_table', methods=['POST'])
 def get_table():
