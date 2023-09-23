@@ -5,8 +5,45 @@
 {% endblock%}
 {% block body %}
 
-<div class="home">
-    
+<div class="container py-3">
+    <div class="home">
+        <div class="row">
+            <div class="col-md-10">
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <strong>
+                            About LIGYSIS
+                        </strong>
+                    </div>
+                    <div class="panel-body">
+                        <p style="text-align: justify;">
+                            <a href="/">LIGYSIS</a> is a web server for the analysis of ligand binding sites. Ligands bind proteins at multiple
+                            locations, or sites. Some of these sites, are well characterised and have been shown to be biologically relevant, i.e.,
+                            substrate, cofactor binding sites, or catalytic sites. However, many other sites are not well characterised and their
+                            biological relevance is unknown. The server is based on a dataset of &asymp; 29,000 proteins that bind to
+                            biologically relevant ligands in accordance with <a href="https://zhanggroup.org/BioLiP/">BioLiP</a>.<br>
+
+                            LIGYSIS groups ligands binding to a protein according to their protein interactions. The sites are then characterised
+                            using mainly three features:
+                            <ul>
+                                <li>
+                                    <b>Relative solvent accessibility.</b>
+                                </li>
+                                <li>
+                                    <b>Evolutionary divergence.</b> The Shenkin divergence score is used to measure divergence in a multiple sequence alignment (MSA)
+                                    obtained with jackHMMER using the target protein sequence as a query. The lower this score, the more conserved a site is.
+                                    Low divergence, i.e., strong conservation is usually linked with functional importance.
+                                </li>
+                                <li>
+                                    <b>Enrichment in missense variation.</b>
+                                </li>
+                            </ul>
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
 
 {% endblock%}
