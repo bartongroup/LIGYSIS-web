@@ -21,23 +21,50 @@
                             locations, or sites. Some of these sites, are well characterised and have been shown to be biologically relevant, i.e.,
                             substrate, cofactor binding sites, or catalytic sites. However, many other sites are not well characterised and their
                             biological relevance is unknown. The server is based on a dataset of &asymp; 29,000 proteins that bind to
-                            biologically relevant ligands in accordance with <a href="https://zhanggroup.org/BioLiP/">BioLiP</a>.<br>
-
+                            biologically relevant ligands in accordance with <a href="https://zhanggroup.org/BioLiP/">BioLiP</a>.
+                        </p>
+                        <p style="text-align: justify;">
                             LIGYSIS groups ligands binding to a protein according to their protein interactions. The sites are then characterised
                             using mainly three features:
-                            <ul>
+                        </p>
+                        <ul style="text-align: justify;">
+                            <li>
+                                <b><a href="https://en.wikipedia.org/wiki/Relative_accessible_surface_area">Relative solvent accessibility (RSA)</a>.</b> Ranging from 0-100%,
+                                it measures the extent to which a residue is exposed to solvent. The higher the value, the more accessible to solvent the residue is. The analysis of
+                                RSA can provide insight into protein function: enzyme <a href="https://en.wikipedia.org/wiki/Active_site">active sites</a>, <a href="https://en.wikipedia.org/wiki/Protein%E2%80%93protein_interaction">
+                                protein-protein interaction</a> sites, as well as key positions for
+                                the structural integrity of the protein tend to be buried. <a href="https://en.wikipedia.org/wiki/Allosteric_regulation">Allosteric sites</a>, <a href="https://en.wikipedia.org/wiki/Signal_peptide">
+                                signal motifs</a>, or highly dynamic regions, however, tend to be more exposed. Almost always, <span class="key-concept">buried</span> residues are relevant for either
+                                <span class="key-concept">function</span>, or <span class="key-concept">structure</span>.
+                            </li>
+                            <li>
+                                <b>Evolutionary divergence.</b> The <a href="10.1002/prot.340110408">Shenkin divergence score</a> is used to measure divergence in a multiple sequence alignment (MSA)
+                                obtained with <a href="http://hmmer.org/">jackHMMER</a> using the target protein sequence as a query. The lower this score, the more conserved a site is.
+                                Low divergence, i.e., <span class="key-concept">strong conservation</span> is usually linked with <span class="key-concept">functional </span>importance.
+                            </li>
+                            <li>
+                                <b>Enrichment in missense variation.</b> Functionally relevant protein positions tend to be evolutionary constrained and present fewer genetic variants
+                                than average, i.e., are depleted. Making use of the <a href="https://gnomad.broadinstitute.org/">gnomAD</a> database, we calculate a Missense Enrichment Score (MES) indicative of the functional constraint
+                                upon the binding sites, and the residues forming them. MES is an <a href="https://en.wikipedia.org/wiki/Odds_ratio">odds ratio (OR)</a>: the smaller the score, the <span class="key-concept">fewer variants</span>, 
+                                the more constrained, and likely <span class="key-concept">functional</span> the position is.
+                            </li>
+                        </ul>
+                        <p style="text-align: justify;">
+                            For more information on how can Shenki, and MES can provide insight on protein function, see references below:
+                            <ol>
                                 <li>
-                                    <b>Relative solvent accessibility.</b>
+                                    <a href="https://doi.org/10.1101/127050">MacGowan <em>et al.</em>, 2017.</a></a><a href="https://www.biorxiv.org/"> bioRxiv.</a>
                                 </li>
                                 <li>
-                                    <b>Evolutionary divergence.</b> The Shenkin divergence score is used to measure divergence in a multiple sequence alignment (MSA)
-                                    obtained with jackHMMER using the target protein sequence as a query. The lower this score, the more conserved a site is.
-                                    Low divergence, i.e., strong conservation is usually linked with functional importance.
+                                    <a href="https://doi.org/10.1002/pro.3783">MacGowan <em>et al.</em>, 2020.</a></a><a href="https://onlinelibrary.wiley.com/"> Wiley Online Library.</a>
                                 </li>
                                 <li>
-                                    <b>Enrichment in missense variation.</b>
+                                    <a href="https://doi.org/10.1371/journal.pcbi.1009335">Utgés <em>et al.</em>, 2021.</a><a href="https://journals.plos.org/ploscompbiol/"> PLOS Computational Biology</a>
                                 </li>
-                            </ul>
+                                <li>
+                                    <a href="https://doi.org/10.21203/rs.3.rs-3160340/v1">MacGowan <em>et al.</em>, 2023.</a></a><a href="https://www.researchsquare.com/"> Research Square.</a>
+                                </li>
+                            </ol>
                         </p>
                     </div>
                 </div>

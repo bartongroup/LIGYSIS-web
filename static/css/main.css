@@ -150,21 +150,60 @@ hr {
     margin: 10px auto;
 }
  */
+
 .container {
     padding-left: 5%;
     padding-right: 5%;
+    flex: 1;
 }
 
 .home {
     padding: 30px 15px;
     text-align: left;
+    display: flex;
+    flex-direction: column;
+    min-height: 100%;
 }
 
+body {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+}
 
+.footer {
+    position: sticky;
+}
 
+a {
+    color: #428bca;
+    text-decoration: none
+}
 
+a:hover,a:focus {
+    color: #2a6496;
+    text-decoration: underline
+}
 
+a:focus {
+    outline: thin dotted;
+    outline: 5px auto -webkit-focus-ring-color;
+    outline-offset: -2px
+}
 
+.nav-link:hover {
+    text-decoration: none;
+    font-weight: bold;
+}
+
+.key-concept {
+    font-weight: 600;
+}
+
+strong {
+    font-weight: 800;
+    font-size: 20px;
+}
 
 
 
