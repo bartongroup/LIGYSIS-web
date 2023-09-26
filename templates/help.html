@@ -1,0 +1,37 @@
+{% extends 'base.html' %}
+
+{% block head %}
+<title>LIGYSIS: Help</title>
+{% endblock%}
+{% block body %}
+<div class="container py-3">
+    <div class="home">
+        <div class="row">
+            <div class="col-md-10">
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <strong>
+                            HELP
+                        </strong>
+                    </div>
+                    <div class="panel-body">
+                        <p style="text-align: justify;">
+                            The <b>LIGYSIS</b> web server is a way to access, visualise, and download the results of our pipeline for the analysis of ligand
+                            binding sites, <b>LIGYSIS</b>. The code for the pipeline can be found <a href="https://github.com/JavierSanchez-Utges/ligysis_dev">here</a>.
+                            The code for the server can be found <a href="https://github.com/JavierSanchez-Utges/ligysis_flask">here</a>.
+                        </p>
+                        <p style="text-align: justify;">
+                            Currently, LIGYSIS only allows for the inspection of proteins that are in our database. Future versions will allow users to submit
+                            their own set of protein 3D structures for analysis. These structures should be in PDB format, as well as contain the same protein, and
+                            number of copies, i.e., always a dimer, or monomer, or hexamer, etc, bound to the ligands of interest. The pipeline will then be run
+                            on the user's structures, and the results will be made available for download. Template Jupyter Notebooks, as well as the code for this
+                            pipeline can be found <a href="https://github.com/JavierSanchez-Utges/fragsys_custom">here</a>.
+                
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock%}

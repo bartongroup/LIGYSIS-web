@@ -205,15 +205,12 @@ strong {
     font-size: 20px;
 }
 
-
-
-
-
-
-
-
-
-
+.btn-primary {
+    --bs-btn-bg: #734A98;
+    --bs-btn-border-color: black;
+    --bs-btn-hover-bg: #a067d2;
+    --bs-btn-hover-border-color: black;
+}
 
 .table {
     border-spacing: 0;

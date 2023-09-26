@@ -12,7 +12,7 @@ from config import DATA_FOLDER
 
 def load_pickle(f_in):
     """
-    loads pickle
+    Loads data from pickle.
     """
     with open(f_in, "rb") as f:
         data = pickle.load(f)
@@ -22,6 +22,7 @@ def load_pickle(f_in):
 
 bss_data = pd.read_pickle(os.path.join(DATA_FOLDER, "bss_data.pkl"))
 bss_ress = pd.read_pickle(os.path.join(DATA_FOLDER, "all_bs_ress_v2_08_2023.pkl"))
+prot_ids = load_pickle(os.path.join(DATA_FOLDER, "prot_ids.pkl"))
 
 ### FORMATTING DATA ###
 
@@ -43,6 +44,8 @@ colors = load_pickle(os.path.join(DATA_FOLDER, "sample_colors_hex.pkl"))
 
 headings = bss_data.columns.tolist()
 
+data_prots = [el.split("_") for el in bss_data.lab.unique().tolist()]
+
 cc = [
     'UniProt_ResNum', 'alignment_column', 'abs_norm_shenkin',
     'oddsratio', 'pvalue', 'AA', 'RSA', 'SS'
@@ -58,7 +61,10 @@ def index():
 
         prot_id = request.form['proteinId']
 
-        return redirect(url_for('results', prot_id = prot_id)) # renders update page
+        if prot_id in prot_ids:
+            return redirect(url_for('results', prot_id = prot_id)) # renders results page
+        else:
+            return render_template('error.html', prot_id = prot_id)
 
     else:
         return render_template('index.html') # renders home page with all tasks
@@ -79,6 +85,10 @@ def results(prot_id):
 @app.route('/about')
 def about():
     return render_template('about.html')
+
+@app.route('/help')
+def help():
+    return render_template('help.html')
 
 @app.route('/get_table', methods=['POST'])
 def get_table():

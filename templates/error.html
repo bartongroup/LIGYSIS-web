@@ -1,0 +1,17 @@
+{% extends 'base.html' %}
+
+{% block head %}
+<title>Error: protein not found</title>
+{% endblock%}
+{% block body %}
+<div class="container py-3">
+    <div class="text-center">
+        <h1 class="display-1 fw-bold">ERROR</h1>
+        <p class="fs-3"> <span class="text-danger">Uh-oh...</span> Page not found.</p>
+        <p class="lead">
+            Your protein of interest is not in our database.
+        </p>
+        <a href="/" class="btn btn-primary" style="text-decoration: none;">Go Home</a>
+    </div>
+</div>
+{% endblock%}
