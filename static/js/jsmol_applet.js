@@ -1,7 +1,7 @@
 const Info = {
     color: "#FFFFFF",
-    height: 500,
-    width: 600,
+    height: 694,
+    width: 694,
     use: "HTML5",
     j2sPath: "/static/js/jmol/jsmol/j2s",
     script: "script /static/scripts/load.txt",

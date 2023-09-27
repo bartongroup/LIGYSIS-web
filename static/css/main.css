@@ -1,7 +1,7 @@
 .container {
     padding-left: 5%;
     padding-right: 5%;
-    flex: 1;
+    /* flex: 1; */
 }
 
 .home {
@@ -16,10 +16,13 @@ body {
     display: flex;
     flex-direction: column;
     min-height: 100vh;
+    
+    margin: 0;
 }
 
 .footer {
     position: sticky;
+    bottom: 0;
 }
 
 a {
@@ -68,18 +71,6 @@ strong {
     --bs-btn-hover-border-color: black;
 }
 
-.table {
-    border-spacing: 0;
-    margin: 1rem;
-    background-color: #f5f5f5;
-}
-
-.sorttable {
-    border-spacing: 0;
-    margin: 1rem;
-    background-color: #f5f5f5;
-}
-
 .table__header {
     text-align: center;
 }
@@ -107,91 +98,110 @@ tbody tr:hover {
     display: none; /* Start with table hidden */
 }
 
-/*
-#chart-container {
-    position: absolute;
-}
-
-.axis-dropdown {
-    position: absolute;
-    z-index: 2; 
-}
-
-.x-axis-dropdown {
-    left: 17%;  
-    bottom: 0;  
-    transform: translateX(-50%);  
-}
-
-.y-axis-dropdown {
-    left: 0;  
-    top: 56%; 
-    transform: translateY(-50%) rotate(-90deg); 
-    transform-origin: left top;  
-}
-
-.axis-dropdown2 {
-    position: absolute;
-    z-index: 2; 
-
-}
-.x-axis-dropdown2 {
-    left: 34%;  
-    bottom: 0;  
-    transform: translateX(-50%);  
-}
-
-.y-axis-dropdown2 {
-    left: 0;  At the left edge of the container
-    top: 100%;  
-    transform: translateY(-50%) rotate(-90deg); 
-    transform-origin: left top;  Sets the origin for the rotation
-} */
-
-
-.flexbox-container {
+/* .flexbox-container {
     display: flex;
     flex-direction: row;
     justify-content:space-between;
     align-items: flex-start;
     flex-wrap: wrap;
+    flex: 1;
+    overflow: auto;
 
 }
 
 .flexbox-item{
-    margin: 10px;
     border: 3px solid #333;
     background-color: white;
 }
 
 .flexbox-item-1{
-    width: 600px;
-    height: 500px;
-    order: 3;
+    height: 700px;
+    width: 900px;
+    order: 1;
 }
 
 .flexbox-item-2{
-    width: 400px;
+    width: 350;
     height: 350px;
     order: 2;
-    overflow-y: auto; /* Show scrollbar when content exceeds height */
+    overflow-y: auto;
+    justify-content:center;
 }
 
 .flexbox-item-3{
     width: 400px;
     height: 350px;
-    order: 1;
+    order: 4;
 }
 
 .flexbox-item-4{
     width: 600px;
     height: 350px;
-    order: 4;
+    order: 5;
 }
 
 .flexbox-item-5{
-    width: 800px;
+    width: 600px;
     height: 350px;
-    order: 5;
-    overflow-y: auto; /* Show scrollbar when content exceeds height */
+    order: 3;
+    overflow-y: auto;
+} */
+
+.flex-container {
+    display: flex;
+    align-items: stretch;
+    padding: 10px;        /* Space between the container edge and the items */
+    margin: 10px;         /* Space around the entire container */
+    box-sizing: border-box; /* Ensures that padding and border are included in the container's total width and height */
+    justify-content: space-between;
+    column-gap: 5px;
+}
+
+.big-item {
+    width: 700px;
+    height: 700px;
+    background-color: #E57373;
+    border: 3px solid #734A98;
+    border-radius: 6.25px;
+}
+
+.item {
+    height: 347.5px;
+    border: 3px solid #734A98;
+    border-radius: 6.25px;
+}
+
+.small-item-wide {
+    /* display: flex; */
+    width: 700px;
+    
+    background-color: #81C784;
+    /* overflow-y: scroll; */
+    
+    position: relative;
+}
+
+.small-item-narrow {
+    width: 400px;
+    position: relative;
+    display: flex;
+    justify-content: center; /* Center child elements horizontally */
+    align-items: center;  /* Center child elements vertically */
+    background-color: #64B5F6;
+}
+
+#bs_ress_table {
+    overflow-y: scroll;
+}
+
+#newChartCanvas {
+    display: flex;
+    justify-content: center; /* Center child elements horizontally */
+    align-items: center;  /* Center child elements vertically */
+}
+
+.narrow-items, .wide-items {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
 }

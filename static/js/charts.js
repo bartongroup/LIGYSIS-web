@@ -1,3 +1,10 @@
+const chartX = "an_shenk";
+const chartY = "MES";
+const chartLab = "lab";
+const newChartX = "abs_norm_shenkin";
+const newChartY = "oddsratio";
+const newChartLab = "UniProt_ResNum";
+
 let myChart;
 let newChart;
 
