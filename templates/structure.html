@@ -15,7 +15,7 @@
 {% block body %}
 <div class="flex-container">
     <div class="big-item">
-        <!-- <script src="/static/js/jsmol_applet.js"></script> -->
+        <script src="/static/js/jsmol_applet.js"></script>
     </div>
 
     <div class="narrow-items">
@@ -39,24 +39,32 @@
                 </tbody>
             </table>
         </div>
-        <div class="item small-item-narrow">
-            <canvas id="chartCanvas" width="400" height="300"></canvas>
-            <!-- <select id="xAxisTitle">
-                {% for header in headings[1:] %}
-                <option value="{{ header }}">{{ header }}</option>
-                {% endfor %}
-            </select>
-            <select id="yAxisTitle">
-                {% for header in headings[1:] %}
-                <option value="{{ header }}">{{ header }}</option>
-                {% endfor %}
-            </select>  -->
+        <div class="item small-item-narrow centered-items">
+            <div class="row">
+                <canvas id="chartCanvas" width="400" height="300"></canvas>
+            </div>
+            <div class="row">
+                <div class="col-6">
+                    <select id="xAxisTitle">
+                        {% for header in headings[1:] %}
+                        <option value="{{ header }}">{{ header }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div class="col-6">
+                    <select id="yAxisTitle">
+                        {% for header in headings[1:] %}
+                        <option value="{{ header }}">{{ header }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+            </div>
         </div>
     </div>
     
     <div class="wide-items">
-        <div class="item small-item-wide">
-            <table class="scroll-y" id="bs_ress_table">
+        <div class="item small-item-wide scroll-y">
+            <table class="" id="bs_ress_table">
                 <thead>
                     <tr class="table__header">
                         {% for header in cc %}
@@ -67,20 +75,28 @@
                 <tbody></tbody>
             </table>
         </div>
-        <div class="item small-item-wide">
-            <canvas id="newChartCanvas" width="650" height="320"></canvas>
-            <!-- <select id="xAxisTitle2" class="axis-dropdown2 x-axis-dropdown2">
-                <option selected hidden>abs_norm_shenkin</option>
-                {% for header in cc[1:] %}
-                <option value="{{ header }}">{{ header }}</option>
-                {% endfor %}
-            </select>
-            <select id="yAxisTitle2" class="axis-dropdown2 y-axis-dropdown2">
-                <option selected hidden>oddsratio</option>
-                {% for header in cc[1:] %}
-                <option value="{{ header }}">{{ header }}</option>
-                {% endfor %}
-            </select> -->
+        <div class="item small-item-wide centered-items">
+            <div class="row">
+                <canvas id="newChartCanvas" width="650" height="320"></canvas>
+            </div>
+            <div class="row">
+                <div class="col-6">
+                    <select id="xAxisTitle2" class="axis-dropdown2 x-axis-dropdown2">
+                        <option selected hidden>abs_norm_shenkin</option>
+                        {% for header in cc[1:] %}
+                        <option value="{{ header }}">{{ header }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div class="col-6">
+                    <select id="yAxisTitle2" class="axis-dropdown2 y-axis-dropdown2">
+                        <option selected hidden>oddsratio</option>
+                        {% for header in cc[1:] %}
+                        <option value="{{ header }}">{{ header }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+            </div>
         </div>
     </div>
 </div>

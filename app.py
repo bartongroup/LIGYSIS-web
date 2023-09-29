@@ -77,6 +77,10 @@ def results(prot_id):
     data1 = bss_prot.to_dict(orient="list")
 
     prot_ress = bss_ress.query('up_acc == @prot_id')[cc]
+    # cc = ["ResNum", "MSAcol", "shenkin", "OR", "pval", "AA", "RSA", "SS"]
+    # prot_ress.columns = cc
+
+    print(prot_ress.head())
 
     data2 = prot_ress.to_dict(orient="list")
     

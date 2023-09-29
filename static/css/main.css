@@ -160,13 +160,13 @@ tbody tr:hover {
 .big-item {
     width: 700px;
     height: 700px;
-    background-color: #E57373;
+    /* background-color: #E57373; */
     border: 3px solid #734A98;
     border-radius: 6.25px;
 }
 
 .item {
-    height: 347.5px;
+    height: 367.5px;
     border: 3px solid #734A98;
     border-radius: 6.25px;
 }
@@ -175,7 +175,7 @@ tbody tr:hover {
     /* display: flex; */
     width: 700px;
     
-    background-color: #81C784;
+    /* background-color: #81C784; */
     /* overflow-y: scroll; */
     
     position: relative;
@@ -187,15 +187,16 @@ tbody tr:hover {
     display: flex;
     justify-content: center; /* Center child elements horizontally */
     align-items: center;  /* Center child elements vertically */
-    background-color: #64B5F6;
+    /* background-color: #64B5F6; */
 }
 
-#bs_ress_table {
+.scroll-y{
     overflow-y: scroll;
 }
 
-#newChartCanvas {
+.centered-items {
     display: flex;
+    flex-direction: column;
     justify-content: center; /* Center child elements horizontally */
     align-items: center;  /* Center child elements vertically */
 }
