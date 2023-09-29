@@ -15,13 +15,14 @@
 {% block body %}
 <div class="flex-container">
     <div class="big-item">
-        <script src="/static/js/jsmol_applet.js"></script>
+        <!-- <script src="/static/js/jsmol_applet.js"></script> -->
     </div>
 
     <div class="narrow-items">
         <div class="item small-item-narrow">
-            <table id="bss_table">
-                <thead>
+            <table class="table table-bordered table-hover sortable"id="bss_table">
+                <caption>Ligand binding sites and their averaged features</caption>
+                <thead class="fixTableHead">
                     <tr class="table__header">
                         {% for header in headings %}
                         <th class="table__cell">{{ header }}</th>
@@ -30,7 +31,7 @@
                 </thead>
                 <tbody>
                     {% for i in range(data["lab"]|length) %}
-                        <tr class="table__row" style="color: {{ colors[loop.index0] }}" id="{{ data['lab'][loop.index0] }}">
+                    <tr class="custom-row" style="color: {{ colors[loop.index0] }} !important;" id="{{ data['lab'][loop.index0] }}">
                             {% for k in data.keys() %}
                                 <td class="table__cell">{{ data[k][i] }}</td>
                             {% endfor %}
@@ -64,7 +65,7 @@
     
     <div class="wide-items">
         <div class="item small-item-wide scroll-y">
-            <table class="" id="bs_ress_table">
+            <table class="table table-bordered table-hover sortable" id="bs_ress_table">
                 <thead>
                     <tr class="table__header">
                         {% for header in cc %}

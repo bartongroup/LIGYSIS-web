@@ -71,81 +71,14 @@ strong {
     --bs-btn-hover-border-color: black;
 }
 
-.table__header {
-    text-align: center;
-}
-
-.table__cell {
-    padding: 8px;
-}
-
-th, td {
-    border: 1px solid black;
-    text-align: center;
-}
-
-tbody tr:hover {
-    background-color: #ffff99;
-    font-weight: bold;
-}
-
 .highlighted-row {
-    background-color: #ffff99; /* or any highlighting style you prefer */
+    --bs-table-bg: #ffff99;
     font-weight: bold;
 }
 
 #bs_ress_table {
-    display: none; /* Start with table hidden */
+    display: none;
 }
-
-/* .flexbox-container {
-    display: flex;
-    flex-direction: row;
-    justify-content:space-between;
-    align-items: flex-start;
-    flex-wrap: wrap;
-    flex: 1;
-    overflow: auto;
-
-}
-
-.flexbox-item{
-    border: 3px solid #333;
-    background-color: white;
-}
-
-.flexbox-item-1{
-    height: 700px;
-    width: 900px;
-    order: 1;
-}
-
-.flexbox-item-2{
-    width: 350;
-    height: 350px;
-    order: 2;
-    overflow-y: auto;
-    justify-content:center;
-}
-
-.flexbox-item-3{
-    width: 400px;
-    height: 350px;
-    order: 4;
-}
-
-.flexbox-item-4{
-    width: 600px;
-    height: 350px;
-    order: 5;
-}
-
-.flexbox-item-5{
-    width: 600px;
-    height: 350px;
-    order: 3;
-    overflow-y: auto;
-} */
 
 .flex-container {
     display: flex;
@@ -172,12 +105,7 @@ tbody tr:hover {
 }
 
 .small-item-wide {
-    /* display: flex; */
-    width: 700px;
-    
-    /* background-color: #81C784; */
-    /* overflow-y: scroll; */
-    
+    /* width: 700px; */
     position: relative;
 }
 
@@ -205,4 +133,25 @@ tbody tr:hover {
     display: flex;
     flex-direction: column;
     gap: 5px;
+}
+
+/* EDITING THE BOOTSTRAP TABLE CSS CLASSES */
+
+.table{
+    --bs-table-hover-bg: #ffff99;
+}
+
+.table-hover > tbody > tr:hover {
+    /* --bs-body-font-weight: 900; */
+    font-weight: bold;
+}
+
+.table-bordered th,
+.table-bordered td {
+    border: 2px solid black !important;
+    text-align: center;
+}
+
+.table .custom-row td {
+    color: inherit;  /* This makes the table cell text color inherit the row's text color */
 }

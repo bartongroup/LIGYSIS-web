@@ -65,7 +65,9 @@ const chartConfig = {
                             $.each(keyOrder, function(j, key) { // Second loop to iterate through keys (columns)
                                 newRow.append('<td class="table__cell">' + response[key][i] + '</td>');
                             });
-                            newRow.css('color', pointColor); // Set the font color of the new row
+                            newRow[0].style.setProperty('--bs-table-color', pointColor);
+                            newRow[0].style.setProperty('--bs-table-hover-color', pointColor);
+                            // newRow.css('color', pointColor); // Set the font color of the new row
                             tableBody.append(newRow); // Append the new row to the table body
                         }
 

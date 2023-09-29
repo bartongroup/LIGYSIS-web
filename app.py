@@ -80,7 +80,7 @@ def results(prot_id):
     # cc = ["ResNum", "MSAcol", "shenkin", "OR", "pval", "AA", "RSA", "SS"]
     # prot_ress.columns = cc
 
-    print(prot_ress.head())
+    # print(prot_ress.head())
 
     data2 = prot_ress.to_dict(orient="list")
     
