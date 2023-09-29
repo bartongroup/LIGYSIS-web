@@ -13,34 +13,34 @@
 {% endblock %}
 
 {% block body %}
+<div class="flex-container">
+    <div class="big-item">
+        <script src="/static/js/jsmol_applet.js"></script>
+    </div>
 
-<div class="container">
-    <div class="row">
-        <div class="col-lg-7 col-sm-12">
-            <!-- <script src="/static/js/jsmol_applet.js"></script> -->
-        </div>
-        <div class="col-lg-5 col-sm-12">
-            <div class="row">
-                <table class="table table-bordered table-hover sortable"id="bss_table">
-                    <caption>Ligand binding sites and their averaged features</caption>
-                    <thead class="fixTableHead">
-                        <tr class="table__header">
-                            {% for header in headings %}
-                            <th class="table__cell">{{ header }}</th>
+    <div class="narrow-items">
+        <div class="item small-item-narrow">
+            <table class="table table-bordered table-hover sortable"id="bss_table">
+                <caption>Ligand binding sites and their averaged features</caption>
+                <thead class="fixTableHead">
+                    <tr class="table__header">
+                        {% for header in headings %}
+                        <th class="table__cell">{{ header }}</th>
+                        {% endfor %}
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for i in range(data["lab"]|length) %}
+                    <tr class="custom-row" style="color: {{ colors[loop.index0] }} !important;" id="{{ data['lab'][loop.index0] }}">
+                            {% for k in data.keys() %}
+                                <td class="table__cell">{{ data[k][i] }}</td>
                             {% endfor %}
                         </tr>
-                    </thead>
-                    <tbody>
-                        {% for i in range(data["lab"]|length) %}
-                        <tr class="custom-row" style="color: {{ colors[loop.index0] }} !important;" id="{{ data['lab'][loop.index0] }}">
-                                {% for k in data.keys() %}
-                                    <td class="table__cell">{{ data[k][i] }}</td>
-                                {% endfor %}
-                            </tr>
-                        {% endfor %}
-                    </tbody>
-                </table>
-            </div>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        <div class="item small-item-narrow centered-items">
             <div class="row">
                 <canvas id="chartCanvas" width="400" height="300"></canvas>
             </div>
@@ -61,20 +61,22 @@
                 </div>
             </div>
         </div>
-    <div class="row">
-        <div class="col">
-            <div class="row">
-                <table class="table table-bordered table-hover sortable" id="bs_ress_table">
-                    <thead class="sticky-header">
-                        <tr class="table__header">
-                            {% for header in cc %}
-                            <th class="table__cell">{{ header }}</th>
-                            {% endfor %}
-                        </tr>
-                    </thead>
-                    <tbody></tbody>
-                </table>
-            </div>
+    </div>
+    
+    <div class="wide-items">
+        <div class="item small-item-wide scroll-y">
+            <table class="table table-bordered table-hover sortable" id="bs_ress_table">
+                <thead class="sticky-header">
+                    <tr class="table__header">
+                        {% for header in cc %}
+                        <th class="table__cell">{{ header }}</th>
+                        {% endfor %}
+                    </tr>
+                </thead>
+                <tbody></tbody>
+            </table>
+        </div>
+        <div class="item small-item-wide centered-items">
             <div class="row">
                 <canvas id="newChartCanvas" width="650" height="320"></canvas>
             </div>
@@ -100,12 +102,13 @@
     </div>
 </div>
 
-<script> // some variable definitions from the server
+<script> // some variable definitions
     const chartData = {{ data | tojson }}
     const chartColors = {{ colors | tojson }}
     const cc = {{ cc | tojson }}
     const bs_ress_dict = {{ bs_ress_dict | tojson }}
 </script>
+
 <script src="/static/js/charts.js"></script>
 <script src="/static/js/table_listeners.js"></script>
 

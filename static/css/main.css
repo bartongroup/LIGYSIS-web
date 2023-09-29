@@ -16,7 +16,6 @@ body {
     display: flex;
     flex-direction: column;
     min-height: 100vh;
-    
     margin: 0;
 }
 
@@ -142,7 +141,6 @@ strong {
 }
 
 .table-hover > tbody > tr:hover {
-    /* --bs-body-font-weight: 900; */
     font-weight: bold;
 }
 
@@ -154,4 +152,12 @@ strong {
 
 .table .custom-row td {
     color: inherit;  /* This makes the table cell text color inherit the row's text color */
+}
+
+
+.sticky-header {
+    /* display: block; */
+    position: sticky;
+    top: 0;
+    z-index: 1; /* This ensures that the header is always on top */
 }
