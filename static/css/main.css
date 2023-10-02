@@ -1,11 +1,25 @@
+header{
+    padding-top: 0.75em;
+    padding-bottom: 0.75em;
+}
 .container {
     padding-left: 5%;
     padding-right: 5%;
+    padding-top: 1rem;
+    padding-bottom: 1rem;
     /* flex: 1; */
 }
 
+h2 {
+    margin-top: 0.5rem;
+}
+
+p {
+    margin-top: 1em;
+}
+
 .home {
-    padding: 30px 15px;
+    /* padding: 15px 15px; */
     text-align: left;
     display: flex;
     flex-direction: column;
@@ -16,13 +30,20 @@ body {
     display: flex;
     flex-direction: column;
     min-height: 100vh;
-    margin: 0;
+    /* margin: 0; */
 }
 
-.footer {
-    position: sticky;
-    bottom: 0;
+main {
+    /* padding-top:1em; */
+    /* padding-bottom:1em; */
+    flex-grow: 1;
 }
+
+#footer {
+    padding-top:1em;
+    padding-bottom:1em;
+}
+
 
 a {
     color: #428bca;
@@ -31,7 +52,7 @@ a {
 
 a:hover,a:focus {
     color: #2a6496;
-    text-decoration: underline
+    text-decoration: none
 }
 
 a:focus {
@@ -160,4 +181,14 @@ strong {
     position: sticky;
     top: 0;
     z-index: 1; /* This ensures that the header is always on top */
+}
+
+.featurette-divider {
+    border-top: 3px solid #734A98;
+}
+
+.box {
+    border: 5px solid #734A98;
+    border-radius: 5px;
+    padding: 0px;
 }

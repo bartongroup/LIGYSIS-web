@@ -3,15 +3,47 @@
 {% block head %}
 <title>LIGYSIS: Contact</title>
 {% endblock%}
-{% block body %}
-<div class="container py-3">
-    <div class="text-center">
-        <h2>Contact</h2>
-        <p class="lead">
-            For enquiries about <b>LIGYSIS</b>, please contact us at <a href="mailto:ligysis@compbio.dundee.ac.uk">ligysis@compbio.dundee.ac.uk</a>.
-            <br>For further help or contact information, please visit our <a href="http://www.compbio.dundee.ac.uk/contact.html">contact page</a>.    
-        </p>
-        <a href="/" class="btn btn-primary" style="text-decoration: none;">Go Home</a>
+{% block main %}
+<div class="container text-center">
+    <h2>Contact</h2>
+    <p class="lead">
+        For enquiries about <b>LIGYSIS</b>, please contact us at <a href="mailto:ligysis@compbio.dundee.ac.uk">ligysis@compbio.dundee.ac.uk</a>.
+        <br>For further help or contact information, please visit our <a href="http://www.compbio.dundee.ac.uk/contact.html">contact page</a>.    
+    </p>
+    <a href="/" class="btn btn-primary" style="text-decoration: none;">Go Home</a>
+</div>
+<div class="container text-center box">
+    <div class="row">
+        <div class="col-3">
+            Button with data-bs-toggle
+        </div>
+        <div class="col-9">
+            <button class="btn btn-primary" type="button" data-bs-toggle="collapse" data-bs-target="#collapseExample" aria-expanded="false" aria-controls="collapseExample">
+                <i class="bi bi-caret-down-square"></i>
+            </button>   
+        </div>
+    </div>
+
+
+    <div class="collapse" id="collapseExample">
+        <div class="container text-center">
+            <h2>Contact</h2>
+            <p class="lead">
+                For enquiries about <b>LIGYSIS</b>, please contact us at <a href="mailto:ligysis@compbio.dundee.ac.uk">ligysis@compbio.dundee.ac.uk</a>.
+                <br>For further help or contact information, please visit our <a href="http://www.compbio.dundee.ac.uk/contact.html">contact page</a>.    
+            </p>
+            <a href="/" class="btn btn-primary" style="text-decoration: none;">Go Home</a>
+        </div>
     </div>
 </div>
+
+<script>
+    $(document).ready(function(){
+        $('[data-bs-toggle="collapse"]').click(function(){
+            var icon = $(this).find('i.bi');
+            icon.toggleClass('bi bi-caret-down-square bi bi-caret-up-square');
+        });
+    });
+</script>
+
 {% endblock%}

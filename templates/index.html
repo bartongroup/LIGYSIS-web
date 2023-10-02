@@ -5,16 +5,16 @@
 {% endblock%}
 
 
-{% block body %}
+{% block main %}
 
-<div class="container py-3">
+<div class="container">
     <div class="home">
         <h2>Welcome to <b>LIGYSIS</b>: A Web Server for the analysis of <br>biologically meaningful ligand binding sites in proteins</h2>
         <p class="lead">Use the input field below to select the protein you would like to explore.</p>
     </div>
 </div>
 
-<div class="container py-3">
+<div class="container">
     <form action="/" method="POST" class="text-center">
         <div class="row justify-content-center">
             <div class="col-md-4">
@@ -33,11 +33,11 @@
     </form>
 </div>
 
-<div class="container py-3">
+<div class="container">
     <p class="pull-left">
         <i>
             Notice: <b>LIGYSIS</b> includes information from &asymp; 29,000 proteins that bind to biologically relevant ligands in accordance with
-            <a style="text-decoration: none;" href="https://zhanggroup.org/BioLiP/">
+            <a href="https://zhanggroup.org/BioLiP/">
                 BioLiP.
             </a>
         </i>
