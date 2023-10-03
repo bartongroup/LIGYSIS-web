@@ -192,3 +192,8 @@ strong {
     border-radius: 5px;
     padding: 0px;
 }
+
+.box-header {
+    margin-left: 0;
+    margin-right: 0;
+}
