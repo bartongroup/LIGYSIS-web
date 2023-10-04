@@ -16,39 +16,11 @@
 
 <div class="container">
     <div class="row mb-3">
-        <div class="col-lg-7 col-sm-12 box">
-            <div class="row justify-content-center box-header" style="background-color: #734A98;">
-                <div class="col-3 align-self-center">
-                    Button with data-bs-toggle
-                </div>
-                <div class="col-1 align-self-center">
-                    <button class="btn btn-primary" type="button" data-bs-toggle="collapse" data-bs-target="#collapseExample" aria-expanded="false" aria-controls="collapseExample">
-                        <i class="bi bi-caret-down-square"></i>
-                    </button>   
-                </div>
+        <div class="col-lg-7 col-sm-12 mb-3">
+            <div id="jmolApplet" class="applet-border d-flex align-items-center justify-content-center">
+                <script src="/static/js/jsmol_applet.js"></script>
             </div>
-        
-            <hr id="myHr" style="border: 2.5px solid #734A98; margin:0; display: none; opacity: 1;">
-
-            <div class="collapse" id="collapseExample">
-                <div class="container text-center">
-                    <script src="/static/js/jsmol_applet.js"></script>
-                </div>
-            </div>
-
-
-            <!-- <script src="/static/js/jsmol_applet.js"></script> -->
-            <script>
-                $(document).ready(function(){
-                    $('[data-bs-toggle="collapse"]').click(function(){
-                        var icon = $(this).find('i.bi');
-                        icon.toggleClass('bi bi-caret-down-square bi bi-caret-up-square');
             
-                        // Toggle <hr> visibility
-                        $("#myHr").toggle();
-                    });
-                });
-            </script>
         </div>
         <div class="col-lg-5 col-sm-12">
             <div class="row mb-3 justify-content-center">
@@ -140,5 +112,26 @@
 </script>
 <script src="/static/js/charts.js"></script>
 <script src="/static/js/table_listeners.js"></script>
+
+<script>
+    function resizeJSmol() {
+        var appletContainer = document.getElementById('jmolApplet');
+        var newWidth = appletContainer.offsetWidth;
+        
+        // Optionally set a new height, if you want a different aspect ratio.
+        // var newHeight = appletContainer.offsetHeight;
+    
+        // Update JSmol size dynamically.
+        Jmol.resizeApplet(applet, {width: newWidth, height: newWidth});
+    }
+    
+    // Listen for window resize events and adjust JSmol accordingly.
+    window.addEventListener('resize', resizeJSmol);
+    
+    // Initialize JSmol size on page load.
+    document.addEventListener('DOMContentLoaded', (event) => {
+        resizeJSmol();
+    });    
+</script>
 
 {% endblock%}

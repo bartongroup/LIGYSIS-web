@@ -197,3 +197,17 @@ strong {
     margin-left: 0;
     margin-right: 0;
 }
+
+.applet-border {
+    border: 2px solid #000000;
+    width: 100%; 
+    max-width: 700px;
+    max-height: 700px;
+    height: 100%; 
+    position: relative;
+    /* padding-bottom: 100%;  */
+}
+
+.navbar-brand {
+    margin-right: 0;
+}
