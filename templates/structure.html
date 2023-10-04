@@ -15,75 +15,86 @@
 {% block main %}
 
 <div class="container">
-    <div class="row mb-3">
-        <div class="col-lg-7 col-sm-12 mb-3">
+    <div class="row">
+        <div class="col-lg-7 col-sm-12 d-flex flex-column mb-3">
             <div id="jmolApplet" class="applet-border d-flex align-items-center justify-content-center">
                 <script src="/static/js/jsmol_applet.js"></script>
             </div>
             
         </div>
-        <div class="col-lg-5 col-sm-12">
+        <div class="col-lg-5 col-sm-12 d-flex flex-column mb-3 justify-content-between">
             <div class="row mb-3 justify-content-center">
-                <table class="table table-bordered table-hover sortable"id="bss_table">
-                    <caption>Ligand binding sites and their averaged features</caption>
-                    <thead class="fixTableHead">
-                        <tr class="table__header">
-                            {% for header in headings %}
-                            <th class="table__cell">{{ header }}</th>
-                            {% endfor %}
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {% for i in range(data["lab"]|length) %}
-                        <tr class="custom-row" style="color: {{ colors[loop.index0] }} !important;" id="{{ data['lab'][loop.index0] }}">
-                                {% for k in data.keys() %}
-                                    <td class="table__cell">{{ data[k][i] }}</td>
+                <div class="table-responsive">
+                    <table class="table table-bordered table-hover sortable"id="bss_table">
+                        <caption>Ligand binding sites and their averaged features</caption>
+                        <thead class="fixTableHead">
+                            <tr class="table__header">
+                                {% for header in headings %}
+                                <th class="table__cell">{{ header }}</th>
                                 {% endfor %}
                             </tr>
-                        {% endfor %}
-                    </tbody>
-                </table>
-            </div>
-            <div class="row mb-2 justify-content-center">
-                <canvas id="chartCanvas" width="400" height="300"></canvas>
-            </div>
-            <div class="row justify-content-evenly">
-                <div class="col-2">
-                    <select id="xAxisTitle">
-                        {% for header in headings[1:] %}
-                        <option value="{{ header }}">{{ header }}</option>
-                        {% endfor %}
-                    </select>
+                        </thead>
+                        <tbody>
+                            {% for i in range(data["lab"]|length) %}
+                            <tr class="custom-row" style="color: {{ colors[loop.index0] }} !important;" id="{{ data['lab'][loop.index0] }}">
+                                    {% for k in data.keys() %}
+                                        <td class="table__cell">{{ data[k][i] }}</td>
+                                    {% endfor %}
+                                </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
                 </div>
-                <div class="col-2">
-                    <select id="yAxisTitle">
-                        {% for header in headings[1:] %}
-                        <option value="{{ header }}">{{ header }}</option>
-                        {% endfor %}
-                    </select>
-                </div>
+                
             </div>
+            <div class="row justify-content-center">
+                <!-- <div class="col d-flex flex-column"> -->
+                <div class="row mb-2 justify-content-center">
+                    <canvas id="chartCanvas" width="400" height="300"></canvas>
+                </div>
+                <div class="row justify-content-between">
+                    <div class="col-6 d-flex justify-content-center">
+                        <select id="xAxisTitle">
+                            {% for header in headings[1:] %}
+                            <option value="{{ header }}">{{ header }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <div class="col-6 d-flex justify-content-center">
+                        <select id="yAxisTitle">
+                            {% for header in headings[1:] %}
+                            <option value="{{ header }}">{{ header }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                </div>
+                <!-- </div> -->
+            </div>
+            
+
         </div>
     </div>
     <div class="row mb-3">
         <div class="col">
             <div class="row mb-3 justify-content-center">
-                <table class="table table-bordered table-hover sortable" id="bs_ress_table">
-                    <thead class="sticky-header">
-                        <tr class="table__header">
-                            {% for header in cc %}
-                            <th class="table__cell">{{ header }}</th>
-                            {% endfor %}
-                        </tr>
-                    </thead>
-                    <tbody></tbody>
-                </table>
+                <div class="table-responsive">
+                    <table class="table table-bordered table-hover sortable" id="bs_ress_table">
+                        <thead class="sticky-header">
+                            <tr class="table__header">
+                                {% for header in cc %}
+                                <th class="table__cell">{{ header }}</th>
+                                {% endfor %}
+                            </tr>
+                        </thead>
+                        <tbody></tbody>
+                    </table>
+                </div>
             </div>
             <div class="row mb-2 justify-content-center">
                 <canvas id="newChartCanvas" width="650" height="320"></canvas>
             </div>
-            <div class="row justify-content-evenly">
-                <div class="col-2">
+            <div class="row justify-content-between">
+                <div class="col-6 d-flex justify-content-center">
                     <select id="xAxisTitle2" class="axis-dropdown2 x-axis-dropdown2">
                         <option selected hidden>abs_norm_shenkin</option>
                         {% for header in cc[1:] %}
@@ -91,7 +102,7 @@
                         {% endfor %}
                     </select>
                 </div>
-                <div class="col-2">
+                <div class="col-6 d-flex justify-content-center">
                     <select id="yAxisTitle2" class="axis-dropdown2 y-axis-dropdown2">
                         <option selected hidden>oddsratio</option>
                         {% for header in cc[1:] %}
