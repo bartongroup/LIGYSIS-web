@@ -59,7 +59,14 @@
         </header>
 
         <main class="d-flex flex-column justify-content-around">
-        {% block main %}{% endblock%}
+            {% block main %}{% endblock%}
+            <div class="container">
+                <div class="row mb-3 justify-content-center text-center">
+                    <div class="col d-flex justify-content-end">
+                        <a href="#" class="btn btn-primary" style="text-decoration: none;">Back to top</a>
+                    </div>
+                </div>
+            </div>
         </main>
 
         <footer class="container bg-white pt-0">
