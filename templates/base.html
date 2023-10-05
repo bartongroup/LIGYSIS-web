@@ -18,7 +18,7 @@
         {% endblock%}
     </head>
     <body>
-        <header>
+        <header class="py-0">
             <div class="container">
                 <nav class="navbar navbar-expand-md navbar-light justify-content-center">
                     <a 
@@ -64,52 +64,36 @@
         {% block main %}{% endblock%}
         </main>
 
-        <footer class="container bg-white">
+        <footer class="container bg-white pt-0">
             <hr class="featurette-divider">
-            <!-- <div class="container">
-                <div class="row">
-                    <div class="col-md-12">
-                        <p class="text-muted">
-                            If you use the <b>LIGYSIS</b> web server, please cite:<br>
-                            Utgés <i>et al. </i>(2023).
-                            <a style="text-decoration: none;" href="https://doi.org/10.21203/rs.3.rs-3185838/v1">
-                                Classification of likely functional state for ligand binding sites identified from fragment screening.
-                            </a>
-                            <a style="text-decoration: none;" href="https://www.researchsquare.com/">
-                                Research Square.
-                            </a>
-                        </p>
-                    </div>
-                </div>
-            </div> -->
             <div id="footer">
                 <div class="row justify-content-around align-items-center">
-                    <div class="col-md-2 d-flex justify-content-center">
+                    <div class="col-12 col-sm-12 col-md-2 mb-1 d-flex justify-content-center">
                         <a href="http://www.compbio.dundee.ac.uk/">
-                            <img src="/static/images/BG_logo.svg" alt="Barton Group Logo" height="75">
+                            <img src="/static/images/BG_logo.svg" alt="Barton Group Logo" height="75" class="responsive">
                         </a>
                     </div>
-                    <div class="col-md-2 d-flex justify-content-center">
+                    <div class="col-12 col-sm-12 col-md-2 mb-1 d-flex justify-content-center">
                         <a href="https://www.dundee.ac.uk/">
-                            <img src="/static/images/UoD_logo.svg" alt="University of Dundee Logo" height="80">
+                            <img src="/static/images/UoD_logo.png" alt="University of Dundee Logo" height="80" class="responsive">
                         </a>
                     </div>
-                    <div class="col-md-4 text-center">
-                        <p class="text-muted" id="copyright">LIGYSIS © 2023
+                    <div class="col-12 col-sm-12 col-md-4 mb-1 d-flex justify-content-center">
+                        <p class="text-muted text-center my-2" id="copyright">LIGYSIS © 2023
                             <a href="http://www.compbio.dundee.ac.uk/">The Barton Group</a> -
                             <a href="http://www.lifesci.dundee.ac.uk/research/cb">Division of Computational Biology</a>,
                             <a href="http://www.lifesci.dundee.ac.uk/">School of Life Sciences</a>,
                             <a href="http://www.dundee.ac.uk/">University of Dundee</a>, UK
                         </p>
                     </div>
-                    <div class="col-md-2 d-flex justify-content-center">
+                    <div class="col-12 col-sm-12 col-md-2 mb-1 d-flex justify-content-center">
                         <a href="http://www.eastscotbiodtp.ac.uk/">
-                            <img src="/static/images/EASTBIO_logo_nobg.png" alt="ESATBIO logo" height="75">
+                            <img src="/static/images/EASTBIO_logo_nobg.png" alt="ESATBIO logo" height="75" class="responsive">
                         </a>
                     </div>
-                    <div class="col-md-2 d-flex justify-content-center">
+                    <div class="col-12 col-sm-12 col-md-2 mb-1 d-flex justify-content-center">
                         <a href="https://www.ukri.org/councils/bbsrc/">
-                            <img src="/static/images/BBSRC_logo.gif" alt="BBSRC Logo" height="75">
+                            <img src="/static/images/BBSRC_logo.gif" alt="BBSRC Logo" height="75" class="responsive">
                         </a>
                     </div>
                 </div>

@@ -16,6 +16,8 @@ h2 {
 
 p {
     margin-top: 1em;
+    margin-bottom: 0;
+    text-align: justify;
 }
 
 .home {
@@ -39,10 +41,10 @@ main {
     flex-grow: 1;
 }
 
-#footer {
-    padding-top:1em;
+/* footer {
+    padding-top:0;
     padding-bottom:1em;
-}
+} */
 
 
 a {
@@ -221,3 +223,44 @@ strong {
     padding-right: 0;
     padding-left: 0;
 }
+
+li {
+    text-align: justify;
+}
+
+img.responsive {
+    max-height: 80px;
+    width: auto;
+}
+
+/* @media only screen and (max-width: 600px) {
+    img.responsive {
+        max-height: 80px;
+        width: auto;
+    }
+} */
+
+/* @media only screen and (min-width: 601px) and (max-width: 894px) {
+    img.responsive {
+        max-height: 80px;
+        width: auto;
+    }
+} */
+
+/* @media only screen and (min-width: 1200px){
+    img.responsive {
+        max-height:auto;
+        max-width:auto;
+    }
+} */
+
+img.responsive {
+    max-width: 100%;
+    max-height: 80px;
+    height: auto;
+    width: auto;
+}
+
+
+/* Additional media queries for other screen sizes if necessary */
+
