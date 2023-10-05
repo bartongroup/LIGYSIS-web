@@ -229,38 +229,8 @@ li {
 }
 
 img.responsive {
-    max-height: 80px;
-    width: auto;
-}
-
-/* @media only screen and (max-width: 600px) {
-    img.responsive {
-        max-height: 80px;
-        width: auto;
-    }
-} */
-
-/* @media only screen and (min-width: 601px) and (max-width: 894px) {
-    img.responsive {
-        max-height: 80px;
-        width: auto;
-    }
-} */
-
-/* @media only screen and (min-width: 1200px){
-    img.responsive {
-        max-height:auto;
-        max-width:auto;
-    }
-} */
-
-img.responsive {
     max-width: 100%;
     max-height: 80px;
     height: auto;
     width: auto;
 }
-
-
-/* Additional media queries for other screen sizes if necessary */
-

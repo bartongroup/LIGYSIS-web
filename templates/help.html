@@ -1,85 +1,111 @@
 {% extends 'base.html' %}
 
 {% block head %}
-<title>LIGYSIS: Help</title>
+
+<title>
+    LIGYSIS: Help
+</title>
+
 {% endblock%}
+
 {% block main %}
+
 <div class="container">
-    <div class="row mb-3">
-        <div class="row mb-2">
-            <strong>
-                HELP
-            </strong>
+    <div class="row">
+        <div class="col">
+            <div class="row mb-3">
+                <div class="col">
+                    <div class="row mb-2">
+                        <strong>
+                            HELP
+                        </strong>
+                    </div>
+                    <div class="row">
+                        <p>
+                            The <b>LIGYSIS</b> web server is a way to access, visualise, and download the results of our pipeline for the analysis of ligand
+                            binding sites, <b>LIGYSIS</b>. 
+                        </p>
+                    </div>
+                </div>
+            </div>
+            <div class="row mb-3">
+                <div class="col">
+                    <div class="row mb-2">
+                        <strong>
+                            Results page
+                        </strong>
+                    </div>
+                    <div class="row">
+                        <p>
+                            The <b>LIGYSIS</b> results page is composed by 5 main elements:
+                        </p>
+                        <p>
+                            Second paragraph here.
+                        </p>
+                    </div>
+                </div>
+            </div>
+            <div class="row mb-3">
+                <div class="col">
+                    <div class="row mb-2">
+                        <strong>
+                            Coming soon...
+                        </strong>
+                    </div>
+                    <div class="row">
+                        <p>
+                            Currently, the <b>LIGYSIS</b> server only allows for the inspection of proteins that are in our database. Future versions will allow users to submit
+                            their own set of protein 3D structures for analysis. These structures should be in <span class="key-concept">PDB format</span>, as well as represent the
+                            <span class="key-concept">same protein unit</span>, i.e., a dimer, or monomer, or hexamer, etc, bound to the ligands of interest. This is required for the
+                            <span class="key-concept">correct superposition</span> of the structures. The pipeline will then be run on the user's structures, and the results will be made
+                            available for download. Template Jupyter Notebooks, as well as the code for this pipeline can be found <a href="https://github.com/JavierSanchez-Utges/fragsys_custom">here</a>.
+                        </p>
+                    </div>
+                </div>
+            </div>
+            <div class="row mb-3">
+                <div class="col">
+                    <div class="row mb-2">
+                        <strong>
+                            Code availability
+                        </strong>
+                    </div>
+                    <div class="row">
+                        <p>
+                            The code for the <b>LIGYSIS</b> pipeline can be found <a href="https://github.com/JavierSanchez-Utges/ligysis_dev">here</a>.<br>
+                            The code for the <b>LIGYSIS</b> web server can be found <a href="https://github.com/JavierSanchez-Utges/ligysis_flask">here</a>.
+                        </p>
+                    </div>
+                </div>
+            </div>
+            <div class="row mb-3">
+                <div class="col">
+                    <div class="row mb-2">
+                        <strong>
+                            Citing LIGYSIS
+                        </strong>
+                    </div>
+                    <div class="row">
+                        <p>
+                            If you use the <b>LIGYSIS</b> web server, please cite:<br>
+                            Utgés <i>et al. </i>(2023).
+                            <a style="text-decoration: none;" href="https://doi.org/10.21203/rs.3.rs-3185838/v1">
+                                Classification of likely functional state for ligand binding sites identified from fragment screening.
+                            </a>
+                            <a style="text-decoration: none;" href="https://www.researchsquare.com/">
+                                Research Square.
+                            </a>
+                        </p>
+                    </div>
+                </div>
+            </div>
+            <div class="row mb-3 justify-content-center text-center">
+                <div class="col">
+                    <a href="#" class="btn btn-primary" style="text-decoration: none;">Back to top</a>
+                </div>
+            </div>
         </div>
-        <div class="row">
-            <p>
-                The <b>LIGYSIS</b> web server is a way to access, visualise, and download the results of our pipeline for the analysis of ligand
-                binding sites, <b>LIGYSIS</b>. 
-            </p>
-        </div>
-    </div>
-    <div class="row mb-3">
-        <div class="row mb-2">
-            <strong>
-                Results page
-            </strong>
-        </div>
-        <div class="row">
-            <p>
-                The <b>LIGYSIS</b> results page is composed by 5 main elements:
-            </p>
-            <p>
-                Second paragraph here.
-            </p>
-        </div>
-    </div>
-    <div class="row mb-3">
-        <div class="row mb-2">
-            <strong>
-                Coming soon...
-            </strong>
-        </div>
-        <div class="row">
-            <p>
-                Currently, the <b>LIGYSIS</b> server only allows for the inspection of proteins that are in our database. Future versions will allow users to submit
-                their own set of protein 3D structures for analysis. These structures should be in <span class="key-concept">PDB format</span>, as well as represent the
-                <span class="key-concept">same protein unit</span>, i.e., a dimer, or monomer, or hexamer, etc, bound to the ligands of interest. This is required for the
-                <span class="key-concept">correct superposition</span> of the structures. The pipeline will then be run on the user's structures, and the results will be made
-                available for download. Template Jupyter Notebooks, as well as the code for this pipeline can be found <a href="https://github.com/JavierSanchez-Utges/fragsys_custom">here</a>.
-            </p>
-        </div>
-    </div>
-    <div class="row mb-3">
-        <div class="row mb-2">
-            <strong>
-                Code availability
-            </strong>
-        </div>
-        <div class="row">
-            <p>
-                The code for the <b>LIGYSIS</b> pipeline can be found <a href="https://github.com/JavierSanchez-Utges/ligysis_dev">here</a>.<br>
-                The code for the <b>LIGYSIS</b> web server can be found <a href="https://github.com/JavierSanchez-Utges/ligysis_flask">here</a>.
-            </p>
-        </div>
-    </div>
-    <div class="row mb-3">
-        <div class="row mb-2">
-            <strong>
-                Citing LIGYSIS
-            </strong>
-        </div>
-        <div class="row">
-            <p>
-                If you use the <b>LIGYSIS</b> web server, please cite:<br>
-                Utgés <i>et al. </i>(2023).
-                <a style="text-decoration: none;" href="https://doi.org/10.21203/rs.3.rs-3185838/v1">
-                    Classification of likely functional state for ligand binding sites identified from fragment screening.
-                </a>
-                <a style="text-decoration: none;" href="https://www.researchsquare.com/">
-                    Research Square.
-                </a>
-            </p>
-        </div>
-    </div>
+    </div> 
 </div>
+
 {% endblock%}

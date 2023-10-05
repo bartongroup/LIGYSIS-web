@@ -1,69 +1,43 @@
 {% extends 'base.html' %}
 
 {% block head %}
-<title>LIGYSIS: Contact</title>
+
+<title>
+    LIGYSIS: Contact
+</title>
+
 {% endblock%}
+
 {% block main %}
+
 <div class="container text-center">
-    <h2>Contact</h2>
-    <p class="lead text-center" >
-        For enquiries about <b>LIGYSIS</b>, please contact us at <a href="mailto:ligysis@compbio.dundee.ac.uk">ligysis@compbio.dundee.ac.uk</a>.
-        <br>For further help or contact information, please visit our <a href="http://www.compbio.dundee.ac.uk/contact.html">contact page</a>.    
-    </p>
-    <a href="/" class="btn btn-primary" style="text-decoration: none;">Go Home</a>
-</div>
-
-<div class="container">
-    <p class="pull-left">
-        If you use the <b>LIGYSIS</b> web server, please cite:<br>
-        Utgés <i>et al. </i>(2023).
-        <a style="text-decoration: none;" href="https://doi.org/10.21203/rs.3.rs-3185838/v1">
-            Classification of likely functional state for ligand binding sites identified from fragment screening.
-        </a>
-        <a style="text-decoration: none;" href="https://www.researchsquare.com/">
-            Research Square.
-        </a>
-    </p>
-</div>
-
-<div class="container text-center box">
-    <div class="row justify-content-center box-header" style="background-color: #734A98;">
-        <div class="col-3 align-self-center">
-            Button with data-bs-toggle
-        </div>
-        <div class="col-1 align-self-center">
-            <button class="btn btn-primary" type="button" data-bs-toggle="collapse" data-bs-target="#collapseExample" aria-expanded="false" aria-controls="collapseExample">
-                <i class="bi bi-caret-down-square"></i>
-            </button>   
-        </div>
-    </div>
-
-    <hr id="myHr" style="border: 2.5px solid #734A98; margin:0; display: none; opacity: 1;">
-
-
-
-    <div class="collapse" id="collapseExample">
-        <div class="container text-center">
-            <h2>Contact</h2>
-            <p class="lead">
+    <div class="row">
+        <div class="col">
+            <h2 class="my-3">Contact</h2>
+            <p class="lead text-center my-3" >
                 For enquiries about <b>LIGYSIS</b>, please contact us at <a href="mailto:ligysis@compbio.dundee.ac.uk">ligysis@compbio.dundee.ac.uk</a>.
                 <br>For further help or contact information, please visit our <a href="http://www.compbio.dundee.ac.uk/contact.html">contact page</a>.    
             </p>
-            <a href="/" class="btn btn-primary" style="text-decoration: none;">Go Home</a>
+            <a href="/" class="btn btn-primary my-3" style="text-decoration: none;">Go Home</a>
         </div>
     </div>
 </div>
 
-<script>
-    $(document).ready(function(){
-        $('[data-bs-toggle="collapse"]').click(function(){
-            var icon = $(this).find('i.bi');
-            icon.toggleClass('bi bi-caret-down-square bi bi-caret-up-square');
-
-            // Toggle <hr> visibility
-            $("#myHr").toggle();
-        });
-    });
-</script>
+<div class="container">
+    <div class="row">
+        <div class="col">
+            <p class="pull-left">
+                If you use the <b>LIGYSIS</b> web server, please cite:<br>
+                Utgés <i>et al. </i>(2023).
+                <a style="text-decoration: none;" href="https://doi.org/10.21203/rs.3.rs-3185838/v1">
+                    Classification of likely functional state for ligand binding sites identified from fragment screening.
+                </a>
+                <a style="text-decoration: none;" href="https://www.researchsquare.com/">
+                    Research Square.
+                </a>
+            </p>
+        </div>
+    </div>
+</div>
 
 {% endblock%}
