@@ -6,7 +6,7 @@ import pandas as pd
 
 from flask import Flask, render_template, url_for, request, redirect, jsonify
 
-from config import DATA_FOLDER
+from config import DATA_FOLDER, BIOLIP_FOLDER
 
 ### FUNCTIONS ###
 
@@ -20,9 +20,9 @@ def load_pickle(f_in):
 
 ### READING INPUT DATA ###
 
-bss_data = pd.read_pickle(os.path.join(DATA_FOLDER, "bss_data.pkl"))
-bss_ress = pd.read_pickle(os.path.join(DATA_FOLDER, "all_bs_ress_v2_08_2023.pkl"))
-prot_ids = load_pickle(os.path.join(DATA_FOLDER, "prot_ids.pkl"))
+bss_data = pd.read_pickle(os.path.join(BIOLIP_FOLDER, "biolip_bss_data_100_accs.pkl"))
+bss_ress = pd.read_pickle(os.path.join(BIOLIP_FOLDER, "biolip_ress_data_100_accs.pkl"))
+prot_ids = load_pickle(os.path.join(BIOLIP_FOLDER, "biolip_100_accs.pkl"))
 
 ### FORMATTING DATA ###
 
@@ -31,12 +31,15 @@ bss_ress["bs_id"] = bss_ress.up_acc + "_" + bss_ress.seg_id.astype(str) + "_" + 
 bss_ress.UniProt_ResNum = bss_ress.UniProt_ResNum.astype(int)
 bss_ress = bss_ress.drop_duplicates(["up_acc", "seg_id", "binding_sites", "UniProt_ResNum"]) # drop duplicate residues within the binding site
 
-bs_ress_dict =  {
-    "P78540_1_0": [83, 84],
-    "P78540_1_1": [24, 26, 58, 61, 62, 63, 323],
-    "P78540_1_2": [107, 133, 134, 135, 136, 245, 290],
-    "P78540_1_3": [120, 143, 145, 147, 149, 155, 156, 160, 161, 200, 202, 205, 251, 253, 265, 296]
-}
+bs_ress_dict = load_pickle(os.path.join(BIOLIP_FOLDER, "biolip_bs_ress_100_accs.pkl"))
+
+
+# bs_ress_dict =  {
+#     "P78540_1_0": [83, 84],
+#     "P78540_1_1": [24, 26, 58, 61, 62, 63, 323],
+#     "P78540_1_2": [107, 133, 134, 135, 136, 245, 290],
+#     "P78540_1_3": [120, 143, 145, 147, 149, 155, 156, 160, 161, 200, 202, 205, 251, 253, 265, 296]
+# }
 
 ### SOME FIXED VARIABLES ###
 
@@ -44,7 +47,7 @@ colors = load_pickle(os.path.join(DATA_FOLDER, "sample_colors_hex.pkl"))
 
 headings = bss_data.columns.tolist()
 
-data_prots = [el.split("_") for el in bss_data.lab.unique().tolist()]
+#data_prots = [el.split("_") for el in bss_data.lab.unique().tolist()]
 
 cc = [
     'UniProt_ResNum', 'alignment_column', 'abs_norm_shenkin',
