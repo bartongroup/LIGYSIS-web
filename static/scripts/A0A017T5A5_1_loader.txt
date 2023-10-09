@@ -1,0 +1,8 @@
+load /static/data/structures/6gmf_A.pdb
+
+define A0A017T5A5_1_0 58, 61, 79, 80, 87, 91, 98, 142, 226, 229, 230, 233, 234, 237, 238, 241, 274, 279, 280, 283, 285, 308, 335, 336, 341, 343, 344, 345, 348, 349;
+
+select A0A017T5A5_1_0; wireframe on; wireframe 0.2; color[204, 81, 81];
+
+color isosurface {A0A017T5A5_1_0}; color[204, 81, 81];
+

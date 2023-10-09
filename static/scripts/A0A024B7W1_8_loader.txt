@@ -1,0 +1,8 @@
+load /static/data/structures/7m1v_A.pdb
+
+define A0A024B7W1_8_0 1069, 1074, 1076, 1083, 1085, 1120, 1146, 1148, 1155;
+
+select A0A024B7W1_8_0; wireframe on; wireframe 0.2; color[204, 81, 81];
+
+color isosurface {A0A024B7W1_8_0}; color[204, 81, 81];
+

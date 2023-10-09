@@ -1,0 +1,8 @@
+load /static/data/structures/6vxe_C.pdb
+
+define A0A031WDE4_1_0 152, 160, 277, 278, 334, 340, 434, 436, 447, 450, 645;
+
+select A0A031WDE4_1_0; wireframe on; wireframe 0.2; color[204, 81, 81];
+
+color isosurface {A0A031WDE4_1_0}; color[204, 81, 81];
+

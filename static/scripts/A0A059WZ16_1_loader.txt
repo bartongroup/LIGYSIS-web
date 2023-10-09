@@ -1,0 +1,32 @@
+load /static/data/structures/5f49_C.pdb
+
+define A0A059WZ16_1_0 90, 91, 126, 128;
+define A0A059WZ16_1_1 39;
+define A0A059WZ16_1_2 14, 20;
+define A0A059WZ16_1_3 44, 83;
+define A0A059WZ16_1_4 18, 53, 55;
+define A0A059WZ16_1_5 157;
+define A0A059WZ16_1_6 34, 35, 91, 92, 93, 94, 99, 100, 101, 102, 104, 105, 133, 134, 136, 137, 138, 140;
+define A0A059WZ16_1_7 35, 91, 121, 122, 128, 147, 153;
+define A0A059WZ16_1_8 40;
+
+select A0A059WZ16_1_0; wireframe on; wireframe 0.2; color[204, 81, 81];
+select A0A059WZ16_1_1; wireframe on; wireframe 0.2; color[127, 51, 51];
+select A0A059WZ16_1_2; wireframe on; wireframe 0.2; color[81, 204, 204];
+select A0A059WZ16_1_3; wireframe on; wireframe 0.2; color[51, 127, 127];
+select A0A059WZ16_1_4; wireframe on; wireframe 0.2; color[142, 204, 81];
+select A0A059WZ16_1_5; wireframe on; wireframe 0.2; color[89, 127, 51];
+select A0A059WZ16_1_6; wireframe on; wireframe 0.2; color[142, 81, 204];
+select A0A059WZ16_1_7; wireframe on; wireframe 0.2; color[89, 51, 127];
+select A0A059WZ16_1_8; wireframe on; wireframe 0.2; color[204, 173, 81];
+
+color isosurface {A0A059WZ16_1_0}; color[204, 81, 81];
+color isosurface {A0A059WZ16_1_1}; color[127, 51, 51];
+color isosurface {A0A059WZ16_1_2}; color[81, 204, 204];
+color isosurface {A0A059WZ16_1_3}; color[51, 127, 127];
+color isosurface {A0A059WZ16_1_4}; color[142, 204, 81];
+color isosurface {A0A059WZ16_1_5}; color[89, 127, 51];
+color isosurface {A0A059WZ16_1_6}; color[142, 81, 204];
+color isosurface {A0A059WZ16_1_7}; color[89, 51, 127];
+color isosurface {A0A059WZ16_1_8}; color[204, 173, 81];
+

@@ -1,0 +1,15 @@
+set platformSpeed 1;
+set hermiteLevel 1;
+set highResolution ON;
+set ribbonBorder ON;
+set ribbonAspectRatio 8;
+set cartoonFancy ON;
+set hoverDelay 0.01;
+wireframe off;
+spacefill off;
+ribbon on;
+color white;
+isoSurface solvent 1.4;
+color isoSurface white translucent 0.95;
+
+isoSurface OFF;

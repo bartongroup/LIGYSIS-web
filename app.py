@@ -21,8 +21,16 @@ def load_pickle(f_in):
 ### READING INPUT DATA ###
 
 bss_data = pd.read_pickle(os.path.join(BIOLIP_FOLDER, "biolip_bss_data_100_accs.pkl"))
+
 bss_ress = pd.read_pickle(os.path.join(BIOLIP_FOLDER, "biolip_ress_data_100_accs.pkl"))
+
 prot_ids = load_pickle(os.path.join(BIOLIP_FOLDER, "biolip_100_accs.pkl"))
+
+prot_seg_rep_strucs = load_pickle(os.path.join(BIOLIP_FOLDER, "biolip_prot_seg_rep_100_acc.pkl"))
+
+good_segs_df = pd.read_csv(os.path.join(BIOLIP_FOLDER, "biolip_good_segs_df_100_accs.csv"))
+good_segs = good_segs_df.seg_id.tolist()
+print(good_segs[:5])
 
 ### FORMATTING DATA ###
 
@@ -32,14 +40,6 @@ bss_ress.UniProt_ResNum = bss_ress.UniProt_ResNum.astype(int)
 bss_ress = bss_ress.drop_duplicates(["up_acc", "seg_id", "binding_sites", "UniProt_ResNum"]) # drop duplicate residues within the binding site
 
 bs_ress_dict = load_pickle(os.path.join(BIOLIP_FOLDER, "biolip_bs_ress_100_accs.pkl"))
-
-
-# bs_ress_dict =  {
-#     "P78540_1_0": [83, 84],
-#     "P78540_1_1": [24, 26, 58, 61, 62, 63, 323],
-#     "P78540_1_2": [107, 133, 134, 135, 136, 245, 290],
-#     "P78540_1_3": [120, 143, 145, 147, 149, 155, 156, 160, 161, 200, 202, 205, 251, 253, 265, 296]
-# }
 
 ### SOME FIXED VARIABLES ###
 
@@ -65,15 +65,15 @@ def index():
         prot_id = request.form['proteinId']
 
         if prot_id in prot_ids:
-            return redirect(url_for('results', prot_id = prot_id)) # renders results page
+            return redirect(url_for('results', prot_id = prot_id, seg_id = 1)) # renders results page
         else:
             return render_template('error.html', prot_id = prot_id)
 
     else:
         return render_template('index.html') # renders home page with all tasks
     
-@app.route('/results/<prot_id>', methods = ['POST', 'GET'])
-def results(prot_id):
+@app.route('/results/<prot_id>/<seg_id>', methods = ['POST', 'GET'])
+def results(prot_id, seg_id):
 
     bss_prot = bss_data[bss_data.lab.str.contains(prot_id)]
 
@@ -84,10 +84,11 @@ def results(prot_id):
     # prot_ress.columns = cc
 
     # print(prot_ress.head())
+    
 
     data2 = prot_ress.to_dict(orient="list")
     
-    return render_template('structure.html', data = data1, headings = headings, data2 = data2, cc = cc, colors = colors, bs_ress_dict = bs_ress_dict)
+    return render_template('structure.html', data = data1, headings = headings, data2 = data2, cc = cc, colors = colors, bs_ress_dict = bs_ress_dict, prot_id = prot_id, seg_id = seg_id)
 
 @app.route('/about')
 def about():

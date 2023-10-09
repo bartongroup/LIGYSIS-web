@@ -1,0 +1,11 @@
+load /static/data/structures/7ccg_A.pdb
+
+define A0A059WF38_1_0 128, 129, 184, 187, 189, 191, 227, 238, 240, 241;
+define A0A059WF38_1_1 11, 45, 70, 72, 73, 75, 129, 130, 131, 187, 189, 227, 249, 250, 251;
+
+select A0A059WF38_1_0; wireframe on; wireframe 0.2; color[204, 81, 81];
+select A0A059WF38_1_1; wireframe on; wireframe 0.2; color[127, 51, 51];
+
+color isosurface {A0A059WF38_1_0}; color[204, 81, 81];
+color isosurface {A0A059WF38_1_1}; color[127, 51, 51];
+

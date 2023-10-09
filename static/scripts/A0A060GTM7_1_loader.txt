@@ -1,0 +1,11 @@
+load /static/data/structures/4xay_G.pdb
+
+define A0A060GTM7_1_0 55, 57, 301;
+define A0A060GTM7_1_1 55, 201, 230;
+
+select A0A060GTM7_1_0; wireframe on; wireframe 0.2; color[204, 81, 81];
+select A0A060GTM7_1_1; wireframe on; wireframe 0.2; color[127, 51, 51];
+
+color isosurface {A0A060GTM7_1_0}; color[204, 81, 81];
+color isosurface {A0A060GTM7_1_1}; color[127, 51, 51];
+

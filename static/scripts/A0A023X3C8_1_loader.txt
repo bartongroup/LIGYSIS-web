@@ -1,0 +1,8 @@
+load /static/data/structures/7lq4_A.pdb
+
+define A0A023X3C8_1_0 57, 58, 61, 237, 239, 240, 243;
+
+select A0A023X3C8_1_0; wireframe on; wireframe 0.2; color[204, 81, 81];
+
+color isosurface {A0A023X3C8_1_0}; color[204, 81, 81];
+
