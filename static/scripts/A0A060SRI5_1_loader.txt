@@ -1,8 +1,0 @@
-load /static/data/structures/5no7_A.pdb
-
-define A0A060SRI5_1_0 207, 208;
-
-select A0A060SRI5_1_0; wireframe on; wireframe 0.2; color[204, 81, 81];
-
-color isosurface {A0A060SRI5_1_0}; color[204, 81, 81];
-

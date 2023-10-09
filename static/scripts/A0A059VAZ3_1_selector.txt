@@ -1,0 +1,9 @@
+define A0A059VAZ3_1_0 599, 600, 601, 602, 603, 608, 610, 612, 633, 667, 672, 673, 674, 675, 676, 677, 678, 679, 703, 715, 721;
+define A0A059VAZ3_1_1 318, 319, 320, 322, 357, 358, 359, 360, 361, 362, 363, 422, 423, 446, 472, 479, 480, 484, 493, 501, 505, 506, 509, 540, 541, 544;
+
+select A0A059VAZ3_1_0; wireframe on; wireframe 0.2; color[204, 81, 81];
+select A0A059VAZ3_1_1; wireframe on; wireframe 0.2; color[127, 51, 51];
+
+color isosurface {A0A059VAZ3_1_0}; color[204, 81, 81];
+color isosurface {A0A059VAZ3_1_1}; color[127, 51, 51];
+

@@ -1,0 +1,9 @@
+define A0A024AX32_1_0 5, 6, 8, 9, 10, 30, 31, 32, 33, 43, 44, 96, 120, 136, 137, 138, 143, 161, 163, 190, 200, 249, 266, 267, 274, 277, 279, 280;
+define A0A024AX32_1_1 44, 91, 173, 188, 190, 200, 274;
+
+select A0A024AX32_1_0; wireframe on; wireframe 0.2; color[204, 81, 81];
+select A0A024AX32_1_1; wireframe on; wireframe 0.2; color[127, 51, 51];
+
+color isosurface {A0A024AX32_1_0}; color[204, 81, 81];
+color isosurface {A0A024AX32_1_1}; color[127, 51, 51];
+

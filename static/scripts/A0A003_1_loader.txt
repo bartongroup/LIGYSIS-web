@@ -1,1 +1,0 @@
-load /static/data/structures/6kv9_A_trans.pdb

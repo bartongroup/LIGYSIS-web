@@ -1,8 +1,0 @@
-load /static/data/structures/7xri_C.pdb
-
-define A0A060IN49_1_0 33, 34, 106, 107, 132, 134, 135, 138, 144, 145, 169, 199, 200, 225;
-
-select A0A060IN49_1_0; wireframe on; wireframe 0.2; color[204, 81, 81];
-
-color isosurface {A0A060IN49_1_0}; color[204, 81, 81];
-

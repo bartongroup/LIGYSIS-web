@@ -1,0 +1,12 @@
+define A0A045JB88_1_0 176, 179, 211, 212, 213, 259, 302, 303, 324, 328, 347;
+define A0A045JB88_1_1 68, 117, 120, 121, 146, 149, 150, 153;
+define A0A045JB88_1_2 142, 143, 144, 145, 148, 160, 163, 164;
+
+select A0A045JB88_1_0; wireframe on; wireframe 0.2; color[204, 81, 81];
+select A0A045JB88_1_1; wireframe on; wireframe 0.2; color[127, 51, 51];
+select A0A045JB88_1_2; wireframe on; wireframe 0.2; color[81, 204, 204];
+
+color isosurface {A0A045JB88_1_0}; color[204, 81, 81];
+color isosurface {A0A045JB88_1_1}; color[127, 51, 51];
+color isosurface {A0A045JB88_1_2}; color[81, 204, 204];
+

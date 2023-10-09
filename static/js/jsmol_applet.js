@@ -1,9 +1,9 @@
-const proteinScript = '/static/scripts/' + segmentName + '_loader.txt'; // Change to the appropriate protein script
+// const proteinScript = '/static/scripts/' + segmentName + '_loader.txt'; // Change to the appropriate protein script
 const appearanceScript = '/static/scripts/styles.txt';
 const selectorScript = '/static/scripts/' + segmentName + '_selector.txt'; // Change to the appropriate protein script
 
 const combinedScript = `
-script ${proteinScript};
+load /static/data/structures/${segmentReps[segmentId]["rep"]}_trans.pdb;
 script ${appearanceScript};
 script ${selectorScript};
 `;
@@ -20,8 +20,6 @@ const Info = {
 jmolInitialize("/static/js/jmol/jsmol"); // initialise Jmol applet
 
 const applet = Jmol.getApplet("jmolApplet", Info); // "jmolApplet" is the string ID of this Jmol applet
-
-Jmol.script(applet, "isoSurface ON"); // calls jmolScriptCallback when an atom is hovered
 
 var isAtomHovered = false; // boolean to check if a JSMOL atom is hovered
 var isRowHovered = false; // boolean to check if a table row is hovered

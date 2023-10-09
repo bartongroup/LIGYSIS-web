@@ -1,0 +1,6 @@
+define A0A024E1X5_1_0 294, 298, 299, 324, 344, 345;
+
+select A0A024E1X5_1_0; wireframe on; wireframe 0.2; color[204, 81, 81];
+
+color isosurface {A0A024E1X5_1_0}; color[204, 81, 81];
+

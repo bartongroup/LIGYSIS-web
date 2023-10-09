@@ -26,11 +26,11 @@ bss_ress = pd.read_pickle(os.path.join(BIOLIP_FOLDER, "biolip_ress_data_100_accs
 
 prot_ids = load_pickle(os.path.join(BIOLIP_FOLDER, "biolip_100_accs.pkl"))
 
-prot_seg_rep_strucs = load_pickle(os.path.join(BIOLIP_FOLDER, "biolip_prot_seg_rep_100_acc.pkl"))
+prot_seg_rep_strucs = load_pickle(os.path.join(BIOLIP_FOLDER, "biolip_prot_seg_rep_filt_100_acc.pkl"))
 
-good_segs_df = pd.read_csv(os.path.join(BIOLIP_FOLDER, "biolip_good_segs_df_100_accs.csv"))
-good_segs = good_segs_df.seg_id.tolist()
-print(good_segs[:5])
+#good_segs_dict = pd.read_csv(os.path.join(BIOLIP_FOLDER, "biolip_good_segs_dict_100_accs.csv"))
+
+#print(good_segs[:5])
 
 ### FORMATTING DATA ###
 
@@ -65,7 +65,12 @@ def index():
         prot_id = request.form['proteinId']
 
         if prot_id in prot_ids:
-            return redirect(url_for('results', prot_id = prot_id, seg_id = 1)) # renders results page
+
+            first_seg = sorted(list(prot_seg_rep_strucs[prot_id].keys()))[0]
+
+            print(first_seg)
+
+            return redirect(url_for('results', prot_id = prot_id, seg_id = first_seg)) # renders results page
         else:
             return render_template('error.html', prot_id = prot_id)
 
@@ -75,11 +80,18 @@ def index():
 @app.route('/results/<prot_id>/<seg_id>', methods = ['POST', 'GET'])
 def results(prot_id, seg_id):
 
-    bss_prot = bss_data[bss_data.lab.str.contains(prot_id)]
+    seg_name = prot_id + "_" + seg_id
+
+    bss_prot = bss_data[bss_data.lab.str.contains(seg_name)]
 
     data1 = bss_prot.to_dict(orient="list")
 
     prot_ress = bss_ress.query('up_acc == @prot_id')[cc]
+
+    segment_reps = prot_seg_rep_strucs[prot_id]
+
+    segment_reps = dict(sorted(segment_reps.items()))
+
     # cc = ["ResNum", "MSAcol", "shenkin", "OR", "pval", "AA", "RSA", "SS"]
     # prot_ress.columns = cc
 
@@ -88,7 +100,7 @@ def results(prot_id, seg_id):
 
     data2 = prot_ress.to_dict(orient="list")
     
-    return render_template('structure.html', data = data1, headings = headings, data2 = data2, cc = cc, colors = colors, bs_ress_dict = bs_ress_dict, prot_id = prot_id, seg_id = seg_id)
+    return render_template('structure.html', data = data1, headings = headings, data2 = data2, cc = cc, colors = colors, bs_ress_dict = bs_ress_dict, prot_id = prot_id, seg_id = seg_id, segment_reps = segment_reps)
 
 @app.route('/about')
 def about():
@@ -111,7 +123,7 @@ def get_table():
 
     site_data = prot_ress.to_dict(orient="list")
 
-    # Your logic here to select the right DataFrame based on data_point_index
+    print(site_data)
 
     return jsonify(site_data)
 

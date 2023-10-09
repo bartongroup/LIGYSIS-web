@@ -18,7 +18,10 @@
     const proteinId = {{ prot_id | tojson }}
     const segmentId = {{ seg_id | tojson }}
     const segmentName = proteinId + "_" + segmentId
-    console.log(segmentName)
+    const segmentReps = {{ segment_reps | tojson }}
+
+
+    console.log(segmentReps)
 </script>
 
 {% endblock %}
@@ -26,6 +29,27 @@
 {% block main %}
 
 <div class="container">
+    <div class="row mb-3">
+        <div class="col-12 col-sm-8 col-md-6 col-lg-4 col-xl-3">
+            <select id="selectSegment" class="form-select" aria-label="Selecting structural segment">
+                <option selected>Segment {{ seg_id }} ({{ segment_reps[seg_id | int]["start"] }} - {{ segment_reps[seg_id | int]["end"] }})</option>
+                {% for key, value in segment_reps.items() if key != seg_id | int %}
+                    <option value="/results/{{ prot_id }}/{{ key }}">Segment {{ key}} ({{ value["start"] }} - {{ value["end"] }})</option>
+                {% endfor %}
+            </select>
+        </div>
+    </div>
+    <script>
+        $(document).ready(function() {
+            $('#selectSegment').on('change', function() {
+                var selectedValue = $(this).val();
+                if (selectedValue) {
+                window.location.href = selectedValue; // Redirect to the selected page (structural segment)
+                }
+            });
+        });
+    </script>
+    
     <div class="row">
         <div class="col-lg-7 col-sm-12 d-flex flex-column mb-3">
             <div id="jmolApplet" class="applet-border d-flex align-items-center justify-content-center">
@@ -87,24 +111,10 @@
     </div>
     <div class="row mb-3">
         <div class="col">
-            <div class="row mb-3 justify-content-center">
-                <div class="table-responsive">
-                    <table class="table table-bordered table-hover sortable" id="bs_ress_table">
-                        <thead class="sticky-header">
-                            <tr class="table__header">
-                                {% for header in cc %}
-                                <th class="table__cell">{{ header }}</th>
-                                {% endfor %}
-                            </tr>
-                        </thead>
-                        <tbody></tbody>
-                    </table>
-                </div>
-            </div>
             <div class="row mb-2 justify-content-center">
                 <canvas id="newChartCanvas" width="650" height="320"></canvas>
             </div>
-            <div class="row justify-content-between">
+            <div class="row justify-content-between mb-3">
                 <div class="col-6 d-flex justify-content-center">
                     <select id="xAxisTitle2" class="axis-dropdown2 x-axis-dropdown2">
                         <option selected hidden>abs_norm_shenkin</option>
@@ -121,7 +131,25 @@
                         {% endfor %}
                     </select>
                 </div>
+                
             </div>
+            <div class="row justify-content-center">
+                <div class="table-responsive">
+                    <table class="table table-bordered table-hover sortable" id="bs_ress_table">
+                        <thead class="sticky-header">
+                            <tr class="table__header">
+                                {% for header in cc %}
+                                <th class="table__cell">{{ header }}</th>
+                                {% endfor %}
+                            </tr>
+                        </thead>
+                        <tbody></tbody>
+                    </table>
+                </div>
+            </div>
+            
+            
+            
         </div>
     </div>
 </div>

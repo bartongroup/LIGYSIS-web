@@ -1,0 +1,9 @@
+define A0A023H437_1_0 23, 41, 49, 56, 59, 78, 84, 85, 86;
+define A0A023H437_1_1 55, 58, 59, 62, 84;
+
+select A0A023H437_1_0; wireframe on; wireframe 0.2; color[204, 81, 81];
+select A0A023H437_1_1; wireframe on; wireframe 0.2; color[127, 51, 51];
+
+color isosurface {A0A023H437_1_0}; color[204, 81, 81];
+color isosurface {A0A023H437_1_1}; color[127, 51, 51];
+

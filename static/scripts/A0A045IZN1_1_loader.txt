@@ -1,8 +1,0 @@
-load /static/data/structures/8odq_B.pdb
-
-define A0A045IZN1_1_0 98, 99, 100, 132, 134, 182, 207, 209, 210, 230, 232, 233, 284;
-
-select A0A045IZN1_1_0; wireframe on; wireframe 0.2; color[204, 81, 81];
-
-color isosurface {A0A045IZN1_1_0}; color[204, 81, 81];
-

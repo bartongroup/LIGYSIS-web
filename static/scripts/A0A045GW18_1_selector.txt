@@ -1,0 +1,6 @@
+define A0A045GW18_1_0 353, 355, 356, 357, 358, 372, 375, 377;
+
+select A0A045GW18_1_0; wireframe on; wireframe 0.2; color[204, 81, 81];
+
+color isosurface {A0A045GW18_1_0}; color[204, 81, 81];
+

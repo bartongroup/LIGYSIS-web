@@ -1,0 +1,6 @@
+define A0A024L327_1_0 71, 83, 84, 86, 87, 107, 116, 118, 119, 120, 121, 159, 170, 177, 247, 256;
+
+select A0A024L327_1_0; wireframe on; wireframe 0.2; color[204, 81, 81];
+
+color isosurface {A0A024L327_1_0}; color[204, 81, 81];
+

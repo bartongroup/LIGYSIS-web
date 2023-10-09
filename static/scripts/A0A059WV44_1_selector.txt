@@ -1,0 +1,6 @@
+define A0A059WV44_1_0 26, 27, 86, 87, 88, 89, 94, 95, 96, 97, 98, 99, 100, 121, 130, 131, 133, 134, 135;
+
+select A0A059WV44_1_0; wireframe on; wireframe 0.2; color[204, 81, 81];
+
+color isosurface {A0A059WV44_1_0}; color[204, 81, 81];
+

@@ -1,0 +1,6 @@
+define A0A059VJE6_2_0 25, 26, 41, 47, 51, 139, 140, 141, 142, 144, 162, 163, 164, 165, 188;
+
+select A0A059VJE6_2_0; wireframe on; wireframe 0.2; color[204, 81, 81];
+
+color isosurface {A0A059VJE6_2_0}; color[204, 81, 81];
+
