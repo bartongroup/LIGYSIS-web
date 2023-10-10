@@ -8,20 +8,26 @@ script ${appearanceScript};
 script ${selectorScript};
 `;
 
-const Info = {
+var Info = {
     color: "#FFFFFF",
     height: 700,
     width: 700,
     use: "HTML5",
     j2sPath: "/static/js/jmol/jsmol/j2s",
     script: combinedScript,
+    readyFunction: jmolIsReady,
 }; // information to initiate jmol applet
 
 jmolInitialize("/static/js/jmol/jsmol"); // initialise Jmol applet
 
-const applet = Jmol.getApplet("jmolApplet", Info); // "jmolApplet" is the string ID of this Jmol applet
+Jmol.getApplet("jmolApplet", Info); // "jmolApplet" is the string ID of this Jmol applet
+
+function jmolIsReady(jmolApplet) {
+    // console.log("JSmol is ready!"); // Debug line to indicate the applet is ready
+    Jmol.script(jmolApplet, "set HoverCallback 'jmolScriptCallback'"); // Set the hover callback now that the applet is ready
+}
 
 var isAtomHovered = false; // boolean to check if a JSMOL atom is hovered
 var isRowHovered = false; // boolean to check if a table row is hovered
 
-Jmol.script(applet, "set HoverCallback 'jmolScriptCallback'"); // calls jmolScriptCallback when an atom is hovered
+// Jmol.script(jmolApplet, "set HoverCallback 'jmolScriptCallback'"); // calls jmolScriptCallback when an atom is hovered

@@ -68,7 +68,7 @@ def index():
 
             first_seg = sorted(list(prot_seg_rep_strucs[prot_id].keys()))[0]
 
-            print(first_seg)
+            #print(first_seg)
 
             return redirect(url_for('results', prot_id = prot_id, seg_id = first_seg)) # renders results page
         else:
@@ -123,7 +123,7 @@ def get_table():
 
     site_data = prot_ress.to_dict(orient="list")
 
-    print(site_data)
+    #print(site_data)
 
     return jsonify(site_data)
 

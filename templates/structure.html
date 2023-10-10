@@ -8,6 +8,7 @@
 <script src="/static/js/jmol/jsmol/js/Jmol2.js"></script>
 <script src="https://www.kryogenix.org/code/browser/sorttable/sorttable.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
 <script src="/static/js/event_functions.js"></script>
 
 <script> // some variable definitions from the server
@@ -19,9 +20,6 @@
     const segmentId = {{ seg_id | tojson }}
     const segmentName = proteinId + "_" + segmentId
     const segmentReps = {{ segment_reps | tojson }}
-
-
-    console.log(segmentReps)
 </script>
 
 {% endblock %}
@@ -39,20 +37,11 @@
             </select>
         </div>
     </div>
-    <script>
-        $(document).ready(function() {
-            $('#selectSegment').on('change', function() {
-                var selectedValue = $(this).val();
-                if (selectedValue) {
-                window.location.href = selectedValue; // Redirect to the selected page (structural segment)
-                }
-            });
-        });
-    </script>
+    
     
     <div class="row">
         <div class="col-lg-7 col-sm-12 d-flex flex-column mb-3">
-            <div id="jmolApplet" class="applet-border d-flex align-items-center justify-content-center">
+            <div id="jmolAppletDiv" class="applet-border d-flex align-items-center justify-content-center">
                 <script src="/static/js/jsmol_applet.js"></script>
             </div>
             
@@ -105,8 +94,6 @@
                 </div>
                 <!-- </div> -->
             </div>
-            
-
         </div>
     </div>
     <div class="row mb-3">
@@ -131,7 +118,6 @@
                         {% endfor %}
                     </select>
                 </div>
-                
             </div>
             <div class="row justify-content-center">
                 <div class="table-responsive">
@@ -147,35 +133,13 @@
                     </table>
                 </div>
             </div>
-            
-            
-            
         </div>
     </div>
 </div>
 
 <script src="/static/js/charts.js"></script>
 <script src="/static/js/table_listeners.js"></script>
-
-<script>
-    function resizeJSmol() {
-        var appletContainer = document.getElementById('jmolApplet');
-        var newWidth = appletContainer.offsetWidth;
-        
-        // Optionally set a new height, if you want a different aspect ratio.
-        // var newHeight = appletContainer.offsetHeight;
-    
-        // Update JSmol size dynamically.
-        Jmol.resizeApplet(applet, {width: newWidth, height: newWidth});
-    }
-    
-    // Listen for window resize events and adjust JSmol accordingly.
-    window.addEventListener('resize', resizeJSmol);
-    
-    // Initialize JSmol size on page load.
-    document.addEventListener('DOMContentLoaded', (event) => {
-        resizeJSmol();
-    });    
-</script>
+<script src="/static/js/jsmol_resize.js"></script>
+<script src="/static/js/change_segment.js"></script>
 
 {% endblock%}

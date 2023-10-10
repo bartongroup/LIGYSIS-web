@@ -48,13 +48,13 @@ function highlightTableRow(pointLabel) { // highlights the table row of the bind
 
 function jmolScriptCallback() { // this function is called when an atom is hovered
 
-    var atom = Jmol.evaluateVar(applet, "_atomHovered"); // gets the atom hovered
+    var atom = Jmol.evaluateVar(jmolApplet, "_atomHovered"); // gets the atom hovered
 
     if (atom != -1) { // if an atom is hovered set isAtomHovered to true
         isAtomHovered = true;
     }
 
-    var atomInfo = Jmol.getPropertyAsArray(applet, "atomInfo", `{${atom}}`); // gets the atom info of the hovered atom
+    var atomInfo = Jmol.getPropertyAsArray(jmolApplet, "atomInfo", `{${atom}}`); // gets the atom info of the hovered atom
 
     var resNum = atomInfo[0].resno; // gets the residue number of the hovered atom
 
