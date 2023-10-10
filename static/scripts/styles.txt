@@ -1,9 +1,21 @@
-set platformSpeed 1;
-set hermiteLevel 1;
+#halos OFF
+#halos 25%;
+#color halos [255, 255, 153];
+
+set antialiasDisplay ON;
 set highResolution ON;
-set ribbonBorder ON;
-set ribbonAspectRatio 8;
+set imageState true;
+set displayCellParameters true;
 set cartoonFancy ON;
+set platformSpeed 5;
+set hermiteLevel 5;
+set ribbonAspectRatio 8;
+#set ambientPercent 30;
+#set diffusePercent 90;
+set ribbonBorder ON;
+#set zShade true;
+#set zShadePower 2;
+
 set hoverDelay 0.01;
 wireframe off;
 spacefill off;
@@ -11,5 +23,4 @@ ribbon on;
 color white;
 isoSurface solvent 1.4;
 color isoSurface white translucent 0.95;
-
 isoSurface OFF;

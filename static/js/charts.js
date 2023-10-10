@@ -32,15 +32,23 @@ const chartConfig = {
             {
                 label: "Binding sites",
                 radius: 12,
+                hoverRadius: 16,
                 data: chartData[chartY],
                 backgroundColor: chartColors,
+                pointHoverBackgroundColor: chartColors,
                 borderColor: "black",
                 borderWidth: 2,
-                lineTension: 0.1
+                hoverBorderWidth: 10,
+                hoverBorderColor: "gold",
+                pointHoverBorderColor: "gold",
             }
         ]
     },
     options: {
+        animation: {
+            duration: 1000, // duration of the hover animation
+            // additional animation configurations...
+        },
         onClick: function(event, array) { // event listener for click on chart points
             if (array.length > 0) {
 
@@ -111,7 +119,7 @@ const chartConfig = {
                                         clearHighlightedRow(); // clears the highlighted table row
                                     }
                                 },
-                                responsive: false,
+                                responsive: true,
                                 scales: {
                                     x: {
                                         title: {
@@ -175,14 +183,23 @@ const chartConfig = {
         },
         onHover: function(event, chartElement) { // event listener for hover on chart points
             if (chartElement.length > 0) {
+                console.log("hoverBorderColor:", chartConfig.data.datasets[0].hoverBorderColor);
                 let firstPoint = chartElement[0];
                 let pointLabel = chartData[chartLab][firstPoint.index];
+                // implement halos on JSMOL //
+                Jmol.script(jmolApplet, `select ${pointLabel} and not backbone; wireframe 0.2; color halos [255, 255, 153]; halos 25%;`);
+                 // implement halos on JSMOL //
+
                 highlightTableRow(pointLabel); // highlights the table row corresponding to the hovered chart point
-            } else {
+                isRowHovered = true; // set isRowHovered to true when a table row is hovered
+            }
+            else {
                 clearHighlightedRow();
+                isRowHovered = false;
+                Jmol.script(jmolApplet, 'halos OFF; wireframe OFF;'); // removes halos from JSMOL
             }
         },
-        responsive: false,
+        responsive: true,
         scales: {
             x: {
                 title: {
@@ -215,7 +232,7 @@ const chartConfig = {
                     },
                 }
             }
-        }
+        },
     }
 };
 
