@@ -84,23 +84,21 @@ def results(prot_id, seg_id):
 
     bss_prot = bss_data[bss_data.lab.str.contains(seg_name)]
 
+    first_site = bss_prot.lab.unique().tolist()[0]
+
+    first_site_data = bss_ress.query('bs_id == @first_site')[cc].to_dict(orient="list")
+
     data1 = bss_prot.to_dict(orient="list")
 
     prot_ress = bss_ress.query('up_acc == @prot_id')[cc]
 
     segment_reps = prot_seg_rep_strucs[prot_id]
 
-    segment_reps = dict(sorted(segment_reps.items()))
-
-    # cc = ["ResNum", "MSAcol", "shenkin", "OR", "pval", "AA", "RSA", "SS"]
-    # prot_ress.columns = cc
-
-    # print(prot_ress.head())
-    
+    segment_reps = dict(sorted(segment_reps.items()))    
 
     data2 = prot_ress.to_dict(orient="list")
     
-    return render_template('structure.html', data = data1, headings = headings, data2 = data2, cc = cc, colors = colors, bs_ress_dict = bs_ress_dict, prot_id = prot_id, seg_id = seg_id, segment_reps = segment_reps)
+    return render_template('structure.html', data = data1, headings = headings, data2 = data2, cc = cc, colors = colors, bs_ress_dict = bs_ress_dict, prot_id = prot_id, seg_id = seg_id, segment_reps = segment_reps, first_site_data = first_site_data)
 
 @app.route('/about')
 def about():
@@ -119,9 +117,9 @@ def get_table():
 
     lab = request.json.get('label', None)
 
-    prot_ress = bss_ress.query('bs_id == @lab')[cc]
+    site_ress = bss_ress.query('bs_id == @lab')[cc]
 
-    site_data = prot_ress.to_dict(orient="list")
+    site_data = site_ress.to_dict(orient="list")
 
     #print(site_data)
 

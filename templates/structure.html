@@ -20,6 +20,7 @@
     const segmentId = {{ seg_id | tojson }}
     const segmentName = proteinId + "_" + segmentId
     const segmentReps = {{ segment_reps | tojson }}
+    const newChartData = {{ first_site_data | tojson }}
 </script>
 
 {% endblock %}
@@ -40,8 +41,8 @@
     
     
     <div class="row">
-        <div class="col-lg-7 col-sm-12 d-flex flex-column mb-3">
-            <div id="jmolAppletDiv" class="applet-border d-flex align-items-center justify-content-center">
+        <div class="col-lg-7 col-sm-12 d-flex flex-column mb-3  align-items-center justify-content-center">
+            <div id="jmolAppletDiv" class="applet-border d-flex">
                 <script src="/static/js/jsmol_applet.js"></script>
             </div>
             
@@ -129,7 +130,15 @@
                                 {% endfor %}
                             </tr>
                         </thead>
-                        <tbody></tbody>
+                        <tbody> 
+                            {% for i in range(first_site_data["UniProt_ResNum"]|length) %}
+                            <tr class="custom-row" style="color: {{ colors[0] }} !important;" id="{{ first_site_data['UniProt_ResNum'][i] }}">
+                                    {% for k in first_site_data.keys() %}
+                                        <td class="table__cell">{{ first_site_data[k][i] }}</td>
+                                    {% endfor %}
+                                </tr>
+                            {% endfor %}
+                        </tbody>
                     </table>
                 </div>
             </div>
