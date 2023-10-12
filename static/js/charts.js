@@ -325,7 +325,7 @@ document.getElementById('newChartCanvas').addEventListener('mousemove', function
             newLastHoveredPoint = newFirstPoint.index;
 
             let newPointLabel = newChartData[newChartLab][newFirstPoint.index];
-
+            Jmol.script(jmolApplet, 'halos OFF; wireframe OFF;');
             Jmol.script(jmolApplet, `select ${newPointLabel} and not backbone; wireframe 0.2; color halos [255, 255, 153]; halos 25%;`);
             highlightTableRow(newPointLabel); 
             isRowHovered = true;
@@ -355,6 +355,7 @@ $('table#bs_ress_table tbody').on('mouseover', 'tr', function () { // event list
     console.log(rowId);
     console.log(index);
     if (index !== -1) {
+        Jmol.script(jmolApplet, 'halos OFF; wireframe OFF;'); // removes halos from JSMOL
         resetChartStyles(newChart, index, "gold", 10, 16); // changes chart styles to highlight the binding site
         // implement halos on JSMOL //
         Jmol.script(jmolApplet, `select ${rowId} and not backbone; wireframe 0.2; color halos [255, 255, 153]; halos 25%;`);
