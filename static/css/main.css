@@ -201,7 +201,7 @@ strong {
 }
 
 .applet-border {
-    border: 2px solid #000000;
+    /* border: 2px solid #000000; */ /* Removed for new 3Dmol.js viewer */
     width: 100%; 
     max-width: 700px;
     max-height: 700px;

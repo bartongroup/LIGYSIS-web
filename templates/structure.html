@@ -4,11 +4,16 @@
 
 <title>LIGYSIS results</title>
 
-<!-- <script src="/static/js/jmol/jsmol/JSmol.min.js"></script>
+<script src="/static/js/jmol/jsmol/JSmol.min.js"></script>
+<script src="/static/js/jmol/jsmol/JSmol.GLmol.min.js"></script>
 <script src="/static/js/jmol/jsmol/js/Jmol2.js"></script>
 <script src="https://www.kryogenix.org/code/browser/sorttable/sorttable.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-<script src="/static/js/event_functions.js"></script> -->
+<script src="/static/js/event_functions.js"></script>
+
+<script src="https://3Dmol.org/build/3Dmol-min.js"></script>     
+<script src="https://3Dmol.org/build/3Dmol.ui-min.js"></script> 
+
 
 <script> // some variable definitions from the server
     const chartData = {{ data | tojson }}
@@ -41,11 +46,61 @@
     
     <div class="row">
         <div class="col-lg-7 col-sm-12 d-flex flex-column mb-3  align-items-center justify-content-center">
-            <div id="jmolAppletDiv" class="applet-border d-flex">
-                <script src="/static/js/jsmol_applet.js"></script>
+            <div style="border: 3px solid black;" class="d-flex">
+                <div id="container-01" style="height: 632px; width: 632px;" class="applet-border d-flex">
+                    <script>
+                        let element = document.querySelector('#container-01');
+                        let config = { backgroundColor: 'white'}  // setting the outline color to red};
+                        let viewer = $3Dmol.createViewer( element, config );
+                        let pdbUri = `/static/data/structures/${segmentReps[segmentId]["rep"]}_trans.pdb`;
+                        jQuery.ajax( pdbUri, { 
+                            success: function(data) {
+                            let v = viewer;
+                            v.addModel( data, "pdb" );                       /* load data */
+                            v.setStyle({}, {cartoon: {color: 'white', style: 'edged', arrows: true}});  /* style all atoms */
+                            viewer.setStyle(
+                            {resi:[19, 22, 23, 24, 43, 44, 45, 67, 68, 69, 87, 88, 89, 91, 106, 129, 130, 154, 158, 183, 185, 186, 192, 195]},
+                            {cartoon:{color:"#cc5151"},stick:{color:"#cc5151"},}
+                        );
+
+                        viewer.setStyle(
+                            {resi:[91, 94, 131, 132, 133, 154, 183, 184, 185, 192, 195, 196, 199, 211, 212, 213, 218, 220, 282]},
+                            {cartoon:{color:"#7f3333"},stick:{color:"#7f3333"},}
+                        );
+                            v.zoomTo();                                      /* set camera */
+                            v.render({});                                    /* render scene */
+                            v.zoom(1.2, 100);                                /* slight zoom */
+                            },
+                            error: function(hdr, status, err) {
+                            console.error( "Failed to load PDB " + pdbUri + ": " + err );
+                            },
+                        });
+                    </script>
+
+                    <script>
+                        console.log("Going to color the residues")
+                        
+
+                        viewer.render({});  // Re-render to apply the new styles
+                    </script>
+                </div>
             </div>
             
+            <!-- <div id="jmolAppletDiv" class="applet-border d-flex">
+                <div
+                style="height: 635px; width: 635px; position: relative;"
+                class='viewer_3Dmoljs'
+                data-href="/static/data/structures/{{segment_reps[seg_id | int]['rep']}}_trans.pdb"
+                data-type="pdb"
+                data-backgroundcolor='white'
+                data-style='cartoon:color=white'
+                data-ui='true'>
+            </div> -->
         </div>
+            <!-- <div id="jmolAppletDiv" class="applet-border d-flex">
+                <script src="/static/js/jsmol_applet.js"></script>
+            </div> -->
+            
         <div class="col-lg-5 col-sm-12 d-flex flex-column mb-3 justify-content-between">
             <div class="row mb-3 justify-content-center">
                 <div class="table-responsive">

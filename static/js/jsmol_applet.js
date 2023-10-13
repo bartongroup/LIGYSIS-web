@@ -16,7 +16,7 @@ var Info = {
     color: "#FFFFFF",
     height: 635, // does not really matter, as it will be resized automatically depending on device screen size. This is en example height.
     width: 635, // does not really matter, as it will be resized automatically depending on device screen sizeThis is en example height.
-    use: "HTML5",
+    use: "WebGL",
     j2sPath: "/static/js/jmol/jsmol/j2s",
     script: combinedScript,
     readyFunction: jmolIsReady,
