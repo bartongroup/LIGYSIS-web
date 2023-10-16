@@ -4,9 +4,12 @@
 
 <title>LIGYSIS results</title>
 
-<script src="/static/js/jmol/jsmol/JSmol.min.js"></script>
+<!-- <script src="/static/js/jmol/jsmol/JSmol.min.js"></script>
 <script src="/static/js/jmol/jsmol/JSmol.GLmol.min.js"></script>
-<script src="/static/js/jmol/jsmol/js/Jmol2.js"></script>
+<script src="/static/js/jmol/jsmol/js/Jmol2.js"></script> -->
+
+
+
 <script src="https://www.kryogenix.org/code/browser/sorttable/sorttable.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script src="/static/js/event_functions.js"></script>
@@ -25,6 +28,8 @@
     const segmentName = proteinId + "_" + segmentId
     const segmentReps = {{ segment_reps | tojson }}
     const newChartData = {{ first_site_data | tojson }}
+
+    var surfaceVisible = false;
 </script>
 
 {% endblock %}
@@ -44,81 +49,68 @@
     </div>
     
     <div class="row">
-        <br>
-                    <input type="button" value="Stick" onclick="viewer.setStyle({},{stick:{}}); viewer.render();"></input>
-                    <input type="button" value="Line" onclick="viewer.setStyle({},{line:{}}); viewer.render();"></input>
-                    <input type="button" value="Cross"
-                        onclick="viewer.setStyle({},{cross:{linewidth:2}}); viewer.render();"></input>
-                    <input type="button" value="Sphere" onclick="viewer.setStyle({},{sphere:{}}); viewer.render();"></input>
-                    <input type="button" value="Cartoon"
-                        onclick="viewer.setStyle({hetflag:false},{cartoon:{}}); viewer.render();"></input>
-                    <input type="button" value="Label alpha C's" onclick="addLabels(viewer); viewer.render();"></input>
-                    <input type="button" value="Color SS" onclick="colorSS(viewer);"></input>
-                    <br>
-                    <input type="button" value="Surface1"
-                        onclick="surf1 = viewer.addSurface($3Dmol.SurfaceType.VDW, {}, {hetflag:false,chain:'A'},{hetflag:false,chain:'A'});"></input>
-                    <input type="button" value="Surface2"
-                        onclick="surf2 = viewer.addSurface($3Dmol.SurfaceType.MS, {map:{prop:'partialCharge',scheme:new $3Dmol.Gradient.RWB(-.6,.6)}, opacity:0.85}, {chain:'B'},{chain:'B'});"></input>
-                    <input type="button" value="RM Surfaces" onclick="viewer.removeAllSurfaces();"></input>
-                    <br>
+        <div class="col-lg-7 col-sm-12 d-flex flex-column align-items-center justify-content-center">
+            <div class="row mb-3">
+                <div style="border: 3px solid black;" class="d-flex px-0">
+                    <div id="container-01" style="height: 632px; width: 632px;" class="applet-border d-flex">
+                        <script>
+                            let element = document.querySelector('#container-01');
+                            let config = { backgroundColor: 'white'}  // setting the outline color to red};
+                            let viewer = $3Dmol.createViewer( element, config );
+                            let pdbUri = `/static/data/structures/${segmentReps[segmentId]["rep"]}_trans.pdb`;
+                            jQuery.ajax( pdbUri, { 
+                                success: function(data) {
+                                let v = viewer;
+                                v.addModel( data, "pdb" );                       /* load data */
+                                v.setStyle({}, {cartoon: {color: 'white', arrows: true}});  /* style all atoms */
+                                v.zoomTo();                                      /* set camera */
+                                v.render({});                                    /* render scene */
+                                v.zoom(1.2, 100);                                /* slight zoom */
+                                },
+                                error: function(hdr, status, err) {
+                                conerrsole.or( "Failed to load PDB " + pdbUri + ": " + err );
+                                },
+                            });
+                        </script>
+                    </div>
+                </div>
+            </div>
+            <div class="row mb-3">
+                <div class="col d-flex">
+                    <input id="surfButton" type="button" value="Surface OFF" style="font-weight: bold; color: #674ea7;"
+                    onclick="toggleSurfaceVisibility()"></input>
+                    <script>
+                        function toggleSurfaceVisibility() {
+                            var button = document.getElementById('surfButton');
+                            if (surfaceVisible) {
+                                viewer.removeAllSurfaces(); // Remove the surface
+                                button.value = 'Surface OFF'; // Change the button text
+                                button.style = "font-weight: bold; color: #674ea7;";
+                            }
+                            else {
+                              // Create and add the surface
+                                viewer.addSurface(
+                                    $3Dmol.SurfaceType.ISO,
+                                    {
+                                        color: 'white',
+                                        opacity: 0.7,
+                                    },
+                                { hetflag: false },
+                                );
+                                button.value = "Surface ON"; // Change the button text
+                                button.style = "font-weight: bold; color: #B22222;";
+                            }
+                            surfaceVisible = !surfaceVisible; // Toggle the visibility state
+                            viewer.render();
+                        }
+                    </script>
+                </div>
+                <div class="col d-flex">
                     <input type="button" value="Recenter" onclick="viewer.zoomTo();"></input>
-                    <br>
-                    <input type="button" value="Color S1"
-                    onclick="viewer.setStyle({resi:[19, 22, 23, 24, 43, 44, 45, 67, 68, 69, 87, 88, 89, 91, 106, 129, 130, 154, 158, 183, 185, 186, 192, 195]},{cartoon:{color:'#cc5151', style: 'edged', arrows: true},stick:{color:'#cc5151'},}); viewer.render({}); "
-    </div>
-    <div class="row">
-        <div class="col-lg-7 col-sm-12 d-flex flex-column mb-3  align-items-center justify-content-center">
-            <div style="border: 3px solid black;" class="d-flex">
-                <div id="container-01" style="height: 632px; width: 632px;" class="applet-border d-flex">
-                    <script>
-                        let element = document.querySelector('#container-01');
-                        let config = { backgroundColor: 'white'}  // setting the outline color to red};
-                        let viewer = $3Dmol.createViewer( element, config );
-                        let pdbUri = `/static/data/structures/${segmentReps[segmentId]["rep"]}_trans.pdb`;
-                        jQuery.ajax( pdbUri, { 
-                            success: function(data) {
-                            let v = viewer;
-                            v.addModel( data, "pdb" );                       /* load data */
-                            v.setStyle({}, {cartoon: {color: 'white', style: 'edged', arrows: true}});  /* style all atoms */
-                            v.zoomTo();                                      /* set camera */
-                            v.render({});                                    /* render scene */
-                            v.zoom(1.2, 100);                                /* slight zoom */
-                            },
-                            error: function(hdr, status, err) {
-                            console.error( "Failed to load PDB " + pdbUri + ": " + err );
-                            },
-                        });
-                    </script>
-
-                    <script>
-                        console.log("Going to color the residues")
-                        
-                        viewer.setStyle({resi:[19, 22, 23, 24, 43, 44, 45, 67, 68, 69, 87, 88, 89, 91, 106, 129, 130, 154, 158, 183, 185, 186, 192, 195]},{cartoon:{color:"#cc5151"},stick:{color:"#cc5151"},});
-
-                        viewer.setStyle(
-                            {resi:[91, 94, 131, 132, 133, 154, 183, 184, 185, 192, 195, 196, 199, 211, 212, 213, 218, 220, 282]},
-                            {cartoon:{color:"#7f3333"},stick:{color:"#7f3333"},}
-                        );
-                        viewer.render({});  // Re-render to apply the new styles
-                    </script>
-                    
                 </div>
             </div>
             
-            <!-- <div id="jmolAppletDiv" class="applet-border d-flex">
-                <div
-                style="height: 635px; width: 635px; position: relative;"
-                class='viewer_3Dmoljs'
-                data-href="/static/data/structures/{{segment_reps[seg_id | int]['rep']}}_trans.pdb"
-                data-type="pdb"
-                data-backgroundcolor='white'
-                data-style='cartoon:color=white'
-                data-ui='true'>
-            </div> -->
         </div>
-            <!-- <div id="jmolAppletDiv" class="applet-border d-flex">
-                <script src="/static/js/jsmol_applet.js"></script>
-            </div> -->
             
         <div class="col-lg-5 col-sm-12 d-flex flex-column mb-3 justify-content-between">
             <div class="row mb-3 justify-content-center">
@@ -146,7 +138,6 @@
                 
             </div>
             <div class="row justify-content-center">
-                <!-- <div class="col d-flex flex-column"> -->
                 <div class="row mb-2 justify-content-center">
                     <canvas id="chartCanvas" width="500" height="500"></canvas>
                 </div>
@@ -166,7 +157,6 @@
                         </select>
                     </div>
                 </div>
-                <!-- </div> -->
             </div>
         </div>
     </div>

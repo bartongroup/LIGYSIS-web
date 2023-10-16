@@ -7,7 +7,6 @@ const newChartLab = "UniProt_ResNum";
 
 let myChart;
 let newChart;
-// let newChartData;
 
 const chartCtx = document.getElementById("chartCanvas").getContext("2d"); 
 const newChartCtx = document.getElementById("newChartCanvas").getContext("2d");
@@ -46,121 +45,6 @@ const chartConfig = {
         ]
     },
     options: {
-        // onClick: function(event, array) { // event listener for click on chart points
-        //     if (array.length > 0) {
-
-        //         let index = array[0].index; // index of the clicked data point
-        //         let pointLabel = chartData[chartLab][index]; // label of the clicked data point
-        //         let pointColor = chartColors[index]; // color of the clicked data point
-
-        //         //$('#bs_ress_table').show(); // show the table
-    
-        //         $.ajax({ // AJAX request to get the table data from the server
-        //             type: 'POST', // POST request
-        //             url: '/get_table', // URL to send the request to
-        //             contentType: 'application/json;charset=UTF-8', // content type
-        //             data: JSON.stringify({'label': pointLabel}), // data to send
-        //             success: function(response) { // function to execute when the request is successful
-        //                 const keyOrder = cc; // order of the keys in the response object
-        //                 let tableBody = $('#bs_ress_table tbody'); // tbody of the table
-        //                 tableBody.empty(); // empty the tbody
-        //                 for (var i = 0; i < response[keyOrder[0]].length; i++) { // First loop to iterate through rows
-        //                     let newRow = $('<tr class="table__row">'); // Create a new row
-        //                     newRow.attr('id', response[newChartLab][i]); // Assign ID dynamically to each row
-        //                     $.each(keyOrder, function(j, key) { // Second loop to iterate through keys (columns)
-        //                         newRow.append('<td class="table__cell">' + response[key][i] + '</td>');
-        //                     });
-        //                     newRow[0].style.setProperty('--bs-table-color', pointColor);
-        //                     newRow[0].style.setProperty('--bs-table-hover-color', pointColor);
-        //                     // newRow.css('color', pointColor); // Set the font color of the new row
-        //                     tableBody.append(newRow); // Append the new row to the table body
-        //                 }
-
-        //                 // Data for the new chart
-        //                 newChartData = response; // data for the new chart
-        //                 // let newChartConfig = { // configuration for the new chart
-        //                 //     type: "scatter",
-        //                 //     data: {
-        //                 //         labels: newChartData[newChartX],
-        //                 //         datasets: [
-        //                 //             {
-        //                 //                 label: "Binding residues",
-        //                 //                 radius: 8,
-        //                 //                 data: newChartData[newChartY],
-        //                 //                 backgroundColor: pointColor,
-        //                 //                 pointHoverBackgroundColor: pointColor,
-        //                 //                 borderColor: "black",
-        //                 //                 borderWidth: 2,
-        //                 //                 hoverRadius: 16,
-        //                 //                 hoverBorderWidth: 10,
-        //                 //                 hoverBorderColor: "gold",
-        //                 //                 pointHoverBorderColor: "gold",
-        //                 //             }
-        //                 //         ]
-        //                 //     },
-        //                 //     options: {
-        //                 //         responsive: true,
-        //                 //         scales: {
-        //                 //             x: {
-        //                 //                 title: {
-        //                 //                     display: true,
-        //                 //                     align: "center",
-        //                 //                     text: newChartX,
-        //                 //                 },
-        //                 //                 suggestedMin: newChartLims[newChartX]["sugMin"],
-        //                 //                 suggestedMax: newChartLims[newChartX]["sugMax"],
-        //                 //             },
-        //                 //             y: {
-        //                 //                 title: {
-        //                 //                     display: true,
-        //                 //                     align: "center",
-        //                 //                     text: newChartY,
-        //                 //                 },
-        //                 //                 suggestedMin: newChartLims[newChartY]["sugMin"],
-        //                 //                 suggestedMax: newChartLims[newChartY]["sugMax"],
-        //                 //             }
-        //                 //         },
-        //                 //         plugins: {
-        //                 //             legend: {
-        //                 //                 display: false,
-        //                 //             },
-        //                 //             tooltip: {
-        //                 //                 callbacks: {
-        //                 //                     title: function(context) {
-        //                 //                         let dataIndex = context[0].dataIndex; // Assuming you are only hovering over a single point
-        //                 //                         return newChartData[newChartLab][dataIndex]; // Use the 'UniProt_ResNum' property from your data
-        //                 //                     },
-        //                 //                 }
-        //                 //             }
-        //                 //         }
-        //                 //     },
-        //                 // };
-                        
-        //                 // if (newChart) {
-        //                 //     newChart.destroy();
-        //                 // }
-
-        //                 // newChart = new Chart(newChartCtx, newChartConfig); // create the new chart
-
-        //                 // const xAxisTitleDropdown = document.getElementById("xAxisTitle2");
-        //                 // const yAxisTitleDropdown = document.getElementById("yAxisTitle2");
-                    
-        //                 // xAxisTitleDropdown.value = newChart.options.scales.x.title.text;
-        //                 // yAxisTitleDropdown.value = newChart.options.scales.y.title.text;
-
-        //                 // xAxisTitleDropdown.addEventListener("change", function () {
-        //                 //     updateChart("x", xAxisTitleDropdown, newChart, newChartData, newChartLims); // event listener for change in x axis title
-        //                 // });
-                    
-        //                 // yAxisTitleDropdown.addEventListener("change", function () {
-        //                 //     updateChart("y", yAxisTitleDropdown, newChart, newChartData, newChartLims); // event listener for change in y axis title
-        //                 // });
-        //             }
-        //         });
-        //     } // else {
-        //         // $('#bs_ress_table').hide(); // hide the table
-        //     //}
-        // },
         responsive: true,
         scales: {
             x: {
@@ -287,8 +171,10 @@ document.getElementById('chartCanvas').addEventListener('mousemove', function(e)
             lastHoveredPoint1 = firstPoint.index;
 
             let pointLabel = chartData[chartLab][firstPoint.index];
+            let siteColor = chartColors[Number(pointLabel.split("_").pop())]; 
 
-            Jmol.script(jmolApplet, `select ${pointLabel} and not backbone; wireframe 0.2; color halos [255, 255, 153]; halos 25%;`);
+            viewer.setStyle({resi: bs_ress_dict[pointLabel]}, {cartoon:{color: siteColor, arrows: true}, stick:{color: siteColor}, });
+            viewer.render({});
             highlightTableRow(pointLabel); 
             isRowHovered = true;
         }
@@ -297,7 +183,8 @@ document.getElementById('chartCanvas').addEventListener('mousemove', function(e)
 
         clearHighlightedRow();
         isRowHovered = false;
-        Jmol.script(jmolApplet, 'halos OFF; wireframe OFF;');
+        viewer.setStyle({}, {cartoon: {color: 'white', arrows: true}});
+        viewer.render({});
     }
 });
 
@@ -307,7 +194,8 @@ document.getElementById('chartCanvas').addEventListener('mouseout', function(e) 
 
         clearHighlightedRow();
         isRowHovered = false;
-        Jmol.script(jmolApplet, 'halos OFF; wireframe OFF;');
+        viewer.setStyle({}, {cartoon: {color: 'white', arrows: true}});
+        viewer.render({});
     }
 });
 
@@ -320,13 +208,16 @@ document.getElementById('newChartCanvas').addEventListener('mousemove', function
     if (newChartElement.length > 0) { // cursor is hovering over a data point
         let newFirstPoint = newChartElement[0];
         
+        const pointColor = newChart.data.datasets[0].backgroundColor;
 
         if (newLastHoveredPoint !== newFirstPoint.index) { // Check if the hovered point has changed
             newLastHoveredPoint = newFirstPoint.index;
 
             let newPointLabel = newChartData[newChartLab][newFirstPoint.index];
-            Jmol.script(jmolApplet, 'halos OFF; wireframe OFF;');
-            Jmol.script(jmolApplet, `select ${newPointLabel} and not backbone; wireframe 0.2; color halos [255, 255, 153]; halos 25%;`);
+
+            viewer.setStyle({resi: newPointLabel}, {cartoon:{color: pointColor, arrows: true}, stick:{color: pointColor}, });
+            viewer.render({});
+
             highlightTableRow(newPointLabel); 
             isRowHovered = true;
         }
@@ -335,7 +226,8 @@ document.getElementById('newChartCanvas').addEventListener('mousemove', function
 
         clearHighlightedRow();
         isRowHovered = false;
-        Jmol.script(jmolApplet, 'halos OFF; wireframe OFF;');
+        viewer.setStyle({}, {cartoon: {color: 'white', arrows: true}});
+        viewer.render({});
     }
 });
 
@@ -368,34 +260,3 @@ $('table#bs_ress_table tbody').on('mouseover', 'tr', function () { // event list
         Jmol.script(jmolApplet, 'halos OFF; wireframe OFF;'); // removes halos from JSMOL
     });
 });
-
-// document.querySelector('table#bs_ress_table tbody').addEventListener('mouseover', function (event) { 
-//     let element = event.target;
-//     while (element && element.tagName.toLowerCase() !== 'tr') {
-//         element = element.parentNode;
-//     }
-//     if (element && element.tagName.toLowerCase() === 'tr') {
-//         let rowId = Number(element.id); // gets the row id of the table row that is hovered over
-//         let index = newChartData[newChartLab].indexOf(rowId); // gets the index of the row id in the chart data
-        
-//         if (index !== -1) {
-//             resetChartStyles(newChart, index, "gold", 10, 16); // changes chart styles to highlight the binding site
-//             // implement halos on JSMOL //
-//             Jmol.script(jmolApplet, `select ${rowId} and not backbone; wireframe 0.2; color halos [255, 255, 153]; halos 25%;`);
-//             // implement halos on JSMOL //
-//         }
-//     }
-// });
-
-// document.querySelector('table#bs_ress_table tbody').addEventListener('mouseout', function (event) { 
-//     let element = event.target;
-//     while (element && element.tagName.toLowerCase() !== 'tr') {
-//         element = element.parentNode;
-//     }
-//     if (element && element.tagName.toLowerCase() === 'tr') {
-//         newChart.data.datasets[0].data.forEach(function(point, i) {
-//             resetChartStyles(newChart, i, "black", 2, 8); // resets chart styles to default
-//             Jmol.script(jmolApplet, 'halos OFF; wireframe OFF;'); // removes halos from JSMOL
-//         });
-//     }
-// });

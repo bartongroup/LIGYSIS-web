@@ -4,13 +4,21 @@
 $('table#bss_table tbody').on('mouseover', 'tr', function () { // event listener for mouseover on table rows
     isRowHovered = true; // set isRowHovered to true when a table row is hovered
     let rowId = this.id;  // gets the row id of the table row that is hovered over
+    let siteColor = chartColors[Number(rowId.split("_").pop())]; // gets the binding site color of the table row that is hovered over
 
-    // implement halos on JSMOL //
-    viewer.setStyle({resi:[rowId]},{cartoon:{color:'#cc5151'},stick:{color:'#cc5151'},});
-    viewer.render({});
-    // Jmol.script(jmolApplet, `select ${rowId} and not backbone; wireframe 0.2; color halos [255, 255, 153]; halos 25%;`);
-     // implement halos on JSMOL //
+    // implement halos on 3Dmol.js //
+    viewer.setStyle({resi: bs_ress_dict[rowId]}, {cartoon:{color: siteColor, arrows: true}, stick:{color: siteColor}, });
     
+    if (surfaceVisible) {
+        viewer.removeAllSurfaces();
+        viewer.setStyle({resi: bs_ress_dict[rowId]}, {cartoon:{color: siteColor, arrows: true}, stick:{color: siteColor}, surfaceColor: siteColor},);
+        //viewer.setStyle({resi: bs_ress_dict[rowId]}, {hetflag: false}, {surfaceColor: siteColor});
+        viewer.addSurface($3Dmol.SurfaceType.ISO, {opacity: 0.8, color: siteColor}, {resi: bs_ress_dict[rowId]}, {}, {hetflag: false});
+        viewer.addSurface($3Dmol.SurfaceType.ISO, {opacity: 0.8, color: 'white'}, {resi: bs_ress_dict[rowId], invert: true}, {}, {hetflag: false});
+    }
+    viewer.render({});
+    // implement halos on 3Dmol.js //
+
     let index = chartData[chartLab].indexOf(rowId); // gets the index of the row id in the chart data
 
     if (index !== -1) {
@@ -22,7 +30,13 @@ $('table#bss_table tbody').on('mouseover', 'tr', function () { // event listener
     myChart.data.datasets[0].data.forEach(function(point, i) {
         resetChartStyles(myChart, i, "black", 1, 12); // resets chart styles to default
     });
-    //Jmol.script(jmolApplet, 'halos OFF; wireframe OFF;'); // removes halos from JSMOL
+    // implement halos on 3Dmol.js //
+    viewer.setStyle({}, {cartoon: {color: 'white', arrows: true}});
+    // if (surfaceVisible) {
+    //     viewer.addSurface($3Dmol.SurfaceType.ISO, {opacity: 0.7, color: 'white'}, {}, {hetflag: false});
+    // }
+    viewer.render({});
+    // implement halos on 3Dmol.js //
 });
 
 // THIS IS THE EVENT LISTENER THAT CHANGES THE AXES OF THE BINDING SITES PLOTS ACCORDING TO DROPDOWNS
