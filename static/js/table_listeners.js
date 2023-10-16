@@ -6,7 +6,9 @@ $('table#bss_table tbody').on('mouseover', 'tr', function () { // event listener
     let rowId = this.id;  // gets the row id of the table row that is hovered over
 
     // implement halos on JSMOL //
-    Jmol.script(jmolApplet, `select ${rowId} and not backbone; wireframe 0.2; color halos [255, 255, 153]; halos 25%;`);
+    viewer.setStyle({resi:[rowId]},{cartoon:{color:'#cc5151'},stick:{color:'#cc5151'},});
+    viewer.render({});
+    // Jmol.script(jmolApplet, `select ${rowId} and not backbone; wireframe 0.2; color halos [255, 255, 153]; halos 25%;`);
      // implement halos on JSMOL //
     
     let index = chartData[chartLab].indexOf(rowId); // gets the index of the row id in the chart data
@@ -20,7 +22,7 @@ $('table#bss_table tbody').on('mouseover', 'tr', function () { // event listener
     myChart.data.datasets[0].data.forEach(function(point, i) {
         resetChartStyles(myChart, i, "black", 1, 12); // resets chart styles to default
     });
-    Jmol.script(jmolApplet, 'halos OFF; wireframe OFF;'); // removes halos from JSMOL
+    //Jmol.script(jmolApplet, 'halos OFF; wireframe OFF;'); // removes halos from JSMOL
 });
 
 // THIS IS THE EVENT LISTENER THAT CHANGES THE AXES OF THE BINDING SITES PLOTS ACCORDING TO DROPDOWNS

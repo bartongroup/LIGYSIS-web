@@ -43,7 +43,29 @@
         </div>
     </div>
     
-    
+    <div class="row">
+        <br>
+                    <input type="button" value="Stick" onclick="viewer.setStyle({},{stick:{}}); viewer.render();"></input>
+                    <input type="button" value="Line" onclick="viewer.setStyle({},{line:{}}); viewer.render();"></input>
+                    <input type="button" value="Cross"
+                        onclick="viewer.setStyle({},{cross:{linewidth:2}}); viewer.render();"></input>
+                    <input type="button" value="Sphere" onclick="viewer.setStyle({},{sphere:{}}); viewer.render();"></input>
+                    <input type="button" value="Cartoon"
+                        onclick="viewer.setStyle({hetflag:false},{cartoon:{}}); viewer.render();"></input>
+                    <input type="button" value="Label alpha C's" onclick="addLabels(viewer); viewer.render();"></input>
+                    <input type="button" value="Color SS" onclick="colorSS(viewer);"></input>
+                    <br>
+                    <input type="button" value="Surface1"
+                        onclick="surf1 = viewer.addSurface($3Dmol.SurfaceType.VDW, {}, {hetflag:false,chain:'A'},{hetflag:false,chain:'A'});"></input>
+                    <input type="button" value="Surface2"
+                        onclick="surf2 = viewer.addSurface($3Dmol.SurfaceType.MS, {map:{prop:'partialCharge',scheme:new $3Dmol.Gradient.RWB(-.6,.6)}, opacity:0.85}, {chain:'B'},{chain:'B'});"></input>
+                    <input type="button" value="RM Surfaces" onclick="viewer.removeAllSurfaces();"></input>
+                    <br>
+                    <input type="button" value="Recenter" onclick="viewer.zoomTo();"></input>
+                    <br>
+                    <input type="button" value="Color S1"
+                    onclick="viewer.setStyle({resi:[19, 22, 23, 24, 43, 44, 45, 67, 68, 69, 87, 88, 89, 91, 106, 129, 130, 154, 158, 183, 185, 186, 192, 195]},{cartoon:{color:'#cc5151', style: 'edged', arrows: true},stick:{color:'#cc5151'},}); viewer.render({}); "
+    </div>
     <div class="row">
         <div class="col-lg-7 col-sm-12 d-flex flex-column mb-3  align-items-center justify-content-center">
             <div style="border: 3px solid black;" class="d-flex">
@@ -58,15 +80,6 @@
                             let v = viewer;
                             v.addModel( data, "pdb" );                       /* load data */
                             v.setStyle({}, {cartoon: {color: 'white', style: 'edged', arrows: true}});  /* style all atoms */
-                            viewer.setStyle(
-                            {resi:[19, 22, 23, 24, 43, 44, 45, 67, 68, 69, 87, 88, 89, 91, 106, 129, 130, 154, 158, 183, 185, 186, 192, 195]},
-                            {cartoon:{color:"#cc5151"},stick:{color:"#cc5151"},}
-                        );
-
-                        viewer.setStyle(
-                            {resi:[91, 94, 131, 132, 133, 154, 183, 184, 185, 192, 195, 196, 199, 211, 212, 213, 218, 220, 282]},
-                            {cartoon:{color:"#7f3333"},stick:{color:"#7f3333"},}
-                        );
                             v.zoomTo();                                      /* set camera */
                             v.render({});                                    /* render scene */
                             v.zoom(1.2, 100);                                /* slight zoom */
@@ -80,9 +93,15 @@
                     <script>
                         console.log("Going to color the residues")
                         
+                        viewer.setStyle({resi:[19, 22, 23, 24, 43, 44, 45, 67, 68, 69, 87, 88, 89, 91, 106, 129, 130, 154, 158, 183, 185, 186, 192, 195]},{cartoon:{color:"#cc5151"},stick:{color:"#cc5151"},});
 
+                        viewer.setStyle(
+                            {resi:[91, 94, 131, 132, 133, 154, 183, 184, 185, 192, 195, 196, 199, 211, 212, 213, 218, 220, 282]},
+                            {cartoon:{color:"#7f3333"},stick:{color:"#7f3333"},}
+                        );
                         viewer.render({});  // Re-render to apply the new styles
                     </script>
+                    
                 </div>
             </div>
             
