@@ -171,9 +171,25 @@ document.getElementById('chartCanvas').addEventListener('mousemove', function(e)
             lastHoveredPoint1 = firstPoint.index;
 
             let pointLabel = chartData[chartLab][firstPoint.index];
-            let siteColor = chartColors[Number(pointLabel.split("_").pop())]; 
+            let siteColor = chartColors[Number(pointLabel.split("_").pop())];
 
-            viewer.setStyle({resi: bs_ress_dict[pointLabel]}, {cartoon:{style:'oval', color: siteColor, arrows: true}, stick:{color: siteColor}, });
+            if (surfaceVisible) {
+                viewer.removeAllSurfaces();
+                viewer.addSurface( // adds coloured surface to binding site
+                    $3Dmol.SurfaceType.ISO,
+                    {opacity: 0.9, color: siteColor},
+                    {resi: seg_ress_dict[pointLabel], hetflag: false},
+                    {resi: seg_ress_dict[pointLabel], hetflag: false}
+                    );
+                viewer.addSurface( // adds white surface to rest of protein
+                    $3Dmol.SurfaceType.ISO,
+                    {opacity: 0.7, color: 'white'},
+                    {resi: seg_ress_dict[pointLabel], invert: true, hetflag: false},
+                    {hetflag: false},
+                    );
+            }
+
+            viewer.setStyle({resi: seg_ress_dict[pointLabel]}, {cartoon:{style:'oval', color: siteColor, arrows: true}, stick:{color: siteColor}, });
             viewer.render({});
             highlightTableRow(pointLabel); 
             isRowHovered = true;
@@ -184,6 +200,15 @@ document.getElementById('chartCanvas').addEventListener('mousemove', function(e)
         clearHighlightedRow();
         isRowHovered = false;
         viewer.setStyle({}, {cartoon: {style:'oval', color: 'white', arrows: true}});
+        if (surfaceVisible) {
+            viewer.removeAllSurfaces();
+            viewer.addSurface(
+                $3Dmol.SurfaceType.ISO,
+                {opacity: 0.7, color: 'white'},
+                {hetflag: false},
+                {hetflag: false}
+            );
+        }
         viewer.render({});
     }
 });
@@ -215,7 +240,22 @@ document.getElementById('newChartCanvas').addEventListener('mousemove', function
 
             let newPointLabel = newChartData[newChartLab][newFirstPoint.index];
 
-            viewer.setStyle({resi: newPointLabel}, {cartoon:{color: pointColor, arrows: true}, stick:{color: pointColor}, });
+            if (surfaceVisible) {
+                viewer.removeAllSurfaces();
+                viewer.addSurface( // adds coloured surface to binding site
+                    $3Dmol.SurfaceType.ISO,
+                    {opacity: 0.9, color: pointColor},
+                    {resi: newPointLabel, hetflag: false},
+                    {resi: newPointLabel, hetflag: false}
+                    );
+                viewer.addSurface( // adds white surface to rest of protein
+                    $3Dmol.SurfaceType.ISO,
+                    {opacity: 0.7, color: 'white'},
+                    {resi: newPointLabel, invert: true, hetflag: false},
+                    {hetflag: false},
+                    );
+            }
+            viewer.setStyle({resi: newPointLabel}, {cartoon:{style:'oval', color: pointColor, arrows: true}, stick:{color: pointColor}, });
             viewer.render({});
 
             highlightTableRow(newPointLabel); 
@@ -226,7 +266,16 @@ document.getElementById('newChartCanvas').addEventListener('mousemove', function
 
         clearHighlightedRow();
         isRowHovered = false;
-        viewer.setStyle({}, {cartoon: {color: 'white', arrows: true}});
+        if (surfaceVisible) {
+            viewer.removeAllSurfaces();
+            viewer.addSurface(
+                $3Dmol.SurfaceType.ISO,
+                {opacity: 0.7, color: 'white'},
+                {hetflag: false},
+                {hetflag: false}
+            );
+        }
+        viewer.setStyle({}, {cartoon: {style:'oval', color: 'white', arrows: true}});
         viewer.render({});
     }
 });
@@ -237,32 +286,54 @@ document.getElementById('newChartCanvas').addEventListener('mouseout', function(
 
         clearHighlightedRow();
         isRowHovered = false;
-        Jmol.script(jmolApplet, 'halos OFF; wireframe OFF;');
+        
     }
 });
 
 $('table#bs_ress_table tbody').on('mouseover', 'tr', function () { // event listener for mouseover on table rows
     let rowId = Number(this.id);  // gets the row id of the table row that is hovered over
     let index = newChartData[newChartLab].indexOf(rowId); // gets the index of the row id in the chart data
+
     console.log(this);
-    //console.log(rowId);
-    // console.log(index);
+
     if (index !== -1) {
-        //Jmol.script(jmolApplet, 'halos OFF; wireframe OFF;'); // removes halos from JSMOL
         
         resetChartStyles(newChart, index, "gold", 10, 16); // changes chart styles to highlight the binding site
-        // implement halos on JSMOL //
-        // Jmol.script(jmolApplet, `select ${rowId} and not backbone; wireframe 0.2; color halos [255, 255, 153]; halos 25%;`);
+
+        if (surfaceVisible) {
+            viewer.removeAllSurfaces();
+            viewer.addSurface( // adds coloured surface to binding site
+                $3Dmol.SurfaceType.ISO,
+                {opacity: 0.9, color: "red"},
+                {resi: rowId, hetflag: false},
+                {resi: rowId, hetflag: false}
+                );
+            viewer.addSurface( // adds white surface to rest of protein
+                $3Dmol.SurfaceType.ISO,
+                {opacity: 0.7, color: 'white'},
+                {resi: rowId, invert: true, hetflag: false},
+                {hetflag: false},
+                );
+        }
         viewer.setStyle({resi: rowId}, {cartoon:{style:'oval', color: "red", arrows: true}, stick:{color: "red"}, });
         viewer.render({});
-        // implement halos on JSMOL //
+
 
     }
 }).on('mouseout', 'tr', function () { // event listener for mouseout on table rows
     newChart.data.datasets[0].data.forEach(function(point, i) {
         resetChartStyles(newChart, i, "black", 2, 8); // resets chart styles to default
+
+        if (surfaceVisible) {
+            viewer.removeAllSurfaces();
+            viewer.addSurface(
+                $3Dmol.SurfaceType.ISO,
+                {opacity: 0.7, color: 'white'},
+                {hetflag: false},
+                {hetflag: false}
+            );
+        }
         viewer.setStyle({}, {cartoon: {style:'oval', color: 'white', arrows: true}});
         viewer.render({});
-        //Jmol.script(jmolApplet, 'halos OFF; wireframe OFF;'); // removes halos from JSMOL
     });
 });

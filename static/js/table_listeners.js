@@ -10,23 +10,19 @@ $('table#bss_table tbody').on('mouseover', 'tr', function () { // event listener
     
     
     if (surfaceVisible) {
-        viewer.removeAllSurfaces();
-        // viewer.setStyle({resi: bs_ress_dict[rowId]}, {cartoon:{color: siteColor, arrows: true}, stick:{color: siteColor}, surfaceColor: siteColor},);
-        //viewer.setStyle({resi: bs_ress_dict[rowId]}, {hetflag: false}, {surfaceColor: siteColor});
-        viewer.addSurface( // adds coloured surface to binding site
-            $3Dmol.SurfaceType.ISO,
-            {opacity: 0.9, color: siteColor},
-            {resi: bs_ress_dict[rowId], hetflag: false},
-            {resi: bs_ress_dict[rowId], hetflag: false}
-            );
-        viewer.addSurface( // adds white surface to rest of protein
-            $3Dmol.SurfaceType.ISO,
-            {opacity: 0.7, color: 'white'},
-            {resi: bs_ress_dict[rowId], invert: true, hetflag: false},
-            {hetflag: false},
-            );
+        for (const [key, value] of Object.entries(surfsDict)) {
+            if (key == rowId) {
+                viewer.setSurfaceMaterialStyle(surfsDict[rowId].surfid, {color: siteColor, opacity:0.9});
+            }
+            else if (key == `not_${rowId}`) {
+                viewer.setSurfaceMaterialStyle(surfsDict[`not_${rowId}`].surfid, {color: 'white', opacity:0.7});
+            }
+            else {
+                viewer.setSurfaceMaterialStyle(value.surfid, {color: 'white', opacity:0.0});
+            }
+        }
     }
-    viewer.setStyle({resi: bs_ress_dict[rowId]}, {cartoon:{style:'oval', color: siteColor, arrows: true}, stick:{color: siteColor}, });
+    viewer.setStyle({resi: seg_ress_dict[rowId]}, {cartoon:{style:'oval', color: siteColor, arrows: true}, stick:{color: siteColor}, });
     viewer.render({});
     // implement halos on 3Dmol.js //
 
@@ -44,13 +40,18 @@ $('table#bss_table tbody').on('mouseover', 'tr', function () { // event listener
     // implement halos on 3Dmol.js //
     viewer.setStyle({}, {cartoon: {style:'oval', color: 'white', arrows: true}});
     if (surfaceVisible) {
-        viewer.removeAllSurfaces();
-        viewer.addSurface(
-            $3Dmol.SurfaceType.ISO,
-            {opacity: 0.7, color: 'white'},
-            {hetflag: false},
-            {hetflag: false}
-        );
+        for (const [key, value] of Object.entries(surfsDict)) {
+            if (key == "non_binding") {
+                viewer.setSurfaceMaterialStyle(surfsDict[key].surfid, {color: 'white', opacity:0.7});
+            }
+            else if (key.startsWith("not_")) {
+                viewer.setSurfaceMaterialStyle(surfsDict[key].surfid, {color: 'white', opacity:0.0});
+            }
+            else {
+                let siteColor = chartColors[Number(key.split("_").pop())];
+                viewer.setSurfaceMaterialStyle(surfsDict[key].surfid, {color: siteColor, opacity:0.8});
+            }
+        }
     }
     viewer.render({});
     // implement halos on 3Dmol.js //

@@ -18,7 +18,7 @@
     const chartData = {{ data | tojson }}
     const chartColors = {{ colors | tojson }}
     const cc = {{ cc | tojson }}
-    const bs_ress_dict = {{ bs_ress_dict | tojson }}
+    const seg_ress_dict = {{ seg_ress_dict | tojson }}
     const proteinId = {{ prot_id | tojson }}
     const segmentId = {{ seg_id | tojson }}
     const segmentName = proteinId + "_" + segmentId
@@ -26,6 +26,8 @@
     const newChartData = {{ first_site_data | tojson }}
 
     var surfaceVisible = false;
+    let wholeSurf;
+    let surfsDict = {};
 </script>
 
 {% endblock %}
@@ -88,15 +90,45 @@
                                 button.style = "font-weight: bold; color: #674ea7;";
                             }
                             else {
-                              // Create and add the surface
-                                viewer.addSurface(
-                                    $3Dmol.SurfaceType.ISO,
-                                    {
-                                        color: 'white',
-                                        opacity: 0.7,
-                                    },
-                                { hetflag: false },
-                                );
+                                // Create and add the surface
+                                for (const [key, value] of Object.entries(seg_ress_dict)) {
+                                    if (key == "ALL_BINDING") {
+                                        surfsDict["non_binding"] = viewer.addSurface(
+                                            $3Dmol.SurfaceType.ISO,
+                                            {
+                                                color: 'white',
+                                                opacity: 0.7,
+                                            },
+                                            {resi: seg_ress_dict[key], invert: true, hetflag: false},
+                                            { hetflag: false },
+                                        );
+                                    }
+                                    else {
+                                        let siteColor = chartColors[Number(key.split("_").pop())];
+                                        surfsDict[key] = viewer.addSurface(
+                                            $3Dmol.SurfaceType.ISO,
+                                            {
+                                                color: siteColor,
+                                                opacity: 0.8,
+                                            },
+                                            {resi: seg_ress_dict[key], hetflag: false},
+                                            { hetflag: false },
+                                        );
+                                        surfsDict[`not_${key}`] = viewer.addSurface(
+                                            $3Dmol.SurfaceType.ISO,
+                                            {
+                                                color: 'white',
+                                                opacity: 0.0,
+                                            },
+                                            {resi: seg_ress_dict[key], invert: true, hetflag: false},
+                                            { hetflag: false },
+                                        );
+                                    }
+                                }
+
+
+
+
                                 button.value = "Surface ON"; // Change the button text
                                 button.style = "font-weight: bold; color: #B22222;";
                             }

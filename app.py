@@ -39,7 +39,7 @@ bss_ress["bs_id"] = bss_ress.up_acc + "_" + bss_ress.seg_id.astype(str) + "_" + 
 bss_ress.UniProt_ResNum = bss_ress.UniProt_ResNum.astype(int)
 bss_ress = bss_ress.drop_duplicates(["up_acc", "seg_id", "binding_sites", "UniProt_ResNum"]) # drop duplicate residues within the binding site
 
-bs_ress_dict = load_pickle(os.path.join(BIOLIP_FOLDER, "biolip_bs_ress_100_accs.pkl"))
+bs_ress_dict = load_pickle(os.path.join(BIOLIP_FOLDER, "biolip_bs_ress_100_accs2.pkl"))
 
 ### SOME FIXED VARIABLES ###
 
@@ -97,8 +97,14 @@ def results(prot_id, seg_id):
     segment_reps = dict(sorted(segment_reps.items()))    
 
     data2 = prot_ress.to_dict(orient="list")
+
+    seg_ress_dict = bs_ress_dict[prot_id][seg_id]
     
-    return render_template('structure.html', data = data1, headings = headings, data2 = data2, cc = cc, colors = colors, bs_ress_dict = bs_ress_dict, prot_id = prot_id, seg_id = seg_id, segment_reps = segment_reps, first_site_data = first_site_data)
+    return render_template(
+        'structure.html', data = data1, headings = headings, data2 = data2, cc = cc, colors = colors,
+        seg_ress_dict = seg_ress_dict, prot_id = prot_id, seg_id = seg_id, segment_reps = segment_reps,
+        first_site_data = first_site_data
+    )
 
 @app.route('/about')
 def about():
