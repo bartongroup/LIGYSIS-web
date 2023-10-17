@@ -24,7 +24,7 @@ const newChartLims = {
     pvalue: {sugMin: 0.1, sugMax: 0.75, min: 0, max: 1}
 };
 
-const chartConfig = {
+let chartConfig = {
     type: "scatter",
     data: {
         labels: chartData[chartX],
@@ -173,7 +173,7 @@ document.getElementById('chartCanvas').addEventListener('mousemove', function(e)
             let pointLabel = chartData[chartLab][firstPoint.index];
             let siteColor = chartColors[Number(pointLabel.split("_").pop())]; 
 
-            viewer.setStyle({resi: bs_ress_dict[pointLabel]}, {cartoon:{color: siteColor, arrows: true}, stick:{color: siteColor}, });
+            viewer.setStyle({resi: bs_ress_dict[pointLabel]}, {cartoon:{style:'oval', color: siteColor, arrows: true}, stick:{color: siteColor}, });
             viewer.render({});
             highlightTableRow(pointLabel); 
             isRowHovered = true;
@@ -183,7 +183,7 @@ document.getElementById('chartCanvas').addEventListener('mousemove', function(e)
 
         clearHighlightedRow();
         isRowHovered = false;
-        viewer.setStyle({}, {cartoon: {color: 'white', arrows: true}});
+        viewer.setStyle({}, {cartoon: {style:'oval', color: 'white', arrows: true}});
         viewer.render({});
     }
 });
@@ -194,7 +194,7 @@ document.getElementById('chartCanvas').addEventListener('mouseout', function(e) 
 
         clearHighlightedRow();
         isRowHovered = false;
-        viewer.setStyle({}, {cartoon: {color: 'white', arrows: true}});
+        viewer.setStyle({}, {cartoon: {style:'oval', color: 'white', arrows: true}});
         viewer.render({});
     }
 });
@@ -244,19 +244,25 @@ document.getElementById('newChartCanvas').addEventListener('mouseout', function(
 $('table#bs_ress_table tbody').on('mouseover', 'tr', function () { // event listener for mouseover on table rows
     let rowId = Number(this.id);  // gets the row id of the table row that is hovered over
     let index = newChartData[newChartLab].indexOf(rowId); // gets the index of the row id in the chart data
-    console.log(rowId);
-    console.log(index);
+    console.log(this);
+    //console.log(rowId);
+    // console.log(index);
     if (index !== -1) {
-        Jmol.script(jmolApplet, 'halos OFF; wireframe OFF;'); // removes halos from JSMOL
+        //Jmol.script(jmolApplet, 'halos OFF; wireframe OFF;'); // removes halos from JSMOL
+        
         resetChartStyles(newChart, index, "gold", 10, 16); // changes chart styles to highlight the binding site
         // implement halos on JSMOL //
-        Jmol.script(jmolApplet, `select ${rowId} and not backbone; wireframe 0.2; color halos [255, 255, 153]; halos 25%;`);
+        // Jmol.script(jmolApplet, `select ${rowId} and not backbone; wireframe 0.2; color halos [255, 255, 153]; halos 25%;`);
+        viewer.setStyle({resi: rowId}, {cartoon:{style:'oval', color: "red", arrows: true}, stick:{color: "red"}, });
+        viewer.render({});
         // implement halos on JSMOL //
 
     }
 }).on('mouseout', 'tr', function () { // event listener for mouseout on table rows
     newChart.data.datasets[0].data.forEach(function(point, i) {
         resetChartStyles(newChart, i, "black", 2, 8); // resets chart styles to default
-        Jmol.script(jmolApplet, 'halos OFF; wireframe OFF;'); // removes halos from JSMOL
+        viewer.setStyle({}, {cartoon: {style:'oval', color: 'white', arrows: true}});
+        viewer.render({});
+        //Jmol.script(jmolApplet, 'halos OFF; wireframe OFF;'); // removes halos from JSMOL
     });
 });

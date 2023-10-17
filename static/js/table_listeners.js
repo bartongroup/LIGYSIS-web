@@ -7,15 +7,26 @@ $('table#bss_table tbody').on('mouseover', 'tr', function () { // event listener
     let siteColor = chartColors[Number(rowId.split("_").pop())]; // gets the binding site color of the table row that is hovered over
 
     // implement halos on 3Dmol.js //
-    viewer.setStyle({resi: bs_ress_dict[rowId]}, {cartoon:{color: siteColor, arrows: true}, stick:{color: siteColor}, });
+    
     
     if (surfaceVisible) {
         viewer.removeAllSurfaces();
-        viewer.setStyle({resi: bs_ress_dict[rowId]}, {cartoon:{color: siteColor, arrows: true}, stick:{color: siteColor}, surfaceColor: siteColor},);
+        // viewer.setStyle({resi: bs_ress_dict[rowId]}, {cartoon:{color: siteColor, arrows: true}, stick:{color: siteColor}, surfaceColor: siteColor},);
         //viewer.setStyle({resi: bs_ress_dict[rowId]}, {hetflag: false}, {surfaceColor: siteColor});
-        viewer.addSurface($3Dmol.SurfaceType.ISO, {opacity: 0.8, color: siteColor}, {resi: bs_ress_dict[rowId]}, {}, {hetflag: false});
-        viewer.addSurface($3Dmol.SurfaceType.ISO, {opacity: 0.8, color: 'white'}, {resi: bs_ress_dict[rowId], invert: true}, {}, {hetflag: false});
+        viewer.addSurface( // adds coloured surface to binding site
+            $3Dmol.SurfaceType.ISO,
+            {opacity: 0.9, color: siteColor},
+            {resi: bs_ress_dict[rowId], hetflag: false},
+            {resi: bs_ress_dict[rowId], hetflag: false}
+            );
+        viewer.addSurface( // adds white surface to rest of protein
+            $3Dmol.SurfaceType.ISO,
+            {opacity: 0.7, color: 'white'},
+            {resi: bs_ress_dict[rowId], invert: true, hetflag: false},
+            {hetflag: false},
+            );
     }
+    viewer.setStyle({resi: bs_ress_dict[rowId]}, {cartoon:{style:'oval', color: siteColor, arrows: true}, stick:{color: siteColor}, });
     viewer.render({});
     // implement halos on 3Dmol.js //
 
@@ -31,10 +42,16 @@ $('table#bss_table tbody').on('mouseover', 'tr', function () { // event listener
         resetChartStyles(myChart, i, "black", 1, 12); // resets chart styles to default
     });
     // implement halos on 3Dmol.js //
-    viewer.setStyle({}, {cartoon: {color: 'white', arrows: true}});
-    // if (surfaceVisible) {
-    //     viewer.addSurface($3Dmol.SurfaceType.ISO, {opacity: 0.7, color: 'white'}, {}, {hetflag: false});
-    // }
+    viewer.setStyle({}, {cartoon: {style:'oval', color: 'white', arrows: true}});
+    if (surfaceVisible) {
+        viewer.removeAllSurfaces();
+        viewer.addSurface(
+            $3Dmol.SurfaceType.ISO,
+            {opacity: 0.7, color: 'white'},
+            {hetflag: false},
+            {hetflag: false}
+        );
+    }
     viewer.render({});
     // implement halos on 3Dmol.js //
 });

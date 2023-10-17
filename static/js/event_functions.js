@@ -46,43 +46,43 @@ function highlightTableRow(pointLabel) { // highlights the table row of the bind
     }
 }
 
-function jmolScriptCallback() { // this function is called when an atom is hovered
+// function jmolScriptCallback() { // this function is called when an atom is hovered
 
-    var atom = Jmol.evaluateVar(jmolApplet, "_atomHovered"); // gets the atom hovered
+//     var atom = Jmol.evaluateVar(jmolApplet, "_atomHovered"); // gets the atom hovered
 
-    if (atom != -1) { // if an atom is hovered set isAtomHovered to true
-        isAtomHovered = true;
-    }
+//     if (atom != -1) { // if an atom is hovered set isAtomHovered to true
+//         isAtomHovered = true;
+//     }
 
-    var atomInfo = Jmol.getPropertyAsArray(jmolApplet, "atomInfo", `{${atom}}`); // gets the atom info of the hovered atom
+//     var atomInfo = Jmol.getPropertyAsArray(jmolApplet, "atomInfo", `{${atom}}`); // gets the atom info of the hovered atom
 
-    var resNum = atomInfo[0].resno; // gets the residue number of the hovered atom
+//     var resNum = atomInfo[0].resno; // gets the residue number of the hovered atom
 
-    var b = 0; // boolean to check if the residue number is in any binding site
+//     var b = 0; // boolean to check if the residue number is in any binding site
 
-    whenNotHovering(); // clears highlighted table row before highlighting another one (2 rows will never be highlighted)
+//     whenNotHovering(); // clears highlighted table row before highlighting another one (2 rows will never be highlighted)
 
-    for (const [k, v] of Object.entries(bs_ress_dict)) { // iterates through dictionary of residue numbers and their corresponding binding sites
-        if (v.includes(resNum)) {
-            highlightTableRow(k); // highlights the table row of the binding site
-            b = 1;
-            var index = chartData[chartLab].indexOf(k);
-            if (index !== -1) {
-                resetChartStyles(myChart, index, "gold", 10, 16); // changes chart styles to highlight the binding site
-            }
-            break;
-        }
-    }
-    if (b == 0) { // clears highlight row if the residue number is not in any binding site
-        whenNotHovering(); // clears highlighted table row and chart point before highlighting another one (2 rows/points will never be highlighted)
-    }
-}
+//     for (const [k, v] of Object.entries(bs_ress_dict)) { // iterates through dictionary of residue numbers and their corresponding binding sites
+//         if (v.includes(resNum)) {
+//             highlightTableRow(k); // highlights the table row of the binding site
+//             b = 1;
+//             var index = chartData[chartLab].indexOf(k);
+//             if (index !== -1) {
+//                 resetChartStyles(myChart, index, "gold", 10, 16); // changes chart styles to highlight the binding site
+//             }
+//             break;
+//         }
+//     }
+//     if (b == 0) { // clears highlight row if the residue number is not in any binding site
+//         whenNotHovering(); // clears highlighted table row and chart point before highlighting another one (2 rows/points will never be highlighted)
+//     }
+// }
 
-setInterval(function() {   // checks if an atom is hovered every 100ms
-    if (!isAtomHovered && !isRowHovered) {
-        whenNotHovering(); // execute your code when not hovering over an atom and a row is not hovered
-    }
-    isAtomHovered = false; // reset the flag
-}, 100); // this interval has to be longer than hoverDelay in Jmol
+// setInterval(function() {   // checks if an atom is hovered every 100ms
+//     if (!isAtomHovered && !isRowHovered) {
+//         whenNotHovering(); // execute your code when not hovering over an atom and a row is not hovered
+//     }
+//     isAtomHovered = false; // reset the flag
+// }, 100); // this interval has to be longer than hoverDelay in Jmol
 
 // END

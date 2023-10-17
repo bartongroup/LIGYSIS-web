@@ -4,11 +4,7 @@
 
 <title>LIGYSIS results</title>
 
-<!-- <script src="/static/js/jmol/jsmol/JSmol.min.js"></script>
-<script src="/static/js/jmol/jsmol/JSmol.GLmol.min.js"></script>
-<script src="/static/js/jmol/jsmol/js/Jmol2.js"></script> -->
-
-
+<script src="https://code.jquery.com/jquery-3.6.1.min.js"></script>
 
 <script src="https://www.kryogenix.org/code/browser/sorttable/sorttable.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
@@ -49,20 +45,23 @@
     </div>
     
     <div class="row">
-        <div class="col-lg-7 col-sm-12 d-flex flex-column align-items-center justify-content-center">
+        <div id="3DMolAppletHolder" class="col-lg-7 col-sm-12 d-flex flex-column align-items-center justify-content-center">
             <div class="row mb-3">
-                <div style="border: 3px solid black;" class="d-flex px-0">
+                <div style="border: 2px solid black;" class="d-flex px-0">
                     <div id="container-01" style="height: 632px; width: 632px;" class="applet-border d-flex">
                         <script>
                             let element = document.querySelector('#container-01');
                             let config = { backgroundColor: 'white'}  // setting the outline color to red};
                             let viewer = $3Dmol.createViewer( element, config );
+                            $3Dmol.setSyncSurface(true); // all surfaces appear at once
+                            viewer.setViewStyle({'style':'outline','color':'black','width':0.1})
                             let pdbUri = `/static/data/structures/${segmentReps[segmentId]["rep"]}_trans.pdb`;
                             jQuery.ajax( pdbUri, { 
                                 success: function(data) {
                                 let v = viewer;
                                 v.addModel( data, "pdb" );                       /* load data */
-                                v.setStyle({}, {cartoon: {color: 'white', arrows: true}});  /* style all atoms */
+                                v.setStyle({}, {cartoon: {style:'oval', color: 'white', arrows: true}});  /* style all atoms */
+                                //v.setSyncSurface(true);
                                 v.zoomTo();                                      /* set camera */
                                 v.render({});                                    /* render scene */
                                 v.zoom(1.2, 100);                                /* slight zoom */
@@ -71,6 +70,7 @@
                                 conerrsole.or( "Failed to load PDB " + pdbUri + ": " + err );
                                 },
                             });
+                            viewer.resize();
                         </script>
                     </div>
                 </div>
@@ -211,7 +211,8 @@
 
 <script src="/static/js/charts.js"></script>
 <script src="/static/js/table_listeners.js"></script>
-<script src="/static/js/jsmol_resize.js"></script>
+<!-- <script src="/static/js/jsmol_resize.js"></script> -->
+<script src="/static/js/3DMol_resize.js"></script>
 <script src="/static/js/change_segment.js"></script>
 
 {% endblock%}
