@@ -174,21 +174,15 @@ document.getElementById('chartCanvas').addEventListener('mousemove', function(e)
             let siteColor = chartColors[Number(pointLabel.split("_").pop())];
 
             if (surfaceVisible) {
-                viewer.removeAllSurfaces();
-                viewer.addSurface( // adds coloured surface to binding site
-                    $3Dmol.SurfaceType.ISO,
-                    {opacity: 0.9, color: siteColor},
-                    {resi: seg_ress_dict[pointLabel], hetflag: false},
-                    {resi: seg_ress_dict[pointLabel], hetflag: false}
-                    );
-                viewer.addSurface( // adds white surface to rest of protein
-                    $3Dmol.SurfaceType.ISO,
-                    {opacity: 0.7, color: 'white'},
-                    {resi: seg_ress_dict[pointLabel], invert: true, hetflag: false},
-                    {hetflag: false},
-                    );
+                for (const [key, value] of Object.entries(surfsDict)) {
+                    if (key == pointLabel) {
+                        viewer.setSurfaceMaterialStyle(value.surfid, {color: siteColor, opacity:0.9});
+                    }
+                    else {
+                        viewer.setSurfaceMaterialStyle(value.surfid, {color: 'white', opacity:0.0});
+                    }
+                }
             }
-
             viewer.setStyle({resi: seg_ress_dict[pointLabel]}, {cartoon:{style:'oval', color: siteColor, arrows: true}, stick:{color: siteColor}, });
             viewer.render({});
             highlightTableRow(pointLabel); 
@@ -201,28 +195,47 @@ document.getElementById('chartCanvas').addEventListener('mousemove', function(e)
         isRowHovered = false;
         viewer.setStyle({}, {cartoon: {style:'oval', color: 'white', arrows: true}});
         if (surfaceVisible) {
-            viewer.removeAllSurfaces();
-            viewer.addSurface(
-                $3Dmol.SurfaceType.ISO,
-                {opacity: 0.7, color: 'white'},
-                {hetflag: false},
-                {hetflag: false}
-            );
+            console.log("Mouseout from point!")
+            if (surfaceVisible) {
+                for (const [key, value] of Object.entries(surfsDict)) {
+                    if (key == "non_binding") {
+                        viewer.setSurfaceMaterialStyle(surfsDict[key].surfid, {color: 'white', opacity:0.7});
+                    }
+                    else {
+                        let siteColor = chartColors[Number(key.split("_").pop())];
+                        viewer.setSurfaceMaterialStyle(surfsDict[key].surfid, {color: siteColor, opacity:0.8});
+                    }
+                }
+            }
         }
         viewer.render({});
     }
 });
 
-document.getElementById('chartCanvas').addEventListener('mouseout', function(e) { // when the cursor mopves out of the chart canvas
-    if (lastHoveredPoint1 !== null) {
-        lastHoveredPoint1 = null;
+// document.getElementById('chartCanvas').addEventListener('mouseout', function(e) { // when the cursor mopves out of the chart canvas
+//     if (lastHoveredPoint1 !== null) {
+//         lastHoveredPoint1 = null;
 
-        clearHighlightedRow();
-        isRowHovered = false;
-        viewer.setStyle({}, {cartoon: {style:'oval', color: 'white', arrows: true}});
-        viewer.render({});
-    }
-});
+//         clearHighlightedRow();
+//         isRowHovered = false;
+//         if (surfaceVisible) {
+//             console.log("Mouseout from canvas!")
+//             if (surfaceVisible) {
+//                 for (const [key, value] of Object.entries(surfsDict)) {
+//                     if (key == "non_binding") {
+//                         viewer.setSurfaceMaterialStyle(surfsDict[key].surfid, {color: 'white', opacity:0.7});
+//                     }
+//                     else {
+//                         let siteColor = chartColors[Number(key.split("_").pop())];
+//                         viewer.setSurfaceMaterialStyle(surfsDict[key].surfid, {color: siteColor, opacity:0.8});
+//                     }
+//                 }
+//             }
+//         }
+//         viewer.setStyle({}, {cartoon: {style:'oval', color: 'white', arrows: true}});
+//         viewer.render({});
+//     }
+// });
 
 
 var newLastHoveredPoint = null;
@@ -317,8 +330,6 @@ $('table#bs_ress_table tbody').on('mouseover', 'tr', function () { // event list
         }
         viewer.setStyle({resi: rowId}, {cartoon:{style:'oval', color: "red", arrows: true}, stick:{color: "red"}, });
         viewer.render({});
-
-
     }
 }).on('mouseout', 'tr', function () { // event listener for mouseout on table rows
     newChart.data.datasets[0].data.forEach(function(point, i) {

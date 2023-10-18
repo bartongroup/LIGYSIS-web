@@ -34,7 +34,7 @@
 
 {% block main %}
 
-<div class="container">
+<div class="container-fluid">
     <div class="row mb-3">
         <div class="col-12 col-sm-8 col-md-6 col-lg-4 col-xl-3">
             <select id="selectSegment" class="form-select" aria-label="Selecting structural segment">
@@ -45,108 +45,50 @@
             </select>
         </div>
     </div>
-    
     <div class="row">
-        <div id="3DMolAppletHolder" class="col-lg-7 col-sm-12 d-flex flex-column align-items-center justify-content-center">
-            <div class="row mb-3">
+        <div id="3DMolAppletHolder" class="col-lg-4 col-sm-12 d-flex flex-column align-items-center justify-content-center align-self-start">
+            <div class="row mb-3 custom-padding">
                 <div style="border: 2px solid black;" class="d-flex px-0">
-                    <div id="container-01" style="height: 632px; width: 632px;" class="applet-border d-flex">
-                        <script>
-                            let element = document.querySelector('#container-01');
-                            let config = { backgroundColor: 'white'}  // setting the outline color to red};
-                            let viewer = $3Dmol.createViewer( element, config );
-                            $3Dmol.setSyncSurface(true); // all surfaces appear at once
-                            viewer.setViewStyle({'style':'outline','color':'black','width':0.1})
-                            let pdbUri = `/static/data/structures/${segmentReps[segmentId]["rep"]}_trans.pdb`;
-                            jQuery.ajax( pdbUri, { 
-                                success: function(data) {
-                                let v = viewer;
-                                v.addModel( data, "pdb" );                       /* load data */
-                                v.setStyle({}, {cartoon: {style:'oval', color: 'white', arrows: true}});  /* style all atoms */
-                                //v.setSyncSurface(true);
-                                v.zoomTo();                                      /* set camera */
-                                v.render({});                                    /* render scene */
-                                v.zoom(1.2, 100);                                /* slight zoom */
-                                },
-                                error: function(hdr, status, err) {
-                                conerrsole.or( "Failed to load PDB " + pdbUri + ": " + err );
-                                },
-                            });
-                            viewer.resize();
-                        </script>
+                    <div id="container-01" style="height: 598px; width: 598px;" class="applet-border d-flex">
+                        <script src="/static/js/3DMol_applet.js"></script>
                     </div>
                 </div>
             </div>
-            <div class="row mb-3">
-                <div class="col d-flex">
+            <div class="row mb-3 justify-content-between custom-padding">
+                <div class="col-5 d-flex justify-content-center">
                     <input id="surfButton" type="button" value="Surface OFF" style="font-weight: bold; color: #674ea7;"
                     onclick="toggleSurfaceVisibility()"></input>
-                    <script>
-                        function toggleSurfaceVisibility() {
-                            var button = document.getElementById('surfButton');
-                            if (surfaceVisible) {
-                                viewer.removeAllSurfaces(); // Remove the surface
-                                button.value = 'Surface OFF'; // Change the button text
-                                button.style = "font-weight: bold; color: #674ea7;";
-                            }
-                            else {
-                                // Create and add the surface
-                                for (const [key, value] of Object.entries(seg_ress_dict)) {
-                                    if (key == "ALL_BINDING") {
-                                        surfsDict["non_binding"] = viewer.addSurface(
-                                            $3Dmol.SurfaceType.ISO,
-                                            {
-                                                color: 'white',
-                                                opacity: 0.7,
-                                            },
-                                            {resi: seg_ress_dict[key], invert: true, hetflag: false},
-                                            { hetflag: false },
-                                        );
-                                    }
-                                    else {
-                                        let siteColor = chartColors[Number(key.split("_").pop())];
-                                        surfsDict[key] = viewer.addSurface(
-                                            $3Dmol.SurfaceType.ISO,
-                                            {
-                                                color: siteColor,
-                                                opacity: 0.8,
-                                            },
-                                            {resi: seg_ress_dict[key], hetflag: false},
-                                            { hetflag: false },
-                                        );
-                                        surfsDict[`not_${key}`] = viewer.addSurface(
-                                            $3Dmol.SurfaceType.ISO,
-                                            {
-                                                color: 'white',
-                                                opacity: 0.0,
-                                            },
-                                            {resi: seg_ress_dict[key], invert: true, hetflag: false},
-                                            { hetflag: false },
-                                        );
-                                    }
-                                }
-
-
-
-
-                                button.value = "Surface ON"; // Change the button text
-                                button.style = "font-weight: bold; color: #B22222;";
-                            }
-                            surfaceVisible = !surfaceVisible; // Toggle the visibility state
-                            viewer.render();
-                        }
-                    </script>
+                    <script src="/static/js/3DMol_toggle_surfs.js"></script>
                 </div>
-                <div class="col d-flex">
+                <div class="col-5 d-flex justify-content-center">
                     <input type="button" value="Recenter" onclick="viewer.zoomTo();"></input>
                 </div>
             </div>
-            
         </div>
-            
-        <div class="col-lg-5 col-sm-12 d-flex flex-column mb-3 justify-content-between">
-            <div class="row mb-3 justify-content-center">
+        <div class="col-lg-3 col-sm-12 d-flex flex-column mb-3">
+            <div class="row mb-2 justify-content-center custom-padding">
+                <canvas id="chartCanvas" width="300" height="300"></canvas>
+            </div>
+            <div class="row justify-content-around mb-3 custom-padding">
+                <div class="col-5 d-flex justify-content-center">
+                    <select id="xAxisTitle">
+                        {% for header in headings[1:] %}
+                        <option value="{{ header }}">{{ header }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div class="col-5 d-flex justify-content-center">
+                    <select id="yAxisTitle">
+                        {% for header in headings[1:] %}
+                        <option value="{{ header }}">{{ header }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+            </div>
+            <div class="row mb-3 justify-content-center custom-padding">
                 <div class="table-responsive">
+
+                
                     <table class="table table-bordered table-hover sortable"id="bss_table">
                         <caption>Ligand binding sites and their averaged features</caption>
                         <thead class="fixTableHead">
@@ -167,38 +109,14 @@
                         </tbody>
                     </table>
                 </div>
-                
-            </div>
-            <div class="row justify-content-center">
-                <div class="row mb-2 justify-content-center">
-                    <canvas id="chartCanvas" width="500" height="500"></canvas>
-                </div>
-                <div class="row justify-content-between">
-                    <div class="col-6 d-flex justify-content-center">
-                        <select id="xAxisTitle">
-                            {% for header in headings[1:] %}
-                            <option value="{{ header }}">{{ header }}</option>
-                            {% endfor %}
-                        </select>
-                    </div>
-                    <div class="col-6 d-flex justify-content-center">
-                        <select id="yAxisTitle">
-                            {% for header in headings[1:] %}
-                            <option value="{{ header }}">{{ header }}</option>
-                            {% endfor %}
-                        </select>
-                    </div>
-                </div>
             </div>
         </div>
-    </div>
-    <div class="row mb-3">
-        <div class="col">
-            <div class="row mb-2 justify-content-center">
+        <div class="col-lg-5 d-flex flex-column">
+            <div class="row mb-2 justify-content-center custom-padding">
                 <canvas id="newChartCanvas" width="650" height="320"></canvas>
             </div>
-            <div class="row justify-content-between mb-3">
-                <div class="col-6 d-flex justify-content-center">
+            <div class="row justify-content-around mb-3 custom-padding">
+                <div class="col-5 d-flex justify-content-center">
                     <select id="xAxisTitle2" class="axis-dropdown2 x-axis-dropdown2">
                         <option selected hidden>abs_norm_shenkin</option>
                         {% for header in cc[1:] %}
@@ -206,7 +124,7 @@
                         {% endfor %}
                     </select>
                 </div>
-                <div class="col-6 d-flex justify-content-center">
+                <div class="col-5 d-flex justify-content-center">
                     <select id="yAxisTitle2" class="axis-dropdown2 y-axis-dropdown2">
                         <option selected hidden>oddsratio</option>
                         {% for header in cc[1:] %}
@@ -215,7 +133,7 @@
                     </select>
                 </div>
             </div>
-            <div class="row justify-content-center">
+            <div class="row justify-content-center mb-3 custom-padding">
                 <div class="table-responsive">
                     <table class="table table-bordered table-hover sortable" id="bs_ress_table">
                         <thead class="sticky-header">
@@ -246,5 +164,6 @@
 <!-- <script src="/static/js/jsmol_resize.js"></script> -->
 <script src="/static/js/3DMol_resize.js"></script>
 <script src="/static/js/change_segment.js"></script>
+<script src="/static/js/3DMol_add_surfs.js"></script>
 
 {% endblock%}

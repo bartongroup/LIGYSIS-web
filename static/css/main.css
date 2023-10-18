@@ -178,12 +178,11 @@ strong {
 }
 
 
-.sticky-header {
-    /* display: block; */
+/* .sticky-header {
     position: sticky;
     top: 0;
-    z-index: 1; /* This ensures that the header is always on top */
-}
+    z-index: 1; 
+} */
 
 .featurette-divider {
     border-top: 3px solid #734A98;
@@ -214,15 +213,15 @@ strong {
     margin-right: 0;
 }
 
-.row {
+/* .row {
     margin-left: 0;
     margin-right: 0;
-}
+} */
 
-.table-responsive {
+/* .table-responsive {
     padding-right: 0;
     padding-left: 0;
-}
+} */
 
 li {
     text-align: justify;
@@ -230,7 +229,45 @@ li {
 
 img.responsive {
     max-width: 100%;
-    max-height: 80px;
+    max-height: 60px;
     height: auto;
     width: auto;
+}
+
+img.responsive-logo {
+    max-width: 100%;
+    max-height: 100px;
+    height: auto;
+    width: auto;
+}
+
+.container-fluid {
+    padding-left: 2rem;
+    padding-right: 2rem;
+
+}
+
+/* #chartCanvas {
+    max-height: 446px;
+    max-width: 446px;
+}
+
+#bss_table {
+    max-width: 446px;
+} */
+
+.custom-padding {
+    padding-right: calc(var(--bs-gutter-x) * .5);
+    padding-left: calc(var(--bs-gutter-x) * .5)
+}
+
+.table-responsive::-webkit-scrollbar {
+    -webkit-appearance: none;
+    width: 10px;
+}
+
+.table-responsive::-webkit-scrollbar-thumb {
+    background-color: #734A98;
+    border-radius: 10px;
+    border: 1px solid black; /* or another suitable color */
 }

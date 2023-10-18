@@ -16,15 +16,15 @@
         {% endblock%}
     </head>
     <body>
-        <header class="py-0">
-            <div class="container">
+        <header>
+            <div class="container-fluid">
                 <nav class="navbar navbar-expand-md navbar-light justify-content-center">
                     <a 
                         href="/"
                         class="navbar-brand mb-2 me-4">
                         <img
                             src="/static/images/LIGYSIS_logo_v2.png" alt="LIGYSIS logo" height="100"
-                            class="d-inline-block align-top responsive"
+                            class="d-inline-block align-top responsive-logo"
                         />
                         <span class="hidden">LIGYSIS</span>
                     </a>
@@ -60,7 +60,7 @@
 
         <main class="d-flex flex-column justify-content-around">
             {% block main %}{% endblock%}
-            <div class="container">
+            <div class="container-fluid">
                 <div class="row mb-3 justify-content-center text-center">
                     <div class="col d-flex justify-content-end">
                         <a href="#" class="btn btn-primary" style="text-decoration: none;">Back to top</a>
@@ -69,7 +69,7 @@
             </div>
         </main>
 
-        <footer class="container bg-white pt-0">
+        <footer class="container-fluid bg-white pt-0 mb-3">
             <hr class="featurette-divider">
             <div id="footer">
                 <div class="row justify-content-around align-items-center">

@@ -12,10 +12,7 @@ $('table#bss_table tbody').on('mouseover', 'tr', function () { // event listener
     if (surfaceVisible) {
         for (const [key, value] of Object.entries(surfsDict)) {
             if (key == rowId) {
-                viewer.setSurfaceMaterialStyle(surfsDict[rowId].surfid, {color: siteColor, opacity:0.9});
-            }
-            else if (key == `not_${rowId}`) {
-                viewer.setSurfaceMaterialStyle(surfsDict[`not_${rowId}`].surfid, {color: 'white', opacity:0.7});
+                viewer.setSurfaceMaterialStyle(value.surfid, {color: siteColor, opacity:0.9});
             }
             else {
                 viewer.setSurfaceMaterialStyle(value.surfid, {color: 'white', opacity:0.0});
@@ -44,9 +41,6 @@ $('table#bss_table tbody').on('mouseover', 'tr', function () { // event listener
             if (key == "non_binding") {
                 viewer.setSurfaceMaterialStyle(surfsDict[key].surfid, {color: 'white', opacity:0.7});
             }
-            else if (key.startsWith("not_")) {
-                viewer.setSurfaceMaterialStyle(surfsDict[key].surfid, {color: 'white', opacity:0.0});
-            }
             else {
                 let siteColor = chartColors[Number(key.split("_").pop())];
                 viewer.setSurfaceMaterialStyle(surfsDict[key].surfid, {color: siteColor, opacity:0.8});
@@ -54,7 +48,6 @@ $('table#bss_table tbody').on('mouseover', 'tr', function () { // event listener
         }
     }
     viewer.render({});
-    // implement halos on 3Dmol.js //
 });
 
 // THIS IS THE EVENT LISTENER THAT CHANGES THE AXES OF THE BINDING SITES PLOTS ACCORDING TO DROPDOWNS

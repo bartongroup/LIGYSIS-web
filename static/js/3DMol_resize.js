@@ -1,10 +1,19 @@
 function resize3DMol() {
     var appletContainer = document.getElementById('3DMolAppletHolder');
     var appletDiv = document.getElementById('container-01');
+    
+
+    // padding of appletDiv
+    var appletPadding = parseInt(window.getComputedStyle(appletContainer).paddingLeft, 10);
+
     var newWidth = appletContainer.offsetWidth;
 
-    appletDiv.style.height = `${newWidth}px`;
-    appletDiv.style.width = `${newWidth}px`;
+    var correctedWidth = newWidth - (appletPadding * 2);
+
+    console.log(newWidth, appletPadding);
+
+    appletDiv.style.height = `${correctedWidth}px`;
+    appletDiv.style.width = `${correctedWidth}px`;
     // var newHeight = appletContainer.offsetHeight;
 
     // Update 3DMol.js size dynamically.
