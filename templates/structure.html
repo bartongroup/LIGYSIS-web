@@ -23,9 +23,10 @@
     const segmentId = {{ seg_id | tojson }}
     const segmentName = proteinId + "_" + segmentId
     const segmentReps = {{ segment_reps | tojson }}
-    const newChartData = {{ first_site_data | tojson }}
+    let newChartData = {{ first_site_data | tojson }}
 
-    var surfaceVisible = false;
+    let surfaceVisible = false;
+    let siteIsClicked = false;
     let wholeSurf;
     let surfsDict = {};
 </script>
@@ -86,9 +87,7 @@
                 </div>
             </div>
             <div class="row mb-3 justify-content-center custom-padding">
-                <div class="table-responsive">
-
-                
+                <div class="table-responsive px-0">
                     <table class="table table-bordered table-hover sortable"id="bss_table">
                         <caption>Ligand binding sites and their averaged features</caption>
                         <thead class="fixTableHead">
@@ -134,7 +133,7 @@
                 </div>
             </div>
             <div class="row justify-content-center mb-3 custom-padding">
-                <div class="table-responsive">
+                <div class="table-responsive px-0">
                     <table class="table table-bordered table-hover sortable" id="bs_ress_table">
                         <thead class="sticky-header">
                             <tr class="table__header">
@@ -161,6 +160,7 @@
 
 <script src="/static/js/charts.js"></script>
 <script src="/static/js/table_listeners.js"></script>
+<script src="/static/js/chart_listeners.js"></script>
 <!-- <script src="/static/js/jsmol_resize.js"></script> -->
 <script src="/static/js/3DMol_resize.js"></script>
 <script src="/static/js/change_segment.js"></script>

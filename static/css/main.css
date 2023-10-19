@@ -178,11 +178,38 @@ strong {
 }
 
 
-/* .sticky-header {
+.sticky-header {
     position: sticky;
     top: 0;
     z-index: 1; 
-} */
+}
+
+.sticky-header th::before {
+    content: "";
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: -1px;  /* Shifts the pseudo-element outside of the th */
+    height: 3px;
+    background-color: black;  /* Border color */
+    z-index: 2;
+    box-sizing: border-box;  /* Ensures that height is consistent */
+}
+
+.sticky-header th::after {
+    content: "";
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: -1px;  /* Shifts the pseudo-element outside of the th */
+    height: 2px;
+    background-color: black;  /* Border color */
+    z-index: 2;
+    box-sizing: border-box;  /* Ensures that height is consistent */
+}
+
+
+
 
 .featurette-divider {
     border-top: 3px solid #734A98;
@@ -212,16 +239,6 @@ strong {
 .navbar-brand {
     margin-right: 0;
 }
-
-/* .row {
-    margin-left: 0;
-    margin-right: 0;
-} */
-
-/* .table-responsive {
-    padding-right: 0;
-    padding-left: 0;
-} */
 
 li {
     text-align: justify;
@@ -261,13 +278,20 @@ img.responsive-logo {
     padding-left: calc(var(--bs-gutter-x) * .5)
 }
 
+/* For vertical scrollbar */
 .table-responsive::-webkit-scrollbar {
     -webkit-appearance: none;
     width: 10px;
+    height: 10px;
 }
 
 .table-responsive::-webkit-scrollbar-thumb {
     background-color: #734A98;
     border-radius: 10px;
-    border: 1px solid black; /* or another suitable color */
+    border: 1px solid black;
+}
+
+.table-responsive {
+    margin-right: 8px;
+    margin-bottom: 8px;
 }

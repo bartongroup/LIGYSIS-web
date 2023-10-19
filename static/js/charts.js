@@ -24,6 +24,20 @@ const newChartLims = {
     pvalue: {sugMin: 0.1, sugMax: 0.75, min: 0, max: 1}
 };
 
+const chartAreaBorder = {
+    id: 'chartAreaBorder',
+    beforeDraw(chart, args, options) {
+        const {ctx, chartArea: {left, top, width, height}} = chart;
+        ctx.save();
+        ctx.strokeStyle = options.borderColor;
+        ctx.lineWidth = options.borderWidth;
+        ctx.setLineDash(options.borderDash || []);
+        ctx.lineDashOffset = options.borderDashOffset;
+        ctx.strokeRect(left, top, width, height);
+        ctx.restore();
+    }
+};
+
 let chartConfig = {
     type: "scatter",
     data: {
@@ -41,6 +55,7 @@ let chartConfig = {
                 hoverBorderWidth: 10,
                 hoverBorderColor: "gold",
                 pointHoverBorderColor: "gold",
+                
             }
         ]
     },
@@ -52,18 +67,58 @@ let chartConfig = {
                     display: true,
                     align: "center",
                     text: chartX,
+                    font: {
+                        size: 16,
+                        // weight: 'bold',
+                        // family: 'Arial'
+                    },
+                    color: 'black',
                 },
                 suggestedMin: myChartLims[chartX]["sugMin"],
                 suggestedMax: myChartLims[chartX]["sugMax"],
+                grid: {
+                    display: true,
+                    drawOnChartArea: false,
+                    color: 'black',
+                    tickLength: 6,
+                    tickWidth: 1,
+                },
+                ticks: {
+                    color: 'black', // Color of the tick labels
+                    // font: {
+                    //     size: 28  // Font size of the tick labels
+                    // },
+                    //padding: 10
+                },
             },
             y: {
                 title: {
                     display: true,
                     align: "center",
                     text: chartY,
+                    font: {
+                        size: 16,
+                        // weight: 'bold',
+                        // family: 'Arial'
+                    },
+                    color: 'black',
                 },
                 suggestedMin: myChartLims[chartY]["sugMin"],
                 suggestedMax: myChartLims[chartY]["sugMax"],
+                grid: {
+                    display: true,
+                    drawOnChartArea: false,
+                    color: 'black',
+                    tickLength: 6,
+                    tickWidth: 1,
+                },
+                ticks: {
+                    color: 'black', // Color of the tick labels
+                    // font: {
+                    //     size: 28  // Font size of the tick labels
+                    // },
+                    //padding: 10
+                },
             }
         },
         plugins: {
@@ -77,9 +132,16 @@ let chartConfig = {
                         return chartData[chartLab][dataIndex]; // Use the 'lab' property from your data
                     },
                 }
-            }
+            },
+            chartAreaBorder: {
+                borderColor: 'black',
+                borderWidth: 1,
+                borderDash: [0, 0],
+                borderDashOffset: 5,
+            },
         },
-    }
+    },
+    plugins: [chartAreaBorder],
 };
 
 let newChartConfig = { // configuration for the new chart
@@ -110,18 +172,58 @@ let newChartConfig = { // configuration for the new chart
                     display: true,
                     align: "center",
                     text: newChartX,
+                    font: {
+                        size: 16,
+                        // weight: 'bold',
+                        // family: 'Arial'
+                    },
+                    color: 'black',
                 },
                 suggestedMin: newChartLims[newChartX]["sugMin"],
                 suggestedMax: newChartLims[newChartX]["sugMax"],
+                grid: {
+                    display: true,
+                    drawOnChartArea: false,
+                    color: 'black',
+                    tickLength: 6,
+                    tickWidth: 1,
+                },
+                ticks: {
+                    color: 'black', // Color of the tick labels
+                    // font: {
+                    //     size: 28  // Font size of the tick labels
+                    // },
+                    //padding: 10
+                },
             },
             y: {
                 title: {
                     display: true,
                     align: "center",
                     text: newChartY,
+                    font: {
+                        size: 16,
+                        // weight: 'bold',
+                        // family: 'Arial'
+                    },
+                    color: 'black',
                 },
                 suggestedMin: newChartLims[newChartY]["sugMin"],
                 suggestedMax: newChartLims[newChartY]["sugMax"],
+                grid: {
+                    display: true,
+                    drawOnChartArea: false,
+                    color: 'black',
+                    tickLength: 6,
+                    tickWidth: 1,
+                },
+                ticks: {
+                    color: 'black', // Color of the tick labels
+                    // font: {
+                    //     size: 28  // Font size of the tick labels
+                    // },
+                    //padding: 10
+                },
             }
         },
         plugins: {
@@ -135,9 +237,16 @@ let newChartConfig = { // configuration for the new chart
                         return newChartData[newChartLab][dataIndex]; // Use the 'UniProt_ResNum' property from your data
                     },
                 }
-            }
+            },
+            chartAreaBorder: {
+                borderColor: 'black',
+                borderWidth: 1,
+                borderDash: [0, 0],
+                borderDashOffset: 5,
+            },
         }
     },
+    plugins: [chartAreaBorder],
 };
 
 myChart = new Chart(chartCtx, chartConfig);
@@ -156,195 +265,4 @@ xAxisTitleDropdown.addEventListener("change", function () {
 
 yAxisTitleDropdown.addEventListener("change", function () {
     updateChart("y", yAxisTitleDropdown, newChart, newChartData, newChartLims); // event listener for change in y axis title
-});
-
-
-var lastHoveredPoint1 = null;
-
-document.getElementById('chartCanvas').addEventListener('mousemove', function(e) { // when the cursor moves over the chart canvas
-    var chartElement = myChart.getElementsAtEventForMode(e, 'nearest', { intersect: true }, true); // gets the chart element that is closest to the cursor
-    
-    if (chartElement.length > 0) { // cursor is hovering over a data point
-        let firstPoint = chartElement[0];
-
-        if (lastHoveredPoint1 !== firstPoint.index) { // Check if the hovered point has changed
-            lastHoveredPoint1 = firstPoint.index;
-
-            let pointLabel = chartData[chartLab][firstPoint.index];
-            let siteColor = chartColors[Number(pointLabel.split("_").pop())];
-
-            if (surfaceVisible) {
-                for (const [key, value] of Object.entries(surfsDict)) {
-                    if (key == pointLabel) {
-                        viewer.setSurfaceMaterialStyle(value.surfid, {color: siteColor, opacity:0.9});
-                    }
-                    else {
-                        viewer.setSurfaceMaterialStyle(value.surfid, {color: 'white', opacity:0.0});
-                    }
-                }
-            }
-            viewer.setStyle({resi: seg_ress_dict[pointLabel]}, {cartoon:{style:'oval', color: siteColor, arrows: true}, stick:{color: siteColor}, });
-            viewer.render({});
-            highlightTableRow(pointLabel); 
-            isRowHovered = true;
-        }
-    } else if (lastHoveredPoint1 !== null) { // when no data point is being hovered on, but the last hovered point is not null (recently hovered on a point)
-        lastHoveredPoint1 = null;
-
-        clearHighlightedRow();
-        isRowHovered = false;
-        viewer.setStyle({}, {cartoon: {style:'oval', color: 'white', arrows: true}});
-        if (surfaceVisible) {
-            console.log("Mouseout from point!")
-            if (surfaceVisible) {
-                for (const [key, value] of Object.entries(surfsDict)) {
-                    if (key == "non_binding") {
-                        viewer.setSurfaceMaterialStyle(surfsDict[key].surfid, {color: 'white', opacity:0.7});
-                    }
-                    else {
-                        let siteColor = chartColors[Number(key.split("_").pop())];
-                        viewer.setSurfaceMaterialStyle(surfsDict[key].surfid, {color: siteColor, opacity:0.8});
-                    }
-                }
-            }
-        }
-        viewer.render({});
-    }
-});
-
-// document.getElementById('chartCanvas').addEventListener('mouseout', function(e) { // when the cursor mopves out of the chart canvas
-//     if (lastHoveredPoint1 !== null) {
-//         lastHoveredPoint1 = null;
-
-//         clearHighlightedRow();
-//         isRowHovered = false;
-//         if (surfaceVisible) {
-//             console.log("Mouseout from canvas!")
-//             if (surfaceVisible) {
-//                 for (const [key, value] of Object.entries(surfsDict)) {
-//                     if (key == "non_binding") {
-//                         viewer.setSurfaceMaterialStyle(surfsDict[key].surfid, {color: 'white', opacity:0.7});
-//                     }
-//                     else {
-//                         let siteColor = chartColors[Number(key.split("_").pop())];
-//                         viewer.setSurfaceMaterialStyle(surfsDict[key].surfid, {color: siteColor, opacity:0.8});
-//                     }
-//                 }
-//             }
-//         }
-//         viewer.setStyle({}, {cartoon: {style:'oval', color: 'white', arrows: true}});
-//         viewer.render({});
-//     }
-// });
-
-
-var newLastHoveredPoint = null;
-
-document.getElementById('newChartCanvas').addEventListener('mousemove', function(e) { // when the cursor moves over the chart canvas
-    var newChartElement = newChart.getElementsAtEventForMode(e, 'nearest', { intersect: true }, true); // gets the chart element that is closest to the cursor
-    
-    if (newChartElement.length > 0) { // cursor is hovering over a data point
-        let newFirstPoint = newChartElement[0];
-        
-        const pointColor = newChart.data.datasets[0].backgroundColor;
-
-        if (newLastHoveredPoint !== newFirstPoint.index) { // Check if the hovered point has changed
-            newLastHoveredPoint = newFirstPoint.index;
-
-            let newPointLabel = newChartData[newChartLab][newFirstPoint.index];
-
-            if (surfaceVisible) {
-                viewer.removeAllSurfaces();
-                viewer.addSurface( // adds coloured surface to binding site
-                    $3Dmol.SurfaceType.ISO,
-                    {opacity: 0.9, color: pointColor},
-                    {resi: newPointLabel, hetflag: false},
-                    {resi: newPointLabel, hetflag: false}
-                    );
-                viewer.addSurface( // adds white surface to rest of protein
-                    $3Dmol.SurfaceType.ISO,
-                    {opacity: 0.7, color: 'white'},
-                    {resi: newPointLabel, invert: true, hetflag: false},
-                    {hetflag: false},
-                    );
-            }
-            viewer.setStyle({resi: newPointLabel}, {cartoon:{style:'oval', color: pointColor, arrows: true}, stick:{color: pointColor}, });
-            viewer.render({});
-
-            highlightTableRow(newPointLabel); 
-            isRowHovered = true;
-        }
-    } else if (newLastHoveredPoint !== null) { // when no data point is being hovered on, but the last hovered point is not null (recently hovered on a point)
-        newLastHoveredPoint = null;
-
-        clearHighlightedRow();
-        isRowHovered = false;
-        if (surfaceVisible) {
-            viewer.removeAllSurfaces();
-            viewer.addSurface(
-                $3Dmol.SurfaceType.ISO,
-                {opacity: 0.7, color: 'white'},
-                {hetflag: false},
-                {hetflag: false}
-            );
-        }
-        viewer.setStyle({}, {cartoon: {style:'oval', color: 'white', arrows: true}});
-        viewer.render({});
-    }
-});
-
-document.getElementById('newChartCanvas').addEventListener('mouseout', function(e) { // when the cursor mopves out of the chart canvas
-    if (newLastHoveredPoint !== null) {
-        newLastHoveredPoint = null;
-
-        clearHighlightedRow();
-        isRowHovered = false;
-        
-    }
-});
-
-$('table#bs_ress_table tbody').on('mouseover', 'tr', function () { // event listener for mouseover on table rows
-    let rowId = Number(this.id);  // gets the row id of the table row that is hovered over
-    let index = newChartData[newChartLab].indexOf(rowId); // gets the index of the row id in the chart data
-
-    console.log(this);
-
-    if (index !== -1) {
-        
-        resetChartStyles(newChart, index, "gold", 10, 16); // changes chart styles to highlight the binding site
-
-        if (surfaceVisible) {
-            viewer.removeAllSurfaces();
-            viewer.addSurface( // adds coloured surface to binding site
-                $3Dmol.SurfaceType.ISO,
-                {opacity: 0.9, color: "red"},
-                {resi: rowId, hetflag: false},
-                {resi: rowId, hetflag: false}
-                );
-            viewer.addSurface( // adds white surface to rest of protein
-                $3Dmol.SurfaceType.ISO,
-                {opacity: 0.7, color: 'white'},
-                {resi: rowId, invert: true, hetflag: false},
-                {hetflag: false},
-                );
-        }
-        viewer.setStyle({resi: rowId}, {cartoon:{style:'oval', color: "red", arrows: true}, stick:{color: "red"}, });
-        viewer.render({});
-    }
-}).on('mouseout', 'tr', function () { // event listener for mouseout on table rows
-    newChart.data.datasets[0].data.forEach(function(point, i) {
-        resetChartStyles(newChart, i, "black", 2, 8); // resets chart styles to default
-
-        if (surfaceVisible) {
-            viewer.removeAllSurfaces();
-            viewer.addSurface(
-                $3Dmol.SurfaceType.ISO,
-                {opacity: 0.7, color: 'white'},
-                {hetflag: false},
-                {hetflag: false}
-            );
-        }
-        viewer.setStyle({}, {cartoon: {style:'oval', color: 'white', arrows: true}});
-        viewer.render({});
-    });
 });
