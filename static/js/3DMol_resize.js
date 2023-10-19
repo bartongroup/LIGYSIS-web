@@ -10,7 +10,7 @@ function resize3DMol() {
 
     var correctedWidth = newWidth - (appletPadding * 2);
 
-    console.log(newWidth, appletPadding);
+    //console.log(newWidth, appletPadding);
 
     appletDiv.style.height = `${correctedWidth}px`;
     appletDiv.style.width = `${correctedWidth}px`;

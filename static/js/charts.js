@@ -11,18 +11,53 @@ let newChart;
 const chartCtx = document.getElementById("chartCanvas").getContext("2d"); 
 const newChartCtx = document.getElementById("newChartCanvas").getContext("2d");
 
+let clickedPoints = []; // array to store the clicked points
+
 const myChartLims = { 
     an_shenk: {sugMin: 0, sugMax: 50, min: 0, max: 100},
     MES: {sugMin: 0, sugMax: 2, min: 0, max: 5},
     RSA: {sugMin: 0, sugMax: 50, min: 0, max: 100},
     n_ress: {sugMin: 1, sugMax: 25, min: 1, max: 70}
 };
+
 const newChartLims = {
     abs_norm_shenkin: {sugMin: 0, sugMax: 50, min: 0, max: 100},
     oddsratio: {sugMin: 0, sugMax: 2, min: 0, max: 5},
     RSA: {sugMin: 0, sugMax: 75, min: 0, max: 100},
     pvalue: {sugMin: 0.1, sugMax: 0.75, min: 0, max: 1}
 };
+
+const clickedPointStyler = {
+    id: 'clickedPointStyler',
+    beforeEvent: function(chart, event, options) {
+        if (event.type !== 'mousemove') return; // only care about mousemove events
+
+        const activeElements = chart.getElementsAtEventForMode(event.native, 'nearest', {intersect: true}, true);
+
+        // Check if we are not hovering over any data point now
+        if (activeElements.length === 0 && chart.lastActive && chart.lastActive.length > 0) {
+            // Apply the clicked styling
+            if (options.clickedPoints && options.clickedColor) {
+                const dataset = chart.data.datasets[0];
+
+                if (!Array.isArray(dataset.borderColor)) {
+                    dataset.borderColor = [];
+                }
+
+                options.clickedPoints.forEach(idx => {
+                    dataset.borderColor[idx] = options.clickedColor;
+                });
+
+                chart.update();
+            }
+        }
+
+        // Store the current active elements
+        chart.lastActive = activeElements;
+    }
+};
+
+
 
 const chartAreaBorder = {
     id: 'chartAreaBorder',
@@ -55,7 +90,6 @@ let chartConfig = {
                 hoverBorderWidth: 10,
                 hoverBorderColor: "gold",
                 pointHoverBorderColor: "gold",
-                
             }
         ]
     },
@@ -139,9 +173,13 @@ let chartConfig = {
                 borderDash: [0, 0],
                 borderDashOffset: 5,
             },
+            clickedPointStyler: {
+                clickedPoints: clickedPoints,
+                clickedColor: "#50C878",
+            },
         },
     },
-    plugins: [chartAreaBorder],
+    plugins: [chartAreaBorder, clickedPointStyler],
 };
 
 let newChartConfig = { // configuration for the new chart

@@ -98,6 +98,11 @@ strong {
     font-weight: bold;
 }
 
+.clicked-row {
+    --bs-table-bg: #bfd4cb;
+    font-weight: bold;
+}
+
 /* #bs_ress_table {
     display: none;
 } */

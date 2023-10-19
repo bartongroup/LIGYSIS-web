@@ -2,12 +2,25 @@
 // It also updates the boolean iSRowHovered to true/false when a table row is hovered over/mouseout. 
 
 $('table#bss_table tbody').on('mouseover', 'tr', function () { // event listener for mouseover on table rows
-    isRowHovered = true; // set isRowHovered to true when a table row is hovered
+
     let rowId = this.id;  // gets the row id of the table row that is hovered over
+
+    if (!this.classList.contains('clicked-row')) { // row is not clicked
+
+        highlightTableRow(rowId); // highlights the table row of the binding site
+
+        let index = chartData[chartLab].indexOf(rowId); // gets the index of the row id in the chart data
+
+        if (index !== -1) {
+            resetChartStyles(myChart, index, "#ffff99", 10, 16); // changes chart styles to highlight the binding site
+        }
+    }
+
+    // isRowHovered = true; // set isRowHovered to true when a table row is hovered
+    
     let siteColor = chartColors[Number(rowId.split("_").pop())]; // gets the binding site color of the table row that is hovered over
 
     // implement halos on 3Dmol.js //
-    
     
     if (surfaceVisible) {
         for (const [key, value] of Object.entries(surfsDict)) {
@@ -20,34 +33,98 @@ $('table#bss_table tbody').on('mouseover', 'tr', function () { // event listener
         }
     }
     viewer.setStyle({resi: seg_ress_dict[rowId]}, {cartoon:{style:'oval', color: siteColor, arrows: true}, stick:{color: siteColor}, });
+    
     viewer.render({});
-    // implement halos on 3Dmol.js //
-
-    let index = chartData[chartLab].indexOf(rowId); // gets the index of the row id in the chart data
-
-    if (index !== -1) {
-        resetChartStyles(myChart, index, "gold", 10, 16); // changes chart styles to highlight the binding site
-    }
     
 }).on('mouseout', 'tr', function () {
-    isRowHovered = false; // set isRowHovered to false when a table row is not hovered
-    myChart.data.datasets[0].data.forEach(function(point, i) {
-        resetChartStyles(myChart, i, "black", 1, 12); // resets chart styles to default
-    });
-    // implement halos on 3Dmol.js //
-    viewer.setStyle({}, {cartoon: {style:'oval', color: 'white', arrows: true}});
+     // isRowHovered = false; // set isRowHovered to false when a table row is not hovered
+
+    let rowId = this.id;  // gets the row id of the table row that is hovered over
+
+    let classList = this.classList;
+
+    let index = chartData[chartLab].indexOf(rowId); // gets the index of the row id in the chart data
+    
+    if (!classList.contains('clicked-row')) { // row is not clicked
+
+        if (classList.contains('highlighted-row')) {
+            clearHighlightedRow(); // clears highlighted table row
+    
+            resetChartStyles(myChart, index, "black", 1, 12); // resets chart styles to default
+        }
+
+        if (surfaceVisible) {
+            for (const [key, value] of Object.entries(surfsDict)) {
+                if (key == "non_binding") {
+                    viewer.setSurfaceMaterialStyle(surfsDict[key].surfid, {color: 'white', opacity:0.7});
+                }
+                else {
+                    let siteColor = chartColors[Number(key.split("_").pop())];
+                    viewer.setSurfaceMaterialStyle(surfsDict[key].surfid, {color: siteColor, opacity:0.8});
+                }
+            }
+        }
+
+        viewer.setStyle({resi: seg_ress_dict[rowId]}, {cartoon: {style:'oval', color: 'white', arrows: true}});
+
+        viewer.render({});
+    }
+    
+}).on('click', 'tr', function () {
+    
+    let rowId = this.id;  // gets the row id of the table row that is clicked
+    let index = chartData[chartLab].indexOf(rowId); // gets the index of the row id in the chart data
+    var classList = this.classList;
+    var clickedElements = document.getElementsByClassName("clicked-row");
+    let siteColor = chartColors[Number(rowId.split("_").pop())]; // gets the binding site color of the table row that is hovered over
+    
+    if (classList.contains('highlighted-row')) {
+        clearHighlightedRow(); // clears highlighting from table row, before applying clicked styles
+    }
+
+    if (classList.contains('clicked-row')) { // row is already clicked
+        clearClickedRows();
+        if (index !== -1) {
+            resetChartStyles(myChart, index, "#ffff99", 10, 16); // changes chart styles to highlight the binding site
+        }
+        highlightTableRow(rowId); // highlights the table row of the binding site
+    }
+
+    else {
+        if (clickedElements) { // any OTHER row is already clicked
+            for (var i = 0; i < clickedElements.length; i++) {
+                var clickedElementId = clickedElements[i].id;
+                viewer.setStyle({resi: seg_ress_dict[clickedElementId]}, {cartoon: {style:'oval', color: 'white', arrows: true}});
+                viewer.render({});
+            }
+            clearClickedRows();
+            myChart.data.datasets[0].data.forEach(function(point, i) {
+                resetChartStyles(myChart, i, "black", 1, 12); // resets chart styles to default
+            });
+        }
+
+        if (index !== -1) {
+            resetChartStyles(myChart, index, "#bfd4cb", 10, 16); // changes chart styles to highlight the binding site
+        }
+
+        clickTableRow(this);
+
+    }
+
     if (surfaceVisible) {
         for (const [key, value] of Object.entries(surfsDict)) {
-            if (key == "non_binding") {
-                viewer.setSurfaceMaterialStyle(surfsDict[key].surfid, {color: 'white', opacity:0.7});
+            if (key == rowId) {
+                viewer.setSurfaceMaterialStyle(value.surfid, {color: siteColor, opacity:0.9});
             }
             else {
-                let siteColor = chartColors[Number(key.split("_").pop())];
-                viewer.setSurfaceMaterialStyle(surfsDict[key].surfid, {color: siteColor, opacity:0.8});
+                viewer.setSurfaceMaterialStyle(value.surfid, {color: 'white', opacity:0.0});
             }
         }
     }
+    viewer.setStyle({resi: seg_ress_dict[rowId]}, {cartoon:{style:'oval', color: siteColor, arrows: true}, stick:{color: siteColor}, });
+    
     viewer.render({});
+    
 });
 
 $('table#bs_ress_table tbody').on('mouseover', 'tr', function () { // event listener for mouseover on table rows

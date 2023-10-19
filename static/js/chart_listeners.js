@@ -13,6 +13,8 @@ document.getElementById('chartCanvas').addEventListener('mousemove', function(e)
             let pointLabel = chartData[chartLab][firstPoint.index];
             let siteColor = chartColors[Number(pointLabel.split("_").pop())];
 
+            resetChartStyles(myChart, firstPoint.index, "gold", 10, 16); // changes chart styles to highlight the binding site
+
             if (surfaceVisible) {
                 for (const [key, value] of Object.entries(surfsDict)) {
                     if (key == pointLabel) {
@@ -64,6 +66,9 @@ document.getElementById('chartCanvas').addEventListener('click', function(e) { /
         let pointColor = chartColors[index]; // color of the clicked data point
 
         siteIsClicked = true;
+        // Add the clicked point to the list
+        clickedPoints.push(index);
+
         resetChartStyles(myChart, index, "#50C878", 10, 16); // changes chart styles to highlight the binding site
 
         $.ajax({ // AJAX request to get the table data from the server
@@ -98,6 +103,9 @@ document.getElementById('chartCanvas').addEventListener('click', function(e) { /
 
             }
         });
+    }
+    else {
+
     }
 });
 
