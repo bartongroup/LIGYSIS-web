@@ -54,6 +54,15 @@ cc = [
     'oddsratio', 'pvalue', 'AA', 'RSA', 'SS'
 ]
 
+bs_table_tooltips = [
+    "This is the ligand binding site identifier",
+    "This is the site's avg. RSA",
+    "This is the site's avg. divergence score",
+    "This is the site's avg. missense enrichment score",
+    "This is the site's size (in aa)",
+]
+
+
 #### FLASK APP ###
 
 app = Flask(__name__)
@@ -103,7 +112,7 @@ def results(prot_id, seg_id):
     return render_template(
         'structure.html', data = data1, headings = headings, data2 = data2, cc = cc, colors = colors,
         seg_ress_dict = seg_ress_dict, prot_id = prot_id, seg_id = seg_id, segment_reps = segment_reps,
-        first_site_data = first_site_data
+        first_site_data = first_site_data, bs_table_tooltips = bs_table_tooltips,
     )
 
 @app.route('/about')

@@ -30,3 +30,19 @@ function toggleSurfaceVisibility() {
     surfaceVisible = !surfaceVisible; // Toggle the visibility state
     viewer.render();
 }
+
+function toggleLabelsVisibility() {
+    var button = document.getElementById('labelButton');
+    if (labelsVisible) {
+        button.value = 'Labels OFF'; // Change the button text
+        button.style = "font-weight: bold; color: #674ea7;";
+        viewer.removeAllLabels();
+    }
+    else {
+        button.value = "Labels ON"; // Change the button text
+        button.style = "font-weight: bold; color: #B22222;";
+    }
+    labelsVisible = !labelsVisible; // Toggle the visibility state
+    
+    // viewer.render();
+}

@@ -8,12 +8,13 @@ document.getElementById('chartCanvas').addEventListener('mousemove', function(e)
         let firstPoint = chartElement[0];
 
         if (lastHoveredPoint1 !== firstPoint.index) { // Check if the hovered point has changed
+            clearHighlightedRow();
             lastHoveredPoint1 = firstPoint.index;
 
             let pointLabel = chartData[chartLab][firstPoint.index];
             let siteColor = chartColors[Number(pointLabel.split("_").pop())];
 
-            resetChartStyles(myChart, firstPoint.index, "gold", 10, 16); // changes chart styles to highlight the binding site
+            resetChartStyles(myChart, firstPoint.index, "#ffff99", 10, 16); // changes chart styles to highlight the binding site
 
             if (surfaceVisible) {
                 for (const [key, value] of Object.entries(surfsDict)) {
@@ -29,13 +30,13 @@ document.getElementById('chartCanvas').addEventListener('mousemove', function(e)
             viewer.setStyle({resi: seg_ress_dict[pointLabel]}, {cartoon:{style:'oval', color: siteColor, arrows: true}, stick:{color: siteColor}, });
             viewer.render({});
             highlightTableRow(pointLabel); 
-            isRowHovered = true;
+            //isRowHovered = true;
         }
-    } else if (lastHoveredPoint1 !== null & !siteIsClicked) { // when no data point is being hovered on, but the last hovered point is not null (recently hovered on a point)
+    } else if (lastHoveredPoint1 !== null) { // when no data point is being hovered on, but the last hovered point is not null (recently hovered on a point)
         lastHoveredPoint1 = null;
 
         clearHighlightedRow();
-        isRowHovered = false;
+        //isRowHovered = false;
         viewer.setStyle({}, {cartoon: {style:'oval', color: 'white', arrows: true}});
         if (surfaceVisible) {
             console.log("Mouseout from point!")
@@ -65,11 +66,11 @@ document.getElementById('chartCanvas').addEventListener('click', function(e) { /
         let pointLabel = chartData[chartLab][index]; // label of the clicked data point
         let pointColor = chartColors[index]; // color of the clicked data point
 
-        siteIsClicked = true;
+        // siteIsClicked = true;
         // Add the clicked point to the list
-        clickedPoints.push(index);
+        // clickedPoints.push(index);
 
-        resetChartStyles(myChart, index, "#50C878", 10, 16); // changes chart styles to highlight the binding site
+        // resetChartStyles(myChart, index, "#50C878", 10, 16); // changes chart styles to highlight the binding site
 
         $.ajax({ // AJAX request to get the table data from the server
             type: 'POST', // POST request
@@ -101,12 +102,18 @@ document.getElementById('chartCanvas').addEventListener('click', function(e) { /
                 newChart.update();
 
 
-            }
+            },
+            error: function(jqXHR, textStatus, errorThrown) {
+                console.error('Request failed:');
+                console.error('Status:', textStatus);
+                console.error('Error:', errorThrown);
+                console.error('Response:', jqXHR.responseText);
+            },
         });
     }
-    else {
+    // else {
 
-    }
+    // }
 });
 
 document.getElementById('newChartCanvas').addEventListener('mousemove', function(e) { // when the cursor moves over the chart canvas
@@ -123,55 +130,62 @@ document.getElementById('newChartCanvas').addEventListener('mousemove', function
             let newPointLabel = newChartData[newChartLab][newFirstPoint.index];
 
             viewer.setStyle({}, {cartoon: {style:'oval', color: 'white', arrows: true}}); // this is done so only a single point is highlighted when hovered on (some are really close.)
+            
             clearHighlightedRow();
-            isRowHovered = false;
+            
+            // isRowHovered = false;
 
-            if (surfaceVisible) {
-                viewer.removeAllSurfaces();
-                viewer.addSurface( // adds coloured surface to binding site
-                    $3Dmol.SurfaceType.ISO,
-                    {opacity: 0.9, color: pointColor},
-                    {resi: newPointLabel, hetflag: false},
-                    {resi: newPointLabel, hetflag: false}
-                    );
-                viewer.addSurface( // adds white surface to rest of protein
-                    $3Dmol.SurfaceType.ISO,
-                    {opacity: 0.7, color: 'white'},
-                    {resi: newPointLabel, invert: true, hetflag: false},
-                    {hetflag: false},
-                    );
-            }
+            // if (surfaceVisible) {
+            //     viewer.removeAllSurfaces();
+            //     viewer.addSurface( // adds coloured surface to binding site
+            //         $3Dmol.SurfaceType.ISO,
+            //         {opacity: 0.9, color: pointColor},
+            //         {resi: newPointLabel, hetflag: false},
+            //         {resi: newPointLabel, hetflag: false}
+            //         );
+            //     viewer.addSurface( // adds white surface to rest of protein
+            //         $3Dmol.SurfaceType.ISO,
+            //         {opacity: 0.7, color: 'white'},
+            //         {resi: newPointLabel, invert: true, hetflag: false},
+            //         {hetflag: false},
+            //     );
+            // }
             viewer.setStyle({resi: newPointLabel}, {cartoon:{style:'oval', color: pointColor, arrows: true}, stick:{color: pointColor}, });
+            
             viewer.render({});
 
             highlightTableRow(newPointLabel); 
-            isRowHovered = true;
+            // isRowHovered = true;
         }
     } else if (newLastHoveredPoint !== null) { // when no data point is being hovered on, but the last hovered point is not null (recently hovered on a point)
         newLastHoveredPoint = null;
 
         clearHighlightedRow();
-        isRowHovered = false;
-        if (surfaceVisible) {
-            viewer.removeAllSurfaces();
-            viewer.addSurface(
-                $3Dmol.SurfaceType.ISO,
-                {opacity: 0.7, color: 'white'},
-                {hetflag: false},
-                {hetflag: false}
-            );
-        }
+
+        // isRowHovered = false;
+
+        // if (surfaceVisible) {
+        //     viewer.removeAllSurfaces();
+        //     viewer.addSurface(
+        //         $3Dmol.SurfaceType.ISO,
+        //         {opacity: 0.7, color: 'white'},
+        //         {hetflag: false},
+        //         {hetflag: false}
+        //     );
+        // }
         viewer.setStyle({}, {cartoon: {style:'oval', color: 'white', arrows: true}});
+
         viewer.render({});
     }
 });
 
-document.getElementById('newChartCanvas').addEventListener('mouseout', function(e) { // when the cursor mopves out of the chart canvas
-    if (newLastHoveredPoint !== null) {
-        newLastHoveredPoint = null;
+// document.getElementById('newChartCanvas').addEventListener('mouseout', function(e) { // when the cursor mopves out of the chart canvas
+//     if (newLastHoveredPoint !== null) {
+//         newLastHoveredPoint = null;
 
-        clearHighlightedRow();
-        isRowHovered = false;
+//         clearHighlightedRow();
+
+//         // isRowHovered = false;
         
-    }
-});
+//     }
+// });

@@ -26,6 +26,7 @@
     let newChartData = {{ first_site_data | tojson }}
 
     let surfaceVisible = false;
+    let labelsVisible = false;
     let sitePointClicked = false;
     let siteRowClicked = false;
     let wholeSurf;
@@ -47,6 +48,32 @@
             </select>
         </div>
     </div>
+    <div class="row mb-3">
+        <div class="col-lg-4 col-sm-12 mb-1 d-flex flex-column align-items-center">
+            <h5>
+                Structure panel&nbsp;
+                <a href="/help#structurePanelHelp">
+                    <i class="bi bi-info-circle" style="color: black;"></i>
+                </a>
+            </h5>
+        </div>
+        <div class="col-lg-3 col-sm-12 mb-1 d-flex flex-column align-items-center">
+            <h5>
+                Binding sites panel&nbsp;
+                <a href="/help#sitePanelHelp">
+                    <i class="bi bi-info-circle" style="color: black;"></i>
+                </a>
+            </h5>
+        </div>
+        <div class="col-lg-5 col-sm-12 mb-1 d-flex flex-column align-items-center">
+            <h5>
+                Binding residues panel&nbsp;
+                <a href="/help#siteResiduesPanelHelp">
+                    <i class="bi bi-info-circle" style="color: black;"></i>
+                </a>
+            </h5>
+        </div>
+    </div>
     <div class="row">
         <div id="3DMolAppletHolder" class="col-lg-4 col-sm-12 d-flex flex-column align-items-center justify-content-center align-self-start">
             <div class="row mb-3 custom-padding">
@@ -57,12 +84,17 @@
                 </div>
             </div>
             <div class="row mb-3 justify-content-between custom-padding">
-                <div class="col-5 d-flex justify-content-center">
+                <div class="col-4 d-flex justify-content-center">
                     <input id="surfButton" type="button" value="Surface OFF" style="font-weight: bold; color: #674ea7;"
                     onclick="toggleSurfaceVisibility()"></input>
                     <script src="/static/js/3DMol_toggle_surfs.js"></script>
                 </div>
-                <div class="col-5 d-flex justify-content-center">
+                <div class="col-4 d-flex justify-content-center">
+                    <input id="labelButton" type="button" value="Labels OFF" style="font-weight: bold; color: #674ea7;"
+                    onclick="toggleLabelsVisibility()"></input>
+                    <script src="/static/js/3DMol_toggle_surfs.js"></script>
+                </div>
+                <div class="col-4 d-flex justify-content-center">
                     <input type="button" value="Recenter" onclick="viewer.zoomTo();"></input>
                 </div>
             </div>
@@ -94,7 +126,12 @@
                         <thead class="fixTableHead">
                             <tr class="table__header">
                                 {% for header in headings %}
-                                <th class="table__cell">{{ header }}</th>
+                                <th class="table__cell">
+                                    {{ header }}<br>
+                                    <a href="/help#{{ header }}SiteHelp" data-toggle="tooltip" title= "{{ bs_table_tooltips[loop.index0] }}">
+                                        <i class="bi bi-info-circle" style="color: black;"></i>
+                                    </a>
+                                </th>
                                 {% endfor %}
                             </tr>
                         </thead>
@@ -166,5 +203,11 @@
 <script src="/static/js/3DMol_resize.js"></script>
 <script src="/static/js/change_segment.js"></script>
 <script src="/static/js/3DMol_add_surfs.js"></script>
+
+<script>
+    $(document).ready(function(){
+        $('[data-toggle="tooltip"]').tooltip();   
+    });
+</script>
 
 {% endblock%}

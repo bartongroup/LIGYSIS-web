@@ -88,8 +88,8 @@ let chartConfig = {
                 borderColor: "black",
                 borderWidth: 2,
                 hoverBorderWidth: 10,
-                hoverBorderColor: "gold",
-                pointHoverBorderColor: "gold",
+                hoverBorderColor: "#ffff99",
+                pointHoverBorderColor: "#ffff99",
             }
         ]
     },
