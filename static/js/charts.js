@@ -197,8 +197,8 @@ let newChartConfig = { // configuration for the new chart
                 borderWidth: 2,
                 hoverRadius: 16,
                 hoverBorderWidth: 10,
-                hoverBorderColor: "gold",
-                pointHoverBorderColor: "gold",
+                hoverBorderColor: "#ffff99",
+                pointHoverBorderColor: "#ffff99",
             }
         ]
     },

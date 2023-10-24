@@ -24,6 +24,10 @@ bss_data = pd.read_pickle(os.path.join(BIOLIP_FOLDER, "biolip_bss_data_100_accs.
 
 bss_ress = pd.read_pickle(os.path.join(BIOLIP_FOLDER, "biolip_ress_data_100_accs.pkl"))
 
+# replace NaNs with "NaN" string
+bss_ress = bss_ress.fillna("NaN")
+bss_data = bss_data.fillna("NaN")
+
 prot_ids = load_pickle(os.path.join(BIOLIP_FOLDER, "biolip_100_accs.pkl"))
 
 prot_seg_rep_strucs = load_pickle(os.path.join(BIOLIP_FOLDER, "biolip_prot_seg_rep_filt_100_acc.pkl"))

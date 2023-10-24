@@ -84,18 +84,22 @@
                 </div>
             </div>
             <div class="row mb-3 justify-content-between custom-padding">
-                <div class="col-4 d-flex justify-content-center">
+                <div class="col-3 d-flex justify-content-center">
                     <input id="surfButton" type="button" value="Surface OFF" style="font-weight: bold; color: #674ea7;"
                     onclick="toggleSurfaceVisibility()"></input>
                     <script src="/static/js/3DMol_toggle_surfs.js"></script>
                 </div>
-                <div class="col-4 d-flex justify-content-center">
+                <div class="col-3 d-flex justify-content-center">
                     <input id="labelButton" type="button" value="Labels OFF" style="font-weight: bold; color: #674ea7;"
                     onclick="toggleLabelsVisibility()"></input>
                     <script src="/static/js/3DMol_toggle_surfs.js"></script>
                 </div>
-                <div class="col-4 d-flex justify-content-center">
+                <div class="col-3 d-flex justify-content-center">
                     <input type="button" value="Recenter" onclick="viewer.zoomTo();"></input>
+                </div>
+                <div class="col-3 d-flex justify-content-center">
+                    <input id="saveImageButton" type="button" value="Save Image" style="color: black;"
+                    onclick="saveImage('3DmolCanvas', `${segmentName}_struc`)"></input>
                 </div>
             </div>
         </div>
@@ -122,7 +126,7 @@
             <div class="row mb-3 justify-content-center custom-padding">
                 <div class="table-responsive px-0">
                     <table class="table table-bordered sortable"id="bss_table">
-                        <caption>Ligand binding sites and their averaged features</caption>
+                        <!-- <caption>Ligand binding sites and their averaged features</caption> -->
                         <thead class="fixTableHead">
                             <tr class="table__header">
                                 {% for header in headings %}
@@ -204,10 +208,10 @@
 <script src="/static/js/change_segment.js"></script>
 <script src="/static/js/3DMol_add_surfs.js"></script>
 
-<script>
+<!-- <script>
     $(document).ready(function(){
         $('[data-toggle="tooltip"]').tooltip();   
     });
-</script>
+</script> -->
 
 {% endblock%}

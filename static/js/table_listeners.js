@@ -136,6 +136,9 @@ $('table#bs_ress_table tbody').on('mouseover', 'tr', function () { // event list
     let rowId = Number(this.id);  // gets the row id of the table row that is hovered over
     let index = newChartData[newChartLab].indexOf(rowId); // gets the index of the row id in the chart data
     let rowColor = window.getComputedStyle(this).getPropertyValue('color');
+    let rowColorHex = rgbToHex(rowColor);
+    // console.log(rowColor);
+    // console.log(rowColorHex);
 
     if (index !== -1) {
         
@@ -156,12 +159,17 @@ $('table#bs_ress_table tbody').on('mouseover', 'tr', function () { // event list
         //         {hetflag: false},
         //         );
         // }
-        viewer.setStyle({resi: rowId}, {cartoon:{style:'oval', color: rowColor, arrows: true}, stick:{color: rowColor}, });
+        viewer.setStyle({resi: rowId}, {cartoon:{style:'oval', color: rowColorHex, arrows: true}, stick:{color: rowColorHex}, });
         viewer.render({});
     }
 }).on('mouseout', 'tr', function () { // event listener for mouseout on table rows
-    newChart.data.datasets[0].data.forEach(function(point, i) {
-        resetChartStyles(newChart, i, "black", 2, 8); // resets chart styles to default
+    let rowId = Number(this.id);  // gets the row id of the table row that is hovered over
+    let index = newChartData[newChartLab].indexOf(rowId); // gets the index of the row id in the chart data
+
+    // newChart.data.datasets[0].data.forEach(function(point, i) {
+        
+    
+        resetChartStyles(newChart, index, "black", 2, 8); // resets chart styles to default
 
         // if (surfaceVisible) {
         //     viewer.removeAllSurfaces();
@@ -172,9 +180,9 @@ $('table#bs_ress_table tbody').on('mouseover', 'tr', function () { // event list
         //         {hetflag: false}
         //     );
         // }
-        viewer.setStyle({}, {cartoon: {style:'oval', color: 'white', arrows: true}});
-        viewer.render({});
-    });
+    viewer.setStyle({resi: rowId}, {cartoon: {style:'oval', color: 'white', arrows: true}});
+    viewer.render({});
+    //});
 });
 
 
@@ -217,3 +225,23 @@ document.addEventListener('DOMContentLoaded', function() {
 
     table.parentElement.style.maxHeight = maxHeight + 'px';
 });
+
+
+
+function rgbToHex(rgb) {
+    const rgbValues = rgb.match(/^rgba?[\s+]?[(]?(\d+)[,\s]+(\d+)[,\s]+(\d+)[,\s/]*(?:[\d+.]*)?[)]?$/i);
+
+    if (!rgbValues) {
+      return null;  // not an rgb or rgba string
+    }
+
+    let r = parseInt(rgbValues[1], 10).toString(16);
+    let g = parseInt(rgbValues[2], 10).toString(16);
+    let b = parseInt(rgbValues[3], 10).toString(16);
+
+    r = r.length === 1 ? "0" + r : r;
+    g = g.length === 1 ? "0" + g : g;
+    b = b.length === 1 ? "0" + b : b;
+
+    return "#" + r + g + b;
+}

@@ -56,3 +56,15 @@ function clearClickedRows() {   // clears the highlighted table row
         clickedRow.classList.remove("clicked-row");
     }
 }
+
+function saveImage(canvasId, filename) {
+    var canvas = document.getElementById(canvasId);
+    var link = document.createElement('a');
+    link.href = canvas.toDataURL('image/png', 1);
+    link.download = `${filename}.png`;
+    link.click();
+}
+
+$(document).ready(function(){
+    $('[data-toggle="tooltip"]').tooltip();   
+});

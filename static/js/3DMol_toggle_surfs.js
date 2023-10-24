@@ -36,11 +36,32 @@ function toggleLabelsVisibility() {
     if (labelsVisible) {
         button.value = 'Labels OFF'; // Change the button text
         button.style = "font-weight: bold; color: #674ea7;";
+
         viewer.removeAllLabels();
     }
     else {
         button.value = "Labels ON"; // Change the button text
         button.style = "font-weight: bold; color: #B22222;";
+        
+        // add labels if any site is clicked already
+        let clickedElements = document.getElementsByClassName("clicked-row");
+        if (clickedElements) { // any OTHER row is already clicked
+            for (var i = 0; i < clickedElements.length; i++) {
+                var clickedElementId = clickedElements[i].id;
+                let siteColor = chartColors[Number(clickedElementId.split("_").pop())];
+                viewer.addResLabels(
+                    {resi: seg_ress_dict[clickedElementId]},
+                    {
+                        alignment: 'center', backgroundColor: 'white', backgroundOpacity: 1,
+                        borderColor: 'black', borderOpacity: 1, borderThickness: 2,
+                        font: 'Arial', fontColor: siteColor, fontOpacity: 1, fontSize: 12,
+                        inFront: true, screenOffset: [0, 0, 0], showBackground: true
+                    }
+                );
+
+                viewer.render({});
+            }
+        }
     }
     labelsVisible = !labelsVisible; // Toggle the visibility state
     
