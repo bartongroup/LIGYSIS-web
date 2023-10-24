@@ -8,6 +8,7 @@ document.getElementById('chartCanvas').addEventListener('mousemove', function(e)
         let firstPoint = chartElement[0];
 
         if (lastHoveredPoint1 !== firstPoint.index) { // Check if the hovered point has changed
+            viewer.setStyle({}, {cartoon:{style:'oval', color: 'white', arrows: true},  });
             clearHighlightedRow();
             lastHoveredPoint1 = firstPoint.index;
 

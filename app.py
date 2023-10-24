@@ -66,6 +66,18 @@ bs_table_tooltips = [
     "This is the site's size (in aa)",
 ]
 
+bs_ress_table_tooltips = [
+    "This is the residue's UniProt number",
+    "This is the residue's alignment column",
+    "This is the residue's divergence score",
+    "This is the residue's missense enrichment score",
+    "This is the MES p-value",
+    "This is the residue's amino acid",
+    "This is the residue's RSA",
+    "This is the residue's secondary structure",
+]
+
+
 
 #### FLASK APP ###
 
@@ -116,7 +128,8 @@ def results(prot_id, seg_id):
     return render_template(
         'structure.html', data = data1, headings = headings, data2 = data2, cc = cc, colors = colors,
         seg_ress_dict = seg_ress_dict, prot_id = prot_id, seg_id = seg_id, segment_reps = segment_reps,
-        first_site_data = first_site_data, bs_table_tooltips = bs_table_tooltips,
+        first_site_data = first_site_data, bs_table_tooltips = bs_table_tooltips, bs_ress_table_tooltips = bs_ress_table_tooltips,
+        
     )
 
 @app.route('/about')
