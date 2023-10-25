@@ -227,7 +227,6 @@ document.addEventListener('DOMContentLoaded', function() {
 });
 
 
-
 function rgbToHex(rgb) {
     const rgbValues = rgb.match(/^rgba?[\s+]?[(]?(\d+)[,\s]+(\d+)[,\s]+(\d+)[,\s/]*(?:[\d+.]*)?[)]?$/i);
 
