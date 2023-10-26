@@ -16,7 +16,7 @@ $3Dmol.setSyncSurface(true); // all surfaces appear at once
 
 viewer.setViewStyle({'style': 'outline', 'color': 'black','width': 0.1})
 
-let pdbUri = `/static/data/structures/${segmentReps[segmentId]["rep"]}_trans.pdb`;
+let pdbUri = `/static/data/structures/${segmentReps[segmentId]["rep"]}.pdb`;
 
 jQuery.ajax( pdbUri, { 
     success: function(data) {
@@ -34,7 +34,7 @@ jQuery.ajax( pdbUri, {
         viewer.zoom(1.2, 100);                                /* slight zoom */
     },
     error: function(hdr, status, err) {
-        conerrsole.or( "Failed to load PDB " + pdbUri + ": " + err );
+        console.error( "Failed to load PDB " + pdbUri + ": " + err );
     },
 });
 

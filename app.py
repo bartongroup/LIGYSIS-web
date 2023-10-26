@@ -25,33 +25,29 @@ bss_data = pd.read_pickle(os.path.join(BIOLIP_FOLDER, "biolip_bss_data_15000_acc
 bss_ress = pd.read_pickle(os.path.join(BIOLIP_FOLDER, "biolip_ress_data_15000_accs.pkl")) # residue data
 
 # replace NaNs with "NaN" string
-bss_ress = bss_ress.fillna("NaN")
-bss_data = bss_data.fillna("NaN")
+bss_ress = bss_ress.fillna("NaN") # pre-processing could also be done before saving the pickle
+bss_data = bss_data.fillna("NaN") # pre-processing could also be done before saving the pickle
+
+bss_data.columns = ["ID", "RSA", "DS", "MES", "Size"]
 
 prot_ids = load_pickle(os.path.join(BIOLIP_FOLDER, "biolip_up_ids_15000_accs.pkl")) # protein ids
 
-prot_seg_rep_strucs = load_pickle(os.path.join(BIOLIP_FOLDER, "biolip_prot_seg_rep_filt_100_acc.pkl")) # representative structures dict
+prot_seg_rep_strucs = load_pickle(os.path.join(BIOLIP_FOLDER, "biolip_prot_seg_rep_filt_15000_acc.pkl")) # representative structures dict (only successfully run segments)
 
-#good_segs_dict = pd.read_csv(os.path.join(BIOLIP_FOLDER, "biolip_good_segs_dict_100_accs.csv"))
-
-#print(good_segs[:5])
-
-### FORMATTING DATA ###
+### FORMATTING DATA ### pre-processing could also be done before saving the pickle
 
 bss_ress = bss_ress.explode("binding_sites")
 bss_ress["bs_id"] = bss_ress.up_acc + "_" + bss_ress.seg_id.astype(str) + "_" + bss_ress.binding_sites.astype(str)
 bss_ress.UniProt_ResNum = bss_ress.UniProt_ResNum.astype(int)
 bss_ress = bss_ress.drop_duplicates(["up_acc", "seg_id", "binding_sites", "UniProt_ResNum"]) # drop duplicate residues within the binding site
 
-bs_ress_dict = load_pickle(os.path.join(BIOLIP_FOLDER, "biolip_bs_ress_100_accs2.pkl"))
+bs_ress_dict = load_pickle(os.path.join(BIOLIP_FOLDER, "biolip_bs_ress_15000_accs2.pkl"))
 
 ### SOME FIXED VARIABLES ###
 
 colors = load_pickle(os.path.join(DATA_FOLDER, "sample_colors_hex.pkl")) # sample colors
 
 headings = bss_data.columns.tolist()
-
-#data_prots = [el.split("_") for el in bss_data.lab.unique().tolist()]
 
 cc = [
     'UniProt_ResNum', 'alignment_column', 'abs_norm_shenkin',
@@ -105,9 +101,12 @@ def results(prot_id, seg_id):
 
     seg_name = prot_id + "_" + seg_id
 
-    bss_prot = bss_data[bss_data.lab.str.contains(seg_name)]
+    bss_prot = bss_data[bss_data.ID.str.contains(seg_name)].copy()
 
-    first_site = bss_prot.lab.unique().tolist()[0]
+    # grab only third element of ID column
+    bss_prot.ID = bss_prot.ID.str.split("_").str[2]
+
+    first_site = bss_prot.ID.unique().tolist()[0]
 
     first_site_data = bss_ress.query('bs_id == @first_site')[cc].to_dict(orient="list")
 
@@ -117,11 +116,15 @@ def results(prot_id, seg_id):
 
     segment_reps = prot_seg_rep_strucs[prot_id]
 
-    segment_reps = dict(sorted(segment_reps.items()))    
+    # segment_reps = dict(sorted(segment_reps.items())) # should not be necessary since I sorted it beforehand
 
     data2 = prot_ress.to_dict(orient="list")
 
     seg_ress_dict = bs_ress_dict[prot_id][seg_id]
+    seg_ress_dict = {str(key): value for key, value in seg_ress_dict.items()}
+
+
+    print(seg_ress_dict)
     
     return render_template(
         'structure.html', data = data1, headings = headings, data2 = data2, cc = cc, colors = colors,

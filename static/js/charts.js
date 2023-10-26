@@ -1,6 +1,6 @@
-const chartX = "an_shenk";
+const chartX = "DS";
 const chartY = "MES";
-const chartLab = "lab";
+const chartLab = "ID";
 const newChartX = "abs_norm_shenkin";
 const newChartY = "oddsratio";
 const newChartLab = "UniProt_ResNum";
@@ -14,10 +14,10 @@ const newChartCtx = document.getElementById("newChartCanvas").getContext("2d");
 let clickedPoints = []; // array to store the clicked points
 
 const myChartLims = { 
-    an_shenk: {sugMin: 0, sugMax: 50, min: 0, max: 100},
+    DS: {sugMin: 0, sugMax: 50, min: 0, max: 100},
     MES: {sugMin: 0, sugMax: 2, min: 0, max: 5},
     RSA: {sugMin: 0, sugMax: 50, min: 0, max: 100},
-    n_ress: {sugMin: 1, sugMax: 25, min: 1, max: 70}
+    Size: {sugMin: 1, sugMax: 25, min: 1, max: 70}
 };
 
 const newChartLims = {

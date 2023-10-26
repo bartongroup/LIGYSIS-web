@@ -300,3 +300,38 @@ img.responsive-logo {
     margin-right: 8px;
     margin-bottom: 8px;
 }
+
+
+
+@font-face {
+    font-family: 'PT Root UI';
+    src: url('PT-Root-UI_Regular.woff2') format('woff2');
+    font-weight: normal;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'PT Root UI';
+    src: url('PT-Root-UI_Bold.woff2') format('woff2');
+    font-weight: bold;
+    font-style: normal;
+}
+
+/* .border {
+    border: 2px solid black;
+    width: fit-content;
+    margin: 2rem;
+    padding: 0.5rem;
+}
+.sans {
+    font-family: sans-serif;
+} */
+.uniwidthsans {
+    font-family: 'PT Root UI', sans-serif;
+}
+/* .hoverbold {
+    font-weight: normal;
+}
+.hoverbold:hover {
+    font-weight: bold;
+} */
