@@ -20,17 +20,17 @@ def load_pickle(f_in):
 
 ### READING INPUT DATA ###
 
-bss_data = pd.read_pickle(os.path.join(BIOLIP_FOLDER, "biolip_bss_data_100_accs.pkl"))
+bss_data = pd.read_pickle(os.path.join(BIOLIP_FOLDER, "biolip_bss_data_15000_accs.pkl")) # site data
 
-bss_ress = pd.read_pickle(os.path.join(BIOLIP_FOLDER, "biolip_ress_data_100_accs.pkl"))
+bss_ress = pd.read_pickle(os.path.join(BIOLIP_FOLDER, "biolip_ress_data_15000_accs.pkl")) # residue data
 
 # replace NaNs with "NaN" string
 bss_ress = bss_ress.fillna("NaN")
 bss_data = bss_data.fillna("NaN")
 
-prot_ids = load_pickle(os.path.join(BIOLIP_FOLDER, "biolip_100_accs.pkl"))
+prot_ids = load_pickle(os.path.join(BIOLIP_FOLDER, "biolip_up_ids_15000_accs.pkl")) # protein ids
 
-prot_seg_rep_strucs = load_pickle(os.path.join(BIOLIP_FOLDER, "biolip_prot_seg_rep_filt_100_acc.pkl"))
+prot_seg_rep_strucs = load_pickle(os.path.join(BIOLIP_FOLDER, "biolip_prot_seg_rep_filt_100_acc.pkl")) # representative structures dict
 
 #good_segs_dict = pd.read_csv(os.path.join(BIOLIP_FOLDER, "biolip_good_segs_dict_100_accs.csv"))
 
@@ -47,7 +47,7 @@ bs_ress_dict = load_pickle(os.path.join(BIOLIP_FOLDER, "biolip_bs_ress_100_accs2
 
 ### SOME FIXED VARIABLES ###
 
-colors = load_pickle(os.path.join(DATA_FOLDER, "sample_colors_hex.pkl"))
+colors = load_pickle(os.path.join(DATA_FOLDER, "sample_colors_hex.pkl")) # sample colors
 
 headings = bss_data.columns.tolist()
 
@@ -76,8 +76,6 @@ bs_ress_table_tooltips = [
     "This is the residue's RSA",
     "This is the residue's secondary structure",
 ]
-
-
 
 #### FLASK APP ###
 
