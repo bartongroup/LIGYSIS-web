@@ -1,6 +1,0 @@
-define A0A060P168_1_0 7, 61, 80, 145;
-
-select A0A060P168_1_0; wireframe on; wireframe 0.2; color[204, 81, 81];
-
-color isosurface {A0A060P168_1_0}; color[204, 81, 81];
-

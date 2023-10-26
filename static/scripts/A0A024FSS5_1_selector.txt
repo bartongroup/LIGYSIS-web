@@ -1,6 +1,0 @@
-define A0A024FSS5_1_0 11, 12, 15, 18, 25, 26, 29, 43, 47, 50, 51, 53, 59, 69, 70, 73;
-
-select A0A024FSS5_1_0; wireframe on; wireframe 0.2; color[204, 81, 81];
-
-color isosurface {A0A024FSS5_1_0}; color[204, 81, 81];
-

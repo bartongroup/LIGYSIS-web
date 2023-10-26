@@ -1,9 +1,0 @@
-define A0A024E3Q2_1_0 295, 299, 326, 348, 349;
-define A0A024E3Q2_1_1 119, 120, 152, 153, 180, 224, 226, 229, 248, 278, 279, 294, 296, 372, 406;
-
-select A0A024E3Q2_1_0; wireframe on; wireframe 0.2; color[204, 81, 81];
-select A0A024E3Q2_1_1; wireframe on; wireframe 0.2; color[127, 51, 51];
-
-color isosurface {A0A024E3Q2_1_0}; color[204, 81, 81];
-color isosurface {A0A024E3Q2_1_1}; color[127, 51, 51];
-

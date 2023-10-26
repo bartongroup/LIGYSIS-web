@@ -1,9 +1,0 @@
-define A0A059VJE6_1_0 1810, 1811, 1836, 1838;
-define A0A059VJE6_1_1 1727, 1729, 1887;
-
-select A0A059VJE6_1_0; wireframe on; wireframe 0.2; color[204, 81, 81];
-select A0A059VJE6_1_1; wireframe on; wireframe 0.2; color[127, 51, 51];
-
-color isosurface {A0A059VJE6_1_0}; color[204, 81, 81];
-color isosurface {A0A059VJE6_1_1}; color[127, 51, 51];
-

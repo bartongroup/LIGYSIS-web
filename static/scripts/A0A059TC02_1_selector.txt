@@ -1,9 +1,0 @@
-define A0A059TC02_1_0 16, 17, 18, 38, 44, 64, 65, 84, 85, 86, 121, 122, 157, 161, 184, 185, 186, 187, 199;
-define A0A059TC02_1_1 124, 129, 157, 158;
-
-select A0A059TC02_1_0; wireframe on; wireframe 0.2; color[204, 81, 81];
-select A0A059TC02_1_1; wireframe on; wireframe 0.2; color[127, 51, 51];
-
-color isosurface {A0A059TC02_1_0}; color[204, 81, 81];
-color isosurface {A0A059TC02_1_1}; color[127, 51, 51];
-

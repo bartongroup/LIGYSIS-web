@@ -1,3 +1,0 @@
-<manifest id="jniinchi" version="1.03_1" platform="FREEBSD-AMD64" >
-  <file library="true">libJniInchi-1.03_1-FREEBSD-AMD64.so</file>
-</manifest>

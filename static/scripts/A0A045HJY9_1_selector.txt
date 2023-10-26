@@ -1,6 +1,0 @@
-define A0A045HJY9_1_0 37, 42, 67, 131;
-
-select A0A045HJY9_1_0; wireframe on; wireframe 0.2; color[204, 81, 81];
-
-color isosurface {A0A045HJY9_1_0}; color[204, 81, 81];
-

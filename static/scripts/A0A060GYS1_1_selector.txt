@@ -1,9 +1,0 @@
-define A0A060GYS1_1_0 55, 57, 101, 301;
-define A0A060GYS1_1_1 55, 57, 106, 131, 201, 230, 257, 301, 303, 306, 308, 309, 313, 317;
-
-select A0A060GYS1_1_0; wireframe on; wireframe 0.2; color[204, 81, 81];
-select A0A060GYS1_1_1; wireframe on; wireframe 0.2; color[127, 51, 51];
-
-color isosurface {A0A060GYS1_1_0}; color[204, 81, 81];
-color isosurface {A0A060GYS1_1_1}; color[127, 51, 51];
-

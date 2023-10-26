@@ -1,6 +1,0 @@
-define A0A059WLS9_1_0 30, 31, 34, 51, 52, 75, 79, 92, 93, 94;
-
-select A0A059WLS9_1_0; wireframe on; wireframe 0.2; color[204, 81, 81];
-
-color isosurface {A0A059WLS9_1_0}; color[204, 81, 81];
-
