@@ -100,7 +100,7 @@
                 <canvas id="chartCanvas" width="300" height="300"></canvas>
             </div>
             <div class="row mb-3 justify-content-around custom-padding">
-                <div class="col-6 col-sm-4 col-lg-8 col-xl-6 mb-2 d-flex justify-content-center align-items-center">
+                <div class="col-6 col-sm-4 col-lg-8 col-xl-4 mb-2 d-flex justify-content-center align-items-center">
                     <span style="font-weight: 500; font-size: 1.25rem;">Y</span>:&nbsp;
                     <select id="yAxisTitle">
                         {% for header in headings[1:] %}
@@ -108,7 +108,7 @@
                         {% endfor %}
                     </select>
                 </div>
-                <div class="col-6 col-sm-4 col-lg-8 col-xl-6 mb-2 d-flex justify-content-center align-items-center">
+                <div class="col-6 col-sm-4 col-lg-8 col-xl-4 mb-2 d-flex justify-content-center align-items-center">
                     <span style="font-weight: 500; font-size: 1.25rem;">X</span>:&nbsp;
                     <select id="xAxisTitle">
                         {% for header in headings[1:] %}
@@ -116,7 +116,7 @@
                         {% endfor %}
                     </select>
                 </div>
-                <div class="col-6 col-sm-4 col-lg-8 col-xl-6 d-flex justify-content-center">
+                <div class="col-6 col-sm-4 col-lg-8 col-xl-4 d-flex justify-content-center">
                     <input id="saveImageButton" type="button" value="Save Image" style="color: black;"
                     onclick="saveImage('chartCanvas', `${segmentName}_sites_graph`)"></input>
                 </div>
@@ -173,27 +173,27 @@
                 <canvas id="newChartCanvas" width="650" height="320"></canvas>
             </div>
             <div class="row mb-3 justify-content-around custom-padding">
-                <div class="col-sm-4 col-lg-8 col-xl-6 mb-2 d-flex justify-content-center align-items-center">
+                <div class="col-sm-4 col-lg-8 col-xl-4 mb-2 d-flex justify-content-center align-items-center">
                     <span style="font-weight: 500; font-size: 1.25rem;">Y</span>:&nbsp;
                     <select id="yAxisTitle2" class="axis-dropdown2 y-axis-dropdown2">
-                        <option selected hidden>oddsratio</option>
+                        <option selected hidden>MES</option>
                         {% for header in cc_new[1:] %}
                         <option value="{{ header }}">{{ header }}</option>
                         {% endfor %}
                     </select>
                 </div>
 
-                <div class="col-sm-4 col-lg-8 col-xl-6 mb-2 d-flex justify-content-center align-items-center">
+                <div class="col-sm-4 col-lg-8 col-xl-4 mb-2 d-flex justify-content-center align-items-center">
                     <span style="font-weight: 500; font-size: 1.25rem;">X</span>:&nbsp;
                     <select id="xAxisTitle2" class="axis-dropdown2 x-axis-dropdown2">
-                        <option selected hidden>abs_norm_shenkin</option>
+                        <option selected hidden>DS</option>
                         {% for header in cc_new[1:] %}
                         <option value="{{ header }}">{{ header }}</option>
                         {% endfor %}
                     </select>
                 </div>
 
-                <div class="col-sm-4 col-lg-8 col-xl-6 mb-2 d-flex justify-content-center align-items-center">
+                <div class="col-sm-4 col-lg-8 col-xl-4 mb-2 d-flex justify-content-center align-items-center">
                     <!-- <i
                     class="bi bi-download"
                     style="color: black; cursor: pointer; font-size: 1.5rem;"
@@ -209,11 +209,11 @@
                 
             </div>
             <div class="row mb-1 justify-content-center custom-padding">
-                <div class="table-responsive px-0">
+                <div class="table-responsive px-0 uniwidthsans">
                     <table class="table table-bordered table-hover sortable" id="bs_ress_table">
                         <thead class="sticky-header">
                             <tr class="table__header">
-                                {% for header in cc %}
+                                {% for header in cc_new %}
                                 <th class="table__cell">
                                     <span data-toggle="tooltip" title= "{{ bs_ress_table_tooltips[loop.index0] }}">{{ header }}</span><br>
                                 </th>
@@ -221,8 +221,8 @@
                             </tr>
                         </thead>
                         <tbody> 
-                            {% for i in range(first_site_data["UniProt_ResNum"]|length) %}
-                            <tr class="custom-row" style="color: {{ colors[0] }} !important;" id="{{ first_site_data['UniProt_ResNum'][i] }}">
+                            {% for i in range(first_site_data["UPResNum"]|length) %}
+                            <tr class="custom-row" style="color: {{ colors[0] }} !important;" id="{{ first_site_data['UPResNum'][i] }}">
                                     {% for k in first_site_data.keys() %}
                                         <td class="table__cell">{{ first_site_data[k][i] }}</td>
                                     {% endfor %}

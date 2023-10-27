@@ -1,9 +1,9 @@
 const chartX = "DS";
 const chartY = "MES";
 const chartLab = "ID";
-const newChartX = "abs_norm_shenkin";
-const newChartY = "oddsratio";
-const newChartLab = "UniProt_ResNum";
+const newChartX = "DS";
+const newChartY = "MES";
+const newChartLab = "UPResNum";
 
 let myChart;
 let newChart;
@@ -11,7 +11,7 @@ let newChart;
 const chartCtx = document.getElementById("chartCanvas").getContext("2d"); 
 const newChartCtx = document.getElementById("newChartCanvas").getContext("2d");
 
-let clickedPoints = []; // array to store the clicked points
+// let clickedPoints = []; // array to store the clicked points
 
 const myChartLims = { 
     DS: {sugMin: 0, sugMax: 50, min: 0, max: 100},
@@ -21,43 +21,41 @@ const myChartLims = {
 };
 
 const newChartLims = {
-    abs_norm_shenkin: {sugMin: 0, sugMax: 50, min: 0, max: 100},
-    oddsratio: {sugMin: 0, sugMax: 2, min: 0, max: 5},
+    DS: {sugMin: 0, sugMax: 50, min: 0, max: 100},
+    MES: {sugMin: 0, sugMax: 2, min: 0, max: 5},
     RSA: {sugMin: 0, sugMax: 75, min: 0, max: 100},
-    pvalue: {sugMin: 0.1, sugMax: 0.75, min: 0, max: 1}
+    p: {sugMin: 0.1, sugMax: 0.75, min: 0, max: 1}
 };
 
-const clickedPointStyler = {
-    id: 'clickedPointStyler',
-    beforeEvent: function(chart, event, options) {
-        if (event.type !== 'mousemove') return; // only care about mousemove events
+// const clickedPointStyler = {
+//     id: 'clickedPointStyler',
+//     beforeEvent: function(chart, event, options) {
+//         if (event.type !== 'mousemove') return; // only care about mousemove events
 
-        const activeElements = chart.getElementsAtEventForMode(event.native, 'nearest', {intersect: true}, true);
+//         const activeElements = chart.getElementsAtEventForMode(event.native, 'nearest', {intersect: true}, true);
 
-        // Check if we are not hovering over any data point now
-        if (activeElements.length === 0 && chart.lastActive && chart.lastActive.length > 0) {
-            // Apply the clicked styling
-            if (options.clickedPoints && options.clickedColor) {
-                const dataset = chart.data.datasets[0];
+//         // Check if we are not hovering over any data point now
+//         if (activeElements.length === 0 && chart.lastActive && chart.lastActive.length > 0) {
+//             // Apply the clicked styling
+//             if (options.clickedPoints && options.clickedColor) {
+//                 const dataset = chart.data.datasets[0];
 
-                if (!Array.isArray(dataset.borderColor)) {
-                    dataset.borderColor = [];
-                }
+//                 if (!Array.isArray(dataset.borderColor)) {
+//                     dataset.borderColor = [];
+//                 }
 
-                options.clickedPoints.forEach(idx => {
-                    dataset.borderColor[idx] = options.clickedColor;
-                });
+//                 options.clickedPoints.forEach(idx => {
+//                     dataset.borderColor[idx] = options.clickedColor;
+//                 });
 
-                chart.update();
-            }
-        }
+//                 chart.update();
+//             }
+//         }
 
-        // Store the current active elements
-        chart.lastActive = activeElements;
-    }
-};
-
-
+//         // Store the current active elements
+//         chart.lastActive = activeElements;
+//     }
+// };
 
 const chartAreaBorder = {
     id: 'chartAreaBorder',
@@ -173,13 +171,13 @@ let chartConfig = {
                 borderDash: [0, 0],
                 borderDashOffset: 5,
             },
-            clickedPointStyler: {
-                clickedPoints: clickedPoints,
-                clickedColor: "#50C878",
-            },
+            // clickedPointStyler: {
+            //     clickedPoints: clickedPoints,
+            //     clickedColor: "#50C878",
+            // },
         },
     },
-    plugins: [chartAreaBorder, clickedPointStyler],
+    plugins: [chartAreaBorder, ],
 };
 
 let newChartConfig = { // configuration for the new chart
