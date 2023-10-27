@@ -1,8 +1,19 @@
-const chartX = "DS";
-const chartY = "MES";
+let chartX = "DS";
+let chartY = "MES";
+
+if (chartData[chartY].includes("NaN")) {
+    chartY = "RSA";
+}
+
 const chartLab = "ID";
-const newChartX = "DS";
-const newChartY = "MES";
+
+let newChartX = "DS";
+let newChartY = "MES";
+
+if (newChartData[newChartY].includes("NaN")) {
+    newChartY = "RSA";
+}
+
 const newChartLab = "UPResNum";
 
 let myChart;
@@ -10,8 +21,6 @@ let newChart;
 
 const chartCtx = document.getElementById("chartCanvas").getContext("2d"); 
 const newChartCtx = document.getElementById("newChartCanvas").getContext("2d");
-
-// let clickedPoints = []; // array to store the clicked points
 
 const myChartLims = { 
     DS: {sugMin: 0, sugMax: 50, min: 0, max: 100},
@@ -26,36 +35,6 @@ const newChartLims = {
     RSA: {sugMin: 0, sugMax: 75, min: 0, max: 100},
     p: {sugMin: 0.1, sugMax: 0.75, min: 0, max: 1}
 };
-
-// const clickedPointStyler = {
-//     id: 'clickedPointStyler',
-//     beforeEvent: function(chart, event, options) {
-//         if (event.type !== 'mousemove') return; // only care about mousemove events
-
-//         const activeElements = chart.getElementsAtEventForMode(event.native, 'nearest', {intersect: true}, true);
-
-//         // Check if we are not hovering over any data point now
-//         if (activeElements.length === 0 && chart.lastActive && chart.lastActive.length > 0) {
-//             // Apply the clicked styling
-//             if (options.clickedPoints && options.clickedColor) {
-//                 const dataset = chart.data.datasets[0];
-
-//                 if (!Array.isArray(dataset.borderColor)) {
-//                     dataset.borderColor = [];
-//                 }
-
-//                 options.clickedPoints.forEach(idx => {
-//                     dataset.borderColor[idx] = options.clickedColor;
-//                 });
-
-//                 chart.update();
-//             }
-//         }
-
-//         // Store the current active elements
-//         chart.lastActive = activeElements;
-//     }
-// };
 
 const chartAreaBorder = {
     id: 'chartAreaBorder',

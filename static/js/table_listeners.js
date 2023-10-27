@@ -26,7 +26,9 @@ $('table#bss_table tbody').on('mouseover', 'tr', function () { // event listener
             }
         }
     }
-    viewer.setStyle({resi: seg_ress_dict[rowId]}, {cartoon:{style:'oval', color: siteColor, arrows: true}, stick:{color: siteColor}, });
+    let PDBResNums = seg_ress_dict[rowId].map(el => Up2PdbDict[proteinId]["A"][el]);
+
+    viewer.setStyle({resi: PDBResNums}, {cartoon:{style:'oval', color: siteColor, arrows: true}, stick:{color: siteColor}, });
     
     viewer.render({});
     
@@ -56,7 +58,9 @@ $('table#bss_table tbody').on('mouseover', 'tr', function () { // event listener
             }
         }
 
-        viewer.setStyle({resi: seg_ress_dict[rowId]}, {cartoon: {style:'oval', color: 'white', arrows: true}});
+        let PDBResNums = seg_ress_dict[rowId].map(el => Up2PdbDict[proteinId]["A"][el]);
+
+        viewer.setStyle({resi: PDBResNums}, {cartoon: {style:'oval', color: 'white', arrows: true}});
         viewer.removeAllLabels(); // clearing labels from previous clicked site
         viewer.render({});
     }
@@ -104,6 +108,8 @@ $('table#bss_table tbody').on('mouseover', 'tr', function () { // event listener
 
     }
 
+    let PDBResNums = seg_ress_dict[rowId].map(el => Up2PdbDict[proteinId]["A"][el]);
+
     if (surfaceVisible) {
         for (const [key, value] of Object.entries(surfsDict)) {
             if (key == rowId) {
@@ -117,7 +123,7 @@ $('table#bss_table tbody').on('mouseover', 'tr', function () { // event listener
     if (labelsVisible) {
         viewer.removeAllLabels(); // clearing labels from previous clicked site
         viewer.addResLabels(
-            {resi: seg_ress_dict[rowId]},
+            {resi: PDBResNums},
             {
                 alignment: 'center', backgroundColor: 'white', backgroundOpacity: 1,
                 borderColor: 'black', borderOpacity: 1, borderThickness: 2,
@@ -126,7 +132,12 @@ $('table#bss_table tbody').on('mouseover', 'tr', function () { // event listener
             }
         );
     }
-    viewer.setStyle({resi: seg_ress_dict[rowId]}, {cartoon:{style:'oval', color: siteColor, arrows: true}, stick:{color: siteColor}, });
+
+    // console.log(seg_ress_dict[rowId])
+
+    
+
+    viewer.setStyle({resi: PDBResNums}, {cartoon:{style:'oval', color: siteColor, arrows: true}, stick:{color: siteColor}, });
     
     viewer.render({});
     
@@ -159,7 +170,9 @@ $('table#bs_ress_table tbody').on('mouseover', 'tr', function () { // event list
         //         {hetflag: false},
         //         );
         // }
-        viewer.setStyle({resi: rowId}, {cartoon:{style:'oval', color: rowColorHex, arrows: true}, stick:{color: rowColorHex}, });
+        let PDBResNum = Up2PdbDict[proteinId]["A"][rowId];
+
+        viewer.setStyle({resi: PDBResNum}, {cartoon:{style:'oval', color: rowColorHex, arrows: true}, stick:{color: rowColorHex}, });
         viewer.render({});
     }
 }).on('mouseout', 'tr', function () { // event listener for mouseout on table rows
@@ -180,7 +193,10 @@ $('table#bs_ress_table tbody').on('mouseover', 'tr', function () { // event list
         //         {hetflag: false}
         //     );
         // }
-    viewer.setStyle({resi: rowId}, {cartoon: {style:'oval', color: 'white', arrows: true}});
+
+    let PDBResNum = Up2PdbDict[proteinId]["A"][rowId];
+
+    viewer.setStyle({resi: PDBResNum}, {cartoon: {style:'oval', color: 'white', arrows: true}});
     viewer.render({});
     //});
 });

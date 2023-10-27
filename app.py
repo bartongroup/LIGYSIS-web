@@ -6,7 +6,7 @@ import pandas as pd
 
 from flask import Flask, render_template, url_for, request, redirect, jsonify
 
-from config import DATA_FOLDER, BIOLIP_FOLDER, SITE_TABLES_FOLDER, RES_TABLES_FOLDER, REP_STRUCS_FOLDER, BS_RESS_FOLDER
+from config import DATA_FOLDER, BIOLIP_FOLDER, SITE_TABLES_FOLDER, RES_TABLES_FOLDER, REP_STRUCS_FOLDER, BS_RESS_FOLDER, MAPPINGS_FOLDER
 
 ### FUNCTIONS ###
 
@@ -116,6 +116,12 @@ def results(prot_id, seg_id):
     seg_ress_dict = bs_ress_dict[prot_id][seg_id]
     seg_ress_dict = {str(key): value for key, value in seg_ress_dict.items()}
 
+    pdb2up_dict = load_pickle(os.path.join(MAPPINGS_FOLDER, "pdb2up", "{}_pdb2up.pkl".format(segment_reps[int(seg_id)]["rep"])))
+
+    up2pdb_dict = load_pickle(os.path.join(MAPPINGS_FOLDER, "up2pdb", "{}_up2pdb.pkl".format(segment_reps[int(seg_id)]["rep"])))
+
+    # print(pdb2up_dict)
+
 
     #print(seg_ress_dict)
     
@@ -123,6 +129,7 @@ def results(prot_id, seg_id):
         'structure.html', data = data1, headings = headings, data2 = data2, cc_new = cc_new, colors = colors,
         seg_ress_dict = seg_ress_dict, prot_id = prot_id, seg_id = seg_id, segment_reps = segment_reps,
         first_site_data = first_site_data, bs_table_tooltips = bs_table_tooltips, bs_ress_table_tooltips = bs_ress_table_tooltips,
+        pdb2up_dict = pdb2up_dict, up2pdb_dict = up2pdb_dict
         
     )
 

@@ -26,6 +26,9 @@
     let newChartData = {{ first_site_data | tojson }}
     let headings = {{ headings | tojson }}
 
+    const Pdb2UpDict = {{ pdb2up_dict | tojson }}
+    const Up2PdbDict = {{ up2pdb_dict | tojson }}
+
     let surfaceVisible = false;
     let labelsVisible = false;
     let sitePointClicked = false;
@@ -40,10 +43,24 @@
 
 <div class="container-fluid">
     <div class="row mb-1 align-items-center">
-        <div class="col-12 col-sm-8 col-md-6 col-lg-4 col-xl-3 d-flex flex-column align-items-center align-items-md-start">
-            <h1 class="mb-3 mb-md-0">{{ prot_id }}</h1>
+        <div class="col-12 col-sm-8 col-md-6 col-lg-4 col-xl-2 d-flex flex-column align-items-center align-items-md-start">
+            <a href="https://www.uniprot.org/uniprotkb/{{ prot_id }}/entry">
+                <h1 class="mb-3 mb-md-0">
+                    {{ prot_id }}&nbsp;
+                </h1>
+            </a>
         </div>
         <div class="col-12 col-sm-8 col-md-6 col-lg-4 col-xl-3 d-flex flex-column align-items-center align-items-md-start">
+            <h2  class="mb-3 my-md-0">
+                &nbsp;Lipoprotein
+            </h2>
+        </div>
+        <div class="col-xl-4 d-flex flex-column align-items-center align-items-md-start">
+            <h4 class="mb-3 mb-md-0">
+                (XXX Structures,&nbsp;&nbsp;YYY Ligands,&nbsp;&nbsp;ZZZ Binding Sites)
+            </h4>
+        </div>
+        <div class="col-12 col-sm-8 col-md-6 col-lg-4 col-xl-3 d-flex flex-column align-items-center align-items-md-end">
             <select id="selectSegment" class="form-select" aria-label="Selecting structural segment">
                 <option selected>Segment {{ seg_id }} ({{ segment_reps[seg_id | int]["start"] }} - {{ segment_reps[seg_id | int]["end"] }})</option>
                 {% for key, value in segment_reps.items() if key != seg_id | int %}
@@ -51,9 +68,10 @@
                 {% endfor %}
             </select>
         </div>
+        
     </div>
-    <div class="row">
-        <div id="3DMolAppletHolder" class="col-lg-4 col-sm-12 d-flex flex-column align-items-center justify-content-center align-self-start">
+    <div class="row justify-content-around">
+        <div id="3DMolAppletHolder" class="col-lg-4 col-sm-12 d-flex flex-column align-items-center justify-content-center align-self-start rounded-border">
             <div class="row my-3 custom-padding align-self-center">
                 <h5>
                     Structure panel&nbsp;
@@ -79,15 +97,16 @@
                     onclick="toggleLabelsVisibility()"></input>
                 </div>
                 <div class="col-6 col-md-3 col-lg-6 col-xl-3 d-flex justify-content-center">
-                    <input type="button" value="Recenter" onclick="viewer.zoomTo();"></input>
-                </div>
-                <div class="col-6 col-md-3 col-lg-6 col-xl-3 d-flex justify-content-center">
                     <input id="saveImageButton" type="button" value="Save Image" style="color: black;"
                     onclick="saveImage('3DmolCanvas', `${segmentName}_struc`)"></input>
                 </div>
+                <div class="col-6 col-md-3 col-lg-6 col-xl-3 d-flex justify-content-center">
+                    <input id="saveStrucButton" type="button" value="Save Structure" style="color: black;"
+                    onclick="downloadFile(`/static/data/biolip/split/structures/pdb/${segmentReps[segmentId]['rep']}.pdb`)"></input>
+                </div>
             </div>
         </div>
-        <div class="col-lg-3 col-sm-12 mb-3 d-flex flex-column ">
+        <div class="col-lg-3 col-sm-12 mb-3 d-flex flex-column rounded-border">
             <div class="row my-3 custom-padding align-self-center">
                 <h5>
                     Binding sites panel&nbsp;
@@ -124,7 +143,6 @@
             <div class="row mb-0 justify-content-center custom-padding">
                 <div class="table-responsive px-0 uniwidthsans">
                     <table class="table table-bordered sortable"id="bss_table">
-
                         <thead>
                             <tr class="table__header">
                                 {% for header in headings %}
@@ -150,17 +168,27 @@
                 </div>
             </div>
             <div class="row mb-3 justify-content-center custom-padding">
-                <div class="col-1 d-flex justify-content-center align-items-center">
+                <div class="col-3 col-md-1 col-lg-3 col-xl-1 d-flex justify-content-center align-items-center">
+                    <i
+                    class="bi bi-download"
+                    style="color: black; cursor: pointer; font-size: 1.5rem;"
+                    onclick="downloadFile(`/static/data/biolip/split/site_tables/${proteinId}_bss.pkl`)"
+                    ></i>
+                </div>
+                <div class="col-9 col-md-5 col-lg-9 col-xl-5 d-flex justify-content-start align-items-center">
+                    Download table.
+                </div>
+                <div class="col-3 col-md-1 col-lg-3 col-xl-1 d-flex justify-content-center align-items-center">
                     <a href="/help#{{ header }}SiteHelp">
                         <i class="bi bi-info-circle" style="color: black; font-size: 1.5rem;"></i>
                     </a>
                 </div>
-                <div class="col-11 d-flex justify-content-start align-items-center">
-                    Click on icon for more information about the columns.
+                <div class="col-9 col-md-5 col-lg-9 col-xl-5 d-flex justify-content-start align-items-center">
+                    Information about the columns.
                 </div>
             </div>
         </div>
-        <div class="col-lg-5 d-flex flex-column">
+        <div class="col-lg-4 d-flex flex-column rounded-border">
             <div class="row my-3 align-self-center">
                 <h5>
                     Binding residues panel&nbsp;
@@ -233,24 +261,27 @@
                 </div>
             </div>
             <div class="row mb-3 justify-content-center custom-padding">
-                <div class="col-1 d-flex justify-content-center align-items-center">
+                <div class="col-3 col-md-1 col-lg-3 col-xl-1 d-flex justify-content-center align-items-center">
+                    <i
+                    class="bi bi-download"
+                    style="color: black; cursor: pointer; font-size: 1.5rem;"
+                    onclick="downloadFile(`/static/data/biolip/split/res_tables/${segmentName}_ress.pkl`)"
+                    ></i>
+                </div>
+                <div class="col-9 col-md-5 col-lg-9 col-xl-5 d-flex justify-content-start align-items-center">
+                    Download table.
+                </div>
+                <div class="col-3 col-md-1 col-lg-3 col-xl-1 d-flex justify-content-center align-items-center">
                     <a href="/help#{{ header }}siteResiduesPanelHelp">
                         <i class="bi bi-info-circle" style="color: black; font-size: 1.5rem;"></i>
                     </a>
                 </div>
-                <div class="col-11 d-flex justify-content-start align-items-center">
-                    Click on icon for more information about the columns.
+                <div class="col-9 col-md-5 col-lg-9 col-xl-5 d-flex justify-content-start align-items-center">
+                    Information about the columns.
                 </div>
             </div>
         </div>
     </div>
-    <!-- <div class="border sans hoverbold">
-        Here is some text NOT using a uniwidth font -- hover the mouse over it!
-    </div>
-    <div class="border uniwidthsans hoverbold">
-        Here is some text using a uniwidth font -- hover the mouse over it!
-    </div>
-    </div> -->
 
 <script src="/static/js/charts.js"></script>
 <script src="/static/js/table_listeners.js"></script>
@@ -259,11 +290,5 @@
 <script src="/static/js/3DMol_resize.js"></script>
 <script src="/static/js/3DMol_add_surfs.js"></script>
 <script src="/static/js/3DMol_toggle_surfs.js"></script>
-
-<!-- <script>
-    $(document).ready(function(){
-        $('[data-toggle="tooltip"]').tooltip();   
-    });
-</script> -->
 
 {% endblock%}

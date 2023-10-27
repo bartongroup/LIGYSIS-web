@@ -27,8 +27,9 @@ document.getElementById('chartCanvas').addEventListener('mousemove', function(e)
                     }
                 }
             }
-            //viewer.setStyle({}, {cartoon: {style:'oval', color: 'white', arrows: true}});
-            viewer.setStyle({resi: seg_ress_dict[pointLabel]}, {cartoon:{style:'oval', color: siteColor, arrows: true}, stick:{color: siteColor}, });
+
+            let PDBResNums = seg_ress_dict[pointLabel].map(el => Up2PdbDict[proteinId]["A"][el]);
+            viewer.setStyle({resi: PDBResNums}, {cartoon:{style:'oval', color: siteColor, arrows: true}, stick:{color: siteColor}, });
             viewer.render({});
             highlightTableRow(pointLabel); 
             //isRowHovered = true;
@@ -151,7 +152,10 @@ document.getElementById('newChartCanvas').addEventListener('mousemove', function
             //         {hetflag: false},
             //     );
             // }
-            viewer.setStyle({resi: newPointLabel}, {cartoon:{style:'oval', color: pointColor, arrows: true}, stick:{color: pointColor}, });
+
+            let PDBResNum = Up2PdbDict[proteinId]["A"][newPointLabel];
+
+            viewer.setStyle({resi: PDBResNum}, {cartoon:{style:'oval', color: pointColor, arrows: true}, stick:{color: pointColor}, });
             
             viewer.render({});
 

@@ -1,13 +1,15 @@
 
 for (const [key, value] of Object.entries(seg_ress_dict)) {
+    let PDBResNums = seg_ress_dict[key].map(el => Up2PdbDict[proteinId]["A"][el]);
     if (key == "ALL_BINDING") {
+
         surfsDict["non_binding"] = viewer.addSurface(
             $3Dmol.SurfaceType.ISO,
             {
                 color: 'white',
                 opacity: 0.0,
             },
-            {resi: seg_ress_dict[key], invert: true},
+            {resi: PDBResNums, invert: true},
             {hetflag: false},
         );
     }
@@ -19,8 +21,8 @@ for (const [key, value] of Object.entries(seg_ress_dict)) {
                 color: siteColor,
                 opacity: 0.0,
             },
-            {resi: seg_ress_dict[key]},
-            {resi: seg_ress_dict[key]},
+            {resi: PDBResNums},
+            {resi: PDBResNums},
         );
     }
 }

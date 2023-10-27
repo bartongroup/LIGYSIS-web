@@ -49,8 +49,9 @@ function toggleLabelsVisibility() {
             for (var i = 0; i < clickedElements.length; i++) {
                 var clickedElementId = clickedElements[i].id;
                 let siteColor = chartColors[Number(clickedElementId.split("_").pop())];
+                let PDBResNums = seg_ress_dict[clickedElementId].map(el => Up2PdbDict[proteinId]["A"][el]);
                 viewer.addResLabels(
-                    {resi: seg_ress_dict[clickedElementId]},
+                    {resi: PDBResNums},
                     {
                         alignment: 'center', backgroundColor: 'white', backgroundOpacity: 1,
                         borderColor: 'black', borderOpacity: 1, borderThickness: 2,
