@@ -6,7 +6,7 @@ import pandas as pd
 
 from flask import Flask, render_template, url_for, request, redirect, jsonify
 
-from config import DATA_FOLDER, BIOLIP_FOLDER
+from config import DATA_FOLDER, BIOLIP_FOLDER, SITE_TABLES_FOLDER, RES_TABLES_FOLDER, REP_STRUCS_FOLDER, BS_RESS_FOLDER
 
 ### FUNCTIONS ###
 
@@ -20,39 +20,48 @@ def load_pickle(f_in):
 
 ### READING INPUT DATA ###
 
-bss_data = pd.read_pickle(os.path.join(BIOLIP_FOLDER, "biolip_bss_data_15000_accs.pkl")) # site data
+# bss_data = pd.read_pickle(os.path.join(BIOLIP_FOLDER, "biolip_bss_data_15000_accs.pkl")) # site data
 
-bss_ress = pd.read_pickle(os.path.join(BIOLIP_FOLDER, "biolip_ress_data_15000_accs.pkl")) # residue data
+# bss_ress = pd.read_pickle(os.path.join(BIOLIP_FOLDER, "biolip_ress_data_15000_accs.pkl")) # residue data
 
 # replace NaNs with "NaN" string
-bss_ress = bss_ress.fillna("NaN") # pre-processing could also be done before saving the pickle
-bss_data = bss_data.fillna("NaN") # pre-processing could also be done before saving the pickle
+# bss_ress = bss_ress.fillna("NaN") # pre-processing could also be done before saving the pickle
+#bss_data = bss_data.fillna("NaN") # pre-processing could also be done before saving the pickle
 
-bss_data.columns = ["ID", "RSA", "DS", "MES", "Size"]
+#bss_data.columns = ["ID", "RSA", "DS", "MES", "Size"]
 
 prot_ids = load_pickle(os.path.join(BIOLIP_FOLDER, "biolip_up_ids_15000_accs.pkl")) # protein ids
 
-prot_seg_rep_strucs = load_pickle(os.path.join(BIOLIP_FOLDER, "biolip_prot_seg_rep_filt_15000_acc.pkl")) # representative structures dict (only successfully run segments)
+# prot_seg_rep_strucs = load_pickle(os.path.join(BIOLIP_FOLDER, "biolip_prot_seg_rep_filt_15000_acc.pkl")) # representative structures dict (only successfully run segments)
 
 ### FORMATTING DATA ### pre-processing could also be done before saving the pickle
 
-bss_ress = bss_ress.explode("binding_sites")
-bss_ress["bs_id"] = bss_ress.up_acc + "_" + bss_ress.seg_id.astype(str) + "_" + bss_ress.binding_sites.astype(str)
-bss_ress.UniProt_ResNum = bss_ress.UniProt_ResNum.astype(int)
-bss_ress = bss_ress.drop_duplicates(["up_acc", "seg_id", "binding_sites", "UniProt_ResNum"]) # drop duplicate residues within the binding site
+# bss_ress = bss_ress.explode("binding_sites")
+# bss_ress["bs_id"] = bss_ress.up_acc + "_" + bss_ress.seg_id.astype(str) + "_" + bss_ress.binding_sites.astype(str)
+# bss_ress.UniProt_ResNum = bss_ress.UniProt_ResNum.astype(int)
+# bss_ress = bss_ress.drop_duplicates(["up_acc", "seg_id", "binding_sites", "UniProt_ResNum"]) # drop duplicate residues within the binding site
 
-bs_ress_dict = load_pickle(os.path.join(BIOLIP_FOLDER, "biolip_bs_ress_15000_accs2.pkl"))
+# bss_ress.columns 
+
+# bs_ress_dict = load_pickle(os.path.join(BIOLIP_FOLDER, "biolip_bs_ress_15000_accs2.pkl"))
 
 ### SOME FIXED VARIABLES ###
 
 colors = load_pickle(os.path.join(DATA_FOLDER, "sample_colors_hex.pkl")) # sample colors
 
-headings = bss_data.columns.tolist()
+headings = ["ID", "RSA", "DS", "MES", "Size"]
 
-cc = [
-    'UniProt_ResNum', 'alignment_column', 'abs_norm_shenkin',
-    'oddsratio', 'pvalue', 'AA', 'RSA', 'SS'
-]
+# cc = [
+#     'UniProt_ResNum', 'alignment_column', 'abs_norm_shenkin',
+#     'oddsratio', 'pvalue', 'AA', 'RSA', 'SS'
+# ]
+
+cc_new = ["UPResNum", "MSACol", "DS", "MES", "p", "AA", "RSA", "SS"]
+
+#rename bs_ress columns cc --> cc_new
+# bss_ress.rename(columns=dict(zip(cc, cc_new)), inplace=True)
+
+#print(bss_ress.head(5))
 
 bs_table_tooltips = [
     "This is the ligand binding site identifier",
@@ -85,9 +94,9 @@ def index():
 
         if prot_id in prot_ids:
 
-            first_seg = sorted(list(prot_seg_rep_strucs[prot_id].keys()))[0]
+            prot_seg_rep_strucs = load_pickle(os.path.join(REP_STRUCS_FOLDER, "{}_segs_rep_strucs.pkl".format(prot_id))) # representative structures dict (only successfully run segments)
 
-            #print(first_seg)
+            first_seg = sorted(list(prot_seg_rep_strucs[prot_id].keys()))[0]
 
             return redirect(url_for('results', prot_id = prot_id, seg_id = first_seg)) # renders results page
         else:
@@ -101,6 +110,12 @@ def results(prot_id, seg_id):
 
     seg_name = prot_id + "_" + seg_id
 
+    bss_data = pd.read_pickle(os.path.join(SITE_TABLES_FOLDER, "{}_bss.pkl".format(prot_id))) # site data
+    bss_data = bss_data.fillna("NaN") # pre-processing could also be done before saving the pickle
+    bss_data.columns = headings
+
+    print(bss_data.shape)
+
     bss_prot = bss_data[bss_data.ID.str.contains(seg_name)].copy()
 
     # grab only third element of ID column
@@ -108,11 +123,18 @@ def results(prot_id, seg_id):
 
     first_site = bss_prot.ID.unique().tolist()[0]
 
-    first_site_data = bss_ress.query('bs_id == @first_site')[cc].to_dict(orient="list")
+    bss_ress = pd.read_pickle(os.path.join(RES_TABLES_FOLDER, "{}_ress.pkl".format(seg_name))) # residue data
+    bss_ress = bss_ress.fillna("NaN") # pre-processing could also be done before saving the pickle
+
+    print(bss_ress.shape)
+
+    first_site_data = bss_ress.query('bs_id == @first_site')[cc_new].to_dict(orient="list")
 
     data1 = bss_prot.to_dict(orient="list")
 
-    prot_ress = bss_ress.query('up_acc == @prot_id')[cc]
+    prot_ress = bss_ress.query('up_acc == @prot_id')[cc_new]
+
+    prot_seg_rep_strucs = load_pickle(os.path.join(REP_STRUCS_FOLDER, "{}_segs_rep_strucs.pkl".format(prot_id))) # representative structures dict (only successfully run segments)
 
     segment_reps = prot_seg_rep_strucs[prot_id]
 
@@ -120,14 +142,16 @@ def results(prot_id, seg_id):
 
     data2 = prot_ress.to_dict(orient="list")
 
+    bs_ress_dict = load_pickle(os.path.join(BS_RESS_FOLDER, "{}_bs_ress.pkl".format(prot_id)))
+
     seg_ress_dict = bs_ress_dict[prot_id][seg_id]
     seg_ress_dict = {str(key): value for key, value in seg_ress_dict.items()}
 
 
-    print(seg_ress_dict)
+    #print(seg_ress_dict)
     
     return render_template(
-        'structure.html', data = data1, headings = headings, data2 = data2, cc = cc, colors = colors,
+        'structure.html', data = data1, headings = headings, data2 = data2, cc_new = cc_new, colors = colors,
         seg_ress_dict = seg_ress_dict, prot_id = prot_id, seg_id = seg_id, segment_reps = segment_reps,
         first_site_data = first_site_data, bs_table_tooltips = bs_table_tooltips, bs_ress_table_tooltips = bs_ress_table_tooltips,
         
@@ -150,7 +174,15 @@ def get_table():
 
     lab = request.json.get('label', None)
 
-    site_ress = bss_ress.query('bs_id == @lab')[cc]
+    prot_id, seg_id, _ = lab.split("_")
+
+    seg_name = prot_id + "_" + seg_id
+
+    seg_ress = pd.read_pickle(os.path.join(RES_TABLES_FOLDER, "{}_ress.pkl".format(seg_name))) # residue data
+
+    seg_ress = seg_ress.fillna("NaN") # pre-processing could also be done before saving the pickle
+
+    site_ress = seg_ress.query('bs_id == @lab')[cc_new]
 
     site_data = site_ress.to_dict(orient="list")
 

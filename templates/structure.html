@@ -17,7 +17,7 @@
 <script> // some variable definitions from the server
     const chartData = {{ data | tojson }}
     const chartColors = {{ colors | tojson }}
-    const cc = {{ cc | tojson }}
+    const cc = {{ cc_new | tojson }}
     const seg_ress_dict = {{ seg_ress_dict | tojson }}
     const proteinId = {{ prot_id | tojson }}
     const segmentId = {{ seg_id | tojson }}
@@ -177,7 +177,7 @@
                     <span style="font-weight: 500; font-size: 1.25rem;">Y</span>:&nbsp;
                     <select id="yAxisTitle2" class="axis-dropdown2 y-axis-dropdown2">
                         <option selected hidden>oddsratio</option>
-                        {% for header in cc[1:] %}
+                        {% for header in cc_new[1:] %}
                         <option value="{{ header }}">{{ header }}</option>
                         {% endfor %}
                     </select>
@@ -187,7 +187,7 @@
                     <span style="font-weight: 500; font-size: 1.25rem;">X</span>:&nbsp;
                     <select id="xAxisTitle2" class="axis-dropdown2 x-axis-dropdown2">
                         <option selected hidden>abs_norm_shenkin</option>
-                        {% for header in cc[1:] %}
+                        {% for header in cc_new[1:] %}
                         <option value="{{ header }}">{{ header }}</option>
                         {% endfor %}
                     </select>
