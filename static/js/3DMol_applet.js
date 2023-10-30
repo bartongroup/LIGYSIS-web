@@ -17,7 +17,7 @@ $3Dmol.setSyncSurface(true); // all surfaces appear at once
 viewer.setViewStyle({'style': 'outline', 'color': 'black','width': 0.1})
 
 // let pdbUri = `/static/data/biolip/split/structures/${segmentReps[segmentId]["rep"]}.pdb`;
-let pdbUri = `/static/data/1p99_updated.cif`;
+let pdbUri = `/static/data/biolip/split/structures/cif/${repStruc}.cif`;
 jQuery.ajax( pdbUri, { 
     success: function(data) {
         viewer.addModel( data, "cif" );                       /* load data */

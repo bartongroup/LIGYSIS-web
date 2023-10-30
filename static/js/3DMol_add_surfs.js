@@ -1,6 +1,6 @@
 
 for (const [key, value] of Object.entries(seg_ress_dict)) {
-    let PDBResNums = seg_ress_dict[key].map(el => Up2PdbDict[proteinId]["A"][el]);
+    let PDBResNums = seg_ress_dict[key].map(el => Up2PdbDict[repPdbId][repPdbChainId][el]);
     if (key == "ALL_BINDING") {
 
         surfsDict["non_binding"] = viewer.addSurface(

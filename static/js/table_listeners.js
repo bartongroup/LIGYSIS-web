@@ -26,7 +26,7 @@ $('table#bss_table tbody').on('mouseover', 'tr', function () { // event listener
             }
         }
     }
-    let PDBResNums = seg_ress_dict[rowId].map(el => Up2PdbDict[proteinId]["A"][el]);
+    let PDBResNums = seg_ress_dict[rowId].map(el => Up2PdbDict[repPdbId][repPdbChainId][el]);
 
     viewer.setStyle({resi: PDBResNums}, {cartoon:{style:'oval', color: siteColor, arrows: true}, stick:{color: siteColor}, });
     
@@ -58,7 +58,7 @@ $('table#bss_table tbody').on('mouseover', 'tr', function () { // event listener
             }
         }
 
-        let PDBResNums = seg_ress_dict[rowId].map(el => Up2PdbDict[proteinId]["A"][el]);
+        let PDBResNums = seg_ress_dict[rowId].map(el => Up2PdbDict[repPdbId][repPdbChainId][el]);
 
         viewer.setStyle({resi: PDBResNums}, {cartoon: {style:'oval', color: 'white', arrows: true}});
         viewer.removeAllLabels(); // clearing labels from previous clicked site
@@ -108,7 +108,7 @@ $('table#bss_table tbody').on('mouseover', 'tr', function () { // event listener
 
     }
 
-    let PDBResNums = seg_ress_dict[rowId].map(el => Up2PdbDict[proteinId]["A"][el]);
+    let PDBResNums = seg_ress_dict[rowId].map(el => Up2PdbDict[repPdbId][repPdbChainId][el]);
 
     if (surfaceVisible) {
         for (const [key, value] of Object.entries(surfsDict)) {
@@ -170,7 +170,7 @@ $('table#bs_ress_table tbody').on('mouseover', 'tr', function () { // event list
         //         {hetflag: false},
         //         );
         // }
-        let PDBResNum = Up2PdbDict[proteinId]["A"][rowId];
+        let PDBResNum = Up2PdbDict[repPdbId][repPdbChainId][rowId];
 
         viewer.setStyle({resi: PDBResNum}, {cartoon:{style:'oval', color: rowColorHex, arrows: true}, stick:{color: rowColorHex}, });
         viewer.render({});
@@ -194,7 +194,7 @@ $('table#bs_ress_table tbody').on('mouseover', 'tr', function () { // event list
         //     );
         // }
 
-    let PDBResNum = Up2PdbDict[proteinId]["A"][rowId];
+    let PDBResNum = Up2PdbDict[repPdbId][repPdbChainId][rowId];
 
     viewer.setStyle({resi: PDBResNum}, {cartoon: {style:'oval', color: 'white', arrows: true}});
     viewer.render({});

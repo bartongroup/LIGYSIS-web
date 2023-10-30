@@ -6,7 +6,7 @@ import pandas as pd
 
 from flask import Flask, render_template, url_for, request, redirect, jsonify
 
-from config import DATA_FOLDER, BIOLIP_FOLDER, SITE_TABLES_FOLDER, RES_TABLES_FOLDER, REP_STRUCS_FOLDER, BS_RESS_FOLDER, MAPPINGS_FOLDER
+from config import DATA_FOLDER, BIOLIP_FOLDER, SITE_TABLES_FOLDER, RES_TABLES_FOLDER, REP_STRUCS_FOLDER, BS_RESS_FOLDER, MAPPINGS_FOLDER, STATS_FOLDER
 
 ### FUNCTIONS ###
 
@@ -116,12 +116,50 @@ def results(prot_id, seg_id):
     seg_ress_dict = bs_ress_dict[prot_id][seg_id]
     seg_ress_dict = {str(key): value for key, value in seg_ress_dict.items()}
 
-    pdb2up_dict = load_pickle(os.path.join(MAPPINGS_FOLDER, "pdb2up", "{}_pdb2up.pkl".format(segment_reps[int(seg_id)]["rep"])))
+    pdb2up_dict = load_pickle(os.path.join(MAPPINGS_FOLDER, "pdb2up", "{}_pdb2up_mapping.pkl".format(segment_reps[int(seg_id)]["rep"])))
 
-    up2pdb_dict = load_pickle(os.path.join(MAPPINGS_FOLDER, "up2pdb", "{}_up2pdb.pkl".format(segment_reps[int(seg_id)]["rep"])))
+    up2pdb_dict = load_pickle(os.path.join(MAPPINGS_FOLDER, "up2pdb", "{}_up2pdb_mapping.pkl".format(segment_reps[int(seg_id)]["rep"])))
+
+    seg_stats = load_pickle(os.path.join(STATS_FOLDER, "{}_stats.pkl".format(seg_name)))
 
     # print(pdb2up_dict)
 
+    # print(seg_stats)
+    for v in seg_stats[prot_id][seg_id].values():
+        v = int(v)
+
+    # print(type(seg_stats[prot_id][seg_id]["strucs"]))
+
+    import numpy as np
+
+    # seg_stats = {k: int(v) if isinstance(v, np.int64) else v for k, v in seg_stats.items()}
+
+    # seg_stats = {k: int(v) if isinstance(v, np.int64) else v for k, v in seg_stats.items()}
+
+    # import numpy as np
+
+    def convert_numpy(obj):
+        if isinstance(obj, np.integer):
+            return int(obj)
+        elif isinstance(obj, np.floating):
+            return float(obj)
+        elif isinstance(obj, np.ndarray):
+            return obj.tolist()
+        elif isinstance(obj, dict):
+            return {k: convert_numpy(v) for k, v in obj.items()}
+        elif isinstance(obj, (list, tuple)):
+            return [convert_numpy(v) for v in obj]
+        return obj
+
+    seg_stats_converted = convert_numpy(seg_stats)
+
+    # up2pdb_dict_converted = convert_numpy(up2pdb_dict)
+    up2pdb_dict_converted = {k: {k2:{int(k3):int(v3) for k3, v3 in v2.items()} for k2, v2 in v.items()} for k, v in up2pdb_dict.items()}
+
+    # pdb2up_dict_converted = convert_numpy(pdb2up_dict)
+    pdb2up_dict_converted = {k: {k2:{int(k3):int(v3) for k3, v3 in v2.items()} for k2, v2 in v.items()} for k, v in pdb2up_dict.items()}
+
+    # print(up2pdb_dict_converted)
 
     #print(seg_ress_dict)
     
@@ -129,7 +167,7 @@ def results(prot_id, seg_id):
         'structure.html', data = data1, headings = headings, data2 = data2, cc_new = cc_new, colors = colors,
         seg_ress_dict = seg_ress_dict, prot_id = prot_id, seg_id = seg_id, segment_reps = segment_reps,
         first_site_data = first_site_data, bs_table_tooltips = bs_table_tooltips, bs_ress_table_tooltips = bs_ress_table_tooltips,
-        pdb2up_dict = pdb2up_dict, up2pdb_dict = up2pdb_dict
+        pdb2up_dict = pdb2up_dict_converted, up2pdb_dict = up2pdb_dict_converted, seg_stats = seg_stats_converted
         
     )
 

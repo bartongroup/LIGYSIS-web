@@ -28,8 +28,8 @@ document.getElementById('chartCanvas').addEventListener('mousemove', function(e)
                 }
             }
 
-            let PDBResNums = seg_ress_dict[pointLabel].map(el => Up2PdbDict[proteinId]["A"][el]);
-            viewer.setStyle({resi: PDBResNums}, {cartoon:{style:'oval', color: siteColor, arrows: true}, stick:{color: siteColor}, });
+            let PDBResNums = seg_ress_dict[pointLabel].map(el => Up2PdbDict[repPdbId][repPdbChainId][el]);
+            viewer.setStyle({resi: seg_ress_dict[pointLabel]}, {cartoon:{style:'oval', color: siteColor, arrows: true}, stick:{color: siteColor}, });
             viewer.render({});
             highlightTableRow(pointLabel); 
             //isRowHovered = true;
@@ -68,6 +68,8 @@ document.getElementById('chartCanvas').addEventListener('click', function(e) { /
         let pointLabel = chartData[chartLab][index]; // label of the clicked data point
         let pointColor = chartColors[index]; // color of the clicked data point
 
+        let fullPointLabel = segmentName + "_" + pointLabel;
+
         // siteIsClicked = true;
         // Add the clicked point to the list
         // clickedPoints.push(index);
@@ -78,7 +80,7 @@ document.getElementById('chartCanvas').addEventListener('click', function(e) { /
             type: 'POST', // POST request
             url: '/get_table', // URL to send the request to
             contentType: 'application/json;charset=UTF-8', // content type
-            data: JSON.stringify({'label': pointLabel}), // data to send
+            data: JSON.stringify({'label': fullPointLabel}), // data to send
             success: function(response) { // function to execute when the request is successful
                 const keyOrder = cc; // order of the keys in the response object
                 let tableBody = $('#bs_ress_table tbody'); // tbody of the table
@@ -153,7 +155,7 @@ document.getElementById('newChartCanvas').addEventListener('mousemove', function
             //     );
             // }
 
-            let PDBResNum = Up2PdbDict[proteinId]["A"][newPointLabel];
+            let PDBResNum = Up2PdbDict[repPdbId][repPdbChainId][newPointLabel];
 
             viewer.setStyle({resi: PDBResNum}, {cartoon:{style:'oval', color: pointColor, arrows: true}, stick:{color: pointColor}, });
             
