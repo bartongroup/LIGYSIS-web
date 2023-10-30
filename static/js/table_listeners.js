@@ -3,13 +3,13 @@
 $('table#bss_table tbody').on('mouseover', 'tr', function () { // event listener for mouseover on table rows
 
     let rowId = this.id;  // gets the row id of the table row that is hovered over
-    let siteColor = chartColors[Number(rowId.split("_").pop())]; // gets the binding site color of the table row that is hovered over
+    let siteColor = chartColors[Number(rowId)];//.split("_").pop())]; // gets the binding site color of the table row that is hovered over
 
     if (!this.classList.contains('clicked-row')) { // row is not clicked
 
         highlightTableRow(rowId); // highlights the table row of the binding site
 
-        let index = chartData[chartLab].indexOf(rowId); // gets the index of the row id in the chart data
+        let index = chartData[chartLab].indexOf(Number(rowId)); // gets the index of the row id in the chart data
 
         if (index !== -1) {
             resetChartStyles(myChart, index, "#ffff99", 10, 16); // changes chart styles to highlight the binding site
@@ -35,7 +35,7 @@ $('table#bss_table tbody').on('mouseover', 'tr', function () { // event listener
 }).on('mouseout', 'tr', function () {
      // isRowHovered = false; // set isRowHovered to false when a table row is not hovered
 
-    let rowId = this.id;  // gets the row id of the table row that is hovered over
+    let rowId = Number(this.id);  // gets the row id of the table row that is hovered over
     let index = chartData[chartLab].indexOf(rowId); // gets the index of the row id in the chart data
     let classList = this.classList;
     
@@ -68,8 +68,8 @@ $('table#bss_table tbody').on('mouseover', 'tr', function () { // event listener
 }).on('click', 'tr', function () {
     
     let rowId = this.id;  // gets the row id of the table row that is clicked
-    let index = chartData[chartLab].indexOf(rowId); // gets the index of the row id in the chart data
-    let siteColor = chartColors[Number(rowId.split("_").pop())]; // gets the binding site color of the table row that is hovered over
+    let index = chartData[chartLab].indexOf(Number(rowId)); // gets the index of the row id in the chart data
+    let siteColor = chartColors[Number(rowId)];//.split("_").pop())]; // gets the binding site color of the table row that is hovered over
     let classList = this.classList;
     let clickedElements = document.getElementsByClassName("clicked-row");
     
@@ -87,6 +87,47 @@ $('table#bss_table tbody').on('mouseover', 'tr', function () { // event listener
     }
 
     else {
+        // new stuff
+        let fullPointLabel = segmentName + "_" + rowId;
+        $.ajax({ // AJAX request to get the table data from the server
+            type: 'POST', // POST request
+            url: '/get_table', // URL to send the request to
+            contentType: 'application/json;charset=UTF-8', // content type
+            data: JSON.stringify({'label': fullPointLabel}), // data to send
+            success: function(response) { // function to execute when the request is successful
+                const keyOrder = cc; // order of the keys in the response object
+                let tableBody = $('#bs_ress_table tbody'); // tbody of the table
+                tableBody.empty(); // empty the tbody
+                for (var i = 0; i < response[keyOrder[0]].length; i++) { // First loop to iterate through rows
+                    let newRow = $('<tr class="table__row">'); // Create a new row
+                    newRow.attr('id', response[newChartLab][i]); // Assign ID dynamically to each row
+                    $.each(keyOrder, function(j, key) { // Second loop to iterate through keys (columns)
+                        newRow.append('<td class="table__cell">' + response[key][i] + '</td>');
+                    });
+                    newRow[0].style.setProperty('--bs-table-color', siteColor);
+                    newRow[0].style.setProperty('--bs-table-hover-color', siteColor);
+                    // newRow.css('color', pointColor); // Set the font color of the new row
+                    tableBody.append(newRow); // Append the new row to the table body
+                }
+
+                newChartData = response;
+                newChart.data.datasets[0].data = newChartData[newChartY];  // New data
+                newChart.data.datasets[0].backgroundColor = siteColor;
+                newChart.data.labels = newChartData[newChartX];  // New labels (if needed)
+
+                // Update the chart
+                newChart.update();
+
+
+            },
+            error: function(jqXHR, textStatus, errorThrown) {
+                console.error('Request failed:');
+                console.error('Status:', textStatus);
+                console.error('Error:', errorThrown);
+                console.error('Response:', jqXHR.responseText);
+            },
+        });
+        // new stuff
         clearHighlightedRow(); // clears highlighting from table row, before applying clicked styles
         if (clickedElements) { // any OTHER row is already clicked
             for (var i = 0; i < clickedElements.length; i++) {
@@ -147,9 +188,10 @@ $('table#bs_ress_table tbody').on('mouseover', 'tr', function () { // event list
     let rowId = Number(this.id);  // gets the row id of the table row that is hovered over
     let index = newChartData[newChartLab].indexOf(rowId); // gets the index of the row id in the chart data
     let rowColor = window.getComputedStyle(this).getPropertyValue('color');
+    console.log(rowColor);
     let rowColorHex = rgbToHex(rowColor);
     // console.log(rowColor);
-    // console.log(rowColorHex);
+    console.log(rowColorHex);
 
     if (index !== -1) {
         
@@ -226,6 +268,26 @@ document.addEventListener("DOMContentLoaded", function () {
 
 document.addEventListener('DOMContentLoaded', function() {
     var table = document.getElementById('bs_ress_table');
+    
+    // Assuming a consistent border width for all rows, we can get the border from the first row.
+    var rowBorderWidth = window.getComputedStyle(table.rows[0], null).getPropertyValue('border-bottom-width');
+    var firstRowHeight = window.getComputedStyle(table.rows[0], null).getPropertyValue('height');
+    // Convert the border width from string (like "1px") to an integer value
+    rowBorderWidth = parseFloat(rowBorderWidth, 10);
+    firstRowHeight = parseFloat(firstRowHeight, 10);
+    
+    var numberOfRowsToShow = 6;
+
+    // Add the border height (number of borders will be numberOfRowsToShow - 1)
+    var maxHeight = (firstRowHeight * numberOfRowsToShow) + (numberOfRowsToShow - 3) * rowBorderWidth;
+
+    table.parentElement.style.maxHeight = maxHeight + 'px';
+});
+
+// THIS IS THE EVENT LISTENER THAT CHANGES THE SIZE OF THE TABLE OF BINDING SITEs SO ONLY TOP 5 ROWS ARE SHOWN
+
+document.addEventListener('DOMContentLoaded', function() {
+    var table = document.getElementById('bss_table');
     
     // Assuming a consistent border width for all rows, we can get the border from the first row.
     var rowBorderWidth = window.getComputedStyle(table.rows[0], null).getPropertyValue('border-bottom-width');

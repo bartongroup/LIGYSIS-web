@@ -13,7 +13,8 @@ document.getElementById('chartCanvas').addEventListener('mousemove', function(e)
             lastHoveredPoint1 = firstPoint.index;
 
             let pointLabel = chartData[chartLab][firstPoint.index];
-            let siteColor = chartColors[Number(pointLabel.split("_").pop())];
+            // console.log(pointLabel);
+            let siteColor = chartColors[Number(pointLabel)];//.split("_").pop())];
 
             resetChartStyles(myChart, firstPoint.index, "#ffff99", 10, 16); // changes chart styles to highlight the binding site
 
@@ -29,7 +30,7 @@ document.getElementById('chartCanvas').addEventListener('mousemove', function(e)
             }
 
             let PDBResNums = seg_ress_dict[pointLabel].map(el => Up2PdbDict[repPdbId][repPdbChainId][el]);
-            viewer.setStyle({resi: seg_ress_dict[pointLabel]}, {cartoon:{style:'oval', color: siteColor, arrows: true}, stick:{color: siteColor}, });
+            viewer.setStyle({resi: PDBResNums}, {cartoon:{style:'oval', color: siteColor, arrows: true}, stick:{color: siteColor}, });
             viewer.render({});
             highlightTableRow(pointLabel); 
             //isRowHovered = true;

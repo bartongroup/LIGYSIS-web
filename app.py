@@ -2,6 +2,7 @@
 
 import os
 import pickle
+import numpy as np
 import pandas as pd
 
 from flask import Flask, render_template, url_for, request, redirect, jsonify
@@ -17,6 +18,19 @@ def load_pickle(f_in):
     with open(f_in, "rb") as f:
         data = pickle.load(f)
     return data
+
+def convert_numpy(obj):
+    if isinstance(obj, np.integer):
+        return int(obj)
+    elif isinstance(obj, np.floating):
+        return float(obj)
+    elif isinstance(obj, np.ndarray):
+        return obj.tolist()
+    elif isinstance(obj, dict):
+        return {k: convert_numpy(v) for k, v in obj.items()}
+    elif isinstance(obj, (list, tuple)):
+        return [convert_numpy(v) for v in obj]
+    return obj
 
 ### READING INPUT DATA ###
 
@@ -71,7 +85,7 @@ def index():
 
     else:
         return render_template('index.html') # renders home page with all tasks
-    
+
 @app.route('/results/<prot_id>/<seg_id>', methods = ['POST', 'GET'])
 def results(prot_id, seg_id):
 
@@ -88,9 +102,13 @@ def results(prot_id, seg_id):
     # grab only third element of ID column
     bss_prot.ID = bss_prot.ID.str.split("_").str[2]
 
+    bss_prot.ID = bss_prot.ID.astype(int)
+
+    bss_prot = bss_prot.sort_values(by = "ID")
+
     first_site = bss_prot.ID.unique().tolist()[0]
 
-    first_site_name = seg_name + "_" + first_site
+    first_site_name = seg_name + "_" + str(first_site)
 
     bss_ress = pd.read_pickle(os.path.join(RES_TABLES_FOLDER, "{}_ress.pkl".format(seg_name))) # residue data
     bss_ress = bss_ress.fillna("NaN") # pre-processing could also be done before saving the pickle
@@ -99,7 +117,11 @@ def results(prot_id, seg_id):
 
     first_site_data = bss_ress.query('bs_id == @first_site_name')[cc_new].to_dict(orient="list")
 
+    print(bss_prot)
+
     data1 = bss_prot.to_dict(orient="list")
+
+    print(data1)
 
     prot_ress = bss_ress.query('up_acc == @prot_id')[cc_new]
 
@@ -122,53 +144,20 @@ def results(prot_id, seg_id):
 
     seg_stats = load_pickle(os.path.join(STATS_FOLDER, "{}_stats.pkl".format(seg_name)))
 
-    # print(pdb2up_dict)
-
-    # print(seg_stats)
-    for v in seg_stats[prot_id][seg_id].values():
-        v = int(v)
-
-    # print(type(seg_stats[prot_id][seg_id]["strucs"]))
-
-    import numpy as np
-
-    # seg_stats = {k: int(v) if isinstance(v, np.int64) else v for k, v in seg_stats.items()}
-
-    # seg_stats = {k: int(v) if isinstance(v, np.int64) else v for k, v in seg_stats.items()}
-
-    # import numpy as np
-
-    def convert_numpy(obj):
-        if isinstance(obj, np.integer):
-            return int(obj)
-        elif isinstance(obj, np.floating):
-            return float(obj)
-        elif isinstance(obj, np.ndarray):
-            return obj.tolist()
-        elif isinstance(obj, dict):
-            return {k: convert_numpy(v) for k, v in obj.items()}
-        elif isinstance(obj, (list, tuple)):
-            return [convert_numpy(v) for v in obj]
-        return obj
-
+    # for v in seg_stats[prot_id][seg_id].values():
+    #     v = int(v)
+    
     seg_stats_converted = convert_numpy(seg_stats)
 
-    # up2pdb_dict_converted = convert_numpy(up2pdb_dict)
     up2pdb_dict_converted = {k: {k2:{int(k3):int(v3) for k3, v3 in v2.items()} for k2, v2 in v.items()} for k, v in up2pdb_dict.items()}
 
-    # pdb2up_dict_converted = convert_numpy(pdb2up_dict)
     pdb2up_dict_converted = {k: {k2:{int(k3):int(v3) for k3, v3 in v2.items()} for k2, v2 in v.items()} for k, v in pdb2up_dict.items()}
-
-    # print(up2pdb_dict_converted)
-
-    #print(seg_ress_dict)
     
     return render_template(
         'structure.html', data = data1, headings = headings, data2 = data2, cc_new = cc_new, colors = colors,
         seg_ress_dict = seg_ress_dict, prot_id = prot_id, seg_id = seg_id, segment_reps = segment_reps,
         first_site_data = first_site_data, bs_table_tooltips = bs_table_tooltips, bs_ress_table_tooltips = bs_ress_table_tooltips,
         pdb2up_dict = pdb2up_dict_converted, up2pdb_dict = up2pdb_dict_converted, seg_stats = seg_stats_converted
-        
     )
 
 @app.route('/about')
