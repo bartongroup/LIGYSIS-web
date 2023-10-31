@@ -50,15 +50,30 @@ function toggleLabelsVisibility() {
                 var clickedElementId = clickedElements[i].id;
                 let siteColor = chartColors[Number(clickedElementId.split("_").pop())];
                 let PDBResNums = seg_ress_dict[clickedElementId].map(el => Up2PdbDict[repPdbId][repPdbChainId][el]);
-                viewer.addResLabels(
-                    {resi: PDBResNums},
-                    {
-                        alignment: 'center', backgroundColor: 'white', backgroundOpacity: 1,
-                        borderColor: 'black', borderOpacity: 1, borderThickness: 2,
-                        font: 'Arial', fontColor: siteColor, fontOpacity: 1, fontSize: 12,
-                        inFront: true, screenOffset: [0, 0, 0], showBackground: true
-                    }
-                );
+                for (PDBResNum of PDBResNums) {
+                    let resSel = {resi: PDBResNum}
+                    let resName = viewer.selectedAtoms(resSel)[0].resn
+                    viewer.addLabel(
+                        resName + String(Pdb2UpDict[repPdbId][repPdbChainId][PDBResNum]),
+                        {
+                            alignment: 'center', backgroundColor: 'white', backgroundOpacity: 1,
+                            borderColor: 'black', borderOpacity: 1, borderThickness: 2,
+                            font: 'Arial', fontColor: siteColor, fontOpacity: 1, fontSize: 12,
+                            inFront: true, screenOffset: [0, 0, 0], showBackground: true
+                        },
+                        resSel,
+                        true,
+                    );
+                }
+                // viewer.addResLabels(
+                //     {resi: PDBResNums},
+                //     {
+                //         alignment: 'center', backgroundColor: 'white', backgroundOpacity: 1,
+                //         borderColor: 'black', borderOpacity: 1, borderThickness: 2,
+                //         font: 'Arial', fontColor: siteColor, fontOpacity: 1, fontSize: 12,
+                //         inFront: true, screenOffset: [0, 0, 0], showBackground: true
+                //     }
+                // );
 
                 viewer.render({});
             }

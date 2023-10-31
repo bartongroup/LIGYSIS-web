@@ -24,6 +24,24 @@ for (const [key, value] of Object.entries(seg_ress_dict)) {
             {resi: PDBResNums},
             {resi: PDBResNums},
         );
+
+        // for (PDBResNum in PDBResNums) {
+        //     viewer.addLabel(
+        //         Pdb2UdDict[repPdbId][repPdbChainId][PDBResNum],
+        //         {
+        //             alignment: 'center', backgroundColor: 'white', backgroundOpacity: 1,
+        //             borderColor: 'black', borderOpacity: 1, borderThickness: 2,
+        //             font: 'Arial', fontColor: siteColor, fontOpacity: 1, fontSize: 12,
+        //             inFront: true, screenOffset: [0, 0, 0], showBackground: true
+        //         },
+        //         {resi: PDBResNum},
+        //         noshow: true,
+        //     );
+        // }
     }
 }
+
+// add individual residue labels here
+
+
 viewer.render();

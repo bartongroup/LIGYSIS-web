@@ -84,7 +84,7 @@ def index():
             return render_template('error.html', prot_id = prot_id)
 
     else:
-        return render_template('index.html') # renders home page with all tasks
+        return render_template('index.html', prot_ids = prot_ids) # renders home page with all tasks
 
 @app.route('/results/<prot_id>/<seg_id>', methods = ['POST', 'GET'])
 def results(prot_id, seg_id):

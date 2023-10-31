@@ -2,9 +2,20 @@
 
 {% block head %}
 
+<link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/flick/jquery-ui.css">
+<script src="https://code.jquery.com/jquery-1.12.4.min.js" 
+        integrity="sha384-nvAa0+6Qg9clwYCGGPpDQLVpLNn0fRaROjHqs13t4Ggj3Ez50XnGQqc/r8MhnRDZ" 
+        crossorigin="anonymous"></script>
+<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js"></script>
+
 <title>
     LIGYSIS: Home
 </title>
+
+
+<script>
+    const proteinIds = {{ prot_ids | tojson }}
+</script>
 
 {% endblock%}
 
@@ -29,7 +40,7 @@
                             <label for="proteinId" class="form-label">
                                 UniProt ID
                             </label>
-                            <input type="text" class="form-control" name="proteinId" id="proteinId" placeholder="P78540" aria-describedby="proteinIdHelp">
+                            <input type="text" class="form-control" name="proteinId" id="autocomplete" placeholder="P78540" aria-describedby="proteinIdHelp">
                             <div id="proteinIdHelp" class="form-text">
                                 Enter the UniProt ID of the protein you want to inspect.
                             </div>
@@ -77,5 +88,7 @@
         </div>
     </div>
 </div>
+
+<script src="/static/js/input_autocomplete.js"></script>
 
 {% endblock%}
