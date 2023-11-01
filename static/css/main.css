@@ -312,7 +312,7 @@ img.responsive-logo {
     position: relative;
 }
 
-.column:nth-child(2)::before {
+.column:nth-child(1)::before {
     content: "";
     height: 100%;
     background-color: transparent;
@@ -325,7 +325,7 @@ img.responsive-logo {
     /* margin-right: calc(-5%); */
 } 
 
-.column:nth-child(2)::after {
+.column:nth-child(1)::after {
     content: "";
     height: 100%;
     background-color: transparent;
@@ -337,8 +337,6 @@ img.responsive-logo {
     
     /* margin-right: calc(-5%); */
 }
-
-
 
 .ui-autocomplete {
     max-height: 200px;

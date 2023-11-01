@@ -303,7 +303,7 @@ document.addEventListener('DOMContentLoaded', function() {
     rowBorderWidth = parseFloat(rowBorderWidth, 10);
     firstRowHeight = parseFloat(firstRowHeight, 10);
     
-    var numberOfRowsToShow = 6;
+    var numberOfRowsToShow = 5;
 
     // Add the border height (number of borders will be numberOfRowsToShow - 1)
     var maxHeight = (firstRowHeight * numberOfRowsToShow) + (numberOfRowsToShow - 3) * rowBorderWidth;
