@@ -259,21 +259,25 @@ img.responsive-logo {
     margin-bottom: 8px;
 }
 
-
-
 @font-face {
-    font-family: 'PT Root UI';
-    src: url('PT-Root-UI_Regular.woff2') format('woff2');
-    font-weight: normal;
-    font-style: normal;
+	font-family: 'PT Root UI';
+	src: 
+		url('/static/fonts/PT-Root-UI_Regular.woff2') format('woff2'),
+		url('/static/fonts/PT-Root-UI_Regular.woff') format('woff');
+	font-weight: normal;
+	font-style: normal;
 }
 
 @font-face {
-    font-family: 'PT Root UI';
-    src: url('PT-Root-UI_Bold.woff2') format('woff2');
-    font-weight: bold;
-    font-style: normal;
+	font-family: 'PT Root UI';
+	src: 
+		url('/static/fonts/PT-Root-UI_Bold.woff2') format('woff2'),
+		url('/static/fonts/PT-Root-UI_Bold.woff') format('woff');
+	font-weight: bold;
+	font-style: normal;
 }
+
+
 
 /* .border {
     border: 2px solid black;
@@ -344,3 +348,7 @@ img.responsive-logo {
     /* add padding to account for vertical scrollbar */
     padding-right: 20px;
 }
+
+.ui-menu-item .ui-menu-item-wrapper.ui-state-active {
+    color: #734A98 !important;
+} 

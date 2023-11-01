@@ -49,8 +49,10 @@ function toggleLabelsVisibility() {
             for (var i = 0; i < clickedElements.length; i++) {
                 var clickedElementId = clickedElements[i].id;
                 let siteColor = chartColors[Number(clickedElementId.split("_").pop())];
-                console.log(siteColor);
-                let PDBResNums = seg_ress_dict[clickedElementId].map(el => Up2PdbDict[repPdbId][repPdbChainId][el]);
+                // let PDBResNums = seg_ress_dict[clickedElementId].map(el => Up2PdbDict[repPdbId][repPdbChainId][el]);
+                let PDBResNums = seg_ress_dict[clickedElementId]
+                    .filter(el => Up2PdbDict[repPdbId][repPdbChainId].hasOwnProperty(el)) // this accounts not for missing residues in the structure (unresolved)
+                    .map(el => Up2PdbDict[repPdbId][repPdbChainId][el]);
                 for (PDBResNum of PDBResNums) {
                     let resSel = {resi: PDBResNum}
                     let resName = viewer.selectedAtoms(resSel)[0].resn

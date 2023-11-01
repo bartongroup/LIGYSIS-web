@@ -150,7 +150,9 @@ $('table#bss_table tbody').on('mouseover', 'tr', function () { // event listener
 
     }
 
-    let PDBResNums = seg_ress_dict[rowId].map(el => Up2PdbDict[repPdbId][repPdbChainId][el]);
+    let PDBResNums = seg_ress_dict[rowId]
+    .filter(el => Up2PdbDict[repPdbId][repPdbChainId].hasOwnProperty(el)) // this accounts not for missing residues in the structure (unresolved)
+    .map(el => Up2PdbDict[repPdbId][repPdbChainId][el]);
 
     if (surfaceVisible) {
         for (const [key, value] of Object.entries(surfsDict)) {
@@ -168,6 +170,7 @@ $('table#bss_table tbody').on('mouseover', 'tr', function () { // event listener
         for (PDBResNum of PDBResNums) {
             let resSel = {resi: PDBResNum}
             let resName = viewer.selectedAtoms(resSel)[0].resn
+            // console.log(resSel, resName);
             viewer.addLabel(
                 resName + String(Pdb2UpDict[repPdbId][repPdbChainId][PDBResNum]),
                 {

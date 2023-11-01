@@ -40,7 +40,7 @@ prot_ids = load_pickle(os.path.join(BIOLIP_FOLDER, "biolip_up_ids_15000_accs.pkl
 
 colors = load_pickle(os.path.join(DATA_FOLDER, "sample_colors_hex.pkl")) # sample colors
 
-headings = ["ID", "RSA", "DS", "MES", "Size"]
+headings = ["ID", "RSA", "DS", "MES", "Size", "Cluster", "FS"]
 
 cc_new = ["UPResNum", "MSACol", "DS", "MES", "p", "AA", "RSA", "SS"]
 
@@ -50,6 +50,8 @@ bs_table_tooltips = [
     "This is the site's avg. divergence score",
     "This is the site's avg. missense enrichment score",
     "This is the site's size (in aa)",
+    "This is the site's RSA cluster label",
+    "This is the site's functional score",
 ]
 
 bs_ress_table_tooltips = [
