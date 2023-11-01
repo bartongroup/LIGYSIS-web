@@ -57,15 +57,15 @@
         </div>
         <div class="col-12 col-sm-8 col-md-6 col-lg-4 col-xl-3 d-flex flex-column align-items-center align-items-md-start">
             <h2  class="mb-3 my-md-0">
-                &nbsp;Lipoprotein
+                &nbsp;{{ entry_name }}
             </h2>
         </div>
         <div class="col-xl-4 d-flex flex-column align-items-center align-items-md-start">
-            <h4 class="mb-3 mb-md-0">
-                ({{ seg_stats[prot_id][seg_id]["strucs"]}} Structures,&nbsp;&nbsp;
-                {{ seg_stats[prot_id][seg_id]["ligs"]}} Ligands,&nbsp;&nbsp;
-                {{ seg_stats[prot_id][seg_id]["bss"]}} Binding Sites)
-            </h4>
+            <h3 class="mb-3 mb-md-0">
+                ({{ seg_stats[prot_id][seg_id]["strucs"]}}&nbsp;Structures,&nbsp;&nbsp;
+                {{ seg_stats[prot_id][seg_id]["ligs"]}}&nbsp;Ligands,&nbsp;&nbsp;
+                {{ seg_stats[prot_id][seg_id]["bss"]}}&nbsp;Binding Sites)
+            </h3>
         </div>
         <div class="col-12 col-sm-8 col-md-6 col-lg-4 col-xl-3 d-flex flex-column align-items-center align-items-md-end">
             <select id="selectSegment" class="form-select" aria-label="Selecting structural segment">

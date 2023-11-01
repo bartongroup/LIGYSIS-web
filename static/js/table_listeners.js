@@ -132,7 +132,8 @@ $('table#bss_table tbody').on('mouseover', 'tr', function () { // event listener
         if (clickedElements) { // any OTHER row is already clicked
             for (var i = 0; i < clickedElements.length; i++) {
                 var clickedElementId = clickedElements[i].id;
-                viewer.setStyle({resi: seg_ress_dict[clickedElementId]}, {cartoon: {style:'oval', color: 'white', arrows: true}});
+                let PDBResNumsClicked = seg_ress_dict[clickedElementId].map(el => Up2PdbDict[repPdbId][repPdbChainId][el]);
+                viewer.setStyle({resi: PDBResNumsClicked}, {cartoon: {style:'oval', color: 'white', arrows: true}});
                 viewer.render({});
             }
             clearClickedRows();
@@ -161,22 +162,25 @@ $('table#bss_table tbody').on('mouseover', 'tr', function () { // event listener
             }
         }
     }
+
     if (labelsVisible) {
         viewer.removeAllLabels(); // clearing labels from previous clicked site
-        viewer.addResLabels(
-            {resi: PDBResNums},
-            {
-                alignment: 'center', backgroundColor: 'white', backgroundOpacity: 1,
-                borderColor: 'black', borderOpacity: 1, borderThickness: 2,
-                font: 'Arial', fontColor: siteColor, fontOpacity: 1, fontSize: 12,
-                inFront: true, screenOffset: [0, 0, 0], showBackground: true
-            }
-        );
+        for (PDBResNum of PDBResNums) {
+            let resSel = {resi: PDBResNum}
+            let resName = viewer.selectedAtoms(resSel)[0].resn
+            viewer.addLabel(
+                resName + String(Pdb2UpDict[repPdbId][repPdbChainId][PDBResNum]),
+                {
+                    alignment: 'center', backgroundColor: 'white', backgroundOpacity: 1,
+                    borderColor: 'black', borderOpacity: 1, borderThickness: 2,
+                    font: 'Arial', fontColor: siteColor, fontOpacity: 1, fontSize: 12,
+                    inFront: true, screenOffset: [0, 0, 0], showBackground: true
+                },
+                resSel,
+                false,
+            );
+        }
     }
-
-    // console.log(seg_ress_dict[rowId])
-
-    
 
     viewer.setStyle({resi: PDBResNums}, {cartoon:{style:'oval', color: siteColor, arrows: true}, stick:{color: siteColor}, });
     
@@ -188,10 +192,10 @@ $('table#bs_ress_table tbody').on('mouseover', 'tr', function () { // event list
     let rowId = Number(this.id);  // gets the row id of the table row that is hovered over
     let index = newChartData[newChartLab].indexOf(rowId); // gets the index of the row id in the chart data
     let rowColor = window.getComputedStyle(this).getPropertyValue('color');
-    console.log(rowColor);
+    // console.log(rowColor);
     let rowColorHex = rgbToHex(rowColor);
     // console.log(rowColor);
-    console.log(rowColorHex);
+    // console.log(rowColorHex);
 
     if (index !== -1) {
         

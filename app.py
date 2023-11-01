@@ -7,7 +7,7 @@ import pandas as pd
 
 from flask import Flask, render_template, url_for, request, redirect, jsonify
 
-from config import DATA_FOLDER, BIOLIP_FOLDER, SITE_TABLES_FOLDER, RES_TABLES_FOLDER, REP_STRUCS_FOLDER, BS_RESS_FOLDER, MAPPINGS_FOLDER, STATS_FOLDER
+from config import DATA_FOLDER, BIOLIP_FOLDER, SITE_TABLES_FOLDER, RES_TABLES_FOLDER, REP_STRUCS_FOLDER, BS_RESS_FOLDER, MAPPINGS_FOLDER, STATS_FOLDER, ENTRY_NAMES_FOLDER
 
 ### FUNCTIONS ###
 
@@ -144,6 +144,8 @@ def results(prot_id, seg_id):
 
     seg_stats = load_pickle(os.path.join(STATS_FOLDER, "{}_stats.pkl".format(seg_name)))
 
+    entry_name = load_pickle(os.path.join(ENTRY_NAMES_FOLDER, "{}_name.pkl".format(prot_id)))[prot_id]
+
     # for v in seg_stats[prot_id][seg_id].values():
     #     v = int(v)
     
@@ -157,7 +159,7 @@ def results(prot_id, seg_id):
         'structure.html', data = data1, headings = headings, data2 = data2, cc_new = cc_new, colors = colors,
         seg_ress_dict = seg_ress_dict, prot_id = prot_id, seg_id = seg_id, segment_reps = segment_reps,
         first_site_data = first_site_data, bs_table_tooltips = bs_table_tooltips, bs_ress_table_tooltips = bs_ress_table_tooltips,
-        pdb2up_dict = pdb2up_dict_converted, up2pdb_dict = up2pdb_dict_converted, seg_stats = seg_stats_converted
+        pdb2up_dict = pdb2up_dict_converted, up2pdb_dict = up2pdb_dict_converted, seg_stats = seg_stats_converted, entry_name = entry_name
     )
 
 @app.route('/about')

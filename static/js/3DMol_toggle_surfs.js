@@ -49,6 +49,7 @@ function toggleLabelsVisibility() {
             for (var i = 0; i < clickedElements.length; i++) {
                 var clickedElementId = clickedElements[i].id;
                 let siteColor = chartColors[Number(clickedElementId.split("_").pop())];
+                console.log(siteColor);
                 let PDBResNums = seg_ress_dict[clickedElementId].map(el => Up2PdbDict[repPdbId][repPdbChainId][el]);
                 for (PDBResNum of PDBResNums) {
                     let resSel = {resi: PDBResNum}
@@ -65,16 +66,6 @@ function toggleLabelsVisibility() {
                         true,
                     );
                 }
-                // viewer.addResLabels(
-                //     {resi: PDBResNums},
-                //     {
-                //         alignment: 'center', backgroundColor: 'white', backgroundOpacity: 1,
-                //         borderColor: 'black', borderOpacity: 1, borderThickness: 2,
-                //         font: 'Arial', fontColor: siteColor, fontOpacity: 1, fontSize: 12,
-                //         inFront: true, screenOffset: [0, 0, 0], showBackground: true
-                //     }
-                // );
-
                 viewer.render({});
             }
         }

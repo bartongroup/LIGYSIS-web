@@ -20,3 +20,5 @@ BS_RESS_FOLDER = os.path.join(SPLIT_FOLDER, "bs_ress_dicts")
 MAPPINGS_FOLDER = os.path.join(SPLIT_FOLDER, "mappings")
 
 STATS_FOLDER = os.path.join(SPLIT_FOLDER, "sum_stats")
+
+ENTRY_NAMES_FOLDER = os.path.join(SPLIT_FOLDER, "entry_names")
