@@ -16,9 +16,9 @@
             <div class="row mb-3">
                 <div class="col">
                     <div class="row mb-2">
-                        <strong>
+                        <h1>
                             HELP
-                        </strong>
+                        </h1>
                     </div>
                     <div class="row">
                         <p>
@@ -31,20 +31,53 @@
             <div class="row mb-3">
                 <div class="col">
                     <div class="row mb-2">
-                        <strong>
+                        <h2>
                             Results page
-                        </strong>
+                        </h2>
                     </div>
                     <div class="row">
                         <p class="mb-2">
-                            The <b>LIGYSIS</b> results page is composed by 3 main panels:
+                            This is how the main <b>LIGYSIS</b> results page looks like:
                         </p>
                         <img src="/static/images/ligysis_web_results_panels4.png" alt="LIGYSIS results" >
-                        <div class="col">
-                            <ol class="mb-0">
-                                <li id="structurePanelHelp" class="mb-1">
-                                    The structure panel:
-                                </li>
+                        <p class="mb-2">
+                            It is composed by 3 main panels:
+                        </p>
+                        <!-- <div class="col">
+                            <ol class="mb-0"> -->
+                                
+                                    <h3 id="structurePanelHelp" class="mb-1">
+                                        The Structure panel
+                                    </h3>
+                                    <p>
+                                        This is the main panel. It includes a <a href="https://3dmol.csb.pitt.edu/">3DMol.js</a> structure viewer and a few utilities
+                                        below it in the form of buttons. There are four buttons:
+                                    </p>
+                                    <div class="col">
+                                        <ol class="mb-0">
+                                            <li class="mb-1">
+                                                <b>Surface ON/OFF</b>: clicking on this button switches the visibility of the protein surfaces.
+                                            </li>
+                                            <li class="mb-1">
+                                                <b>Labels ON/OFF</b>: clicking on this button switches the visibility of the labels of the residues forming
+                                                the binding site that is clicked on.
+                                            </li>
+                                            <li class="mb-1">
+                                                <b>Save Image</b>: click here to save the current state of the viewer to a <em>.png</em> image.
+                                            </li>
+                                            <li class="mb-1">
+                                                <b>Save Structure</b>: click here to save the structure that is being visualised to a file in <em>.cif</em> format.
+                                            </li>
+                                        </ol>
+                                    </div>
+                                    
+                                    <h3 id="sitePanelHelp" class="mb-1">
+                                        The Binding Site panel
+                                    </h3>
+
+                                    
+                                    
+
                                 <li id="sitePanelHelp" class="mb-1">
                                     The binding site panel:
                                 </li>
@@ -61,8 +94,8 @@
                                 </li>
 
                                 
-                            </ol>
-                        </div>
+                            <!-- </ol>
+                        </div> -->
                         
                         <p>
                             Second paragraph here.
