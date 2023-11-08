@@ -35,55 +35,110 @@
                             Results page
                         </h2>
                     </div>
+                    <div class="row mb-3">
+                        <p class="mb-2">
+                            This is how the main <b>LIGYSIS</b> results page looks like. It is composed by 3 main panels.
+                        </p>
+
+                        <img src="/static/images/ligysis_web_results_panels4.png" alt="LIGYSIS results">
+                    </div>
                     <div class="row">
+                        <h3 id="structurePanelHelp" class="mb-3">
+                            The Structure panel
+                        </h3>
                         <p class="mb-2">
-                            This is how the main <b>LIGYSIS</b> results page looks like:
+                            This is the main panel. It includes a <a href="https://3dmol.csb.pitt.edu/">3DMol.js</a> structure viewer and a few utilities
+                            below it in the form of buttons. There are four buttons:
                         </p>
-                        <img src="/static/images/ligysis_web_results_panels4.png" alt="LIGYSIS results" >
+                        <div class="col">
+                            <ol class="mb-0">
+                                <li class="mb-2">
+                                    <b>Surface ON/OFF</b>: clicking on this button switches the visibility of the protein surfaces.
+                                </li>
+                                <li class="mb-2">
+                                    <b>Labels ON/OFF</b>: clicking on this button switches the visibility of the labels of the residues forming
+                                    the binding site that is clicked on.
+                                </li>
+                                <li class="mb-2">
+                                    <b>Save Image</b>: click here to save the current state of the viewer to a <em>.png</em> image.
+                                </li>
+                                <li class="mb-2">
+                                    <b>Save Structure</b>: click here to save the structure that is being visualised to a file in <em>.cif</em> format.
+                                </li>
+                            </ol>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <h3 id="sitePanelHelp" class="mb-3">
+                            The Binding Site panel
+                        </h3>
                         <p class="mb-2">
-                            It is composed by 3 main panels:
+                            This panel includes an interactive scatter plot generated with <a href="https://www.chartjs.org/">Chart.js</a>, in which
+                            each data point represents a defined ligand binding site on the protein. Below this, three utilities can be found:
                         </p>
-                        <!-- <div class="col">
-                            <ol class="mb-0"> -->
+                        <div class="col">
+                            <ol class="mb-0">
+                                <li class="mb-2">
+                                    <b>X-axis</b>: this dropdown menu allows the user to select the variable to be plotted on the x-axis.
+                                </li>
+                                <li class="mb-2">
+                                    <b>Y-axis</b>: this dropdown menu allows the user to select the variable to be plotted on the y-axis.
+                                </li>
+                                <li class="mb-2">
+                                    <b>Save Image</b>: click here to save the current graph to a <em>.png</em> image.
+                                </li>
+                            </ol>
+                        </div>
+                        <p class="mb-2">
+                            In addition, this panel includes a dynamic table showing the data underlying the graph. Each table row corresponds
+                            to a data point in the plot, i.e., to a ligand binding site on the protein. The columns are:
+                        </p>
+                        <div class="col">
+                            <ul class="mb-0">
+                                <li class="mb-2">
+                                    <b>ID</b>: the unique identifier of the binding site. This ID is <em>arbitrarily assigned</em> by the pipeline,
+                                    i.e., lower/higher numbers do not have any meaning.
+                                </li>
+                                <li class="mb-2">
+                                    <b>RSA</b>: the relative solvent accessibility of the binding site. This is a measure of how exposed the binding
+                                    site is to the solvent. It is calculated as the <em>average</em> of the relative solvent accessibility of the residues
+                                    forming the binding site.
+                                </li>
+                                <li class="mb-2">
+                                    <b>DS</b>: the divergence score of the binding site. This is a measure of how different in sequence is the binding site
+                                    across homologues in a multiple sequence alignment (MSA). It is calculated as the <em>average</em> of the divergence score of the residues forming
+                                    the binding site. This is a normalised version of the <a href="https://doi.org/10.1002/prot.340110408">Shenkin divergence score</a>.
+                                </li>
+                                <li class="mb-2">
+                                    <b>MES</b>: the missense enrichment score of the binding site. This is a measure of how constrained the binding site is.
+                                    It is calculated as the <em>average</em> of the missense enrichment score of the residues forming the binding site.
+                                    This is an <a href="https://en.wikipedia.org/wiki/Odds_ratio">odds ratio</a> (OR) calculated using the <a href="https://gnomad.broadinstitute.org/">gnomAD</a> database.
+                                    For more details see <a href="https://doi.org/10.1101/127050">MacGowan <em>et al.</em>, 2017</a>, <a href="https://doi.org/10.1371/journal.pcbi.1009335">Utgés <em>et al.</em>, 2021</a>,
+                                    and <a href="https://doi.org/10.21203/rs.3.rs-3160340/v1">MacGowan <em>et al.</em>, 2023</a>.
+                                </li>
+                                <li class="mb-2">
+                                    <b>Size</b>: the size of the binding site in amino acids (aa), i.e., how many amino acids form the binding site.
+                                </li>
+                                <li class="mb-2">
+                                    <b>Cluster</b>: the RSA cluster label predicted for the binding site. This label is obtained using an <a href="https://en.wikipedia.org/wiki/Artificial_neural_network">
+                                    artificial neural network</a> (ANN), specifically a <a href="https://en.wikipedia.org/wiki/Feedforward_neural_network#Multilayer_perceptron">multilayer perceptron</a> (MLP).
+                                    The label is predicted from the solvent accessibility profile of the site and is indicative of the likely functional state of the binding site
+                                    (see <a href="https://doi.org/10.21203/rs.3.rs-3185838/v1">Utgés <em>et al.</em>, 2023</a>).
+                                </li>
+                                <li class="mb-2">
+                                    <b>FS</b>: the functional score of the binding site. This goes from 0.05-0.58. The higher the score, the more likely the binding site is to be functional. 
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+
+                                    
+                                    
+
                                 
-                                    <h3 id="structurePanelHelp" class="mb-1">
-                                        The Structure panel
-                                    </h3>
-                                    <p>
-                                        This is the main panel. It includes a <a href="https://3dmol.csb.pitt.edu/">3DMol.js</a> structure viewer and a few utilities
-                                        below it in the form of buttons. There are four buttons:
-                                    </p>
-                                    <div class="col">
-                                        <ol class="mb-0">
-                                            <li class="mb-1">
-                                                <b>Surface ON/OFF</b>: clicking on this button switches the visibility of the protein surfaces.
-                                            </li>
-                                            <li class="mb-1">
-                                                <b>Labels ON/OFF</b>: clicking on this button switches the visibility of the labels of the residues forming
-                                                the binding site that is clicked on.
-                                            </li>
-                                            <li class="mb-1">
-                                                <b>Save Image</b>: click here to save the current state of the viewer to a <em>.png</em> image.
-                                            </li>
-                                            <li class="mb-1">
-                                                <b>Save Structure</b>: click here to save the structure that is being visualised to a file in <em>.cif</em> format.
-                                            </li>
-                                        </ol>
-                                    </div>
-                                    
-                                    <h3 id="sitePanelHelp" class="mb-1">
-                                        The Binding Site panel
-                                    </h3>
-
-                                    
-                                    
-
-                                <li id="sitePanelHelp" class="mb-1">
-                                    The binding site panel:
-                                </li>
-                                <li id="siteResiduesPanelHelp" class="mb-1">
-                                    The binding site residues panel:
-                                </li>
+                        <h3 id="siteResiduesPanelHelp" class="mb-1">
+                            The Binding Site Residues panel
+                        </h3>
                                 <li id="an_shenkSiteHelp" class="mb-1">
                                     The binding site residues panel:
                                 </li>
@@ -102,7 +157,6 @@
                         </p>
                     </div>
                 </div>
-            </div>
             <div class="row mb-3">
                 <div class="col">
                     <div class="row mb-2">
