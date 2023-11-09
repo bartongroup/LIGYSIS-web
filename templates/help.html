@@ -2,6 +2,8 @@
 
 {% block head %}
 
+<script src="https://cdn.jsdelivr.net/npm/mathjax@2/MathJax.js?config=AM_CHTML"></script>
+
 <title>
     LIGYSIS: Help
 </title>
@@ -112,21 +114,40 @@
                                 <li class="mb-2">
                                     <b>MES</b>: the missense enrichment score of the binding site. This is a measure of how constrained the binding site is.
                                     It is calculated as the <em>average</em> of the missense enrichment score of the residues forming the binding site.
-                                    This is an <a href="https://en.wikipedia.org/wiki/Odds_ratio">odds ratio</a> (OR) calculated using the <a href="https://gnomad.broadinstitute.org/">gnomAD</a> database.
-                                    For more details see <a href="https://doi.org/10.1101/127050">MacGowan <em>et al.</em>, 2017</a>, <a href="https://doi.org/10.1371/journal.pcbi.1009335">Utgés <em>et al.</em>, 2021</a>,
+                                    This is an <a href="https://en.wikipedia.org/wiki/Odds_ratio">odds ratio</a> (OR) calculated using the
+                                    <a href="https://gnomad.broadinstitute.org/">gnomAD</a> database.
+                                    For more details see <a href="https://doi.org/10.1101/127050">MacGowan <em>et al.</em>, 2017</a>,
+                                    <a href="https://doi.org/10.1371/journal.pcbi.1009335">Utgés <em>et al.</em>, 2021</a>,
                                     and <a href="https://doi.org/10.21203/rs.3.rs-3160340/v1">MacGowan <em>et al.</em>, 2023</a>.
                                 </li>
                                 <li class="mb-2">
                                     <b>Size</b>: the size of the binding site in amino acids (aa), i.e., how many amino acids form the binding site.
                                 </li>
                                 <li class="mb-2">
-                                    <b>Cluster</b>: the RSA cluster label predicted for the binding site. This label is obtained using an <a href="https://en.wikipedia.org/wiki/Artificial_neural_network">
-                                    artificial neural network</a> (ANN), specifically a <a href="https://en.wikipedia.org/wiki/Feedforward_neural_network#Multilayer_perceptron">multilayer perceptron</a> (MLP).
+                                    <b>Cluster</b>: the RSA cluster label predicted for the binding site. This label is obtained using an
+                                    <a href="https://en.wikipedia.org/wiki/Artificial_neural_network">
+                                    artificial neural network</a> (ANN), specifically a <a href="https://en.wikipedia.org/wiki/Feedforward_neural_network#Multilayer_perceptron">
+                                    multilayer perceptron</a> (MLP).
                                     The label is predicted from the solvent accessibility profile of the site and is indicative of the likely functional state of the binding site
                                     (see <a href="https://doi.org/10.21203/rs.3.rs-3185838/v1">Utgés <em>et al.</em>, 2023</a>).
                                 </li>
                                 <li class="mb-2">
-                                    <b>FS</b>: the functional score of the binding site. This goes from 0.05-0.58. The higher the score, the more likely the binding site is to be functional. 
+                                    <b>FS</b>: the functional score of the binding site. The score ranges from 0.04-0.58. The higher the score, the more likely 
+                                    the binding site is to be functional. It is calculated based on the following formula:<br>
+                                    <div class="cmath text-center">
+                                        `FS_(i) = sum_(j=1)^4 p_(i_j) f_(j)`
+                                    </div><br>
+                                    <div class="cmath">
+                                        Where `FS_(i)` is the functional score of binding site `i`, `p_(i_j)` is the probability of the binding site `i` to belong to
+                                        cluster `j`, and `f_(j)` is the functional score of cluster `j`. The functional score of each cluster is calculated as the
+                                        <em>proportion</em> of known functional sites, as annotated in UniProt, within that cluster.<br><br>
+                                        The functional scores of the clusters are: `f = [0.58, 0.18, 0.05, 0.04]` for `C_1`, `C_2`, `C_3`, and `C_4`, respectively.
+                                        <br><br>
+                                        At the moment, this score is purely based on the RSA Cluster label. Future versions will also include evolutionary
+                                        divergence, as well as missense variation information.
+
+                                    </div>
+                                    
                                 </li>
                             </ul>
                         </div>
@@ -198,13 +219,13 @@
                         </strong>
                     </div>
                     <div class="row">
-                        <p>
-                            If you use the <b>LIGYSIS</b> web server, please cite:<br>
-                            Utgés <i>et al. </i>(2023).
-                            <a style="text-decoration: none;" href="https://doi.org/10.21203/rs.3.rs-3185838/v1">
-                                Classification of likely functional state for ligand binding sites identified from fragment screening.
-                            </a>
-                            <a style="text-decoration: none;" href="https://www.researchsquare.com/">
+                        <p class="pull-left">
+                            There is not yet a publication for the <b>LIGYSIS</b> web server. However,
+                            this service explores the results obtained with our method, which can be cited:
+                            <br><br>
+                            J. S. Utgés, et al. Classification of likely functional state for ligand
+                            binding sites identified from fragment screening, 24 July 2023, PREPRINT (Version 1), available at
+                            <a href="https://doi.org/10.21203/rs.3.rs-3185838/v1">
                                 Research Square.
                             </a>
                         </p>

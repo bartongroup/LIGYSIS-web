@@ -24,14 +24,15 @@ const newChartCtx = document.getElementById("newChartCanvas").getContext("2d");
 
 const myChartLims = { 
     DS: {sugMin: 0, sugMax: 50, min: 0, max: 100},
-    MES: {sugMin: 0, sugMax: 2, min: 0, max: 5},
+    FS: {sugMin: 0, sugMax: 0.6, min: 0, max: 0.6},
+    MES: {sugMin: 0.05, sugMax: 2, min: 0, max: 5},
     RSA: {sugMin: 0, sugMax: 50, min: 0, max: 100},
     Size: {sugMin: 1, sugMax: 25, min: 1, max: 70}
 };
 
 const newChartLims = {
     DS: {sugMin: 0, sugMax: 50, min: 0, max: 100},
-    MES: {sugMin: 0, sugMax: 2, min: 0, max: 5},
+    MES: {sugMin: 0.05, sugMax: 2, min: 0, max: 5},
     RSA: {sugMin: 0, sugMax: 75, min: 0, max: 100},
     p: {sugMin: 0.1, sugMax: 0.75, min: 0, max: 1}
 };
@@ -103,6 +104,7 @@ let chartConfig = {
                 },
             },
             y: {
+                type: 'logarithmic',
                 title: {
                     display: true,
                     align: "center",
@@ -125,6 +127,7 @@ let chartConfig = {
                 },
                 ticks: {
                     color: 'black', // Color of the tick labels
+                    autoSkip: true,
                     // font: {
                     //     size: 28  // Font size of the tick labels
                     // },
@@ -142,6 +145,19 @@ let chartConfig = {
                         let dataIndex = context[0].dataIndex; // Assuming you are only hovering over a single point
                         return chartData[chartLab][dataIndex]; // Use the 'lab' property from your data
                     },
+                }
+            },
+            annotation: {
+                annotations: {
+                    line1: {
+                        type: 'line',
+                        yMin: 1,
+                        yMax: 1,
+                        borderColor: 'black',
+                        borderWidth: 1,
+                        borderDash: [10, 5],
+                        display: true,
+                    }
                 }
             },
             chartAreaBorder: {
@@ -212,6 +228,7 @@ let newChartConfig = { // configuration for the new chart
                 },
             },
             y: {
+                type: 'logarithmic',
                 title: {
                     display: true,
                     align: "center",
@@ -251,6 +268,19 @@ let newChartConfig = { // configuration for the new chart
                         let dataIndex = context[0].dataIndex; // Assuming you are only hovering over a single point
                         return newChartData[newChartLab][dataIndex]; // Use the 'UniProt_ResNum' property from your data
                     },
+                }
+            },
+            annotation: {
+                annotations: {
+                    line1: {
+                        type: 'line',
+                        yMin: 1,
+                        yMax: 1,
+                        borderColor: 'black',
+                        borderWidth: 1,
+                        borderDash: [10, 5],
+                        display: true,
+                    }
                 }
             },
             chartAreaBorder: {

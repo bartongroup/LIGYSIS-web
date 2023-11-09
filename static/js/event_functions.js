@@ -10,9 +10,20 @@ function updateChart(axes, dropdownElem, myChart, chartData, myChartLims) { // u
         myChart.data.datasets[0].data = chartData[selectedTitle];
     }
 
+    if (selectedTitle === "MES") {
+        myChart.options.scales[axes].type = "logarithmic";
+        myChart.options.scales[axes].ticks.autoSkip = false;
+        myChart.options.plugins.annotation.annotations.line1.display = true;
+    } else {
+        myChart.options.scales[axes].type = "linear";
+        myChart.options.scales[axes].ticks.autoSkip = true;
+        myChart.options.plugins.annotation.annotations.line1.display = false;
+    }
+
     myChart.options.scales[axes].title.text = selectedTitle;
     myChart.options.scales[axes].suggestedMin = myChartLims[selectedTitle]["sugMin"];
     myChart.options.scales[axes].suggestedMax = myChartLims[selectedTitle]["sugMax"];
+    
     myChart.update();
 }
 

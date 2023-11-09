@@ -119,11 +119,11 @@ def results(prot_id, seg_id):
 
     first_site_data = bss_ress.query('bs_id == @first_site_name')[cc_new].to_dict(orient="list")
 
-    print(bss_prot)
+    # print(bss_prot)
 
     data1 = bss_prot.to_dict(orient="list")
 
-    print(data1)
+    # print(data1)
 
     prot_ress = bss_ress.query('up_acc == @prot_id')[cc_new]
 
