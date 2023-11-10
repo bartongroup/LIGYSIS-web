@@ -34,7 +34,7 @@ def convert_numpy(obj):
 
 ### READING INPUT DATA ###
 
-prot_ids = load_pickle(os.path.join(BIOLIP_FOLDER, "biolip_up_ids_15000_accs.pkl")) # protein ids
+prot_ids = load_pickle(os.path.join(BIOLIP_FOLDER, "biolip_up_ids_15000_accs.pkl")) # protein idshon
 
 ### SOME FIXED VARIABLES ###
 
