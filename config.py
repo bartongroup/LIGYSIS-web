@@ -6,10 +6,10 @@ DATA_FOLDER = os.path.join(BASE_DIR, "static", "data")
 #DATA_FOLDER = "/cluster/gjb_lab/2394007/LIGYSIS_PDB"
 
 BIOLIP_FOLDER = os.path.join(DATA_FOLDER, "biolip", "1500accs")
-# does not exist in cluster
+# BIOLIP_FOLDER = DATA_FOLDER # IN CLUSTER
 
 SPLIT_FOLDER = os.path.join(DATA_FOLDER, "biolip", "split")
-# does not exist in cluster
+# SPLIT_FOLDER = DATA_FOLDER # IN CLUSTER
 
 SITE_TABLES_FOLDER = os.path.join(SPLIT_FOLDER, "site_tables")
 #SITE_TABLES_FOLDER = os.path.join(DATA_FOLDER, "site_tables") # IN CLUSTER
