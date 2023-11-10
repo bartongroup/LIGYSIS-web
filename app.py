@@ -7,7 +7,7 @@ import pandas as pd
 
 from flask import Flask, render_template, url_for, request, redirect, jsonify
 
-from config import DATA_FOLDER, BIOLIP_FOLDER, SITE_TABLES_FOLDER, RES_TABLES_FOLDER, REP_STRUCS_FOLDER, BS_RESS_FOLDER, MAPPINGS_FOLDER, STATS_FOLDER, ENTRY_NAMES_FOLDER
+from config import DATA_FOLDER, SITE_TABLES_FOLDER, RES_TABLES_FOLDER, REP_STRUCS_FOLDER, BS_RESS_FOLDER, MAPPINGS_FOLDER, STATS_FOLDER, ENTRY_NAMES_FOLDER
 
 ### FUNCTIONS ###
 
@@ -34,7 +34,7 @@ def convert_numpy(obj):
 
 ### READING INPUT DATA ###
 
-prot_ids = load_pickle(os.path.join(BIOLIP_FOLDER, "biolip_up_ids_15000_accs.pkl")) # protein idshon
+prot_ids = load_pickle(os.path.join(DATA_FOLDER, "biolip_up_ids_15000_accs.pkl")) # protein idshon
 
 ### SOME FIXED VARIABLES ###
 

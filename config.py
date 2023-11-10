@@ -5,12 +5,12 @@ BASE_DIR = os.path.dirname(os.path.abspath(__file__)) # VALID FOR ALL (UNUSED IN
 DATA_FOLDER = os.path.join(BASE_DIR, "static", "data") # IN LOCAL & EXAMPLE
 #DATA_FOLDER = "/cluster/gjb_lab/2394007/LIGYSIS_PDB" # IN CLUSTER
 
-BIOLIP_FOLDER = os.path.join(DATA_FOLDER, "example") # IN EXAMPLE
+# BIOLIP_FOLDER = os.path.join(DATA_FOLDER, "example") # IN EXAMPLE
 # BIOLIP_FOLDER = os.path.join(DATA_FOLDER, "biolip", "1500accs") # IN LOCAL
 # BIOLIP_FOLDER = DATA_FOLDER # IN CLUSTER
 
-SPLIT_FOLDER = BIOLIP_FOLDER # IN EXAMPLE
-# SPLIT_FOLDER = os.path.join(DATA_FOLDER, "biolip", "split") # IN LOCAL
+# SPLIT_FOLDER = BIOLIP_FOLDER # IN EXAMPLE
+SPLIT_FOLDER = os.path.join(DATA_FOLDER, "biolip", "split") # IN LOCAL
 # SPLIT_FOLDER = DATA_FOLDER # IN CLUSTER
 
 SITE_TABLES_FOLDER = os.path.join(SPLIT_FOLDER, "site_tables") # IN EXAMPLE & LOCAL
