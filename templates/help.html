@@ -138,52 +138,95 @@
                                         `FS_(i) = sum_(j=1)^4 p_(i_j) f_(j)`
                                     </div><br>
                                     <div class="cmath">
-                                        Where `FS_(i)` is the functional score of binding site `i`, `p_(i_j)` is the probability of the binding site `i` to belong to
-                                        cluster `j`, and `f_(j)` is the functional score of cluster `j`. The functional score of each cluster is calculated as the
+                                        The functional score of binding site `i`, `FS_(i)`, is defined by `p_(i_j)`, which is the probability of binding site `i` belonging to
+                                        cluster `j`. `p_(i_j)` is given by the outcome vector resulting from the MLP: `P_i`                                        
+                                    </div><br>
+                                    <div class="cmath text-center">
+                                        `P_i = [p_(i_(C_(1))), p_(i_(C_(2))),  p_(i_(C_(3))), p_(i_(C_(4)))]`
+                                    </div><br>
+                                    <div class="cmath">
+                                        Where `p_(i_(C_(1)))` is the probability of binding site `i` to belong to cluster `C_1`, and so on.<br><br>
+                                        Finally, `f_(j)` is the functional score of cluster `j`.The functional score of each cluster is calculated as the
                                         <em>proportion</em> of known functional sites, as annotated in UniProt, within that cluster.<br><br>
-                                        The functional scores of the clusters are: `f = [0.58, 0.18, 0.05, 0.04]` for `C_1`, `C_2`, `C_3`, and `C_4`, respectively.
+                                    </div>
+                                    
+                                    <div class="cmath">
+                                        The functional scores of the clusters are given by `F = [0.58, 0.18, 0.05, 0.04]` for `C_1`, `C_2`, `C_3`, and `C_4`, respectively.
                                         <br><br>
                                         At the moment, this score is purely based on the RSA Cluster label. Future versions will also include evolutionary
                                         divergence, as well as missense variation information.
-
                                     </div>
-                                    
                                 </li>
                             </ul>
                         </div>
                     </div>
-
-                                    
-                                    
-
-                                
-                        <h3 id="siteResiduesPanelHelp" class="mb-1">
+                    <div class="row">
+                        <h3 id="siteResiduesPanelHelp" class="mb-3">
                             The Binding Site Residues panel
                         </h3>
-                                <li id="an_shenkSiteHelp" class="mb-1">
-                                    The binding site residues panel:
-                                </li>
-                                <li id="n_ressSiteHelp" class="mb-1">
-                                    The size of the binding site in amino acids (aa), i.e., how many amino acids form the binding site.
-                                    This number represents the unique residues that bind the ligands grouped together based on their interaction
-                                    fingerprints.
-                                </li>
-
-                                
-                            <!-- </ol>
-                        </div> -->
-                        
-                        <p>
-                            Second paragraph here.
+                        <p class="mb-2">
+                            This panel also includes an interactive scatter plot generated with <a href="https://www.chartjs.org/">Chart.js</a>, but now
+                            each data point represents a <em>binding site residue</em>. Below this, three utilities can be found:
                         </p>
+                        <div class="col">
+                            <ol class="mb-0">
+                                <li class="mb-2">
+                                    <b>X-axis</b>: this dropdown menu allows the user to select the variable to be plotted on the X-axis.
+                                </li>
+                                <li class="mb-2">
+                                    <b>Y-axis</b>: this dropdown menu allows the user to select the variable to be plotted on the Y-axis.
+                                </li>
+                                <li class="mb-2">
+                                    <b>Save Image</b>: click here to save the current graph to a <em>.png</em> image.
+                                </li>
+                            </ol>
+                        </div>
+                        <p class="mb-2">
+                            In addition, this panel includes a dynamic table showing the data underlying the graph. Each table row corresponds
+                            to a data point in the plot, i.e., to a residue forming a binding site on the protein. The columns are:
+                        </p>
+                        <div class="col">
+                            <ul class="mb-0">
+                                <li class="mb-2">
+                                    <b>UPResNum</b>: the residue number identifier matching the UniProt sequence, or UniProt Residue Number.
+                                </li>
+                                <li class="mb-2">
+                                    <b>MSACol</b>: the multiple sequence alignment (MSA) column index where a residue aligns to.
+                                </li>
+                                <li class="mb-2">
+                                    <b>DS</b>: the divergence score of the alignment column where a residue is aligned. The score used is a
+                                    normalised version of the <a href="https://doi.org/10.1002/prot.340110408">Shenkin divergence score</a>.
+                                </li>
+                                <li class="mb-2">
+                                    <b>MES</b>: the missense enrichment score of the alignment column where a residue aligns to.
+                                    This is an <a href="https://en.wikipedia.org/wiki/Odds_ratio">odds ratio</a> (OR) calculated using the
+                                    <a href="https://gnomad.broadinstitute.org/">gnomAD</a> database.
+                                    For more details see <a href="https://doi.org/10.1101/127050">MacGowan <em>et al.</em>, 2017</a>,
+                                    <a href="https://doi.org/10.1371/journal.pcbi.1009335">Utgés <em>et al.</em>, 2021</a>,
+                                    and <a href="https://doi.org/10.21203/rs.3.rs-3160340/v1">MacGowan <em>et al.</em>, 2023</a>.
+                                </li>
+                                <li class="mb-2">
+                                    <b>p</b>: the p-value of the MES (OR), obtained using <a href="https://en.wikipedia.org/wiki/Fisher%27s_exact_test">Fisher's exact test</a>.
+                                </li>
+                                <li class="mb-2">
+                                    <b>AA</b>: the amino acid one letter code of a given residue.
+                                </li>
+                                <li class="mb-2">
+                                    <b>RSA</b>: the relative solvent accessibility of a given residue. This is a normalised version of the
+                                    accessible surface area (ASA) calculated by <a href="https://doi.org/10.1002/bip.360221211">DSSP</a>.
+                                </li>
+                                <li class="mb-2">
+                                    <b>SS</b>: the secondary structure element of a given residue as calculated by DSSP.
+                                </li>
+                            </ul>
+                        </div>
                     </div>
-                </div>
             <div class="row mb-3">
                 <div class="col">
                     <div class="row mb-2">
-                        <strong>
+                        <h2>
                             Coming soon...
-                        </strong>
+                        </h2>
                     </div>
                     <div class="row">
                         <p>
@@ -191,7 +234,13 @@
                             their own set of protein 3D structures for analysis. These structures should be in <span class="key-concept">PDB format</span>, as well as represent the
                             <span class="key-concept">same protein unit</span>, i.e., a dimer, or monomer, or hexamer, etc, bound to the ligands of interest. This is required for the
                             <span class="key-concept">correct superposition</span> of the structures. The pipeline will then be run on the user's structures, and the results will be made
-                            available for download. Template Jupyter Notebooks, as well as the code for this pipeline can be found <a href="https://github.com/JavierSanchez-Utges/fragsys_custom">here</a>.
+                            available for download. <s>Template Jupyter Notebooks, as well as the code for this pipeline can be found <a href="https://github.com/JavierSanchez-Utges/fragsys_custom">here</a>.</s>
+                        </p>
+                        
+                        <p>
+                            <br>
+                            Ligands and contacts visualisation are not yet implemented in this version. This is at the top of our list, so users can explore a Binding
+                            Site of interest and explore which molecules, their type, the residues they interact with and the kind of interactions they form.
                         </p>
                     </div>
                 </div>
@@ -199,24 +248,28 @@
             <div class="row mb-3">
                 <div class="col">
                     <div class="row mb-2">
-                        <strong>
+                        <h2>
                             Code availability
-                        </strong>
+                        </h2>
                     </div>
                     <div class="row">
-                        <p>
-                            The code for the <b>LIGYSIS</b> pipeline can be found <a href="https://github.com/JavierSanchez-Utges/ligysis_dev">here</a>.<br>
-                            The code for the <b>LIGYSIS</b> web server can be found <a href="https://github.com/JavierSanchez-Utges/ligysis_flask">here</a>.
+                        <p style="font-size: 1.5rem; color:red;">
+                            The code for the Pipeline nor the Web Server is not available yet.
                         </p>
+                        <!-- <p>
+                            <s>The code for the <b>LIGYSIS</b> pipeline can be found <a href="https://github.com/JavierSanchez-Utges/ligysis_dev">here</a>.</s>
+                            <br><br>
+                            <s>The code for the <b>LIGYSIS</b> web server can be found <a href="https://github.com/JavierSanchez-Utges/ligysis_flask">here</a>.</s>
+                        </p> -->
                     </div>
                 </div>
             </div>
             <div class="row mb-3">
                 <div class="col">
                     <div class="row mb-2">
-                        <strong>
+                        <h2>
                             Citing LIGYSIS
-                        </strong>
+                        </h2>
                     </div>
                     <div class="row">
                         <p class="pull-left">
