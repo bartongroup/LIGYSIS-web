@@ -14,18 +14,43 @@ $('table#bss_table tbody').on('mouseover', 'tr', function () { // event listener
         if (index !== -1) {
             resetChartStyles(myChart, index, "#ffff99", 10, 16); // changes chart styles to highlight the binding site
         }
-    }
-    
-    if (surfaceVisible) {
-        for (const [key, value] of Object.entries(surfsDict)) {
-            if (key == rowId) {
-                viewer.setSurfaceMaterialStyle(value.surfid, {color: siteColor, opacity:0.9});
-            }
-            else {
-                viewer.setSurfaceMaterialStyle(value.surfid, {color: 'white', opacity:0.0});
+
+        if (surfaceVisible) {
+            for (const [key, value] of Object.entries(surfsDict)) {
+                if (key == rowId) {
+                    viewer.setSurfaceMaterialStyle(value.surfid, {color: siteColor, opacity:0.9});
+                }
+                // else {
+                //     viewer.setSurfaceMaterialStyle(value.surfid, {color: 'white', opacity:0.0});
+                // }
             }
         }
     }
+
+    else {
+        console.log("We are hovering over a clicked row!");
+    //     if (surfaceVisible) {
+    //         for (const [key, value] of Object.entries(surfsDict)) {
+    //             if (key == rowId) {
+    //                 viewer.setSurfaceMaterialStyle(value.surfid, {color: siteColor, opacity:0.9});
+    //             }
+    //             // else {
+    //             //     viewer.setSurfaceMaterialStyle(value.surfid, {color: 'white', opacity:0.0});
+    //             // }
+    //         }
+    //     }
+    }
+    
+    // if (surfaceVisible) {
+    //     for (const [key, value] of Object.entries(surfsDict)) {
+    //         if (key == rowId) {
+    //             viewer.setSurfaceMaterialStyle(value.surfid, {color: siteColor, opacity:0.9});
+    //         }
+    //         // else {
+    //         //     viewer.setSurfaceMaterialStyle(value.surfid, {color: 'white', opacity:0.0});
+    //         // }
+    //     }
+    // }
     let PDBResNums = seg_ress_dict[rowId].map(el => Up2PdbDict[repPdbId][repPdbChainId][el]);
 
     viewer.setStyle({resi: PDBResNums}, {cartoon:{style:'oval', color: siteColor, arrows: true}, stick:{color: siteColor}, });
@@ -36,8 +61,10 @@ $('table#bss_table tbody').on('mouseover', 'tr', function () { // event listener
      // isRowHovered = false; // set isRowHovered to false when a table row is not hovered
 
     let rowId = Number(this.id);  // gets the row id of the table row that is hovered over
+    let siteColor = chartColors[Number(rowId)];
     let index = chartData[chartLab].indexOf(rowId); // gets the index of the row id in the chart data
     let classList = this.classList;
+    let clickedElements = document.getElementsByClassName("clicked-row");
     
     if (!classList.contains('clicked-row')) { // row is not clicked
 
@@ -46,6 +73,61 @@ $('table#bss_table tbody').on('mouseover', 'tr', function () { // event listener
             resetChartStyles(myChart, index, "black", 1, 12); // resets chart styles to default
         }
 
+        let PDBResNums = seg_ress_dict[rowId].map(el => Up2PdbDict[repPdbId][repPdbChainId][el]);
+
+        viewer.setStyle({resi: PDBResNums}, {cartoon: {style:'oval', color: 'white', arrows: true}});
+
+        if (clickedElements.length == 0) {
+            // console.log("Mouseout from point!");
+            viewer.removeAllLabels(); // clearing labels from previous clicked site, unless still clicked
+
+            if (surfaceVisible) {
+                for (const [key, value] of Object.entries(surfsDict)) {
+                    if (key == "non_binding") {
+                        viewer.setSurfaceMaterialStyle(surfsDict[key].surfid, {color: 'white', opacity:0.7});
+                    }
+                    else {
+                        let siteColor = chartColors[Number(key.split("_").pop())];
+                        viewer.setSurfaceMaterialStyle(surfsDict[key].surfid, {color: siteColor, opacity:0.8});
+                    }
+                }
+            }
+        }
+        else {
+
+            if (surfaceVisible) {
+                for (const [key, value] of Object.entries(surfsDict)) {
+                    if (key == rowId) {
+                        viewer.setSurfaceMaterialStyle(value.surfid, {color: siteColor, opacity:0.0});
+                    }
+                }
+            }
+        }
+        viewer.render({});
+    }
+    
+}).on('click', 'tr', function () {
+    
+    let rowId = this.id;  // gets the row id of the table row that is clicked
+    let index = chartData[chartLab].indexOf(Number(rowId)); // gets the index of the row id in the chart data
+    let siteColor = chartColors[Number(rowId)];//.split("_").pop())]; // gets the binding site color of the table row that is hovered over
+    let classList = this.classList;
+    let clickedElements = document.getElementsByClassName("clicked-row");
+
+    let PDBResNums = seg_ress_dict[rowId]
+    .filter(el => Up2PdbDict[repPdbId][repPdbChainId].hasOwnProperty(el)) // this accounts not for missing residues in the structure (unresolved)
+    .map(el => Up2PdbDict[repPdbId][repPdbChainId][el]);
+    
+
+    if (classList.contains('clicked-row')) { // row is already clicked
+        clearClickedRows();
+        if (index !== -1) {
+            resetChartStyles(myChart, index, "#ffff99", 10, 16); // changes chart styles to highlight the binding site
+        }
+        highlightTableRow(rowId); // highlights the table row of the binding site
+
+        viewer.removeAllLabels(); // clearing labels from previous clicked site, unless still clicked
+        // }
         if (surfaceVisible) {
             for (const [key, value] of Object.entries(surfsDict)) {
                 if (key == "non_binding") {
@@ -57,37 +139,9 @@ $('table#bss_table tbody').on('mouseover', 'tr', function () { // event listener
                 }
             }
         }
-
-        let PDBResNums = seg_ress_dict[rowId].map(el => Up2PdbDict[repPdbId][repPdbChainId][el]);
-
-        viewer.setStyle({resi: PDBResNums}, {cartoon: {style:'oval', color: 'white', arrows: true}});
-        viewer.removeAllLabels(); // clearing labels from previous clicked site
-        viewer.render({});
-    }
-    
-}).on('click', 'tr', function () {
-    
-    let rowId = this.id;  // gets the row id of the table row that is clicked
-    let index = chartData[chartLab].indexOf(Number(rowId)); // gets the index of the row id in the chart data
-    let siteColor = chartColors[Number(rowId)];//.split("_").pop())]; // gets the binding site color of the table row that is hovered over
-    let classList = this.classList;
-    let clickedElements = document.getElementsByClassName("clicked-row");
-    
-    
-    // if (classList.contains('highlighted-row')) { // row is already highlighted
-        // clearHighlightedRow(); // clears highlighting from table row, before applying clicked styles
-    //}
-
-    if (classList.contains('clicked-row')) { // row is already clicked
-        clearClickedRows();
-        if (index !== -1) {
-            resetChartStyles(myChart, index, "#ffff99", 10, 16); // changes chart styles to highlight the binding site
-        }
-        highlightTableRow(rowId); // highlights the table row of the binding site
     }
 
     else {
-        // new stuff
         let fullPointLabel = segmentName + "_" + rowId;
         $.ajax({ // AJAX request to get the table data from the server
             type: 'POST', // POST request
@@ -148,45 +202,41 @@ $('table#bss_table tbody').on('mouseover', 'tr', function () { // event listener
 
         clickTableRow(this);
 
-    }
-
-    let PDBResNums = seg_ress_dict[rowId]
-    .filter(el => Up2PdbDict[repPdbId][repPdbChainId].hasOwnProperty(el)) // this accounts not for missing residues in the structure (unresolved)
-    .map(el => Up2PdbDict[repPdbId][repPdbChainId][el]);
-
-    if (surfaceVisible) {
-        for (const [key, value] of Object.entries(surfsDict)) {
-            if (key == rowId) {
-                viewer.setSurfaceMaterialStyle(value.surfid, {color: siteColor, opacity:0.9});
-            }
-            else {
-                viewer.setSurfaceMaterialStyle(value.surfid, {color: 'white', opacity:0.0});
+        if (labelsVisible) {
+            viewer.removeAllLabels(); // clearing labels from previous clicked site
+            for (PDBResNum of PDBResNums) {
+                let resSel = {resi: PDBResNum}
+                let resName = viewer.selectedAtoms(resSel)[0].resn
+                // console.log(resSel, resName);
+                viewer.addLabel(
+                    resName + String(Pdb2UpDict[repPdbId][repPdbChainId][PDBResNum]),
+                    {
+                        alignment: 'center', backgroundColor: 'white', backgroundOpacity: 1,
+                        borderColor: 'black', borderOpacity: 1, borderThickness: 2,
+                        font: 'Arial', fontColor: siteColor, fontOpacity: 1, fontSize: 12,
+                        inFront: true, screenOffset: [0, 0, 0], showBackground: true
+                    },
+                    resSel,
+                    false,
+                );
             }
         }
-    }
 
-    if (labelsVisible) {
-        viewer.removeAllLabels(); // clearing labels from previous clicked site
-        for (PDBResNum of PDBResNums) {
-            let resSel = {resi: PDBResNum}
-            let resName = viewer.selectedAtoms(resSel)[0].resn
-            // console.log(resSel, resName);
-            viewer.addLabel(
-                resName + String(Pdb2UpDict[repPdbId][repPdbChainId][PDBResNum]),
-                {
-                    alignment: 'center', backgroundColor: 'white', backgroundOpacity: 1,
-                    borderColor: 'black', borderOpacity: 1, borderThickness: 2,
-                    font: 'Arial', fontColor: siteColor, fontOpacity: 1, fontSize: 12,
-                    inFront: true, screenOffset: [0, 0, 0], showBackground: true
-                },
-                resSel,
-                false,
-            );
+        if (surfaceVisible) {
+            for (const [key, value] of Object.entries(surfsDict)) {
+                if (key == rowId) {
+                    viewer.setSurfaceMaterialStyle(value.surfid, {color: siteColor, opacity:0.9});
+                }
+                else {
+                    viewer.setSurfaceMaterialStyle(value.surfid, {color: 'white', opacity:0.0});
+                }
+            }
         }
-    }
 
-    viewer.setStyle({resi: PDBResNums}, {cartoon:{style:'oval', color: siteColor, arrows: true}, stick:{color: siteColor}, });
+    }
     
+    viewer.setStyle({resi: PDBResNums}, {cartoon:{style:'oval', color: siteColor, arrows: true}, stick:{color: siteColor}, });
+
     viewer.render({});
     
 });
@@ -195,30 +245,13 @@ $('table#bs_ress_table tbody').on('mouseover', 'tr', function () { // event list
     let rowId = Number(this.id);  // gets the row id of the table row that is hovered over
     let index = newChartData[newChartLab].indexOf(rowId); // gets the index of the row id in the chart data
     let rowColor = window.getComputedStyle(this).getPropertyValue('color');
-    // console.log(rowColor);
     let rowColorHex = rgbToHex(rowColor);
-    // console.log(rowColor);
-    // console.log(rowColorHex);
 
     if (index !== -1) {
         
         resetChartStyles(newChart, index, "#ffff99", 10, 16); // changes chart styles to highlight the binding site
 
-        // if (surfaceVisible) {
-        //     viewer.removeAllSurfaces();
-        //     viewer.addSurface( // adds coloured surface to binding site
-        //         $3Dmol.SurfaceType.ISO,
-        //         {opacity: 0.9, color: "red"},
-        //         {resi: rowId, hetflag: false},
-        //         {resi: rowId, hetflag: false}
-        //         );
-        //     viewer.addSurface( // adds white surface to rest of protein
-        //         $3Dmol.SurfaceType.ISO,
-        //         {opacity: 0.7, color: 'white'},
-        //         {resi: rowId, invert: true, hetflag: false},
-        //         {hetflag: false},
-        //         );
-        // }
+
         let PDBResNum = Up2PdbDict[repPdbId][repPdbChainId][rowId];
 
         viewer.setStyle({resi: PDBResNum}, {cartoon:{style:'oval', color: rowColorHex, arrows: true}, stick:{color: rowColorHex}, });
