@@ -58,13 +58,32 @@ let chartConfig = {
         datasets: [
             {
                 label: "Binding sites",
-                radius: 12,
+                radius: function(context) { // radius will depend on whether the point is clicked or not
+                    if (context.dataIndex === clickedPointLabel) {
+                        return 16; // Custom radius for clicked point
+                    }
+                    return 12; // Default
+                },
+                // radius: 12,
                 hoverRadius: 16,
                 data: chartData[chartY],
                 backgroundColor: chartColors,
                 pointHoverBackgroundColor: chartColors,
-                borderColor: "black",
-                borderWidth: 2,
+                // borderColor: "black",
+                borderColor: function(context) { // border color will depend on whether the point is clicked or not
+                    if (context.dataIndex === clickedPointLabel) {
+                        return "#bfd4cb"; // border color for clicked point
+                    }
+                    return "black"; // Default 
+                },
+                // borderWidth: 2,
+                borderWidth: function(context) {
+                    // console.log(context.dataIndex, clickedPointLabel);
+                    if (context.dataIndex === clickedPointLabel) {
+                        return 10; // border width for clicked point
+                    }
+                    return 1; // Default
+                },
                 hoverBorderWidth: 10,
                 hoverBorderColor: "#ffff99",
                 pointHoverBorderColor: "#ffff99",

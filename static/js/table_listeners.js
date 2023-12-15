@@ -93,9 +93,11 @@ $('table#bss_table tbody').on('mouseover', 'tr', function () { // event listener
 
     if (classList.contains('clicked-row')) { // row is already clicked
         clearClickedRows();
+
         if (index !== -1) {
             resetChartStyles(myChart, index, "#ffff99", 10, 16); // changes chart styles to highlight the binding site
         }
+
         highlightTableRow(rowId); // highlights the table row of the binding site
 
         viewer.removeAllLabels(); // clearing labels from previous clicked site, unless still clicked
@@ -163,13 +165,14 @@ $('table#bss_table tbody').on('mouseover', 'tr', function () { // event listener
                 viewer.render({});
             }
             clearClickedRows();
+
             myChart.data.datasets[0].data.forEach(function(point, i) {
                 resetChartStyles(myChart, i, "black", 1, 12); // resets chart styles to default
             });
         }
 
         if (index !== -1) {
-            resetChartStyles(myChart, index, "#bfd4cb", 10, 16); // changes chart styles to highlight the binding site
+            resetChartStyles(myChart, index, "#bfd4cb", 10, 16); // changes chart styles to highlight the clicked binding site
         }
 
         clickTableRow(this);

@@ -27,7 +27,7 @@ document.getElementById('chartCanvas').addEventListener('mousemove', function(e)
                 
                 let clickedElement = clickedElements[0]; // clicked row
                 
-                let clickedPointLabel = chartData[chartLab][clickedElement.id]; // label of the clicked binding site row
+                clickedPointLabel = chartData[chartLab][clickedElement.id]; // label of the clicked binding site row
                 
                 let clickedPDBResNums = seg_ress_dict[clickedPointLabel].map(el => Up2PdbDict[repPdbId][repPdbChainId][el]); // PDB residue numbers of the clicked binding site
                 
@@ -74,6 +74,9 @@ document.getElementById('chartCanvas').addEventListener('mousemove', function(e)
             viewer.render({});
             
         }
+        // else {
+        //     console.log("THIS HAPPENS HERE!")
+        // }
     } else if (lastHoveredPoint1 !== null) { // when no data point is being hovered on, but the last hovered point is not null (recently hovered on a point)
         lastHoveredPoint1 = null;
 
@@ -83,7 +86,7 @@ document.getElementById('chartCanvas').addEventListener('mousemove', function(e)
 
             let clickedElement = clickedElements[0]; // clicked row
             
-            let clickedPointLabel = chartData[chartLab][clickedElement.id]; // label of the clicked binding site row
+            clickedPointLabel = chartData[chartLab][clickedElement.id]; // label of the clicked binding site row
             
             let clickedPDBResNums = seg_ress_dict[clickedPointLabel].map(el => Up2PdbDict[repPdbId][repPdbChainId][el]); // PDB residue numbers of the clicked binding site
             
@@ -101,6 +104,9 @@ document.getElementById('chartCanvas').addEventListener('mousemove', function(e)
                     }
                 }
             }
+
+            resetChartStyles(myChart, clickedPointLabel, "#bfd4cb", 10, 16); // changes chart styles to highlight the newly clicked site
+
         }
         else { // no row is clicked
 
@@ -123,6 +129,9 @@ document.getElementById('chartCanvas').addEventListener('mousemove', function(e)
     }
 });
 
+// create mouseout event for chart canvas
+
+
 document.getElementById('chartCanvas').addEventListener('click', function(e) { // when the cursor moves over the chart canvas
 
     var chartElement = myChart.getElementsAtEventForMode(e, 'nearest', { intersect: true }, true); // gets the chart element that is closest to the cursor
@@ -130,8 +139,11 @@ document.getElementById('chartCanvas').addEventListener('click', function(e) { /
     if (chartElement.length > 0) { // cursor is hovering over a data point
         
         let firstPoint = chartElement[0];
+
         let index = firstPoint.index; // index of the clicked data point
+
         let pointLabel = chartData[chartLab][index]; // label of the clicked data point
+
         let pointColor = chartColors[index]; // color of the clicked data point
 
         let fullPointLabel = segmentName + "_" + pointLabel;
@@ -165,7 +177,6 @@ document.getElementById('chartCanvas').addEventListener('click', function(e) { /
                 // Update the chart
                 newChart.update();
 
-
             },
             error: function(jqXHR, textStatus, errorThrown) {
                 console.error('Request failed:');
@@ -174,6 +185,30 @@ document.getElementById('chartCanvas').addEventListener('click', function(e) { /
                 console.error('Response:', jqXHR.responseText);
             },
         });
+
+        // I want to replace the binding site of the clicked row when a data point on this chart is clicked on
+
+        let clickedElements = document.getElementsByClassName("clicked-row");
+
+        if (clickedElements.length > 0) { // a row is clicked
+
+            let clickedElement = clickedElements[0]; // clicked row
+                
+            clickedPointLabel = chartData[chartLab][clickedElement.id]; // label of the clicked binding site row
+
+            clearClickedRows(); // clear the already clicked table row
+
+
+            resetChartStyles(myChart, clickedPointLabel, "black", 1, 12); // changes chart styles to default for the previously clicked site
+
+            
+
+        }
+
+        clickTableTowById(pointLabel) // click the table row of the newly clicked data point
+
+        resetChartStyles(myChart, pointLabel, "#bfd4cb", 10, 16); // changes chart styles to highlight the newly clicked site
+
     }
 });
 

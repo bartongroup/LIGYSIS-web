@@ -61,6 +61,13 @@ function clickTableRow(row) { // highlights the table row of the binding site
     row.classList.add("clicked-row"); 
 }
 
+function clickTableTowById(pointLabel) { // highlights the table row of the binding site
+    var row = document.getElementById(pointLabel);
+    if (row) {
+        row.classList.add("clicked-row"); 
+    }
+}
+
 function clearClickedRows() {   // clears the highlighted table row
     var clickedRow = document.querySelector(".clicked-row");
     if (clickedRow) {
