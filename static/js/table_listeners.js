@@ -3,7 +3,7 @@
 $('table#bss_table tbody').on('mouseover', 'tr', function () { // event listener for mouseover on table rows
 
     let rowId = this.id;  // gets the row id of the table row that is hovered over
-    let siteColor = chartColors[Number(rowId)];//.split("_").pop())]; // gets the binding site color of the table row that is hovered over
+    let siteColor = chartColors[Number(rowId)]; // gets the binding site color of the table row that is hovered over
 
     if (!this.classList.contains('clicked-row')) { // row is not clicked
 
@@ -15,42 +15,15 @@ $('table#bss_table tbody').on('mouseover', 'tr', function () { // event listener
             resetChartStyles(myChart, index, "#ffff99", 10, 16); // changes chart styles to highlight the binding site
         }
 
-        if (surfaceVisible) {
+        if (surfaceVisible) { // if surface is visible
             for (const [key, value] of Object.entries(surfsDict)) {
                 if (key == rowId) {
-                    viewer.setSurfaceMaterialStyle(value.surfid, {color: siteColor, opacity:0.9});
+                    viewer.setSurfaceMaterialStyle(value.surfid, {color: siteColor, opacity:0.9}); // change the surface color of the hovered binding site row
                 }
-                // else {
-                //     viewer.setSurfaceMaterialStyle(value.surfid, {color: 'white', opacity:0.0});
-                // }
             }
         }
     }
-
-    else {
-        console.log("We are hovering over a clicked row!");
-    //     if (surfaceVisible) {
-    //         for (const [key, value] of Object.entries(surfsDict)) {
-    //             if (key == rowId) {
-    //                 viewer.setSurfaceMaterialStyle(value.surfid, {color: siteColor, opacity:0.9});
-    //             }
-    //             // else {
-    //             //     viewer.setSurfaceMaterialStyle(value.surfid, {color: 'white', opacity:0.0});
-    //             // }
-    //         }
-    //     }
-    }
     
-    // if (surfaceVisible) {
-    //     for (const [key, value] of Object.entries(surfsDict)) {
-    //         if (key == rowId) {
-    //             viewer.setSurfaceMaterialStyle(value.surfid, {color: siteColor, opacity:0.9});
-    //         }
-    //         // else {
-    //         //     viewer.setSurfaceMaterialStyle(value.surfid, {color: 'white', opacity:0.0});
-    //         // }
-    //     }
-    // }
     let PDBResNums = seg_ress_dict[rowId].map(el => Up2PdbDict[repPdbId][repPdbChainId][el]);
 
     viewer.setStyle({resi: PDBResNums}, {cartoon:{style:'oval', color: siteColor, arrows: true}, stick:{color: siteColor}, });
@@ -58,7 +31,6 @@ $('table#bss_table tbody').on('mouseover', 'tr', function () { // event listener
     viewer.render({});
     
 }).on('mouseout', 'tr', function () {
-     // isRowHovered = false; // set isRowHovered to false when a table row is not hovered
 
     let rowId = Number(this.id);  // gets the row id of the table row that is hovered over
     let siteColor = chartColors[Number(rowId)];
@@ -81,7 +53,7 @@ $('table#bss_table tbody').on('mouseover', 'tr', function () { // event listener
             // console.log("Mouseout from point!");
             viewer.removeAllLabels(); // clearing labels from previous clicked site, unless still clicked
 
-            if (surfaceVisible) {
+            if (surfaceVisible) { // if surface is visible
                 for (const [key, value] of Object.entries(surfsDict)) {
                     if (key == "non_binding") {
                         viewer.setSurfaceMaterialStyle(surfsDict[key].surfid, {color: 'white', opacity:0.7});
@@ -254,7 +226,7 @@ $('table#bs_ress_table tbody').on('mouseover', 'tr', function () { // event list
 
         let PDBResNum = Up2PdbDict[repPdbId][repPdbChainId][rowId];
 
-        viewer.setStyle({resi: PDBResNum}, {cartoon:{style:'oval', color: rowColorHex, arrows: true}, stick:{color: rowColorHex}, });
+        viewer.setStyle({resi: PDBResNum}, {cartoon:{style:'oval', color: rowColorHex, arrows: true}, stick:{color: rowColorHex}, }); 
         viewer.render({});
     }
 }).on('mouseout', 'tr', function () { // event listener for mouseout on table rows

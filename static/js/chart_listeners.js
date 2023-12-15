@@ -2,64 +2,129 @@ var lastHoveredPoint1 = null;
 var newLastHoveredPoint = null;
 
 document.getElementById('chartCanvas').addEventListener('mousemove', function(e) { // when the cursor moves over the chart canvas
+
     var chartElement = myChart.getElementsAtEventForMode(e, 'nearest', { intersect: true }, true); // gets the chart element that is closest to the cursor
+
+    let clickedElements = document.getElementsByClassName("clicked-row"); // get all clicked rows (there should only be one)
     
     if (chartElement.length > 0) { // cursor is hovering over a data point
+
         let firstPoint = chartElement[0];
 
         if (lastHoveredPoint1 !== firstPoint.index) { // Check if the hovered point has changed
-            viewer.setStyle({}, {cartoon:{style:'oval', color: 'white', arrows: true},  });
+
             clearHighlightedRow();
+
             lastHoveredPoint1 = firstPoint.index;
 
             let pointLabel = chartData[chartLab][firstPoint.index];
-            // console.log(pointLabel);
-            let siteColor = chartColors[Number(pointLabel)];//.split("_").pop())];
+
+            let siteColor = chartColors[Number(pointLabel)];
 
             resetChartStyles(myChart, firstPoint.index, "#ffff99", 10, 16); // changes chart styles to highlight the binding site
 
-            if (surfaceVisible) {
-                for (const [key, value] of Object.entries(surfsDict)) {
-                    if (key == pointLabel) {
-                        viewer.setSurfaceMaterialStyle(value.surfid, {color: siteColor, opacity:0.9});
-                    }
-                    else {
-                        viewer.setSurfaceMaterialStyle(value.surfid, {color: 'white', opacity:0.0});
+            if (clickedElements.length > 0) { // a row is clicked
+                
+                let clickedElement = clickedElements[0]; // clicked row
+                
+                let clickedPointLabel = chartData[chartLab][clickedElement.id]; // label of the clicked binding site row
+                
+                let clickedPDBResNums = seg_ress_dict[clickedPointLabel].map(el => Up2PdbDict[repPdbId][repPdbChainId][el]); // PDB residue numbers of the clicked binding site
+                
+                let clickedSiteColor = chartColors[Number(clickedPointLabel)];
+                
+                viewer.setStyle({resi: clickedPDBResNums, invert: true, hetflag: false}, {cartoon:{style:'oval', color: 'white', arrows: true},  }); // remove sidechains and colour white everything but clicked site
+                
+                if (surfaceVisible) {
+
+                    for (const [key, value] of Object.entries(surfsDict)) {
+                        if (key == pointLabel) {
+                            viewer.setSurfaceMaterialStyle(value.surfid, {color: siteColor, opacity:0.9}); // show surface of hovered site visible at 90% opacity
+                        }
+                        else if (key == clickedPointLabel) {
+                            viewer.setSurfaceMaterialStyle(value.surfid, {color: clickedSiteColor, opacity:0.9}); // keep surface of clicked table row site visible at 90% opacity
+                        }
+                        else {
+                            viewer.setSurfaceMaterialStyle(value.surfid, {color: 'white', opacity:0.0}); // hide all other surfaces
+                        }
                     }
                 }
             }
 
+            else { // no row is clicked
+
+                viewer.setStyle({}, {cartoon:{style:'oval', color: 'white', arrows: true},  });
+
+                if (surfaceVisible) {
+                    for (const [key, value] of Object.entries(surfsDict)) {
+                        if (key == pointLabel) {
+                            viewer.setSurfaceMaterialStyle(value.surfid, {color: siteColor, opacity:0.9});
+                        }
+                        else {
+                            viewer.setSurfaceMaterialStyle(value.surfid, {color: 'white', opacity:0.0});
+                        }
+                    }
+                }
+            }
+
+            highlightTableRow(pointLabel); 
+
             let PDBResNums = seg_ress_dict[pointLabel].map(el => Up2PdbDict[repPdbId][repPdbChainId][el]);
             viewer.setStyle({resi: PDBResNums}, {cartoon:{style:'oval', color: siteColor, arrows: true}, stick:{color: siteColor}, });
             viewer.render({});
-            highlightTableRow(pointLabel); 
-            //isRowHovered = true;
+            
         }
     } else if (lastHoveredPoint1 !== null) { // when no data point is being hovered on, but the last hovered point is not null (recently hovered on a point)
         lastHoveredPoint1 = null;
 
         clearHighlightedRow();
-        //isRowHovered = false;
-        viewer.setStyle({}, {cartoon: {style:'oval', color: 'white', arrows: true}});
-        if (surfaceVisible) {
-            console.log("Mouseout from point!")
-            if (surfaceVisible) {
+
+        if (clickedElements.length > 0) { // a row is clicked
+
+            let clickedElement = clickedElements[0]; // clicked row
+            
+            let clickedPointLabel = chartData[chartLab][clickedElement.id]; // label of the clicked binding site row
+            
+            let clickedPDBResNums = seg_ress_dict[clickedPointLabel].map(el => Up2PdbDict[repPdbId][repPdbChainId][el]); // PDB residue numbers of the clicked binding site
+            
+            let clickedSiteColor = chartColors[Number(clickedPointLabel)]; // color of the clicked binding site
+
+            viewer.setStyle({resi: clickedPDBResNums, invert: true, hetflag: false}, {cartoon:{style:'oval', color: 'white', arrows: true},  }); // remove sidechains and colour white everything but clicked site
+
+            if (surfaceVisible) { // if surface is visible
                 for (const [key, value] of Object.entries(surfsDict)) {
-                    if (key == "non_binding") {
-                        viewer.setSurfaceMaterialStyle(surfsDict[key].surfid, {color: 'white', opacity:0.7});
+                    if (key == clickedPointLabel) { 
+                        viewer.setSurfaceMaterialStyle(surfsDict[key].surfid, {color: clickedSiteColor, opacity:0.9}); // keep surface of clicked site visible at 90% opacity
                     }
                     else {
-                        let siteColor = chartColors[Number(key.split("_").pop())];
-                        viewer.setSurfaceMaterialStyle(surfsDict[key].surfid, {color: siteColor, opacity:0.8});
+                        viewer.setSurfaceMaterialStyle(surfsDict[key].surfid, {color: 'white', opacity:0.0}); // hide all other surfaces
                     }
                 }
             }
         }
+        else { // no row is clicked
+
+            viewer.setStyle({}, {cartoon: {style:'oval', color: 'white', arrows: true}}); // remove sidechains and colour white everything
+
+            if (surfaceVisible) {
+                for (const [key, value] of Object.entries(surfsDict)) {
+                    if (key == "non_binding") {
+                        viewer.setSurfaceMaterialStyle(surfsDict[key].surfid, {color: 'white', opacity:0.7}); // keep non-binding surface visible at 70% opacity
+                    }
+                    else {
+                        let siteColor = chartColors[Number(key.split("_").pop())];
+                        viewer.setSurfaceMaterialStyle(surfsDict[key].surfid, {color: siteColor, opacity:0.8}); // keep binding surfaces visible at 80% opacity
+                    }
+                }
+            }
+        }
+        
         viewer.render({});
     }
 });
 
 document.getElementById('chartCanvas').addEventListener('click', function(e) { // when the cursor moves over the chart canvas
+
     var chartElement = myChart.getElementsAtEventForMode(e, 'nearest', { intersect: true }, true); // gets the chart element that is closest to the cursor
     
     if (chartElement.length > 0) { // cursor is hovering over a data point
@@ -70,12 +135,6 @@ document.getElementById('chartCanvas').addEventListener('click', function(e) { /
         let pointColor = chartColors[index]; // color of the clicked data point
 
         let fullPointLabel = segmentName + "_" + pointLabel;
-
-        // siteIsClicked = true;
-        // Add the clicked point to the list
-        // clickedPoints.push(index);
-
-        // resetChartStyles(myChart, index, "#50C878", 10, 16); // changes chart styles to highlight the binding site
 
         $.ajax({ // AJAX request to get the table data from the server
             type: 'POST', // POST request
@@ -116,20 +175,20 @@ document.getElementById('chartCanvas').addEventListener('click', function(e) { /
             },
         });
     }
-    // else {
-
-    // }
 });
 
 document.getElementById('newChartCanvas').addEventListener('mousemove', function(e) { // when the cursor moves over the chart canvas
+
     var newChartElement = newChart.getElementsAtEventForMode(e, 'nearest', { intersect: true }, true); // gets the chart element that is closest to the cursor
     
     if (newChartElement.length > 0) { // cursor is hovering over a data point
+
         let newFirstPoint = newChartElement[0];
         
         const pointColor = newChart.data.datasets[0].backgroundColor;
 
         if (newLastHoveredPoint !== newFirstPoint.index) { // Check if the hovered point has changed
+
             newLastHoveredPoint = newFirstPoint.index;
 
             let newPointLabel = newChartData[newChartLab][newFirstPoint.index];
@@ -137,24 +196,6 @@ document.getElementById('newChartCanvas').addEventListener('mousemove', function
             viewer.setStyle({}, {cartoon: {style:'oval', color: 'white', arrows: true}}); // this is done so only a single point is highlighted when hovered on (some are really close.)
             
             clearHighlightedRow();
-            
-            // isRowHovered = false;
-
-            // if (surfaceVisible) {
-            //     viewer.removeAllSurfaces();
-            //     viewer.addSurface( // adds coloured surface to binding site
-            //         $3Dmol.SurfaceType.ISO,
-            //         {opacity: 0.9, color: pointColor},
-            //         {resi: newPointLabel, hetflag: false},
-            //         {resi: newPointLabel, hetflag: false}
-            //         );
-            //     viewer.addSurface( // adds white surface to rest of protein
-            //         $3Dmol.SurfaceType.ISO,
-            //         {opacity: 0.7, color: 'white'},
-            //         {resi: newPointLabel, invert: true, hetflag: false},
-            //         {hetflag: false},
-            //     );
-            // }
 
             let PDBResNum = Up2PdbDict[repPdbId][repPdbChainId][newPointLabel];
 
@@ -163,37 +204,16 @@ document.getElementById('newChartCanvas').addEventListener('mousemove', function
             viewer.render({});
 
             highlightTableRow(newPointLabel); 
-            // isRowHovered = true;
+            
         }
     } else if (newLastHoveredPoint !== null) { // when no data point is being hovered on, but the last hovered point is not null (recently hovered on a point)
+
         newLastHoveredPoint = null;
 
         clearHighlightedRow();
 
-        // isRowHovered = false;
-
-        // if (surfaceVisible) {
-        //     viewer.removeAllSurfaces();
-        //     viewer.addSurface(
-        //         $3Dmol.SurfaceType.ISO,
-        //         {opacity: 0.7, color: 'white'},
-        //         {hetflag: false},
-        //         {hetflag: false}
-        //     );
-        // }
         viewer.setStyle({}, {cartoon: {style:'oval', color: 'white', arrows: true}});
 
         viewer.render({});
     }
 });
-
-// document.getElementById('newChartCanvas').addEventListener('mouseout', function(e) { // when the cursor mopves out of the chart canvas
-//     if (newLastHoveredPoint !== null) {
-//         newLastHoveredPoint = null;
-
-//         clearHighlightedRow();
-
-//         // isRowHovered = false;
-        
-//     }
-// });
