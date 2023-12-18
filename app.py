@@ -1,13 +1,15 @@
 ### PACKAGE IMPORTS ###
 
 import os
+import io
+import csv
 import pickle
 import numpy as np
 import pandas as pd
 
-from flask import Flask, render_template, url_for, request, redirect, jsonify
+from flask import Flask, render_template, url_for, request, redirect, jsonify, Response
 
-from config import DATA_FOLDER, SITE_TABLES_FOLDER, RES_TABLES_FOLDER, REP_STRUCS_FOLDER, BS_RESS_FOLDER, MAPPINGS_FOLDER, STATS_FOLDER, ENTRY_NAMES_FOLDER
+from config import BASE_DIR, DATA_FOLDER, SITE_TABLES_FOLDER, RES_TABLES_FOLDER, REP_STRUCS_FOLDER, BS_RESS_FOLDER, MAPPINGS_FOLDER, STATS_FOLDER, ENTRY_NAMES_FOLDER
 
 ### FUNCTIONS ###
 
@@ -196,6 +198,32 @@ def get_table():
     #print(site_data)
 
     return jsonify(site_data)
+
+@app.route('/download-csv')
+def download_csv():
+
+    filepath = request.args.get('filepath', default=None, type=str)
+
+    filepath = filepath.lstrip('/')
+
+    if filepath is None:
+        return "Filepath not provided", 400
+    
+    else:
+    
+        full_path = os.path.join(BASE_DIR, filepath)
+
+        df = pd.read_pickle(full_path)
+
+        output = df.to_csv(index=False)
+
+        filenameout = filepath.split("/")[-1].split(".")[0] + ".csv"
+
+        return Response(
+            output,
+            mimetype="text/csv",
+            headers={"Content-disposition": "attachment; filename={}".format(filenameout)},
+        )
 
 ### LAUNCHING SERVER ###
 

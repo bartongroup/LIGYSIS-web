@@ -83,19 +83,17 @@ function saveImage(canvasId, filename) {
     link.click();
 }
 
-function downloadFile(filename) {
-    // Specify the path to the file
-
-    // Create an anchor element and trigger download
+function downloadFile(filename) { // downloads the file
     var link = document.createElement('a');
     link.href = filename;
     link.download = filename.split('/').pop();  // This will suggest the filename to save as
-    // document.body.appendChild(link);  // Append to body
     link.click();  // Simulate click
-    // document.body.removeChild(link);  // Remove the link from DOM
 }
 
-
-$(document).ready(function(){
+$(document).ready(function(){ // enables tooltips
     $('[data-toggle="tooltip"]').tooltip();   
 });
+
+function downloadCSV(filepath) { // downloads the file in CSV format by redirecting to the download-csv route
+    window.location.href = '/download-csv?filepath=' + filepath;
+}

@@ -11,3 +11,12 @@ $( function() {
         });
     };
 } );
+
+// submits example UniProt ID in case no ID is introduced by the user
+
+document.getElementById('UniProtIdSubmit').addEventListener('click', function(event) {
+    var inputField = document.getElementById('autocomplete');
+    if (inputField.value === '') {
+        inputField.value = inputField.placeholder;
+    }
+});
