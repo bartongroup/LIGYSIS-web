@@ -1,6 +1,6 @@
 function toggleSurfaceVisibility() {
     var button = document.getElementById('surfButton');
-    if (surfaceVisible) {
+    if (surfaceVisible) { // hide all surfaces
         for (const [key, value] of Object.entries(surfsDict)) {
             if (key == "non_binding") {
                 viewer.setSurfaceMaterialStyle(surfsDict[key].surfid, {color: 'white', opacity:0.0});
@@ -12,16 +12,28 @@ function toggleSurfaceVisibility() {
         }
         button.value = 'Surface OFF'; // Change the button text
         button.style = "font-weight: bold; color: #674ea7;";
+        
     }
     else {
-        // Create and add the surface
-        for (const [key, value] of Object.entries(surfsDict)) {
-            if (key == "non_binding") {
-                viewer.setSurfaceMaterialStyle(surfsDict[key].surfid, {color: 'white', opacity:0.7});
-            }
-            else {
-                let siteColor = chartColors[Number(key.split("_").pop())];
-                viewer.setSurfaceMaterialStyle(surfsDict[key].surfid, {color: siteColor, opacity:0.8});
+        // check if any rows are clicked
+        let clickedElements = document.getElementsByClassName("clicked-row");
+        if (clickedElements.length > 0) { // show surface only of clicked row
+            let clickedElement = clickedElements[0];
+            let clickedElementId = clickedElement.id;
+            let siteColor = chartColors[Number(clickedElementId.split("_").pop())];
+            let surfid = surfsDict[clickedElementId].surfid;
+            viewer.setSurfaceMaterialStyle(surfid, {color: siteColor, opacity:0.9}); // show ONLY surface of clicked row
+        }
+        else {
+            // change surface opacity
+            for (const [key, value] of Object.entries(surfsDict)) {
+                if (key == "non_binding") {
+                    viewer.setSurfaceMaterialStyle(surfsDict[key].surfid, {color: 'white', opacity:0.7});
+                }
+                else {
+                    let siteColor = chartColors[Number(key.split("_").pop())];
+                    viewer.setSurfaceMaterialStyle(surfsDict[key].surfid, {color: siteColor, opacity:0.8});
+                }
             }
         }
         button.value = "Surface ON"; // Change the button text

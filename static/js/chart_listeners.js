@@ -129,9 +129,6 @@ document.getElementById('chartCanvas').addEventListener('mousemove', function(e)
     }
 });
 
-// create mouseout event for chart canvas
-
-
 document.getElementById('chartCanvas').addEventListener('click', function(e) { // when the cursor moves over the chart canvas
 
     var chartElement = myChart.getElementsAtEventForMode(e, 'nearest', { intersect: true }, true); // gets the chart element that is closest to the cursor
@@ -198,16 +195,99 @@ document.getElementById('chartCanvas').addEventListener('click', function(e) { /
 
             clearClickedRows(); // clear the already clicked table row
 
-
-            resetChartStyles(myChart, clickedPointLabel, "black", 1, 12); // changes chart styles to default for the previously clicked site
-
+            resetChartStyles(myChart, clickedPointLabel, "black", 1, 12); // changes chart styles to default for the previously clicked site  
             
+            var clickedElementId = clickedElement.id;
+
+            let PDBResNumsClicked = seg_ress_dict[clickedElementId].map(el => Up2PdbDict[repPdbId][repPdbChainId][el]);
+
+            viewer.setStyle({resi: PDBResNumsClicked}, {cartoon: {style:'oval', color: 'white', arrows: true}});
+
+            if (surfaceVisible) {
+
+                for (const [key, value] of Object.entries(surfsDict)) {
+                    if (key == clickedElementId) {
+                        viewer.setSurfaceMaterialStyle(value.surfid, {color: "white", opacity:0.0});
+                    }
+                }
+            }
+
+            if (labelsVisible) {
+                viewer.removeAllLabels();
+            }
+
+            viewer.render({});
+
+            // check is clicked row is the same as the newly clicked data point
+
+            if (clickedPointLabel == pointLabel) { // same binding site is clicked
+
+                clickedPointLabel = null; // reset clickedPointLabel
+
+            }
+
+            else {
+
+                clickTableTowById(pointLabel) // click the table row of the newly clicked data point
+
+                resetChartStyles(myChart, pointLabel, "#bfd4cb", 10, 16); // changes chart styles to highlight the newly clicked site
+
+                let PDBResNums = seg_ress_dict[index]
+                .filter(el => Up2PdbDict[repPdbId][repPdbChainId].hasOwnProperty(el)) // this accounts not for missing residues in the structure (unresolved)
+                .map(el => Up2PdbDict[repPdbId][repPdbChainId][el]);
+
+                if (labelsVisible) {
+                    for (PDBResNum of PDBResNums) {
+                        let resSel = {resi: PDBResNum}
+                        let resName = viewer.selectedAtoms(resSel)[0].resn
+                        // console.log(resSel, resName);
+                        viewer.addLabel(
+                            resName + String(Pdb2UpDict[repPdbId][repPdbChainId][PDBResNum]),
+                            {
+                                alignment: 'center', backgroundColor: 'white', backgroundOpacity: 1,
+                                borderColor: 'black', borderOpacity: 1, borderThickness: 2,
+                                font: 'Arial', fontColor: pointColor, fontOpacity: 1, fontSize: 12,
+                                inFront: true, screenOffset: [0, 0, 0], showBackground: true
+                            },
+                            resSel,
+                            false,
+                        );
+                    }
+                }
+
+            }
+        }
+        else { // no row is clicked
+
+            clickTableTowById(pointLabel) // click the table row of the newly clicked data point
+
+            resetChartStyles(myChart, pointLabel, "#bfd4cb", 10, 16); // changes chart styles to highlight the newly clicked site
+
+            let PDBResNums = seg_ress_dict[index]
+            .filter(el => Up2PdbDict[repPdbId][repPdbChainId].hasOwnProperty(el)) // this accounts not for missing residues in the structure (unresolved)
+            .map(el => Up2PdbDict[repPdbId][repPdbChainId][el]);
+
+            if (labelsVisible) {
+                viewer.removeAllLabels(); // clearing labels from previous clicked site
+                for (PDBResNum of PDBResNums) {
+                    let resSel = {resi: PDBResNum}
+                    let resName = viewer.selectedAtoms(resSel)[0].resn
+                    // console.log(resSel, resName);
+                    viewer.addLabel(
+                        resName + String(Pdb2UpDict[repPdbId][repPdbChainId][PDBResNum]),
+                        {
+                            alignment: 'center', backgroundColor: 'white', backgroundOpacity: 1,
+                            borderColor: 'black', borderOpacity: 1, borderThickness: 2,
+                            font: 'Arial', fontColor: pointColor, fontOpacity: 1, fontSize: 12,
+                            inFront: true, screenOffset: [0, 0, 0], showBackground: true
+                        },
+                        resSel,
+                        false,
+                    );
+                }
+            }
 
         }
-
-        clickTableTowById(pointLabel) // click the table row of the newly clicked data point
-
-        resetChartStyles(myChart, pointLabel, "#bfd4cb", 10, 16); // changes chart styles to highlight the newly clicked site
 
     }
 });

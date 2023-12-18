@@ -92,6 +92,7 @@ $('table#bss_table tbody').on('mouseover', 'tr', function () { // event listener
     
 
     if (classList.contains('clicked-row')) { // row is already clicked
+        
         clearClickedRows();
 
         if (index !== -1) {
@@ -318,7 +319,6 @@ document.addEventListener('DOMContentLoaded', function() {
 
     table.parentElement.style.maxHeight = maxHeight + 'px';
 });
-
 
 function rgbToHex(rgb) {
     const rgbValues = rgb.match(/^rgba?[\s+]?[(]?(\d+)[,\s]+(\d+)[,\s]+(\d+)[,\s/]*(?:[\d+.]*)?[)]?$/i);
