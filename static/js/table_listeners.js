@@ -133,15 +133,16 @@ $('table#bss_table tbody').on('mouseover', 'tr', function () { // event listener
                     $.each(keyOrder, function(j, key) { // Second loop to iterate through keys (columns)
                         newRow.append('<td class="table__cell">' + response[key][i] + '</td>');
                     });
+                    newRow[0].style.setProperty('color', siteColor, "important");
                     newRow[0].style.setProperty('--bs-table-color', siteColor);
                     newRow[0].style.setProperty('--bs-table-hover-color', siteColor);
-                    // newRow.css('color', pointColor); // Set the font color of the new row
                     tableBody.append(newRow); // Append the new row to the table body
                 }
 
                 newChartData = response;
                 newChart.data.datasets[0].data = newChartData[newChartY];  // New data
                 newChart.data.datasets[0].backgroundColor = siteColor;
+                newChart.data.datasets[0].pointHoverBackgroundColor = siteColor;
                 newChart.data.labels = newChartData[newChartX];  // New labels (if needed)
 
                 // Update the chart
@@ -223,42 +224,62 @@ $('table#bs_ress_table tbody').on('mouseover', 'tr', function () { // event list
     let rowColor = window.getComputedStyle(this).getPropertyValue('color');
     let rowColorHex = rgbToHex(rowColor);
 
+    // console.log(rowColorHex);
+    // console.log(rowColor);
+
     if (index !== -1) {
         
         resetChartStyles(newChart, index, "#ffff99", 10, 16); // changes chart styles to highlight the binding site
 
-
         let PDBResNum = Up2PdbDict[repPdbId][repPdbChainId][rowId];
 
         viewer.setStyle({resi: PDBResNum}, {cartoon:{style:'oval', color: rowColorHex, arrows: true}, stick:{color: rowColorHex}, }); 
+        
+        if (labelsVisible) {
+            let resSel = {resi: PDBResNum}
+            let resName = viewer.selectedAtoms(resSel)[0].resn
+            viewer.addLabel(
+                resName + String(Pdb2UpDict[repPdbId][repPdbChainId][PDBResNum]),
+                {
+                    alignment: 'center', backgroundColor: 'white', backgroundOpacity: 1,
+                    borderColor: 'black', borderOpacity: 1, borderThickness: 2,
+                    font: 'Arial', fontColor: rowColorHex, fontOpacity: 1, fontSize: 12,
+                    inFront: true, screenOffset: [0, 0, 0], showBackground: true
+                },
+                resSel,
+                true,
+            );
+        }
+
         viewer.render({});
     }
+
 }).on('mouseout', 'tr', function () { // event listener for mouseout on table rows
+
     let rowId = Number(this.id);  // gets the row id of the table row that is hovered over
+
     let index = newChartData[newChartLab].indexOf(rowId); // gets the index of the row id in the chart data
 
-    // newChart.data.datasets[0].data.forEach(function(point, i) {
-        
+    resetChartStyles(newChart, index, "black", 2, 8); // resets chart styles to default
+
+    let clickedElements = document.getElementsByClassName("clicked-row");
+
+    if (clickedElements.length == 0) {
+
+        let PDBResNum = Up2PdbDict[repPdbId][repPdbChainId][rowId];
+
+        viewer.setStyle({resi: PDBResNum}, {cartoon: {style:'oval', color: 'white', arrows: true}});
+
+        if (labelsVisible) {
+            viewer.removeAllLabels(); // clearing labels from previous clicked site, unless still clicked
+        }
+
+        viewer.render({});
+    }
+
     
-        resetChartStyles(newChart, index, "black", 2, 8); // resets chart styles to default
-
-        // if (surfaceVisible) {
-        //     viewer.removeAllSurfaces();
-        //     viewer.addSurface(
-        //         $3Dmol.SurfaceType.ISO,
-        //         {opacity: 0.7, color: 'white'},
-        //         {hetflag: false},
-        //         {hetflag: false}
-        //     );
-        // }
-
-    let PDBResNum = Up2PdbDict[repPdbId][repPdbChainId][rowId];
-
-    viewer.setStyle({resi: PDBResNum}, {cartoon: {style:'oval', color: 'white', arrows: true}});
-    viewer.render({});
-    //});
+    
 });
-
 
 // THIS IS THE EVENT LISTENER THAT CHANGES THE AXES OF THE BINDING SITES PLOTS ACCORDING TO DROPDOWNS
 

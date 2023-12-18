@@ -160,15 +160,16 @@ document.getElementById('chartCanvas').addEventListener('click', function(e) { /
                     $.each(keyOrder, function(j, key) { // Second loop to iterate through keys (columns)
                         newRow.append('<td class="table__cell">' + response[key][i] + '</td>');
                     });
+                    newRow[0].style.setProperty('color', pointColor, "important");
                     newRow[0].style.setProperty('--bs-table-color', pointColor);
                     newRow[0].style.setProperty('--bs-table-hover-color', pointColor);
-                    // newRow.css('color', pointColor); // Set the font color of the new row
                     tableBody.append(newRow); // Append the new row to the table body
                 }
 
                 newChartData = response;
                 newChart.data.datasets[0].data = newChartData[newChartY];  // New data
                 newChart.data.datasets[0].backgroundColor = pointColor;
+                newChart.data.datasets[0].pointHoverBackgroundColor = pointColor;
                 newChart.data.labels = newChartData[newChartX];  // New labels (if needed)
 
                 // Update the chart
@@ -295,6 +296,8 @@ document.getElementById('chartCanvas').addEventListener('click', function(e) { /
 document.getElementById('newChartCanvas').addEventListener('mousemove', function(e) { // when the cursor moves over the chart canvas
 
     var newChartElement = newChart.getElementsAtEventForMode(e, 'nearest', { intersect: true }, true); // gets the chart element that is closest to the cursor
+
+    let clickedElements = document.getElementsByClassName("clicked-row");
     
     if (newChartElement.length > 0) { // cursor is hovering over a data point
 
@@ -308,17 +311,37 @@ document.getElementById('newChartCanvas').addEventListener('mousemove', function
 
             let newPointLabel = newChartData[newChartLab][newFirstPoint.index];
 
-            viewer.setStyle({}, {cartoon: {style:'oval', color: 'white', arrows: true}}); // this is done so only a single point is highlighted when hovered on (some are really close.)
-            
             clearHighlightedRow();
 
-            let PDBResNum = Up2PdbDict[repPdbId][repPdbChainId][newPointLabel];
-
-            viewer.setStyle({resi: PDBResNum}, {cartoon:{style:'oval', color: pointColor, arrows: true}, stick:{color: pointColor}, });
-            
-            viewer.render({});
-
             highlightTableRow(newPointLabel); 
+
+            if (clickedElements.length == 0) { // no row is clicked
+                
+                viewer.setStyle({}, {cartoon: {style:'oval', color: 'white', arrows: true}}); // this is done so only a single point is highlighted when hovered on (some are really close.)
+                
+                let PDBResNum = Up2PdbDict[repPdbId][repPdbChainId][newPointLabel];
+
+                viewer.setStyle({resi: PDBResNum}, {cartoon:{style:'oval', color: pointColor, arrows: true}, stick:{color: pointColor}, });
+
+                if (labelsVisible) {
+                    viewer.removeAllLabels(); // clearing labels from previous hovered residue (residues might be almost superposed in plot. Hiding it so only one is visible)
+                    let resSel = {resi: PDBResNum}
+                    let resName = viewer.selectedAtoms(resSel)[0].resn
+                    viewer.addLabel(
+                        resName + String(Pdb2UpDict[repPdbId][repPdbChainId][PDBResNum]),
+                        {
+                            alignment: 'center', backgroundColor: 'white', backgroundOpacity: 1,
+                            borderColor: 'black', borderOpacity: 1, borderThickness: 2,
+                            font: 'Arial', fontColor: pointColor, fontOpacity: 1, fontSize: 12,
+                            inFront: true, screenOffset: [0, 0, 0], showBackground: true
+                        },
+                        resSel,
+                        true,
+                    );
+                }
+
+                viewer.render({});
+            }
             
         }
     } else if (newLastHoveredPoint !== null) { // when no data point is being hovered on, but the last hovered point is not null (recently hovered on a point)
@@ -327,8 +350,15 @@ document.getElementById('newChartCanvas').addEventListener('mousemove', function
 
         clearHighlightedRow();
 
-        viewer.setStyle({}, {cartoon: {style:'oval', color: 'white', arrows: true}});
+        if (clickedElements.length == 0) {
 
-        viewer.render({});
+            viewer.setStyle({}, {cartoon: {style:'oval', color: 'white', arrows: true}});
+
+            if (labelsVisible) {
+                viewer.removeAllLabels(); // clearing labels from previously hovered on residue
+            }
+
+            viewer.render({});
+        }
     }
 });
