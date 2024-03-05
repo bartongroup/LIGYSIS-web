@@ -11,16 +11,16 @@
 <style>
     .mol-container {
       width: 100%;
-      height: 800px;
+      height: 100%;
       position: absolute;
     }
 </style>
 
 <script>
     let element = document.querySelector('#container-01');
-    let config = { backgroundColor: 'white' };
+    let config = { backgroundColor: 'white' , keepH: false};
     let viewer = $3Dmol.createViewer( element, config );
-    let pdbUri = '/static/experiment/5rfa-assembly-1.cif';
+    let pdbUri = '/static/experiment/7sgw-assembly-1.cif';
     jQuery.ajax( pdbUri, { 
       success: function(data) {
         let v = viewer;
@@ -29,17 +29,15 @@
                     style:'oval', color: 'white', arrows: true,
                 }});  /* style all atoms */
                                   /* slight zoom */
-        viewer.setStyle({resn:'JGY',},{stick:{colorscheme:"greenCarbon"}});
+        <!-- viewer.setStyle({resn:'OEI',},{stick:{colorscheme:"greenCarbon"}}); -->
+        viewer.setStyle({resn:'L30',},{stick:{colorscheme:"greenCarbon"}});
+        viewer.setStyle({resn:'ZN',},{stick:{colorscheme:"greenCarbon"}});
         viewer.setStyle(
-            {resi:[6, 8, 118, 123, 127, 141, 295, 298, 299]},
-            {stick:{color:"white",thickness:1.0}, cartoon:{stlye:"oval", arrows: true, color:"white",}
+            <!-- {resi:[28, 41, 45, 109, 111]}, -->
+            {resi:[164, 189, 192, 208, 224, 226, 264, 268, 269]},
+            {stick:{color:"red",thickness:1.0}, cartoon:{stlye:"oval", arrows: true, color:"red",}
         });
-
-        
-        
-
-         
-
+        viewer.addStyle({elem:"H"},{stick:{hidden:true},sphere:{hidden:true}});
         v.zoomTo();                                      /* set camera */
         v.render();                                      /* render scene */
         v.zoom(1.2, 1000); 
@@ -48,7 +46,6 @@
         console.error( "Failed to load PDB " + pdbUri + ": " + err );
       },
     });
-    
 </script>
 
 
