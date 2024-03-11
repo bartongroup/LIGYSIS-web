@@ -38,6 +38,8 @@
 
     let surfaceVisible = false;
     let labelsVisible = false;
+    let watersVisible = false;
+    let ligandsVisible = false;
     let sitePointClicked = false;
     let siteRowClicked = false;
     let wholeSurf;
@@ -94,7 +96,7 @@
             <div class="row mb-3 custom-padding">
                 <div style="border: 2px solid black;" class="d-flex px-0">
                     <div id="container-01" style="height: 598px; width: 598px;" class="applet-border d-flex">
-                        <script src="/static/js/3DMol_applet.js"></script>
+                        <script src="/static/js/3DMol_applet_DEV.js"></script>
                     </div>
                 </div>
             </div>
@@ -106,6 +108,14 @@
                 <div class="col-6 col-md-3 col-lg-6 col-xl-3 d-flex justify-content-center mb-2 mb-md-0 mb-lg-2 mb-xl-0">
                     <input id="labelButton" type="button" value="Labels OFF" style="font-weight: bold; color: #674ea7;"
                     onclick="toggleLabelsVisibility()"></input>
+                </div>
+                <div class="col-6 col-md-3 col-lg-6 col-xl-3 d-flex justify-content-center mb-2 mb-md-0 mb-lg-2 mb-xl-0">
+                    <input id="ligandButton" type="button" value="Ligands OFF" style="font-weight: bold; color:  #674ea7;"
+                    onclick="toggleLigandsVisibility()"></input>
+                </div>
+                <div class="col-6 col-md-3 col-lg-6 col-xl-3 d-flex justify-content-center mb-2 mb-md-0 mb-lg-2 mb-xl-0">
+                    <input id="waterButton" type="button" value="Waters OFF" style="font-weight: bold; color:  #674ea7;"
+                    onclick="toggleWatersVisibility()"></input>
                 </div>
                 <div class="col-6 col-md-3 col-lg-6 col-xl-3 d-flex justify-content-center">
                     <input id="saveImageButton" type="button" value="Save Image" style="color: black;"

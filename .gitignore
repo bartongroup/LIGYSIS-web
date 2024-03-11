@@ -40,3 +40,5 @@ static/data/biolip/split/structures/pdb/
 
 static/data/biolip/split/sum_stats/*
 !static/data/biolip/split/sum_stats/P00517_1_stats.pkl
+
+static/data/P00517/

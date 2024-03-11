@@ -41,6 +41,26 @@
     viewer.zoomTo(); 
     viewer.render(); 
   }
+
+  function showHoverLabel(atom, viewer) {
+    if(!atom.label) {
+      atom.label = viewer.addLabel(
+        modelOrderRev[atom.model] + " " + atom.chain + " " + atom.resn + " " + atom.resi + " " + atom.atom,
+        {position: atom, backgroundColor: 'mintcream', fontColor:'black', borderColor: 'black', borderThickness: 2}
+      );
+    }
+  }
+
+  function removeHoverLabel(atom) {
+    if(atom.label) {
+      viewer.removeLabel(atom.label);
+      delete atom.label;
+    }
+  }
+
+
+
+
   
   let element = document.querySelector('#container-01');
   let config = { backgroundColor: 'white', keepH: false };
@@ -82,20 +102,8 @@
           viewer.addStyle({resn: 'MN'}, {stick: {hidden: false, radius: 0.25, color:"orange"}});
 
           viewer.setHoverable({}, true, 
-            function(atom,viewer,event,container) {
-              if(!atom.label) {
-                atom.label = viewer.addLabel(
-                  modelOrderRev[atom.model] + " " + atom.chain + " " + atom.resn + " " + atom.resi + " " + atom.atom,
-                  {position: atom, backgroundColor: 'mintcream', fontColor:'black', borderColor: 'black', borderThickness: 2}
-                );
-              }
-            },
-            function(atom) {
-              if(atom.label) {
-                viewer.removeLabel(atom.label);
-                delete atom.label;
-              }
-            }
+            showHoverLabel,
+            removeHoverLabel,
           );
 
           viewer.zoomTo(); 

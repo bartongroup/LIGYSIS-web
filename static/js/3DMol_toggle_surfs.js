@@ -85,6 +85,61 @@ function toggleLabelsVisibility() {
         }
     }
     labelsVisible = !labelsVisible; // Toggle the visibility state
+
+}
+
+function toggleWatersVisibility() {
+    var button = document.getElementById('waterButton');
+    if (watersVisible) {
+        button.value = 'Waters OFF'; // Change the button text
+        button.style = "font-weight: bold; color: #674ea7;";
+        viewer.addStyle({resn: "HOH"}, {sphere: {hidden: true, color: "gold", radius: 0.20}});
+        console.log("Waters hidden!");
+    }
+    else {
+        button.value = 'Waters ON'; // Change the button text
+        button.style = "font-weight: bold; color:#B22222;";
+        viewer.addStyle({resn: "HOH"}, {sphere: {hidden: false, color: "gold", radius: 0.20}});
+        console.log("Waters shown!");
+    }
+    watersVisible = !watersVisible;
+    viewer.render();
+}
+
+
+function toggleLigandsVisibility() {
+    var button = document.getElementById('ligandButton');
+    if (ligandsVisible) {
+        button.value = 'Ligands OFF'; // Change the button text
+        button.style = "font-weight: bold; color: #674ea7;";
+
+        viewer.addStyle({and:[{hetflag: true}, {not:{resn: "HOH"}}, {properties:{ bs: -1}}]}, {stick: {hidden: true, colorscheme: myScheme, radius: 0.25}});
+        viewer.addStyle({and:[{hetflag: true}, {not:{resn: "HOH"}}, {properties:{ bs: -1}}]}, {sphere: {hidden: true, colorscheme: myScheme, radius: 0.20}});
     
-    // viewer.render();
+    
+        viewer.addStyle({and:[{hetflag: true}, {not:{resn: "HOH"}}, {not: {properties:{ bs: -1}}}]}, {stick: {hidden: true, colorscheme: myScheme, radius: 0.25}});
+        viewer.addStyle({and:[{hetflag: true}, {not:{resn: "HOH"}}, {not: {properties:{ bs: -1}}}]}, {sphere: {hidden: true, colorscheme: myScheme, radius: 0.20}}); 
+    
+        console.log("Ligands hidden!");
+    }
+    else {
+        button.value = 'Ligands ON'; // Change the button text
+        button.style = "font-weight: bold; color:#B22222;";
+        // viewer.addStyle({and:[{hetflag: true}, {not:{resn: "HOH"}}]}, {stick: {hidden: false, color: "blue", radius: 0.25}}); 
+        // viewer.addStyle({and:[{hetflag: true}, {not:{resn: "HOH"}}]}, {sphere: {hidden: false, color: "red", radius: 0.20}});
+        viewer.addStyle({and:[{hetflag: true}, {not:{resn: "HOH"}}, {properties:{ bs: -1}}]}, {stick: {hidden: true, colorscheme: myScheme, radius: 0.25}});
+        viewer.addStyle({and:[{hetflag: true}, {not:{resn: "HOH"}}, {properties:{ bs: -1}}]}, {sphere: {hidden: true, colorscheme: myScheme, radius: 0.20}});
+    
+    
+        viewer.addStyle({and:[{hetflag: true}, {not:{resn: "HOH"}}, {not: {properties:{ bs: -1}}}]}, {stick: {hidden: false, colorscheme: myScheme, radius: 0.25}});
+        viewer.addStyle({and:[{hetflag: true}, {not:{resn: "HOH"}}, {not: {properties:{ bs: -1}}}]}, {sphere: {hidden: false, colorscheme: myScheme, radius: 0.20}}); 
+    
+    
+        // viewer.addStyle({resn: "HOH"}, {sphere: {hidden: true, color: "gold", radius: 0.20}});
+        // viewer.addStyle({resn: "HOH"}, {stick: {hidden: true, color: "gold", radius: 0.25}});
+
+        console.log("Ligands shown!");
+    }
+    ligandsVisible = !ligandsVisible;
+    viewer.render();
 }
