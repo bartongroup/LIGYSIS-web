@@ -151,7 +151,7 @@ pdbUris.forEach(pdbUri => {
                 // console.log("Model order", modelOrder);
 
                 viewer.setViewStyle({style:"outline", width:0.0625, color:"black"});
-                viewer.setStyle({hetflag: false}, {cartoon: {hidden: false, style: 'oval', color: 'white', arrows: true,  thickness: 0.25}});
+                viewer.setStyle({hetflag: false}, {cartoon: {hidden: false, style: 'oval', color: 'white', arrows: true, thickness: 0.25, opacity: 0.5}});
                 viewer.setStyle({hetflag: true}, {stick: {hidden: true, radius: 0.25}});
 
                 viewer.addStyle({and:[{hetflag: true}, {not:{resn: "HOH"}}]}, {stick: {hidden: true, color: "blue", radius: 0.25}}); 

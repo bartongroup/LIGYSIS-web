@@ -33,7 +33,7 @@ document.getElementById('chartCanvas').addEventListener('mousemove', function(e)
                 
                 let clickedSiteColor = chartColors[Number(clickedPointLabel)];
                 
-                viewer.setStyle({resi: clickedPDBResNums, invert: true, hetflag: false}, {cartoon:{style:'oval', color: 'white', arrows: true},  }); // remove sidechains and colour white everything but clicked site
+                viewer.setStyle({resi: clickedPDBResNums, invert: true, hetflag: false}, {cartoon:{style:'oval', color: 'white', arrows: true, opacity: 0.5,thickness: 0.25,},  }); // remove sidechains and colour white everything but clicked site
                 
                 if (surfaceVisible) {
 
@@ -53,7 +53,7 @@ document.getElementById('chartCanvas').addEventListener('mousemove', function(e)
 
             else { // no row is clicked
 
-                viewer.setStyle({}, {cartoon:{style:'oval', color: 'white', arrows: true},  });
+                viewer.setStyle({}, {cartoon:{style:'oval', color: 'white', arrows: true, opacity: 0.5,thickness: 0.25,},  });
 
                 if (surfaceVisible) {
                     for (const [key, value] of Object.entries(surfsDict)) {
@@ -70,7 +70,7 @@ document.getElementById('chartCanvas').addEventListener('mousemove', function(e)
             highlightTableRow(pointLabel); 
 
             let PDBResNums = seg_ress_dict[pointLabel].map(el => Up2PdbDict[repPdbId][repPdbChainId][el]);
-            viewer.setStyle({resi: PDBResNums}, {cartoon:{style:'oval', color: siteColor, arrows: true}, stick:{color: siteColor}, });
+            viewer.setStyle({resi: PDBResNums}, {cartoon:{style:'oval', color: siteColor, arrows: true, opacity: 0.5,thickness: 0.25,}, stick:{color: siteColor,}, });
             viewer.render({});
             
         }
@@ -92,7 +92,7 @@ document.getElementById('chartCanvas').addEventListener('mousemove', function(e)
             
             let clickedSiteColor = chartColors[Number(clickedPointLabel)]; // color of the clicked binding site
 
-            viewer.setStyle({resi: clickedPDBResNums, invert: true, hetflag: false}, {cartoon:{style:'oval', color: 'white', arrows: true},  }); // remove sidechains and colour white everything but clicked site
+            viewer.setStyle({resi: clickedPDBResNums, invert: true, hetflag: false}, {cartoon:{style:'oval', color: 'white', arrows: true, opacity: 0.5,thickness: 0.25,},  }); // remove sidechains and colour white everything but clicked site
 
             if (surfaceVisible) { // if surface is visible
                 for (const [key, value] of Object.entries(surfsDict)) {
@@ -110,7 +110,7 @@ document.getElementById('chartCanvas').addEventListener('mousemove', function(e)
         }
         else { // no row is clicked
 
-            viewer.setStyle({}, {cartoon: {style:'oval', color: 'white', arrows: true}}); // remove sidechains and colour white everything
+            viewer.setStyle({}, {cartoon: {style:'oval', color: 'white', arrows: true, opacity: 0.5,thickness: 0.25,}}); // remove sidechains and colour white everything
 
             if (surfaceVisible) {
                 for (const [key, value] of Object.entries(surfsDict)) {
@@ -202,7 +202,7 @@ document.getElementById('chartCanvas').addEventListener('click', function(e) { /
 
             let PDBResNumsClicked = seg_ress_dict[clickedElementId].map(el => Up2PdbDict[repPdbId][repPdbChainId][el]);
 
-            viewer.setStyle({resi: PDBResNumsClicked}, {cartoon: {style:'oval', color: 'white', arrows: true}});
+            viewer.setStyle({resi: PDBResNumsClicked}, {cartoon: {style:'oval', color: 'white', arrows: true, opacity: 0.5,thickness: 0.25,}});
 
             if (surfaceVisible) {
 
@@ -317,11 +317,11 @@ document.getElementById('newChartCanvas').addEventListener('mousemove', function
 
             if (clickedElements.length == 0) { // no row is clicked
                 
-                viewer.setStyle({}, {cartoon: {style:'oval', color: 'white', arrows: true}}); // this is done so only a single point is highlighted when hovered on (some are really close.)
+                viewer.setStyle({}, {cartoon: {style:'oval', color: 'white', arrows: true, opacity: 0.5,thickness: 0.25,}}); // this is done so only a single point is highlighted when hovered on (some are really close.)
                 
                 let PDBResNum = Up2PdbDict[repPdbId][repPdbChainId][newPointLabel];
 
-                viewer.setStyle({resi: PDBResNum}, {cartoon:{style:'oval', color: pointColor, arrows: true}, stick:{color: pointColor}, });
+                viewer.setStyle({resi: PDBResNum}, {cartoon:{style:'oval', color: pointColor, arrows: true, opacity: 0.5,thickness: 0.25,}, stick:{color: pointColor,}, });
 
                 if (labelsVisible) {
                     viewer.removeAllLabels(); // clearing labels from previous hovered residue (residues might be almost superposed in plot. Hiding it so only one is visible)
@@ -352,7 +352,7 @@ document.getElementById('newChartCanvas').addEventListener('mousemove', function
 
         if (clickedElements.length == 0) {
 
-            viewer.setStyle({}, {cartoon: {style:'oval', color: 'white', arrows: true}});
+            viewer.setStyle({}, {cartoon: {style:'oval', color: 'white', arrows: true, opacity: 0.5,thickness: 0.25,}});
 
             if (labelsVisible) {
                 viewer.removeAllLabels(); // clearing labels from previously hovered on residue

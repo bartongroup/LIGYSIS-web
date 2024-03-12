@@ -20,94 +20,43 @@
 <script>
   // Define a function for applying styles and visualizations
   function applyVisualizationStyles(viewer) {
-
-    
-    viewer.addStyle({and:[{hetflag: true}, {not:{resn: "HOH"}}]}, {stick: {hidden: false, color: "blue", radius: 0.25}}); 
-    viewer.addStyle({and:[{hetflag: true}, {not:{resn: "HOH"}}]}, {sphere: {hidden: false, color: "red", radius: 0.20}});
-    viewer.addStyle({resn: "HOH"}, {sphere: {hidden: false, color: "gold", radius: 0.20}});
-
-    viewer.addStyle({and:[{hetflag: true}, {properties:{ bs: -1}}]}, {stick: {hidden: true, color: "grey", radius: 0.25}});
-    viewer.addStyle({and:[{hetflag: true}, {properties:{ bs: -1}}]}, {sphere: {hidden: true, color: "grey", radius: 0.20}});
-
-
-    viewer.addStyle({and:[{hetflag: true}, {not: {properties:{ bs: -1}}}]}, {stick: {hidden: false, colorscheme: myScheme, radius: 0.25}});
-    viewer.addStyle({and:[{hetflag: true}, {not: {properties:{ bs: -1}}}]}, {sphere: {hidden: false, colorscheme: myScheme, radius: 0.20}}); 
-
-
-    viewer.addStyle({resn: "HOH"}, {sphere: {hidden: true, color: "gold", radius: 0.20}});
-    viewer.addStyle({resn: "HOH"}, {stick: {hidden: true, color: "gold", radius: 0.25}});
-    
-    
+    viewer.setViewStyle({style:"outline", width:0.0625, color:"black"});
+    viewer.setStyle({hetflag: false}, {cartoon: {hidden: false, style: 'oval', color: 'white', arrows: true, thickness: 0.2, opacity: 0.5}});
+    viewer.setStyle({hetflag: true}, {stick: {hidden: true,}}); 
+    viewer.setStyle({resn: 'B7Q'}, {stick: {color: "blue", hidden: false}});
+    viewer.setStyle({resn: 'K0I'}, {stick: {color: "red",hidden: false}});
+    viewer.setStyle({resn: 'HOH'}, {stick: {color: "green", hidden: false}});
+    viewer.setStyle({resn: 'MN'}, {stick: {color: "orange", hidden: false}});
+    viewer.setStyle({resn: 'W77'}, {stick: {color: "cyan", hidden: false}});
+    viewer.setStyle({resn: 'PO4'}, {stick: {color: "magenta",  hidden: false}});
+    viewer.setStyle({resn: 'DMS'}, {stick: {color: "yellow",  hidden: false}});
     viewer.zoomTo(); 
     viewer.render(); 
   }
-
-  function showHoverLabel(atom, viewer) {
-    if(!atom.label) {
-      atom.label = viewer.addLabel(
-        modelOrderRev[atom.model] + " " + atom.chain + " " + atom.resn + " " + atom.resi + " " + atom.atom,
-        {position: atom, backgroundColor: 'mintcream', fontColor:'black', borderColor: 'black', borderThickness: 2}
-      );
-    }
-  }
-
-  function removeHoverLabel(atom) {
-    if(atom.label) {
-      viewer.removeLabel(atom.label);
-      delete atom.label;
-    }
-  }
-
-
-
-
   
   let element = document.querySelector('#container-01');
   let config = { backgroundColor: 'white', keepH: false };
   let viewer = $3Dmol.createViewer(element, config);
   let pdbUris = [
-    <!-- '/static/data/Q9UGL1/5fpu_A_trans.cif', -->
-    '/static/data/Q9UGL1/5fpu_updated.cif',
-    <!-- '/static/data/Q9UGL1/5fv3_A_trans.cif', -->
-    <!-- '/static/data/Q9UGL1/6ej1_A_trans.cif', -->
-
+    '/static/data/Q9UGL1/5fpu_A_trans.cif',
+    '/static/data/Q9UGL1/5fz1_A_trans.cif',
+    '/static/data/Q9UGL1/6ej1_A_trans.cif',
   ];
   let loadedCount = 0; // Counter for loaded structures
   let models = [];
   let modelOrder = {}; // creating dictionary to save the order in which files get loaded
-  let modelOrderRev = {};
   pdbUris.forEach(pdbUri => {
     jQuery.ajax(pdbUri, {
       success: function(data) {
-        let model = viewer.addModel(data, "cif",); // Load data
-        let modelID = model.getID();
-        let pdbID = pdbUri.split("/").pop().split("_")[0];
-        <!-- console.log("Loaded model", pdbUri, modelID, loadedCount); -->
-        modelOrder[pdbUri] = modelID;
-        modelOrderRev[modelID] = pdbID;
+        let model = viewer.addModel(data, "cif", {unboundCations: true}); // Load data
+        console.log("Loaded model", pdbUri, model.getID(), loadedCount);
+        modelOrder[pdbUri] = model.getID();
         models.push(model);
         loadedCount++; // Increment counter
         if (loadedCount === pdbUris.length) { // All structures are loaded, apply styles
           console.log("All structures loaded");
           console.log("Model order", modelOrder);
-          <!-- applyVisualizationStyles(viewer) -->
-
-          viewer.setViewStyle({style:"outline", width:0.0625, color:"black"});
-          viewer.setStyle({hetflag: false}, {cartoon: {hidden: false, style: 'oval', color: 'white', arrows: true,  thickness: 0.25}});
-          viewer.setStyle({hetflag: true}, {stick: {hidden: true, radius: 0.25}});
-          viewer.addStyle({and:[{hetflag: true}, {not:{resn: "HOH"}}]}, {stick: {hidden: false, color: "blue", radius: 0.25}}); 
-          viewer.addStyle({and:[{hetflag: true}, {not:{resn: "HOH"}}]}, {sphere: {hidden: false, color: "red", radius: 0.20}});
-          viewer.addStyle({resn: "HOH"}, {sphere: {hidden: false, color: "gold", radius: 0.20}});
-
-          viewer.addStyle({resn: 'MN'}, {stick: {hidden: false, radius: 0.25, color:"orange"}});
-
-          viewer.setHoverable({}, true, 
-            showHoverLabel,
-            removeHoverLabel,
-          );
-
-          viewer.zoomTo(); 
-          viewer.render(); 
+          applyVisualizationStyles(viewer)
         }
       },
       error: function(hdr, status, err) {
