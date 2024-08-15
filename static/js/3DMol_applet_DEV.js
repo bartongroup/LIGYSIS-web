@@ -129,34 +129,34 @@ let pdbUris = [
     '/static/data/P00517/1q8u_A_trans.cif',
     '/static/data/P00517/1svg_A_trans.cif'
 ]
-let myMap = {};
-let myScheme = {};
+let myMap = {}; // Dictionary for color mapping
+let myScheme = {}; // Scheme object for ligand colouring: takes binding site (bs) property and myMap
 let loadedCount = 0; // Counter for loaded structures
-let models = [];
-let modelOrder = {}; // creating dictionary to save the order in which files get loaded
-let modelOrderRev = {};
+let models = []; // List of GLModels
+let modelOrder = {}; // Dictionary: pdb ID --> model ID
+let modelOrderRev = {}; // Dictionary: model ID --> pdb ID
 pdbUris.forEach(pdbUri => {
     jQuery.ajax(pdbUri, {
         success: function(data) {
             let model = viewer.addModel(data, "cif",); // Load data
-            let modelID = model.getID();
-            let baseName = pdbUri.split("/").pop()
-            let pdbID = baseName.split("_")[0];
-            modelOrder[baseName] = modelID;
-            modelOrderRev[modelID] = pdbID;
-            models.push(model);
+            let modelID = model.getID(); // Gets the ID of the GLModel
+            let baseName = pdbUri.split("/").pop() // Name of the structure (.cif) file
+            let pdbID = baseName.split("_")[0]; // PDB ID from file name
+            modelOrder[baseName] = modelID; // populate dictionary
+            modelOrderRev[modelID] = pdbID; // populate dictionary
+            models.push(model); // add model at the end of list
             loadedCount++; // Increment counter
             if (loadedCount === pdbUris.length) { // All structures are loaded, apply styles
                 console.log("All structures loaded");
                 // console.log("Model order", modelOrder);
 
-                viewer.setViewStyle({style:"outline", width:0.0625, color:"black"});
-                viewer.setStyle({hetflag: false}, {cartoon: {hidden: false, style: 'oval', color: 'white', arrows: true, thickness: 0.25, opacity: 0.5}});
-                viewer.setStyle({hetflag: true}, {stick: {hidden: true, radius: 0.25}});
+                viewer.setViewStyle({style:"outline", width:0.0625, color:"black"}); // cartoon outline
+                viewer.setStyle({hetflag: false}, {cartoon: {hidden: false, style: 'oval', color: 'white', arrows: true, thickness: 0.25, opacity: 0.5}}); // cartoon representation for protein
+                viewer.setStyle({hetflag: true}, {stick: {hidden: true, radius: 0}}); // stick representation for ligands (HETATM), hidden by default
 
-                viewer.addStyle({and:[{hetflag: true}, {not:{resn: "HOH"}}]}, {stick: {hidden: true, color: "blue", radius: 0.25}}); 
-                viewer.addStyle({and:[{hetflag: true}, {not:{resn: "HOH"}}]}, {sphere: {hidden: true, color: "red", radius: 0.20}});
-                viewer.addStyle({resn: "HOH"}, {sphere: {hidden: true, color: "gold", radius: 0.20}});
+                viewer.addStyle({and:[{hetflag: true}, {not:{resn: "HOH"}}]}, {stick: {hidden: true, color: "blue", radius: 0.25}}); // stick representation for ligands (not HOH)
+                viewer.addStyle({and:[{hetflag: true}, {not:{resn: "HOH"}}]}, {sphere: {hidden: true, color: "red", radius: 0.20}}); // make ligand (not HOH) spheres smaller so only stick is visible
+                viewer.addStyle({resn: "HOH"}, {sphere: {hidden: true, color: "gold", radius: 0.20}}); // water molecules represented as gold spheres
 
                 // Send modelOrder to Flask
                 fetch('/process-model-order', {
