@@ -135,37 +135,36 @@ def index(): # route for index main site
 @app.route('/results/<prot_id>/<seg_id>', methods = ['POST', 'GET'])
 def results(prot_id, seg_id): # route for results site. Takes Prot ID and Seg ID
 
-    seg_name = prot_id + "_" + seg_id
+    seg_name = prot_id + "_" + seg_id # combining UniProt ID and Segment ID into SEGMENT NAME
 
     bss_data = pd.read_pickle(os.path.join(SITE_TABLES_FOLDER, "{}_bss.pkl".format(prot_id))) # site data
     bss_data = bss_data.fillna("NaN") # pre-processing could also be done before saving the pickle
-    bss_data.columns = headings
+    bss_data.columns = headings # changing table column names
 
     # print(bss_data.shape)
 
-    bss_prot = bss_data[bss_data.ID.str.contains(seg_name)].copy()
+    bss_prot = bss_data[bss_data.ID.str.contains(seg_name)].copy() # extracting Segment of interest rows from table
 
-    # grab only third element of ID column
-    bss_prot.ID = bss_prot.ID.str.split("_").str[2]
+    bss_prot.ID = bss_prot.ID.str.split("_").str[2] # extracting binding site ID from binding site name, which is UniProt ID _ Segment ID _ Binding Site ID
 
-    bss_prot.ID = bss_prot.ID.astype(int)
+    bss_prot.ID = bss_prot.ID.astype(int) # changing binding site ID to integer data type
 
-    bss_prot = bss_prot.sort_values(by = "ID")
+    bss_prot = bss_prot.sort_values(by = "ID") # sorting binding site table rows by ID
 
-    first_site = bss_prot.ID.unique().tolist()[0]
+    first_site = bss_prot.ID.unique().tolist()[0] # first binding site ID
 
-    first_site_name = seg_name + "_" + str(first_site)
+    first_site_name = seg_name + "_" + str(first_site) # name of first binding site (data shown by default when oppening page)
 
     bss_ress = pd.read_pickle(os.path.join(RES_TABLES_FOLDER, "{}_ress.pkl".format(seg_name))) # residue data
     bss_ress = bss_ress.fillna("NaN") # pre-processing could also be done before saving the pickle
 
     # print(bss_ress.shape)
 
-    first_site_data = bss_ress.query('bs_id == @first_site_name')[cc_new].to_dict(orient="list")
+    first_site_data = bss_ress.query('bs_id == @first_site_name')[cc_new].to_dict(orient="list") # data of first binding site residues
 
     # print(bss_prot)
 
-    data1 = bss_prot.to_dict(orient="list")
+    data1 = bss_prot.to_dict(orient="list") # converting table to dictionary to pass to client
 
     # print(data1)
 
@@ -200,12 +199,21 @@ def results(prot_id, seg_id): # route for results site. Takes Prot ID and Seg ID
     up2pdb_dict_converted = {k: {k2:{int(k3):int(v3) for k3, v3 in v2.items()} for k2, v2 in v.items()} for k, v in up2pdb_dict.items()}
 
     pdb2up_dict_converted = {k: {k2:{int(k3):int(v3) for k3, v3 in v2.items()} for k2, v2 in v.items()} for k, v in pdb2up_dict.items()}
+
+    assembly_pdbs = os.listdir(os.path.join(DATA_FOLDER, prot_id, str(seg_id), "assemblies"))
+
+    simple_pdbs = os.listdir(os.path.join(DATA_FOLDER, prot_id, str(seg_id), "simple"))
+
+    assembly_pdb_ids = sorted(list(set([el.split("_")[0] for el in assembly_pdbs]))) # sorted unique PDB IDs
+
+    print(assembly_pdb_ids)
     
     return render_template(
         'structure.html', data = data1, headings = headings, data2 = data2, cc_new = cc_new, colors = colors,
         seg_ress_dict = seg_ress_dict, prot_id = prot_id, seg_id = seg_id, segment_reps = segment_reps,
         first_site_data = first_site_data, bs_table_tooltips = bs_table_tooltips, bs_ress_table_tooltips = bs_ress_table_tooltips,
-        pdb2up_dict = pdb2up_dict_converted, up2pdb_dict = up2pdb_dict_converted, seg_stats = seg_stats_converted, entry_name = entry_name
+        pdb2up_dict = pdb2up_dict_converted, up2pdb_dict = up2pdb_dict_converted, seg_stats = seg_stats_converted, entry_name = entry_name,
+        simple_pdbs = simple_pdbs, assembly_pdb_ids = assembly_pdb_ids
     )
 
 @app.route('/about')

@@ -1,0 +1,161 @@
+<title>3DMol.js experiment</title>
+<script src="https://code.jquery.com/jquery-3.6.1.min.js"></script>
+<script src="https://3Dmol.org/build/3Dmol-min.js"></script>     
+<script src="https://3Dmol.org/build/3Dmol.ui-min.js"></script> 
+<div id="container-01" class="mol-container"></div>
+
+<style>
+  .mol-container {
+    width: 50%;
+    height: 75%;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    border: px solid black; /* Adds a black border */
+    box-sizing: border-box; /* Ensures that the border is included in the element's total width and height */
+  }
+</style>
+
+<script>
+  // Define a function for applying styles and visualizations
+  function applyVisualizationStyles(viewer) {
+    viewer.setViewStyle({style:"outline", width:0.0625, color:"black"});
+    viewer.setStyle({hetflag: false}, {cartoon: {hidden: false, style: 'oval', color: 'white', arrows: true, thickness: 0.2, opacity: 0.5}});
+    viewer.setStyle({hetflag: true}, {stick: {hidden: true,}}); 
+    viewer.setStyle({resn: 'G98'}, {stick: {color: "orange",  hidden: false}});
+    viewer.setStyle({resi:[49, 55, 72, 91, 95, 104, 121, 123, 173, 183, 184, 185]},
+            {stick:{color:"white",thickness:0.5, opacity: 0.75}, cartoon: {hidden: false, style: 'oval', color: 'white', arrows: true, thickness: 0.25, opacity: 0.5}
+        });
+    viewer.addCylinder(
+            {
+                start:{x: 13.526, y: -11.583, z: 22.053 },
+                end:{x: 16.333, y: -12.821, z: 20.777 },
+                radius: 0.125, dashed: true, fromCap:1, toCap:1, color:"#999999",
+            }
+        )
+        viewer.addCylinder(
+            {
+                start:{x: 13.526, y: -11.583, z: 22.053 },
+                end:{x: 16.429, y: -12.823, z: 22.006 },
+                radius: 0.125, dashed: true, fromCap:1, toCap:1, color:"#999999",
+            }
+        )
+        viewer.addCylinder(
+            {
+                start:{x: 8.546, y: -15.820, z: 18.214 },
+                end:{x: 9.982, y: -17.308, z: 15.520 },
+                radius: 0.125, dashed: true, fromCap:1, toCap:1, color:"#999999",
+            }
+        )
+        viewer.addCylinder(
+            {
+                start:{x: 7.941, y: -11.649, z: 22.015 },
+                end:{x: 5.390, y: -12.329, z: 20.394 },
+                radius: 0.125, dashed: true, fromCap:1, toCap:1, color:"#f04646",
+            }
+        )
+        viewer.addCylinder(
+            {
+                start:{x: 3.990, y: -8.800, z: 21.245 },
+                end:{x: 3.176, y: -10.961, z: 20.122 },
+                radius: 0.125, dashed: true, fromCap:1, toCap:1, color:"#999999",
+            }
+        )
+        viewer.addCylinder(
+            {
+                start:{x: 5.198, y: -7.748, z: 19.423 },
+                end:{x: 2.268, y: -6.078, z: 20.109 },
+                radius: 0.0625, dashed: true, fromCap:1, toCap:1, color:"#006633",
+            }
+        )
+        viewer.addCylinder(
+            {
+                start:{x: 5.283, y: -6.821, z: 21.751 },
+                end:{x: 6.425, y: -4.427, z: 23.837 },
+                radius: 0.125, dashed: true, fromCap:1, toCap:1, color:"#006633",
+            }
+        )
+        viewer.addCylinder(
+            {
+                start:{x: 11.027, y: -5.777, z: 22.110 },
+                end:{x: 11.394, y: -3.015, z: 21.153 },
+                radius: 0.125, dashed: true, fromCap:1, toCap:1, color:"#999999",
+            }
+        )
+        viewer.addCylinder(
+            {
+                start:{x: 13.374, y: -5.696, z: 22.380 },
+                end:{x: 14.561, y: -3.012, z: 23.277 },
+                radius: 0.125, dashed: true, fromCap:1, toCap:1, color:"#f04646",
+            }
+        )
+        viewer.addCylinder(
+            {
+                start:{x: 12.222, y: -6.404, z: 22.314 },
+                end:{x: 11.929, y: -6.454, z: 25.652 },
+                radius: 0.125, dashed: true, fromCap:1, toCap:1, color:"#999999",
+            }
+        )
+        viewer.addCylinder(
+            {
+                start:{x: 12.424, y: -7.772, z: 22.514 },
+                end:{x: 11.929, y: -6.454, z: 25.652 },
+                radius: 0.0625, dashed: true, fromCap:1, toCap:1, color:"#999999",
+            }
+        )
+        viewer.addCylinder(
+            {
+                start:{x: 10.131, y: -8.653, z: 22.086 },
+                end:{x: 8.195, y: -7.413, z: 23.965 },
+                radius: 0.125, dashed: true, fromCap:1, toCap:1, color:"#f04646",
+            }
+        )
+        viewer.addCylinder(
+            {
+                start:{x: 7.560, y: -15.721, z: 23.886 },
+                end:{x: 5.823, y: -14.028, z: 24.634 },
+                radius: 0.125, dashed: true, fromCap:1, toCap:1, color:"#e3e159",
+            }
+        )
+        viewer.addCylinder(
+            {
+                start:{x: 3.990, y: -8.800, z: 21.245 },
+                end:{x: 2.845, y: -9.786, z: 23.896 },
+                radius: 0.125, dashed: true, fromCap:1, toCap:1, color:"#f04646",
+            }
+        )
+    viewer.zoomTo(); 
+    viewer.render(); 
+  }
+  
+  let element = document.querySelector('#container-01');
+  let config = { backgroundColor: 'white', keepH: false };
+  let viewer = $3Dmol.createViewer(element, config);
+  let pdbUris = [
+    '/static/data/P00517/1/assemblies/3e8e_bio.cif',
+  ];
+  let loadedCount = 0; // Counter for loaded structures
+  let models = [];
+  let modelOrder = {}; // creating dictionary to save the order in which files get loaded
+  pdbUris.forEach(pdbUri => {
+    jQuery.ajax(pdbUri, {
+      success: function(data) {
+        let model = viewer.addModel(data, "cif", {unboundCations: true}); // Load data
+        console.log("Loaded model", pdbUri, model.getID(), loadedCount);
+        modelOrder[pdbUri] = model.getID();
+        models.push(model);
+        loadedCount++; // Increment counter
+        if (loadedCount === pdbUris.length) { // All structures are loaded, apply styles
+          console.log("All structures loaded");
+          console.log("Model order", modelOrder);
+          applyVisualizationStyles(viewer)
+        }
+      },
+      error: function(hdr, status, err) {
+        console.error("Failed to load PDB " + pdbUri + ": " + err);
+        // Error handling, potentially increment loadedCount or handle differently
+      },
+    });
+  });
+  </script>
