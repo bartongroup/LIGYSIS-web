@@ -106,6 +106,7 @@ function toggleWatersVisibility() {
     viewer.render();
 }
 
+
 function toggleLigandsVisibility() {
     var button = document.getElementById('ligandButton');
     if (ligandsVisible) {

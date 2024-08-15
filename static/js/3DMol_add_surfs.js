@@ -12,6 +12,8 @@ for (const [key, value] of Object.entries(seg_ress_dict)) {
             {resi: PDBResNums, invert: true},
             {hetflag: false},
         );
+        //print resnums
+        console.log(PDBResNums);
     }
     else {
         let siteColor = chartColors[Number(key.split("_").pop())];
@@ -28,6 +30,8 @@ for (const [key, value] of Object.entries(seg_ress_dict)) {
 }
 
 // add individual residue labels here
+// print that surfaces are added
+console.log("Surfaces added");
 
 
 viewer.render();
