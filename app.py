@@ -194,26 +194,30 @@ def results(prot_id, seg_id): # route for results site. Takes Prot ID and Seg ID
     # for v in seg_stats[prot_id][seg_id].values():
     #     v = int(v)
     
-    seg_stats_converted = convert_numpy(seg_stats)
+    seg_stats_converted = convert_numpy(seg_stats) # converting data type of Segment summary statistics
 
     up2pdb_dict_converted = {k: {k2:{int(k3):int(v3) for k3, v3 in v2.items()} for k2, v2 in v.items()} for k, v in up2pdb_dict.items()}
 
     pdb2up_dict_converted = {k: {k2:{int(k3):int(v3) for k3, v3 in v2.items()} for k2, v2 in v.items()} for k, v in pdb2up_dict.items()}
 
-    assembly_pdbs = os.listdir(os.path.join(DATA_FOLDER, prot_id, str(seg_id), "assemblies"))
-
-    simple_pdbs = os.listdir(os.path.join(DATA_FOLDER, prot_id, str(seg_id), "simple"))
+    assembly_pdbs = os.listdir(os.path.join(DATA_FOLDER, prot_id, str(seg_id), "assemblies")) # CIF bio assembly file names
+    assembly_pdbs = [el for el in assembly_pdbs if el.endswith(".cif")]
 
     assembly_pdb_ids = sorted(list(set([el.split("_")[0] for el in assembly_pdbs]))) # sorted unique PDB IDs
 
-    print(assembly_pdb_ids)
+    simple_pdbs = os.listdir(os.path.join(DATA_FOLDER, prot_id, str(seg_id), "simple")) # simple PDB file names (single chain)
+    simple_pdbs = [el for el in simple_pdbs if el.endswith(".cif")]
+
+    simple_pdbs_full_path = [f'/static/data/{prot_id}/{seg_id}/simple/{el}' for el in simple_pdbs]
+
+    # print(assembly_pdb_ids)
     
     return render_template(
         'structure.html', data = data1, headings = headings, data2 = data2, cc_new = cc_new, colors = colors,
         seg_ress_dict = seg_ress_dict, prot_id = prot_id, seg_id = seg_id, segment_reps = segment_reps,
         first_site_data = first_site_data, bs_table_tooltips = bs_table_tooltips, bs_ress_table_tooltips = bs_ress_table_tooltips,
         pdb2up_dict = pdb2up_dict_converted, up2pdb_dict = up2pdb_dict_converted, seg_stats = seg_stats_converted, entry_name = entry_name,
-        simple_pdbs = simple_pdbs, assembly_pdb_ids = assembly_pdb_ids
+        simple_pdbs = simple_pdbs_full_path, assembly_pdb_ids = assembly_pdb_ids
     )
 
 @app.route('/about')
@@ -280,8 +284,9 @@ def process_model_order():
     data = request.json
     loaded_order = data['modelOrder'] # this is the order in which files have been loaded by 3DMol.js
     segment_name = data['segmentName'] # name of the segment
-    cxc_in = os.path.join(DATA_FOLDER, "P00517", "{}_ALL_inf_average_0.5.cxc".format(segment_name)) # ChimeraX command file
-    attr_in =  os.path.join(DATA_FOLDER, "P00517", "{}_ALL_inf_average_0.5.defattr".format(segment_name)) # ChimeraX attribute file
+    prot_id, seg_id = segment_name.split("_") # extracting protein ID and segment ID
+    cxc_in =f'{DATA_FOLDER}/{prot_id}/{seg_id}/simple/{segment_name}_ALL_inf_average_0.5.cxc' # ChimeraX command file
+    attr_in =  f'{DATA_FOLDER}/{prot_id}/{seg_id}/simple/{segment_name}_ALL_inf_average_0.5.defattr' # ChimeraX attribute file
 
     model_order = extract_open_files(cxc_in) # order in which ChimeraX opens files (important for binding site attribute assignment)
 

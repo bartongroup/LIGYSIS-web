@@ -35,6 +35,9 @@
 
     const Pdb2UpDict = {{ pdb2up_dict | tojson   }}
     const Up2PdbDict = {{ up2pdb_dict  | tojson  }}
+    
+    const simplePdbs = {{ simple_pdbs | tojson }}
+    const assemblyPdbIds = {{ assembly_pdb_ids | tojson }}
 
     let surfaceVisible = false;
     let labelsVisible = false;

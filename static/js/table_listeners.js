@@ -26,7 +26,7 @@ $('table#bss_table tbody').on('mouseover', 'tr', function () { // event listener
     
     let PDBResNums = seg_ress_dict[rowId].map(el => Up2PdbDict[repPdbId][repPdbChainId][el]);
 
-    viewer.setStyle({resi: PDBResNums}, {cartoon:{style:'oval', color: siteColor, arrows: true, opacity: 0.5,thickness: 0.25,}, stick:{color: siteColor, opacity: 0.5,}, });
+    viewer.setStyle({resi: PDBResNums}, {cartoon:{style:'oval', color: siteColor, arrows: true, opacity: 0.5,thickness: 0.25,}, stick:{color: siteColor}, });
     
     viewer.render({});
     
@@ -212,7 +212,7 @@ $('table#bss_table tbody').on('mouseover', 'tr', function () { // event listener
 
     }
     
-    viewer.setStyle({resi: PDBResNums}, {cartoon:{style:'oval', color: siteColor, arrows: true, opacity: 0.5,thickness: 0.25,}, stick:{color: siteColor,}, });
+    viewer.setStyle({resi: PDBResNums}, {cartoon:{style:'oval', color: siteColor, arrows: true, opacity: 0.5,thickness: 0.25,}, stick:{color: siteColor}, });
 
     viewer.render({});
     
@@ -233,7 +233,7 @@ $('table#bs_ress_table tbody').on('mouseover', 'tr', function () { // event list
 
         let PDBResNum = Up2PdbDict[repPdbId][repPdbChainId][rowId];
 
-        viewer.setStyle({resi: PDBResNum}, {cartoon:{style:'oval', color: rowColorHex, arrows: true, opacity: 0.5,thickness: 0.25,}, stick:{color: rowColorHex, }, }); 
+        viewer.setStyle({resi: PDBResNum}, {cartoon:{style:'oval', color: rowColorHex, arrows: true, opacity: 0.5,thickness: 0.25,}, stick:{color: rowColorHex}, }); 
         
         if (labelsVisible) {
             let resSel = {resi: PDBResNum}
