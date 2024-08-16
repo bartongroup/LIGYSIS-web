@@ -303,6 +303,43 @@ def process_model_order():
     }
 
     return jsonify(response_data) # send jasonified data back to client
+
+@app.route('/get-contacts', methods=['POST'])
+def get_contacts():
+    data = request.json
+    active_model = data['modelData']
+    prot_id = data['proteinId']
+    seg_id = data['segmentId']
+    
+    arpeggio_cons = pd.read_pickle(f'{DATA_FOLDER}/{prot_id}/{seg_id}/arpeggio/{active_model}_bio_proc.pkl')
+
+    arpeggio_cols = [
+        'contact', 'distance',
+        'auth_asym_id_end', 'auth_atom_id_end', 'auth_seq_id_end',
+        'label_comp_id_end', 'auth_asym_id_bgn',
+        'auth_atom_id_bgn', 'auth_seq_id_bgn', 'label_comp_id_bgn',
+        'orig_label_asym_id_end', 'UniProt_ResNum_end',
+        'coords_end', 'coords_bgn', 'width', 'color'
+        ]
+
+    arpeggio_cons_filt = arpeggio_cons[
+    (arpeggio_cons['contact'].apply(lambda x: x != ["proximal"])) &
+    (arpeggio_cons['interacting_entities'] == "INTER") &
+    (arpeggio_cons['type'] == "atom-atom")
+]
+
+    json_cons= arpeggio_cons_filt[arpeggio_cols].to_json(orient='records')
+
+    response_data = {
+        'contacts': json_cons,
+    }
+
+    return jsonify(response_data) # send jasonified data back to client
+
+
+
+
+
 ### LAUNCHING SERVER ###
 
 if __name__ == "__main__":

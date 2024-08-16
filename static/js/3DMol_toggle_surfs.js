@@ -143,27 +143,79 @@ function toggleLigandsVisibility() {
     viewer.render();
 }
 
-// function to display dropdown with assemblies to explore
+function toggleContactsVisibility() {
+    var button = document.getElementById('contactsButton');
+    if (contactsVisible) {
+        button.value = 'Contacts OFF'; // Change the button text
+        button.style = "font-weight: bold; color: #674ea7;";
+        //viewer.setStyle({}, {cross: {hidden: true}});
 
+        // loop through contactCylinders and delete using removeShape, then empty list
+        for (let i = 0; i < contactCylinders.length; i++) {
+            viewer.removeShape(contactCylinders[i]);
+        }
+        contactCylinders = [];
+        viewer.addStyle({resi: bindingRess}, {stick: {hidden: true, color: "white", radius: 0.25}});
+        console.log("Contacts removed!");
+        contactsVisible = false;
+        viewer.render();
+    } else {
+        //const activeModelData = modelOrderRev[activeModel]; // Retrieve the data to send
 
-// function toggleExploreContacts() {
-//     var button = document.getElementById('exploreContactsButton');
-//     var dropdownContainer = document.getElementById('dropdownContainer');
+        fetch('/get-contacts', {
+            method: 'POST', // Use POST method to send data
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(
+                {
+                    modelData: modelOrderRev[activeModel],
+                    proteinId: proteinId,
+                    segmentId: segmentId,
+                }
+            ) // Send the data as JSON
+        })
+        .then(response => response.json())
+        .then(data => {
+            // Assuming the data is used to set styles or other properties
+            //viewer.setStyle({}, {cross: {hidden: false, data: data}});
+            let contacts = JSON.parse(data.contacts);
+            bindingRess = Array.from(new Set(contacts.map(item => item.auth_seq_id_end)));
+            bindingLigs = Array.from(new Set(contacts.map(item => item.label_comp_id_bgn)));
+            console.log("Binding residues:", bindingRess);
+                
+            contacts.forEach(item => {
+                // Extracting the necessary variables from each item
+                let contactBgnCoords = item.coords_bgn.map(coord => parseFloat(coord)); // Array of coordinates for start
+                let contactEndCoords = item.coords_end.map(coord => parseFloat(coord)); // Array of coordinates for end
+                let contactWidth = parseFloat(item.width);           // Radius
+                let contactColor = item.color;           // Color
+                // console.log(contactBgnCoords, contactEndCoords, contactWidth, contactColor);
+            
+                // Running the viewer.addCylinder command
+                var contactCylinder = viewer.addCylinder({
+                    start: { x: contactBgnCoords[0], y: contactBgnCoords[1], z: contactBgnCoords[2] },
+                    end: { x: contactEndCoords[0], y: contactEndCoords[1], z: contactEndCoords[2] },
+                    radius: contactWidth,
+                    dashed: true,
+                    fromCap: 1,
+                    toCap: 1,
+                    color: contactColor,
+                });
+                contactCylinders.push(contactCylinder);
+            });
 
-//     if (exploreVisible) {
-//         button.value = 'Explore contacts';
-//         button.style.color = '#674ea7';
-//         dropdownContainer.innerHTML = ''; // Remove the dropdown
-//     } else {
-//         button.value = 'Contacts exploration';
-//         button.style.color = '#B22222';
-//         // Add the dropdown to the correct location
-//         dropdownContainer.innerHTML = `
-//             <div id="exploreDropdown" style="background-color: #f9f9f9; max-width: 50%; box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2); z-index: 1;">
-//                 <a href="#contact1" style="color: black; padding: 12px 16px; text-decoration: none; display: block;">Contact 1</a>
-//                 <a href="#contact2" style="color: black; padding: 12px 16px; text-decoration: none; display: block;">Contact 2</a>
-//                 <a href="#contact3" style="color: black; padding: 12px 16px; text-decoration: none; display: block;">Contact 3</a>
-//             </div>`;
-//     }
-//     exploreVisible = !exploreVisible;
-// }
+            viewer.addStyle({resi: bindingRess}, {stick: {hidden: false, color: "white", radius: 0.25}});
+            viewer.addStyle({resn: bindingLigs}, {stick: {hidden: false, color: "red", radius: 0.25}});
+
+            viewer.render();
+
+            
+            button.value = 'Contacts ON'; // Change the button text
+            button.style = "font-weight: bold; color:#B22222;";
+            contactsVisible = true;
+            //viewer.render();
+        })
+        .catch(error => console.error('Error fetching contacts:', error));
+    }
+}

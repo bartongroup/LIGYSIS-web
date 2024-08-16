@@ -48,8 +48,15 @@
     let wholeSurf;
     let surfsDict = {};
     let exploreVisible = false;
+    let contactsVisible = false;
 
     let clickedPointLabel = null;
+    let activeModel = 0;
+    let activeModelSurf;
+
+    let contactCylinders = [];
+    let bindingRess = [];
+    let bindingLigs = [];
 </script>
 
 {% endblock %}
@@ -116,16 +123,13 @@
 
                 <div class="col-6 col-md-3 col-lg-6 col-xl-3 d-flex justify-content-center mb-2 mb-md-0 mb-lg-2 mb-xl-0">
                     <div class="dropup">
-                        <button class="dropup-button" style="font-weight: bold; color: #674ea7;">Superposition</button>
+                        <button class="dropup-button" style="font-weight: bold; color: black;">Superposition</button>
                         <div class="dropup-content">
                             <a href="#" onclick="selectOption('Superposition')">Superposition</a>
                             <!-- Additional options will be populated here -->
                         </div>
                     </div>
                 </div>
-                
-                
-                
                 
                 <div class="col-6 col-md-3 col-lg-6 col-xl-3 d-flex justify-content-center mb-2 mb-md-0 mb-lg-2 mb-xl-0">
                     <input id="ligandButton" type="button" value="Ligands OFF" style="font-weight: bold; color:  #674ea7;"
@@ -135,6 +139,12 @@
                     <input id="waterButton" type="button" value="Waters OFF" style="font-weight: bold; color:  #674ea7;"
                     onclick="toggleWatersVisibility()"></input>
                 </div>
+
+                <div class="col-6 col-md-3 col-lg-6 col-xl-3 d-flex justify-content-center mb-2 mb-md-0 mb-lg-2 mb-xl-0">
+                    <input id="contactsButton" type="button" value="Contacts OFF" style="font-weight: bold; color:  #674ea7;"
+                    onclick="toggleContactsVisibility()"></input>
+                </div>
+
                 <div class="col-6 col-md-3 col-lg-6 col-xl-3 d-flex justify-content-center">
                     <input id="saveImageButton" type="button" value="Save Image" style="color: black;"
                     onclick="saveImage('3DmolCanvas', `${segmentName}_struc`)"></input>

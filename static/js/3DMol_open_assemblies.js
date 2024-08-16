@@ -19,30 +19,51 @@ function populateMenu() {
 }
 
 function selectOption(option) {
-    if (option !== previousSelection) {
+    if (option !== previousSelection) { // if the option is changed, otherwise do nothing
         const button = document.querySelector('.dropup-button');
         button.textContent = option;
+        var consButton = document.getElementById('contactsButton');
 
-        if (previousSelection === 'Superposition' && option !== 'Superposition') {
+        // turn contactsButton off
+        consButton.value = 'Contacts OFF'; // Change the button text
+        consButton.style = "font-weight: bold; color: #674ea7;";
+        console.log("Contacts removed!");
+        contactsVisible = false;
+
+
+        if (previousSelection === 'Superposition') { // changing from Ligand Superposition to any assembly
             openStructure(option);
         }
 
-        if (previousSelection !== 'Superposition' && option !== 'Superposition') {
-            openStructure(option);
-        }
+        if (previousSelection !== 'Superposition') {
 
-        if (previousSelection !== 'Superposition' && option == 'Superposition') {
-
-            for (let i = 0; i <= simplePdbs.length-1; i++) {
-                viewer.getModel(i).show();    
+            // loop through contactCylinders and delete using removeShape, then empty list
+            for (let i = 0; i < contactCylinders.length; i++) {
+                viewer.removeShape(contactCylinders[i]);
             }
-            
-            for (let i = simplePdbs.length; i <= models.length-1; i++) {
-                viewer.getModel(i).hide();    
+            contactCylinders = [];
+
+            viewer.removeSurface(activeModelSurf.surfid);
+            console.log("Assembly surface removed!");
+        
+            if (option !== 'Superposition') {
+                openStructure(option);
             }
 
-            viewer.render();
-            
+            if (option == 'Superposition') {
+
+                for (let i = 0; i <= simplePdbs.length-1; i++) {
+                    viewer.getModel(i).show();    
+                }
+                
+                for (let i = simplePdbs.length; i <= models.length-1; i++) {
+                    viewer.getModel(i).hide();    
+                }
+
+                activeModel = 0;
+
+                viewer.render();
+            }
         }
 
         previousSelection = option; // Update the previous selection
@@ -67,10 +88,20 @@ function openStructure(pdbId) {
                 viewer.getModel(i).hide();    
             }
             // viewer.render();
-            viewer.setStyle({model: modelID}, {cartoon: {hidden: false, style: 'oval', color: 'red', arrows: true, thickness: 0.25, opacity:1.0}});
+            viewer.setStyle({model: modelID}, {cartoon: {hidden: false, style: 'oval', color: 'white', arrows: true, thickness: 0.25, opacity:1.0}});
             viewer.center({model: modelID});
-            viewer.zoomTo()
+            viewer.zoomTo({model: modelID})
             //viewer.zoom(2,1000);
+
+            activeModelSurf = viewer.addSurface(
+                $3Dmol.SurfaceType.ISO,
+                {
+                    color: 'blue',
+                    opacity: 1.0,
+                },
+                {model: modelID, hetflag: false},
+                {hetflag: false},
+            );
             viewer.render();
 
             let baseName = pdbUri.split("/").pop() // Name of the structure (.cif) file
@@ -79,6 +110,7 @@ function openStructure(pdbId) {
             modelOrderRev[modelID] = pdbID; // populate dictionary
             models.push(model); // add model at the end of list
             loadedCount++; // Increment counter
+            activeModel = modelID;
         },
         error: function(hdr, status, err) {
             console.error( "Failed to load PDB " + pdbUri + ": " + err );
