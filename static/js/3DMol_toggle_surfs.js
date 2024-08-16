@@ -106,7 +106,6 @@ function toggleWatersVisibility() {
     viewer.render();
 }
 
-
 function toggleLigandsVisibility() {
     var button = document.getElementById('ligandButton');
     if (ligandsVisible) {
@@ -143,3 +142,28 @@ function toggleLigandsVisibility() {
     ligandsVisible = !ligandsVisible;
     viewer.render();
 }
+
+// function to display dropdown with assemblies to explore
+
+
+// function toggleExploreContacts() {
+//     var button = document.getElementById('exploreContactsButton');
+//     var dropdownContainer = document.getElementById('dropdownContainer');
+
+//     if (exploreVisible) {
+//         button.value = 'Explore contacts';
+//         button.style.color = '#674ea7';
+//         dropdownContainer.innerHTML = ''; // Remove the dropdown
+//     } else {
+//         button.value = 'Contacts exploration';
+//         button.style.color = '#B22222';
+//         // Add the dropdown to the correct location
+//         dropdownContainer.innerHTML = `
+//             <div id="exploreDropdown" style="background-color: #f9f9f9; max-width: 50%; box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2); z-index: 1;">
+//                 <a href="#contact1" style="color: black; padding: 12px 16px; text-decoration: none; display: block;">Contact 1</a>
+//                 <a href="#contact2" style="color: black; padding: 12px 16px; text-decoration: none; display: block;">Contact 2</a>
+//                 <a href="#contact3" style="color: black; padding: 12px 16px; text-decoration: none; display: block;">Contact 3</a>
+//             </div>`;
+//     }
+//     exploreVisible = !exploreVisible;
+// }

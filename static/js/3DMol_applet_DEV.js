@@ -31,104 +31,6 @@ function removeHoverLabel(atom) {
 
 // VIEWER
 
-// let pdbUris = [
-//     '/static/data/P00517/3e8c_F_trans.cif',
-//     '/static/data/P00517/1szm_B_trans.cif',
-//     '/static/data/P00517/3e8e_G_trans.cif',
-//     '/static/data/P00517/2gnh_A_trans.cif',
-//     '/static/data/P00517/1xh9_A_trans.cif',
-//     '/static/data/P00517/3zo1_A_trans.cif',
-//     '/static/data/P00517/4c35_A_trans.cif',
-//     '/static/data/P00517/2uzv_B_trans.cif',
-//     '/static/data/P00517/2vnw_A_trans.cif',
-//     '/static/data/P00517/1xha_A_trans.cif',
-//     '/static/data/P00517/2uw0_A_trans.cif',
-//     '/static/data/P00517/2uzt_A_trans.cif',
-//     '/static/data/P00517/4ie9_A_trans.cif',
-//     '/static/data/P00517/3dnd_A_trans.cif',
-//     '/static/data/P00517/3e8e_A_trans.cif',
-//     '/static/data/P00517/3zo4_A_trans.cif',
-//     '/static/data/P00517/3bwj_A_trans.cif',
-//     '/static/data/P00517/2uw5_A_trans.cif',
-//     '/static/data/P00517/1q8w_A_trans.cif',
-//     '/static/data/P00517/1yds_A_trans.cif',
-//     '/static/data/P00517/1xh5_A_trans.cif',
-//     '/static/data/P00517/4yxr_A_trans.cif',
-//     '/static/data/P00517/2vo0_A_trans.cif',
-//     '/static/data/P00517/1sve_A_trans.cif',
-//     '/static/data/P00517/1q61_A_trans.cif',
-//     '/static/data/P00517/2jdt_A_trans.cif',
-//     '/static/data/P00517/2vo3_A_trans.cif',
-//     '/static/data/P00517/4axa_A_trans.cif',
-//     '/static/data/P00517/1xh6_A_trans.cif',
-//     '/static/data/P00517/5vhb_A_trans.cif',
-//     '/static/data/P00517/3ag9_A_trans.cif',
-//     '/static/data/P00517/4z84_A_trans.cif',
-//     '/static/data/P00517/1q8t_A_trans.cif',
-//     '/static/data/P00517/2uw6_A_trans.cif',
-//     '/static/data/P00517/3e8e_K_trans.cif',
-//     '/static/data/P00517/5vib_A_trans.cif',
-//     '/static/data/P00517/2uzw_A_trans.cif',
-//     '/static/data/P00517/2uw3_A_trans.cif',
-//     '/static/data/P00517/2uvx_A_trans.cif',
-//     '/static/data/P00517/3e8c_A_trans.cif',
-//     '/static/data/P00517/3zo2_A_trans.cif',
-//     '/static/data/P00517/1veb_A_trans.cif',
-//     '/static/data/P00517/4c36_A_trans.cif',
-//     '/static/data/P00517/2vo6_A_trans.cif',
-//     '/static/data/P00517/1smh_A_trans.cif',
-//     '/static/data/P00517/6e9l_A_trans.cif',
-//     '/static/data/P00517/2f7x_A_trans.cif',
-//     '/static/data/P00517/4ij9_A_trans.cif',
-//     '/static/data/P00517/2gnl_A_trans.cif',
-//     '/static/data/P00517/3ag9_B_trans.cif',
-//     '/static/data/P00517/3e8e_E_trans.cif',
-//     '/static/data/P00517/2jdv_A_trans.cif',
-//     '/static/data/P00517/2ojf_A_trans.cif',
-//     '/static/data/P00517/1ydr_A_trans.cif',
-//     '/static/data/P00517/2oh0_A_trans.cif',
-//     '/static/data/P00517/3e8c_D_trans.cif',
-//     '/static/data/P00517/4c38_A_trans.cif',
-//     '/static/data/P00517/2c1b_A_trans.cif',
-//     '/static/data/P00517/4yxs_A_trans.cif',
-//     '/static/data/P00517/1xh4_A_trans.cif',
-//     '/static/data/P00517/1stc_A_trans.cif',
-//     '/static/data/P00517/2uw4_A_trans.cif',
-//     '/static/data/P00517/3dne_A_trans.cif',
-//     '/static/data/P00517/3e8c_B_trans.cif',
-//     '/static/data/P00517/1svh_A_trans.cif',
-//     '/static/data/P00517/2uzu_A_trans.cif',
-//     '/static/data/P00517/4c34_A_trans.cif',
-//     '/static/data/P00517/1xh8_A_trans.cif',
-//     '/static/data/P00517/2uvz_A_trans.cif',
-//     '/static/data/P00517/3e8e_C_trans.cif',
-//     '/static/data/P00517/2jds_A_trans.cif',
-//     '/static/data/P00517/2f7e_A_trans.cif',
-//     '/static/data/P00517/2uw8_A_trans.cif',
-//     '/static/data/P00517/2gni_A_trans.cif',
-//     '/static/data/P00517/2f7z_A_trans.cif',
-//     '/static/data/P00517/4z83_A_trans.cif',
-//     '/static/data/P00517/1ydt_A_trans.cif',
-//     '/static/data/P00517/1q24_A_trans.cif',
-//     '/static/data/P00517/1szm_A_trans.cif',
-//     '/static/data/P00517/2gnj_A_trans.cif',
-//     '/static/data/P00517/3kkv_A_trans.cif',
-//     '/static/data/P00517/2vo7_A_trans.cif',
-//     '/static/data/P00517/3e8c_E_trans.cif',
-//     '/static/data/P00517/3e8e_I_trans.cif',
-//     '/static/data/P00517/2uvy_A_trans.cif',
-//     '/static/data/P00517/4c37_A_trans.cif',
-//     '/static/data/P00517/3zo3_A_trans.cif',
-//     '/static/data/P00517/3e8c_C_trans.cif',
-//     '/static/data/P00517/2uw7_A_trans.cif',
-//     '/static/data/P00517/6e99_A_trans.cif',
-//     '/static/data/P00517/2gnf_A_trans.cif',
-//     '/static/data/P00517/2c1a_A_trans.cif',
-//     '/static/data/P00517/1xh7_A_trans.cif',
-//     '/static/data/P00517/2vny_A_trans.cif',
-//     '/static/data/P00517/1q8u_A_trans.cif',
-//     '/static/data/P00517/1svg_A_trans.cif'
-// ]
 let myMap = {}; // Dictionary for color mapping
 let myScheme = {}; // Scheme object for ligand colouring: takes binding site (bs) property and myMap
 let loadedCount = 0; // Counter for loaded structures
@@ -151,7 +53,7 @@ simplePdbs.forEach(simplePdb => {
                 // console.log("Model order", modelOrder);
 
                 viewer.setViewStyle({style:"outline", width:0.0625, color:"black"}); // cartoon outline
-                viewer.setStyle({hetflag: false}, {cartoon: {hidden: false, style: 'oval', color: 'white', arrows: true, thickness: 0.25, opacity: 0.5}}); // cartoon representation for protein
+                viewer.setStyle({hetflag: false}, {cartoon: {hidden: false, style: 'oval', color: 'white', arrows: true, thickness: 0.25, opacity: 0.8}}); // cartoon representation for protein
                 viewer.setStyle({hetflag: true}, {stick: {hidden: true, radius: 0}}); // stick representation for ligands (HETATM), hidden by default
 
                 viewer.addStyle({and:[{hetflag: true}, {not:{resn: "HOH"}}]}, {stick: {hidden: true, color: "blue", radius: 0.25}}); // stick representation for ligands (not HOH)
@@ -224,7 +126,7 @@ simplePdbs.forEach(simplePdb => {
                             {hetflag: false},
                         );
                         //print resnums
-                        console.log(PDBResNums);
+                        // console.log(PDBResNums);
                     }
                     else {
                         let siteColor = chartColors[Number(key.split("_").pop())];

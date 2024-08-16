@@ -203,7 +203,7 @@ def results(prot_id, seg_id): # route for results site. Takes Prot ID and Seg ID
     assembly_pdbs = os.listdir(os.path.join(DATA_FOLDER, prot_id, str(seg_id), "assemblies")) # CIF bio assembly file names
     assembly_pdbs = [el for el in assembly_pdbs if el.endswith(".cif")]
 
-    assembly_pdb_ids = sorted(list(set([el.split("_")[0] for el in assembly_pdbs]))) # sorted unique PDB IDs
+    assembly_pdb_ids = sorted(list(set([el.split("_")[0] for el in assembly_pdbs])),) # sorted unique PDB IDs
 
     simple_pdbs = os.listdir(os.path.join(DATA_FOLDER, prot_id, str(seg_id), "simple")) # simple PDB file names (single chain)
     simple_pdbs = [el for el in simple_pdbs if el.endswith(".cif")]

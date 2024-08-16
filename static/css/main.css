@@ -277,36 +277,9 @@ img.responsive-logo {
 	font-style: normal;
 }
 
-
-
-/* .border {
-    border: 2px solid black;
-    width: fit-content;
-    margin: 2rem;
-    padding: 0.5rem;
-}
-.sans {
-    font-family: sans-serif;
-} */
 .uniwidthsans {
     font-family: 'PT Root UI', sans-serif;
 }
-/* .hoverbold {
-    font-weight: normal;
-}
-.hoverbold:hover {
-    font-weight: bold;
-} */
-
-
-/* .rounded-border {
-    border: 2px solid black;
-    border-radius: 5px;
-} */
-
-/* .custom-row {
-    align-items: stretch; 
-} */
 
 .column:not(:last-child) {
     position: relative;
@@ -350,3 +323,48 @@ img.responsive-logo {
 .ui-menu-item .ui-menu-item-wrapper.ui-state-active {
     color: #734A98 !important;
 } 
+
+
+/* Custom dropdown styling */
+
+.dropup {
+    position: relative;
+    display: inline-block;
+}
+
+.dropup-content {
+    display: none;
+    position: absolute;
+    background-color: #f9f9f9;
+    min-width: 160px;
+    bottom: 100%;
+    z-index: 1;
+    overflow-y: auto;
+    max-height: 200px; /* Adjust based on your requirement */
+    box-shadow: 5px 8px 16px 0px rgba(0,0,0,0.2);
+}
+
+.dropup-content a {
+    color: black;
+    padding: 12px 16px;
+    text-decoration: none;
+    display: block;
+    outline: 1px solid black;
+}
+
+.dropup-content a:hover {background-color: #f1f1f1}
+
+/* .dropup:hover .dropup-content {
+    display: block;
+} */
+
+.dropup-button {
+    background-color:#f1f1f1;
+    color: black;
+    padding: 10px;
+    font-size: 16px;
+    border: 1px solid black;
+    cursor: pointer;
+    /* outline: 1px solid black; Adds the outline */
+    border-radius: 5px; /* Optional: Adds rounded corners */
+}
