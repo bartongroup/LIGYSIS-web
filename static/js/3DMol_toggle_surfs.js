@@ -190,8 +190,9 @@ function toggleContactsVisibility() {
             // Assuming the data is used to set styles or other properties
             //viewer.setStyle({}, {cross: {hidden: false, data: data}});
             let contacts = JSON.parse(data.contacts);
+            let strucLigData = data.ligands;
             bindingRess = Array.from(new Set(contacts.map(item => item.auth_seq_id_end)));
-            bindingLigs = Array.from(new Set(contacts.map(item => item.label_comp_id_bgn)));
+            // bindingLigs = Array.from(new Set(contacts.map(item => item.label_comp_id_bgn)));
             console.log("Binding residues:", bindingRess);
                 
             contacts.forEach(item => {
@@ -216,7 +217,26 @@ function toggleContactsVisibility() {
             });
 
             viewer.addStyle({resi: bindingRess}, {stick: {hidden: false, color: "white", radius: 0.25}});
-            viewer.addStyle({resn: bindingLigs}, {stick: {hidden: false, color: "red", radius: 0.25}});
+            // viewer.addStyle({resn: bindingLigs}, {stick: {hidden: false, color: "red", radius: 0.25}});
+            for (let i = 0; i < strucLigData.length; i++) {
+                let ligand = strucLigData[i];
+                let ligandResn = ligand[0]
+                let ligandChain = ligand[1];
+                let ligandResi = ligand[2];
+                let ligandColor = chartColors[ligand[3]];
+                viewer.addStyle({resi: ligandResi, chain: ligandChain, resn: ligandResn}, {stick: {hidden: false, color: ligandColor, radius: 0.25}});
+                // viewer.addLabel(
+                //     ligandResn + ligandResi,
+                //     {
+                //         alignment: 'center', backgroundColor: 'white', backgroundOpacity: 1,
+                //         borderColor: 'black', borderOpacity: 1, borderThickness: 2,
+                //         font: 'Arial', fontColor: ligandColor, fontOpacity: 1, fontSize: 12,
+                //         inFront: true, screenOffset: [0, 0, 0], showBackground: true
+                //     },
+                //     {resi: ligandResi, chain: ligandChain},
+                //     true,
+                // );
+            }
 
             viewer.render();
 

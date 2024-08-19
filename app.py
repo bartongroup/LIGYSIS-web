@@ -12,6 +12,17 @@ from flask import Flask, render_template, url_for, request, redirect, jsonify, R
 
 from config import BASE_DIR, DATA_FOLDER, SITE_TABLES_FOLDER, RES_TABLES_FOLDER, REP_STRUCS_FOLDER, BS_RESS_FOLDER, MAPPINGS_FOLDER, STATS_FOLDER, ENTRY_NAMES_FOLDER
 
+### VARIABLES ###
+
+arpeggio_cols = [
+        'contact', 'distance',
+        'auth_asym_id_end', 'auth_atom_id_end', 'auth_seq_id_end',
+        'label_comp_id_end', 'auth_asym_id_bgn',
+        'auth_atom_id_bgn', 'auth_seq_id_bgn', 'label_comp_id_bgn',
+        'orig_label_asym_id_end', 'UniProt_ResNum_end',
+        'coords_end', 'coords_bgn', 'width', 'color'
+]
+
 ### FUNCTIONS ###
 
 def load_pickle(f_in): # loads pickle and returns data
@@ -75,6 +86,25 @@ def transform_lines2(defattr_in, opened_chimX, loaded_3dmol): # gets binding sit
                     print("Model not found")
     bs_ids = sorted(int(item) for item in set(bs_ids)) # gets unique set of sorted binding site IDs
     return data, bs_ids
+
+def transform_dict(input_dict):
+    """
+    Transforms a dictionary where keys are in the format 'prefix_ATP_D_400'
+    into a list of tuples in the format [("ATP", "D", 400, value),]
+
+    Args:
+    input_dict (dict): Dictionary to be transformed.
+
+    Returns:
+    list: A list of tuples containing transformed data.
+    """
+    result_list = []
+    for key, value in input_dict.items():
+        # Split the key by '_' and extract necessary parts
+        parts = key.split('_')
+        # Append the new tuple to the result list
+        result_list.append((parts[1], parts[2], int(parts[3]), value))
+    return result_list
 
 ### READING INPUT DATA ###
 
@@ -316,15 +346,7 @@ def get_contacts():
     seg_id = data['segmentId']
     
     arpeggio_cons = pd.read_pickle(f'{DATA_FOLDER}/{prot_id}/{seg_id}/arpeggio/{active_model}_bio_proc.pkl')
-
-    arpeggio_cols = [
-        'contact', 'distance',
-        'auth_asym_id_end', 'auth_atom_id_end', 'auth_seq_id_end',
-        'label_comp_id_end', 'auth_asym_id_bgn',
-        'auth_atom_id_bgn', 'auth_seq_id_bgn', 'label_comp_id_bgn',
-        'orig_label_asym_id_end', 'UniProt_ResNum_end',
-        'coords_end', 'coords_bgn', 'width', 'color'
-        ]
+    
 
     arpeggio_cons_filt = arpeggio_cons[
     (arpeggio_cons['contact'].apply(lambda x: x != ["proximal"])) &
@@ -337,6 +359,22 @@ def get_contacts():
     response_data = {
         'contacts': json_cons,
     }
+
+    bs_membership = pd.read_pickle(f'{DATA_FOLDER}/example/other/{prot_id}_{seg_id}_ALL_inf_bss_membership.pkl')
+
+    bs_membership_rev = {v: k for k, vs in bs_membership.items() for v in vs}
+
+    struc_ligs = {k: v for k, v in bs_membership_rev.items() if k.startswith(active_model)}
+
+    struc_ligs_data = transform_dict(struc_ligs)
+
+    print(struc_ligs_data)
+
+    response_data = {
+        'contacts': json_cons,
+        'ligands': struc_ligs_data
+    }
+
 
     return jsonify(response_data) # send jasonified data back to client
 
