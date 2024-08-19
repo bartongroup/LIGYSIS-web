@@ -53,7 +53,7 @@ simplePdbs.forEach(simplePdb => {
                 // console.log("Model order", modelOrder);
 
                 viewer.setViewStyle({style:"outline", width:0.0625, color:"black"}); // cartoon outline
-                viewer.setStyle({hetflag: false}, {cartoon: {hidden: false, style: 'oval', color: 'white', arrows: true, thickness: 0.25, opacity: 0.8}}); // cartoon representation for protein
+                viewer.setStyle({hetflag: false}, {cartoon: {hidden: false, style: 'oval', color: 'white', arrows: true, thickness: 0.25, opacity: 1.0}}); // cartoon representation for protein
                 viewer.setStyle({hetflag: true}, {stick: {hidden: true, radius: 0}}); // stick representation for ligands (HETATM), hidden by default
 
                 viewer.addStyle({and:[{hetflag: true}, {not:{resn: "HOH"}}]}, {stick: {hidden: true, color: "blue", radius: 0.25}}); // stick representation for ligands (not HOH)
@@ -75,7 +75,7 @@ simplePdbs.forEach(simplePdb => {
                     const maxId = data.maxId;
                     resultTuples.forEach(([modId, chain, resi, pBs]) => {
                         // Execute your JavaScript commands here using these values
-                        console.log(modId, chain, resi, pBs);
+                        // console.log(modId, chain, resi, pBs);
                         var mySel = viewer.models[modId].atoms.filter(atom => atom.chain === chain & atom.resi === resi);
                         mySel.forEach(atom => {atom.properties["bs"] = pBs;});
                     });
@@ -116,7 +116,7 @@ simplePdbs.forEach(simplePdb => {
                     let PDBResNums = seg_ress_dict[key].map(el => Up2PdbDict[repPdbId][repPdbChainId][el]);
                     if (key == "ALL_BINDING") {
                 
-                        surfsDict["non_binding"] = viewer.addSurface(
+                        surfsDict["superposition"]["non_binding"] = viewer.addSurface(
                             $3Dmol.SurfaceType.ISO,
                             {
                                 color: 'white',
@@ -130,7 +130,7 @@ simplePdbs.forEach(simplePdb => {
                     }
                     else {
                         let siteColor = chartColors[Number(key.split("_").pop())];
-                        surfsDict[key] = viewer.addSurface(
+                        surfsDict["superposition"][key] = viewer.addSurface(
                             $3Dmol.SurfaceType.ISO,
                             {
                                 color: siteColor,

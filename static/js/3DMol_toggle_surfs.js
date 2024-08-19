@@ -1,14 +1,19 @@
 function toggleSurfaceVisibility() {
     var button = document.getElementById('surfButton');
     if (surfaceVisible) { // hide all surfaces
-        for (const [key, value] of Object.entries(surfsDict)) {
-            if (key == "non_binding") {
-                viewer.setSurfaceMaterialStyle(surfsDict[key].surfid, {color: 'white', opacity:0.0});
+        if (activeModel == "superposition") {
+            for (const [key, value] of Object.entries(surfsDict["superposition"])) {
+                if (key == "non_binding") {
+                    viewer.setSurfaceMaterialStyle(surfsDict["superposition"][key].surfid, {color: 'white', opacity:0.0});
+                }
+                else {
+                    let siteColor = chartColors[Number(key.split("_").pop())];
+                    viewer.setSurfaceMaterialStyle(surfsDict["superposition"][key].surfid, {color: siteColor, opacity:0.0});
+                }
             }
-            else {
-                let siteColor = chartColors[Number(key.split("_").pop())];
-                viewer.setSurfaceMaterialStyle(surfsDict[key].surfid, {color: siteColor, opacity:0.0});
-            }
+        }
+        else {
+            viewer.setSurfaceMaterialStyle(surfsDict[activeModel].surfid, {color: 'white', opacity:0.0});
         }
         button.value = 'Surface OFF'; // Change the button text
         button.style = "font-weight: bold; color: #674ea7;";
@@ -21,19 +26,24 @@ function toggleSurfaceVisibility() {
             let clickedElement = clickedElements[0];
             let clickedElementId = clickedElement.id;
             let siteColor = chartColors[Number(clickedElementId.split("_").pop())];
-            let surfid = surfsDict[clickedElementId].surfid;
+            let surfid = surfsDict["superposition"][clickedElementId].surfid;
             viewer.setSurfaceMaterialStyle(surfid, {color: siteColor, opacity:0.9}); // show ONLY surface of clicked row
         }
         else {
             // change surface opacity
-            for (const [key, value] of Object.entries(surfsDict)) {
-                if (key == "non_binding") {
-                    viewer.setSurfaceMaterialStyle(surfsDict[key].surfid, {color: 'white', opacity:0.7});
+            if (activeModel == "superposition") {
+                for (const [key, value] of Object.entries(surfsDict["superposition"])) {
+                    if (key == "non_binding") {
+                        viewer.setSurfaceMaterialStyle(surfsDict["superposition"][key].surfid, {color: 'white', opacity:0.7});
+                    }
+                    else {
+                        let siteColor = chartColors[Number(key.split("_").pop())];
+                        viewer.setSurfaceMaterialStyle(surfsDict["superposition"][key].surfid, {color: siteColor, opacity:0.8});
+                    }
                 }
-                else {
-                    let siteColor = chartColors[Number(key.split("_").pop())];
-                    viewer.setSurfaceMaterialStyle(surfsDict[key].surfid, {color: siteColor, opacity:0.8});
-                }
+            }
+            else {
+                viewer.setSurfaceMaterialStyle(surfsDict[activeModel].surfid, {color: 'white', opacity:0.7});
             }
         }
         button.value = "Surface ON"; // Change the button text

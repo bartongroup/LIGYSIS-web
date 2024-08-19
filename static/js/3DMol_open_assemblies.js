@@ -43,7 +43,7 @@ function selectOption(option) {
             }
             contactCylinders = [];
 
-            viewer.removeSurface(activeModelSurf.surfid);
+            viewer.removeSurface(surfsDict[activeModel].surfid);
             console.log("Assembly surface removed!");
         
             if (option !== 'Superposition') {
@@ -60,7 +60,7 @@ function selectOption(option) {
                     viewer.getModel(i).hide();    
                 }
 
-                activeModel = 0;
+                activeModel = 'superposition';
 
                 viewer.render();
             }
@@ -82,6 +82,7 @@ function openStructure(pdbId) {
         success: function(data) {
             let model = viewer.addModel(data, "cif",); // Load data
             let modelID = model.getID(); // Gets the ID of the GLModel
+            activeModel = modelID;
 
             // Hide ligand superposition models
             for (let i = 0; i <= models.length-1; i++) {
@@ -93,11 +94,11 @@ function openStructure(pdbId) {
             viewer.zoomTo({model: modelID})
             //viewer.zoom(2,1000);
 
-            activeModelSurf = viewer.addSurface(
+            surfsDict[activeModel] = viewer.addSurface(
                 $3Dmol.SurfaceType.ISO,
                 {
                     color: 'white',
-                    opacity: 0.8,
+                    opacity: 0.0,
                 },
                 {model: modelID, hetflag: false},
                 {hetflag: false},
@@ -110,7 +111,6 @@ function openStructure(pdbId) {
             modelOrderRev[modelID] = pdbID; // populate dictionary
             models.push(model); // add model at the end of list
             loadedCount++; // Increment counter
-            activeModel = modelID;
         },
         error: function(hdr, status, err) {
             console.error( "Failed to load PDB " + pdbUri + ": " + err );
