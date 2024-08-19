@@ -96,8 +96,8 @@ function openStructure(pdbId) {
             activeModelSurf = viewer.addSurface(
                 $3Dmol.SurfaceType.ISO,
                 {
-                    color: 'blue',
-                    opacity: 1.0,
+                    color: 'white',
+                    opacity: 0.8,
                 },
                 {model: modelID, hetflag: false},
                 {hetflag: false},

@@ -178,10 +178,14 @@ def results(prot_id, seg_id): # route for results site. Takes Prot ID and Seg ID
 
     data2 = prot_ress.to_dict(orient="list")
 
-    bs_ress_dict = load_pickle(os.path.join(BS_RESS_FOLDER, "{}_bs_ress.pkl".format(prot_id)))
+    #bs_ress_dict = load_pickle(os.path.join(BS_RESS_FOLDER, "{}_bs_ress.pkl".format(prot_id)))
+    bs_ress_dict = load_pickle(os.path.join(DATA_FOLDER, "example", "other", f'{prot_id}_{seg_id}_ALL_inf_bss_ress.pkl'))
 
-    seg_ress_dict = bs_ress_dict[prot_id][seg_id]
+    seg_ress_dict = bs_ress_dict#[prot_id][seg_id]
     seg_ress_dict = {str(key): value for key, value in seg_ress_dict.items()}
+    # add key: "ALL_BINDING" and value a sorted set of all binding residues
+    seg_ress_dict["ALL_BINDING"] = sorted(list(set([el2 for el in seg_ress_dict.values() for el2 in el])))
+    print(seg_ress_dict)
 
     pdb2up_dict = load_pickle(os.path.join(MAPPINGS_FOLDER, "pdb2up", "{}_pdb2up_mapping.pkl".format(segment_reps[int(seg_id)]["rep"])))
 

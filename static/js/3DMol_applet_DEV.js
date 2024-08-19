@@ -75,7 +75,7 @@ simplePdbs.forEach(simplePdb => {
                     const maxId = data.maxId;
                     resultTuples.forEach(([modId, chain, resi, pBs]) => {
                         // Execute your JavaScript commands here using these values
-                        // console.log(modId, chain, resi, pBs);
+                        console.log(modId, chain, resi, pBs);
                         var mySel = viewer.models[modId].atoms.filter(atom => atom.chain === chain & atom.resi === resi);
                         mySel.forEach(atom => {atom.properties["bs"] = pBs;});
                     });
