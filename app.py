@@ -346,19 +346,14 @@ def get_contacts():
     seg_id = data['segmentId']
     
     arpeggio_cons = pd.read_pickle(f'{DATA_FOLDER}/{prot_id}/{seg_id}/arpeggio/{active_model}_bio_proc.pkl')
-    
 
     arpeggio_cons_filt = arpeggio_cons[
-    (arpeggio_cons['contact'].apply(lambda x: x != ["proximal"])) &
-    (arpeggio_cons['interacting_entities'] == "INTER") &
-    (arpeggio_cons['type'] == "atom-atom")
-]
+        (arpeggio_cons['contact'].apply(lambda x: x != ["proximal"])) &
+        (arpeggio_cons['interacting_entities'] == "INTER") &
+        (arpeggio_cons['type'] == "atom-atom")
+    ]
 
     json_cons= arpeggio_cons_filt[arpeggio_cols].to_json(orient='records')
-
-    response_data = {
-        'contacts': json_cons,
-    }
 
     bs_membership = pd.read_pickle(f'{DATA_FOLDER}/example/other/{prot_id}_{seg_id}_ALL_inf_bss_membership.pkl')
 
@@ -368,13 +363,12 @@ def get_contacts():
 
     struc_ligs_data = transform_dict(struc_ligs)
 
-    print(struc_ligs_data)
+    # print(struc_ligs_data)
 
     response_data = {
         'contacts': json_cons,
         'ligands': struc_ligs_data
     }
-
 
     return jsonify(response_data) # send jasonified data back to client
 

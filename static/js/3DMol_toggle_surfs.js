@@ -153,6 +153,78 @@ function toggleLigandsVisibility() {
     viewer.render();
 }
 
+let ligandLabel = null; // Shared variable for the label
+let interLabel = null; // Shared variable for the label
+let protLabel = null; // Shared variable for the label
+
+const undefInters = ["covalent", "vdw", "vdw_clash", "proximal"]
+
+function findMiddlePoint(bgnCoords, endCoords) {
+    if (bgnCoords.length !== 3 || endCoords.length !== 3) {
+        throw new Error('Both coordinates must be arrays of three elements.');
+    }
+
+    let middlePoint = [
+        (bgnCoords[0] + endCoords[0]) / 2,
+        (bgnCoords[1] + endCoords[1]) / 2,
+        (bgnCoords[2] + endCoords[2]) / 2
+    ];
+
+    return middlePoint;
+}
+
+function onHoverCallback(
+    // contactBgnCoords, contactEndCoords, contactColor,
+    // contactDistance, proteinChainId, ligandChainId,
+    // proteinResNum, ligandResNum, proteinResName, ligandResName,
+    // proteinAtomName, ligandAtomName, theContactType, viewer
+    ) {
+        console.log(this.backgroundColor);
+
+    console.log("Hovering over a contact!");
+
+
+    // var middlePoint = findMiddlePoint(contactBgnCoords, contactEndCoords);
+    // // Create a label here
+    // // Example: Show a label at the cursor position
+    // ligandLabel = viewer.addLabel(`${ligandAtomName} ${ligandResName} ${ligandResNum} ${ligandChainId}`, {
+    //     position: {x: contactBgnCoords[0], y: contactBgnCoords[1], z: contactBgnCoords[2]},
+    //     alignment: "center", borderColor: "black",
+    //     borderThickness: 2, fontSize: 12, 
+    //     backgroundColor: 'white',
+    //     fontColor: "black",
+    // });
+    // interLabel = viewer.addLabel(`${theContactType} ${contactDistance}Å`, {
+    //     position: {x: middlePoint[0], y: middlePoint[1], z: middlePoint[2]},
+    //     alignment: "center", borderColor: contactColor,
+    //     borderThickness: 2, fontSize: 12, 
+    //     backgroundColor: 'white',
+    //     fontColor: contactColor,
+    // });
+    // protLabel = viewer.addLabel(`${proteinAtomName} ${proteinResName} ${proteinResNum} ${proteinChainId}`, {
+    //     position: {x: contactEndCoords[0], y: contactEndCoords[1], z: contactEndCoords[2]},
+    //     alignment: "center", borderColor: "black",
+    //     borderThickness: 2, fontSize: 12, 
+    //     backgroundColor: 'white',
+    //     fontColor: "black",
+    // });
+
+    // cylinderLabels.push([ligandLabel, interLabel, protLabel]);
+
+}
+
+function onUnhoverCallback(index, viewer) {
+    // remove labels and empty index element of cylinderLabels
+    viewer.removeLabel(cylinderLabels[index][0]); // Remove the ligand atom label
+    viewer.removeLabel(cylinderLabels[index][1]); // Remove the interaction type label
+    viewer.removeLabel(cylinderLabels[index][2]); // Remove the protein atom label
+    //cylinderLabels[index] = [];
+    // cylinderLabels[index][0] = null;
+    // cylinderLabels[index][1] = null;
+    // cylinderLabels[index][2] = null;
+    viewer.render();
+}
+
 function toggleContactsVisibility() {
     var button = document.getElementById('contactsButton');
     if (contactsVisible) {
@@ -193,15 +265,44 @@ function toggleContactsVisibility() {
             let strucLigData = data.ligands;
             bindingRess = Array.from(new Set(contacts.map(item => item.auth_seq_id_end)));
             // bindingLigs = Array.from(new Set(contacts.map(item => item.label_comp_id_bgn)));
-            console.log("Binding residues:", bindingRess);
+            // console.log("Binding residues:", bindingRess);
                 
-            contacts.forEach(item => {
+            contacts.forEach((item, index) => {
+                // console.log(`Index: ${index}, Contact Name: ${item}`);
                 // Extracting the necessary variables from each item
-                let contactBgnCoords = item.coords_bgn.map(coord => parseFloat(coord)); // Array of coordinates for start
-                let contactEndCoords = item.coords_end.map(coord => parseFloat(coord)); // Array of coordinates for end
+                let contactBgnCoords = item.coords_bgn.map(coord => parseFloat(coord)); // Array of coordinates for ligand atom
+                let contactEndCoords = item.coords_end.map(coord => parseFloat(coord)); // Array of coordinates for protein atom
+
+                let contactType = item.contact;
+                let theContactType;
                 let contactWidth = parseFloat(item.width);           // Radius
                 let contactColor = item.color;           // Color
+                let contactDistance = parseFloat(item.distance); // Distance
+
+                let proteinChainId = item.auth_asym_id_end;
+                let proteinResName = item.label_comp_id_end;
+                let proteinResNum = item.auth_seq_id_end;
+                let proteinAtomName = item.auth_atom_id_end;
+
+                let ligandChainId = item.auth_asym_id_bgn;
+                let ligandResName = item.label_comp_id_bgn;
+                let ligandResNum = item.auth_seq_id_bgn;
+                let ligandAtomName = item.auth_atom_id_bgn;
+
+                // process contact fingerprint to get more relevant interaction type
+                if (contactType.length == 1) {
+                    theContactType = contactType[0];
+                }
+                else {
+                    let relevantInters = contactType.filter(el => !undefInters.includes(el));
+                    if (relevantInters.length > 0) {
+                        console.log("Relevant interactions:", relevantInters);
+                    }
+                    theContactType = relevantInters[0];
+                }
+                
                 // console.log(contactBgnCoords, contactEndCoords, contactWidth, contactColor);
+                
             
                 // Running the viewer.addCylinder command
                 var contactCylinder = viewer.addCylinder({
@@ -212,6 +313,95 @@ function toggleContactsVisibility() {
                     fromCap: 1,
                     toCap: 1,
                     color: contactColor,
+                    userData: {
+                        contactBgnCoords: contactBgnCoords,
+                        contactEndCoords: contactEndCoords,
+                        contactColor: contactColor,
+                        contactDistance: contactDistance,
+                        proteinChainId: proteinChainId,
+                        ligandChainId: ligandChainId,
+                        proteinResNum: proteinResNum,
+                        ligandResNum: ligandResNum,
+                        proteinResName: proteinResName,
+                        ligandResName: ligandResName,
+                        proteinAtomName: proteinAtomName,
+                        ligandAtomName: ligandAtomName,
+                        theContactType: theContactType,
+                        index: index,
+                    },
+                    // hoverable: true,
+                    // hover_callback: onHoverCallback(
+                    //     // contactBgnCoords, contactEndCoords, contactColor,
+                    //     // contactDistance, proteinChainId, ligandChainId,
+                    //     // proteinResNum, ligandResNum, proteinResName, ligandResName,
+                    //     // proteinAtomName, ligandAtomName, theContactType, viewer
+                    //     ),
+                    // unhover_callback: onUnhoverCallback(),
+                    hoverable:true,
+                    //clickable:true,
+                    //callback:
+                    hover_callback: function(){
+                        //console.log(this.userData); this.color.setHex(0x00FFFF00);viewer.render();
+                        var middlePoint = findMiddlePoint(
+                            this.stylespec.userData.contactBgnCoords,
+                            this.stylespec.userData.contactEndCoords
+                            );
+                        // Create a label here
+                        // Example: Show a label at the cursor position
+                        ligandLabel = viewer.addLabel(
+                            `${this.stylespec.userData.ligandAtomName} ${this.stylespec.userData.ligandResName} ${this.stylespec.userData.ligandResNum} ${this.stylespec.userData.ligandChainId}`,
+                            {
+                                position: {
+                                    x: this.stylespec.userData.contactBgnCoords[0],
+                                    y: this.stylespec.userData.contactBgnCoords[1],
+                                    z: this.stylespec.userData.contactBgnCoords[2]
+                                },
+                                alignment: "center", borderColor: "black",
+                                borderThickness: 2, fontSize: 12, 
+                                backgroundColor: 'white',
+                                fontColor: "black",
+                            }
+                        );
+
+                        interLabel = viewer.addLabel(
+                            `${theContactType} ${contactDistance}Å`,
+                            {
+                                position: {
+                                    x: middlePoint[0],
+                                    y: middlePoint[1],
+                                    z: middlePoint[2]
+                                },
+                                alignment: "center", borderColor: contactColor,
+                                borderThickness: 2, fontSize: 12, 
+                                backgroundColor: 'white',
+                                fontColor: contactColor,
+                            }
+                        );
+
+                        protLabel = viewer.addLabel(
+                            `${this.stylespec.userData.proteinAtomName} ${this.stylespec.userData.proteinResName} ${this.stylespec.userData.proteinResNum} ${this.stylespec.userData.proteinChainId}`,
+                            {
+                                position: {
+                                    x: this.stylespec.userData.contactEndCoords[0],
+                                    y: this.stylespec.userData.contactEndCoords[1],
+                                    z: this.stylespec.userData.contactEndCoords[2]
+                                },
+                                alignment: "center", borderColor: "black",
+                                borderThickness: 2, fontSize: 12, 
+                                backgroundColor: 'white',
+                                fontColor: "black",
+                            }
+                        );
+
+                        cylinderLabels[this.stylespec.userData.index] = [ligandLabel, interLabel, protLabel];
+
+                    },
+                    unhover_callback: function(){
+                        // this.color.setHex(0xFF0000);viewer.render();
+                        viewer.removeLabel(cylinderLabels[this.stylespec.userData.index][0]); // Remove the ligand atom label
+                        viewer.removeLabel(cylinderLabels[this.stylespec.userData.index][1]); // Remove the interaction type label
+                        viewer.removeLabel(cylinderLabels[this.stylespec.userData.index][2]); // Remove the protein atom label
+                    }
                 });
                 contactCylinders.push(contactCylinder);
             });
