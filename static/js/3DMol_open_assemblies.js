@@ -32,6 +32,12 @@ function selectOption(option) {
 
 
         if (previousSelection === 'Superposition') { // changing from Ligand Superposition to any assembly
+
+            viewer.setHoverable({model: suppModels}, false, // Hovering disabled for ligand superposition models (otherwise get wrong labels)
+                showHoverLabel,
+                removeHoverLabel,
+            );
+
             openStructure(option);
         }
 
@@ -43,24 +49,38 @@ function selectOption(option) {
             }
             contactCylinders = [];
 
-            viewer.removeSurface(surfsDict[activeModel].surfid);
+            viewer.removeSurface(surfsDict[activeModel].surfid); // Remove surface from previous assembly
             console.log("Assembly surface removed!");
+
+            viewer.setHoverable({model: activeModel}, false, // Hovering disabled for previous assembly
+                showHoverLabel,
+                removeHoverLabel,
+            );
+            console.log("Hvering removed from previous assembly!");
         
             if (option !== 'Superposition') {
+
                 openStructure(option);
             }
 
             if (option == 'Superposition') {
 
                 for (let i = 0; i <= simplePdbs.length-1; i++) {
-                    viewer.getModel(i).show();    
+                    viewer.getModel(i).show(); // Show all ligand superposition models
                 }
                 
-                for (let i = simplePdbs.length; i <= models.length-1; i++) {
-                    viewer.getModel(i).hide();    
+                for (let i = simplePdbs.length; i <= models.length-1; i++) { 
+                    viewer.getModel(i).hide(); // Hide all assemblies 
                 }
 
                 activeModel = 'superposition';
+
+                viewer.setHoverable({model: suppModels}, true, // Hovering re-enabled for superposition
+                    showHoverLabel,
+                    removeHoverLabel,
+                );
+
+                console.log("Hovering activated again for supperposition!");
 
                 viewer.render();
             }
@@ -88,19 +108,23 @@ function openStructure(pdbId) {
             for (let i = 0; i <= models.length-1; i++) {
                 viewer.getModel(i).hide();    
             }
-            // viewer.render();
+
             viewer.setStyle({model: modelID}, {cartoon: {hidden: false, style: 'oval', color: 'white', arrows: true, thickness: 0.25, opacity:1.0}});
             viewer.center({model: modelID});
             viewer.zoomTo({model: modelID})
-            //viewer.zoom(2,1000);
 
-            surfsDict[activeModel] = viewer.addSurface(
+            viewer.setHoverable({model: modelID}, true,  // Hovering enabled for new assembly
+                showHoverLabel,
+                removeHoverLabel,
+            );
+
+            surfsDict[activeModel] = viewer.addSurface( // Add surface to the new assembly
                 $3Dmol.SurfaceType.ISO,
                 {
                     color: 'white',
                     opacity: 0.0,
                 },
-                {model: modelID, hetflag: false},
+                {model: modelID, hetflag: false}, 
                 {hetflag: false},
             );
             viewer.render();
