@@ -137,9 +137,35 @@ function selectOption(option) {
 function openStructure(pdbId) {
     // Example function call to 3DMol.js to load a structure
     console.log("Opening structure:", pdbId);
-    //path to assembly cif
     //let path = '/static/data/' + proteinId + '/' + segmentId + '/assemblies/' + pdbId + '_bio.cif';
-    let pdbUri = `/static/data/${proteinId}/${segmentId}/assemblies/${pdbId}_bio.cif`;
+    let pdbUri = `/static/data/${proteinId}/${segmentId}/assemblies/${pdbId}_bio.cif`; //path to assembly cif
+    
+
+    $.ajax({ // get UniProt residue mappings when loading a new assembly
+        type: 'POST', 
+        url: '/get-uniprot-mapping', // server route
+        contentType: 'application/json;charset=UTF-8',
+        data: JSON.stringify({'pdbId': pdbId, 'proteinId': proteinId, 'segmentId': segmentId}), // sending PDB, Protein and Segment IDs
+        success: function(response) {
+
+            let allMappings = response; // extract the different mapping dictionaries
+            Pdb2UpMapAssembly = allMappings['pdb2up'][pdbId];
+            Up2PdbMapAssembly = allMappings['up2pdb'][pdbId];
+            Chain2AccMapAssembly = allMappings['chain2acc'];
+            chainsMapAssembly = allMappings['chains'];
+
+            proteinChains = Object.keys(Chain2AccMapAssembly).filter(key => Chain2AccMapAssembly[key] === proteinId);
+
+            console.log('UniProt mappings received!');
+
+        },
+        error: function(jqXHR, textStatus, errorThrown) {
+            console.error('Request failed:');
+            console.error('Status:', textStatus);
+            console.error('Error:', errorThrown);
+            console.error('Response:', jqXHR.responseText);
+        },
+    });
     
     jQuery.ajax( pdbUri, { 
         success: function(data) {

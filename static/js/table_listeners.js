@@ -218,40 +218,81 @@ $('table#bss_table tbody').on('mouseover', 'tr', function () { // event listener
     
 });
 
+let AssemblyPDBResNums;
+let SuppPDBResNum;
+
 $('table#bs_ress_table tbody').on('mouseover', 'tr', function () { // event listener for mouseover on table rows
-    let rowId = Number(this.id);  // gets the row id of the table row that is hovered over
+    let rowId = Number(this.id);  // gets the row ID of the table row that is hovered over (this corresponds to the UniProt residue number of this row)
     let index = newChartData[newChartLab].indexOf(rowId); // gets the index of the row id in the chart data
     let rowColor = window.getComputedStyle(this).getPropertyValue('color');
     let rowColorHex = rgbToHex(rowColor);
 
-    if (index !== -1) {
+    AssemblyPDBResNums = [];
+
+    
+    if (index !== -1) { // will always be true if we hover over a row
         
         resetChartStyles(newChart, index, "#ffff99", 10, 16); // changes chart styles to highlight the binding site
 
-        let PDBResNum = Up2PdbDict[repPdbId][repPdbChainId][rowId];
+        if (activeModel == "superposition") { // in this case, only one residue as this is a supperposition of single chains
+            SuppPDBResNum = Up2PdbDict[repPdbId][repPdbChainId][rowId];
+            viewer.setStyle({resi: SuppPDBResNum, hetflag: false}, {cartoon:{style:'oval', color: rowColorHex, arrows: true, opacity: 1.0,thickness: 0.25,}, stick:{color: rowColorHex}, });
+        }
+        else {
+            proteinChains.forEach((element) => { // in case of multiple copies of protein of interest
+                let AssemblyPDBResNum = Up2PdbMapAssembly[chainsMapAssembly[element]][rowId]
+                AssemblyPDBResNums.push([element, AssemblyPDBResNum]);
+                viewer.setStyle(
+                    {resi: AssemblyPDBResNum, chain: element, hetflag: false},
+                    {
+                        cartoon:{style:'oval', color: rowColorHex, arrows: true, opacity: 1.0,thickness: 0.25,},
+                        stick:{color: rowColorHex},
+                    }
+                );
+            });
+        }
 
-        viewer.setStyle({resi: PDBResNum, hetflag: false}, {cartoon:{style:'oval', color: rowColorHex, arrows: true, opacity: 1.0,thickness: 0.25,}, stick:{color: rowColorHex}, }); 
-        
         if (labelsVisible) {
-            let resSel = {resi: PDBResNum}
-            let resName = viewer.selectedAtoms(resSel)[0].resn
-            viewer.addLabel(
-                resName + String(Pdb2UpDict[repPdbId][repPdbChainId][PDBResNum]),
-                {
-                    alignment: 'center', backgroundColor: 'white', backgroundOpacity: 1,
-                    borderColor: 'black', borderOpacity: 1, borderThickness: 2,
-                    font: 'Arial', fontColor: rowColorHex, fontOpacity: 1, fontSize: 12,
-                    inFront: true, screenOffset: [0, 0, 0], showBackground: true
-                },
-                resSel,
-                true,
-            );
+            if (activeModel == "superposition") {
+                let resSel = {resi: SuppPDBResNum, chain: repPdbChainId, hetflag: false}
+                let resName = viewer.selectedAtoms(resSel)[0].resn
+                viewer.addLabel(
+                    resName + String(Pdb2UpDict[repPdbId][repPdbChainId][SuppPDBResNum]),
+                    {
+                        alignment: 'center', backgroundColor: 'white', backgroundOpacity: 1,
+                        borderColor: 'black', borderOpacity: 1, borderThickness: 2,
+                        font: 'Arial', fontColor: rowColorHex, fontOpacity: 1, fontSize: 12,
+                        inFront: true, screenOffset: [0, 0, 0], showBackground: true
+                    },
+                    resSel,
+                    true,
+                );
+            }
+            else {
+                AssemblyPDBResNums.forEach(([chain, resNum]) => {
+                    let resSel = {model: activeModel, resi: resNum, chain: chain, hetflag: false}
+                    let resName = viewer.selectedAtoms(resSel)[0].resn
+                    viewer.addLabel(
+                        resName + String(Pdb2UpMapAssembly[chain][resNum]),
+                        {
+                            alignment: 'center', backgroundColor: 'white', backgroundOpacity: 1,
+                            borderColor: 'black', borderOpacity: 1, borderThickness: 2,
+                            font: 'Arial', fontColor: rowColorHex, fontOpacity: 1, fontSize: 12,
+                            inFront: true, screenOffset: [0, 0, 0], showBackground: true
+                        },
+                        resSel,
+                        true,
+                    );
+                });
+            }
         }
 
         viewer.render({});
     }
 
 }).on('mouseout', 'tr', function () { // event listener for mouseout on table rows
+
+    // AssemblyPDBResNums = [];
 
     let rowId = Number(this.id);  // gets the row id of the table row that is hovered over
 
@@ -265,11 +306,24 @@ $('table#bs_ress_table tbody').on('mouseover', 'tr', function () { // event list
 
         let PDBResNum = Up2PdbDict[repPdbId][repPdbChainId][rowId];
 
-        viewer.setStyle({resi: PDBResNum, hetflag: false}, {cartoon: {style:'oval', color: 'white', arrows: true, opacity: 1.0,thickness: 0.25,}});
-
-        if (labelsVisible) {
-            viewer.removeAllLabels(); // clearing labels from previous clicked site, unless still clicked
+        if (activeModel == "superposition") {
+            viewer.setStyle({resi: SuppPDBResNum, hetflag: false}, {cartoon: {style:'oval', color: 'white', arrows: true, opacity: 1.0,thickness: 0.25,}});
+            if (labelsVisible) {
+                viewer.removeAllLabels(); // clearing labels from previous clicked site, unless still clicked
+            }
         }
+        else {
+            AssemblyPDBResNums.forEach(([chain, resNum]) => {
+                viewer.setStyle({resi: resNum, chain: chain, hetflag: false}, {cartoon: {style:'oval', color: 'white', arrows: true, opacity: 1.0,thickness: 0.25,}});
+            });
+            if (labelsVisible) {
+                viewer.removeAllLabels(); // clearing labels from previous clicked site, unless still clicked
+            }
+        }
+
+        //viewer.setStyle({resi: PDBResNum, hetflag: false}, {cartoon: {style:'oval', color: 'white', arrows: true, opacity: 1.0,thickness: 0.25,}});
+
+        
 
         viewer.render({});
     }

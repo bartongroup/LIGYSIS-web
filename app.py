@@ -106,6 +106,18 @@ def transform_dict(input_dict):
         result_list.append((parts[1], parts[2], int(parts[3]), value))
     return result_list
 
+def convert_mapping_dict(d):
+    rfd = {}
+    for k1, v1 in d.items():
+        rfd[k1] = {}
+        for k2, v2 in v1.items():
+            rfd[k1][k2] = {}
+            for k3, v3 in v2.items():
+                rfd[k1][k2][int(k3)] = int(v3)
+                # for k4, v4 in v3.items():
+                #     rfd[k1][k2][k3][int(k4)] = int(v4)
+    return rfd
+
 ### READING INPUT DATA ###
 
 prot_ids = load_pickle(os.path.join(DATA_FOLDER, "biolip_up_ids_15000_accs.pkl")) # protein idshon
@@ -375,9 +387,28 @@ def get_contacts():
 
     return jsonify(response_data) # send jasonified data back to client
 
+# route to get UniProt residue and chain mapping for a given pdb
+@app.route('/get-uniprot-mapping', methods=['POST'])
+def get_uniprot_mapping():
+    data = request.json
+    pdb_id = data['pdbId']
+    prot_id = data['proteinId']
+    seg_id = data['segmentId']
 
+    pdb2up_map = load_pickle(f'{DATA_FOLDER}/{prot_id}/{seg_id}/mapping/{pdb_id}_pdb2up.pkl')
+    up2pdb_map = load_pickle(f'{DATA_FOLDER}/{prot_id}/{seg_id}/mapping/{pdb_id}_up2pdb.pkl')
+    chain2acc_map = load_pickle(f'{DATA_FOLDER}/{prot_id}/{seg_id}/mapping/{pdb_id}_chain2acc.pkl')
+    chains_map_df = pd.read_pickle(f'{DATA_FOLDER}/{prot_id}/{seg_id}/mapping/{pdb_id}_bio_chain_remapping.pkl')
+    chains_map = dict(zip(chains_map_df["new_auth_asym_id"], chains_map_df["orig_label_asym_id"]))
+    
+    response_data = {
+        'pdb2up': convert_mapping_dict(pdb2up_map),
+        'up2pdb': convert_mapping_dict(up2pdb_map),
+        'chain2acc': chain2acc_map,
+        'chains': chains_map,
+    }
 
-
+    return jsonify(response_data)
 
 ### LAUNCHING SERVER ###
 

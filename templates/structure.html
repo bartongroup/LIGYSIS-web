@@ -31,10 +31,14 @@
     let repStruc = segmentReps[segmentId]["rep"]
     let [repPdbId, repPdbChainId] = repStruc.split("_");
 
-    // console.log(segStats)
-
     const Pdb2UpDict = {{ pdb2up_dict | tojson   }}
     const Up2PdbDict = {{ up2pdb_dict  | tojson  }}
+
+    let Pdb2UpMapAssembly; // this gets populated by the PDB --> UniProt mapping for the active assembly model
+    let Up2PdbMapAssembly; // this gets populated by the UniProt --> PDB mapping for the active assembly model
+    let Chain2AccMapAssembly; // this gets populated by the Chain ID --> UniProt ID mapping for the active assembly model
+    let chainsMapAssembly; // this gets populated by chain remapping data (BIO --> ASYM unit) for the active assembly model
+    let proteinChains; // chain IDs corresponding to the protein of interest
     
     const simplePdbs = {{ simple_pdbs | tojson }}
     const assemblyPdbIds = {{ assembly_pdb_ids | tojson }}
