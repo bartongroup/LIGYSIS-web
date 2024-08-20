@@ -15,12 +15,12 @@ from config import BASE_DIR, DATA_FOLDER, SITE_TABLES_FOLDER, RES_TABLES_FOLDER,
 ### VARIABLES ###
 
 arpeggio_cols = [
-        'contact', 'distance',
-        'auth_asym_id_end', 'auth_atom_id_end', 'auth_seq_id_end',
-        'label_comp_id_end', 'auth_asym_id_bgn',
-        'auth_atom_id_bgn', 'auth_seq_id_bgn', 'label_comp_id_bgn',
-        'orig_label_asym_id_end', 'UniProt_ResNum_end',
-        'coords_end', 'coords_bgn', 'width', 'color'
+    'contact', 'distance',
+    'auth_asym_id_end', 'auth_atom_id_end', 'auth_seq_id_end',
+    'label_comp_id_end', 'auth_asym_id_bgn',
+    'auth_atom_id_bgn', 'auth_seq_id_bgn', 'label_comp_id_bgn',
+    'orig_label_asym_id_end', 'UniProt_ResNum_end',
+    'coords_end', 'coords_bgn', 'width', 'color'
 ]
 
 ### FUNCTIONS ###
@@ -215,7 +215,7 @@ def results(prot_id, seg_id): # route for results site. Takes Prot ID and Seg ID
     seg_ress_dict = {str(key): value for key, value in seg_ress_dict.items()}
     # add key: "ALL_BINDING" and value a sorted set of all binding residues
     seg_ress_dict["ALL_BINDING"] = sorted(list(set([el2 for el in seg_ress_dict.values() for el2 in el])))
-    print(seg_ress_dict)
+    # print(seg_ress_dict)
 
     pdb2up_dict = load_pickle(os.path.join(MAPPINGS_FOLDER, "pdb2up", "{}_pdb2up_mapping.pkl".format(segment_reps[int(seg_id)]["rep"])))
 
@@ -353,7 +353,7 @@ def get_contacts():
         (arpeggio_cons['type'] == "atom-atom")
     ]
 
-    json_cons= arpeggio_cons_filt[arpeggio_cols].to_json(orient='records')
+    json_cons = arpeggio_cons_filt[arpeggio_cols].to_json(orient='records')
 
     bs_membership = pd.read_pickle(f'{DATA_FOLDER}/example/other/{prot_id}_{seg_id}_ALL_inf_bss_membership.pkl')
 
@@ -365,9 +365,12 @@ def get_contacts():
 
     # print(struc_ligs_data)
 
+    struc_prot_data = list(arpeggio_cons_filt[["label_comp_id_end", "auth_asym_id_end", "auth_seq_id_end"]].drop_duplicates().itertuples(index=False, name=None))
+
     response_data = {
         'contacts': json_cons,
-        'ligands': struc_ligs_data
+        'ligands': struc_ligs_data,
+        'protein': struc_prot_data,
     }
 
     return jsonify(response_data) # send jasonified data back to client

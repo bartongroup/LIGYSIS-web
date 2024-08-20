@@ -26,7 +26,7 @@ $('table#bss_table tbody').on('mouseover', 'tr', function () { // event listener
     
     let PDBResNums = seg_ress_dict[rowId].map(el => Up2PdbDict[repPdbId][repPdbChainId][el]);
 
-    viewer.setStyle({resi: PDBResNums}, {cartoon:{style:'oval', color: siteColor, arrows: true, opacity: 1.0,thickness: 0.25,}, stick:{color: siteColor}, });
+    viewer.setStyle({resi: PDBResNums, hetflag: false}, {cartoon:{style:'oval', color: siteColor, arrows: true, opacity: 1.0,thickness: 0.25,}, stick:{color: siteColor}, });
     
     viewer.render({});
     
@@ -47,7 +47,7 @@ $('table#bss_table tbody').on('mouseover', 'tr', function () { // event listener
 
         let PDBResNums = seg_ress_dict[rowId].map(el => Up2PdbDict[repPdbId][repPdbChainId][el]);
 
-        viewer.setStyle({resi: PDBResNums}, {cartoon: {style:'oval', color: 'white', arrows: true, opacity: 1.0,thickness: 0.25,}});
+        viewer.setStyle({resi: PDBResNums, hetflag: false}, {cartoon: {style:'oval', color: 'white', arrows: true, opacity: 1.0,thickness: 0.25,}});
 
         if (clickedElements.length == 0) {
             // console.log("Mouseout from point!");
@@ -163,7 +163,7 @@ $('table#bss_table tbody').on('mouseover', 'tr', function () { // event listener
             for (var i = 0; i < clickedElements.length; i++) {
                 var clickedElementId = clickedElements[i].id;
                 let PDBResNumsClicked = seg_ress_dict[clickedElementId].map(el => Up2PdbDict[repPdbId][repPdbChainId][el]);
-                viewer.setStyle({resi: PDBResNumsClicked}, {cartoon: {style:'oval', color: 'white', arrows: true, opacity: 1.0,thickness: 0.25,}});
+                viewer.setStyle({resi: PDBResNumsClicked, hetflag: false}, {cartoon: {style:'oval', color: 'white', arrows: true, opacity: 1.0,thickness: 0.25,}});
                 viewer.render({});
             }
             clearClickedRows();
@@ -212,7 +212,7 @@ $('table#bss_table tbody').on('mouseover', 'tr', function () { // event listener
 
     }
     
-    viewer.setStyle({resi: PDBResNums}, {cartoon:{style:'oval', color: siteColor, arrows: true, opacity: 1.0,thickness: 0.25,}, stick:{color: siteColor}, });
+    viewer.setStyle({resi: PDBResNums, hetflag: false}, {cartoon:{style:'oval', color: siteColor, arrows: true, opacity: 1.0,thickness: 0.25,}, stick:{color: siteColor}, });
 
     viewer.render({});
     
@@ -230,7 +230,7 @@ $('table#bs_ress_table tbody').on('mouseover', 'tr', function () { // event list
 
         let PDBResNum = Up2PdbDict[repPdbId][repPdbChainId][rowId];
 
-        viewer.setStyle({resi: PDBResNum}, {cartoon:{style:'oval', color: rowColorHex, arrows: true, opacity: 1.0,thickness: 0.25,}, stick:{color: rowColorHex}, }); 
+        viewer.setStyle({resi: PDBResNum, hetflag: false}, {cartoon:{style:'oval', color: rowColorHex, arrows: true, opacity: 1.0,thickness: 0.25,}, stick:{color: rowColorHex}, }); 
         
         if (labelsVisible) {
             let resSel = {resi: PDBResNum}
@@ -265,7 +265,7 @@ $('table#bs_ress_table tbody').on('mouseover', 'tr', function () { // event list
 
         let PDBResNum = Up2PdbDict[repPdbId][repPdbChainId][rowId];
 
-        viewer.setStyle({resi: PDBResNum}, {cartoon: {style:'oval', color: 'white', arrows: true, opacity: 1.0,thickness: 0.25,}});
+        viewer.setStyle({resi: PDBResNum, hetflag: false}, {cartoon: {style:'oval', color: 'white', arrows: true, opacity: 1.0,thickness: 0.25,}});
 
         if (labelsVisible) {
             viewer.removeAllLabels(); // clearing labels from previous clicked site, unless still clicked

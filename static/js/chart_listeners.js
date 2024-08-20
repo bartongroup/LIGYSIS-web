@@ -86,7 +86,7 @@ document.getElementById('chartCanvas').addEventListener('mousemove', function(e)
             highlightTableRow(pointLabel); 
 
             let PDBResNums = seg_ress_dict[pointLabel].map(el => Up2PdbDict[repPdbId][repPdbChainId][el]);
-            viewer.setStyle({resi: PDBResNums}, {cartoon:{style:'oval', color: siteColor, arrows: true, opacity: 1.0, thickness: 0.25,}, stick:{color: siteColor,}, });
+            viewer.setStyle({resi: PDBResNums, hetflag: false}, {cartoon:{style:'oval', color: siteColor, arrows: true, opacity: 1.0, thickness: 0.25,}, stick:{color: siteColor,}, });
             viewer.render({});
             
         }
@@ -231,7 +231,7 @@ document.getElementById('chartCanvas').addEventListener('click', function(e) { /
 
             let PDBResNumsClicked = seg_ress_dict[clickedElementId].map(el => Up2PdbDict[repPdbId][repPdbChainId][el]);
 
-            viewer.setStyle({resi: PDBResNumsClicked}, {cartoon: {style:'oval', color: 'white', arrows: true, opacity: 1.0, thickness: 0.25,}});
+            viewer.setStyle({resi: PDBResNumsClicked, hetflag: false}, {cartoon: {style:'oval', color: 'white', arrows: true, opacity: 1.0, thickness: 0.25,}});
 
             if (surfaceVisible) {
 
@@ -350,7 +350,7 @@ document.getElementById('newChartCanvas').addEventListener('mousemove', function
                 
                 let PDBResNum = Up2PdbDict[repPdbId][repPdbChainId][newPointLabel];
 
-                viewer.setStyle({resi: PDBResNum}, {cartoon:{style:'oval', color: pointColor, arrows: true, opacity: 1.0, thickness: 0.25,}, stick:{color: pointColor,}, });
+                viewer.setStyle({resi: PDBResNum, hetflag: false}, {cartoon:{style:'oval', color: pointColor, arrows: true, opacity: 1.0, thickness: 0.25,}, stick:{color: pointColor,}, });
 
                 if (labelsVisible) {
                     viewer.removeAllLabels(); // clearing labels from previous hovered residue (residues might be almost superposed in plot. Hiding it so only one is visible)

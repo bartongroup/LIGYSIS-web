@@ -127,7 +127,23 @@ function toggleLigandsVisibility() {
     
     
         viewer.addStyle({and:[{hetflag: true}, {not:{resn: "HOH"}}, {not: {properties:{ bs: -1}}}]}, {stick: {hidden: true, colorscheme: myScheme, radius: 0.25}});
-        viewer.addStyle({and:[{hetflag: true}, {not:{resn: "HOH"}}, {not: {properties:{ bs: -1}}}]}, {sphere: {hidden: true, colorscheme: myScheme, radius: 0.20}}); 
+        viewer.addStyle({and:[{hetflag: true}, {not:{resn: "HOH"}}, {not: {properties:{ bs: -1}}}]}, {sphere: {hidden: true, colorscheme: myScheme, radius: 0.20}});
+
+        if (contactsVisible) {
+            var consButton = document.getElementById('contactsButton');
+            consButton.value = 'Contacts OFF'; // Change the button text
+            consButton.style = "font-weight: bold; color: #674ea7;";
+
+            // loop through contactCylinders and delete using removeShape, then empty list
+            for (let i = 0; i < contactCylinders.length; i++) {
+                viewer.removeShape(contactCylinders[i]);
+            }
+            contactCylinders = [];
+
+            viewer.addStyle({hetflag: false}, {stick: {hidden: true}});
+
+            contactsVisible = false;
+        }
     
         console.log("Ligands hidden!");
     }
@@ -184,7 +200,16 @@ function toggleContactsVisibility() {
             viewer.removeShape(contactCylinders[i]);
         }
         contactCylinders = [];
-        viewer.addStyle({resi: bindingRess}, {stick: {hidden: true, color: "white", radius: 0.25}});
+        viewer.addStyle({hetflag: false}, {stick: {hidden: true}});
+        viewer.addStyle({hetflag: true}, {stick: {hidden: true}});
+        viewer.addStyle({hetflag: true}, {sphere: {hidden: true}});
+
+        // turn ligandButton off
+        var ligandButton = document.getElementById('ligandButton');
+        ligandButton.value = 'Ligands OFF';
+        ligandButton.style = "font-weight: bold; color: #674ea7;";
+        ligandsVisible = false;
+
         console.log("Contacts removed!");
         contactsVisible = false;
         viewer.render();
@@ -207,9 +232,9 @@ function toggleContactsVisibility() {
         .then(data => {
             let contacts = JSON.parse(data.contacts);
             let strucLigData = data.ligands;
-            bindingRess = Array.from(new Set(contacts.map(item => item.auth_seq_id_end)));
+            let strucProtData = data.protein;
+            //bindingRess = Array.from(new Set(contacts.map(item => item.auth_seq_id_end)));
 
-                
             contacts.forEach((item, index) => {
                 // Extracting the necessary variables from each item
                 let contactBgnCoords = item.coords_bgn.map(coord => parseFloat(coord)); // Array of coordinates for ligand atom
@@ -237,9 +262,9 @@ function toggleContactsVisibility() {
                 }
                 else {
                     let relevantInters = contactType.filter(el => !undefInters.includes(el));
-                    if (relevantInters.length > 0) {
-                        console.log("Relevant interactions:", relevantInters);
-                    }
+                    // if (relevantInters.length > 0) {
+                    //     console.log("Relevant interactions:", relevantInters);
+                    // }
                     theContactType = relevantInters[0];
                 }
 
@@ -328,10 +353,20 @@ function toggleContactsVisibility() {
                         viewer.removeLabel(cylinderLabels[this.stylespec.userData.index][2]); // Remove the protein atom label
                     }
                 });
+
                 contactCylinders.push(contactCylinder); // Add the cylinder to the contactCylinders list
             });
 
             viewer.addStyle({resi: bindingRess}, {stick: {hidden: false, color: "white", radius: 0.25}}); // Show the binding residues sticks
+
+            for (let i = 0; i < strucProtData.length; i++) { // Loop through the ligands and colour them based on their site
+                let protRes = strucProtData[i];
+                let protResn = protRes[0]
+                let protChain = protRes[1];
+                let protResi = protRes[2];
+                //let ligandColor = chartColors[ligand[3]];
+                viewer.addStyle({resi: protResi, chain: protChain, resn: protResn}, {stick: {hidden: false, color: 'white', radius: 0.25}});
+            }
             
             for (let i = 0; i < strucLigData.length; i++) { // Loop through the ligands and colour them based on their site
                 let ligand = strucLigData[i];
