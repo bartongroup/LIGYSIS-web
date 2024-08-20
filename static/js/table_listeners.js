@@ -224,9 +224,6 @@ $('table#bs_ress_table tbody').on('mouseover', 'tr', function () { // event list
     let rowColor = window.getComputedStyle(this).getPropertyValue('color');
     let rowColorHex = rgbToHex(rowColor);
 
-    // console.log(rowColorHex);
-    // console.log(rowColor);
-
     if (index !== -1) {
         
         resetChartStyles(newChart, index, "#ffff99", 10, 16); // changes chart styles to highlight the binding site
@@ -277,8 +274,6 @@ $('table#bs_ress_table tbody').on('mouseover', 'tr', function () { // event list
         viewer.render({});
     }
 
-    
-    
 });
 
 // THIS IS THE EVENT LISTENER THAT CHANGES THE AXES OF THE BINDING SITES PLOTS ACCORDING TO DROPDOWNS

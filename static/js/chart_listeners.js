@@ -33,7 +33,16 @@ document.getElementById('chartCanvas').addEventListener('mousemove', function(e)
                 
                 let clickedSiteColor = chartColors[Number(clickedPointLabel)];
                 
-                viewer.setStyle({resi: clickedPDBResNums, invert: true, hetflag: false}, {cartoon:{style:'oval', color: 'white', arrows: true, opacity: 1.0,thickness: 0.25,},  }); // remove sidechains and colour white everything but clicked site
+                viewer.setStyle(
+                    
+                    {
+                        and:[{resi: clickedPDBResNums, invert: true}, {hetflag: false}] // all protein residues except clicked site (we want to keep ligands)
+                        // resi: clickedPDBResNums, invert: true, hetflag: false
+                    },
+                    {
+                        cartoon:{style:'oval', color: 'white', arrows: true, opacity: 1.0, thickness: 0.25,}, 
+                    }
+                ); // remove sidechains and colour white everything but clicked site
                 
                 if (surfaceVisible) {
 
@@ -53,7 +62,14 @@ document.getElementById('chartCanvas').addEventListener('mousemove', function(e)
 
             else { // no row is clicked
 
-                viewer.setStyle({}, {cartoon:{style:'oval', color: 'white', arrows: true, opacity: 1.0, thickness: 0.25,},  });
+                viewer.setStyle(
+                    {
+                        herflag: false, // don't want to remove ligands
+                    },
+                    {
+                        cartoon:{style:'oval', color: 'white', arrows: true, opacity: 1.0, thickness: 0.25,},
+                    }
+                );
 
                 if (surfaceVisible) {
                     for (const [key, value] of Object.entries(surfsDict)) {
@@ -74,9 +90,7 @@ document.getElementById('chartCanvas').addEventListener('mousemove', function(e)
             viewer.render({});
             
         }
-        // else {
-        //     console.log("THIS HAPPENS HERE!")
-        // }
+
     } else if (lastHoveredPoint1 !== null) { // when no data point is being hovered on, but the last hovered point is not null (recently hovered on a point)
         lastHoveredPoint1 = null;
 
@@ -92,7 +106,15 @@ document.getElementById('chartCanvas').addEventListener('mousemove', function(e)
             
             let clickedSiteColor = chartColors[Number(clickedPointLabel)]; // color of the clicked binding site
 
-            viewer.setStyle({resi: clickedPDBResNums, invert: true, hetflag: false}, {cartoon:{style:'oval', color: 'white', arrows: true, opacity: 1.0, thickness: 0.25,},  }); // remove sidechains and colour white everything but clicked site
+            viewer.setStyle(
+                {
+                    and:[{resi: clickedPDBResNums, invert: true}, {hetflag: false}] // all protein residues except clicked site (we want to keep ligands)
+                    // resi: clickedPDBResNums, invert: true, hetflag: false
+                },
+                {
+                    cartoon:{style:'oval', color: 'white', arrows: true, opacity: 1.0, thickness: 0.25,}, 
+                }
+            ); // remove sidechains and colour white everything but clicked site
 
             if (surfaceVisible) { // if surface is visible
                 for (const [key, value] of Object.entries(surfsDict)) {
@@ -110,7 +132,14 @@ document.getElementById('chartCanvas').addEventListener('mousemove', function(e)
         }
         else { // no row is clicked
 
-            viewer.setStyle({}, {cartoon: {style:'oval', color: 'white', arrows: true, opacity: 1.0, thickness: 0.25,}}); // remove sidechains and colour white everything
+            viewer.setStyle(
+                {
+                    hetflag: false, // don't want to remove ligands
+                },
+                {
+                    cartoon: {style:'oval', color: 'white', arrows: true, opacity: 1.0, thickness: 0.25,}
+                }
+            ); // remove sidechains and colour white everything except ligands (all protein atoms)
 
             if (surfaceVisible) {
                 for (const [key, value] of Object.entries(surfsDict)) {
@@ -317,7 +346,7 @@ document.getElementById('newChartCanvas').addEventListener('mousemove', function
 
             if (clickedElements.length == 0) { // no row is clicked
                 
-                viewer.setStyle({}, {cartoon: {style:'oval', color: 'white', arrows: true, opacity: 1.0, thickness: 0.25,}}); // this is done so only a single point is highlighted when hovered on (some are really close.)
+                viewer.setStyle({hetflag: false}, {cartoon: {style:'oval', color: 'white', arrows: true, opacity: 1.0, thickness: 0.25,}}); // this is done so only a single point is highlighted when hovered on (some are really close.)
                 
                 let PDBResNum = Up2PdbDict[repPdbId][repPdbChainId][newPointLabel];
 
@@ -352,7 +381,7 @@ document.getElementById('newChartCanvas').addEventListener('mousemove', function
 
         if (clickedElements.length == 0) {
 
-            viewer.setStyle({}, {cartoon: {style:'oval', color: 'white', arrows: true, opacity: 1.0, thickness: 0.25,}});
+            viewer.setStyle({hetflag: false}, {cartoon: {style:'oval', color: 'white', arrows: true, opacity: 1.0, thickness: 0.25,}});
 
             if (labelsVisible) {
                 viewer.removeAllLabels(); // clearing labels from previously hovered on residue
