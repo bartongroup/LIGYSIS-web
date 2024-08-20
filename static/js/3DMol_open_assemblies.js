@@ -22,16 +22,59 @@ function selectOption(option) {
     if (option !== previousSelection) { // if the option is changed, otherwise do nothing
         const button = document.querySelector('.dropup-button');
         button.textContent = option;
-        var consButton = document.getElementById('contactsButton');
+
+        var contactsButton = document.getElementById('contactsButton');
+        var ligandButton = document.getElementById('ligandButton');
+        var waterButton = document.getElementById('waterButton');
+        var labelButton = document.getElementById('labelButton');
+        var surfButton = document.getElementById('surfButton');
 
         // turn contactsButton off
-        consButton.value = 'Contacts OFF'; // Change the button text
-        consButton.style = "font-weight: bold; color: #674ea7;";
-        console.log("Contacts removed!");
+        contactsButton.value = 'Contacts OFF';
+        contactsButton.style = "font-weight: bold; color: #674ea7;";
         contactsVisible = false;
 
+        // turn ligandButton off
+        ligandButton.value = 'Ligands OFF';
+        ligandButton.style = "font-weight: bold; color: #674ea7;";
+        ligandsVisible = false;
+
+        // turn waterButton off
+        waterButton.value = 'Waters OFF';
+        waterButton.style = "font-weight: bold; color: #674ea7;";
+        watersVisible = false;
+
+        // turn labelButton off
+        labelButton.value = 'Labels OFF';
+        labelButton.style = "font-weight: bold; color: #674ea7;";
+        labelsVisible = false;
+        
+        // turn surfButton off
+        surfButton.value = 'Surface OFF';
+        surfButton.style = "font-weight: bold; color: #674ea7;";
+        surfaceVisible = false; 
 
         if (previousSelection === 'Superposition') { // changing from Ligand Superposition to any assembly
+
+            for (const [key, value] of Object.entries(surfsDict["superposition"])) { // hiding all surfaces from ligand superposition
+                if (key == "non_binding") {
+                    viewer.setSurfaceMaterialStyle(surfsDict["superposition"][key].surfid, {color: 'white', opacity:0.0});
+                }
+                else {
+                    let siteColor = chartColors[Number(key.split("_").pop())];
+                    viewer.setSurfaceMaterialStyle(surfsDict["superposition"][key].surfid, {color: siteColor, opacity:0.0});
+                }
+            }
+
+            // hide all ligands from superposition
+            viewer.addStyle({and:[{hetflag: true}, {not:{resn: "HOH"}}, {properties:{ bs: -1}}]}, {stick: {hidden: true, colorscheme: myScheme, radius: 0.25}});
+            viewer.addStyle({and:[{hetflag: true}, {not:{resn: "HOH"}}, {properties:{ bs: -1}}]}, {sphere: {hidden: true, colorscheme: myScheme, radius: 0.20}});
+            viewer.addStyle({and:[{hetflag: true}, {not:{resn: "HOH"}}, {not: {properties:{ bs: -1}}}]}, {stick: {hidden: true, colorscheme: myScheme, radius: 0.25}});
+            viewer.addStyle({and:[{hetflag: true}, {not:{resn: "HOH"}}, {not: {properties:{ bs: -1}}}]}, {sphere: {hidden: true, colorscheme: myScheme, radius: 0.20}});
+
+            viewer.addStyle({resn: "HOH"}, {sphere: {hidden: true, color: "gold", radius: 0.20}}); // hide all water molecules from superposition
+
+            viewer.removeAllLabels(); // remove all labels if they were active
 
             viewer.setHoverable({model: suppModels}, false, // Hovering disabled for ligand superposition models (otherwise get wrong labels)
                 showHoverLabel,
