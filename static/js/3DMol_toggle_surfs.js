@@ -72,25 +72,69 @@ function toggleLabelsVisibility() {
                 var clickedElementId = clickedElements[i].id;
                 let siteColor = chartColors[Number(clickedElementId.split("_").pop())];
                 // let PDBResNums = seg_ress_dict[clickedElementId].map(el => Up2PdbDict[repPdbId][repPdbChainId][el]);
-                let PDBResNums = seg_ress_dict[clickedElementId]
-                    .filter(el => Up2PdbDict[repPdbId][repPdbChainId].hasOwnProperty(el)) // this accounts not for missing residues in the structure (unresolved)
-                    .map(el => Up2PdbDict[repPdbId][repPdbChainId][el]);
-                for (PDBResNum of PDBResNums) {
-                    let resSel = {resi: PDBResNum}
-                    let resName = viewer.selectedAtoms(resSel)[0].resn
-                    viewer.addLabel(
-                        resName + String(Pdb2UpDict[repPdbId][repPdbChainId][PDBResNum]),
-                        {
-                            alignment: 'center', backgroundColor: 'white', backgroundOpacity: 1,
-                            borderColor: 'black', borderOpacity: 1, borderThickness: 2,
-                            font: 'Arial', fontColor: siteColor, fontOpacity: 1, fontSize: 12,
-                            inFront: true, screenOffset: [0, 0, 0], showBackground: true
-                        },
-                        resSel,
-                        true,
-                    );
+
+                if (activeModel == "superposition") {
+                    let siteSuppPDBResNums = seg_ress_dict[clickedElementId]
+                        .filter(el => Up2PdbDict[repPdbId][repPdbChainId].hasOwnProperty(el)) // this accounts not for missing residues in the structure (unresolved)
+                        .map(el => Up2PdbDict[repPdbId][repPdbChainId][el]);
+                    for (siteSuppPDBResNum of siteSuppPDBResNums) {
+                        let resSel = {resi: siteSuppPDBResNum}
+                        let resName = viewer.selectedAtoms(resSel)[0].resn
+                        viewer.addLabel(
+                            resName + String(Pdb2UpDict[repPdbId][repPdbChainId][siteSuppPDBResNum]),
+                            {
+                                alignment: 'center', backgroundColor: 'white', backgroundOpacity: 1,
+                                borderColor: 'black', borderOpacity: 1, borderThickness: 2,
+                                font: 'Arial', fontColor: siteColor, fontOpacity: 1, fontSize: 12,
+                                inFront: true, screenOffset: [0, 0, 0], showBackground: true
+                            },
+                            resSel,
+                            true,
+                        );
+                    }
+                    viewer.render();
                 }
-                viewer.render({});
+                else {
+                    for ([element, siteAssemblyPDBResNum] of siteAssemblyPDBResNums) {
+                        let siteAssemblyPDBResNum = seg_ress_dict[clickedElementId]
+                            .filter(el => Up2PdbMapAssembly[chainsMapAssembly[element]].hasOwnProperty(el))
+                            .map(el => Up2PdbMapAssembly[chainsMapAssembly[element]][el]);
+                        for (siteAssemblyPDBResNumber of siteAssemblyPDBResNum) { // variable name not ideal as siteAssemblyPDBResNum is an array
+                            let resSel = {model: activeModel, resi: siteAssemblyPDBResNumber, chain: element, hetflag: false}
+                            let resName = viewer.selectedAtoms(resSel)[0].resn
+                            viewer.addLabel(
+                                resName + String(Pdb2UpMapAssembly[element][siteAssemblyPDBResNumber]),
+                                {
+                                    alignment: 'center', backgroundColor: 'white', backgroundOpacity: 1,
+                                    borderColor: 'black', borderOpacity: 1, borderThickness: 2,
+                                    font: 'Arial', fontColor: siteColor, fontOpacity: 1, fontSize: 12,
+                                    inFront: true, screenOffset: [0, 0, 0], showBackground: true
+                                },
+                                resSel,
+                                false,
+                            );
+                        }
+                    }
+                }
+                // let PDBResNums = seg_ress_dict[clickedElementId]
+                //     .filter(el => Up2PdbDict[repPdbId][repPdbChainId].hasOwnProperty(el)) // this accounts not for missing residues in the structure (unresolved)
+                //     .map(el => Up2PdbDict[repPdbId][repPdbChainId][el]);
+                // for (PDBResNum of PDBResNums) {
+                //     let resSel = {resi: PDBResNum}
+                //     let resName = viewer.selectedAtoms(resSel)[0].resn
+                //     viewer.addLabel(
+                //         resName + String(Pdb2UpDict[repPdbId][repPdbChainId][PDBResNum]),
+                //         {
+                //             alignment: 'center', backgroundColor: 'white', backgroundOpacity: 1,
+                //             borderColor: 'black', borderOpacity: 1, borderThickness: 2,
+                //             font: 'Arial', fontColor: siteColor, fontOpacity: 1, fontSize: 12,
+                //             inFront: true, screenOffset: [0, 0, 0], showBackground: true
+                //         },
+                //         resSel,
+                //         true,
+                //     );
+                // }
+                viewer.render();
             }
         }
     }

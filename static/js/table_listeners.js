@@ -29,17 +29,22 @@ $('table#bss_table tbody').on('mouseover', 'tr', function () { // event listener
     // let PDBResNums = seg_ress_dict[rowId].map(el => Up2PdbDict[repPdbId][repPdbChainId][el]);
 
     if (activeModel == "superposition") {
-        siteSuppPDBResNums = seg_ress_dict[rowId].map(el => Up2PdbDict[repPdbId][repPdbChainId][el]);
+        //siteSuppPDBResNums = seg_ress_dict[rowId].map(el => Up2PdbDict[repPdbId][repPdbChainId][el]);
+        siteSuppPDBResNums = seg_ress_dict[rowId]
+            .filter(el => Up2PdbDict[repPdbId][repPdbChainId].hasOwnProperty(el)) // this accounts not for missing residues in the structure (unresolved)
+            .map(el => Up2PdbDict[repPdbId][repPdbChainId][el]);
         viewer.setStyle({resi: siteSuppPDBResNums, chain: repPdbChainId, hetflag: false}, {cartoon:{style:'oval', color: siteColor, arrows: true, opacity: 1.0,thickness: 0.25,}, stick:{color: siteColor}, });
     }
     else {
         proteinChains.forEach((element) => { // in case of multiple copies of protein of interest
-            let siteAssemblyPDBResNum = seg_ress_dict[rowId].map(el => Up2PdbMapAssembly[chainsMapAssembly[element]][el]);
+            let siteAssemblyPDBResNum = seg_ress_dict[rowId]
+            .filter(el => Up2PdbMapAssembly[chainsMapAssembly[element]].hasOwnProperty(el)) // filters out site residues not present in this assembly. otherwise mapping is undefined and causes problems later...
+            .map(el => Up2PdbMapAssembly[chainsMapAssembly[element]][el]);
 
             //let AssemblyPDBResNum = Up2PdbMapAssembly[chainsMapAssembly[element]][newPointLabel]
             siteAssemblyPDBResNums.push([element, siteAssemblyPDBResNum]);
             viewer.setStyle(
-                {resi: siteAssemblyPDBResNum, chain: element, hetflag: false},
+                {model: activeModel, resi: siteAssemblyPDBResNum, chain: element, hetflag: false},
                 {
                     cartoon:{style:'oval', color: siteColor, arrows: true, opacity: 1.0,thickness: 0.25,},
                     stick:{color: siteColor},
@@ -50,7 +55,7 @@ $('table#bss_table tbody').on('mouseover', 'tr', function () { // event listener
     }
     // viewer.setStyle({resi: PDBResNums, hetflag: false}, {cartoon:{style:'oval', color: siteColor, arrows: true, opacity: 1.0,thickness: 0.25,}, stick:{color: siteColor}, });
     
-    viewer.render({});
+    viewer.render();
     
 }).on('mouseout', 'tr', function () {
 
@@ -77,7 +82,7 @@ $('table#bss_table tbody').on('mouseover', 'tr', function () { // event listener
                 //let AssemblyPDBResNum = Up2PdbMapAssembly[chainsMapAssembly[element]][newPointLabel]
                 //siteAssemblyPDBResNums.push([element, siteAssemblyPDBResNum]);
                 viewer.setStyle(
-                    {resi: siteAssemblyPDBResNum, chain: element, hetflag: false},
+                    {model: activeModel, resi: siteAssemblyPDBResNum, chain: element, hetflag: false},
                     {
                         cartoon:{style:'oval', color:  'white', arrows: true, opacity: 1.0,thickness: 0.25,},
                     }
@@ -114,7 +119,7 @@ $('table#bss_table tbody').on('mouseover', 'tr', function () { // event listener
                 }
             }
         }
-        viewer.render({});
+        viewer.render();
     }
     
 }).on('click', 'tr', function () {
@@ -125,9 +130,30 @@ $('table#bss_table tbody').on('mouseover', 'tr', function () { // event listener
     let classList = this.classList;
     let clickedElements = document.getElementsByClassName("clicked-row");
 
-    let PDBResNums = seg_ress_dict[rowId]
-    .filter(el => Up2PdbDict[repPdbId][repPdbChainId].hasOwnProperty(el)) // this accounts not for missing residues in the structure (unresolved)
-    .map(el => Up2PdbDict[repPdbId][repPdbChainId][el]);
+
+    if (activeModel == "superposition") {
+        let siteSuppPDBResNums = seg_ress_dict[rowId]
+            .filter(el => Up2PdbDict[repPdbId][repPdbChainId].hasOwnProperty(el)) // this accounts not for missing residues in the structure (unresolved)
+            .map(el => Up2PdbDict[repPdbId][repPdbChainId][el]);
+    }
+    else {
+        proteinChains.forEach((element) => { // in case of multiple copies of protein of interest
+            // let siteAssemblyPDBResNum = seg_ress_dict[rowId].map(el => Up2PdbMapAssembly[chainsMapAssembly[element]][el]);
+            let siteAssemblyPDBResNum = seg_ress_dict[rowId]
+            .filter(el => Up2PdbMapAssembly[chainsMapAssembly[element]].hasOwnProperty(el))
+            .map(el => Up2PdbMapAssembly[chainsMapAssembly[element]][el]);
+
+            //let AssemblyPDBResNum = Up2PdbMapAssembly[chainsMapAssembly[element]][newPointLabel]
+            siteAssemblyPDBResNums.push([element, siteAssemblyPDBResNum]);
+            // viewer.setStyle(
+            //     {resi: siteAssemblyPDBResNum, chain: element, hetflag: false},
+            //     {
+            //         cartoon:{style:'oval', color: siteColor, arrows: true, opacity: 1.0,thickness: 0.25,},
+            //         stick:{color: siteColor},
+            //     }
+            // );
+        });
+    }
     
 
     if (classList.contains('clicked-row')) { // row is already clicked
@@ -201,9 +227,26 @@ $('table#bss_table tbody').on('mouseover', 'tr', function () { // event listener
         if (clickedElements) { // any OTHER row is already clicked
             for (var i = 0; i < clickedElements.length; i++) {
                 var clickedElementId = clickedElements[i].id;
-                let PDBResNumsClicked = seg_ress_dict[clickedElementId].map(el => Up2PdbDict[repPdbId][repPdbChainId][el]);
-                viewer.setStyle({resi: PDBResNumsClicked, hetflag: false}, {cartoon: {style:'oval', color: 'white', arrows: true, opacity: 1.0,thickness: 0.25,}});
-                viewer.render({});
+                if (activeModel == "superposition") {
+                    let suppPDBResNumsClicked = seg_ress_dict[clickedElementId].map(el => Up2PdbDict[repPdbId][repPdbChainId][el]);
+                    viewer.setStyle({resi: suppPDBResNumsClicked, chain: repPdbChainId, hetflag: false}, {cartoon: {style:'oval', color: 'white', arrows: true, opacity: 1.0,thickness: 0.25,}});
+                    // viewer.render();
+                }
+                else {
+                    let AssemblyPDBResNumsClicked = [];
+                    proteinChains.forEach((element) => { // in case of multiple copies of protein of interest
+                        let AssemblyPDBResNum = seg_ress_dict[clickedElementId].map(el => Up2PdbMapAssembly[chainsMapAssembly[element]][el]);
+                        AssemblyPDBResNumsClicked.push([element, AssemblyPDBResNum]);
+                        viewer.setStyle(
+                            {model: activeModel, resi: AssemblyPDBResNum, chain: element, hetflag: false},
+                            {
+                                cartoon:{style:'oval', color: 'white', arrows: true, opacity: 1.0,thickness: 0.25,},
+                            }
+                        );
+                    });
+                    
+                }
+                viewer.render();
             }
             clearClickedRows();
 
@@ -220,21 +263,42 @@ $('table#bss_table tbody').on('mouseover', 'tr', function () { // event listener
 
         if (labelsVisible) {
             viewer.removeAllLabels(); // clearing labels from previous clicked site
-            for (PDBResNum of PDBResNums) {
-                let resSel = {resi: PDBResNum}
-                let resName = viewer.selectedAtoms(resSel)[0].resn
-                // console.log(resSel, resName);
-                viewer.addLabel(
-                    resName + String(Pdb2UpDict[repPdbId][repPdbChainId][PDBResNum]),
-                    {
-                        alignment: 'center', backgroundColor: 'white', backgroundOpacity: 1,
-                        borderColor: 'black', borderOpacity: 1, borderThickness: 2,
-                        font: 'Arial', fontColor: siteColor, fontOpacity: 1, fontSize: 12,
-                        inFront: true, screenOffset: [0, 0, 0], showBackground: true
-                    },
-                    resSel,
-                    false,
-                );
+            if (activeModel == "superposition") {
+                for (siteSuppPDBResNum of siteSuppPDBResNums) {
+                    let resSel = {resi: siteSuppPDBResNum, chain: repPdbChainId, hetflag: false}
+                    let resName = viewer.selectedAtoms(resSel)[0].resn
+                    // console.log(resSel, resName);
+                    viewer.addLabel(
+                        resName + String(Pdb2UpDict[repPdbId][repPdbChainId][siteSuppPDBResNum]),
+                        {
+                            alignment: 'center', backgroundColor: 'white', backgroundOpacity: 1,
+                            borderColor: 'black', borderOpacity: 1, borderThickness: 2,
+                            font: 'Arial', fontColor: siteColor, fontOpacity: 1, fontSize: 12,
+                            inFront: true, screenOffset: [0, 0, 0], showBackground: true
+                        },
+                        resSel,
+                        false,
+                    );
+                }
+            }
+            else {
+                for ([element, siteAssemblyPDBResNum] of siteAssemblyPDBResNums) {
+                    for (siteAssemblyPDBResNumber of siteAssemblyPDBResNum) { // variable name not ideal as siteAssemblyPDBResNum is an array
+                        let resSel = {model: activeModel, resi: siteAssemblyPDBResNumber, chain: element, hetflag: false}
+                        let resName = viewer.selectedAtoms(resSel)[0].resn
+                        viewer.addLabel(
+                            resName + String(Pdb2UpMapAssembly[element][siteAssemblyPDBResNumber]),
+                            {
+                                alignment: 'center', backgroundColor: 'white', backgroundOpacity: 1,
+                                borderColor: 'black', borderOpacity: 1, borderThickness: 2,
+                                font: 'Arial', fontColor: siteColor, fontOpacity: 1, fontSize: 12,
+                                inFront: true, screenOffset: [0, 0, 0], showBackground: true
+                            },
+                            resSel,
+                            false,
+                        );
+                    }
+                }
             }
         }
 
@@ -250,8 +314,12 @@ $('table#bss_table tbody').on('mouseover', 'tr', function () { // event listener
         }
 
     }
-    
-    viewer.setStyle({resi: PDBResNums, hetflag: false}, {cartoon:{style:'oval', color: siteColor, arrows: true, opacity: 1.0,thickness: 0.25,}, stick:{color: siteColor}, });
+    // if (activeModel == "superposition") {
+    //     viewer.setStyle({resi: siteSuppPDBResNums, chain: repPdbChainId, hetflag: false}, {cartoon:{style:'oval', color: siteColor, arrows: true, opacity: 1.0,thickness: 0.25,}, stick:{color: siteColor}, });
+    // }
+    // else {
+
+    // }
 
     viewer.render({});
     

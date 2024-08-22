@@ -359,7 +359,7 @@ document.getElementById('newChartCanvas').addEventListener('mousemove', function
                         let AssemblyPDBResNum = Up2PdbMapAssembly[chainsMapAssembly[element]][newPointLabel]
                         AssemblyPDBResNums.push([element, AssemblyPDBResNum]);
                         viewer.setStyle(
-                            {resi: AssemblyPDBResNum, chain: element, hetflag: false},
+                            {model: activeModel, resi: AssemblyPDBResNum, chain: element, hetflag: false},
                             {
                                 cartoon:{style:'oval', color: pointColor, arrows: true, opacity: 1.0,thickness: 0.25,},
                                 stick:{color: pointColor},
