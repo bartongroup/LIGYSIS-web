@@ -278,7 +278,7 @@ def help(): # route for help site
 def contact(): # route for contact site
     return render_template('contact.html')
 
-@app.route('/get_table', methods=['POST'])
+@app.route('/get-table', methods=['POST'])
 def get_table(): # route to get binding site residues for a given binding site
 
     lab = request.json.get('label', None)
@@ -336,11 +336,8 @@ def process_model_order():
 
     model_order = extract_open_files(cxc_in) # order in which ChimeraX opens files (important for binding site attribute assignment)
 
-    # print(attr_in, model_order, loaded_order)
-
     result_tuples, bs_ids = transform_lines2(attr_in, model_order, loaded_order) # binding site attribute data list of tuples
 
-    # print(result_tuples)
     max_id = max(bs_ids) # maximum binding site ID
 
     response_data = {
@@ -352,6 +349,7 @@ def process_model_order():
 
 @app.route('/get-contacts', methods=['POST'])
 def get_contacts():
+
     data = request.json
     active_model = data['modelData']
     prot_id = data['proteinId']
@@ -375,8 +373,6 @@ def get_contacts():
 
     struc_ligs_data = transform_dict(struc_ligs)
 
-    # print(struc_ligs_data)
-
     struc_prot_data = list(arpeggio_cons_filt[["label_comp_id_end", "auth_asym_id_end", "auth_seq_id_end"]].drop_duplicates().itertuples(index=False, name=None))
 
     response_data = {
@@ -387,9 +383,8 @@ def get_contacts():
 
     return jsonify(response_data) # send jasonified data back to client
 
-# route to get UniProt residue and chain mapping for a given pdb
 @app.route('/get-uniprot-mapping', methods=['POST'])
-def get_uniprot_mapping():
+def get_uniprot_mapping(): # route to get UniProt residue and chain mapping for a given pdb
     data = request.json
     pdb_id = data['pdbId']
     prot_id = data['proteinId']
