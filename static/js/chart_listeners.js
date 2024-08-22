@@ -327,6 +327,8 @@ document.getElementById('newChartCanvas').addEventListener('mousemove', function
     var newChartElement = newChart.getElementsAtEventForMode(e, 'nearest', { intersect: true }, true); // gets the chart element that is closest to the cursor
 
     let clickedElements = document.getElementsByClassName("clicked-row");
+
+    AssemblyPDBResNums = [];
     
     if (newChartElement.length > 0) { // cursor is hovering over a data point
 
@@ -348,25 +350,64 @@ document.getElementById('newChartCanvas').addEventListener('mousemove', function
                 
                 viewer.setStyle({hetflag: false}, {cartoon: {style:'oval', color: 'white', arrows: true, opacity: 1.0, thickness: 0.25,}}); // this is done so only a single point is highlighted when hovered on (some are really close.)
                 
-                let PDBResNum = Up2PdbDict[repPdbId][repPdbChainId][newPointLabel];
+                if (activeModel == "superposition") { // in this case, only one residue as this is a supperposition of single chains
+                    SuppPDBResNum = Up2PdbDict[repPdbId][repPdbChainId][newPointLabel];
+                    viewer.setStyle({resi: SuppPDBResNum, hetflag: false}, {cartoon:{style:'oval', color: pointColor, arrows: true, opacity: 1.0,thickness: 0.25,}, stick:{color: pointColor}, });
+                }
+                else {
+                    proteinChains.forEach((element) => { // in case of multiple copies of protein of interest
+                        let AssemblyPDBResNum = Up2PdbMapAssembly[chainsMapAssembly[element]][newPointLabel]
+                        AssemblyPDBResNums.push([element, AssemblyPDBResNum]);
+                        viewer.setStyle(
+                            {resi: AssemblyPDBResNum, chain: element, hetflag: false},
+                            {
+                                cartoon:{style:'oval', color: pointColor, arrows: true, opacity: 1.0,thickness: 0.25,},
+                                stick:{color: pointColor},
+                            }
+                        );
+                    });
+                }
 
-                viewer.setStyle({resi: PDBResNum, hetflag: false}, {cartoon:{style:'oval', color: pointColor, arrows: true, opacity: 1.0, thickness: 0.25,}, stick:{color: pointColor,}, });
+                //let PDBResNum = Up2PdbDict[repPdbId][repPdbChainId][newPointLabel];
+
+                //viewer.setStyle({resi: PDBResNum, hetflag: false}, {cartoon:{style:'oval', color: pointColor, arrows: true, opacity: 1.0, thickness: 0.25,}, stick:{color: pointColor,}, });
 
                 if (labelsVisible) {
                     viewer.removeAllLabels(); // clearing labels from previous hovered residue (residues might be almost superposed in plot. Hiding it so only one is visible)
-                    let resSel = {resi: PDBResNum}
-                    let resName = viewer.selectedAtoms(resSel)[0].resn
-                    viewer.addLabel(
-                        resName + String(Pdb2UpDict[repPdbId][repPdbChainId][PDBResNum]),
-                        {
-                            alignment: 'center', backgroundColor: 'white', backgroundOpacity: 1,
-                            borderColor: 'black', borderOpacity: 1, borderThickness: 2,
-                            font: 'Arial', fontColor: pointColor, fontOpacity: 1, fontSize: 12,
-                            inFront: true, screenOffset: [0, 0, 0], showBackground: true
-                        },
-                        resSel,
-                        true,
-                    );
+                    if (activeModel == "superposition") {
+                        
+                        let resSel = {resi: SuppPDBResNum, hetflag: false};
+                        let resName = viewer.selectedAtoms(resSel)[0].resn
+                        viewer.addLabel(
+                            resName + String(Pdb2UpDict[repPdbId][repPdbChainId][SuppPDBResNum]),
+                            {
+                                alignment: 'center', backgroundColor: 'white', backgroundOpacity: 1,
+                                borderColor: 'black', borderOpacity: 1, borderThickness: 2,
+                                font: 'Arial', fontColor: pointColor, fontOpacity: 1, fontSize: 12,
+                                inFront: true, screenOffset: [0, 0, 0], showBackground: true
+                            },
+                            resSel,
+                            true,
+                        );
+                    }
+                    else{
+                        AssemblyPDBResNums.forEach(([chain, resNum]) => {
+                            let resSel = {model: activeModel, resi: resNum, chain: chain, hetflag: false}
+                            let resName = viewer.selectedAtoms(resSel)[0].resn
+                            viewer.addLabel(
+                                resName + String(Pdb2UpMapAssembly[chain][resNum]),
+                                {
+                                    alignment: 'center', backgroundColor: 'white', backgroundOpacity: 1,
+                                    borderColor: 'black', borderOpacity: 1, borderThickness: 2,
+                                    font: 'Arial', fontColor: pointColor, fontOpacity: 1, fontSize: 12,
+                                    inFront: true, screenOffset: [0, 0, 0], showBackground: true
+                                },
+                                resSel,
+                                true,
+                            );
+                        });
+
+                    }
                 }
 
                 viewer.render({});

@@ -218,9 +218,6 @@ $('table#bss_table tbody').on('mouseover', 'tr', function () { // event listener
     
 });
 
-let AssemblyPDBResNums;
-let SuppPDBResNum;
-
 $('table#bs_ress_table tbody').on('mouseover', 'tr', function () { // event listener for mouseover on table rows
     let rowId = Number(this.id);  // gets the row ID of the table row that is hovered over (this corresponds to the UniProt residue number of this row)
     let index = newChartData[newChartLab].indexOf(rowId); // gets the index of the row id in the chart data
