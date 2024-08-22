@@ -1,6 +1,8 @@
 var lastHoveredPoint1 = null;
 var newLastHoveredPoint = null;
 
+let siteAssemblyPDBResNumsClicked;
+
 document.getElementById('chartCanvas').addEventListener('mousemove', function(e) { // when the cursor moves over the chart canvas
 
     var chartElement = myChart.getElementsAtEventForMode(e, 'nearest', { intersect: true }, true); // gets the chart element that is closest to the cursor
@@ -160,6 +162,10 @@ document.getElementById('chartCanvas').addEventListener('mousemove', function(e)
 
 document.getElementById('chartCanvas').addEventListener('click', function(e) { // when the cursor moves over the chart canvas
 
+    siteAssemblyPDBResNumsClicked = [];
+
+    siteAssemblyPDBResNums = [];
+
     var chartElement = myChart.getElementsAtEventForMode(e, 'nearest', { intersect: true }, true); // gets the chart element that is closest to the cursor
     
     if (chartElement.length > 0) { // cursor is hovering over a data point
@@ -173,6 +179,21 @@ document.getElementById('chartCanvas').addEventListener('click', function(e) { /
         let pointColor = chartColors[index]; // color of the clicked data point
 
         let fullPointLabel = segmentName + "_" + pointLabel;
+
+        if (activeModel == "superposition") {
+            siteSuppPDBResNums = seg_ress_dict[index]
+                .filter(el => Up2PdbDict[repPdbId][repPdbChainId].hasOwnProperty(el)) // this accounts not for missing residues in the structure (unresolved)
+                .map(el => Up2PdbDict[repPdbId][repPdbChainId][el]);
+        }
+
+        else {
+            proteinChains.forEach((element) => { // in case of multiple copies of protein of interest
+                let siteAssemblyPDBResNum = seg_ress_dict[index]
+                    .filter(el => Up2PdbMapAssembly[chainsMapAssembly[element]].hasOwnProperty(el))
+                    .map(el => Up2PdbMapAssembly[chainsMapAssembly[element]][el]);
+                siteAssemblyPDBResNums.push([element, siteAssemblyPDBResNum]);
+            });
+        }
 
         $.ajax({ // AJAX request to get the table data from the server
             type: 'POST', // POST request
@@ -229,9 +250,33 @@ document.getElementById('chartCanvas').addEventListener('click', function(e) { /
             
             var clickedElementId = clickedElement.id;
 
-            let PDBResNumsClicked = seg_ress_dict[clickedElementId].map(el => Up2PdbDict[repPdbId][repPdbChainId][el]);
+            if (activeModel == "superposition") {
+                let siteSuppPDBResNumsClicked = seg_ress_dict[clickedElementId]
+                    .filter(el => Up2PdbDict[repPdbId][repPdbChainId].hasOwnProperty(el))
+                    .map(el => Up2PdbDict[repPdbId][repPdbChainId][el]);
+                viewer.setStyle({resi: siteSuppPDBResNumsClicked, chain: repPdbChainId, hetflag: false}, {cartoon: {style:'oval', color: 'white', arrows: true, opacity: 1.0, thickness: 0.25,}});
+            }
+            else {
+                proteinChains.forEach((element) => { // in case of multiple copies of protein of interest
+                    let siteAssemblyPDBResNumClicked = seg_ress_dict[clickedElementId]
+                    .filter(el => Up2PdbMapAssembly[chainsMapAssembly[element]].hasOwnProperty(el)) // filters out site residues not present in this assembly. otherwise mapping is undefined and causes problems later...
+                    .map(el => Up2PdbMapAssembly[chainsMapAssembly[element]][el]);
+        
+                    //let AssemblyPDBResNum = Up2PdbMapAssembly[chainsMapAssembly[element]][newPointLabel]
+                    siteAssemblyPDBResNumsClicked.push([element, siteAssemblyPDBResNumClicked]);
+                    viewer.setStyle(
+                        {model: activeModel, resi: siteAssemblyPDBResNumClicked, chain: element, hetflag: false},
+                        {
+                            cartoon:{style:'oval', color: 'white', arrows: true, opacity: 1.0,thickness: 0.25,},
+                            //stick:{color: siteColor},
+                        }
+                    );
+                }); 
+            }
 
-            viewer.setStyle({resi: PDBResNumsClicked, hetflag: false}, {cartoon: {style:'oval', color: 'white', arrows: true, opacity: 1.0, thickness: 0.25,}});
+            //let PDBResNumsClicked = seg_ress_dict[clickedElementId].map(el => Up2PdbDict[repPdbId][repPdbChainId][el]);
+
+            //viewer.setStyle({resi: PDBResNumsClicked, hetflag: false}, {cartoon: {style:'oval', color: 'white', arrows: true, opacity: 1.0, thickness: 0.25,}});
 
             if (surfaceVisible) {
 
@@ -262,12 +307,83 @@ document.getElementById('chartCanvas').addEventListener('click', function(e) { /
 
                 resetChartStyles(myChart, pointLabel, "#bfd4cb", 10, 16); // changes chart styles to highlight the newly clicked site
 
-                let PDBResNums = seg_ress_dict[index]
-                .filter(el => Up2PdbDict[repPdbId][repPdbChainId].hasOwnProperty(el)) // this accounts not for missing residues in the structure (unresolved)
-                .map(el => Up2PdbDict[repPdbId][repPdbChainId][el]);
+                // let PDBResNums = seg_ress_dict[index]
+                //     .filter(el => Up2PdbDict[repPdbId][repPdbChainId].hasOwnProperty(el)) // this accounts not for missing residues in the structure (unresolved)
+                //     .map(el => Up2PdbDict[repPdbId][repPdbChainId][el]);
+                // if (activeModel == "superposition") {
+                //     siteSuppPDBResNums = seg_ress_dict[index]
+                //         .filter(el => Up2PdbDict[repPdbId][repPdbChainId].hasOwnProperty(el)) // this accounts not for missing residues in the structure (unresolved)
+                //         .map(el => Up2PdbDict[repPdbId][repPdbChainId][el]);
+                // }
+
+                // else {
+                //     proteinChains.forEach((element) => { // in case of multiple copies of protein of interest
+                //         let siteAssemblyPDBResNum = seg_ress_dict[index]
+                //             .filter(el => Up2PdbMapAssembly[chainsMapAssembly[element]].hasOwnProperty(el))
+                //             .map(el => Up2PdbMapAssembly[chainsMapAssembly[element]][el]);
+                //         siteAssemblyPDBResNums.push([element, siteAssemblyPDBResNum]);
+                //     });
+                // }
 
                 if (labelsVisible) {
-                    for (PDBResNum of PDBResNums) {
+                    if (activeModel == "superposition") {
+                        //viewer.removeAllLabels(); // clearing labels from previous clicked site
+                        for (siteSuppPDBResNum of siteSuppPDBResNums) {
+                            let resSel = {resi: siteSuppPDBResNum, chain: repPdbChainId, hetflag: false};
+                            let resName = viewer.selectedAtoms(resSel)[0].resn;
+                            // console.log(resSel, resName);
+                            viewer.addLabel(
+                                resName + String(Pdb2UpDict[repPdbId][repPdbChainId][siteSuppPDBResNum]),
+                                {
+                                    alignment: 'center', backgroundColor: 'white', backgroundOpacity: 1,
+                                    borderColor: 'black', borderOpacity: 1, borderThickness: 2,
+                                    font: 'Arial', fontColor: pointColor, fontOpacity: 1, fontSize: 12,
+                                    inFront: true, screenOffset: [0, 0, 0], showBackground: true
+                                },
+                                resSel,
+                                false,
+                            );
+                        }
+                    }
+                    else {
+                        for ([element, siteAssemblyPDBResNum] of siteAssemblyPDBResNums) {
+                            for (siteAssemblyPDBResNumber of siteAssemblyPDBResNum) { // variable name not ideal as siteAssemblyPDBResNum is an array
+                                let resSel = {model: activeModel, resi: siteAssemblyPDBResNumber, chain: element, hetflag: false}
+                                let resName = viewer.selectedAtoms(resSel)[0].resn
+                                viewer.addLabel(
+                                    resName + String(Pdb2UpMapAssembly[element][siteAssemblyPDBResNumber]),
+                                    {
+                                        alignment: 'center', backgroundColor: 'white', backgroundOpacity: 1,
+                                        borderColor: 'black', borderOpacity: 1, borderThickness: 2,
+                                        font: 'Arial', fontColor: pointColor, fontOpacity: 1, fontSize: 12,
+                                        inFront: true, screenOffset: [0, 0, 0], showBackground: true
+                                    },
+                                    resSel,
+                                    false,
+                                );
+                            }
+                        }
+                    }
+                }
+
+            }
+        }
+        else { // no row is clicked
+
+            clickTableTowById(pointLabel) // click the table row of the newly clicked data point
+
+            resetChartStyles(myChart, pointLabel, "#bfd4cb", 10, 16); // changes chart styles to highlight the newly clicked site
+
+            // need to style here!!!! 
+
+            // let PDBResNums = seg_ress_dict[index]
+            // .filter(el => Up2PdbDict[repPdbId][repPdbChainId].hasOwnProperty(el)) // this accounts not for missing residues in the structure (unresolved)
+            // .map(el => Up2PdbDict[repPdbId][repPdbChainId][el]);
+
+            if (labelsVisible) {
+                viewer.removeAllLabels(); // clearing labels from previous clicked site
+                if (activeModel == "superposition") {
+                    for (siteSuppPDBResNum of siteSuppPDBResNums) {
                         let resSel = {resi: PDBResNum}
                         let resName = viewer.selectedAtoms(resSel)[0].resn
                         // console.log(resSel, resName);
@@ -284,36 +400,24 @@ document.getElementById('chartCanvas').addEventListener('click', function(e) { /
                         );
                     }
                 }
-
-            }
-        }
-        else { // no row is clicked
-
-            clickTableTowById(pointLabel) // click the table row of the newly clicked data point
-
-            resetChartStyles(myChart, pointLabel, "#bfd4cb", 10, 16); // changes chart styles to highlight the newly clicked site
-
-            let PDBResNums = seg_ress_dict[index]
-            .filter(el => Up2PdbDict[repPdbId][repPdbChainId].hasOwnProperty(el)) // this accounts not for missing residues in the structure (unresolved)
-            .map(el => Up2PdbDict[repPdbId][repPdbChainId][el]);
-
-            if (labelsVisible) {
-                viewer.removeAllLabels(); // clearing labels from previous clicked site
-                for (PDBResNum of PDBResNums) {
-                    let resSel = {resi: PDBResNum}
-                    let resName = viewer.selectedAtoms(resSel)[0].resn
-                    // console.log(resSel, resName);
-                    viewer.addLabel(
-                        resName + String(Pdb2UpDict[repPdbId][repPdbChainId][PDBResNum]),
-                        {
-                            alignment: 'center', backgroundColor: 'white', backgroundOpacity: 1,
-                            borderColor: 'black', borderOpacity: 1, borderThickness: 2,
-                            font: 'Arial', fontColor: pointColor, fontOpacity: 1, fontSize: 12,
-                            inFront: true, screenOffset: [0, 0, 0], showBackground: true
-                        },
-                        resSel,
-                        false,
-                    );
+                else {
+                    for ([element, siteAssemblyPDBResNum] of siteAssemblyPDBResNums) {
+                        for (siteAssemblyPDBResNumber of siteAssemblyPDBResNum) { // variable name not ideal as siteAssemblyPDBResNum is an array
+                            let resSel = {model: activeModel, resi: siteAssemblyPDBResNumber, chain: element, hetflag: false}
+                            let resName = viewer.selectedAtoms(resSel)[0].resn
+                            viewer.addLabel(
+                                resName + String(Pdb2UpMapAssembly[element][siteAssemblyPDBResNumber]),
+                                {
+                                    alignment: 'center', backgroundColor: 'white', backgroundOpacity: 1,
+                                    borderColor: 'black', borderOpacity: 1, borderThickness: 2,
+                                    font: 'Arial', fontColor: pointColor, fontOpacity: 1, fontSize: 12,
+                                    inFront: true, screenOffset: [0, 0, 0], showBackground: true
+                                },
+                                resSel,
+                                false,
+                            );
+                        }
+                    }
                 }
             }
 
