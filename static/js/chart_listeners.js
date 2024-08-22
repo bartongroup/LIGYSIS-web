@@ -176,7 +176,7 @@ document.getElementById('chartCanvas').addEventListener('click', function(e) { /
 
         $.ajax({ // AJAX request to get the table data from the server
             type: 'POST', // POST request
-            url: '/get_table', // URL to send the request to
+            url: '/get-table', // URL to send the request to
             contentType: 'application/json;charset=UTF-8', // content type
             data: JSON.stringify({'label': fullPointLabel}), // data to send
             success: function(response) { // function to execute when the request is successful

@@ -2,6 +2,8 @@
 
 $('table#bss_table tbody').on('mouseover', 'tr', function () { // event listener for mouseover on table rows
 
+    siteAssemblyPDBResNums = [];
+
     let rowId = this.id;  // gets the row id of the table row that is hovered over
     let siteColor = chartColors[Number(rowId)]; // gets the binding site color of the table row that is hovered over
 
@@ -24,9 +26,29 @@ $('table#bss_table tbody').on('mouseover', 'tr', function () { // event listener
         }
     }
     
-    let PDBResNums = seg_ress_dict[rowId].map(el => Up2PdbDict[repPdbId][repPdbChainId][el]);
+    // let PDBResNums = seg_ress_dict[rowId].map(el => Up2PdbDict[repPdbId][repPdbChainId][el]);
 
-    viewer.setStyle({resi: PDBResNums, hetflag: false}, {cartoon:{style:'oval', color: siteColor, arrows: true, opacity: 1.0,thickness: 0.25,}, stick:{color: siteColor}, });
+    if (activeModel == "superposition") {
+        siteSuppPDBResNums = seg_ress_dict[rowId].map(el => Up2PdbDict[repPdbId][repPdbChainId][el]);
+        viewer.setStyle({resi: siteSuppPDBResNums, chain: repPdbChainId, hetflag: false}, {cartoon:{style:'oval', color: siteColor, arrows: true, opacity: 1.0,thickness: 0.25,}, stick:{color: siteColor}, });
+    }
+    else {
+        proteinChains.forEach((element) => { // in case of multiple copies of protein of interest
+            let siteAssemblyPDBResNum = seg_ress_dict[rowId].map(el => Up2PdbMapAssembly[chainsMapAssembly[element]][el]);
+
+            //let AssemblyPDBResNum = Up2PdbMapAssembly[chainsMapAssembly[element]][newPointLabel]
+            siteAssemblyPDBResNums.push([element, siteAssemblyPDBResNum]);
+            viewer.setStyle(
+                {resi: siteAssemblyPDBResNum, chain: element, hetflag: false},
+                {
+                    cartoon:{style:'oval', color: siteColor, arrows: true, opacity: 1.0,thickness: 0.25,},
+                    stick:{color: siteColor},
+                }
+            );
+        });
+
+    }
+    // viewer.setStyle({resi: PDBResNums, hetflag: false}, {cartoon:{style:'oval', color: siteColor, arrows: true, opacity: 1.0,thickness: 0.25,}, stick:{color: siteColor}, });
     
     viewer.render({});
     
@@ -45,9 +67,26 @@ $('table#bss_table tbody').on('mouseover', 'tr', function () { // event listener
             resetChartStyles(myChart, index, "black", 1, 12); // resets chart styles to default
         }
 
-        let PDBResNums = seg_ress_dict[rowId].map(el => Up2PdbDict[repPdbId][repPdbChainId][el]);
+        if (activeModel == "superposition") {
+            viewer.setStyle({resi: siteSuppPDBResNums, chain: repPdbChainId, hetflag: false}, {cartoon: {style:'oval', color: 'white', arrows: true, opacity: 1.0,thickness: 0.25,}});
+        }
+        else{
+            siteAssemblyPDBResNums.forEach(([element, siteAssemblyPDBResNum]) => { // in case of multiple copies of protein of interest
+                //let siteAssemblyPDBResNum = seg_ress_dict[rowId].map(el => Up2PdbMapAssembly[chainsMapAssembly[element]][el]);
+    
+                //let AssemblyPDBResNum = Up2PdbMapAssembly[chainsMapAssembly[element]][newPointLabel]
+                //siteAssemblyPDBResNums.push([element, siteAssemblyPDBResNum]);
+                viewer.setStyle(
+                    {resi: siteAssemblyPDBResNum, chain: element, hetflag: false},
+                    {
+                        cartoon:{style:'oval', color:  'white', arrows: true, opacity: 1.0,thickness: 0.25,},
+                    }
+                );
+            });
+        }
+        //let PDBResNums = seg_ress_dict[rowId].map(el => Up2PdbDict[repPdbId][repPdbChainId][el]);
 
-        viewer.setStyle({resi: PDBResNums, hetflag: false}, {cartoon: {style:'oval', color: 'white', arrows: true, opacity: 1.0,thickness: 0.25,}});
+        //viewer.setStyle({resi: PDBResNums, hetflag: false}, {cartoon: {style:'oval', color: 'white', arrows: true, opacity: 1.0,thickness: 0.25,}});
 
         if (clickedElements.length == 0) {
             // console.log("Mouseout from point!");
