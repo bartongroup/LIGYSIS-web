@@ -169,13 +169,15 @@ $('table#bss_table tbody').on('mouseover', 'tr', function () { // event listener
         viewer.removeAllLabels(); // clearing labels from previous clicked site, unless still clicked
         // }
         if (surfaceVisible) {
-            for (const [key, value] of Object.entries(surfsDict)) {
-                if (key == "non_binding") {
-                    viewer.setSurfaceMaterialStyle(surfsDict[key].surfid, {color: 'white', opacity:0.7});
-                }
-                else {
-                    let siteColor = chartColors[Number(key.split("_").pop())];
-                    viewer.setSurfaceMaterialStyle(surfsDict[key].surfid, {color: siteColor, opacity:0.8});
+            if (activeModel == "superposition") {
+                for (const [key, value] of Object.entries(surfsDict["superposition"])) {
+                    if (key == "non_binding") {
+                        viewer.setSurfaceMaterialStyle(surfsDict["superposition"][key].surfid, {color: 'white', opacity:0.7});
+                    }
+                    else {
+                        let siteColor = chartColors[Number(key.split("_").pop())];
+                        viewer.setSurfaceMaterialStyle(surfsDict["superposition"][key].surfid, {color: siteColor, opacity:0.8});
+                    }
                 }
             }
         }
@@ -307,12 +309,14 @@ $('table#bss_table tbody').on('mouseover', 'tr', function () { // event listener
         }
 
         if (surfaceVisible) {
-            for (const [key, value] of Object.entries(surfsDict)) {
-                if (key == rowId) {
-                    viewer.setSurfaceMaterialStyle(value.surfid, {color: siteColor, opacity:0.9});
-                }
-                else {
-                    viewer.setSurfaceMaterialStyle(value.surfid, {color: 'white', opacity:0.0});
+            if (activeModel == "superposition") {
+                for (const [key, value] of Object.entries(surfsDict["superposition"])) {
+                    if (key == rowId) {
+                        viewer.setSurfaceMaterialStyle(value.surfid, {color: siteColor, opacity:0.9});
+                    }
+                    else {
+                        viewer.setSurfaceMaterialStyle(value.surfid, {color: 'white', opacity:0.0});
+                    }
                 }
             }
         }
