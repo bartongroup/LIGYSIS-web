@@ -26,8 +26,12 @@ function toggleSurfaceVisibility() {
             let clickedElement = clickedElements[0];
             let clickedElementId = clickedElement.id;
             let siteColor = chartColors[Number(clickedElementId.split("_").pop())];
-            let surfid = surfsDict["superposition"][clickedElementId].surfid;
-            viewer.setSurfaceMaterialStyle(surfid, {color: siteColor, opacity:0.9}); // show ONLY surface of clicked row
+            if (activeModel == "superposition") {
+                let surfid = surfsDict["superposition"][clickedElementId].surfid;
+                viewer.setSurfaceMaterialStyle(surfid, {color: siteColor, opacity:0.9}); // show ONLY surface of clicked row
+            }
+            //let surfid = surfsDict["superposition"][clickedElementId].surfid;
+            //viewer.setSurfaceMaterialStyle(surfid, {color: siteColor, opacity:0.9}); // show ONLY surface of clicked row
         }
         else {
             // change surface opacity

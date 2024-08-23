@@ -375,14 +375,14 @@ document.getElementById('chartCanvas').addEventListener('click', function(e) { /
 
             //viewer.setStyle({resi: PDBResNumsClicked, hetflag: false}, {cartoon: {style:'oval', color: 'white', arrows: true, opacity: 1.0, thickness: 0.25,}});
 
-            if (surfaceVisible) {
+            // if (surfaceVisible) {
 
-                for (const [key, value] of Object.entries(surfsDict)) {
-                    if (key == clickedElementId) {
-                        viewer.setSurfaceMaterialStyle(value.surfid, {color: "white", opacity:0.0});
-                    }
-                }
-            }
+            //     for (const [key, value] of Object.entries(surfsDict)) {
+            //         if (key == clickedElementId) {
+            //             viewer.setSurfaceMaterialStyle(value.surfid, {color: "white", opacity:0.0});
+            //         }
+            //     }
+            // }
 
             if (labelsVisible) {
                 viewer.removeAllLabels();
@@ -395,6 +395,23 @@ document.getElementById('chartCanvas').addEventListener('click', function(e) { /
             if (clickedPointLabel == pointLabel) { // same binding site is clicked
 
                 clickedPointLabel = null; // reset clickedPointLabel
+
+                // here if surface is active: go back to show surfaces as by default
+
+
+                if (surfaceVisible) {
+                    if (activeModel == "superposition") {
+                        for (const [key, value] of Object.entries(surfsDict["superposition"])) {
+                            if (key == "non_binding") {
+                                viewer.setSurfaceMaterialStyle(surfsDict["superposition"][key].surfid, {color: 'white', opacity:0.7});
+                            }
+                            else {
+                                let siteColor = chartColors[Number(key.split("_").pop())];
+                                viewer.setSurfaceMaterialStyle(surfsDict["superposition"][key].surfid, {color: siteColor, opacity:0.8});
+                            }
+                        }
+                    }
+                }
 
             }
 
@@ -463,6 +480,20 @@ document.getElementById('chartCanvas').addEventListener('click', function(e) { /
                     }
                 }
 
+                // hide other surfaces and show clicked one
+                if (surfaceVisible) {
+                    if (activeModel == "superposition") {
+                        for (const [key, value] of Object.entries(surfsDict["superposition"])) {
+                            if (key == pointLabel) {
+                                viewer.setSurfaceMaterialStyle(value.surfid, {color: pointColor, opacity:0.9});
+                            }
+                            else {
+                                viewer.setSurfaceMaterialStyle(value.surfid, {color: 'white', opacity:0.0});
+                            }
+                        }
+                    }
+                }
+
             }
         }
         else { // no row is clicked
@@ -517,6 +548,19 @@ document.getElementById('chartCanvas').addEventListener('click', function(e) { /
                     }
                 }
             }
+            // hide other surfaces and show clicked one
+            if (surfaceVisible) {
+                if (activeModel == "superposition") {
+                    for (const [key, value] of Object.entries(surfsDict["superposition"])) {
+                        if (key == pointLabel) {
+                            viewer.setSurfaceMaterialStyle(value.surfid, {color: pointColor, opacity:0.9});
+                        }
+                        else {
+                            viewer.setSurfaceMaterialStyle(value.surfid, {color: 'white', opacity:0.0});
+                        }
+                    }
+                }
+            }
 
         }
 
@@ -525,15 +569,19 @@ document.getElementById('chartCanvas').addEventListener('click', function(e) { /
         if (activeModel == "superposition") {
             viewer.setStyle(
                 {resi: siteSuppPDBResNums, chain: repPdbChainId, hetflag: false},
-                {cartoon: {style:'oval', color: pointColor, arrows: true, opacity: 1.0, thickness: 0.25,}, stick:{color: pointColor},}, );
+                {cartoon: {style:'oval', color: pointColor, arrows: true, opacity: 1.0, thickness: 0.25,}, stick:{color: pointColor},},
+            );
         }
         else {
             for ([element, siteAssemblyPDBResNum] of siteAssemblyPDBResNums) {
                 viewer.setStyle(
                     {model: activeModel, resi: siteAssemblyPDBResNum, chain: element, hetflag: false},
-                    {cartoon: {style:'oval', color: pointColor, arrows: true, opacity: 1.0, thickness: 0.25,}, stick:{color: pointColor},}, );
+                    {cartoon: {style:'oval', color: pointColor, arrows: true, opacity: 1.0, thickness: 0.25,}, stick:{color: pointColor},},
+                );
             }
         }
+
+        
 
 
         viewer.render();
