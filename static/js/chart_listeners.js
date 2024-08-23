@@ -3,7 +3,12 @@ var newLastHoveredPoint = null;
 
 let siteAssemblyPDBResNumsClicked;
 
+let siteSuppPDBResNumsClicked;
+
 document.getElementById('chartCanvas').addEventListener('mousemove', function(e) { // when the cursor moves over the chart canvas
+
+    siteAssemblyPDBResNums = [];
+    siteSuppPDBResNums = [];
 
     var chartElement = myChart.getElementsAtEventForMode(e, 'nearest', { intersect: true }, true); // gets the chart element that is closest to the cursor
 
@@ -28,23 +33,50 @@ document.getElementById('chartCanvas').addEventListener('mousemove', function(e)
             if (clickedElements.length > 0) { // a row is clicked
                 
                 let clickedElement = clickedElements[0]; // clicked row
+
+                siteSuppPDBResNumsClicked = [];
+                siteAssemblyPDBResNumsClicked = [];
                 
                 clickedPointLabel = chartData[chartLab][clickedElement.id]; // label of the clicked binding site row
-                
-                let clickedPDBResNums = seg_ress_dict[clickedPointLabel].map(el => Up2PdbDict[repPdbId][repPdbChainId][el]); // PDB residue numbers of the clicked binding site
-                
-                let clickedSiteColor = chartColors[Number(clickedPointLabel)];
-                
-                viewer.setStyle(
+
+                let clickedSiteColor = chartColors[Number(clickedPointLabel)]; // color of the clicked binding site
+
+                if (activeModel == "superposition") { // this is to remove any other residues that are not part of the clicked site
+                    siteSuppPDBResNumsClicked = seg_ress_dict[clickedPointLabel]
+                        .filter(el => Up2PdbDict[repPdbId][repPdbChainId].hasOwnProperty(el))
+                        .map(el => Up2PdbDict[repPdbId][repPdbChainId][el]);
                     
-                    {
-                        and:[{resi: clickedPDBResNums, invert: true}, {hetflag: false}] // all protein residues except clicked site (we want to keep ligands)
-                        // resi: clickedPDBResNums, invert: true, hetflag: false
-                    },
-                    {
-                        cartoon:{style:'oval', color: 'white', arrows: true, opacity: 1.0, thickness: 0.25,}, 
-                    }
-                ); // remove sidechains and colour white everything but clicked site
+                    viewer.setStyle(
+                        {
+                            and:[{resi: siteSuppPDBResNumsClicked, chain: repPdbChainId, invert: true}, {hetflag: false}] // all protein residues except clicked site (we want to keep ligands)
+                            // resi: clickedPDBResNums, invert: true, hetflag: false
+                        },
+                        {
+                            cartoon:{style:'oval', color: 'white', arrows: true, opacity: 1.0, thickness: 0.25,}, 
+                        }
+                    ); // remove sidechains and colour white everything but clicked site
+                }
+                else {
+                    proteinChains.forEach((element) => { // in case of multiple copies of protein of interest
+                        siteAssemblyPDBResNumClicked = seg_ress_dict[clickedPointLabel]
+                            .filter(el => Up2PdbMapAssembly[chainsMapAssembly[element]].hasOwnProperty(el))
+                            .map(el => Up2PdbMapAssembly[chainsMapAssembly[element]][el]);
+                            siteAssemblyPDBResNumsClicked.push([element, siteAssemblyPDBResNumClicked]);
+                    
+                        viewer.setStyle(
+                            {
+                                and:[{resi: siteAssemblyPDBResNumClicked, chain: element, invert: true}, {hetflag: false}] // all protein residues except clicked site (we want to keep ligands)
+                                // resi: clickedPDBResNums, invert: true, hetflag: false
+                            },
+                            {
+                                cartoon:{style:'oval', color: 'white', arrows: true, opacity: 1.0, thickness: 0.25,}, 
+                            }
+                        );
+                    });
+                }
+                //let clickedPDBResNums = seg_ress_dict[clickedPointLabel].map(el => Up2PdbDict[repPdbId][repPdbChainId][el]); // PDB residue numbers of the clicked binding site
+                
+                //viewer.render();
                 
                 if (surfaceVisible) {
 
@@ -66,7 +98,7 @@ document.getElementById('chartCanvas').addEventListener('mousemove', function(e)
 
                 viewer.setStyle(
                     {
-                        herflag: false, // don't want to remove ligands
+                        hetflag: false, // don't want to remove ligands
                     },
                     {
                         cartoon:{style:'oval', color: 'white', arrows: true, opacity: 1.0, thickness: 0.25,},
@@ -85,11 +117,38 @@ document.getElementById('chartCanvas').addEventListener('mousemove', function(e)
                 }
             }
 
-            highlightTableRow(pointLabel); 
+            highlightTableRow(pointLabel);
 
-            let PDBResNums = seg_ress_dict[pointLabel].map(el => Up2PdbDict[repPdbId][repPdbChainId][el]);
-            viewer.setStyle({resi: PDBResNums, hetflag: false}, {cartoon:{style:'oval', color: siteColor, arrows: true, opacity: 1.0, thickness: 0.25,}, stick:{color: siteColor,}, });
-            viewer.render({});
+            if (activeModel == "superposition") {
+                siteSuppPDBResNums = seg_ress_dict[pointLabel]
+                    .filter(el => Up2PdbDict[repPdbId][repPdbChainId].hasOwnProperty(el)) // this accounts not for missing residues in the structure (unresolved)
+                    .map(el => Up2PdbDict[repPdbId][repPdbChainId][el]);
+
+                viewer.setStyle(
+                    {resi: siteSuppPDBResNums, chain: repPdbChainId, hetflag: false},
+                    {cartoon:{style:'oval', color: siteColor, arrows: true, opacity: 1.0, thickness: 0.25,},
+                    stick:{color: siteColor,}, }
+                );
+            }
+            else {
+                proteinChains.forEach((element) => { // in case of multiple copies of protein of interest
+                    siteAssemblyPDBResNum = seg_ress_dict[pointLabel]
+                        .filter(el => Up2PdbMapAssembly[chainsMapAssembly[element]].hasOwnProperty(el))
+                        .map(el => Up2PdbMapAssembly[chainsMapAssembly[element]][el]);
+                    siteAssemblyPDBResNums.push([element, siteAssemblyPDBResNum]);
+                    viewer.setStyle(
+                        {model: activeModel, resi: siteAssemblyPDBResNum, chain: element, hetflag: false},
+                        {
+                            cartoon:{style:'oval', color: siteColor, arrows: true, opacity: 1.0,thickness: 0.25,},
+                            stick:{color: siteColor},
+                        }
+                    );
+                });
+            }
+
+            // let PDBResNums = seg_ress_dict[pointLabel].map(el => Up2PdbDict[repPdbId][repPdbChainId][el]);
+            // viewer.setStyle({resi: PDBResNums, hetflag: false}, {cartoon:{style:'oval', color: siteColor, arrows: true, opacity: 1.0, thickness: 0.25,}, stick:{color: siteColor,}, });
+            viewer.render();
             
         }
 
@@ -103,20 +162,58 @@ document.getElementById('chartCanvas').addEventListener('mousemove', function(e)
             let clickedElement = clickedElements[0]; // clicked row
             
             clickedPointLabel = chartData[chartLab][clickedElement.id]; // label of the clicked binding site row
-            
-            let clickedPDBResNums = seg_ress_dict[clickedPointLabel].map(el => Up2PdbDict[repPdbId][repPdbChainId][el]); // PDB residue numbers of the clicked binding site
-            
+
             let clickedSiteColor = chartColors[Number(clickedPointLabel)]; // color of the clicked binding site
 
-            viewer.setStyle(
-                {
-                    and:[{resi: clickedPDBResNums, invert: true}, {hetflag: false}] // all protein residues except clicked site (we want to keep ligands)
-                    // resi: clickedPDBResNums, invert: true, hetflag: false
-                },
-                {
-                    cartoon:{style:'oval', color: 'white', arrows: true, opacity: 1.0, thickness: 0.25,}, 
-                }
-            ); // remove sidechains and colour white everything but clicked site
+            if (activeModel == "superposition") {
+                let siteSuppPDBResNumsClicked = seg_ress_dict[clickedPointLabel]
+                    .filter(el => Up2PdbDict[repPdbId][repPdbChainId].hasOwnProperty(el))
+                    .map(el => Up2PdbDict[repPdbId][repPdbChainId][el]);
+
+                viewer.setStyle(
+                    {
+                        and:[{resi: siteSuppPDBResNumsClicked, invert: true}, {hetflag: false}] // all protein residues except clicked site (we want to keep ligands)
+                    },
+                    {cartoon: {style:'oval', color: 'white', arrows: true, opacity: 1.0, thickness: 0.25,}}
+                );
+                viewer.setStyle( // colouring the clicked site (necessary as sometimes there is overlap between sites)
+                    {resi: siteSuppPDBResNumsClicked, chain: repPdbChainId, hetflag: false},
+                    {cartoon:{style:'oval', color: clickedSiteColor, arrows: true, opacity: 1.0, thickness: 0.25,},
+                    stick:{color: clickedSiteColor,}, }
+                );
+            }
+            else {
+                proteinChains.forEach((element) => { // in case of multiple copies of protein of interest
+                    let siteAssemblyPDBResNumClicked = seg_ress_dict[clickedPointLabel]
+                        .filter(el => Up2PdbMapAssembly[chainsMapAssembly[element]].hasOwnProperty(el))
+                        .map(el => Up2PdbMapAssembly[chainsMapAssembly[element]][el]);
+                    siteAssemblyPDBResNumsClicked.push([element, siteAssemblyPDBResNumClicked]);
+                
+                    viewer.setStyle(
+                        {
+                            and:[{resi: siteAssemblyPDBResNumClicked, chain: element, invert: true}, {hetflag: false}] // all protein residues except clicked site (we want to keep ligands)
+                        },
+                        {cartoon: {style:'oval', color: 'white', arrows: true, opacity: 1.0, thickness: 0.25,}}
+                    );
+                    viewer.setStyle( // colouring the clicked site (necessary as sometimes there is overlap between sites)
+                        {resi: siteAssemblyPDBResNumClicked, chain: element, hetflag: false},
+                        {cartoon:{style:'oval', color: clickedSiteColor, arrows: true, opacity: 1.0, thickness: 0.25,},
+                        stick:{color: clickedSiteColor,}, }
+                    );
+                });
+            }
+            
+            // let clickedPDBResNums = seg_ress_dict[clickedPointLabel].map(el => Up2PdbDict[repPdbId][repPdbChainId][el]); // PDB residue numbers of the clicked binding site
+
+            // viewer.setStyle(
+            //     {
+            //         and:[{resi: clickedPDBResNums, invert: true}, {hetflag: false}] // all protein residues except clicked site (we want to keep ligands)
+            //         // resi: clickedPDBResNums, invert: true, hetflag: false
+            //     },
+            //     {
+            //         cartoon:{style:'oval', color: 'white', arrows: true, opacity: 1.0, thickness: 0.25,}, 
+            //     }
+            // ); // remove sidechains and colour white everything but clicked site
 
             if (surfaceVisible) { // if surface is visible
                 for (const [key, value] of Object.entries(surfsDict)) {
@@ -291,7 +388,7 @@ document.getElementById('chartCanvas').addEventListener('click', function(e) { /
                 viewer.removeAllLabels();
             }
 
-            viewer.render({});
+            //viewer.render({});
 
             // check is clicked row is the same as the newly clicked data point
 
@@ -384,11 +481,11 @@ document.getElementById('chartCanvas').addEventListener('click', function(e) { /
                 viewer.removeAllLabels(); // clearing labels from previous clicked site
                 if (activeModel == "superposition") {
                     for (siteSuppPDBResNum of siteSuppPDBResNums) {
-                        let resSel = {resi: PDBResNum}
+                        let resSel = {resi: siteSuppPDBResNum}
                         let resName = viewer.selectedAtoms(resSel)[0].resn
                         // console.log(resSel, resName);
                         viewer.addLabel(
-                            resName + String(Pdb2UpDict[repPdbId][repPdbChainId][PDBResNum]),
+                            resName + String(Pdb2UpDict[repPdbId][repPdbChainId][siteSuppPDBResNum]),
                             {
                                 alignment: 'center', backgroundColor: 'white', backgroundOpacity: 1,
                                 borderColor: 'black', borderOpacity: 1, borderThickness: 2,
@@ -422,6 +519,24 @@ document.getElementById('chartCanvas').addEventListener('click', function(e) { /
             }
 
         }
+
+        // style here.
+
+        if (activeModel == "superposition") {
+            viewer.setStyle(
+                {resi: siteSuppPDBResNums, chain: repPdbChainId, hetflag: false},
+                {cartoon: {style:'oval', color: pointColor, arrows: true, opacity: 1.0, thickness: 0.25,}, stick:{color: pointColor},}, );
+        }
+        else {
+            for ([element, siteAssemblyPDBResNum] of siteAssemblyPDBResNums) {
+                viewer.setStyle(
+                    {model: activeModel, resi: siteAssemblyPDBResNum, chain: element, hetflag: false},
+                    {cartoon: {style:'oval', color: pointColor, arrows: true, opacity: 1.0, thickness: 0.25,}, stick:{color: pointColor},}, );
+            }
+        }
+
+
+        viewer.render();
 
     }
 });

@@ -228,14 +228,18 @@ $('table#bss_table tbody').on('mouseover', 'tr', function () { // event listener
             for (var i = 0; i < clickedElements.length; i++) {
                 var clickedElementId = clickedElements[i].id;
                 if (activeModel == "superposition") {
-                    let suppPDBResNumsClicked = seg_ress_dict[clickedElementId].map(el => Up2PdbDict[repPdbId][repPdbChainId][el]);
+                    let suppPDBResNumsClicked = seg_ress_dict[clickedElementId]
+                        .filter(el => Up2PdbDict[repPdbId][repPdbChainId].hasOwnProperty(el))
+                        .map(el => Up2PdbDict[repPdbId][repPdbChainId][el]);
                     viewer.setStyle({resi: suppPDBResNumsClicked, chain: repPdbChainId, hetflag: false}, {cartoon: {style:'oval', color: 'white', arrows: true, opacity: 1.0,thickness: 0.25,}});
                     // viewer.render();
                 }
                 else {
                     let AssemblyPDBResNumsClicked = [];
                     proteinChains.forEach((element) => { // in case of multiple copies of protein of interest
-                        let AssemblyPDBResNum = seg_ress_dict[clickedElementId].map(el => Up2PdbMapAssembly[chainsMapAssembly[element]][el]);
+                        let AssemblyPDBResNum = seg_ress_dict[clickedElementId]
+                            .filter(el => Up2PdbMapAssembly[chainsMapAssembly[element]].hasOwnProperty(el))
+                            .map(el => Up2PdbMapAssembly[chainsMapAssembly[element]][el]);
                         AssemblyPDBResNumsClicked.push([element, AssemblyPDBResNum]);
                         viewer.setStyle(
                             {model: activeModel, resi: AssemblyPDBResNum, chain: element, hetflag: false},
@@ -340,44 +344,39 @@ $('table#bs_ress_table tbody').on('mouseover', 'tr', function () { // event list
 
         if (activeModel == "superposition") { // in this case, only one residue as this is a supperposition of single chains
             SuppPDBResNum = Up2PdbDict[repPdbId][repPdbChainId][rowId];
-            viewer.setStyle({resi: SuppPDBResNum, hetflag: false}, {cartoon:{style:'oval', color: rowColorHex, arrows: true, opacity: 1.0,thickness: 0.25,}, stick:{color: rowColorHex}, });
+            if (SuppPDBResNum !== undefined) {
+                viewer.setStyle({resi: SuppPDBResNum, hetflag: false}, {cartoon:{style:'oval', color: rowColorHex, arrows: true, opacity: 1.0,thickness: 0.25,}, stick:{color: rowColorHex}, });
+            }
+            else {
+                console.log("Residue not found in structure!");
+            }
         }
         else {
             proteinChains.forEach((element) => { // in case of multiple copies of protein of interest
                 let AssemblyPDBResNum = Up2PdbMapAssembly[chainsMapAssembly[element]][rowId]
                 AssemblyPDBResNums.push([element, AssemblyPDBResNum]);
-                viewer.setStyle(
-                    {resi: AssemblyPDBResNum, chain: element, hetflag: false},
-                    {
-                        cartoon:{style:'oval', color: rowColorHex, arrows: true, opacity: 1.0,thickness: 0.25,},
-                        stick:{color: rowColorHex},
-                    }
-                );
+                if (AssemblyPDBResNum !== undefined) {
+                    viewer.setStyle(
+                        {resi: AssemblyPDBResNum, chain: element, hetflag: false},
+                        {
+                            cartoon:{style:'oval', color: rowColorHex, arrows: true, opacity: 1.0,thickness: 0.25,},
+                            stick:{color: rowColorHex},
+                        }
+                    );
+                }
+                else {
+                    console.log("Residue not found in assembly!");
+                }
             });
         }
 
         if (labelsVisible) {
             if (activeModel == "superposition") {
-                let resSel = {resi: SuppPDBResNum, chain: repPdbChainId, hetflag: false}
-                let resName = viewer.selectedAtoms(resSel)[0].resn
-                viewer.addLabel(
-                    resName + String(Pdb2UpDict[repPdbId][repPdbChainId][SuppPDBResNum]),
-                    {
-                        alignment: 'center', backgroundColor: 'white', backgroundOpacity: 1,
-                        borderColor: 'black', borderOpacity: 1, borderThickness: 2,
-                        font: 'Arial', fontColor: rowColorHex, fontOpacity: 1, fontSize: 12,
-                        inFront: true, screenOffset: [0, 0, 0], showBackground: true
-                    },
-                    resSel,
-                    true,
-                );
-            }
-            else {
-                AssemblyPDBResNums.forEach(([chain, resNum]) => {
-                    let resSel = {model: activeModel, resi: resNum, chain: chain, hetflag: false}
+                if (SuppPDBResNum !== undefined) {
+                    let resSel = {resi: SuppPDBResNum, chain: repPdbChainId, hetflag: false}
                     let resName = viewer.selectedAtoms(resSel)[0].resn
                     viewer.addLabel(
-                        resName + String(Pdb2UpMapAssembly[chain][resNum]),
+                        resName + String(Pdb2UpDict[repPdbId][repPdbChainId][SuppPDBResNum]),
                         {
                             alignment: 'center', backgroundColor: 'white', backgroundOpacity: 1,
                             borderColor: 'black', borderOpacity: 1, borderThickness: 2,
@@ -387,6 +386,25 @@ $('table#bs_ress_table tbody').on('mouseover', 'tr', function () { // event list
                         resSel,
                         true,
                     );
+                }
+            }
+            else {
+                AssemblyPDBResNums.forEach(([chain, resNum]) => {
+                    if (resNum !== undefined) {
+                        let resSel = {model: activeModel, resi: resNum, chain: chain, hetflag: false}
+                        let resName = viewer.selectedAtoms(resSel)[0].resn
+                        viewer.addLabel(
+                            resName + String(Pdb2UpMapAssembly[chain][resNum]),
+                            {
+                                alignment: 'center', backgroundColor: 'white', backgroundOpacity: 1,
+                                borderColor: 'black', borderOpacity: 1, borderThickness: 2,
+                                font: 'Arial', fontColor: rowColorHex, fontOpacity: 1, fontSize: 12,
+                                inFront: true, screenOffset: [0, 0, 0], showBackground: true
+                            },
+                            resSel,
+                            true,
+                        );
+                    }
                 });
             }
         }
