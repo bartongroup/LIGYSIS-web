@@ -44,7 +44,7 @@ $('table#bss_table tbody').on('mouseover', 'tr', function () { // event listener
         siteSuppPDBResNums = seg_ress_dict[rowId]
             .filter(el => Up2PdbDict[repPdbId][repPdbChainId].hasOwnProperty(el)) // this accounts not for missing residues in the structure (unresolved)
             .map(el => Up2PdbDict[repPdbId][repPdbChainId][el]);
-        viewer.setStyle({resi: siteSuppPDBResNums, chain: repPdbChainId, hetflag: false}, {cartoon:{style:'oval', color: siteColor, arrows: true, opacity: 1.0,thickness: 0.25,}, stick:{color: siteColor}, });
+        viewer.setStyle({resi: siteSuppPDBResNums, chain: repPdbChainId, hetflag: false}, {cartoon:{style:'oval', color: siteColor, arrows: true, opacity: cartoonOpacity, thickness: cartoonThickness,}, stick:{color: siteColor}, });
     }
     else {
         proteinChains.forEach((element) => { // in case of multiple copies of protein of interest
@@ -57,15 +57,13 @@ $('table#bss_table tbody').on('mouseover', 'tr', function () { // event listener
             viewer.setStyle(
                 {model: activeModel, resi: siteAssemblyPDBResNum, chain: element, hetflag: false},
                 {
-                    cartoon:{style:'oval', color: siteColor, arrows: true, opacity: 1.0,thickness: 0.25,},
+                    cartoon:{style:'oval', color: siteColor, arrows: true, opacity: cartoonOpacity, thickness: cartoonThickness,},
                     stick:{color: siteColor},
                 }
             );
         });
 
     }
-    // viewer.setStyle({resi: PDBResNums, hetflag: false}, {cartoon:{style:'oval', color: siteColor, arrows: true, opacity: 1.0,thickness: 0.25,}, stick:{color: siteColor}, });
-    
     viewer.render();
     
 }).on('mouseout', 'tr', function () {
@@ -95,14 +93,11 @@ $('table#bss_table tbody').on('mouseover', 'tr', function () { // event listener
                 viewer.setStyle(
                     {model: activeModel, resi: siteAssemblyPDBResNum, chain: element, hetflag: false},
                     {
-                        cartoon:{style:'oval', color:  'white', arrows: true, opacity: 1.0,thickness: 0.25,},
+                        cartoon:{style:'oval', color:  'white', arrows: true, opacity: cartoonOpacity, thickness: cartoonThickness,},
                     }
                 );
             });
         }
-        //let PDBResNums = seg_ress_dict[rowId].map(el => Up2PdbDict[repPdbId][repPdbChainId][el]);
-
-        //viewer.setStyle({resi: PDBResNums, hetflag: false}, {cartoon: {style:'oval', color: 'white', arrows: true, opacity: 1.0,thickness: 0.25,}});
 
         if (clickedElements.length == 0) {
             // console.log("Mouseout from point!");
@@ -182,13 +177,6 @@ $('table#bss_table tbody').on('mouseover', 'tr', function () { // event listener
 
             //let AssemblyPDBResNum = Up2PdbMapAssembly[chainsMapAssembly[element]][newPointLabel]
             siteAssemblyPDBResNums.push([element, siteAssemblyPDBResNum]);
-            // viewer.setStyle(
-            //     {resi: siteAssemblyPDBResNum, chain: element, hetflag: false},
-            //     {
-            //         cartoon:{style:'oval', color: siteColor, arrows: true, opacity: 1.0,thickness: 0.25,},
-            //         stick:{color: siteColor},
-            //     }
-            // );
         });
     }
     
@@ -283,7 +271,7 @@ $('table#bss_table tbody').on('mouseover', 'tr', function () { // event listener
                     let suppPDBResNumsClicked = seg_ress_dict[clickedElementId]
                         .filter(el => Up2PdbDict[repPdbId][repPdbChainId].hasOwnProperty(el))
                         .map(el => Up2PdbDict[repPdbId][repPdbChainId][el]);
-                    viewer.setStyle({resi: suppPDBResNumsClicked, chain: repPdbChainId, hetflag: false}, {cartoon: {style:'oval', color: 'white', arrows: true, opacity: 1.0,thickness: 0.25,}});
+                    viewer.setStyle({resi: suppPDBResNumsClicked, chain: repPdbChainId, hetflag: false}, {cartoon: {style:'oval', color: 'white', arrows: true, opacity: cartoonOpacity, thickness: cartoonThickness,}});
                     // viewer.render();
                 }
                 else {
@@ -296,7 +284,7 @@ $('table#bss_table tbody').on('mouseover', 'tr', function () { // event listener
                         viewer.setStyle(
                             {model: activeModel, resi: AssemblyPDBResNum, chain: element, hetflag: false},
                             {
-                                cartoon:{style:'oval', color: 'white', arrows: true, opacity: 1.0,thickness: 0.25,},
+                                cartoon:{style:'oval', color: 'white', arrows: true, opacity: cartoonOpacity, thickness: cartoonThickness,},
                             }
                         );
                     });
@@ -384,12 +372,6 @@ $('table#bss_table tbody').on('mouseover', 'tr', function () { // event listener
         }
 
     }
-    // if (activeModel == "superposition") {
-    //     viewer.setStyle({resi: siteSuppPDBResNums, chain: repPdbChainId, hetflag: false}, {cartoon:{style:'oval', color: siteColor, arrows: true, opacity: 1.0,thickness: 0.25,}, stick:{color: siteColor}, });
-    // }
-    // else {
-
-    // }
 
     viewer.render({});
     
@@ -411,7 +393,7 @@ $('table#bs_ress_table tbody').on('mouseover', 'tr', function () { // event list
         if (activeModel == "superposition") { // in this case, only one residue as this is a supperposition of single chains
             SuppPDBResNum = Up2PdbDict[repPdbId][repPdbChainId][rowId];
             if (SuppPDBResNum !== undefined) {
-                viewer.setStyle({resi: SuppPDBResNum, hetflag: false}, {cartoon:{style:'oval', color: rowColorHex, arrows: true, opacity: 1.0,thickness: 0.25,}, stick:{color: rowColorHex}, });
+                viewer.setStyle({resi: SuppPDBResNum, hetflag: false}, {cartoon:{style:'oval', color: rowColorHex, arrows: true, opacity: cartoonOpacity, thickness: cartoonThickness,}, stick:{color: rowColorHex}, });
             }
             else {
                 console.log("Residue not found in structure!");
@@ -425,7 +407,7 @@ $('table#bs_ress_table tbody').on('mouseover', 'tr', function () { // event list
                     viewer.setStyle(
                         {resi: AssemblyPDBResNum, chain: element, hetflag: false},
                         {
-                            cartoon:{style:'oval', color: rowColorHex, arrows: true, opacity: 1.0,thickness: 0.25,},
+                            cartoon:{style:'oval', color: rowColorHex, arrows: true, opacity: cartoonOpacity, thickness: cartoonThickness,},
                             stick:{color: rowColorHex},
                         }
                     );
@@ -495,24 +477,19 @@ $('table#bs_ress_table tbody').on('mouseover', 'tr', function () { // event list
         let PDBResNum = Up2PdbDict[repPdbId][repPdbChainId][rowId];
 
         if (activeModel == "superposition") {
-            viewer.setStyle({resi: SuppPDBResNum, hetflag: false}, {cartoon: {style:'oval', color: 'white', arrows: true, opacity: 1.0,thickness: 0.25,}});
+            viewer.setStyle({resi: SuppPDBResNum, hetflag: false}, {cartoon: {style:'oval', color: 'white', arrows: true, opacity: cartoonOpacity, thickness: cartoonThickness,}});
             if (labelsVisible) {
                 viewer.removeAllLabels(); // clearing labels from previous clicked site, unless still clicked
             }
         }
         else {
             AssemblyPDBResNums.forEach(([chain, resNum]) => {
-                viewer.setStyle({resi: resNum, chain: chain, hetflag: false}, {cartoon: {style:'oval', color: 'white', arrows: true, opacity: 1.0,thickness: 0.25,}});
+                viewer.setStyle({resi: resNum, chain: chain, hetflag: false}, {cartoon: {style:'oval', color: 'white', arrows: true, opacity: cartoonOpacity, thickness: cartoonThickness,}});
             });
             if (labelsVisible) {
                 viewer.removeAllLabels(); // clearing labels from previous clicked site, unless still clicked
             }
         }
-
-        //viewer.setStyle({resi: PDBResNum, hetflag: false}, {cartoon: {style:'oval', color: 'white', arrows: true, opacity: 1.0,thickness: 0.25,}});
-
-        
-
         viewer.render({});
     }
 

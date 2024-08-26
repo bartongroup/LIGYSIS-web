@@ -234,12 +234,8 @@ document.getElementById('chartCanvas').addEventListener('mousemove', function(e)
         else { // no row is clicked
 
             viewer.setStyle(
-                {
-                    hetflag: false, // don't want to remove ligands
-                },
-                {
-                    cartoon: {style:'oval', color: 'white', arrows: true, opacity: 1.0, thickness: 0.25,}
-                }
+                {hetflag: false,}, // don't want to remove ligands
+                {cartoon: {style:'oval', color: 'white', arrows: true, opacity: cartoonOpacity, thickness: cartoonThickness,}}
             ); // remove sidechains and colour white everything except ligands (all protein atoms)
         }
         
@@ -341,7 +337,7 @@ document.getElementById('chartCanvas').addEventListener('click', function(e) { /
                 let siteSuppPDBResNumsClicked = seg_ress_dict[clickedElementId]
                     .filter(el => Up2PdbDict[repPdbId][repPdbChainId].hasOwnProperty(el))
                     .map(el => Up2PdbDict[repPdbId][repPdbChainId][el]);
-                viewer.setStyle({resi: siteSuppPDBResNumsClicked, chain: repPdbChainId, hetflag: false}, {cartoon: {style:'oval', color: 'white', arrows: true, opacity: 1.0, thickness: 0.25,}});
+                viewer.setStyle({resi: siteSuppPDBResNumsClicked, chain: repPdbChainId, hetflag: false}, {cartoon: {style:'oval', color: 'white', arrows: true, opacity: cartoonOpacity, thickness: cartoonThickness,}});
             }
             else {
                 proteinChains.forEach((element) => { // in case of multiple copies of protein of interest
@@ -628,10 +624,6 @@ document.getElementById('newChartCanvas').addEventListener('mousemove', function
                         );
                     });
                 }
-
-                //let PDBResNum = Up2PdbDict[repPdbId][repPdbChainId][newPointLabel];
-
-                //viewer.setStyle({resi: PDBResNum, hetflag: false}, {cartoon:{style:'oval', color: pointColor, arrows: true, opacity: 1.0, thickness: 0.25,}, stick:{color: pointColor,}, });
 
                 if (labelsVisible) {
                     viewer.removeAllLabels(); // clearing labels from previous hovered residue (residues might be almost superposed in plot. Hiding it so only one is visible)
