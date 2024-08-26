@@ -306,7 +306,7 @@ function toggleContactsVisibility() {
         .then(response => response.json())
         .then(data => {
             let contacts = JSON.parse(data.contacts);
-            let strucLigData = data.ligands;
+            //let strucLigData = data.ligands;
             let strucProtData = data.protein;
             //bindingRess = Array.from(new Set(contacts.map(item => item.auth_seq_id_end)));
 
@@ -432,24 +432,42 @@ function toggleContactsVisibility() {
                 contactCylinders.push(contactCylinder); // Add the cylinder to the contactCylinders list
             });
 
-            viewer.addStyle({resi: bindingRess}, {stick: {hidden: false, color: "white", radius: 0.25}}); // Show the binding residues sticks
+            //viewer.addStyle({resi: bindingRess}, {stick: {hidden: false, color: "white", radius: stickRadius}}); // Show the binding residues sticks
 
-            for (let i = 0; i < strucProtData.length; i++) { // Loop through the ligands and colour them based on their site
-                let protRes = strucProtData[i];
-                let protResn = protRes[0]
-                let protChain = protRes[1];
-                let protResi = protRes[2];
-                //let ligandColor = chartColors[ligand[3]];
-                viewer.addStyle({resi: protResi, chain: protChain, resn: protResn}, {stick: {hidden: false, color: 'white', radius: 0.25}});
-            }
+            // for (let i = 0; i < strucProtData.length; i++) { // Loop through the ligands and colour them based on their site
+            //     let protRes = strucProtData[i];
+            //     let protResn = protRes[0]
+            //     let protChain = protRes[1];
+            //     let protResi = protRes[2];
+            //     //let ligandColor = chartColors[ligand[3]];
+            //     viewer.addStyle({resi: protResi, chain: protChain, resn: protResn}, {stick: {hidden: false, color: 'white', radius: stickRadius}});
+            // }
             
-            for (let i = 0; i < strucLigData.length; i++) { // Loop through the ligands and colour them based on their site
-                let ligand = strucLigData[i];
-                let ligandResn = ligand[0]
-                let ligandChain = ligand[1];
-                let ligandResi = ligand[2];
-                let ligandColor = chartColors[ligand[3]];
-                viewer.addStyle({resi: ligandResi, chain: ligandChain, resn: ligandResn}, {stick: {hidden: false, color: ligandColor, radius: 0.25}});
+            // for (let i = 0; i < strucLigData.length; i++) { // Loop through the ligands and colour them based on their site
+            //     let ligand = strucLigData[i];
+            //     let ligandResn = ligand[0]
+            //     let ligandChain = ligand[1];
+            //     let ligandResi = ligand[2];
+            //     let ligandColor = chartColors[ligand[3]];
+            //     viewer.addStyle({resi: ligandResi, chain: ligandChain, resn: ligandResn}, {stick: {hidden: false, color: ligandColor, radius: stickRadius}});
+            // }
+
+            for (const [ligNam, ligDat] of Object.entries(strucProtData)) {
+                let ligComps = ligNam.split("_");
+                let ligMol = ligComps[0];
+                let ligChain = ligComps[1];
+                let ligResi = ligComps[2];
+                let protRess = ligDat[0];
+                let bingingSite = ligDat[1];
+                let ligColor = chartColors[Number(bingingSite)];
+                for (let i = 0; i < protRess.length; i++) {
+                    let protRes = protRess[i];
+                    let protResn = protRes[0];
+                    let protChain = protRes[1];
+                    let protResi = protRes[2];
+                    viewer.addStyle({resi: protResi, chain: protChain, resn: protResn}, {stick: {hidden: false, color: ligColor, radius: stickRadius}});
+                }
+                viewer.addStyle({resi: ligResi, chain: ligChain, resn: ligMol}, {stick: {hidden: false, color: ligColor, radius: stickRadius}});
             }
 
             viewer.render();

@@ -361,7 +361,7 @@ def get_contacts():
         (arpeggio_cons['contact'].apply(lambda x: x != ["proximal"])) &
         (arpeggio_cons['interacting_entities'] == "INTER") &
         (arpeggio_cons['type'] == "atom-atom")
-    ]
+    ].copy()
 
     json_cons = arpeggio_cons_filt[arpeggio_cols].to_json(orient='records')
 
@@ -371,15 +371,37 @@ def get_contacts():
 
     struc_ligs = {k: v for k, v in bs_membership_rev.items() if k.startswith(active_model)}
 
-    struc_ligs_data = transform_dict(struc_ligs)
+    #struc_ligs_data = transform_dict(struc_ligs)
+
+    arpeggio_cons_filt["LIGAND_ID"] = arpeggio_cons_filt.label_comp_id_bgn + "_" + arpeggio_cons_filt.auth_asym_id_bgn + "_" + arpeggio_cons_filt.auth_seq_id_bgn.astype(str)
+
+    #print(arpeggio_cons_filt)
 
     struc_prot_data = list(arpeggio_cons_filt[["label_comp_id_end", "auth_asym_id_end", "auth_seq_id_end"]].drop_duplicates().itertuples(index=False, name=None))
 
+    struc_prot_data = {}
+    for k, v in struc_ligs.items():
+        ligand_id = "_".join(k.split("_")[1:])
+        ligand_site = v
+        ligand_rows = arpeggio_cons_filt[arpeggio_cons_filt.LIGAND_ID == ligand_id]
+        struc_prot_data[ligand_id] = [
+            list(ligand_rows[["label_comp_id_end", "auth_asym_id_end", "auth_seq_id_end"]].drop_duplicates().itertuples(index=False, name=None)),
+            ligand_site
+        ]
+
+
     response_data = {
         'contacts': json_cons,
-        'ligands': struc_ligs_data,
+        #'ligands': struc_ligs_data,
         'protein': struc_prot_data,
     }
+
+    # print(struc_ligs)
+    # print(len(json_cons))
+    # print(len(struc_ligs_data))
+    # print(struc_ligs_data)
+    # print(len(struc_prot_data))
+    #print(struc_prot_data)
 
     return jsonify(response_data) # send jasonified data back to client
 
