@@ -74,9 +74,6 @@ document.getElementById('chartCanvas').addEventListener('mousemove', function(e)
                         );
                     });
                 }
-                //let clickedPDBResNums = seg_ress_dict[clickedPointLabel].map(el => Up2PdbDict[repPdbId][repPdbChainId][el]); // PDB residue numbers of the clicked binding site
-                
-                //viewer.render();
                 
                 if (surfaceVisible) {
                     if (activeModel == "superposition") {
@@ -120,17 +117,6 @@ document.getElementById('chartCanvas').addEventListener('mousemove', function(e)
                         cartoon:{style:'oval', color: 'white', arrows: true, opacity: cartoonOpacity, thickness: cartoonThickness,},
                     }
                 );
-
-                // if (surfaceVisible) {
-                //     for (const [key, value] of Object.entries(surfsDict)) {
-                //         if (key == pointLabel) {
-                //             viewer.setSurfaceMaterialStyle(value.surfid, {color: siteColor, opacity: 0.9});
-                //         }
-                //         else {
-                //             viewer.setSurfaceMaterialStyle(value.surfid, {color: 'white', opacity: surfaceHiddenOpacity});
-                //         }
-                //     }
-                // }
             }
 
             highlightTableRow(pointLabel);
@@ -162,8 +148,6 @@ document.getElementById('chartCanvas').addEventListener('mousemove', function(e)
                 });
             }
 
-            // let PDBResNums = seg_ress_dict[pointLabel].map(el => Up2PdbDict[repPdbId][repPdbChainId][el]);
-            // viewer.setStyle({resi: PDBResNums, hetflag: false}, {cartoon:{style:'oval', color: siteColor, arrows: true, opacity: 1.0, thickness: 0.25,}, stick:{color: siteColor,}, });
             viewer.render();
             
         }
@@ -218,18 +202,6 @@ document.getElementById('chartCanvas').addEventListener('mousemove', function(e)
                     );
                 });
             }
-            
-            // let clickedPDBResNums = seg_ress_dict[clickedPointLabel].map(el => Up2PdbDict[repPdbId][repPdbChainId][el]); // PDB residue numbers of the clicked binding site
-
-            // viewer.setStyle(
-            //     {
-            //         and:[{resi: clickedPDBResNums, invert: true}, {hetflag: false}] // all protein residues except clicked site (we want to keep ligands)
-            //         // resi: clickedPDBResNums, invert: true, hetflag: false
-            //     },
-            //     {
-            //         cartoon:{style:'oval', color: 'white', arrows: true, opacity: 1.0, thickness: 0.25,}, 
-            //     }
-            // ); // remove sidechains and colour white everything but clicked site
 
             if (surfaceVisible) { // if surface is visible (when hovering on a site on the chart and a row is clicked)
                 if (activeModel == "superposition") {
@@ -269,18 +241,6 @@ document.getElementById('chartCanvas').addEventListener('mousemove', function(e)
                     cartoon: {style:'oval', color: 'white', arrows: true, opacity: 1.0, thickness: 0.25,}
                 }
             ); // remove sidechains and colour white everything except ligands (all protein atoms)
-
-            if (surfaceVisible) {
-                for (const [key, value] of Object.entries(surfsDict)) {
-                    if (key == "non_binding") {
-                        viewer.setSurfaceMaterialStyle(surfsDict[key].surfid, {color: 'white', opacity:0.7}); // keep non-binding surface visible at 70% opacity
-                    }
-                    else {
-                        let siteColor = chartColors[Number(key.split("_").pop())];
-                        viewer.setSurfaceMaterialStyle(surfsDict[key].surfid, {color: siteColor, opacity:0.8}); // keep binding surfaces visible at 80% opacity
-                    }
-                }
-            }
         }
         
         viewer.render({});
@@ -400,19 +360,6 @@ document.getElementById('chartCanvas').addEventListener('click', function(e) { /
                     );
                 }); 
             }
-
-            //let PDBResNumsClicked = seg_ress_dict[clickedElementId].map(el => Up2PdbDict[repPdbId][repPdbChainId][el]);
-
-            //viewer.setStyle({resi: PDBResNumsClicked, hetflag: false}, {cartoon: {style:'oval', color: 'white', arrows: true, opacity: 1.0, thickness: 0.25,}});
-
-            // if (surfaceVisible) {
-
-            //     for (const [key, value] of Object.entries(surfsDict)) {
-            //         if (key == clickedElementId) {
-            //             viewer.setSurfaceMaterialStyle(value.surfid, {color: "white", opacity:0.0});
-            //         }
-            //     }
-            // }
 
             if (labelsVisible) {
                 viewer.removeAllLabels();
@@ -631,10 +578,6 @@ document.getElementById('chartCanvas').addEventListener('click', function(e) { /
                 );
             }
         }
-
-        
-
-
         viewer.render();
 
     }
