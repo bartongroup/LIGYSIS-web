@@ -92,8 +92,13 @@ function selectOption(option) {
             }
             contactCylinders = [];
 
-            viewer.removeSurface(surfsDict[activeModel].surfid); // Remove surface from previous assembly
-            console.log("Assembly surface removed!");
+            //viewer.removeSurface(surfsDict[activeModel].surfid); // Remove surface from previous assembly
+            for (const [key, value] of Object.entries(surfsDict[activeModel])) { 
+                for (const [key2, value2] of Object.entries(value)) {
+                    viewer.removeSurface(value2.surfid); // Remove surface from previous assembly
+                }
+            }
+            console.log("Assembly surfaces removed!");
 
             viewer.setHoverable({model: activeModel}, false, // Hovering disabled for previous assembly
                 showHoverLabel,
@@ -202,8 +207,10 @@ function openStructure(pdbId) {
                                         color: 'white',
                                         opacity: surfaceHiddenOpacity,
                                     },
-                                    {and:[{model: activeModel, resi: surfAssemblyPDBResNums, chain: element, invert: true}, {chain: element}]},
-                                    {hetflag: false},
+                                    //{and:[{model: activeModel, resi: surfAssemblyPDBResNums, chain: element, invert: true}, {model: activeModel, chain: element}]},
+                                    {not:{resi: surfAssemblyPDBResNums}, model: activeModel, chain: element},
+                                    {not:{resi: surfAssemblyPDBResNums}, model: activeModel, chain: element},
+                                    //{model: activeModel, hetflag: false},
                                 );
                             }
                             else {

@@ -79,16 +79,32 @@ document.getElementById('chartCanvas').addEventListener('mousemove', function(e)
                 //viewer.render();
                 
                 if (surfaceVisible) {
-
-                    for (const [key, value] of Object.entries(surfsDict)) {
-                        if (key == pointLabel) {
-                            viewer.setSurfaceMaterialStyle(value.surfid, {color: siteColor, opacity:0.9}); // show surface of hovered site visible at 90% opacity
+                    if (activeModel == "superposition") {
+                        for (const [key, value] of Object.entries(surfsDict["superposition"])) {
+                            if (key == pointLabel) {
+                                viewer.setSurfaceMaterialStyle(value.surfid, {color: siteColor, opacity:0.8}); // show surface of hovered site visible at 80% opacity
+                            }
+                            else if (key == clickedPointLabel) {
+                                viewer.setSurfaceMaterialStyle(value.surfid, {color: clickedSiteColor, opacity:0.9}); // keep surface of clicked table row site visible at 90% opacity
+                            }
+                            else {
+                                viewer.setSurfaceMaterialStyle(value.surfid, {color: 'white', opacity:0.0}); // hide all other surfaces
+                            }
                         }
-                        else if (key == clickedPointLabel) {
-                            viewer.setSurfaceMaterialStyle(value.surfid, {color: clickedSiteColor, opacity:0.9}); // keep surface of clicked table row site visible at 90% opacity
-                        }
-                        else {
-                            viewer.setSurfaceMaterialStyle(value.surfid, {color: 'white', opacity:0.0}); // hide all other surfaces
+                    }
+                    else {
+                        for (const [key, value] of Object.entries(surfsDict[activeModel])) {
+                            for (const [key2, value2] of Object.entries(value)) {
+                                if (key == pointLabel) {
+                                    viewer.setSurfaceMaterialStyle(value2.surfid, {color: siteColor, opacity:0.8}); // show surface of hovered site visible at 80% opacity
+                                }
+                                else if (key == clickedPointLabel) {
+                                    viewer.setSurfaceMaterialStyle(value2.surfid, {color: clickedSiteColor, opacity:0.9}); // keep surface of clicked table row site visible at 90% opacity
+                                }
+                                else {
+                                    viewer.setSurfaceMaterialStyle(value2.surfid, {color: 'white', opacity:0.0}); // hide all other surfaces
+                                }
+                            }
                         }
                     }
                 }
@@ -105,16 +121,16 @@ document.getElementById('chartCanvas').addEventListener('mousemove', function(e)
                     }
                 );
 
-                if (surfaceVisible) {
-                    for (const [key, value] of Object.entries(surfsDict)) {
-                        if (key == pointLabel) {
-                            viewer.setSurfaceMaterialStyle(value.surfid, {color: siteColor, opacity: 0.9});
-                        }
-                        else {
-                            viewer.setSurfaceMaterialStyle(value.surfid, {color: 'white', opacity: surfaceHiddenOpacity});
-                        }
-                    }
-                }
+                // if (surfaceVisible) {
+                //     for (const [key, value] of Object.entries(surfsDict)) {
+                //         if (key == pointLabel) {
+                //             viewer.setSurfaceMaterialStyle(value.surfid, {color: siteColor, opacity: 0.9});
+                //         }
+                //         else {
+                //             viewer.setSurfaceMaterialStyle(value.surfid, {color: 'white', opacity: surfaceHiddenOpacity});
+                //         }
+                //     }
+                // }
             }
 
             highlightTableRow(pointLabel);
@@ -215,13 +231,27 @@ document.getElementById('chartCanvas').addEventListener('mousemove', function(e)
             //     }
             // ); // remove sidechains and colour white everything but clicked site
 
-            if (surfaceVisible) { // if surface is visible
-                for (const [key, value] of Object.entries(surfsDict)) {
-                    if (key == clickedPointLabel) { 
-                        viewer.setSurfaceMaterialStyle(surfsDict[key].surfid, {color: clickedSiteColor, opacity:0.9}); // keep surface of clicked site visible at 90% opacity
+            if (surfaceVisible) { // if surface is visible (when hovering on a site on the chart and a row is clicked)
+                if (activeModel == "superposition") {
+                    for (const [key, value] of Object.entries(surfsDict["superposition"])) {
+                        if (key == clickedPointLabel) { 
+                            viewer.setSurfaceMaterialStyle(surfsDict["superposition"][key].surfid, {color: clickedSiteColor, opacity:0.9}); // keep surface of clicked site visible at 90% opacity
+                        }
+                        else {
+                            viewer.setSurfaceMaterialStyle(surfsDict["superposition"][key].surfid, {color: 'white', opacity: surfaceHiddenOpacity}); // hide all other surfaces
+                        }
                     }
-                    else {
-                        viewer.setSurfaceMaterialStyle(surfsDict[key].surfid, {color: 'white', opacity: surfaceHiddenOpacity}); // hide all other surfaces
+                }
+                else {
+                    for (const [key, value] of Object.entries(surfsDict[activeModel])) {
+                        for (const [key2, value2] of Object.entries(value)) {
+                            if (key == clickedPointLabel) {
+                                viewer.setSurfaceMaterialStyle(value2.surfid, {color: clickedSiteColor, opacity:0.9}); // keep surface of clicked site visible at 90% opacity
+                            }
+                            else {
+                                viewer.setSurfaceMaterialStyle(value2.surfid, {color: 'white', opacity: surfaceHiddenOpacity}); // hide all other surfaces
+                            }
+                        }
                     }
                 }
             }
@@ -397,8 +427,6 @@ document.getElementById('chartCanvas').addEventListener('click', function(e) { /
                 clickedPointLabel = null; // reset clickedPointLabel
 
                 // here if surface is active: go back to show surfaces as by default
-
-
                 if (surfaceVisible) {
                     if (activeModel == "superposition") {
                         for (const [key, value] of Object.entries(surfsDict["superposition"])) {
@@ -411,6 +439,20 @@ document.getElementById('chartCanvas').addEventListener('click', function(e) { /
                             }
                         }
                     }
+                    else{
+                        for (const [key, value] of Object.entries(surfsDict[activeModel])) {
+                            for (const [key2, value2] of Object.entries(value)) {
+                                if (key == "non_binding") {
+                                    viewer.setSurfaceMaterialStyle(value2.surfid, {color: 'white', opacity:0.7});
+                                }
+                                else {
+                                    let siteColor = chartColors[Number(key.split("_").pop())];
+                                    viewer.setSurfaceMaterialStyle(value2.surfid, {color: siteColor, opacity:0.8});
+                                }
+                                //viewer.render();
+                            }
+                        }
+                    }
                 }
 
             }
@@ -420,24 +462,6 @@ document.getElementById('chartCanvas').addEventListener('click', function(e) { /
                 clickTableTowById(pointLabel) // click the table row of the newly clicked data point
 
                 resetChartStyles(myChart, pointLabel, "#bfd4cb", 10, 16); // changes chart styles to highlight the newly clicked site
-
-                // let PDBResNums = seg_ress_dict[index]
-                //     .filter(el => Up2PdbDict[repPdbId][repPdbChainId].hasOwnProperty(el)) // this accounts not for missing residues in the structure (unresolved)
-                //     .map(el => Up2PdbDict[repPdbId][repPdbChainId][el]);
-                // if (activeModel == "superposition") {
-                //     siteSuppPDBResNums = seg_ress_dict[index]
-                //         .filter(el => Up2PdbDict[repPdbId][repPdbChainId].hasOwnProperty(el)) // this accounts not for missing residues in the structure (unresolved)
-                //         .map(el => Up2PdbDict[repPdbId][repPdbChainId][el]);
-                // }
-
-                // else {
-                //     proteinChains.forEach((element) => { // in case of multiple copies of protein of interest
-                //         let siteAssemblyPDBResNum = seg_ress_dict[index]
-                //             .filter(el => Up2PdbMapAssembly[chainsMapAssembly[element]].hasOwnProperty(el))
-                //             .map(el => Up2PdbMapAssembly[chainsMapAssembly[element]][el]);
-                //         siteAssemblyPDBResNums.push([element, siteAssemblyPDBResNum]);
-                //     });
-                // }
 
                 if (labelsVisible) {
                     if (activeModel == "superposition") {
@@ -492,6 +516,19 @@ document.getElementById('chartCanvas').addEventListener('click', function(e) { /
                             }
                         }
                     }
+                    else{
+                        for (const [key, value] of Object.entries(surfsDict[activeModel])) {
+                            for (const [key2, value2] of Object.entries(value)) {
+                                if (key == pointLabel) {
+                                    viewer.setSurfaceMaterialStyle(value2.surfid, {color: pointColor, opacity:0.9});
+                                }
+                                else {
+                                    viewer.setSurfaceMaterialStyle(value2.surfid, {color: 'white', opacity:0.0});
+                                }
+                            }
+                        }
+                    }
+                    
                 }
 
             }
@@ -560,7 +597,21 @@ document.getElementById('chartCanvas').addEventListener('click', function(e) { /
                         }
                     }
                 }
+                else {
+                    for (const [key, value] of Object.entries(surfsDict[activeModel])) {
+                        for (const [key2, value2] of Object.entries(value)) {
+                            if (key == pointLabel) {
+                                viewer.setSurfaceMaterialStyle(value2.surfid, {color: pointColor, opacity:0.9});
+                            }
+                            else {
+                                viewer.setSurfaceMaterialStyle(value2.surfid, {color: 'white', opacity:0.0});
+                            }
+                            //viewer.render();
+                        }
+                    }
+                }
             }
+            
 
         }
 

@@ -58,6 +58,7 @@ function toggleSurfaceVisibility() {
                         let siteColor = chartColors[Number(key.split("_").pop())];
                         viewer.setSurfaceMaterialStyle(surfsDict["superposition"][key].surfid, {color: siteColor, opacity:0.8});
                     }
+                    //viewer.render();
                 }
             }
             else {
@@ -65,12 +66,13 @@ function toggleSurfaceVisibility() {
                 for (const [key, value] of Object.entries(surfsDict[activeModel])) {
                     for (const [key2, value2] of Object.entries(value)) {
                         if (key == "non_binding") {
-                            viewer.setSurfaceMaterialStyle(surfsDict[activeModel][key][key2].surfid, {color: 'white', opacity:0.7});
+                            viewer.setSurfaceMaterialStyle(surfsDict[activeModel][key][key2].surfid, {color: 'white', opacity: 0.7}); // 0.7
                         }
                         else {
                             let siteColor = chartColors[Number(key.split("_").pop())];
-                            viewer.setSurfaceMaterialStyle(surfsDict[activeModel][key][key2].surfid, {color: siteColor, opacity:0.8});
+                            viewer.setSurfaceMaterialStyle(surfsDict[activeModel][key][key2].surfid, {color: siteColor, opacity: 0.8}); //0.8
                         }
+                        viewer.render();
                     }
                 }
             }

@@ -135,8 +135,9 @@ function loadAllModels(simplePdbs) { // Load all structures
                         color: 'white',
                         opacity: surfaceHiddenOpacity,
                     },
-                    {resi: PDBResNums, invert: true},
-                    {hetflag: false},
+                    //{resi: PDBResNums, invert: true},
+                    {not:{resi: PDBResNums}, chain: repPdbChainId, hetflag: false},
+                    {not:{resi: PDBResNums}, chain: repPdbChainId, hetflag: false},
                 );
             }
             else {
