@@ -52,7 +52,9 @@ function selectOption(option) {
         // turn surfButton off
         surfButton.value = 'Surface OFF';
         surfButton.style = "font-weight: bold; color: #674ea7;";
-        surfaceVisible = false; 
+        surfaceVisible = false;
+
+        viewer.removeAllLabels(); // remove all labels if they were active
 
         if (previousSelection === 'Superposition') { // changing from Ligand Superposition to any assembly
 
@@ -74,7 +76,6 @@ function selectOption(option) {
 
             viewer.addStyle({resn: "HOH"}, {sphere: {hidden: true, color: waterColor, radius: sphereRadius}}); // hide all water molecules from superposition
 
-            viewer.removeAllLabels(); // remove all labels if they were active
 
             viewer.setHoverable({model: suppModels}, false, // Hovering disabled for ligand superposition models (otherwise get wrong labels)
                 showHoverLabel,
