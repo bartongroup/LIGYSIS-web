@@ -67,6 +67,17 @@
     let SuppPDBResNum;
     let siteSuppPDBResNums;
     let siteAssemblyPDBResNums;
+
+    // variables to format viewer  styles
+    const outlineWidth = 0.0625;
+    const outlineColor = "black";
+    const cartoonThickness = 0.25;
+    const cartoonOpacity = 1.0;
+    const stickRadius = 0.25;
+    const sphereRadius = 0.20;
+    const surfaceHiddenOpacity = 0.0;
+    const waterColor = "gold";
+
 </script>
 
 {% endblock %}
@@ -159,10 +170,6 @@
                     <input id="saveImageButton" type="button" value="Save Image" style="color: black;"
                     onclick="saveImage('3DmolCanvas', `${segmentName}_struc`)"></input>
                 </div>
-                <!-- <div class="col-6 col-md-3 col-lg-6 col-xl-3 d-flex justify-content-center">
-                    <input id="exploreContactsButton" type="button" value="Explore contacts" style="color: black;"
-                    onclick="toggleExploreContacts()"></input>
-                </div> -->
                 <div class="col-6 col-md-3 col-lg-6 col-xl-3 d-flex justify-content-center">
                     <input id="saveStrucButton" type="button" value="Save Structure" style="color: black;"
                     onclick="downloadFile(`/static/data/biolip/split/structures/cif/${segmentReps[segmentId]['rep']}.cif`)"></input>

@@ -52,7 +52,7 @@ document.getElementById('chartCanvas').addEventListener('mousemove', function(e)
                             // resi: clickedPDBResNums, invert: true, hetflag: false
                         },
                         {
-                            cartoon:{style:'oval', color: 'white', arrows: true, opacity: 1.0, thickness: 0.25,}, 
+                            cartoon:{style:'oval', color: 'white', arrows: true, opacity: cartoonOpacity, thickness: cartoonThickness,}, 
                         }
                     ); // remove sidechains and colour white everything but clicked site
                 }
@@ -101,17 +101,17 @@ document.getElementById('chartCanvas').addEventListener('mousemove', function(e)
                         hetflag: false, // don't want to remove ligands
                     },
                     {
-                        cartoon:{style:'oval', color: 'white', arrows: true, opacity: 1.0, thickness: 0.25,},
+                        cartoon:{style:'oval', color: 'white', arrows: true, opacity: cartoonOpacity, thickness: cartoonThickness,},
                     }
                 );
 
                 if (surfaceVisible) {
                     for (const [key, value] of Object.entries(surfsDict)) {
                         if (key == pointLabel) {
-                            viewer.setSurfaceMaterialStyle(value.surfid, {color: siteColor, opacity:0.9});
+                            viewer.setSurfaceMaterialStyle(value.surfid, {color: siteColor, opacity: 0.9});
                         }
                         else {
-                            viewer.setSurfaceMaterialStyle(value.surfid, {color: 'white', opacity:0.0});
+                            viewer.setSurfaceMaterialStyle(value.surfid, {color: 'white', opacity: surfaceHiddenOpacity});
                         }
                     }
                 }
@@ -126,7 +126,7 @@ document.getElementById('chartCanvas').addEventListener('mousemove', function(e)
 
                 viewer.setStyle(
                     {resi: siteSuppPDBResNums, chain: repPdbChainId, hetflag: false},
-                    {cartoon:{style:'oval', color: siteColor, arrows: true, opacity: 1.0, thickness: 0.25,},
+                    {cartoon:{style:'oval', color: siteColor, arrows: true, opacity: cartoonOpacity, thickness: cartoonThickness,},
                     stick:{color: siteColor,}, }
                 );
             }
@@ -139,7 +139,7 @@ document.getElementById('chartCanvas').addEventListener('mousemove', function(e)
                     viewer.setStyle(
                         {model: activeModel, resi: siteAssemblyPDBResNum, chain: element, hetflag: false},
                         {
-                            cartoon:{style:'oval', color: siteColor, arrows: true, opacity: 1.0,thickness: 0.25,},
+                            cartoon:{style:'oval', color: siteColor, arrows: true, opacity: cartoonOpacity, thickness: cartoonThickness,},
                             stick:{color: siteColor},
                         }
                     );
@@ -174,11 +174,11 @@ document.getElementById('chartCanvas').addEventListener('mousemove', function(e)
                     {
                         and:[{resi: siteSuppPDBResNumsClicked, invert: true}, {hetflag: false}] // all protein residues except clicked site (we want to keep ligands)
                     },
-                    {cartoon: {style:'oval', color: 'white', arrows: true, opacity: 1.0, thickness: 0.25,}}
+                    {cartoon: {style:'oval', color: 'white', arrows: true, opacity: cartoonOpacity, thickness: cartoonThickness,}}
                 );
                 viewer.setStyle( // colouring the clicked site (necessary as sometimes there is overlap between sites)
                     {resi: siteSuppPDBResNumsClicked, chain: repPdbChainId, hetflag: false},
-                    {cartoon:{style:'oval', color: clickedSiteColor, arrows: true, opacity: 1.0, thickness: 0.25,},
+                    {cartoon:{style:'oval', color: clickedSiteColor, arrows: true, opacity: cartoonOpacity, thickness: cartoonThickness,},
                     stick:{color: clickedSiteColor,}, }
                 );
             }
@@ -193,11 +193,11 @@ document.getElementById('chartCanvas').addEventListener('mousemove', function(e)
                         {
                             and:[{resi: siteAssemblyPDBResNumClicked, chain: element, invert: true}, {hetflag: false}] // all protein residues except clicked site (we want to keep ligands)
                         },
-                        {cartoon: {style:'oval', color: 'white', arrows: true, opacity: 1.0, thickness: 0.25,}}
+                        {cartoon: {style:'oval', color: 'white', arrows: true, opacity: cartoonOpacity, thickness: cartoonThickness,}}
                     );
                     viewer.setStyle( // colouring the clicked site (necessary as sometimes there is overlap between sites)
                         {resi: siteAssemblyPDBResNumClicked, chain: element, hetflag: false},
-                        {cartoon:{style:'oval', color: clickedSiteColor, arrows: true, opacity: 1.0, thickness: 0.25,},
+                        {cartoon:{style:'oval', color: clickedSiteColor, arrows: true, opacity: cartoonOpacity, thickness: cartoonThickness,},
                         stick:{color: clickedSiteColor,}, }
                     );
                 });
@@ -221,7 +221,7 @@ document.getElementById('chartCanvas').addEventListener('mousemove', function(e)
                         viewer.setSurfaceMaterialStyle(surfsDict[key].surfid, {color: clickedSiteColor, opacity:0.9}); // keep surface of clicked site visible at 90% opacity
                     }
                     else {
-                        viewer.setSurfaceMaterialStyle(surfsDict[key].surfid, {color: 'white', opacity:0.0}); // hide all other surfaces
+                        viewer.setSurfaceMaterialStyle(surfsDict[key].surfid, {color: 'white', opacity: surfaceHiddenOpacity}); // hide all other surfaces
                     }
                 }
             }
@@ -364,7 +364,7 @@ document.getElementById('chartCanvas').addEventListener('click', function(e) { /
                     viewer.setStyle(
                         {model: activeModel, resi: siteAssemblyPDBResNumClicked, chain: element, hetflag: false},
                         {
-                            cartoon:{style:'oval', color: 'white', arrows: true, opacity: 1.0,thickness: 0.25,},
+                            cartoon:{style:'oval', color: 'white', arrows: true, opacity: cartoonOpacity, thickness: cartoonThickness,},
                             //stick:{color: siteColor},
                         }
                     );
@@ -569,14 +569,14 @@ document.getElementById('chartCanvas').addEventListener('click', function(e) { /
         if (activeModel == "superposition") {
             viewer.setStyle(
                 {resi: siteSuppPDBResNums, chain: repPdbChainId, hetflag: false},
-                {cartoon: {style:'oval', color: pointColor, arrows: true, opacity: 1.0, thickness: 0.25,}, stick:{color: pointColor},},
+                {cartoon: {style:'oval', color: pointColor, arrows: true, opacity: cartoonOpacity, thickness: cartoonThickness,}, stick:{color: pointColor},},
             );
         }
         else {
             for ([element, siteAssemblyPDBResNum] of siteAssemblyPDBResNums) {
                 viewer.setStyle(
                     {model: activeModel, resi: siteAssemblyPDBResNum, chain: element, hetflag: false},
-                    {cartoon: {style:'oval', color: pointColor, arrows: true, opacity: 1.0, thickness: 0.25,}, stick:{color: pointColor},},
+                    {cartoon: {style:'oval', color: pointColor, arrows: true, opacity: cartoonOpacity, thickness: cartoonThickness,}, stick:{color: pointColor},},
                 );
             }
         }
@@ -615,11 +615,11 @@ document.getElementById('newChartCanvas').addEventListener('mousemove', function
 
             if (clickedElements.length == 0) { // no row is clicked
                 
-                viewer.setStyle({hetflag: false}, {cartoon: {style:'oval', color: 'white', arrows: true, opacity: 1.0, thickness: 0.25,}}); // this is done so only a single point is highlighted when hovered on (some are really close.)
+                viewer.setStyle({hetflag: false}, {cartoon: {style:'oval', color: 'white', arrows: true, opacity: cartoonOpacity, thickness: cartoonThickness,}}); // this is done so only a single point is highlighted when hovered on (some are really close.)
                 
                 if (activeModel == "superposition") { // in this case, only one residue as this is a supperposition of single chains
                     SuppPDBResNum = Up2PdbDict[repPdbId][repPdbChainId][newPointLabel];
-                    viewer.setStyle({resi: SuppPDBResNum, hetflag: false}, {cartoon:{style:'oval', color: pointColor, arrows: true, opacity: 1.0,thickness: 0.25,}, stick:{color: pointColor}, });
+                    viewer.setStyle({resi: SuppPDBResNum, hetflag: false}, {cartoon:{style:'oval', color: pointColor, arrows: true, opacity: cartoonOpacity, thickness: cartoonThickness,}, stick:{color: pointColor}, });
                 }
                 else {
                     proteinChains.forEach((element) => { // in case of multiple copies of protein of interest
@@ -628,7 +628,7 @@ document.getElementById('newChartCanvas').addEventListener('mousemove', function
                         viewer.setStyle(
                             {model: activeModel, resi: AssemblyPDBResNum, chain: element, hetflag: false},
                             {
-                                cartoon:{style:'oval', color: pointColor, arrows: true, opacity: 1.0,thickness: 0.25,},
+                                cartoon:{style:'oval', color: pointColor, arrows: true, opacity: cartoonOpacity, thickness: cartoonThickness,},
                                 stick:{color: pointColor},
                             }
                         );
@@ -689,7 +689,7 @@ document.getElementById('newChartCanvas').addEventListener('mousemove', function
 
         if (clickedElements.length == 0) {
 
-            viewer.setStyle({hetflag: false}, {cartoon: {style:'oval', color: 'white', arrows: true, opacity: 1.0, thickness: 0.25,}});
+            viewer.setStyle({hetflag: false}, {cartoon: {style:'oval', color: 'white', arrows: true, opacity: cartoonOpacity, thickness: cartoonThickness,}});
 
             if (labelsVisible) {
                 viewer.removeAllLabels(); // clearing labels from previously hovered on residue
