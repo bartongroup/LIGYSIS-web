@@ -29,53 +29,106 @@ function selectOption(option) {
         var labelButton = document.getElementById('labelButton');
         var surfButton = document.getElementById('surfButton');
 
-        // turn contactsButton off
-        contactsButton.value = 'Contacts OFF';
-        contactsButton.style = "font-weight: bold; color: #674ea7;";
-        contactsVisible = false;
-
-        // turn ligandButton off
-        ligandButton.value = 'Ligands OFF';
-        ligandButton.style = "font-weight: bold; color: #674ea7;";
-        ligandsVisible = false;
-
-        // turn waterButton off
-        waterButton.value = 'Waters OFF';
-        waterButton.style = "font-weight: bold; color: #674ea7;";
-        watersVisible = false;
-
-        // turn labelButton off
-        labelButton.value = 'Labels OFF';
-        labelButton.style = "font-weight: bold; color: #674ea7;";
-        labelsVisible = false;
-        
-        // turn surfButton off
-        surfButton.value = 'Surface OFF';
-        surfButton.style = "font-weight: bold; color: #674ea7;";
-        surfaceVisible = false;
-
-        viewer.removeAllLabels(); // remove all labels if they were active
-
-        if (previousSelection === 'Superposition') { // changing from Ligand Superposition to any assembly
-
-            for (const [key, value] of Object.entries(surfsDict["superposition"])) { // hiding all surfaces from ligand superposition
-                if (key == "non_binding") {
-                    viewer.setSurfaceMaterialStyle(surfsDict["superposition"][key].surfid, {color: 'white', opacity: surfaceHiddenOpacity});
-                }
-                else {
-                    let siteColor = chartColors[Number(key.split("_").pop())];
-                    viewer.setSurfaceMaterialStyle(surfsDict["superposition"][key].surfid, {color: siteColor, opacity: surfaceHiddenOpacity});
-                }
-            }
-
-            // hide all ligands from superposition
-            viewer.addStyle({and:[{hetflag: true}, {not:{resn: "HOH"}}, {properties:{ bs: -1}}]}, {stick: {hidden: true, colorscheme: myScheme, radius: stickRadius}});
-            viewer.addStyle({and:[{hetflag: true}, {not:{resn: "HOH"}}, {properties:{ bs: -1}}]}, {sphere: {hidden: true, colorscheme: myScheme, radius: sphereRadius}});
-            viewer.addStyle({and:[{hetflag: true}, {not:{resn: "HOH"}}, {not: {properties:{ bs: -1}}}]}, {stick: {hidden: true, colorscheme: myScheme, radius: stickRadius}});
-            viewer.addStyle({and:[{hetflag: true}, {not:{resn: "HOH"}}, {not: {properties:{ bs: -1}}}]}, {sphere: {hidden: true, colorscheme: myScheme, radius: sphereRadius}});
+        if (watersVisible) { // if waters were visible, hide them
 
             viewer.addStyle({resn: "HOH"}, {sphere: {hidden: true, color: waterColor, radius: sphereRadius}}); // hide all water molecules from superposition
 
+            // turn waterButton off
+            waterButton.value = 'Waters OFF';
+            waterButton.style = "font-weight: bold; color: #674ea7;";
+            watersVisible = false;
+
+        }
+
+        if (labelsVisible) { // if labels were visible, hide them
+
+            viewer.removeAllLabels(); // remove all labels if they were active
+
+            // turn labelButton off
+            labelButton.value = 'Labels OFF';
+            labelButton.style = "font-weight: bold; color: #674ea7;";
+            labelsVisible = false;
+        }
+
+        // // turn contactsButton off
+        // contactsButton.value = 'Contacts OFF';
+        // contactsButton.style = "font-weight: bold; color: #674ea7;";
+        // contactsVisible = false;
+
+        // // turn ligandButton off
+        // ligandButton.value = 'Ligands OFF';
+        // ligandButton.style = "font-weight: bold; color: #674ea7;";
+        // ligandsVisible = false;
+
+        // // turn waterButton off
+        // waterButton.value = 'Waters OFF';
+        // waterButton.style = "font-weight: bold; color: #674ea7;";
+        // watersVisible = false;
+
+        // // turn labelButton off
+        // labelButton.value = 'Labels OFF';
+        // labelButton.style = "font-weight: bold; color: #674ea7;";
+        // labelsVisible = false;
+        
+        // // turn surfButton off
+        // surfButton.value = 'Surface OFF';
+        // surfButton.style = "font-weight: bold; color: #674ea7;";
+        // surfaceVisible = false;
+
+        // viewer.removeAllLabels(); // remove all labels if they were active
+
+        if (previousSelection === 'Superposition') { // changing from Ligand Superposition to any assembly
+
+            if (surfaceVisible) { // if surface was visible, hide it
+
+                for (const [key, value] of Object.entries(surfsDict["superposition"])) { // hiding all surfaces from ligand superposition
+                    if (key == "non_binding") {
+                        viewer.setSurfaceMaterialStyle(surfsDict["superposition"][key].surfid, {color: 'white', opacity: surfaceHiddenOpacity});
+                    }
+                    else {
+                        let siteColor = chartColors[Number(key.split("_").pop())];
+                        viewer.setSurfaceMaterialStyle(surfsDict["superposition"][key].surfid, {color: siteColor, opacity: surfaceHiddenOpacity});
+                    }
+                }
+                // turn surfButton off
+                surfButton.value = 'Surface OFF';
+                surfButton.style = "font-weight: bold; color: #674ea7;";
+                surfaceVisible = false;
+            }
+
+            if (ligandsVisible) { // if ligands were visible, hide them
+                // hide all ligands from superposition
+                viewer.addStyle({and:[{hetflag: true}, {not:{resn: "HOH"}}, {properties:{ bs: -1}}]}, {stick: {hidden: true, colorscheme: myScheme, radius: stickRadius}});
+                viewer.addStyle({and:[{hetflag: true}, {not:{resn: "HOH"}}, {properties:{ bs: -1}}]}, {sphere: {hidden: true, colorscheme: myScheme, radius: sphereRadius}});
+                viewer.addStyle({and:[{hetflag: true}, {not:{resn: "HOH"}}, {not: {properties:{ bs: -1}}}]}, {stick: {hidden: true, colorscheme: myScheme, radius: stickRadius}});
+                viewer.addStyle({and:[{hetflag: true}, {not:{resn: "HOH"}}, {not: {properties:{ bs: -1}}}]}, {sphere: {hidden: true, colorscheme: myScheme, radius: sphereRadius}});
+
+                // turn ligandButton off
+                ligandButton.value = 'Ligands OFF';
+                ligandButton.style = "font-weight: bold; color: #674ea7;";
+                ligandsVisible = false;
+            }
+
+            // if (watersVisible) { // if waters were visible, hide them
+
+            //     viewer.addStyle({resn: "HOH"}, {sphere: {hidden: true, color: waterColor, radius: sphereRadius}}); // hide all water molecules from superposition
+
+            //     // turn waterButton off
+            //     waterButton.value = 'Waters OFF';
+            //     waterButton.style = "font-weight: bold; color: #674ea7;";
+            //     watersVisible = false;
+
+            // }
+
+            // if (labelsVisible) { // if labels were visible, hide them
+
+            //     viewer.removeAllLabels(); // remove all labels if they were active
+
+            //     // turn labelButton off
+            //     labelButton.value = 'Labels OFF';
+            //     labelButton.style = "font-weight: bold; color: #674ea7;";
+            //     labelsVisible = false;
+            // }
 
             viewer.setHoverable({model: suppModels}, false, // Hovering disabled for ligand superposition models (otherwise get wrong labels)
                 showHoverLabel,
@@ -87,25 +140,71 @@ function selectOption(option) {
 
         if (previousSelection !== 'Superposition') {
 
-            // loop through contactCylinders and delete using removeShape, then empty list
-            for (let i = 0; i < contactCylinders.length; i++) {
-                viewer.removeShape(contactCylinders[i]);
-            }
-            contactCylinders = [];
+            if (contactsVisible) { // if contacts were visible, hide them}
 
-            //viewer.removeSurface(surfsDict[activeModel].surfid); // Remove surface from previous assembly
-            for (const [key, value] of Object.entries(surfsDict[activeModel])) { 
-                for (const [key2, value2] of Object.entries(value)) {
-                    viewer.removeSurface(value2.surfid); // Remove surface from previous assembly
+                // loop through contactCylinders and delete using removeShape, then empty list
+                for (let i = 0; i < contactCylinders.length; i++) {
+                    viewer.removeShape(contactCylinders[i]);
                 }
+                contactCylinders = [];
+
+                contactsButton.value = 'Contacts OFF';
+                contactsButton.style = "font-weight: bold; color: #674ea7;";
+                contactsVisible = false;
             }
-            console.log("Assembly surfaces removed!");
+
+            if (surfaceVisible) { // if surface was visible, hide it
+                for (const [key, value] of Object.entries(surfsDict[activeModel])) { 
+                    for (const [key2, value2] of Object.entries(value)) {
+                        viewer.removeSurface(value2.surfid); // Remove surfaces from previous assembly
+                    }
+                }
+
+                surfButton.value = 'Surface OFF';
+                surfButton.style = "font-weight: bold; color: #674ea7;";
+                surfaceVisible = false;
+                console.log("Assembly surfaces removed!");
+            }
+
+            if (ligandsVisible) { // if ligands were visible, hide them
+                // hide all ligands from superposition
+                viewer.addStyle({and:[{hetflag: true}, {not:{resn: "HOH"}}]}, {stick: {hidden: true, colorscheme: myScheme, radius: stickRadius}});
+                viewer.addStyle({and:[{hetflag: true}, {not:{resn: "HOH"}}]}, {sphere: {hidden: true, colorscheme: myScheme, radius: sphereRadius}});
+                viewer.addStyle({and:[{hetflag: true}, {not:{resn: "HOH"}}]}, {stick: {hidden: true, colorscheme: myScheme, radius: stickRadius}});
+                viewer.addStyle({and:[{hetflag: true}, {not:{resn: "HOH"}}]}, {sphere: {hidden: true, colorscheme: myScheme, radius: sphereRadius}});
+
+                // turn ligandButton off
+                ligandButton.value = 'Ligands OFF';
+                ligandButton.style = "font-weight: bold; color: #674ea7;";
+                ligandsVisible = false;
+            }
+
+            // if (watersVisible) { // if waters were visible, hide them
+
+            //     viewer.addStyle({resn: "HOH"}, {sphere: {hidden: true, color: waterColor, radius: sphereRadius}}); // hide all water molecules from superposition
+
+            //     // turn waterButton off
+            //     waterButton.value = 'Waters OFF';
+            //     waterButton.style = "font-weight: bold; color: #674ea7;";
+            //     watersVisible = false;
+
+            // }
+
+            // if (labelsVisible) { // if labels were visible, hide them
+
+            //     viewer.removeAllLabels(); // remove all labels if they were active
+
+            //     // turn labelButton off
+            //     labelButton.value = 'Labels OFF';
+            //     labelButton.style = "font-weight: bold; color: #674ea7;";
+            //     labelsVisible = false;
+            // }
 
             viewer.setHoverable({model: activeModel}, false, // Hovering disabled for previous assembly
                 showHoverLabel,
                 removeHoverLabel,
             );
-            console.log("Hvering removed from previous assembly!");
+            // console.log("Hovering removed from previous assembly!");
         
             if (option !== 'Superposition') {
 
@@ -129,7 +228,11 @@ function selectOption(option) {
                     removeHoverLabel,
                 );
 
-                console.log("Hovering activated again for supperposition!");
+                viewer.setStyle({model: suppModels}, {cartoon: {hidden: false, style: 'oval', color: 'white', arrows: true, thickness: cartoonThickness, opacity: cartoonOpacity}});
+
+                //console.log("Hovering activated again for supperposition!");
+
+                
 
                 viewer.render();
             }
@@ -146,7 +249,6 @@ function openStructure(pdbId) {
     //let path = '/static/data/' + proteinId + '/' + segmentId + '/assemblies/' + pdbId + '_bio.cif';
     let pdbUri = `/static/data/${proteinId}/${segmentId}/assemblies/${pdbId}_bio.cif`; //path to assembly cif
     
-
     $.ajax({ // get UniProt residue mappings when loading a new assembly
         type: 'POST', 
         url: '/get-uniprot-mapping', // server route
@@ -169,7 +271,7 @@ function openStructure(pdbId) {
                     let model = viewer.addModel(data, "cif",); // Load data
                     let modelID = model.getID(); // Gets the ID of the GLModel
                     activeModel = modelID;
-                    surfsDict[activeModel] = {"non_binding": {}, }; // Initialize dictionary for the new assembly
+                    surfsDict[activeModel] = {"non_binding": {}, "lig_inters": {},}; // Initialize dictionary for the new assembly
         
                     // Hide ligand superposition models
                     for (let i = 0; i <= models.length-1; i++) {
@@ -228,21 +330,12 @@ function openStructure(pdbId) {
                             }
                         });
                     }
-                
-        
-                    // surfsDict[activeModel] = viewer.addSurface( // Add surface to the new assembly
-                    //     $3Dmol.SurfaceType.ISO,
-                    //     {
-                    //         color: 'white',
-                    //         opacity: 0.0,
-                    //     },
-                    //     {model: modelID, hetflag: false}, 
-                    //     {hetflag: false},
-                    // );
+
                     viewer.render();
         
                     let baseName = pdbUri.split("/").pop() // Name of the structure (.cif) file
                     let pdbID = baseName.split("_")[0]; // PDB ID from file name
+                    ligandSitesHash[activeModel] = {};
                     modelOrder[baseName] = modelID; // populate dictionary
                     modelOrderRev[modelID] = pdbID; // populate dictionary
                     models.push(model); // add model at the end of list
