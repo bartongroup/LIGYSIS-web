@@ -191,14 +191,27 @@ function toggleWatersVisibility() {
     if (watersVisible) {
         button.value = 'Waters OFF'; // Change the button text
         button.style = "font-weight: bold; color: #674ea7;";
-        viewer.addStyle({resn: "HOH"}, {sphere: {hidden: true, color: "gold", radius: 0.20}});
-        console.log("Waters hidden!");
+        if (activeModel == "superposition") {
+            viewer.addStyle({model: suppModels, resn: "HOH"}, {sphere: {hidden: true, color: waterColor, radius: sphereRadius}});
+            console.log(`Waters hidden for ${activeModel} models!`);
+        }
+        else {
+            viewer.addStyle({model: activeModel, resn: "HOH"}, {sphere: {hidden: true, color: waterColor, radius: sphereRadius}});
+            console.log(`Waters hidden for model ${activeModel}!`);
+        }
     }
     else {
         button.value = 'Waters ON'; // Change the button text
         button.style = "font-weight: bold; color:#B22222;";
-        viewer.addStyle({resn: "HOH"}, {sphere: {hidden: false, color: "gold", radius: 0.20}});
-        console.log("Waters shown!");
+        if (activeModel == "superposition") {
+            viewer.addStyle({model: suppModels, resn: "HOH"}, {sphere: {hidden: false, color: waterColor, radius: sphereRadius}});
+            console.log(`Waters shown for ${activeModel} models!`);
+        }
+        else {
+            viewer.addStyle({model: activeModel, resn: "HOH"}, {sphere: {hidden: false, color: waterColor, radius: sphereRadius}});
+            console.log(`Waters shown for model ${activeModel}!`);
+        }
+        
     }
     watersVisible = !watersVisible;
     viewer.render();
