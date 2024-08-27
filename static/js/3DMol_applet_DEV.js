@@ -79,8 +79,6 @@ function loadAllModels(simplePdbs) { // Load all structures
         viewer.setStyle({model: suppModels, hetflag: false}, {cartoon: {hidden: false, style: 'oval', color: 'white', arrows: true, thickness: cartoonThickness, opacity: cartoonOpacity}}); // cartoon representation for protein
         viewer.setStyle({model: suppModels, hetflag: true}, {stick: {hidden: true, radius: 0}}); // stick representation for ligands (HETATM), hidden by default
 
-        //viewer.addStyle({and:[{hetflag: true}, {not:{resn: "HOH"}}]}, {stick: {hidden: true, color: "blue", radius: stickRadius}}); // stick representation for ligands (not HOH)
-        //viewer.addStyle({and:[{hetflag: true}, {not:{resn: "HOH"}}]}, {sphere: {hidden: true, color: "red", radius: sphereRadius}}); // make ligand (not HOH) spheres smaller so only stick is visible
         viewer.addStyle({model: suppModels, hetflag: true, not:{resn: "HOH"}}, {stick: {hidden: true, color: "blue", radius: stickRadius}}); // stick representation for ligands (not HOH)
         viewer.addStyle({model: suppModels, hetflag: true, not:{resn: "HOH"}}, {sphere: {hidden: true, color: "red", radius: sphereRadius}}); // make ligand (not HOH) spheres smaller so only stick is visible
         viewer.addStyle({model: suppModels, resn: "HOH"}, {sphere: {hidden: true, color: waterColor, radius: sphereRadius}}); // water molecules represented as gold spheres
@@ -111,19 +109,12 @@ function loadAllModels(simplePdbs) { // Load all structures
             myMap[-1] = "grey";
             myScheme = {prop: "bs", map: myMap}
 
-            //viewer.addStyle({and:[{hetflag: true}, {not:{resn: "HOH"}}, {properties:{ bs: -1}}]}, {stick: {hidden: true, colorscheme: myScheme, radius: stickRadius}});
-            //viewer.addStyle({and:[{hetflag: true}, {not:{resn: "HOH"}}, {properties:{ bs: -1}}]}, {sphere: {hidden: true, colorscheme: myScheme, radius: sphereRadius}});
             viewer.addStyle({model: suppModels, hetflag: true, not:{resn: "HOH"}, properties:{ bs: -1}}, {stick: {hidden: true, colorscheme: myScheme, radius: stickRadius}});
             viewer.addStyle({model: suppModels, hetflag: true, not:{resn: "HOH"}, properties:{ bs: -1}}, {sphere: {hidden: true, colorscheme: myScheme, radius: sphereRadius}});
         
-        
-            // viewer.addStyle({and:[{hetflag: true}, {not:{resn: "HOH"}}, {not: {properties:{ bs: -1}}}]}, {stick: {hidden: true, colorscheme: myScheme, radius: stickRadius}});
-            // viewer.addStyle({and:[{hetflag: true}, {not:{resn: "HOH"}}, {not: {properties:{ bs: -1}}}]}, {sphere: {hidden: true, colorscheme: myScheme, radius: sphereRadius}});
             viewer.addStyle({model: suppModels, hetflag: true, not:{resn: "HOH"}, not: {properties:{ bs: -1}}}, {stick: {hidden: true, colorscheme: myScheme, radius: stickRadius}});
             viewer.addStyle({model: suppModels, hetflag: true, not:{resn: "HOH"}, not: {properties:{ bs: -1}}}, {sphere: {hidden: true, colorscheme: myScheme, radius: sphereRadius}}); 
         
-            // viewer.addStyle({resn: "HOH"}, {stick: {hidden: true, color: waterColor, radius: stickRadius}});
-            // viewer.addStyle({resn: "HOH"}, {sphere: {hidden: true, color: waterColor, radius: sphereRadius}});
             viewer.addStyle({model: suppModels, resn: "HOH"}, {stick: {hidden: true, color: waterColor, radius: stickRadius}});
             viewer.addStyle({model: suppModels, resn: "HOH"}, {sphere: {hidden: true, color: waterColor, radius: sphereRadius}});
             viewer.render();
@@ -143,9 +134,8 @@ function loadAllModels(simplePdbs) { // Load all structures
                         color: 'white',
                         opacity: surfaceHiddenOpacity,
                     },
-                    //{resi: PDBResNums, invert: true},
-                    {not:{resi: PDBResNums}, chain: repPdbChainId, hetflag: false},
-                    {not:{resi: PDBResNums}, chain: repPdbChainId, hetflag: false},
+                    {model: suppModels, not:{resi: PDBResNums}, chain: repPdbChainId, hetflag: false},
+                    {model: suppModels, not:{resi: PDBResNums}, chain: repPdbChainId, hetflag: false},
                 );
             }
             else {
@@ -156,8 +146,8 @@ function loadAllModels(simplePdbs) { // Load all structures
                         color: siteColor,
                         opacity: surfaceHiddenOpacity,
                     },
-                    {resi: PDBResNums},
-                    {resi: PDBResNums},
+                    {model: suppModels, resi: PDBResNums, chain: repPdbChainId, hetflag: false},
+                    {model: suppModels, resi: PDBResNums, chain: repPdbChainId, hetflag: false},
                 );
             }
         }
