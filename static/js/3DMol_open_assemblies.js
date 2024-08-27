@@ -23,11 +23,11 @@ function selectOption(option) {
         const button = document.querySelector('.dropup-button');
         button.textContent = option;
 
-        var contactsButton = document.getElementById('contactsButton');
-        var ligandButton = document.getElementById('ligandButton');
-        var waterButton = document.getElementById('waterButton');
-        var labelButton = document.getElementById('labelButton');
-        var surfButton = document.getElementById('surfButton');
+        // var contactsButton = document.getElementById('contactsButton');
+        // var ligandButton = document.getElementById('ligandButton');
+        // var waterButton = document.getElementById('waterButton');
+        // var labelButton = document.getElementById('labelButton');
+        // var surfButton = document.getElementById('surfButton');
 
         if (watersVisible) { // if waters were visible, hide them
 

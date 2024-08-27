@@ -1,5 +1,27 @@
+let ligandLabel = null; // Shared variable for the label
+let interLabel = null; // Shared variable for the label
+let protLabel = null; // Shared variable for the label
+
+const undefInters = ["covalent", "vdw", "vdw_clash", "proximal"]
+
+let ligandSitesHash = {}; // this hash follows structure: {model: {ligandName: [ligand-binding residues selection]}}
+
+function findMiddlePoint(bgnCoords, endCoords) { // returns the middle point between two coordinates (used for labeling interaction cylinder)
+    if (bgnCoords.length !== 3 || endCoords.length !== 3) {
+        throw new Error('Both coordinates must be arrays of three elements.');
+    }
+
+    let middlePoint = [
+        (bgnCoords[0] + endCoords[0]) / 2,
+        (bgnCoords[1] + endCoords[1]) / 2,
+        (bgnCoords[2] + endCoords[2]) / 2
+    ];
+
+    return middlePoint;
+}
+
 function toggleSurfaceVisibility() {
-    var button = document.getElementById('surfButton');
+    //var button = document.getElementById('surfButton');
     if (surfaceVisible) { // hide all surfaces
         if (activeModel == "superposition") {
             for (const [key, value] of Object.entries(surfsDict["superposition"])) {
@@ -21,11 +43,9 @@ function toggleSurfaceVisibility() {
             else {
                 for (const [key, value] of Object.entries(surfsDict[activeModel])) {
                     if (key !== "lig_inters") {
-                        
-                    //}
                         for (const [key2, value2] of Object.entries(value)) {
                             if (key == "non_binding") {
-                                viewer.setSurfaceMaterialStyle(surfsDict[activeModel][key][key2].surfid, {color: 'white', opacity:0.0});
+                                viewer.setSurfaceMaterialStyle(surfsDict[activeModel][key][key2].surfid, {color: 'white', opacity:0.0}); // hide ligand-binding residues surface
                             }
                             else {
                                 let siteColor = chartColors[Number(key.split("_").pop())];
@@ -36,8 +56,8 @@ function toggleSurfaceVisibility() {
                 }
             }
         }
-        button.value = 'Surface OFF'; // Change the button text
-        button.style = "font-weight: bold; color: #674ea7;";
+        surfButton.value = 'Surface OFF'; // Change the button text
+        surfButton.style = "font-weight: bold; color: #674ea7;";
         
     }
     else {
@@ -90,24 +110,24 @@ function toggleSurfaceVisibility() {
                 }
             }
         }
-        button.value = "Surface ON"; // Change the button text
-        button.style = "font-weight: bold; color: #B22222;";
+        surfButton.value = "Surface ON"; // Change the button text
+        surfButton.style = "font-weight: bold; color: #B22222;";
     }
     surfaceVisible = !surfaceVisible; // Toggle the visibility state
     viewer.render();
 }
 
 function toggleLabelsVisibility() {
-    var button = document.getElementById('labelButton');
+    //var button = document.getElementById('labelButton');
     if (labelsVisible) {
-        button.value = 'Labels OFF'; // Change the button text
-        button.style = "font-weight: bold; color: #674ea7;";
+        labelButton.value = 'Labels OFF'; // Change the button text
+        labelButton.style = "font-weight: bold; color: #674ea7;";
 
         viewer.removeAllLabels();
     }
     else {
-        button.value = "Labels ON"; // Change the button text
-        button.style = "font-weight: bold; color: #B22222;";
+        labelButton.value = "Labels ON"; // Change the button text
+        labelButton.style = "font-weight: bold; color: #B22222;";
         
         // add labels if any site is clicked already
         let clickedElements = document.getElementsByClassName("clicked-row");
@@ -115,8 +135,6 @@ function toggleLabelsVisibility() {
             for (var i = 0; i < clickedElements.length; i++) {
                 var clickedElementId = clickedElements[i].id;
                 let siteColor = chartColors[Number(clickedElementId.split("_").pop())];
-                // let PDBResNums = seg_ress_dict[clickedElementId].map(el => Up2PdbDict[repPdbId][repPdbChainId][el]);
-
                 if (activeModel == "superposition") {
                     let siteSuppPDBResNums = seg_ress_dict[clickedElementId]
                         .filter(el => Up2PdbDict[repPdbId][repPdbChainId].hasOwnProperty(el)) // this accounts not for missing residues in the structure (unresolved)
@@ -160,24 +178,6 @@ function toggleLabelsVisibility() {
                         }
                     }
                 }
-                // let PDBResNums = seg_ress_dict[clickedElementId]
-                //     .filter(el => Up2PdbDict[repPdbId][repPdbChainId].hasOwnProperty(el)) // this accounts not for missing residues in the structure (unresolved)
-                //     .map(el => Up2PdbDict[repPdbId][repPdbChainId][el]);
-                // for (PDBResNum of PDBResNums) {
-                //     let resSel = {resi: PDBResNum}
-                //     let resName = viewer.selectedAtoms(resSel)[0].resn
-                //     viewer.addLabel(
-                //         resName + String(Pdb2UpDict[repPdbId][repPdbChainId][PDBResNum]),
-                //         {
-                //             alignment: 'center', backgroundColor: 'white', backgroundOpacity: 1,
-                //             borderColor: 'black', borderOpacity: 1, borderThickness: 2,
-                //             font: 'Arial', fontColor: siteColor, fontOpacity: 1, fontSize: 12,
-                //             inFront: true, screenOffset: [0, 0, 0], showBackground: true
-                //         },
-                //         resSel,
-                //         true,
-                //     );
-                // }
                 viewer.render();
             }
         }
@@ -187,10 +187,10 @@ function toggleLabelsVisibility() {
 }
 
 function toggleWatersVisibility() {
-    var button = document.getElementById('waterButton');
+    //var button = document.getElementById('waterButton');
     if (watersVisible) {
-        button.value = 'Waters OFF'; // Change the button text
-        button.style = "font-weight: bold; color: #674ea7;";
+        waterButton.value = 'Waters OFF'; // Change the button text
+        waterButton.style = "font-weight: bold; color: #674ea7;";
         if (activeModel == "superposition") {
             viewer.addStyle({model: suppModels, resn: "HOH"}, {sphere: {hidden: true, color: waterColor, radius: sphereRadius}});
             console.log(`Waters hidden for ${activeModel} models!`);
@@ -201,8 +201,8 @@ function toggleWatersVisibility() {
         }
     }
     else {
-        button.value = 'Waters ON'; // Change the button text
-        button.style = "font-weight: bold; color:#B22222;";
+        waterButton.value = 'Waters ON'; // Change the button text
+        waterButton.style = "font-weight: bold; color:#B22222;";
         if (activeModel == "superposition") {
             viewer.addStyle({model: suppModels, resn: "HOH"}, {sphere: {hidden: false, color: waterColor, radius: sphereRadius}});
             console.log(`Waters shown for ${activeModel} models!`);
@@ -218,10 +218,10 @@ function toggleWatersVisibility() {
 }
 
 function toggleLigandsVisibility() {
-    var button = document.getElementById('ligandButton');
+    //var button = document.getElementById('ligandButton');
     if (ligandsVisible) {
-        button.value = 'Ligands OFF'; // Change the button text
-        button.style = "font-weight: bold; color: #674ea7;";
+        ligandButton.value = 'Ligands OFF'; // Change the button text
+        ligandButton.style = "font-weight: bold; color: #674ea7;";
 
         if (activeModel == "superposition") {
             viewer.addStyle({and:[{hetflag: true}, {not:{resn: "HOH"}}, {properties:{ bs: -1}}]}, {stick: {hidden: true, colorscheme: myScheme, radius: stickRadius}});
@@ -239,9 +239,9 @@ function toggleLigandsVisibility() {
         }
 
         if (contactsVisible) {
-            var consButton = document.getElementById('contactsButton');
-            consButton.value = 'Contacts OFF'; // Change the button text
-            consButton.style = "font-weight: bold; color: #674ea7;";
+            //var consButton = document.getElementById('contactsButton');
+            contactsButton.value = 'Contacts OFF'; // Change the button text
+            contactsButton.style = "font-weight: bold; color: #674ea7;";
 
             // loop through contactCylinders and delete using removeShape, then empty list
             for (let i = 0; i < contactCylinders.length; i++) {
@@ -252,7 +252,7 @@ function toggleLigandsVisibility() {
             viewer.addStyle({model: activeModel, hetflag: false}, {cartoon: {color: 'white'}, stick: {hidden: true}}); // remove ligand-interacting sticks and colour cartoon white
 
             if (surfaceVisible) {
-                var surfButton = document.getElementById('surfButton');
+                //var surfButton = document.getElementById('surfButton');
                 for (const [key, value] of Object.entries(surfsDict[activeModel]['lig_inters'])) { // hide surfaces of ligand-interacting residues
                     viewer.setSurfaceMaterialStyle(value.surfid, {opacity:0.0});
                 }
@@ -264,8 +264,8 @@ function toggleLigandsVisibility() {
         }
     }
     else {
-        button.value = 'Ligands ON'; // Change the button text
-        button.style = "font-weight: bold; color:#B22222;";
+        ligandButton.value = 'Ligands ON'; // Change the button text
+        ligandButton.style = "font-weight: bold; color:#B22222;";
 
         if (activeModel == "superposition") {
             viewer.addStyle({and:[{hetflag: true}, {not:{resn: "HOH"}}, {properties:{ bs: -1}}]}, {stick: {hidden: true, colorscheme: myScheme, radius: stickRadius}});
@@ -286,41 +286,27 @@ function toggleLigandsVisibility() {
     viewer.render();
 }
 
-let ligandLabel = null; // Shared variable for the label
-let interLabel = null; // Shared variable for the label
-let protLabel = null; // Shared variable for the label
-
-const undefInters = ["covalent", "vdw", "vdw_clash", "proximal"]
-let ligandSitesHash = {};
-
-function findMiddlePoint(bgnCoords, endCoords) {
-    if (bgnCoords.length !== 3 || endCoords.length !== 3) {
-        throw new Error('Both coordinates must be arrays of three elements.');
-    }
-
-    let middlePoint = [
-        (bgnCoords[0] + endCoords[0]) / 2,
-        (bgnCoords[1] + endCoords[1]) / 2,
-        (bgnCoords[2] + endCoords[2]) / 2
-    ];
-
-    return middlePoint;
-}
-
 function toggleContactsVisibility() {
-    var button = document.getElementById('contactsButton');
+    //var button = document.getElementById('contactsButton');
     if (contactsVisible) {
-        button.value = 'Contacts OFF'; // Change the button text
-        button.style = "font-weight: bold; color: #674ea7;";
+        contactsButton.value = 'Contacts OFF'; // Change the button text
+        contactsButton.style = "font-weight: bold; color: #674ea7;";
 
-        if (surfaceVisible) {
-            var surfButton = document.getElementById('surfButton');
-            for (const [key, value] of Object.entries(surfsDict[activeModel]['lig_inters'])) { // hide surfaces of ligand-interacting residues
-                viewer.setSurfaceMaterialStyle(value.surfid, {opacity:0.0});
+        if (surfaceVisible) { // if clicking off contacts button, but surface button still on (show site definition surfaces)
+            //var surfButton = document.getElementById('surfButton');
+            for (const [key, value] of Object.entries(surfsDict[activeModel])) { 
+                if (key == "lig_inters") { // hide surfaces of ligand-interacting residues
+                    for (const [key2, value2] of Object.entries(value)) {
+                        viewer.setSurfaceMaterialStyle(value2.surfid, {opacity:0.0});
+                    }
+                }
+                else { // show binding site definition surfaces
+                    for (const [key2, value2] of Object.entries(value)) {
+                        viewer.setSurfaceMaterialStyle(value2.surfid, {opacity:0.7});
+                    }
+                }
             }
-            surfButton.value = 'Surface OFF'; // Change the button text
-            surfButton.style = "font-weight: bold; color: #674ea7;";
-            surfaceVisible = !surfaceVisible; // Toggle the visibility state
+            
         }
 
         // loop through contactCylinders and delete using removeShape, then empty list
@@ -328,14 +314,12 @@ function toggleContactsVisibility() {
             viewer.removeShape(contactCylinders[i]);
         }
         contactCylinders = [];
-        viewer.addStyle({hetflag: false}, {cartoon: {color: 'white'}, stick: {hidden: true}}); // removed model: activeModel because OR gate does not seem to work well.
-        //viewer.addStyle({model: activeModel, hetflag: true}, {stick: {hidden: true}});
-        //viewer.addStyle({model: activeModel, hetflag: true}, {sphere: {hidden: true}});
-        viewer.addStyle({and:[{model: activeModel, hetflag: true}, {not:{resn: 'HOH'}}]}, {stick: {hidden: true}});
-        viewer.addStyle({and:[{model: activeModel, hetflag: true}, {not:{resn: 'HOH'}}]}, {sphere: {hidden: true}});
+        viewer.addStyle({model: activeModel, hetflag: false}, {cartoon: {color: 'white'}, stick: {hidden: true}}); // removed model: activeModel because OR gate does not seem to work well.
+        viewer.addStyle({model: activeModel, hetflag: true, not:{resn: 'HOH'}}, {stick: {hidden: true}});
+        viewer.addStyle({model: activeModel, hetflag: true, not:{resn: 'HOH'}}, {sphere: {hidden: true}});
 
         // turn ligandButton off
-        var ligandButton = document.getElementById('ligandButton');
+        //var ligandButton = document.getElementById('ligandButton');
         ligandButton.value = 'Ligands OFF';
         ligandButton.style = "font-weight: bold; color: #674ea7;";
         ligandsVisible = false;
@@ -508,7 +492,7 @@ function toggleContactsVisibility() {
                     ligandSitesHash[activeModel][ligNam].push(sel);
                     //viewer.addStyle(sel, {cartoon:{hidden: false, color: ligColor}, stick: {hidden: false, color: ligColor, radius: stickRadius}});
                 }
-                viewer.addStyle({or:ligandSitesHash[activeModel][ligNam], model: activeModel}, {cartoon:{hidden: false, color: ligColor}, stick: {hidden: false, color: ligColor, radius: stickRadius}});
+                viewer.addStyle({model: activeModel, or:ligandSitesHash[activeModel][ligNam]}, {cartoon:{hidden: false, color: ligColor}, stick: {hidden: false, color: ligColor, radius: stickRadius}});
                 viewer.addStyle({model: activeModel, resi: ligResi, chain: ligChain, resn: ligMol}, {stick: {hidden: false, color: ligColor, radius: stickRadius}});
                 // add ligand-interacting residues surfaces
                 surfsDict[activeModel]["lig_inters"][ligNam] = viewer.addSurface(
@@ -517,8 +501,8 @@ function toggleContactsVisibility() {
                         color: ligColor,
                         opacity: surfaceHiddenOpacity,
                     },
-                    {or:ligandSitesHash[activeModel][ligNam], model: activeModel},
-                    {or:ligandSitesHash[activeModel][ligNam], model: activeModel},
+                    {model: activeModel, or:ligandSitesHash[activeModel][ligNam]},
+                    {model: activeModel, or:ligandSitesHash[activeModel][ligNam]},
                 );
             }
 
@@ -539,8 +523,8 @@ function toggleContactsVisibility() {
             }
 
             viewer.render();
-            button.value = 'Contacts ON'; // Change the button text
-            button.style = "font-weight: bold; color:#B22222;";
+            contactsButton.value = 'Contacts ON'; // Change the button text
+            contactsButton.style = "font-weight: bold; color:#B22222;";
             contactsVisible = true;
         })
         .catch(error => console.error('Error fetching contacts:', error));

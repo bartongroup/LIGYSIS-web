@@ -77,7 +77,6 @@
     const sphereRadius = 0.20;
     const surfaceHiddenOpacity = 0.0;
     const waterColor = "gold";
-
 </script>
 
 {% endblock %}
@@ -362,6 +361,12 @@
     function downloadCSV(filepath) {
         window.location.href = '/download-csv?filepath=' + filepath;
     }
+
+    let contactsButton = document.getElementById('contactsButton');
+    let ligandButton = document.getElementById('ligandButton');
+    let waterButton = document.getElementById('waterButton');
+    let labelButton = document.getElementById('labelButton');
+    let surfButton = document.getElementById('surfButton');
 </script>
 
 {% endblock%}
