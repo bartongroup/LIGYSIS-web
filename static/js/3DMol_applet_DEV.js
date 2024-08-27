@@ -76,12 +76,14 @@ function loadAllModels(simplePdbs) { // Load all structures
         suppModels = Array.from({length: models.length}, (_, i) => 0 + i); // Create an array of model IDs from 0 to N-1 where N is the number of superposition models
 
         viewer.setViewStyle({style: "outline", width: outlineWidth, color: outlineColor}); // cartoon outline
-        viewer.setStyle({hetflag: false}, {cartoon: {hidden: false, style: 'oval', color: 'white', arrows: true, thickness: cartoonThickness, opacity: cartoonOpacity}}); // cartoon representation for protein
-        viewer.setStyle({hetflag: true}, {stick: {hidden: true, radius: 0}}); // stick representation for ligands (HETATM), hidden by default
+        viewer.setStyle({model: suppModels, hetflag: false}, {cartoon: {hidden: false, style: 'oval', color: 'white', arrows: true, thickness: cartoonThickness, opacity: cartoonOpacity}}); // cartoon representation for protein
+        viewer.setStyle({model: suppModels, hetflag: true}, {stick: {hidden: true, radius: 0}}); // stick representation for ligands (HETATM), hidden by default
 
-        viewer.addStyle({and:[{hetflag: true}, {not:{resn: "HOH"}}]}, {stick: {hidden: true, color: "blue", radius: stickRadius}}); // stick representation for ligands (not HOH)
-        viewer.addStyle({and:[{hetflag: true}, {not:{resn: "HOH"}}]}, {sphere: {hidden: true, color: "red", radius: sphereRadius}}); // make ligand (not HOH) spheres smaller so only stick is visible
-        viewer.addStyle({resn: "HOH"}, {sphere: {hidden: true, color: waterColor, radius: sphereRadius}}); // water molecules represented as gold spheres
+        //viewer.addStyle({and:[{hetflag: true}, {not:{resn: "HOH"}}]}, {stick: {hidden: true, color: "blue", radius: stickRadius}}); // stick representation for ligands (not HOH)
+        //viewer.addStyle({and:[{hetflag: true}, {not:{resn: "HOH"}}]}, {sphere: {hidden: true, color: "red", radius: sphereRadius}}); // make ligand (not HOH) spheres smaller so only stick is visible
+        viewer.addStyle({model: suppModels, hetflag: true, not:{resn: "HOH"}}, {stick: {hidden: true, color: "blue", radius: stickRadius}}); // stick representation for ligands (not HOH)
+        viewer.addStyle({model: suppModels, hetflag: true, not:{resn: "HOH"}}, {sphere: {hidden: true, color: "red", radius: sphereRadius}}); // make ligand (not HOH) spheres smaller so only stick is visible
+        viewer.addStyle({model: suppModels, resn: "HOH"}, {sphere: {hidden: true, color: waterColor, radius: sphereRadius}}); // water molecules represented as gold spheres
 
         // Send modelOrder to Flask
         fetch('/process-model-order', {
@@ -109,15 +111,21 @@ function loadAllModels(simplePdbs) { // Load all structures
             myMap[-1] = "grey";
             myScheme = {prop: "bs", map: myMap}
 
-            viewer.addStyle({and:[{hetflag: true}, {not:{resn: "HOH"}}, {properties:{ bs: -1}}]}, {stick: {hidden: true, colorscheme: myScheme, radius: stickRadius}});
-            viewer.addStyle({and:[{hetflag: true}, {not:{resn: "HOH"}}, {properties:{ bs: -1}}]}, {sphere: {hidden: true, colorscheme: myScheme, radius: sphereRadius}});
+            //viewer.addStyle({and:[{hetflag: true}, {not:{resn: "HOH"}}, {properties:{ bs: -1}}]}, {stick: {hidden: true, colorscheme: myScheme, radius: stickRadius}});
+            //viewer.addStyle({and:[{hetflag: true}, {not:{resn: "HOH"}}, {properties:{ bs: -1}}]}, {sphere: {hidden: true, colorscheme: myScheme, radius: sphereRadius}});
+            viewer.addStyle({model: suppModels, hetflag: true, not:{resn: "HOH"}, properties:{ bs: -1}}, {stick: {hidden: true, colorscheme: myScheme, radius: stickRadius}});
+            viewer.addStyle({model: suppModels, hetflag: true, not:{resn: "HOH"}, properties:{ bs: -1}}, {sphere: {hidden: true, colorscheme: myScheme, radius: sphereRadius}});
         
         
-            viewer.addStyle({and:[{hetflag: true}, {not:{resn: "HOH"}}, {not: {properties:{ bs: -1}}}]}, {stick: {hidden: true, colorscheme: myScheme, radius: stickRadius}});
-            viewer.addStyle({and:[{hetflag: true}, {not:{resn: "HOH"}}, {not: {properties:{ bs: -1}}}]}, {sphere: {hidden: true, colorscheme: myScheme, radius: sphereRadius}}); 
+            // viewer.addStyle({and:[{hetflag: true}, {not:{resn: "HOH"}}, {not: {properties:{ bs: -1}}}]}, {stick: {hidden: true, colorscheme: myScheme, radius: stickRadius}});
+            // viewer.addStyle({and:[{hetflag: true}, {not:{resn: "HOH"}}, {not: {properties:{ bs: -1}}}]}, {sphere: {hidden: true, colorscheme: myScheme, radius: sphereRadius}});
+            viewer.addStyle({model: suppModels, hetflag: true, not:{resn: "HOH"}, not: {properties:{ bs: -1}}}, {stick: {hidden: true, colorscheme: myScheme, radius: stickRadius}});
+            viewer.addStyle({model: suppModels, hetflag: true, not:{resn: "HOH"}, not: {properties:{ bs: -1}}}, {sphere: {hidden: true, colorscheme: myScheme, radius: sphereRadius}}); 
         
-            viewer.addStyle({resn: "HOH"}, {stick: {hidden: true, color: waterColor, radius: stickRadius}});
-            viewer.addStyle({resn: "HOH"}, {sphere: {hidden: true, color: waterColor, radius: sphereRadius}});
+            // viewer.addStyle({resn: "HOH"}, {stick: {hidden: true, color: waterColor, radius: stickRadius}});
+            // viewer.addStyle({resn: "HOH"}, {sphere: {hidden: true, color: waterColor, radius: sphereRadius}});
+            viewer.addStyle({model: suppModels, resn: "HOH"}, {stick: {hidden: true, color: waterColor, radius: stickRadius}});
+            viewer.addStyle({model: suppModels, resn: "HOH"}, {sphere: {hidden: true, color: waterColor, radius: sphereRadius}});
             viewer.render();
 
         })
