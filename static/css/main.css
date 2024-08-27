@@ -336,7 +336,7 @@ img.responsive-logo {
     display: none;
     position: absolute;
     background-color: #f9f9f9;
-    min-width: 110px;
+    min-width: 100px;
     bottom: 100%;
     z-index: 1;
     overflow-y: auto;
