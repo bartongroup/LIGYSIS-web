@@ -23,12 +23,6 @@ function selectOption(option) {
         const button = document.querySelector('.dropup-button');
         button.textContent = option;
 
-        // var contactsButton = document.getElementById('contactsButton');
-        // var ligandButton = document.getElementById('ligandButton');
-        // var waterButton = document.getElementById('waterButton');
-        // var labelButton = document.getElementById('labelButton');
-        // var surfButton = document.getElementById('surfButton');
-
         if (watersVisible) { // if waters were visible, hide them
 
             viewer.addStyle({resn: "HOH"}, {sphere: {hidden: true, color: waterColor, radius: sphereRadius}}); // hide all water molecules from superposition
@@ -49,33 +43,6 @@ function selectOption(option) {
             labelButton.style = "font-weight: bold; color: #674ea7;";
             labelsVisible = false;
         }
-
-        // // turn contactsButton off
-        // contactsButton.value = 'Contacts OFF';
-        // contactsButton.style = "font-weight: bold; color: #674ea7;";
-        // contactsVisible = false;
-
-        // // turn ligandButton off
-        // ligandButton.value = 'Ligands OFF';
-        // ligandButton.style = "font-weight: bold; color: #674ea7;";
-        // ligandsVisible = false;
-
-        // // turn waterButton off
-        // waterButton.value = 'Waters OFF';
-        // waterButton.style = "font-weight: bold; color: #674ea7;";
-        // watersVisible = false;
-
-        // // turn labelButton off
-        // labelButton.value = 'Labels OFF';
-        // labelButton.style = "font-weight: bold; color: #674ea7;";
-        // labelsVisible = false;
-        
-        // // turn surfButton off
-        // surfButton.value = 'Surface OFF';
-        // surfButton.style = "font-weight: bold; color: #674ea7;";
-        // surfaceVisible = false;
-
-        // viewer.removeAllLabels(); // remove all labels if they were active
 
         if (previousSelection === 'Superposition') { // changing from Ligand Superposition to any assembly
 
@@ -98,37 +65,20 @@ function selectOption(option) {
 
             if (ligandsVisible) { // if ligands were visible, hide them
                 // hide all ligands from superposition
-                viewer.addStyle({and:[{hetflag: true}, {not:{resn: "HOH"}}, {properties:{ bs: -1}}]}, {stick: {hidden: true, colorscheme: myScheme, radius: stickRadius}});
-                viewer.addStyle({and:[{hetflag: true}, {not:{resn: "HOH"}}, {properties:{ bs: -1}}]}, {sphere: {hidden: true, colorscheme: myScheme, radius: sphereRadius}});
-                viewer.addStyle({and:[{hetflag: true}, {not:{resn: "HOH"}}, {not: {properties:{ bs: -1}}}]}, {stick: {hidden: true, colorscheme: myScheme, radius: stickRadius}});
-                viewer.addStyle({and:[{hetflag: true}, {not:{resn: "HOH"}}, {not: {properties:{ bs: -1}}}]}, {sphere: {hidden: true, colorscheme: myScheme, radius: sphereRadius}});
+                // viewer.addStyle({and:[{hetflag: true}, {not:{resn: "HOH"}}, {properties:{ bs: -1}}]}, {stick: {hidden: true, colorscheme: myScheme, radius: stickRadius}});
+                // viewer.addStyle({and:[{hetflag: true}, {not:{resn: "HOH"}}, {properties:{ bs: -1}}]}, {sphere: {hidden: true, colorscheme: myScheme, radius: sphereRadius}});
+                // viewer.addStyle({and:[{hetflag: true}, {not:{resn: "HOH"}}, {not: {properties:{ bs: -1}}}]}, {stick: {hidden: true, colorscheme: myScheme, radius: stickRadius}});
+                // viewer.addStyle({and:[{hetflag: true}, {not:{resn: "HOH"}}, {not: {properties:{ bs: -1}}}]}, {sphere: {hidden: true, colorscheme: myScheme, radius: sphereRadius}});
+                viewer.addStyle({model: suppModels, hetflag: true, not:{resn: "HOH"}, properties:{ bs: -1}}, {stick: {hidden: true, colorscheme: myScheme, radius: stickRadius}});
+                viewer.addStyle({model: suppModels, hetflag: true, not:{resn: "HOH"}, properties:{ bs: -1}}, {sphere: {hidden: true, colorscheme: myScheme, radius: sphereRadius}});
+                viewer.addStyle({model: suppModels, hetflag: true, not:{resn: "HOH"}, not: {properties:{ bs: -1}}}, {stick: {hidden: true, colorscheme: myScheme, radius: stickRadius}});
+                viewer.addStyle({model: suppModels, hetflag: true, not:{resn: "HOH"}, not: {properties:{ bs: -1}}}, {sphere: {hidden: true, colorscheme: myScheme, radius: sphereRadius}});
 
                 // turn ligandButton off
                 ligandButton.value = 'Ligands OFF';
                 ligandButton.style = "font-weight: bold; color: #674ea7;";
                 ligandsVisible = false;
             }
-
-            // if (watersVisible) { // if waters were visible, hide them
-
-            //     viewer.addStyle({resn: "HOH"}, {sphere: {hidden: true, color: waterColor, radius: sphereRadius}}); // hide all water molecules from superposition
-
-            //     // turn waterButton off
-            //     waterButton.value = 'Waters OFF';
-            //     waterButton.style = "font-weight: bold; color: #674ea7;";
-            //     watersVisible = false;
-
-            // }
-
-            // if (labelsVisible) { // if labels were visible, hide them
-
-            //     viewer.removeAllLabels(); // remove all labels if they were active
-
-            //     // turn labelButton off
-            //     labelButton.value = 'Labels OFF';
-            //     labelButton.style = "font-weight: bold; color: #674ea7;";
-            //     labelsVisible = false;
-            // }
 
             viewer.setHoverable({model: suppModels}, false, // Hovering disabled for ligand superposition models (otherwise get wrong labels)
                 showHoverLabel,
@@ -168,37 +118,16 @@ function selectOption(option) {
 
             if (ligandsVisible) { // if ligands were visible, hide them
                 // hide all ligands from superposition
-                viewer.addStyle({and:[{hetflag: true}, {not:{resn: "HOH"}}]}, {stick: {hidden: true, colorscheme: myScheme, radius: stickRadius}});
-                viewer.addStyle({and:[{hetflag: true}, {not:{resn: "HOH"}}]}, {sphere: {hidden: true, colorscheme: myScheme, radius: sphereRadius}});
-                viewer.addStyle({and:[{hetflag: true}, {not:{resn: "HOH"}}]}, {stick: {hidden: true, colorscheme: myScheme, radius: stickRadius}});
-                viewer.addStyle({and:[{hetflag: true}, {not:{resn: "HOH"}}]}, {sphere: {hidden: true, colorscheme: myScheme, radius: sphereRadius}});
+                // viewer.addStyle({and:[{hetflag: true}, {not:{resn: "HOH"}}]}, {stick: {hidden: true, colorscheme: myScheme, radius: stickRadius}});
+                // viewer.addStyle({and:[{hetflag: true}, {not:{resn: "HOH"}}]}, {sphere: {hidden: true, colorscheme: myScheme, radius: sphereRadius}});
+                viewer.addStyle({model: activeModel, hetflag: true, not:{resn: "HOH"}}, {stick: {hidden: true, colorscheme: myScheme, radius: stickRadius}});
+                viewer.addStyle({model: activeModel, hetflag: true, not:{resn: "HOH"}}, {sphere: {hidden: true, colorscheme: myScheme, radius: sphereRadius}});
 
                 // turn ligandButton off
                 ligandButton.value = 'Ligands OFF';
                 ligandButton.style = "font-weight: bold; color: #674ea7;";
                 ligandsVisible = false;
             }
-
-            // if (watersVisible) { // if waters were visible, hide them
-
-            //     viewer.addStyle({resn: "HOH"}, {sphere: {hidden: true, color: waterColor, radius: sphereRadius}}); // hide all water molecules from superposition
-
-            //     // turn waterButton off
-            //     waterButton.value = 'Waters OFF';
-            //     waterButton.style = "font-weight: bold; color: #674ea7;";
-            //     watersVisible = false;
-
-            // }
-
-            // if (labelsVisible) { // if labels were visible, hide them
-
-            //     viewer.removeAllLabels(); // remove all labels if they were active
-
-            //     // turn labelButton off
-            //     labelButton.value = 'Labels OFF';
-            //     labelButton.style = "font-weight: bold; color: #674ea7;";
-            //     labelsVisible = false;
-            // }
 
             viewer.setHoverable({model: activeModel}, false, // Hovering disabled for previous assembly
                 showHoverLabel,
@@ -229,11 +158,6 @@ function selectOption(option) {
                 );
 
                 viewer.setStyle({model: suppModels}, {cartoon: {hidden: false, style: 'oval', color: 'white', arrows: true, thickness: cartoonThickness, opacity: cartoonOpacity}});
-
-                //console.log("Hovering activated again for supperposition!");
-
-                
-
                 viewer.render();
             }
         }
@@ -310,10 +234,8 @@ function openStructure(pdbId) {
                                         color: 'white',
                                         opacity: surfaceHiddenOpacity,
                                     },
-                                    //{and:[{model: activeModel, resi: surfAssemblyPDBResNums, chain: element, invert: true}, {model: activeModel, chain: element}]},
-                                    {not:{resi: surfAssemblyPDBResNums}, model: activeModel, chain: element},
-                                    {not:{resi: surfAssemblyPDBResNums}, model: activeModel, chain: element},
-                                    //{model: activeModel, hetflag: false},
+                                    {model: activeModel, not:{resi: surfAssemblyPDBResNums}, chain: element},
+                                    {model: activeModel, not:{resi: surfAssemblyPDBResNums}, chain: element},
                                 );
                             }
                             else {

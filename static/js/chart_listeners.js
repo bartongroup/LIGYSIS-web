@@ -48,7 +48,7 @@ document.getElementById('chartCanvas').addEventListener('mousemove', function(e)
                     
                     viewer.setStyle(
                         {
-                            and:[{resi: siteSuppPDBResNumsClicked, chain: repPdbChainId, invert: true}, {hetflag: false}] // all protein residues except clicked site (we want to keep ligands)
+                            and:[{model: suppModels, resi: siteSuppPDBResNumsClicked, chain: repPdbChainId, invert: true}, {hetflag: false}] // all protein residues except clicked site (we want to keep ligands)
                             // resi: clickedPDBResNums, invert: true, hetflag: false
                         },
                         {
@@ -65,11 +65,11 @@ document.getElementById('chartCanvas').addEventListener('mousemove', function(e)
                     
                         viewer.setStyle(
                             {
-                                and:[{resi: siteAssemblyPDBResNumClicked, chain: element, invert: true}, {hetflag: false}] // all protein residues except clicked site (we want to keep ligands)
+                                and:[{model: activeModel, resi: siteAssemblyPDBResNumClicked, chain: element, invert: true}, {hetflag: false}] // all protein residues except clicked site (we want to keep ligands)
                                 // resi: clickedPDBResNums, invert: true, hetflag: false
                             },
                             {
-                                cartoon:{style:'oval', color: 'white', arrows: true, opacity: 1.0, thickness: 0.25,}, 
+                                cartoon:{style:'oval', color: 'white', arrows: true, opacity: cartoonOpacity, thickness: cartoonThickness,}, 
                             }
                         );
                     });
@@ -85,7 +85,7 @@ document.getElementById('chartCanvas').addEventListener('mousemove', function(e)
                                 viewer.setSurfaceMaterialStyle(value.surfid, {color: clickedSiteColor, opacity:0.9}); // keep surface of clicked table row site visible at 90% opacity
                             }
                             else {
-                                viewer.setSurfaceMaterialStyle(value.surfid, {color: 'white', opacity:0.0}); // hide all other surfaces
+                                viewer.setSurfaceMaterialStyle(value.surfid, {color: 'white', opacity: surfaceHiddenOpacity}); // hide all other surfaces
                             }
                         }
                     }
@@ -99,7 +99,7 @@ document.getElementById('chartCanvas').addEventListener('mousemove', function(e)
                                     viewer.setSurfaceMaterialStyle(value2.surfid, {color: clickedSiteColor, opacity:0.9}); // keep surface of clicked table row site visible at 90% opacity
                                 }
                                 else {
-                                    viewer.setSurfaceMaterialStyle(value2.surfid, {color: 'white', opacity:0.0}); // hide all other surfaces
+                                    viewer.setSurfaceMaterialStyle(value2.surfid, {color: 'white', opacity: surfaceHiddenOpacity}); // hide all other surfaces
                                 }
                             }
                         }
@@ -127,7 +127,7 @@ document.getElementById('chartCanvas').addEventListener('mousemove', function(e)
                     .map(el => Up2PdbDict[repPdbId][repPdbChainId][el]);
 
                 viewer.setStyle(
-                    {resi: siteSuppPDBResNums, chain: repPdbChainId, hetflag: false},
+                    {model: suppModels, resi: siteSuppPDBResNums, chain: repPdbChainId, hetflag: false},
                     {cartoon:{style:'oval', color: siteColor, arrows: true, opacity: cartoonOpacity, thickness: cartoonThickness,},
                     stick:{color: siteColor,}, }
                 );
@@ -172,12 +172,12 @@ document.getElementById('chartCanvas').addEventListener('mousemove', function(e)
 
                 viewer.setStyle(
                     {
-                        and:[{resi: siteSuppPDBResNumsClicked, invert: true}, {hetflag: false}] // all protein residues except clicked site (we want to keep ligands)
+                        and:[{model: suppModels, resi: siteSuppPDBResNumsClicked, invert: true}, {hetflag: false}] // all protein residues except clicked site (we want to keep ligands)
                     },
                     {cartoon: {style:'oval', color: 'white', arrows: true, opacity: cartoonOpacity, thickness: cartoonThickness,}}
                 );
                 viewer.setStyle( // colouring the clicked site (necessary as sometimes there is overlap between sites)
-                    {resi: siteSuppPDBResNumsClicked, chain: repPdbChainId, hetflag: false},
+                    {model: suppModels, resi: siteSuppPDBResNumsClicked, chain: repPdbChainId, hetflag: false},
                     {cartoon:{style:'oval', color: clickedSiteColor, arrows: true, opacity: cartoonOpacity, thickness: cartoonThickness,},
                     stick:{color: clickedSiteColor,}, }
                 );
@@ -191,12 +191,12 @@ document.getElementById('chartCanvas').addEventListener('mousemove', function(e)
                 
                     viewer.setStyle(
                         {
-                            and:[{resi: siteAssemblyPDBResNumClicked, chain: element, invert: true}, {hetflag: false}] // all protein residues except clicked site (we want to keep ligands)
+                            and:[{model: activeModel, resi: siteAssemblyPDBResNumClicked, chain: element, invert: true}, {hetflag: false}] // all protein residues except clicked site (we want to keep ligands)
                         },
                         {cartoon: {style:'oval', color: 'white', arrows: true, opacity: cartoonOpacity, thickness: cartoonThickness,}}
                     );
                     viewer.setStyle( // colouring the clicked site (necessary as sometimes there is overlap between sites)
-                        {resi: siteAssemblyPDBResNumClicked, chain: element, hetflag: false},
+                        {model: activeModel, resi: siteAssemblyPDBResNumClicked, chain: element, hetflag: false},
                         {cartoon:{style:'oval', color: clickedSiteColor, arrows: true, opacity: cartoonOpacity, thickness: cartoonThickness,},
                         stick:{color: clickedSiteColor,}, }
                     );
@@ -337,7 +337,7 @@ document.getElementById('chartCanvas').addEventListener('click', function(e) { /
                 let siteSuppPDBResNumsClicked = seg_ress_dict[clickedElementId]
                     .filter(el => Up2PdbDict[repPdbId][repPdbChainId].hasOwnProperty(el))
                     .map(el => Up2PdbDict[repPdbId][repPdbChainId][el]);
-                viewer.setStyle({resi: siteSuppPDBResNumsClicked, chain: repPdbChainId, hetflag: false}, {cartoon: {style:'oval', color: 'white', arrows: true, opacity: cartoonOpacity, thickness: cartoonThickness,}});
+                viewer.setStyle({model: suppModels, resi: siteSuppPDBResNumsClicked, chain: repPdbChainId, hetflag: false}, {cartoon: {style:'oval', color: 'white', arrows: true, opacity: cartoonOpacity, thickness: cartoonThickness,}});
             }
             else {
                 proteinChains.forEach((element) => { // in case of multiple copies of protein of interest
@@ -361,8 +361,6 @@ document.getElementById('chartCanvas').addEventListener('click', function(e) { /
                 viewer.removeAllLabels();
             }
 
-            //viewer.render({});
-
             // check is clicked row is the same as the newly clicked data point
 
             if (clickedPointLabel == pointLabel) { // same binding site is clicked
@@ -385,14 +383,16 @@ document.getElementById('chartCanvas').addEventListener('click', function(e) { /
                     else{
                         for (const [key, value] of Object.entries(surfsDict[activeModel])) {
                             for (const [key2, value2] of Object.entries(value)) {
-                                if (key == "non_binding") {
+                                if (key == "lig_inters") {
+                                    // pass
+                                }
+                                else if (key == "non_binding") {
                                     viewer.setSurfaceMaterialStyle(value2.surfid, {color: 'white', opacity:0.7});
                                 }
                                 else {
                                     let siteColor = chartColors[Number(key.split("_").pop())];
                                     viewer.setSurfaceMaterialStyle(value2.surfid, {color: siteColor, opacity:0.8});
                                 }
-                                //viewer.render();
                             }
                         }
                     }
@@ -408,11 +408,9 @@ document.getElementById('chartCanvas').addEventListener('click', function(e) { /
 
                 if (labelsVisible) {
                     if (activeModel == "superposition") {
-                        //viewer.removeAllLabels(); // clearing labels from previous clicked site
                         for (siteSuppPDBResNum of siteSuppPDBResNums) {
-                            let resSel = {resi: siteSuppPDBResNum, chain: repPdbChainId, hetflag: false};
+                            let resSel = {model: suppModels, resi: siteSuppPDBResNum, chain: repPdbChainId, hetflag: false};
                             let resName = viewer.selectedAtoms(resSel)[0].resn;
-                            // console.log(resSel, resName);
                             viewer.addLabel(
                                 resName + String(Pdb2UpDict[repPdbId][repPdbChainId][siteSuppPDBResNum]),
                                 {
@@ -455,18 +453,21 @@ document.getElementById('chartCanvas').addEventListener('click', function(e) { /
                                 viewer.setSurfaceMaterialStyle(value.surfid, {color: pointColor, opacity:0.9});
                             }
                             else {
-                                viewer.setSurfaceMaterialStyle(value.surfid, {color: 'white', opacity:0.0});
+                                viewer.setSurfaceMaterialStyle(value.surfid, {color: 'white', opacity: surfaceHiddenOpacity});
                             }
                         }
                     }
                     else{
                         for (const [key, value] of Object.entries(surfsDict[activeModel])) {
                             for (const [key2, value2] of Object.entries(value)) {
-                                if (key == pointLabel) {
+                                if (key == "lig_inters") {
+                                    // pass
+                                }
+                                else if (key == pointLabel) {
                                     viewer.setSurfaceMaterialStyle(value2.surfid, {color: pointColor, opacity:0.9});
                                 }
                                 else {
-                                    viewer.setSurfaceMaterialStyle(value2.surfid, {color: 'white', opacity:0.0});
+                                    viewer.setSurfaceMaterialStyle(value2.surfid, {color: 'white', opacity: surfaceHiddenOpacity});
                                 }
                             }
                         }
@@ -482,17 +483,11 @@ document.getElementById('chartCanvas').addEventListener('click', function(e) { /
 
             resetChartStyles(myChart, pointLabel, "#bfd4cb", 10, 16); // changes chart styles to highlight the newly clicked site
 
-            // need to style here!!!! 
-
-            // let PDBResNums = seg_ress_dict[index]
-            // .filter(el => Up2PdbDict[repPdbId][repPdbChainId].hasOwnProperty(el)) // this accounts not for missing residues in the structure (unresolved)
-            // .map(el => Up2PdbDict[repPdbId][repPdbChainId][el]);
-
             if (labelsVisible) {
                 viewer.removeAllLabels(); // clearing labels from previous clicked site
                 if (activeModel == "superposition") {
                     for (siteSuppPDBResNum of siteSuppPDBResNums) {
-                        let resSel = {resi: siteSuppPDBResNum}
+                        let resSel = {model: suppModels, resi: siteSuppPDBResNum}
                         let resName = viewer.selectedAtoms(resSel)[0].resn
                         // console.log(resSel, resName);
                         viewer.addLabel(
@@ -536,21 +531,27 @@ document.getElementById('chartCanvas').addEventListener('click', function(e) { /
                             viewer.setSurfaceMaterialStyle(value.surfid, {color: pointColor, opacity:0.9});
                         }
                         else {
-                            viewer.setSurfaceMaterialStyle(value.surfid, {color: 'white', opacity:0.0});
+                            viewer.setSurfaceMaterialStyle(value.surfid, {color: 'white', opacity: surfaceHiddenOpacity});
                         }
                     }
                 }
                 else {
                     for (const [key, value] of Object.entries(surfsDict[activeModel])) {
-                        for (const [key2, value2] of Object.entries(value)) {
-                            if (key == pointLabel) {
-                                viewer.setSurfaceMaterialStyle(value2.surfid, {color: pointColor, opacity:0.9});
-                            }
-                            else {
-                                viewer.setSurfaceMaterialStyle(value2.surfid, {color: 'white', opacity:0.0});
-                            }
-                            //viewer.render();
+                        if (key == "lig_inters") {
+                            // pass
                         }
+                        else {
+                            for (const [key2, value2] of Object.entries(value)) {
+                                if (key == pointLabel) {
+                                    viewer.setSurfaceMaterialStyle(value2.surfid, {color: pointColor, opacity:0.9});
+                                }
+                                else {
+                                    viewer.setSurfaceMaterialStyle(value2.surfid, {color: 'white', opacity: surfaceHiddenOpacity});
+                                }
+                                //viewer.render();
+                            }
+                        }
+                        
                     }
                 }
             }
@@ -562,7 +563,7 @@ document.getElementById('chartCanvas').addEventListener('click', function(e) { /
 
         if (activeModel == "superposition") {
             viewer.setStyle(
-                {resi: siteSuppPDBResNums, chain: repPdbChainId, hetflag: false},
+                {model: suppModels, resi: siteSuppPDBResNums, chain: repPdbChainId, hetflag: false},
                 {cartoon: {style:'oval', color: pointColor, arrows: true, opacity: cartoonOpacity, thickness: cartoonThickness,}, stick:{color: pointColor},},
             );
         }
@@ -609,7 +610,7 @@ document.getElementById('newChartCanvas').addEventListener('mousemove', function
                 
                 if (activeModel == "superposition") { // in this case, only one residue as this is a supperposition of single chains
                     SuppPDBResNum = Up2PdbDict[repPdbId][repPdbChainId][newPointLabel];
-                    viewer.setStyle({resi: SuppPDBResNum, hetflag: false}, {cartoon:{style:'oval', color: pointColor, arrows: true, opacity: cartoonOpacity, thickness: cartoonThickness,}, stick:{color: pointColor}, });
+                    viewer.setStyle({model: suppModels, chain: repPdbChainId, resi: SuppPDBResNum, hetflag: false}, {cartoon:{style:'oval', color: pointColor, arrows: true, opacity: cartoonOpacity, thickness: cartoonThickness,}, stick:{color: pointColor}, });
                 }
                 else {
                     proteinChains.forEach((element) => { // in case of multiple copies of protein of interest
@@ -629,7 +630,7 @@ document.getElementById('newChartCanvas').addEventListener('mousemove', function
                     viewer.removeAllLabels(); // clearing labels from previous hovered residue (residues might be almost superposed in plot. Hiding it so only one is visible)
                     if (activeModel == "superposition") {
                         
-                        let resSel = {resi: SuppPDBResNum, hetflag: false};
+                        let resSel = {model: suppModels, resi: SuppPDBResNum, chain: repPdbChainId, hetflag: false};
                         let resName = viewer.selectedAtoms(resSel)[0].resn
                         viewer.addLabel(
                             resName + String(Pdb2UpDict[repPdbId][repPdbChainId][SuppPDBResNum]),
@@ -681,7 +682,7 @@ document.getElementById('newChartCanvas').addEventListener('mousemove', function
                 viewer.removeAllLabels(); // clearing labels from previously hovered on residue
             }
 
-            viewer.render({});
+            viewer.render();
         }
     }
 });

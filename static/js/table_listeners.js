@@ -36,23 +36,19 @@ $('table#bss_table tbody').on('mouseover', 'tr', function () { // event listener
             }
         }
     }
-    
-    // let PDBResNums = seg_ress_dict[rowId].map(el => Up2PdbDict[repPdbId][repPdbChainId][el]);
 
     if (activeModel == "superposition") {
-        //siteSuppPDBResNums = seg_ress_dict[rowId].map(el => Up2PdbDict[repPdbId][repPdbChainId][el]);
         siteSuppPDBResNums = seg_ress_dict[rowId]
             .filter(el => Up2PdbDict[repPdbId][repPdbChainId].hasOwnProperty(el)) // this accounts not for missing residues in the structure (unresolved)
             .map(el => Up2PdbDict[repPdbId][repPdbChainId][el]);
-        viewer.setStyle({resi: siteSuppPDBResNums, chain: repPdbChainId, hetflag: false}, {cartoon:{style:'oval', color: siteColor, arrows: true, opacity: cartoonOpacity, thickness: cartoonThickness,}, stick:{color: siteColor}, });
+        viewer.setStyle({model: suppModels, resi: siteSuppPDBResNums, chain: repPdbChainId, hetflag: false}, {cartoon:{style:'oval', color: siteColor, arrows: true, opacity: cartoonOpacity, thickness: cartoonThickness,}, stick:{color: siteColor}, });
     }
     else {
         proteinChains.forEach((element) => { // in case of multiple copies of protein of interest
             let siteAssemblyPDBResNum = seg_ress_dict[rowId]
-            .filter(el => Up2PdbMapAssembly[chainsMapAssembly[element]].hasOwnProperty(el)) // filters out site residues not present in this assembly. otherwise mapping is undefined and causes problems later...
-            .map(el => Up2PdbMapAssembly[chainsMapAssembly[element]][el]);
+                .filter(el => Up2PdbMapAssembly[chainsMapAssembly[element]].hasOwnProperty(el)) // filters out site residues not present in this assembly. otherwise mapping is undefined and causes problems later...
+                .map(el => Up2PdbMapAssembly[chainsMapAssembly[element]][el]);
 
-            //let AssemblyPDBResNum = Up2PdbMapAssembly[chainsMapAssembly[element]][newPointLabel]
             siteAssemblyPDBResNums.push([element, siteAssemblyPDBResNum]);
             viewer.setStyle(
                 {model: activeModel, resi: siteAssemblyPDBResNum, chain: element, hetflag: false},
@@ -82,14 +78,10 @@ $('table#bss_table tbody').on('mouseover', 'tr', function () { // event listener
         }
 
         if (activeModel == "superposition") {
-            viewer.setStyle({resi: siteSuppPDBResNums, chain: repPdbChainId, hetflag: false}, {cartoon: {style:'oval', color: 'white', arrows: true, opacity: 1.0,thickness: 0.25,}});
+            viewer.setStyle({model: suppModels, resi: siteSuppPDBResNums, chain: repPdbChainId, hetflag: false}, {cartoon: {style:'oval', color: 'white', arrows: true, opacity: 1.0,thickness: 0.25,}});
         }
         else{
             siteAssemblyPDBResNums.forEach(([element, siteAssemblyPDBResNum]) => { // in case of multiple copies of protein of interest
-                //let siteAssemblyPDBResNum = seg_ress_dict[rowId].map(el => Up2PdbMapAssembly[chainsMapAssembly[element]][el]);
-    
-                //let AssemblyPDBResNum = Up2PdbMapAssembly[chainsMapAssembly[element]][newPointLabel]
-                //siteAssemblyPDBResNums.push([element, siteAssemblyPDBResNum]);
                 viewer.setStyle(
                     {model: activeModel, resi: siteAssemblyPDBResNum, chain: element, hetflag: false},
                     {
@@ -100,7 +92,6 @@ $('table#bss_table tbody').on('mouseover', 'tr', function () { // event listener
         }
 
         if (clickedElements.length == 0) {
-            // console.log("Mouseout from point!");
             viewer.removeAllLabels(); // clearing labels from previous clicked site, unless still clicked
 
             if (surfaceVisible) { // if surface is visible
@@ -118,7 +109,10 @@ $('table#bss_table tbody').on('mouseover', 'tr', function () { // event listener
                 else {
                     for (const [key, value] of Object.entries(surfsDict[activeModel])) {
                         for (const [key2, value2] of Object.entries(value)) {
-                            if (key == "non_binding") {
+                            if (key == "lig_inters") { // do nothing for these surfaces
+                                // pass
+                            }
+                            else if (key == "non_binding") {
                                 viewer.setSurfaceMaterialStyle(value2.surfid, {color: 'white', opacity:0.7});
                             }
                             else {
@@ -170,12 +164,10 @@ $('table#bss_table tbody').on('mouseover', 'tr', function () { // event listener
     }
     else {
         proteinChains.forEach((element) => { // in case of multiple copies of protein of interest
-            // let siteAssemblyPDBResNum = seg_ress_dict[rowId].map(el => Up2PdbMapAssembly[chainsMapAssembly[element]][el]);
             let siteAssemblyPDBResNum = seg_ress_dict[rowId]
-            .filter(el => Up2PdbMapAssembly[chainsMapAssembly[element]].hasOwnProperty(el))
-            .map(el => Up2PdbMapAssembly[chainsMapAssembly[element]][el]);
+                .filter(el => Up2PdbMapAssembly[chainsMapAssembly[element]].hasOwnProperty(el))
+                .map(el => Up2PdbMapAssembly[chainsMapAssembly[element]][el]);
 
-            //let AssemblyPDBResNum = Up2PdbMapAssembly[chainsMapAssembly[element]][newPointLabel]
             siteAssemblyPDBResNums.push([element, siteAssemblyPDBResNum]);
         });
     }
@@ -208,7 +200,10 @@ $('table#bss_table tbody').on('mouseover', 'tr', function () { // event listener
             else {
                 for (const [key, value] of Object.entries(surfsDict[activeModel])) {
                     for (const [key2, value2] of Object.entries(value)) {
-                        if (key == "non_binding") {
+                        if (key == "lig_inters") { // do nothing for these surfaces
+                            // pass
+                        }
+                        else if (key == "non_binding") {
                             viewer.setSurfaceMaterialStyle(value2.surfid, {color: 'white', opacity:0.7});
                         }
                         else {
@@ -262,7 +257,6 @@ $('table#bss_table tbody').on('mouseover', 'tr', function () { // event listener
                 console.error('Response:', jqXHR.responseText);
             },
         });
-        // new stuff
         clearHighlightedRow(); // clears highlighting from table row, before applying clicked styles
         if (clickedElements) { // any OTHER row is already clicked
             for (var i = 0; i < clickedElements.length; i++) {
@@ -271,8 +265,7 @@ $('table#bss_table tbody').on('mouseover', 'tr', function () { // event listener
                     let suppPDBResNumsClicked = seg_ress_dict[clickedElementId]
                         .filter(el => Up2PdbDict[repPdbId][repPdbChainId].hasOwnProperty(el))
                         .map(el => Up2PdbDict[repPdbId][repPdbChainId][el]);
-                    viewer.setStyle({resi: suppPDBResNumsClicked, chain: repPdbChainId, hetflag: false}, {cartoon: {style:'oval', color: 'white', arrows: true, opacity: cartoonOpacity, thickness: cartoonThickness,}});
-                    // viewer.render();
+                    viewer.setStyle({model: suppModels, resi: suppPDBResNumsClicked, chain: repPdbChainId, hetflag: false}, {cartoon: {style:'oval', color: 'white', arrows: true, opacity: cartoonOpacity, thickness: cartoonThickness,}});
                 }
                 else {
                     let AssemblyPDBResNumsClicked = [];
@@ -309,7 +302,7 @@ $('table#bss_table tbody').on('mouseover', 'tr', function () { // event listener
             viewer.removeAllLabels(); // clearing labels from previous clicked site
             if (activeModel == "superposition") {
                 for (siteSuppPDBResNum of siteSuppPDBResNums) {
-                    let resSel = {resi: siteSuppPDBResNum, chain: repPdbChainId, hetflag: false}
+                    let resSel = {model: suppModels, resi: siteSuppPDBResNum, chain: repPdbChainId, hetflag: false}
                     let resName = viewer.selectedAtoms(resSel)[0].resn
                     // console.log(resSel, resName);
                     viewer.addLabel(
@@ -405,7 +398,7 @@ $('table#bs_ress_table tbody').on('mouseover', 'tr', function () { // event list
                 AssemblyPDBResNums.push([element, AssemblyPDBResNum]);
                 if (AssemblyPDBResNum !== undefined) {
                     viewer.setStyle(
-                        {resi: AssemblyPDBResNum, chain: element, hetflag: false},
+                        {model: activeModel, resi: AssemblyPDBResNum, chain: element, hetflag: false},
                         {
                             cartoon:{style:'oval', color: rowColorHex, arrows: true, opacity: cartoonOpacity, thickness: cartoonThickness,},
                             stick:{color: rowColorHex},
@@ -421,7 +414,7 @@ $('table#bs_ress_table tbody').on('mouseover', 'tr', function () { // event list
         if (labelsVisible) {
             if (activeModel == "superposition") {
                 if (SuppPDBResNum !== undefined) {
-                    let resSel = {resi: SuppPDBResNum, chain: repPdbChainId, hetflag: false}
+                    let resSel = {model: suppModels, resi: SuppPDBResNum, chain: repPdbChainId, hetflag: false}
                     let resName = viewer.selectedAtoms(resSel)[0].resn
                     viewer.addLabel(
                         resName + String(Pdb2UpDict[repPdbId][repPdbChainId][SuppPDBResNum]),
@@ -477,14 +470,14 @@ $('table#bs_ress_table tbody').on('mouseover', 'tr', function () { // event list
         let PDBResNum = Up2PdbDict[repPdbId][repPdbChainId][rowId];
 
         if (activeModel == "superposition") {
-            viewer.setStyle({resi: SuppPDBResNum, hetflag: false}, {cartoon: {style:'oval', color: 'white', arrows: true, opacity: cartoonOpacity, thickness: cartoonThickness,}});
+            viewer.setStyle({model: suppModels, resi: SuppPDBResNum, hetflag: false}, {cartoon: {style:'oval', color: 'white', arrows: true, opacity: cartoonOpacity, thickness: cartoonThickness,}});
             if (labelsVisible) {
                 viewer.removeAllLabels(); // clearing labels from previous clicked site, unless still clicked
             }
         }
         else {
             AssemblyPDBResNums.forEach(([chain, resNum]) => {
-                viewer.setStyle({resi: resNum, chain: chain, hetflag: false}, {cartoon: {style:'oval', color: 'white', arrows: true, opacity: cartoonOpacity, thickness: cartoonThickness,}});
+                viewer.setStyle({model: activeModel, resi: resNum, chain: chain, hetflag: false}, {cartoon: {style:'oval', color: 'white', arrows: true, opacity: cartoonOpacity, thickness: cartoonThickness,}});
             });
             if (labelsVisible) {
                 viewer.removeAllLabels(); // clearing labels from previous clicked site, unless still clicked
