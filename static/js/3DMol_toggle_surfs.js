@@ -223,12 +223,20 @@ function toggleLigandsVisibility() {
         button.value = 'Ligands OFF'; // Change the button text
         button.style = "font-weight: bold; color: #674ea7;";
 
-        viewer.addStyle({and:[{hetflag: true}, {not:{resn: "HOH"}}, {properties:{ bs: -1}}]}, {stick: {hidden: true, colorscheme: myScheme, radius: 0.25}});
-        viewer.addStyle({and:[{hetflag: true}, {not:{resn: "HOH"}}, {properties:{ bs: -1}}]}, {sphere: {hidden: true, colorscheme: myScheme, radius: 0.20}});
-    
-    
-        viewer.addStyle({and:[{hetflag: true}, {not:{resn: "HOH"}}, {not: {properties:{ bs: -1}}}]}, {stick: {hidden: true, colorscheme: myScheme, radius: 0.25}});
-        viewer.addStyle({and:[{hetflag: true}, {not:{resn: "HOH"}}, {not: {properties:{ bs: -1}}}]}, {sphere: {hidden: true, colorscheme: myScheme, radius: 0.20}});
+        if (activeModel == "superposition") {
+            viewer.addStyle({and:[{hetflag: true}, {not:{resn: "HOH"}}, {properties:{ bs: -1}}]}, {stick: {hidden: true, colorscheme: myScheme, radius: stickRadius}});
+            viewer.addStyle({and:[{hetflag: true}, {not:{resn: "HOH"}}, {properties:{ bs: -1}}]}, {sphere: {hidden: true, colorscheme: myScheme, radius: sphereRadius}});
+            viewer.addStyle({and:[{hetflag: true}, {not:{resn: "HOH"}}, {not: {properties:{ bs: -1}}}]}, {stick: {hidden: true, colorscheme: myScheme, radius: stickRadius}});
+            viewer.addStyle({and:[{hetflag: true}, {not:{resn: "HOH"}}, {not: {properties:{ bs: -1}}}]}, {sphere: {hidden: true, colorscheme: myScheme, radius: sphereRadius}});
+            console.log(`Ligands hidden for ${activeModel} model!`);
+        }
+        else {
+            // viewer.addStyle({and:[{model: activeModel, hetflag: true}, {not:{resn: "HOH"}}]}, {stick: {hidden: true, radius: stickRadius}});
+            // viewer.addStyle({and:[{model: activeModel, hetflag: true}, {not:{resn: "HOH"}}]}, {sphere: {hidden: true, radius: sphereRadius}});
+            viewer.addStyle({model: activeModel, hetflag: true, not:{resn: "HOH"}}, {stick: {hidden: true, radius: stickRadius}});
+            viewer.addStyle({model: activeModel, hetflag: true, not:{resn: "HOH"}}, {sphere: {hidden: true, radius: sphereRadius}})
+            console.log(`Ligands hidden for model ${activeModel}!`);
+        }
 
         if (contactsVisible) {
             var consButton = document.getElementById('contactsButton');
@@ -252,31 +260,27 @@ function toggleLigandsVisibility() {
                 surfButton.style = "font-weight: bold; color: #674ea7;";
                 surfaceVisible = !surfaceVisible; // Toggle the visibility state
             }
-
-
-
             contactsVisible = false;
         }
-    
-        console.log("Ligands hidden!");
     }
     else {
         button.value = 'Ligands ON'; // Change the button text
         button.style = "font-weight: bold; color:#B22222;";
-        // viewer.addStyle({and:[{hetflag: true}, {not:{resn: "HOH"}}]}, {stick: {hidden: false, color: "blue", radius: 0.25}}); 
-        // viewer.addStyle({and:[{hetflag: true}, {not:{resn: "HOH"}}]}, {sphere: {hidden: false, color: "red", radius: 0.20}});
-        viewer.addStyle({and:[{hetflag: true}, {not:{resn: "HOH"}}, {properties:{ bs: -1}}]}, {stick: {hidden: true, colorscheme: myScheme, radius: 0.25}});
-        viewer.addStyle({and:[{hetflag: true}, {not:{resn: "HOH"}}, {properties:{ bs: -1}}]}, {sphere: {hidden: true, colorscheme: myScheme, radius: 0.20}});
-    
-    
-        viewer.addStyle({and:[{hetflag: true}, {not:{resn: "HOH"}}, {not: {properties:{ bs: -1}}}]}, {stick: {hidden: false, colorscheme: myScheme, radius: 0.25}});
-        viewer.addStyle({and:[{hetflag: true}, {not:{resn: "HOH"}}, {not: {properties:{ bs: -1}}}]}, {sphere: {hidden: false, colorscheme: myScheme, radius: 0.20}}); 
-    
-    
-        // viewer.addStyle({resn: "HOH"}, {sphere: {hidden: true, color: "gold", radius: 0.20}});
-        // viewer.addStyle({resn: "HOH"}, {stick: {hidden: true, color: "gold", radius: 0.25}});
 
-        console.log("Ligands shown!");
+        if (activeModel == "superposition") {
+            viewer.addStyle({and:[{hetflag: true}, {not:{resn: "HOH"}}, {properties:{ bs: -1}}]}, {stick: {hidden: true, colorscheme: myScheme, radius: stickRadius}});
+            viewer.addStyle({and:[{hetflag: true}, {not:{resn: "HOH"}}, {properties:{ bs: -1}}]}, {sphere: {hidden: true, colorscheme: myScheme, radius: sphereRadius}});
+            viewer.addStyle({and:[{hetflag: true}, {not:{resn: "HOH"}}, {not: {properties:{ bs: -1}}}]}, {stick: {hidden: false, colorscheme: myScheme, radius: stickRadius}});
+            viewer.addStyle({and:[{hetflag: true}, {not:{resn: "HOH"}}, {not: {properties:{ bs: -1}}}]}, {sphere: {hidden: false, colorscheme: myScheme, radius: sphereRadius}});
+            console.log(`Ligands shown for ${activeModel} models!`);
+        }
+        else {
+            //viewer.addStyle({and:[{model: activeModel, hetflag: true}, {not:{resn: "HOH"}}]}, {stick: {hidden: false, radius: stickRadius}});
+            //viewer.addStyle({and:[{model: activeModel, hetflag: true}, {not:{resn: "HOH"}}]}, {sphere: {hidden: false, radius: sphereRadius}});
+            viewer.addStyle({model: activeModel, hetflag: true, not:{resn: "HOH"}}, {stick: {hidden: false, radius: stickRadius}});
+            viewer.addStyle({model: activeModel, hetflag: true, not:{resn: "HOH"}}, {sphere: {hidden: false, radius: sphereRadius}});
+            console.log(`Ligands shown for model ${activeModel}!`);
+        }
     }
     ligandsVisible = !ligandsVisible;
     viewer.render();
