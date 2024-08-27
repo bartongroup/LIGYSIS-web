@@ -336,12 +336,15 @@ img.responsive-logo {
     display: none;
     position: absolute;
     background-color: #f9f9f9;
-    min-width: 160px;
+    min-width: 110px;
     bottom: 100%;
     z-index: 1;
     overflow-y: auto;
-    max-height: 200px; /* Adjust based on your requirement */
+    max-height: 180px; /* Adjust based on your requirement */
     box-shadow: 5px 8px 16px 0px rgba(0,0,0,0.2);
+    border-radius: 5px; /* Optional: Adds rounded corners */
+    outline: 1px solid black;
+    font-size: 14px;
 }
 
 .dropup-content a {
@@ -349,7 +352,7 @@ img.responsive-logo {
     padding: 12px 16px;
     text-decoration: none;
     display: block;
-    outline: 1px solid black;
+    outline: 0.5px solid black;
 }
 
 .dropup-content a:hover {background-color: #f1f1f1}
