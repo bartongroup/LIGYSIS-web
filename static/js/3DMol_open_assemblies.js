@@ -64,11 +64,6 @@ function selectOption(option) {
             }
 
             if (ligandsVisible) { // if ligands were visible, hide them
-                // hide all ligands from superposition
-                // viewer.addStyle({and:[{hetflag: true}, {not:{resn: "HOH"}}, {properties:{ bs: -1}}]}, {stick: {hidden: true, colorscheme: myScheme, radius: stickRadius}});
-                // viewer.addStyle({and:[{hetflag: true}, {not:{resn: "HOH"}}, {properties:{ bs: -1}}]}, {sphere: {hidden: true, colorscheme: myScheme, radius: sphereRadius}});
-                // viewer.addStyle({and:[{hetflag: true}, {not:{resn: "HOH"}}, {not: {properties:{ bs: -1}}}]}, {stick: {hidden: true, colorscheme: myScheme, radius: stickRadius}});
-                // viewer.addStyle({and:[{hetflag: true}, {not:{resn: "HOH"}}, {not: {properties:{ bs: -1}}}]}, {sphere: {hidden: true, colorscheme: myScheme, radius: sphereRadius}});
                 viewer.addStyle({model: suppModels, hetflag: true, not:{resn: "HOH"}, properties:{ bs: -1}}, {stick: {hidden: true, colorscheme: myScheme, radius: stickRadius}});
                 viewer.addStyle({model: suppModels, hetflag: true, not:{resn: "HOH"}, properties:{ bs: -1}}, {sphere: {hidden: true, colorscheme: myScheme, radius: sphereRadius}});
                 viewer.addStyle({model: suppModels, hetflag: true, not:{resn: "HOH"}, not: {properties:{ bs: -1}}}, {stick: {hidden: true, colorscheme: myScheme, radius: stickRadius}});
@@ -84,6 +79,11 @@ function selectOption(option) {
                 showHoverLabel,
                 removeHoverLabel,
             );
+
+            contactsButton.disabled = false;
+            contactsButton.style.color = '#674ea7';  // Active font color
+            contactsButton.style.fontWeight = 'bold'; // Bold font when active
+            //contactsButton.style.backgroundColor = 'white';  // Active background color
 
             openStructure(option);
         }
@@ -117,9 +117,6 @@ function selectOption(option) {
             }
 
             if (ligandsVisible) { // if ligands were visible, hide them
-                // hide all ligands from superposition
-                // viewer.addStyle({and:[{hetflag: true}, {not:{resn: "HOH"}}]}, {stick: {hidden: true, colorscheme: myScheme, radius: stickRadius}});
-                // viewer.addStyle({and:[{hetflag: true}, {not:{resn: "HOH"}}]}, {sphere: {hidden: true, colorscheme: myScheme, radius: sphereRadius}});
                 viewer.addStyle({model: activeModel, hetflag: true, not:{resn: "HOH"}}, {stick: {hidden: true, colorscheme: myScheme, radius: stickRadius}});
                 viewer.addStyle({model: activeModel, hetflag: true, not:{resn: "HOH"}}, {sphere: {hidden: true, colorscheme: myScheme, radius: sphereRadius}});
 
@@ -138,9 +135,19 @@ function selectOption(option) {
             if (option !== 'Superposition') {
 
                 openStructure(option);
+
+                contactsButton.disabled = false;
+                contactsButton.style.color = '#674ea7';  // Active font color
+                contactsButton.style.fontWeight = 'bold'; // Bold font when active
+                //contactsButton.style.backgroundColor = 'white';  // Active background color
             }
 
             if (option == 'Superposition') {
+
+                contactsButton.disabled = true;
+                contactsButton.style.color = 'darkgray';
+                contactsButton.style.fontWeight = 'normal'; // Bold font when active
+                //contactsButton.style.backgroundColor = 'lightgray';
 
                 for (let i = 0; i <= simplePdbs.length-1; i++) {
                     viewer.getModel(i).show(); // Show all ligand superposition models
