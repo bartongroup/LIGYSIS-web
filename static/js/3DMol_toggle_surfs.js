@@ -70,6 +70,12 @@ function toggleSurfaceVisibility() {
                 let surfid = surfsDict["superposition"][clickedElementId].surfid;
                 viewer.setSurfaceMaterialStyle(surfid, {color: siteColor, opacity:0.9}); // show ONLY surface of clicked row
             }
+            else {
+                for (const [key, value] of Object.entries(surfsDict[activeModel][clickedElementId])) {
+                    let surfid = value.surfid;
+                    viewer.setSurfaceMaterialStyle(surfid, {color: siteColor, opacity:0.9}); // show ONLY surface of clicked row
+                }
+            }
         }
         else {
             // change surface opacity
@@ -129,7 +135,7 @@ function toggleLabelsVisibility() {
         
         // add labels if any site is clicked already
         let clickedElements = document.getElementsByClassName("clicked-row");
-        if (clickedElements) { // any OTHER row is already clicked
+        if (clickedElements) { // any row is already clicked
             for (var i = 0; i < clickedElements.length; i++) {
                 var clickedElementId = clickedElements[i].id;
                 let siteColor = chartColors[Number(clickedElementId.split("_").pop())];
@@ -155,10 +161,17 @@ function toggleLabelsVisibility() {
                     viewer.render();
                 }
                 else {
-                    for ([element, siteAssemblyPDBResNum] of siteAssemblyPDBResNums) {
+                    siteAssemblyPDBResNums = [];
+                    proteinChains.forEach((element) => { // in case of multiple copies of protein of interest
                         let siteAssemblyPDBResNum = seg_ress_dict[clickedElementId]
                             .filter(el => Up2PdbMapAssembly[chainsMapAssembly[element]].hasOwnProperty(el))
                             .map(el => Up2PdbMapAssembly[chainsMapAssembly[element]][el]);
+                        siteAssemblyPDBResNums.push([element, siteAssemblyPDBResNum]);
+                    });
+                    for ([element, siteAssemblyPDBResNum] of siteAssemblyPDBResNums) {
+                        // let siteAssemblyPDBResNum = seg_ress_dict[clickedElementId]
+                        //     .filter(el => Up2PdbMapAssembly[chainsMapAssembly[element]].hasOwnProperty(el))
+                        //     .map(el => Up2PdbMapAssembly[chainsMapAssembly[element]][el]);
                         for (siteAssemblyPDBResNumber of siteAssemblyPDBResNum) { // variable name not ideal as siteAssemblyPDBResNum is an array
                             let resSel = {model: activeModel, resi: siteAssemblyPDBResNumber, chain: element, hetflag: false}
                             let resName = viewer.selectedAtoms(resSel)[0].resn
@@ -171,13 +184,16 @@ function toggleLabelsVisibility() {
                                     inFront: true, screenOffset: [0, 0, 0], showBackground: true
                                 },
                                 resSel,
-                                false,
+                                true,
                             );
                         }
                     }
                 }
                 viewer.render();
             }
+        }
+        else{
+            console.log("No site clicked!");
         }
     }
     labelsVisible = !labelsVisible; // Toggle the visibility state
