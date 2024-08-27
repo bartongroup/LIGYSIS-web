@@ -21,7 +21,6 @@ function findMiddlePoint(bgnCoords, endCoords) { // returns the middle point bet
 }
 
 function toggleSurfaceVisibility() {
-    //var button = document.getElementById('surfButton');
     if (surfaceVisible) { // hide all surfaces
         if (activeModel == "superposition") {
             for (const [key, value] of Object.entries(surfsDict["superposition"])) {
@@ -118,7 +117,6 @@ function toggleSurfaceVisibility() {
 }
 
 function toggleLabelsVisibility() {
-    //var button = document.getElementById('labelButton');
     if (labelsVisible) {
         labelButton.value = 'Labels OFF'; // Change the button text
         labelButton.style = "font-weight: bold; color: #674ea7;";
@@ -187,7 +185,6 @@ function toggleLabelsVisibility() {
 }
 
 function toggleWatersVisibility() {
-    //var button = document.getElementById('waterButton');
     if (watersVisible) {
         waterButton.value = 'Waters OFF'; // Change the button text
         waterButton.style = "font-weight: bold; color: #674ea7;";
@@ -218,7 +215,6 @@ function toggleWatersVisibility() {
 }
 
 function toggleLigandsVisibility() {
-    //var button = document.getElementById('ligandButton');
     if (ligandsVisible) {
         ligandButton.value = 'Ligands OFF'; // Change the button text
         ligandButton.style = "font-weight: bold; color: #674ea7;";
@@ -231,15 +227,12 @@ function toggleLigandsVisibility() {
             console.log(`Ligands hidden for ${activeModel} model!`);
         }
         else {
-            // viewer.addStyle({and:[{model: activeModel, hetflag: true}, {not:{resn: "HOH"}}]}, {stick: {hidden: true, radius: stickRadius}});
-            // viewer.addStyle({and:[{model: activeModel, hetflag: true}, {not:{resn: "HOH"}}]}, {sphere: {hidden: true, radius: sphereRadius}});
             viewer.addStyle({model: activeModel, hetflag: true, not:{resn: "HOH"}}, {stick: {hidden: true, radius: stickRadius}});
             viewer.addStyle({model: activeModel, hetflag: true, not:{resn: "HOH"}}, {sphere: {hidden: true, radius: sphereRadius}})
             console.log(`Ligands hidden for model ${activeModel}!`);
         }
 
         if (contactsVisible) {
-            //var consButton = document.getElementById('contactsButton');
             contactsButton.value = 'Contacts OFF'; // Change the button text
             contactsButton.style = "font-weight: bold; color: #674ea7;";
 
@@ -275,8 +268,6 @@ function toggleLigandsVisibility() {
             console.log(`Ligands shown for ${activeModel} models!`);
         }
         else {
-            //viewer.addStyle({and:[{model: activeModel, hetflag: true}, {not:{resn: "HOH"}}]}, {stick: {hidden: false, radius: stickRadius}});
-            //viewer.addStyle({and:[{model: activeModel, hetflag: true}, {not:{resn: "HOH"}}]}, {sphere: {hidden: false, radius: sphereRadius}});
             viewer.addStyle({model: activeModel, hetflag: true, not:{resn: "HOH"}}, {stick: {hidden: false, radius: stickRadius}});
             viewer.addStyle({model: activeModel, hetflag: true, not:{resn: "HOH"}}, {sphere: {hidden: false, radius: sphereRadius}});
             console.log(`Ligands shown for model ${activeModel}!`);
@@ -287,7 +278,6 @@ function toggleLigandsVisibility() {
 }
 
 function toggleContactsVisibility() {
-    //var button = document.getElementById('contactsButton');
     if (contactsVisible) {
         contactsButton.value = 'Contacts OFF'; // Change the button text
         contactsButton.style = "font-weight: bold; color: #674ea7;";
@@ -319,7 +309,6 @@ function toggleContactsVisibility() {
         viewer.addStyle({model: activeModel, hetflag: true, not:{resn: 'HOH'}}, {sphere: {hidden: true}});
 
         // turn ligandButton off
-        //var ligandButton = document.getElementById('ligandButton');
         ligandButton.value = 'Ligands OFF';
         ligandButton.style = "font-weight: bold; color: #674ea7;";
         ligandsVisible = false;
@@ -345,9 +334,7 @@ function toggleContactsVisibility() {
         .then(response => response.json())
         .then(data => {
             let contacts = JSON.parse(data.contacts);
-            //let strucLigData = data.ligands;
             let strucProtData = data.protein;
-            //bindingRess = Array.from(new Set(contacts.map(item => item.auth_seq_id_end)));
 
             contacts.forEach((item, index) => {
                 // Extracting the necessary variables from each item
@@ -376,9 +363,6 @@ function toggleContactsVisibility() {
                 }
                 else {
                     let relevantInters = contactType.filter(el => !undefInters.includes(el));
-                    // if (relevantInters.length > 0) {
-                    //     console.log("Relevant interactions:", relevantInters);
-                    // }
                     theContactType = relevantInters[0];
                 }
 
@@ -486,11 +470,7 @@ function toggleContactsVisibility() {
                     let protChain = protRes[1];
                     let protResi = protRes[2];
                     let sel = {model: activeModel, resi: protResi, chain: protChain, resn: protResn};
-                    //let sel = {and:[{model: activeModel}, {resi: protResi}, {chain: protChain}, {resn: protResn}]};
-                    //console.log(sel);
-                    //listOfSels.push(sel);
                     ligandSitesHash[activeModel][ligNam].push(sel);
-                    //viewer.addStyle(sel, {cartoon:{hidden: false, color: ligColor}, stick: {hidden: false, color: ligColor, radius: stickRadius}});
                 }
                 viewer.addStyle({model: activeModel, or:ligandSitesHash[activeModel][ligNam]}, {cartoon:{hidden: false, color: ligColor}, stick: {hidden: false, color: ligColor, radius: stickRadius}});
                 viewer.addStyle({model: activeModel, resi: ligResi, chain: ligChain, resn: ligMol}, {stick: {hidden: false, color: ligColor, radius: stickRadius}});

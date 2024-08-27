@@ -353,7 +353,6 @@
 <script src="/static/js/chart_listeners.js"></script>
 <script src="/static/js/change_segment.js"></script>
 <script src="/static/js/3DMol_resize.js"></script>
-<!-- <script src="/static/js/3DMol_add_surfs.js"></script> -->  <!-- Now on applet. This would execute before all models were loaded.  -->
 <script src="/static/js/3DMol_toggle_surfs.js"></script>
 <script src="/static/js/3DMol_open_assemblies.js"></script>
 
@@ -361,7 +360,6 @@
     function downloadCSV(filepath) {
         window.location.href = '/download-csv?filepath=' + filepath;
     }
-
     let contactsButton = document.getElementById('contactsButton');
     let ligandButton = document.getElementById('ligandButton');
     let waterButton = document.getElementById('waterButton');
