@@ -21,7 +21,7 @@ $('table#bss_table tbody').on('mouseover', 'tr', function () { // event listener
             if (activeModel == "superposition") {
                 for (const [key, value] of Object.entries(surfsDict["superposition"])) {
                     if (key == rowId) {
-                        viewer.setSurfaceMaterialStyle(value.surfid, {color: siteColor, opacity:0.8}); // change the surface color of the hovered binding site row
+                        viewer.setSurfaceMaterialStyle(value.surfid, {color: siteColor, opacity:0.9}); // change the surface color of the hovered binding site row
                     }
                 }
             }
@@ -29,7 +29,7 @@ $('table#bss_table tbody').on('mouseover', 'tr', function () { // event listener
                 for (const [key, value] of Object.entries(surfsDict[activeModel])) {
                     for (const [key2, value2] of Object.entries(value)) {
                         if (key == rowId) {
-                            viewer.setSurfaceMaterialStyle(value2.surfid, {color: siteColor, opacity:0.8}); // change the surface color of the hovered binding site row
+                            viewer.setSurfaceMaterialStyle(value2.surfid, {color: siteColor, opacity:0.9}); // change the surface color of the hovered binding site row
                         }
                     }
                 }
@@ -78,16 +78,34 @@ $('table#bss_table tbody').on('mouseover', 'tr', function () { // event listener
         }
 
         if (activeModel == "superposition") {
-            viewer.setStyle({model: suppModels, resi: siteSuppPDBResNums, chain: repPdbChainId, hetflag: false}, {cartoon: {style:'oval', color: 'white', arrows: true, opacity: 1.0,thickness: 0.25,}});
+            viewer.setStyle({model: suppModels, resi: siteSuppPDBResNums, chain: repPdbChainId, hetflag: false}, {cartoon: {style:'oval', color: 'white', arrows: true, opacity: cartoonOpacity, thickness: cartoonThickness,}});
         }
         else{
             siteAssemblyPDBResNums.forEach(([element, siteAssemblyPDBResNum]) => { // in case of multiple copies of protein of interest
-                viewer.setStyle(
-                    {model: activeModel, resi: siteAssemblyPDBResNum, chain: element, hetflag: false},
-                    {
-                        cartoon:{style:'oval', color:  'white', arrows: true, opacity: cartoonOpacity, thickness: cartoonThickness,},
+                if (contactsVisible) {
+                    viewer.setStyle(
+                        {model: activeModel, resi: siteAssemblyPDBResNum, chain: element, hetflag: false, not:{or: allBindingRess}},
+                        {
+                            cartoon:{style:'oval', color: 'white', arrows: true, opacity: cartoonOpacity, thickness: cartoonThickness,},
+                        }
+                    );
+                    // colour ligand-binding residues again
+                    for (const [key, value] of Object.entries(ligandSitesHash[activeModel])) {
+                        let ligColor = chartColors[strucProtData[key][1]];
+                        viewer.setStyle(
+                            {model: activeModel, hetflag: false, or: value},
+                            {cartoon:{style:'oval', color: ligColor, arrows: true, opacity: cartoonOpacity, thickness: cartoonThickness,}, stick:{hidden: false, color: ligColor,}}
+                        );
                     }
-                );
+                }
+                else {
+                    viewer.setStyle(
+                        {model: activeModel, resi: siteAssemblyPDBResNum, chain: element, hetflag: false},
+                        {
+                            cartoon:{style:'oval', color:  'white', arrows: true, opacity: cartoonOpacity, thickness: cartoonThickness,},
+                        }
+                    );
+                }
             });
 
         }
@@ -108,17 +126,24 @@ $('table#bss_table tbody').on('mouseover', 'tr', function () { // event listener
                     }
                 }
                 else {
-                    for (const [key, value] of Object.entries(surfsDict[activeModel])) {
-                        for (const [key2, value2] of Object.entries(value)) {
-                            if (key == "lig_inters") { // do nothing for these surfaces
-                                // pass
-                            }
-                            else if (key == "non_binding") {
-                                viewer.setSurfaceMaterialStyle(value2.surfid, {color: 'white', opacity:0.7});
-                            }
-                            else {
-                                let siteColor = chartColors[Number(key.split("_").pop())];
-                                viewer.setSurfaceMaterialStyle(value2.surfid, {color: siteColor, opacity:0.8});
+                    if (contactsVisible) {
+                        for (const [key, value] of Object.entries(surfsDict[activeModel][rowId])) {
+                            viewer.setSurfaceMaterialStyle(value.surfid, {color: siteColor, opacity: surfaceHiddenOpacity});
+                        }
+                    }
+                    else {
+                        for (const [key, value] of Object.entries(surfsDict[activeModel])) {
+                            for (const [key2, value2] of Object.entries(value)) {
+                                if (key == "lig_inters") { // do nothing for these surfaces
+                                    // pass
+                                }
+                                else if (key == "non_binding") {
+                                    viewer.setSurfaceMaterialStyle(value2.surfid, {color: 'white', opacity:0.7});
+                                }
+                                else {
+                                    let siteColor = chartColors[Number(key.split("_").pop())];
+                                    viewer.setSurfaceMaterialStyle(value2.surfid, {color: siteColor, opacity:0.8});
+                                }
                             }
                         }
                     }
@@ -201,16 +226,27 @@ $('table#bss_table tbody').on('mouseover', 'tr', function () { // event listener
             else {
                 for (const [key, value] of Object.entries(surfsDict[activeModel])) {
                     for (const [key2, value2] of Object.entries(value)) {
-                        if (key == "lig_inters") { // do nothing for these surfaces
-                            // pass
-                        }
-                        else if (key == "non_binding") {
-                            viewer.setSurfaceMaterialStyle(value2.surfid, {color: 'white', opacity:0.7});
+                        if (contactsVisible) {
+                            if (key == "lig_inters") { // do nothing for these surfaces
+                                // pass
+                            }
+                            else if (key == rowId) {
+                                viewer.setSurfaceMaterialStyle(value2.surfid, {color: siteColor, opacity: surfaceHiddenOpacity});
+                            }
+
                         }
                         else {
-                            let siteColor = chartColors[Number(key.split("_").pop())];
-                            viewer.setSurfaceMaterialStyle(value2.surfid, {color: siteColor, opacity:0.8});
-                        }
+                            if (key == "lig_inters") { // do nothing for these surfaces
+                                // pass
+                            }
+                            else if (key == "non_binding") {
+                                viewer.setSurfaceMaterialStyle(value2.surfid, {color: 'white', opacity:0.7});
+                            }
+                            else {
+                                let siteColor = chartColors[Number(key.split("_").pop())];
+                                viewer.setSurfaceMaterialStyle(value2.surfid, {color: siteColor, opacity:0.8});
+                            }
+                    }
                     }
                 }
             }
@@ -353,12 +389,18 @@ $('table#bss_table tbody').on('mouseover', 'tr', function () { // event listener
             }
             else {
                 for (const [key, value] of Object.entries(surfsDict[activeModel])) {
-                    for (const [key2, value2] of Object.entries(value)) {
-                        if (key == rowId) {
-                            viewer.setSurfaceMaterialStyle(value2.surfid, {color: siteColor, opacity:0.9});
-                        }
-                        else {
-                            viewer.setSurfaceMaterialStyle(value2.surfid, {color: 'white', opacity:0.0});
+                    if (key == 'lig_inters') {
+                        // pass
+                    }
+                    else {
+                        for (const [key2, value2] of Object.entries(value)) {
+                            if (key == rowId) {
+                                viewer.setSurfaceMaterialStyle(value2.surfid, {color: siteColor, opacity:0.9});
+                            }
+
+                            else {
+                                viewer.setSurfaceMaterialStyle(value2.surfid, {color: 'white', opacity: surfaceHiddenOpacity});
+                            }
                         }
                     }
                 }
