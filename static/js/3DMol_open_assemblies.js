@@ -23,6 +23,13 @@ function selectOption(option) {
         const button = document.querySelector('.dropup-button');
         button.textContent = option;
 
+        let clickedElements = document.getElementsByClassName("clicked-row");
+        if (clickedElements.length > 0) {
+            let clickedPointLabel = chartData[chartLab][clickedElements[0].id]; // label of the clicked binding site row
+            resetChartStyles(myChart, clickedPointLabel, "black", 1, 12); // changes chart styles to default for the previously clicked site
+            clickedElements[0].classList.remove("clicked-row"); // unclick the clicked row
+        } 
+
         if (watersVisible) { // if waters were visible, hide them
 
             viewer.addStyle({resn: "HOH"}, {sphere: {hidden: true, color: waterColor, radius: sphereRadius}}); // hide all water molecules from superposition
