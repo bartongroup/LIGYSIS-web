@@ -5,6 +5,7 @@ let protLabel = null; // Shared variable for the label
 const undefInters = ["covalent", "vdw", "vdw_clash", "proximal"]
 
 let ligandSitesHash = {}; // this hash follows structure: {model: {ligandName: [ligand-binding residues selection]}}
+let allBindingRess;
 
 function findMiddlePoint(bgnCoords, endCoords) { // returns the middle point between two coordinates (used for labeling interaction cylinder)
     if (bgnCoords.length !== 3 || endCoords.length !== 3) {
@@ -192,9 +193,34 @@ function toggleLabelsVisibility() {
                 viewer.render();
             }
         }
-        else{
-            console.log("No site clicked!");
+        // show labels if CONTACTS is on
+        if (contactsVisible) {
+            for (const [key, value] of Object.entries(ligandSitesHash[activeModel])) {
+                let bingingSite = strucProtData[key][1];
+                let ligColor = chartColors[Number(bingingSite)];
+                for (let i = 0; i < value.length; i++) {
+                    let sel = value[i];
+                    //let resName = viewer.selectedAtoms(sel)[0].resn
+                    // console.log(sel.resn + String(Pdb2UpMapAssembly[sel.chain][sel.resi])); 
+                    viewer.addLabel(
+                        sel.resn + String(Pdb2UpMapAssembly[sel.chain][sel.resi]),
+                        {
+                            alignment: 'center', backgroundColor: 'white', backgroundOpacity: 1,
+                            borderColor: 'black', borderOpacity: 1, borderThickness: 2,
+                            font: 'Arial', fontColor: ligColor, fontOpacity: 1, fontSize: 12,
+                            inFront: true, screenOffset: [0, 0, 0], showBackground: true
+                        },
+                        sel,
+                        true,
+                    );
+                }
+            }
+            viewer.render();
         }
+        // else{
+        //     // pass 
+        //     //console.log("No site clicked!");
+        // }
     }
     labelsVisible = !labelsVisible; // Toggle the visibility state
 
@@ -260,6 +286,10 @@ function toggleLigandsVisibility() {
 
             viewer.addStyle({model: activeModel, hetflag: false}, {cartoon: {color: 'white'}, stick: {hidden: true}}); // remove ligand-interacting sticks and colour cartoon white
 
+            if (labelsVisible) {
+                viewer.removeAllLabels(); // remove ligand-binding residue labels
+            }
+
             if (surfaceVisible) {
                 //var surfButton = document.getElementById('surfButton');
                 for (const [key, value] of Object.entries(surfsDict[activeModel]['lig_inters'])) { // hide surfaces of ligand-interacting residues
@@ -293,13 +323,15 @@ function toggleLigandsVisibility() {
     viewer.render();
 }
 
+let contacts;
+let strucProtData;
+
 function toggleContactsVisibility() {
     if (contactsVisible) {
         contactsButton.value = 'Contacts OFF'; // Change the button text
         contactsButton.style = "font-weight: bold; color: #674ea7;";
 
         if (surfaceVisible) { // if clicking off contacts button, but surface button still on (show site definition surfaces)
-            //var surfButton = document.getElementById('surfButton');
             for (const [key, value] of Object.entries(surfsDict[activeModel])) { 
                 if (key == "lig_inters") { // hide surfaces of ligand-interacting residues
                     for (const [key2, value2] of Object.entries(value)) {
@@ -308,11 +340,21 @@ function toggleContactsVisibility() {
                 }
                 else { // show binding site definition surfaces
                     for (const [key2, value2] of Object.entries(value)) {
-                        viewer.setSurfaceMaterialStyle(value2.surfid, {opacity:0.7});
+                        if (key == "non_binding") {
+                            viewer.setSurfaceMaterialStyle(value2.surfid, {color: 'white', opacity:0.7});
+                        }
+                        else {
+                            let siteColor = chartColors[Number(key.split("_").pop())];
+                            viewer.setSurfaceMaterialStyle(value2.surfid, {color: siteColor, opacity:0.8});
+                        }
                     }
                 }
             }
             
+        }        
+
+        if (labelsVisible) {
+            viewer.removeAllLabels(); // remove ligand-binding residue labels
         }
 
         // loop through contactCylinders and delete using removeShape, then empty list
@@ -334,6 +376,19 @@ function toggleContactsVisibility() {
         viewer.render();
     } else {
 
+        let clickedElements = document.getElementsByClassName("clicked-row");
+        if (clickedElements.length > 0) {
+            let clickedPointLabel = chartData[chartLab][clickedElements[0].id]; // label of the clicked binding site row
+            resetChartStyles(myChart, clickedPointLabel, "black", 1, 12); // changes chart styles to default for the previously clicked site
+            clickedElements[0].classList.remove("clicked-row"); // unclick the clicked row
+
+            // remove labels of the clicked site
+            viewer.removeAllLabels();
+
+            // remove sticks and color cartoon white
+            viewer.addStyle({model: activeModel, hetflag: false}, {cartoon: {color: 'white'}, stick: {hidden: true}});
+        } 
+
         fetch('/get-contacts', {
             method: 'POST', // Use POST method to send data
             headers: {
@@ -349,8 +404,8 @@ function toggleContactsVisibility() {
         })
         .then(response => response.json())
         .then(data => {
-            let contacts = JSON.parse(data.contacts);
-            let strucProtData = data.protein;
+            contacts = JSON.parse(data.contacts);
+            strucProtData = data.protein;
 
             contacts.forEach((item, index) => {
                 // Extracting the necessary variables from each item
@@ -487,6 +542,21 @@ function toggleContactsVisibility() {
                     let protResi = protRes[2];
                     let sel = {model: activeModel, resi: protResi, chain: protChain, resn: protResn};
                     ligandSitesHash[activeModel][ligNam].push(sel);
+
+                    // add labels 
+                    if (labelsVisible) {
+                        viewer.addLabel(
+                            protResn + String(Pdb2UpMapAssembly[protChain][protResi]),
+                            {
+                                alignment: 'center', backgroundColor: 'white', backgroundOpacity: 1,
+                                borderColor: 'black', borderOpacity: 1, borderThickness: 2,
+                                font: 'Arial', fontColor: ligColor, fontOpacity: 1, fontSize: 12,
+                                inFront: true, screenOffset: [0, 0, 0], showBackground: true
+                            },
+                            sel,
+                            true,
+                        );
+                    }
                 }
                 viewer.addStyle({model: activeModel, or:ligandSitesHash[activeModel][ligNam]}, {cartoon:{hidden: false, color: ligColor}, stick: {hidden: false, color: ligColor, radius: stickRadius}});
                 viewer.addStyle({model: activeModel, resi: ligResi, chain: ligChain, resn: ligMol}, {stick: {hidden: false, color: ligColor, radius: stickRadius}});
@@ -500,7 +570,9 @@ function toggleContactsVisibility() {
                     {model: activeModel, or:ligandSitesHash[activeModel][ligNam]},
                     {model: activeModel, or:ligandSitesHash[activeModel][ligNam]},
                 );
+                // if labels are on, show labels for ligand-interacting residues
             }
+            allBindingRess = Object.values(ligandSitesHash[activeModel]).flat()
 
             if (surfaceVisible) {
                 for (const [key, value] of Object.entries(surfsDict[activeModel])) { // show surfaces of ligand-interacting residues

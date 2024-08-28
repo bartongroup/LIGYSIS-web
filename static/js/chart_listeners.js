@@ -46,33 +46,36 @@ document.getElementById('chartCanvas').addEventListener('mousemove', function(e)
                         .filter(el => Up2PdbDict[repPdbId][repPdbChainId].hasOwnProperty(el))
                         .map(el => Up2PdbDict[repPdbId][repPdbChainId][el]);
                     
-                    viewer.setStyle(
-                        {
-                            and:[{model: suppModels, resi: siteSuppPDBResNumsClicked, chain: repPdbChainId, invert: true}, {hetflag: false}] // all protein residues except clicked site (we want to keep ligands)
-                            // resi: clickedPDBResNums, invert: true, hetflag: false
-                        },
-                        {
-                            cartoon:{style:'oval', color: 'white', arrows: true, opacity: cartoonOpacity, thickness: cartoonThickness,}, 
-                        }
-                    ); // remove sidechains and colour white everything but clicked site
+                    // viewer.setStyle(
+                    //     {
+                    //         and:[{model: suppModels, resi: siteSuppPDBResNumsClicked, chain: repPdbChainId, invert: true}, {hetflag: false}] // all protein residues except clicked site (we want to keep ligands)
+                    //         // resi: clickedPDBResNums, invert: true, hetflag: false
+                    //     },
+                    //     {
+                    //         cartoon:{style:'oval', color: 'white', arrows: true, opacity: cartoonOpacity, thickness: cartoonThickness,}, 
+                    //     }
+                    // ); // remove sidechains and colour white everything but clicked site
                 }
                 else {
-                    proteinChains.forEach((element) => { // in case of multiple copies of protein of interest
-                        siteAssemblyPDBResNumClicked = seg_ress_dict[clickedPointLabel]
-                            .filter(el => Up2PdbMapAssembly[chainsMapAssembly[element]].hasOwnProperty(el))
-                            .map(el => Up2PdbMapAssembly[chainsMapAssembly[element]][el]);
-                            siteAssemblyPDBResNumsClicked.push([element, siteAssemblyPDBResNumClicked]);
+                    // pass
+                    // proteinChains.forEach((element) => { // in case of multiple copies of protein of interest
+                    //     siteAssemblyPDBResNumClicked = seg_ress_dict[clickedPointLabel]
+                    //         .filter(el => Up2PdbMapAssembly[chainsMapAssembly[element]].hasOwnProperty(el))
+                    //         .map(el => Up2PdbMapAssembly[chainsMapAssembly[element]][el]);
+                    //         siteAssemblyPDBResNumsClicked.push([element, siteAssemblyPDBResNumClicked]);
+
+                        
                     
-                        viewer.setStyle(
-                            {
-                                and:[{model: activeModel, resi: siteAssemblyPDBResNumClicked, chain: element, invert: true}, {hetflag: false}] // all protein residues except clicked site (we want to keep ligands)
-                                // resi: clickedPDBResNums, invert: true, hetflag: false
-                            },
-                            {
-                                cartoon:{style:'oval', color: 'white', arrows: true, opacity: cartoonOpacity, thickness: cartoonThickness,}, 
-                            }
-                        );
-                    });
+                    //     viewer.setStyle(
+                    //         {
+                    //             and:[{model: activeModel, resi: siteAssemblyPDBResNumClicked, chain: element, invert: true}, {hetflag: false}] // all protein residues except clicked site (we want to keep ligands)
+                    //             // resi: clickedPDBResNums, invert: true, hetflag: false
+                    //         },
+                    //         {
+                    //             cartoon:{style:'oval', color: 'white', arrows: true, opacity: cartoonOpacity, thickness: cartoonThickness,}, 
+                    //         }
+                    //     );
+                    // });
                 }
                 
                 if (surfaceVisible) {
@@ -98,6 +101,11 @@ document.getElementById('chartCanvas').addEventListener('mousemove', function(e)
                                 else if (key == clickedPointLabel) {
                                     viewer.setSurfaceMaterialStyle(value2.surfid, {color: clickedSiteColor, opacity:0.9}); // keep surface of clicked table row site visible at 90% opacity
                                 }
+                                else if (key == "lig_inters") {
+                                    if (contactsVisible) {
+                                        // pass
+                                    }
+                                }
                                 else {
                                     viewer.setSurfaceMaterialStyle(value2.surfid, {color: 'white', opacity: surfaceHiddenOpacity}); // hide all other surfaces
                                 }
@@ -109,14 +117,24 @@ document.getElementById('chartCanvas').addEventListener('mousemove', function(e)
 
             else { // no row is clicked
 
-                viewer.setStyle(
-                    {
-                        hetflag: false, // don't want to remove ligands
-                    },
-                    {
-                        cartoon:{style:'oval', color: 'white', arrows: true, opacity: cartoonOpacity, thickness: cartoonThickness,},
-                    }
-                );
+                if (contactsVisible) { // don't want to hide ligand-binding sites if CONTACTS is ON
+                    // pass
+                    let allBindingRess = Object.values(ligandSitesHash[activeModel]).flat();
+                    viewer.setStyle(
+                        {model: activeModel, hetflag: false, not:{or:allBindingRess}},
+                        {cartoon:{style:'oval', color: 'white', arrows: true, opacity: cartoonOpacity, thickness: cartoonThickness,},}
+                    );   
+                }
+                else {
+                    viewer.setStyle(
+                        {
+                            hetflag: false, // don't want to remove ligands
+                        },
+                        {
+                            cartoon:{style:'oval', color: 'white', arrows: true, opacity: cartoonOpacity, thickness: cartoonThickness,},
+                        }
+                    );
+                }
             }
 
             highlightTableRow(pointLabel);
@@ -183,24 +201,57 @@ document.getElementById('chartCanvas').addEventListener('mousemove', function(e)
                 );
             }
             else {
+                let siteAssemblyRessClicked = [];
                 proteinChains.forEach((element) => { // in case of multiple copies of protein of interest
                     let siteAssemblyPDBResNumClicked = seg_ress_dict[clickedPointLabel]
                         .filter(el => Up2PdbMapAssembly[chainsMapAssembly[element]].hasOwnProperty(el))
                         .map(el => Up2PdbMapAssembly[chainsMapAssembly[element]][el]);
                     siteAssemblyPDBResNumsClicked.push([element, siteAssemblyPDBResNumClicked]);
-                
+                    // if (contactsVisible) { // don't want to hide ligand-binding sites if CONTACTS is ON
+                    //     viewer.setStyle(
+                    //         {
+                    //             model: activeModel, hetflag: false, not:{or: allBindingRess} // all protein residues except clicked site (we want to keep ligands)
+                    //         },
+                    //         {cartoon: {style:'oval', color: 'white', arrows: true, opacity: cartoonOpacity, thickness: cartoonThickness,}}
+                    //     );
+                    //     viewer.setStyle( // colouring the clicked site (necessary as sometimes there is overlap between sites)
+                    //         {model: activeModel, resi: siteAssemblyPDBResNumClicked, chain: element, hetflag: false},
+                    //         {cartoon:{style:'oval', color: clickedSiteColor, arrows: true, opacity: cartoonOpacity, thickness: cartoonThickness,},
+                    //         stick:{color: clickedSiteColor,}, }
+                    //     );
+
+                    // }
+                    // else {
                     viewer.setStyle(
                         {
                             and:[{model: activeModel, resi: siteAssemblyPDBResNumClicked, chain: element, invert: true}, {hetflag: false}] // all protein residues except clicked site (we want to keep ligands)
                         },
                         {cartoon: {style:'oval', color: 'white', arrows: true, opacity: cartoonOpacity, thickness: cartoonThickness,}}
                     );
+                    let sel = {model: activeModel, resi: siteAssemblyPDBResNumClicked, chain: element, hetflag: false};
                     viewer.setStyle( // colouring the clicked site (necessary as sometimes there is overlap between sites)
-                        {model: activeModel, resi: siteAssemblyPDBResNumClicked, chain: element, hetflag: false},
+                        sel,
                         {cartoon:{style:'oval', color: clickedSiteColor, arrows: true, opacity: cartoonOpacity, thickness: cartoonThickness,},
                         stick:{color: clickedSiteColor,}, }
                     );
+                    siteAssemblyRessClicked.push(sel);
+                    // }
                 });
+                if (contactsVisible) { // don't want to hide ligand-binding sites if CONTACTS is ON
+                    viewer.setStyle(
+                        {
+                            model: activeModel, hetflag: false, not: {or: allBindingRess}, not: {or: siteAssemblyRessClicked} // all protein residues except clicked site (we want to keep ligands)
+                        },
+                        {cartoon: {style:'oval', color: 'white', arrows: true, opacity: cartoonOpacity, thickness: cartoonThickness,}}
+                    );
+                    for (const [key, value] of Object.entries(ligandSitesHash[activeModel])) {
+                        let ligColor = chartColors[strucProtData[key][1]];
+                        viewer.setStyle(
+                            {model: activeModel, hetflag: false, or: value},
+                            {cartoon:{style:'oval', color: ligColor, arrows: true, opacity: cartoonOpacity, thickness: cartoonThickness,}, stick:{hidden: false, color: ligColor,}}
+                        );
+                    }
+                }
             }
 
             if (surfaceVisible) { // if surface is visible (when hovering on a site on the chart and a row is clicked)
@@ -220,6 +271,11 @@ document.getElementById('chartCanvas').addEventListener('mousemove', function(e)
                             if (key == clickedPointLabel) {
                                 viewer.setSurfaceMaterialStyle(value2.surfid, {color: clickedSiteColor, opacity:0.9}); // keep surface of clicked site visible at 90% opacity
                             }
+                            else if (key == "lig_inters") {
+                                if (contactsVisible) {
+                                    // pass
+                                }
+                            }
                             else {
                                 viewer.setSurfaceMaterialStyle(value2.surfid, {color: 'white', opacity: surfaceHiddenOpacity}); // hide all other surfaces
                             }
@@ -233,10 +289,33 @@ document.getElementById('chartCanvas').addEventListener('mousemove', function(e)
         }
         else { // no row is clicked
 
-            viewer.setStyle(
-                {hetflag: false,}, // don't want to remove ligands
-                {cartoon: {style:'oval', color: 'white', arrows: true, opacity: cartoonOpacity, thickness: cartoonThickness,}}
-            ); // remove sidechains and colour white everything except ligands (all protein atoms)
+            if (contactsVisible) { // don't want to hide ligand-binding sites if CONTACTS is ON
+                // pass
+                //let allBindingRess = Object.values(ligandSitesHash[activeModel]).flat();
+                viewer.setStyle(
+                    {model: activeModel, hetflag: false, not:{or:allBindingRess}},
+                    {cartoon:{style:'oval', color: 'white', arrows: true, opacity: cartoonOpacity, thickness: cartoonThickness,},}
+                );
+                // also recolour the ligand-interacting residues as some might be in multiple sites
+                for (const [key, value] of Object.entries(ligandSitesHash[activeModel])) {
+                    let ligColor = chartColors[strucProtData[key][1]];
+                    viewer.setStyle(
+                        {model: activeModel, hetflag: false, or: value},
+                        {cartoon:{style:'oval', color: ligColor, arrows: true, opacity: cartoonOpacity, thickness: cartoonThickness,}, stick:{hidden: false, color: ligColor,}}
+                    );
+                }
+            }
+            else {
+                viewer.setStyle(
+                    {hetflag: false,}, // don't want to remove ligands
+                    {cartoon: {style:'oval', color: 'white', arrows: true, opacity: cartoonOpacity, thickness: cartoonThickness,}}
+                ); // remove sidechains and colour white everything except ligands (all protein atoms)
+            }
+
+            // viewer.setStyle(
+            //     {hetflag: false,}, // don't want to remove ligands
+            //     {cartoon: {style:'oval', color: 'white', arrows: true, opacity: cartoonOpacity, thickness: cartoonThickness,}}
+            // ); // remove sidechains and colour white everything except ligands (all protein atoms)
         }
         
         viewer.render({});

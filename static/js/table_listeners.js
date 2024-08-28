@@ -89,6 +89,7 @@ $('table#bss_table tbody').on('mouseover', 'tr', function () { // event listener
                     }
                 );
             });
+
         }
 
         if (clickedElements.length == 0) {
@@ -130,7 +131,7 @@ $('table#bss_table tbody').on('mouseover', 'tr', function () { // event listener
                 if (activeModel == "superposition") {
                     for (const [key, value] of Object.entries(surfsDict["superposition"])) {
                         if (key == rowId) {
-                            viewer.setSurfaceMaterialStyle(value.surfid, {color: siteColor, opacity:0.0});
+                            viewer.setSurfaceMaterialStyle(value.surfid, {color: siteColor, opacity: surfaceHiddenOpacity});
                         }
                     }
                 }
@@ -138,7 +139,7 @@ $('table#bss_table tbody').on('mouseover', 'tr', function () { // event listener
                     for (const [key, value] of Object.entries(surfsDict[activeModel])) {
                         for (const [key2, value2] of Object.entries(value)) {
                             if (key == rowId) {
-                                viewer.setSurfaceMaterialStyle(value2.surfid, {color: siteColor, opacity:0.0});
+                                viewer.setSurfaceMaterialStyle(value2.surfid, {color: siteColor, opacity: surfaceHiddenOpacity});
                             }
                         }
                     }
