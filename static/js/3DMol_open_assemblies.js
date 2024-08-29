@@ -43,7 +43,13 @@ function selectOption(option) {
 
         if (labelsVisible) { // if labels were visible, hide them
 
-            viewer.removeAllLabels(); // remove all labels if they were active
+            //viewer.removeAllLabels(); // remove all labels if they were active
+            for ([key, value] of Object.entries(labelsHash)) {
+                for (let i = 0; i < value.length; i++) {
+                    viewer.removeLabel(value[i]);
+                }
+                labelsHash[key] = [];
+            }
 
             // turn labelButton off
             labelButton.value = 'Labels OFF';

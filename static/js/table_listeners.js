@@ -111,7 +111,7 @@ $('table#bss_table tbody').on('mouseover', 'tr', function () { // event listener
         }
 
         if (clickedElements.length == 0) {
-            viewer.removeAllLabels(); // clearing labels from previous clicked site, unless still clicked
+            //viewer.removeAllLabels(); // clearing labels from previous clicked site, unless still clicked
 
             if (surfaceVisible) { // if surface is visible
                 if (activeModel == "superposition") {
@@ -197,6 +197,13 @@ $('table#bss_table tbody').on('mouseover', 'tr', function () { // event listener
             siteAssemblyPDBResNums.push([element, siteAssemblyPDBResNum]);
         });
     }
+
+    if (labelsVisible) {
+        for (const label of labelsHash["clickedSite"]) {
+            viewer.removeLabel(label);
+        }
+        labelsHash["clickedSite"] = [];
+    }
     
 
     if (classList.contains('clicked-row')) { // row is already clicked
@@ -209,7 +216,7 @@ $('table#bss_table tbody').on('mouseover', 'tr', function () { // event listener
 
         highlightTableRow(rowId); // highlights the table row of the binding site
 
-        viewer.removeAllLabels(); // clearing labels from previous clicked site, unless still clicked
+        //viewer.removeAllLabels(); // clearing labels from previous clicked site, unless still clicked
         // }
         if (surfaceVisible) {
             if (activeModel == "superposition") {
@@ -233,7 +240,6 @@ $('table#bss_table tbody').on('mouseover', 'tr', function () { // event listener
                             else if (key == rowId) {
                                 viewer.setSurfaceMaterialStyle(value2.surfid, {color: siteColor, opacity: surfaceHiddenOpacity});
                             }
-
                         }
                         else {
                             if (key == "lig_inters") { // do nothing for these surfaces
@@ -246,7 +252,7 @@ $('table#bss_table tbody').on('mouseover', 'tr', function () { // event listener
                                 let siteColor = chartColors[Number(key.split("_").pop())];
                                 viewer.setSurfaceMaterialStyle(value2.surfid, {color: siteColor, opacity:0.8});
                             }
-                    }
+                        }
                     }
                 }
             }
@@ -336,13 +342,14 @@ $('table#bss_table tbody').on('mouseover', 'tr', function () { // event listener
         clickTableRow(this);
 
         if (labelsVisible) {
-            viewer.removeAllLabels(); // clearing labels from previous clicked site
+            //viewer.removeAllLabels(); // clearing labels from previous clicked site
+
             if (activeModel == "superposition") {
                 for (siteSuppPDBResNum of siteSuppPDBResNums) {
                     let resSel = {model: suppModels, resi: siteSuppPDBResNum, chain: repPdbChainId, hetflag: false}
                     let resName = viewer.selectedAtoms(resSel)[0].resn
                     // console.log(resSel, resName);
-                    viewer.addLabel(
+                    let label = viewer.addLabel(
                         resName + String(Pdb2UpDict[repPdbId][repPdbChainId][siteSuppPDBResNum]),
                         {
                             alignment: 'center', backgroundColor: 'white', backgroundOpacity: 1,
@@ -353,6 +360,7 @@ $('table#bss_table tbody').on('mouseover', 'tr', function () { // event listener
                         resSel,
                         false,
                     );
+                    labelsHash["clickedSite"].push(label);
                 }
             }
             else {
@@ -360,7 +368,7 @@ $('table#bss_table tbody').on('mouseover', 'tr', function () { // event listener
                     for (siteAssemblyPDBResNumber of siteAssemblyPDBResNum) { // variable name not ideal as siteAssemblyPDBResNum is an array
                         let resSel = {model: activeModel, resi: siteAssemblyPDBResNumber, chain: element, hetflag: false}
                         let resName = viewer.selectedAtoms(resSel)[0].resn
-                        viewer.addLabel(
+                        let label = viewer.addLabel(
                             resName + String(Pdb2UpMapAssembly[element][siteAssemblyPDBResNumber]),
                             {
                                 alignment: 'center', backgroundColor: 'white', backgroundOpacity: 1,
@@ -371,6 +379,7 @@ $('table#bss_table tbody').on('mouseover', 'tr', function () { // event listener
                             resSel,
                             false,
                         );
+                        labelsHash["clickedSite"].push(label);
                     }
                 }
             }
@@ -459,7 +468,7 @@ $('table#bs_ress_table tbody').on('mouseover', 'tr', function () { // event list
                 if (SuppPDBResNum !== undefined) {
                     let resSel = {model: suppModels, resi: SuppPDBResNum, chain: repPdbChainId, hetflag: false}
                     let resName = viewer.selectedAtoms(resSel)[0].resn
-                    viewer.addLabel(
+                    let label = viewer.addLabel(
                         resName + String(Pdb2UpDict[repPdbId][repPdbChainId][SuppPDBResNum]),
                         {
                             alignment: 'center', backgroundColor: 'white', backgroundOpacity: 1,
@@ -470,6 +479,7 @@ $('table#bs_ress_table tbody').on('mouseover', 'tr', function () { // event list
                         resSel,
                         true,
                     );
+                    labelsHash["hoveredRes"].push(label);
                 }
             }
             else {
@@ -477,7 +487,7 @@ $('table#bs_ress_table tbody').on('mouseover', 'tr', function () { // event list
                     if (resNum !== undefined) {
                         let resSel = {model: activeModel, resi: resNum, chain: chain, hetflag: false}
                         let resName = viewer.selectedAtoms(resSel)[0].resn
-                        viewer.addLabel(
+                        let label = viewer.addLabel(
                             resName + String(Pdb2UpMapAssembly[chain][resNum]),
                             {
                                 alignment: 'center', backgroundColor: 'white', backgroundOpacity: 1,
@@ -488,6 +498,7 @@ $('table#bs_ress_table tbody').on('mouseover', 'tr', function () { // event list
                             resSel,
                             true,
                         );
+                        labelsHash["hoveredRes"].push(label);
                     }
                 });
             }
@@ -510,21 +521,31 @@ $('table#bs_ress_table tbody').on('mouseover', 'tr', function () { // event list
 
     if (clickedElements.length == 0) {
 
+        if (labelsVisible) {
+            //viewer.removeAllLabels(); // clearing labels from previous clicked site, unless still clicked
+            for (const label of labelsHash["hoveredRes"]) {
+                viewer.removeLabel(label);
+            }
+        }
+
         let PDBResNum = Up2PdbDict[repPdbId][repPdbChainId][rowId];
 
         if (activeModel == "superposition") {
             viewer.setStyle({model: suppModels, resi: SuppPDBResNum, hetflag: false}, {cartoon: {style:'oval', color: 'white', arrows: true, opacity: cartoonOpacity, thickness: cartoonThickness,}});
-            if (labelsVisible) {
-                viewer.removeAllLabels(); // clearing labels from previous clicked site, unless still clicked
-            }
+            // if (labelsVisible) {
+            //     viewer.removeAllLabels(); // clearing labels from previous clicked site, unless still clicked
+            // }
         }
         else {
             AssemblyPDBResNums.forEach(([chain, resNum]) => {
                 viewer.setStyle({model: activeModel, resi: resNum, chain: chain, hetflag: false}, {cartoon: {style:'oval', color: 'white', arrows: true, opacity: cartoonOpacity, thickness: cartoonThickness,}});
             });
-            if (labelsVisible) {
-                viewer.removeAllLabels(); // clearing labels from previous clicked site, unless still clicked
-            }
+            // if (labelsVisible) {
+            //     //viewer.removeAllLabels(); // clearing labels from previous clicked site, unless still clicked
+            //     for (const label of labelsHash["hoveredRes"]) {
+            //         viewer.removeLabel(label);
+            //     }
+            // }
         }
         viewer.render({});
     }

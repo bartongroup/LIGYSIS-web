@@ -128,7 +128,13 @@ function toggleLabelsVisibility() {
         labelButton.value = 'Labels OFF'; // Change the button text
         labelButton.style = "font-weight: bold; color: #674ea7;";
 
-        viewer.removeAllLabels();
+        //viewer.removeAllLabels();
+        for (const [key, value] of Object.entries(labelsHash)) {
+            for (let i = 0; i < value.length; i++) {
+                viewer.removeLabel(value[i]);
+            }
+            labelsHash[key] = [];
+        }
     }
     else {
         labelButton.value = "Labels ON"; // Change the button text
@@ -147,7 +153,7 @@ function toggleLabelsVisibility() {
                     for (siteSuppPDBResNum of siteSuppPDBResNums) {
                         let resSel = {resi: siteSuppPDBResNum}
                         let resName = viewer.selectedAtoms(resSel)[0].resn
-                        viewer.addLabel(
+                        let label = viewer.addLabel(
                             resName + String(Pdb2UpDict[repPdbId][repPdbChainId][siteSuppPDBResNum]),
                             {
                                 alignment: 'center', backgroundColor: 'white', backgroundOpacity: 1,
@@ -158,6 +164,7 @@ function toggleLabelsVisibility() {
                             resSel,
                             true,
                         );
+                        labelsHash["clickedSite"].push(label);
                     }
                     viewer.render();
                 }
@@ -176,7 +183,7 @@ function toggleLabelsVisibility() {
                         for (siteAssemblyPDBResNumber of siteAssemblyPDBResNum) { // variable name not ideal as siteAssemblyPDBResNum is an array
                             let resSel = {model: activeModel, resi: siteAssemblyPDBResNumber, chain: element, hetflag: false}
                             let resName = viewer.selectedAtoms(resSel)[0].resn
-                            viewer.addLabel(
+                            let label = viewer.addLabel(
                                 resName + String(Pdb2UpMapAssembly[element][siteAssemblyPDBResNumber]),
                                 {
                                     alignment: 'center', backgroundColor: 'white', backgroundOpacity: 1,
@@ -187,6 +194,7 @@ function toggleLabelsVisibility() {
                                 resSel,
                                 true,
                             );
+                            labelsHash["clickedSite"].push(label);
                         }
                     }
                 }
@@ -287,7 +295,11 @@ function toggleLigandsVisibility() {
             viewer.addStyle({model: activeModel, hetflag: false}, {cartoon: {color: 'white'}, stick: {hidden: true}}); // remove ligand-interacting sticks and colour cartoon white
 
             if (labelsVisible) {
-                viewer.removeAllLabels(); // remove ligand-binding residue labels
+                // viewer.removeAllLabels(); // remove ligand-binding residue labels
+                for (label of labelsHash["contactSites"]) {
+                    viewer.removeLabel(label);
+                }
+                labelsHash["contactSites"] = [];
             }
 
             if (surfaceVisible) {
@@ -354,7 +366,11 @@ function toggleContactsVisibility() {
         }        
 
         if (labelsVisible) {
-            viewer.removeAllLabels(); // remove ligand-binding residue labels
+            //viewer.removeAllLabels(); // remove ligand-binding residue labels
+            for (label of labelsHash["contactSites"]) {
+                viewer.removeLabel(label);
+            }
+            labelsHash["contactSites"] = [];
         }
 
         // loop through contactCylinders and delete using removeShape, then empty list
@@ -383,7 +399,7 @@ function toggleContactsVisibility() {
             clickedElements[0].classList.remove("clicked-row"); // unclick the clicked row
 
             // remove labels of the clicked site
-            viewer.removeAllLabels();
+            //viewer.removeAllLabels();
 
             // remove sticks and color cartoon white
             viewer.addStyle({model: activeModel, hetflag: false}, {cartoon: {color: 'white'}, stick: {hidden: true}});
@@ -545,7 +561,7 @@ function toggleContactsVisibility() {
 
                     // add labels 
                     if (labelsVisible) {
-                        viewer.addLabel(
+                        let label = viewer.addLabel(
                             protResn + String(Pdb2UpMapAssembly[protChain][protResi]),
                             {
                                 alignment: 'center', backgroundColor: 'white', backgroundOpacity: 1,
@@ -556,6 +572,7 @@ function toggleContactsVisibility() {
                             sel,
                             true,
                         );
+                        labelsHash["contactSites"].push(label);
                     }
                 }
                 viewer.addStyle({model: activeModel, or:ligandSitesHash[activeModel][ligNam]}, {cartoon:{hidden: false, color: ligColor}, stick: {hidden: false, color: ligColor, radius: stickRadius}});

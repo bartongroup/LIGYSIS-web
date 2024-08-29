@@ -500,7 +500,12 @@ document.getElementById('chartCanvas').addEventListener('click', function(e) { /
             }
 
             if (labelsVisible) {
-                viewer.removeAllLabels();
+                // pass
+                //viewer.removeAllLabels();
+                for (label of labelsHash["clickedSite"]) {
+                    viewer.removeLabel(label);
+                }
+                labelsHash["clickedSite"] = [];
             }
 
             // check is clicked row is the same as the newly clicked data point
@@ -559,11 +564,12 @@ document.getElementById('chartCanvas').addEventListener('click', function(e) { /
                 resetChartStyles(myChart, pointLabel, "#bfd4cb", 10, 16); // changes chart styles to highlight the newly clicked site
 
                 if (labelsVisible) {
+                    labelsHash["clickedSite"] = [];
                     if (activeModel == "superposition") {
                         for (siteSuppPDBResNum of siteSuppPDBResNums) {
                             let resSel = {model: suppModels, resi: siteSuppPDBResNum, chain: repPdbChainId, hetflag: false};
                             let resName = viewer.selectedAtoms(resSel)[0].resn;
-                            viewer.addLabel(
+                            let label = viewer.addLabel(
                                 resName + String(Pdb2UpDict[repPdbId][repPdbChainId][siteSuppPDBResNum]),
                                 {
                                     alignment: 'center', backgroundColor: 'white', backgroundOpacity: 1,
@@ -574,6 +580,7 @@ document.getElementById('chartCanvas').addEventListener('click', function(e) { /
                                 resSel,
                                 false,
                             );
+                            labelsHash["clickedSite"].push(label);
                         }
                     }
                     else {
@@ -581,7 +588,7 @@ document.getElementById('chartCanvas').addEventListener('click', function(e) { /
                             for (siteAssemblyPDBResNumber of siteAssemblyPDBResNum) { // variable name not ideal as siteAssemblyPDBResNum is an array
                                 let resSel = {model: activeModel, resi: siteAssemblyPDBResNumber, chain: element, hetflag: false}
                                 let resName = viewer.selectedAtoms(resSel)[0].resn
-                                viewer.addLabel(
+                                let label = viewer.addLabel(
                                     resName + String(Pdb2UpMapAssembly[element][siteAssemblyPDBResNumber]),
                                     {
                                         alignment: 'center', backgroundColor: 'white', backgroundOpacity: 1,
@@ -592,6 +599,7 @@ document.getElementById('chartCanvas').addEventListener('click', function(e) { /
                                     resSel,
                                     false,
                                 );
+                                labelsHash["clickedSite"].push(label);
                             }
                         }
                     }
@@ -636,13 +644,14 @@ document.getElementById('chartCanvas').addEventListener('click', function(e) { /
             resetChartStyles(myChart, pointLabel, "#bfd4cb", 10, 16); // changes chart styles to highlight the newly clicked site
 
             if (labelsVisible) {
-                viewer.removeAllLabels(); // clearing labels from previous clicked site
+                //viewer.removeAllLabels(); // clearing labels from previous clicked site
+                labelsHash["clickedSite"] = [];
                 if (activeModel == "superposition") {
                     for (siteSuppPDBResNum of siteSuppPDBResNums) {
                         let resSel = {model: suppModels, resi: siteSuppPDBResNum}
                         let resName = viewer.selectedAtoms(resSel)[0].resn
                         // console.log(resSel, resName);
-                        viewer.addLabel(
+                        let label = viewer.addLabel(
                             resName + String(Pdb2UpDict[repPdbId][repPdbChainId][siteSuppPDBResNum]),
                             {
                                 alignment: 'center', backgroundColor: 'white', backgroundOpacity: 1,
@@ -653,6 +662,7 @@ document.getElementById('chartCanvas').addEventListener('click', function(e) { /
                             resSel,
                             false,
                         );
+                        labelsHash["clickedSite"].push(label);
                     }
                 }
                 else {
@@ -660,7 +670,7 @@ document.getElementById('chartCanvas').addEventListener('click', function(e) { /
                         for (siteAssemblyPDBResNumber of siteAssemblyPDBResNum) { // variable name not ideal as siteAssemblyPDBResNum is an array
                             let resSel = {model: activeModel, resi: siteAssemblyPDBResNumber, chain: element, hetflag: false}
                             let resName = viewer.selectedAtoms(resSel)[0].resn
-                            viewer.addLabel(
+                            let label = viewer.addLabel(
                                 resName + String(Pdb2UpMapAssembly[element][siteAssemblyPDBResNumber]),
                                 {
                                     alignment: 'center', backgroundColor: 'white', backgroundOpacity: 1,
@@ -671,6 +681,7 @@ document.getElementById('chartCanvas').addEventListener('click', function(e) { /
                                 resSel,
                                 false,
                             );
+                            labelsHash["clickedSite"].push(label);
                         }
                     }
                 }
@@ -761,48 +772,69 @@ document.getElementById('newChartCanvas').addEventListener('mousemove', function
                 if (activeModel == "superposition") { // in this case, only one residue as this is a supperposition of single chains
                     viewer.setStyle({hetflag: false}, {cartoon: {style:'oval', color: 'white', arrows: true, opacity: cartoonOpacity, thickness: cartoonThickness,}}); // this is done so only a single point is highlighted when hovered on (some are really close.)
                     SuppPDBResNum = Up2PdbDict[repPdbId][repPdbChainId][newPointLabel];
-                    viewer.setStyle({model: suppModels, chain: repPdbChainId, resi: SuppPDBResNum, hetflag: false}, {cartoon:{style:'oval', color: pointColor, arrows: true, opacity: cartoonOpacity, thickness: cartoonThickness,}, stick:{color: pointColor}, });
+                    if (SuppPDBResNum != undefined) {
+                        viewer.setStyle({model: suppModels, chain: repPdbChainId, resi: SuppPDBResNum, hetflag: false}, {cartoon:{style:'oval', color: pointColor, arrows: true, opacity: cartoonOpacity, thickness: cartoonThickness,}, stick:{color: pointColor}, });
+                    }
+                    else {
+                        console.log(`Residue ${newPointLabel} not found in the structure!`);
+                    }
                 }
                 else {
                     if (contactsVisible) {
                         viewer.setStyle({model: activeModel, hetflag: false, not: {or: allBindingRess}}, {cartoon: {style:'oval', color: 'white', arrows: true, opacity: cartoonOpacity, thickness: cartoonThickness,}});
                     }
+                    else {
+                        viewer.setStyle({model: activeModel, hetflag: false}, {cartoon: {style:'oval', color: 'white', arrows: true, opacity: cartoonOpacity, thickness: cartoonThickness,}});
+                    }
                     proteinChains.forEach((element) => { // in case of multiple copies of protein of interest
                         let AssemblyPDBResNum = Up2PdbMapAssembly[chainsMapAssembly[element]][newPointLabel]
-                        AssemblyPDBResNums.push([element, AssemblyPDBResNum]);
-                        viewer.setStyle(
-                            {model: activeModel, resi: AssemblyPDBResNum, chain: element, hetflag: false},
-                            {
-                                cartoon:{style:'oval', color: pointColor, arrows: true, opacity: cartoonOpacity, thickness: cartoonThickness,},
-                                stick:{color: pointColor},
-                            }
-                        );
+                        if (AssemblyPDBResNum  != undefined) {
+                            AssemblyPDBResNums.push([element, AssemblyPDBResNum]);
+                            viewer.setStyle(
+                                {model: activeModel, resi: AssemblyPDBResNum, chain: element, hetflag: false},
+                                {
+                                    cartoon:{style:'oval', color: pointColor, arrows: true, opacity: cartoonOpacity, thickness: cartoonThickness,},
+                                    stick:{color: pointColor},
+                                }
+                            );
+                        }
+
                     });
                 }
 
                 if (labelsVisible) {
-                    viewer.removeAllLabels(); // clearing labels from previous hovered residue (residues might be almost superposed in plot. Hiding it so only one is visible)
+                    //viewer.removeAllLabels(); // clearing labels from previous hovered residue (residues might be almost superposed in plot. Hiding it so only one is visible)
+                    for (label of labelsHash["hoveredRes"]) {
+                        viewer.removeLabel(label);
+                    }
+                    labelsHash["hoveredRes"] = [];
+
                     if (activeModel == "superposition") {
-                        
-                        let resSel = {model: suppModels, resi: SuppPDBResNum, chain: repPdbChainId, hetflag: false};
-                        let resName = viewer.selectedAtoms(resSel)[0].resn
-                        viewer.addLabel(
-                            resName + String(Pdb2UpDict[repPdbId][repPdbChainId][SuppPDBResNum]),
-                            {
-                                alignment: 'center', backgroundColor: 'white', backgroundOpacity: 1,
-                                borderColor: 'black', borderOpacity: 1, borderThickness: 2,
-                                font: 'Arial', fontColor: pointColor, fontOpacity: 1, fontSize: 12,
-                                inFront: true, screenOffset: [0, 0, 0], showBackground: true
-                            },
-                            resSel,
-                            true,
-                        );
+                        if (SuppPDBResNum != undefined) {
+                            let resSel = {model: suppModels, resi: SuppPDBResNum, chain: repPdbChainId, hetflag: false};
+                            let resName = viewer.selectedAtoms(resSel)[0].resn
+                            let label = viewer.addLabel(
+                                resName + String(Pdb2UpDict[repPdbId][repPdbChainId][SuppPDBResNum]),
+                                {
+                                    alignment: 'center', backgroundColor: 'white', backgroundOpacity: 1,
+                                    borderColor: 'black', borderOpacity: 1, borderThickness: 2,
+                                    font: 'Arial', fontColor: pointColor, fontOpacity: 1, fontSize: 12,
+                                    inFront: true, screenOffset: [0, 0, 0], showBackground: true
+                                },
+                                resSel,
+                                true,
+                            );
+                            labelsHash["hoveredRes"].push(label);
+                        }
+                        else {
+                            console.log(`Residue ${newPointLabel} not found in the structure!`);
+                        }
                     }
                     else{
                         AssemblyPDBResNums.forEach(([chain, resNum]) => {
                             let resSel = {model: activeModel, resi: resNum, chain: chain, hetflag: false}
                             let resName = viewer.selectedAtoms(resSel)[0].resn
-                            viewer.addLabel(
+                            let label = viewer.addLabel(
                                 resName + String(Pdb2UpMapAssembly[chain][resNum]),
                                 {
                                     alignment: 'center', backgroundColor: 'white', backgroundOpacity: 1,
@@ -813,6 +845,7 @@ document.getElementById('newChartCanvas').addEventListener('mousemove', function
                                 resSel,
                                 true,
                             );
+                            labelsHash["hoveredRes"].push(label);
                         });
 
                     }
@@ -837,12 +870,20 @@ document.getElementById('newChartCanvas').addEventListener('mousemove', function
                 if (contactsVisible) {
                     viewer.setStyle({model: activeModel, hetflag: false, not: {or: allBindingRess}}, {cartoon: {style:'oval', color: 'white', arrows: true, opacity: cartoonOpacity, thickness: cartoonThickness,}});
                 }
+                else {
+                    viewer.setStyle({model: activeModel, hetflag: false}, {cartoon: {style:'oval', color: 'white', arrows: true, opacity: cartoonOpacity, thickness: cartoonThickness,}});
+                }
             }
 
             // viewer.setStyle({hetflag: false}, {cartoon: {style:'oval', color: 'white', arrows: true, opacity: cartoonOpacity, thickness: cartoonThickness,}});
 
             if (labelsVisible) {
-                viewer.removeAllLabels(); // clearing labels from previously hovered on residue
+                for (label of labelsHash["hoveredRes"]) {
+                    viewer.removeLabel(label);
+                }
+                labelsHash["hoveredRes"] = [];
+                // pass
+                //viewer.removeAllLabels(); // clearing labels from previously hovered on residue
             }
 
             viewer.render();
