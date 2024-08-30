@@ -155,12 +155,15 @@ function selectOption(option) {
                 //contactsButton.style.backgroundColor = 'white';  // Active background color
             }
 
-            if (option == 'Superposition') {
+            //if (option == 'Superposition') {
+            else {
 
                 contactsButton.disabled = true;
                 contactsButton.style.color = 'darkgray';
                 contactsButton.style.fontWeight = 'normal'; // Bold font when active
                 //contactsButton.style.backgroundColor = 'lightgray';
+
+                console.log(`Reading SIFTS mapping for ${repPdbId} chain ${repPdbChainId}`);
 
                 for (let i = 0; i <= simplePdbs.length-1; i++) {
                     viewer.getModel(i).show(); // Show all ligand superposition models
@@ -201,6 +204,7 @@ function openStructure(pdbId) {
         success: function(response) {
 
             let allMappings = response; // extract the different mapping dictionaries
+            console.log(`Reading SIFTS mapping for ${pdbId}`)
             Pdb2UpMapAssembly = allMappings['pdb2up'][pdbId];
             Up2PdbMapAssembly = allMappings['up2pdb'][pdbId];
             Chain2AccMapAssembly = allMappings['chain2acc'];

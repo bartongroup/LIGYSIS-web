@@ -31,6 +31,8 @@
     let repStruc = segmentReps[segmentId]["rep"]
     let [repPdbId, repPdbChainId] = repStruc.split("_");
 
+    console.log(`Reading SIFTS mapping for ${repPdbId} chain ${repPdbChainId}`);
+
     const Pdb2UpDict = {{ pdb2up_dict | tojson   }}
     const Up2PdbDict = {{ up2pdb_dict  | tojson  }}
 
@@ -68,6 +70,16 @@
     let SuppPDBResNum;
     let siteSuppPDBResNums;
     let siteAssemblyPDBResNums;
+
+    let AssemblyClickedSiteResidues = [];
+    let AssemblyHoveredSiteResidues = [];
+    let AssemblyClickedResidue = [];
+    let AssebmlyHoveredResidue = [];
+
+    let SuppClickedSiteResidues = null;
+    let SuppHoveredSiteResidues = null;
+    let SuppClickedResidue = null;
+    let SuppHoveredResidue = null;
 
     // variables to format viewer  styles
     const outlineWidth = 0.0625;

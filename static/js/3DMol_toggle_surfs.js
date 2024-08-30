@@ -210,7 +210,7 @@ function toggleLabelsVisibility() {
                     let sel = value[i];
                     //let resName = viewer.selectedAtoms(sel)[0].resn
                     // console.log(sel.resn + String(Pdb2UpMapAssembly[sel.chain][sel.resi])); 
-                    viewer.addLabel(
+                    let label = viewer.addLabel(
                         sel.resn + String(Pdb2UpMapAssembly[sel.chain][sel.resi]),
                         {
                             alignment: 'center', backgroundColor: 'white', backgroundOpacity: 1,
@@ -221,6 +221,7 @@ function toggleLabelsVisibility() {
                         sel,
                         true,
                     );
+                    labelsHash["contactSites"].push(label);
                 }
             }
             viewer.render();
@@ -343,21 +344,34 @@ function toggleContactsVisibility() {
         contactsButton.value = 'Contacts OFF'; // Change the button text
         contactsButton.style = "font-weight: bold; color: #674ea7;";
 
+        let clickedElements = document.getElementsByClassName("clicked-row");
+
         if (surfaceVisible) { // if clicking off contacts button, but surface button still on (show site definition surfaces)
-            for (const [key, value] of Object.entries(surfsDict[activeModel])) { 
-                if (key == "lig_inters") { // hide surfaces of ligand-interacting residues
-                    for (const [key2, value2] of Object.entries(value)) {
-                        viewer.setSurfaceMaterialStyle(value2.surfid, {opacity:0.0});
-                    }
+            
+            if (clickedElements.length > 0) { // if a row is clicked i just show the surface of the clicked site
+                let clickedElement = clickedElements[0];
+                let clickedElementId = clickedElement.id;
+                let siteColor = chartColors[Number(clickedElementId.split("_").pop())];
+                for (const [key, value] of Object.entries(surfsDict[activeModel]["lig_inters"])) {
+                    viewer.setSurfaceMaterialStyle(value.surfid, {color: siteColor, opacity: surfaceHiddenOpacity});
                 }
-                else { // show binding site definition surfaces
-                    for (const [key2, value2] of Object.entries(value)) {
-                        if (key == "non_binding") {
-                            viewer.setSurfaceMaterialStyle(value2.surfid, {color: 'white', opacity:0.7});
+            }
+            else {
+                for (const [key, value] of Object.entries(surfsDict[activeModel])) { 
+                    if (key == "lig_inters") { // hide surfaces of ligand-interacting residues
+                        for (const [key2, value2] of Object.entries(value)) {
+                            viewer.setSurfaceMaterialStyle(value2.surfid, {opacity:0.0});
                         }
-                        else {
-                            let siteColor = chartColors[Number(key.split("_").pop())];
-                            viewer.setSurfaceMaterialStyle(value2.surfid, {color: siteColor, opacity:0.8});
+                    }
+                    else { // show binding site definition surfaces
+                        for (const [key2, value2] of Object.entries(value)) {
+                            if (key == "non_binding") {
+                                viewer.setSurfaceMaterialStyle(value2.surfid, {color: 'white', opacity:0.7});
+                            }
+                            else {
+                                let siteColor = chartColors[Number(key.split("_").pop())];
+                                viewer.setSurfaceMaterialStyle(value2.surfid, {color: siteColor, opacity:0.8});
+                            }
                         }
                     }
                 }
@@ -378,7 +392,18 @@ function toggleContactsVisibility() {
             viewer.removeShape(contactCylinders[i]);
         }
         contactCylinders = [];
-        viewer.addStyle({model: activeModel, hetflag: false}, {cartoon: {color: 'white'}, stick: {hidden: true}}); // removed model: activeModel because OR gate does not seem to work well.
+
+
+        if (clickedElements.length > 0) { // if a row is clicked i just show the surface of the clicked site
+            let clickedElement = clickedElements[0];
+            let clickedElementId = clickedElement.id;
+            // pas
+            
+        }
+        else {
+            viewer.addStyle({model: activeModel, hetflag: false}, {cartoon: {color: 'white'}, stick: {hidden: true}}); // needs to change if site is clicked
+        
+        }
         viewer.addStyle({model: activeModel, hetflag: true, not:{resn: 'HOH'}}, {stick: {hidden: true}});
         viewer.addStyle({model: activeModel, hetflag: true, not:{resn: 'HOH'}}, {sphere: {hidden: true}});
 
@@ -391,20 +416,6 @@ function toggleContactsVisibility() {
         contactsVisible = false;
         viewer.render();
     } else {
-
-        let clickedElements = document.getElementsByClassName("clicked-row");
-        if (clickedElements.length > 0) {
-            let clickedPointLabel = chartData[chartLab][clickedElements[0].id]; // label of the clicked binding site row
-            resetChartStyles(myChart, clickedPointLabel, "black", 1, 12); // changes chart styles to default for the previously clicked site
-            clickedElements[0].classList.remove("clicked-row"); // unclick the clicked row
-
-            // remove labels of the clicked site
-            //viewer.removeAllLabels();
-
-            // remove sticks and color cartoon white
-            viewer.addStyle({model: activeModel, hetflag: false}, {cartoon: {color: 'white'}, stick: {hidden: true}});
-        } 
-
         fetch('/get-contacts', {
             method: 'POST', // Use POST method to send data
             headers: {
@@ -575,7 +586,16 @@ function toggleContactsVisibility() {
                         labelsHash["contactSites"].push(label);
                     }
                 }
+                // check if a site is clicked
+                // let clickedElements = document.getElementsByClassName("clicked-row");
+                // if (clickedElements.length > 0) { // if a row is clicked i just show the surface of the clicked site
+                //     let clickedElement = clickedElements[0];
+                //     let clickedElementId = clickedElement.id;
+                //     // need to keep the residues of the clicked site displayed
+
+                // else {
                 viewer.addStyle({model: activeModel, or:ligandSitesHash[activeModel][ligNam]}, {cartoon:{hidden: false, color: ligColor}, stick: {hidden: false, color: ligColor, radius: stickRadius}});
+                // }
                 viewer.addStyle({model: activeModel, resi: ligResi, chain: ligChain, resn: ligMol}, {stick: {hidden: false, color: ligColor, radius: stickRadius}});
                 // add ligand-interacting residues surfaces
                 surfsDict[activeModel]["lig_inters"][ligNam] = viewer.addSurface(
@@ -592,18 +612,41 @@ function toggleContactsVisibility() {
             allBindingRess = Object.values(ligandSitesHash[activeModel]).flat()
 
             if (surfaceVisible) {
-                for (const [key, value] of Object.entries(surfsDict[activeModel])) { // show surfaces of ligand-interacting residues
-                    if (key == "lig_inters") {
-                        for (const [key2, value2] of Object.entries(value)) {
-                            viewer.setSurfaceMaterialStyle(value2.surfid, {opacity:0.7});
+                let clickedElements = document.getElementsByClassName("clicked-row");
+                if (clickedElements.length > 0) { // if a row is clicked i just show the surface of the clicked site
+                    let clickedElement = clickedElements[0];
+                    let clickedElementId = clickedElement.id;
+                    let siteColor = chartColors[Number(clickedElementId.split("_").pop())];
+                    for (const [key, value] of Object.entries(surfsDict[activeModel])) { // show surfaces of ligand-interacting residues
+                        if (key == "lig_inters") {
+                            for (const [key2, value2] of Object.entries(value)) {
+                                viewer.setSurfaceMaterialStyle(value2.surfid, {opacity:0.7});
+                            }
                         }
-                    }
-                    else {
-                        for (const [key2, value2] of Object.entries(value)) {
-                            viewer.setSurfaceMaterialStyle(value2.surfid, {opacity:0.0});
+                        else if (key == clickedElementId) {
+                            // pass
+                        }
+                        else {
+                            for (const [key2, value2] of Object.entries(value)) {
+                                viewer.setSurfaceMaterialStyle(value2.surfid, {opacity:0.0});
+                            }
                         }
                     }
                 }
+                else {
+                    for (const [key, value] of Object.entries(surfsDict[activeModel])) { // show surfaces of ligand-interacting residues
+                        if (key == "lig_inters") {
+                            for (const [key2, value2] of Object.entries(value)) {
+                                viewer.setSurfaceMaterialStyle(value2.surfid, {opacity:0.7});
+                            }
+                        }
+                        else {
+                            for (const [key2, value2] of Object.entries(value)) {
+                                viewer.setSurfaceMaterialStyle(value2.surfid, {opacity:0.0});
+                            }
+                        }
+                    }
+                }   
 
             }
 

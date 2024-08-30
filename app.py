@@ -229,9 +229,13 @@ def results(prot_id, seg_id): # route for results site. Takes Prot ID and Seg ID
     seg_ress_dict["ALL_BINDING"] = sorted(list(set([el2 for el in seg_ress_dict.values() for el2 in el])))
     # print(seg_ress_dict)
 
-    pdb2up_dict = load_pickle(os.path.join(MAPPINGS_FOLDER, "pdb2up", "{}_pdb2up_mapping.pkl".format(segment_reps[int(seg_id)]["rep"])))
+    # should read the dict {seg_id: protein_atom_structure} here
 
-    up2pdb_dict = load_pickle(os.path.join(MAPPINGS_FOLDER, "up2pdb", "{}_up2pdb_mapping.pkl".format(segment_reps[int(seg_id)]["rep"])))
+    pdb2up_dict = load_pickle(os.path.join(MAPPINGS_FOLDER, "pdb2up", "{}_pdb2up_mapping.pkl".format(segment_reps[int(seg_id)]["rep"]))) # the problem is the one with protein atoms is not this one.
+
+    up2pdb_dict = load_pickle(os.path.join(MAPPINGS_FOLDER, "up2pdb", "{}_up2pdb_mapping.pkl".format(segment_reps[int(seg_id)]["rep"]))) # the problem is the one with protein atoms is not this one.
+
+    # simple chains here come from ASYM unit, so reading SIFTS mapping dict will work. (NOT ASSEMBLY)
 
     seg_stats = load_pickle(os.path.join(STATS_FOLDER, "{}_stats.pkl".format(seg_name)))
 
