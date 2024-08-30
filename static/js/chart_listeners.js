@@ -315,8 +315,15 @@ document.getElementById('chartCanvas').addEventListener('mousemove', function(e)
                             if (key == "lig_inters") {
                                 // pass
                             }
+                            // else {
+                            //     viewer.setSurfaceMaterialStyle(value2.surfid, {opacity: surfaceHiddenOpacity});
+                            // }
+                            else if (key == "non_binding") {
+                                viewer.setSurfaceMaterialStyle(value2.surfid, {color: 'white', opacity:0.7});
+                            }
                             else {
-                                viewer.setSurfaceMaterialStyle(value2.surfid, {opacity: surfaceHiddenOpacity});
+                                let siteColor = chartColors[Number(key.split("_").pop())];
+                                viewer.setSurfaceMaterialStyle(value2.surfid, {color: siteColor, opacity:0.8});
                             }
                         }
                     }
@@ -418,49 +425,49 @@ document.getElementById('chartCanvas').addEventListener('click', function(e) { /
             
             //var clickedElementId = clickedElement.id;
 
-            if (activeModel == "superposition") {
+            // if (activeModel == "superposition") {
 
-                viewer.setStyle( // colour white previously clicked site residues
-                        SuppClickedSiteResidues,
-                        {
-                            cartoon: {style:'oval', color: 'white', arrows: true, opacity: cartoonOpacity, thickness: cartoonThickness,}
-                        }
-                    );
+            //     viewer.setStyle( // colour white previously clicked site residues
+            //             SuppClickedSiteResidues,
+            //             {
+            //                 cartoon: {style:'oval', color: 'white', arrows: true, opacity: cartoonOpacity, thickness: cartoonThickness,}
+            //             }
+            //         );
 
-                // let siteSuppPDBResNumsClicked = seg_ress_dict[clickedElementId]
-                //     .filter(el => Up2PdbDict[repPdbId][repPdbChainId].hasOwnProperty(el))
-                //     .map(el => Up2PdbDict[repPdbId][repPdbChainId][el]);
+            //     // let siteSuppPDBResNumsClicked = seg_ress_dict[clickedElementId]
+            //     //     .filter(el => Up2PdbDict[repPdbId][repPdbChainId].hasOwnProperty(el))
+            //     //     .map(el => Up2PdbDict[repPdbId][repPdbChainId][el]);
 
-                // viewer.setStyle(
-                //     {model: suppModels, resi: siteSuppPDBResNumsClicked, chain: repPdbChainId, hetflag: false},
-                //     {
-                //         cartoon: {style:'oval', color: 'white', arrows: true, opacity: cartoonOpacity, thickness: cartoonThickness,}
-                //     }
-                // );
-            }
-            else {
-                // proteinChains.forEach((element) => { // in case of multiple copies of protein of interest
-                //     let siteAssemblyPDBResNumClicked = seg_ress_dict[clickedElementId]
-                //     .filter(el => Up2PdbMapAssembly[chainsMapAssembly[element]].hasOwnProperty(el)) // filters out site residues not present in this assembly. otherwise mapping is undefined and causes problems later...
-                //     .map(el => Up2PdbMapAssembly[chainsMapAssembly[element]][el]);
+            //     // viewer.setStyle(
+            //     //     {model: suppModels, resi: siteSuppPDBResNumsClicked, chain: repPdbChainId, hetflag: false},
+            //     //     {
+            //     //         cartoon: {style:'oval', color: 'white', arrows: true, opacity: cartoonOpacity, thickness: cartoonThickness,}
+            //     //     }
+            //     // );
+            // }
+            // else {
+            //     // proteinChains.forEach((element) => { // in case of multiple copies of protein of interest
+            //     //     let siteAssemblyPDBResNumClicked = seg_ress_dict[clickedElementId]
+            //     //     .filter(el => Up2PdbMapAssembly[chainsMapAssembly[element]].hasOwnProperty(el)) // filters out site residues not present in this assembly. otherwise mapping is undefined and causes problems later...
+            //     //     .map(el => Up2PdbMapAssembly[chainsMapAssembly[element]][el]);
         
-                //     //let AssemblyPDBResNum = Up2PdbMapAssembly[chainsMapAssembly[element]][newPointLabel]
-                //     siteAssemblyPDBResNumsClicked.push([element, siteAssemblyPDBResNumClicked]);
-                //     viewer.setStyle(
-                //         {model: activeModel, resi: siteAssemblyPDBResNumClicked, chain: element, hetflag: false},
-                //         {
-                //             cartoon:{style:'oval', color: 'white', arrows: true, opacity: cartoonOpacity, thickness: cartoonThickness,},
-                //             //stick:{color: siteColor},
-                //         }
-                //     );
-                // });
-                viewer.setStyle(
-                    {model: activeModel, or: AssemblyClickedSiteResidues},
-                    {
-                        cartoon: {style:'oval', color: 'white', arrows: true, opacity: cartoonOpacity, thickness: cartoonThickness,}
-                    }
-                );
-            }
+            //     //     //let AssemblyPDBResNum = Up2PdbMapAssembly[chainsMapAssembly[element]][newPointLabel]
+            //     //     siteAssemblyPDBResNumsClicked.push([element, siteAssemblyPDBResNumClicked]);
+            //     //     viewer.setStyle(
+            //     //         {model: activeModel, resi: siteAssemblyPDBResNumClicked, chain: element, hetflag: false},
+            //     //         {
+            //     //             cartoon:{style:'oval', color: 'white', arrows: true, opacity: cartoonOpacity, thickness: cartoonThickness,},
+            //     //             //stick:{color: siteColor},
+            //     //         }
+            //     //     );
+            //     // });
+            //     viewer.setStyle(
+            //         {model: activeModel, or: AssemblyClickedSiteResidues},
+            //         {
+            //             cartoon: {style:'oval', color: 'white', arrows: true, opacity: cartoonOpacity, thickness: cartoonThickness,}
+            //         }
+            //     );
+            // }
 
             if (labelsVisible) {
                 for (label of labelsHash["clickedSite"]) {
@@ -520,6 +527,23 @@ document.getElementById('chartCanvas').addEventListener('click', function(e) { /
             }
 
             else {
+                if (activeModel == "superposition") {
+
+                    viewer.setStyle( // colour white previously clicked site residues
+                            SuppClickedSiteResidues,
+                            {
+                                cartoon: {style:'oval', color: 'white', arrows: true, opacity: cartoonOpacity, thickness: cartoonThickness,}
+                            }
+                        );
+                }
+                else {
+                    viewer.setStyle(
+                        {model: activeModel, or: AssemblyClickedSiteResidues},
+                        {
+                            cartoon: {style:'oval', color: 'white', arrows: true, opacity: cartoonOpacity, thickness: cartoonThickness,}
+                        }
+                    );
+                }
 
                 clickTableTowById(pointLabel) // click the table row of the newly clicked data point
 
@@ -645,6 +669,27 @@ document.getElementById('chartCanvas').addEventListener('click', function(e) { /
                 });
             }
 
+            if (activeModel == "superposition") {
+                viewer.setStyle(
+                    //{model: suppModels, resi: siteSuppPDBResNums, chain: repPdbChainId, hetflag: false},
+                    SuppClickedSiteResidues,
+    
+                    {cartoon: {style:'oval', color: pointColor, arrows: true, opacity: cartoonOpacity, thickness: cartoonThickness,}, stick:{color: pointColor},},
+                );
+            }
+            else {
+                //for ([element, siteAssemblyPDBResNum] of siteAssemblyPDBResNums) {
+                    viewer.setStyle(
+                        //{model: activeModel, resi: siteAssemblyPDBResNum, chain: element, hetflag: false},
+                        {model: activeModel, or: AssemblyClickedSiteResidues},
+                        {
+                            cartoon: {style:'oval', color: pointColor, arrows: true, opacity: cartoonOpacity, thickness: cartoonThickness,},
+                            stick:{color: pointColor},
+                        },
+                    );
+                //}
+            }
+
             if (labelsVisible) {
                 //viewer.removeAllLabels(); // clearing labels from previous clicked site
                 labelsHash["clickedSite"] = [];
@@ -724,26 +769,26 @@ document.getElementById('chartCanvas').addEventListener('click', function(e) { /
 
         // style here.
 
-        if (activeModel == "superposition") {
-            viewer.setStyle(
-                //{model: suppModels, resi: siteSuppPDBResNums, chain: repPdbChainId, hetflag: false},
-                SuppClickedSiteResidues,
+        // if (activeModel == "superposition") {
+        //     viewer.setStyle(
+        //         //{model: suppModels, resi: siteSuppPDBResNums, chain: repPdbChainId, hetflag: false},
+        //         SuppClickedSiteResidues,
 
-                {cartoon: {style:'oval', color: pointColor, arrows: true, opacity: cartoonOpacity, thickness: cartoonThickness,}, stick:{color: pointColor},},
-            );
-        }
-        else {
-            //for ([element, siteAssemblyPDBResNum] of siteAssemblyPDBResNums) {
-                viewer.setStyle(
-                    //{model: activeModel, resi: siteAssemblyPDBResNum, chain: element, hetflag: false},
-                    {model: activeModel, or: AssemblyClickedSiteResidues},
-                    {
-                        cartoon: {style:'oval', color: pointColor, arrows: true, opacity: cartoonOpacity, thickness: cartoonThickness,},
-                        stick:{color: pointColor},
-                    },
-                );
-            //}
-        }
+        //         {cartoon: {style:'oval', color: pointColor, arrows: true, opacity: cartoonOpacity, thickness: cartoonThickness,}, stick:{color: pointColor},},
+        //     );
+        // }
+        // else {
+        //     //for ([element, siteAssemblyPDBResNum] of siteAssemblyPDBResNums) {
+        //         viewer.setStyle(
+        //             //{model: activeModel, resi: siteAssemblyPDBResNum, chain: element, hetflag: false},
+        //             {model: activeModel, or: AssemblyClickedSiteResidues},
+        //             {
+        //                 cartoon: {style:'oval', color: pointColor, arrows: true, opacity: cartoonOpacity, thickness: cartoonThickness,},
+        //                 stick:{color: pointColor},
+        //             },
+        //         );
+        //     //}
+        // }
         viewer.render();
 
     }
