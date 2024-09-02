@@ -43,7 +43,6 @@ function selectOption(option) {
 
         if (labelsVisible) { // if labels were visible, hide them
 
-            //viewer.removeAllLabels(); // remove all labels if they were active
             for ([key, value] of Object.entries(labelsHash)) {
                 for (let i = 0; i < value.length; i++) {
                     viewer.removeLabel(value[i]);
@@ -96,7 +95,6 @@ function selectOption(option) {
             contactsButton.disabled = false;
             contactsButton.style.color = '#674ea7';  // Active font color
             contactsButton.style.fontWeight = 'bold'; // Bold font when active
-            //contactsButton.style.backgroundColor = 'white';  // Active background color
 
             openStructure(option);
         }
@@ -143,8 +141,7 @@ function selectOption(option) {
                 showHoverLabel,
                 removeHoverLabel,
             );
-            // console.log("Hovering removed from previous assembly!");
-        
+
             if (option !== 'Superposition') {
 
                 openStructure(option);
@@ -152,16 +149,12 @@ function selectOption(option) {
                 contactsButton.disabled = false;
                 contactsButton.style.color = '#674ea7';  // Active font color
                 contactsButton.style.fontWeight = 'bold'; // Bold font when active
-                //contactsButton.style.backgroundColor = 'white';  // Active background color
             }
-
-            //if (option == 'Superposition') {
             else {
 
                 contactsButton.disabled = true;
                 contactsButton.style.color = 'darkgray';
                 contactsButton.style.fontWeight = 'normal'; // Bold font when active
-                //contactsButton.style.backgroundColor = 'lightgray';
 
                 console.log(`Reading SIFTS mapping for ${repPdbId} chain ${repPdbChainId}`);
 
@@ -238,7 +231,6 @@ function openStructure(pdbId) {
                     // implement surface addition for binding sites
         
                     for (const [key, value] of Object.entries(seg_ress_dict)) { 
-                        //let PDBResNums = seg_ress_dict[key].map(el => Up2PdbDict[repPdbId][repPdbChainId][el]);
 
                         if (key !== "ALL_BINDING") {
                             surfsDict[activeModel][key] = {}; // Initialize dictionary for each binding site

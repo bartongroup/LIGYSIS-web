@@ -41,10 +41,6 @@ function toggleSurfaceVisibility() {
                         viewer.setSurfaceMaterialStyle(value2.surfid, {opacity: surfaceHiddenOpacity});
                     }
                 }
-                // for (const [key, value] of Object.entries(surfsDict[activeModel]['lig_inters'])) {
-                //     viewer.setSurfaceMaterialStyle(value.surfid, {opacity: surfaceHiddenOpacity});
-                // }
-
             }
             else {
                 for (const [key, value] of Object.entries(surfsDict[activeModel])) {

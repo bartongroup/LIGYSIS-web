@@ -51,8 +51,7 @@ document.getElementById('chartCanvas').addEventListener('mousemove', function(e)
                 }
                 else {
                     // pass
-                }
-                
+                }              
                 if (surfaceVisible) {
                     if (activeModel == "superposition") {
                         for (const [key, value] of Object.entries(surfsDict["superposition"])) {
@@ -93,8 +92,6 @@ document.getElementById('chartCanvas').addEventListener('mousemove', function(e)
             else { // no row is clicked
 
                 if (contactsVisible) { // don't want to hide ligand-binding sites if CONTACTS is ON
-                    // pass
-                    //let allBindingRess = Object.values(ligandSitesHash[activeModel]).flat();
                     viewer.setStyle(
                         {model: activeModel, hetflag: false, not:{or:allBindingRess}},
                         {cartoon:{style:'oval', color: 'white', arrows: true, opacity: cartoonOpacity, thickness: cartoonThickness,},}
@@ -137,7 +134,6 @@ document.getElementById('chartCanvas').addEventListener('mousemove', function(e)
                 SuppHoveredSiteResidues = {model: suppModels, resi: siteSuppPDBResNums, chain: repPdbChainId, hetflag: false};
 
                 viewer.setStyle(
-                    // {model: suppModels, resi: siteSuppPDBResNums, chain: repPdbChainId, hetflag: false},
                     SuppHoveredSiteResidues,
                     {cartoon:{style:'oval', color: siteColor, arrows: true, opacity: cartoonOpacity, thickness: cartoonThickness,},
                     stick:{color: siteColor,}, }
@@ -151,13 +147,6 @@ document.getElementById('chartCanvas').addEventListener('mousemove', function(e)
                     siteAssemblyPDBResNums.push([element, siteAssemblyPDBResNum]);
                     let assemblySel = {model: activeModel, resi: siteAssemblyPDBResNum, chain: element, hetflag: false};
                     AssemblyHoveredSiteResidues.push(assemblySel);
-                    // viewer.setStyle(
-                    //     {model: activeModel, resi: siteAssemblyPDBResNum, chain: element, hetflag: false},
-                    //     {
-                    //         cartoon:{style:'oval', color: siteColor, arrows: true, opacity: cartoonOpacity, thickness: cartoonThickness,},
-                    //         stick:{color: siteColor},
-                    //     }
-                    // );
                 });
                 viewer.setStyle(
                     {model: activeModel, or: AssemblyHoveredSiteResidues},
@@ -363,21 +352,6 @@ document.getElementById('chartCanvas').addEventListener('click', function(e) { /
 
         let fullPointLabel = segmentName + "_" + pointLabel;
 
-        // if (activeModel == "superposition") {
-        //     siteSuppPDBResNums = seg_ress_dict[index]
-        //         .filter(el => Up2PdbDict[repPdbId][repPdbChainId].hasOwnProperty(el)) // this accounts not for missing residues in the structure (unresolved)
-        //         .map(el => Up2PdbDict[repPdbId][repPdbChainId][el]);
-        // }
-
-        // else {
-        //     proteinChains.forEach((element) => { // in case of multiple copies of protein of interest
-        //         let siteAssemblyPDBResNum = seg_ress_dict[index]
-        //             .filter(el => Up2PdbMapAssembly[chainsMapAssembly[element]].hasOwnProperty(el))
-        //             .map(el => Up2PdbMapAssembly[chainsMapAssembly[element]][el]);
-        //         siteAssemblyPDBResNums.push([element, siteAssemblyPDBResNum]);
-        //     });
-        // }
-
         $.ajax({ // AJAX request to get the table data from the server
             type: 'POST', // POST request
             url: '/get-table', // URL to send the request to
@@ -430,52 +404,6 @@ document.getElementById('chartCanvas').addEventListener('click', function(e) { /
             clearClickedRows(); // clear the already clicked table row
 
             resetChartStyles(myChart, clickedPointLabel, "black", 1, 12); // changes chart styles to default for the previously clicked site  
-            
-            //var clickedElementId = clickedElement.id;
-
-            // if (activeModel == "superposition") {
-
-            //     viewer.setStyle( // colour white previously clicked site residues
-            //             SuppClickedSiteResidues,
-            //             {
-            //                 cartoon: {style:'oval', color: 'white', arrows: true, opacity: cartoonOpacity, thickness: cartoonThickness,}
-            //             }
-            //         );
-
-            //     // let siteSuppPDBResNumsClicked = seg_ress_dict[clickedElementId]
-            //     //     .filter(el => Up2PdbDict[repPdbId][repPdbChainId].hasOwnProperty(el))
-            //     //     .map(el => Up2PdbDict[repPdbId][repPdbChainId][el]);
-
-            //     // viewer.setStyle(
-            //     //     {model: suppModels, resi: siteSuppPDBResNumsClicked, chain: repPdbChainId, hetflag: false},
-            //     //     {
-            //     //         cartoon: {style:'oval', color: 'white', arrows: true, opacity: cartoonOpacity, thickness: cartoonThickness,}
-            //     //     }
-            //     // );
-            // }
-            // else {
-            //     // proteinChains.forEach((element) => { // in case of multiple copies of protein of interest
-            //     //     let siteAssemblyPDBResNumClicked = seg_ress_dict[clickedElementId]
-            //     //     .filter(el => Up2PdbMapAssembly[chainsMapAssembly[element]].hasOwnProperty(el)) // filters out site residues not present in this assembly. otherwise mapping is undefined and causes problems later...
-            //     //     .map(el => Up2PdbMapAssembly[chainsMapAssembly[element]][el]);
-        
-            //     //     //let AssemblyPDBResNum = Up2PdbMapAssembly[chainsMapAssembly[element]][newPointLabel]
-            //     //     siteAssemblyPDBResNumsClicked.push([element, siteAssemblyPDBResNumClicked]);
-            //     //     viewer.setStyle(
-            //     //         {model: activeModel, resi: siteAssemblyPDBResNumClicked, chain: element, hetflag: false},
-            //     //         {
-            //     //             cartoon:{style:'oval', color: 'white', arrows: true, opacity: cartoonOpacity, thickness: cartoonThickness,},
-            //     //             //stick:{color: siteColor},
-            //     //         }
-            //     //     );
-            //     // });
-            //     viewer.setStyle(
-            //         {model: activeModel, or: AssemblyClickedSiteResidues},
-            //         {
-            //             cartoon: {style:'oval', color: 'white', arrows: true, opacity: cartoonOpacity, thickness: cartoonThickness,}
-            //         }
-            //     );
-            // }
 
             if (labelsVisible) {
                 for (label of labelsHash["clickedSite"]) {
@@ -648,7 +576,6 @@ document.getElementById('chartCanvas').addEventListener('click', function(e) { /
                     }
                     
                 }
-
             }
         }
         else { // no row is clicked (at this point the variables should always be null and [])
@@ -936,22 +863,17 @@ document.getElementById('newChartCanvas').addEventListener('mousemove', function
                             }
                         );
                     }
-                    
                 }
                 else {
                     viewer.setStyle({model: activeModel, hetflag: false}, {cartoon: {style:'oval', color: 'white', arrows: true, opacity: cartoonOpacity, thickness: cartoonThickness,}});
                 }
             }
 
-            // viewer.setStyle({hetflag: false}, {cartoon: {style:'oval', color: 'white', arrows: true, opacity: cartoonOpacity, thickness: cartoonThickness,}});
-
             if (labelsVisible) {
                 for (label of labelsHash["hoveredRes"]) {
                     viewer.removeLabel(label);
                 }
                 labelsHash["hoveredRes"] = [];
-                // pass
-                //viewer.removeAllLabels(); // clearing labels from previously hovered on residue
             }
 
             viewer.render();
