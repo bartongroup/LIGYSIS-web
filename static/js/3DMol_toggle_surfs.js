@@ -74,6 +74,12 @@ function toggleSurfaceVisibility() {
                 viewer.setSurfaceMaterialStyle(surfid, {color: siteColor, opacity:0.9}); // show ONLY surface of clicked row
             }
             else {
+                if (contactsVisible) { // if contacts are visible, show only surface of ligand interacting residues
+                    for (const [key, value] of Object.entries(surfsDict[activeModel]['lig_inters'])) {
+                        let ligColor = chartColors[strucProtData[key][1]];
+                        viewer.setSurfaceMaterialStyle(value.surfid, {color: ligColor, opacity: 0.9});
+                    }
+                }
                 for (const [key, value] of Object.entries(surfsDict[activeModel][clickedElementId])) {
                     let surfid = value.surfid;
                     viewer.setSurfaceMaterialStyle(surfid, {color: siteColor, opacity:0.9}); // show ONLY surface of clicked row
@@ -91,7 +97,6 @@ function toggleSurfaceVisibility() {
                         let siteColor = chartColors[Number(key.split("_").pop())];
                         viewer.setSurfaceMaterialStyle(surfsDict["superposition"][key].surfid, {color: siteColor, opacity:0.8});
                     }
-                    //viewer.render();
                 }
             }
             else {

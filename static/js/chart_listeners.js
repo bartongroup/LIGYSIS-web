@@ -23,13 +23,17 @@ document.getElementById('chartCanvas').addEventListener('mousemove', function(e)
 
         if (lastHoveredPoint1 !== firstPoint.index) { // Check if the hovered point has changed
 
-            clearHighlightedRow();
+            // clearHighlightedRow();
 
-            lastHoveredPoint1 = firstPoint.index;
+            // lastHoveredPoint1 = firstPoint.index;
 
             let pointLabel = chartData[chartLab][firstPoint.index];
 
+            let previousPointLabel = chartData[chartLab][lastHoveredPoint1];
+
             let siteColor = chartColors[Number(pointLabel)];
+
+            let previousSiteColor = chartColors[Number(previousPointLabel)];
 
             resetChartStyles(myChart, firstPoint.index, "#ffff99", 10, 16); // changes chart styles to highlight the binding site
 
@@ -37,21 +41,44 @@ document.getElementById('chartCanvas').addEventListener('mousemove', function(e)
                 
                 let clickedElement = clickedElements[0]; // clicked row
 
-                siteSuppPDBResNumsClicked = [];
+                //siteSuppPDBResNumsClicked = [];
                 siteAssemblyPDBResNumsClicked = [];
                 
                 clickedPointLabel = chartData[chartLab][clickedElement.id]; // label of the clicked binding site row
 
                 let clickedSiteColor = chartColors[Number(clickedPointLabel)]; // color of the clicked binding site
 
-                if (activeModel == "superposition") { // this is to remove any other residues that are not part of the clicked site
-                    siteSuppPDBResNumsClicked = seg_ress_dict[clickedPointLabel]
-                        .filter(el => Up2PdbDict[repPdbId][repPdbChainId].hasOwnProperty(el))
-                        .map(el => Up2PdbDict[repPdbId][repPdbChainId][el]);
+                if (activeModel == "superposition") {
+                    viewer.setStyle(// colour everything white except for clicked site. To make disappear before hovering on other site (can happen when two sites are close in the graph)
+                        {model: suppModels, not: SuppClickedSiteResidues, hetflag: false},
+                        
+                        {
+                            cartoon: {style:'oval', color: 'white', arrows: true, opacity: cartoonOpacity, thickness: cartoonThickness,},
+                            stick: {color: 'white', hidden: true},
+                        }
+                    );     
                 }
-                else {
-                    // pass
-                }              
+                else  {
+                    if (contactsVisible) { // don't want to hide ligand-binding sites if CONTACTS is ON
+                        viewer.setStyle(
+                            {model: activeModel, not: {or: AssemblyClickedSiteResidues.concat(allBindingRess)}, hetflag: false},
+                            {
+                                cartoon: {style:'oval', color: 'white', arrows: true, opacity: cartoonOpacity, thickness: cartoonThickness,},
+                                stick: {color: 'white', hidden: true},
+                            }
+                        );
+                    }
+                    else {
+                        viewer.setStyle(// colour everything white except for clicked site. To make disappear before hovering on other site (can happen when two sites are close in the graph)
+                            {model: activeModel, not: {or: AssemblyClickedSiteResidues}, hetflag: false},
+                            {
+                                cartoon: {style:'oval', color: 'white', arrows: true, opacity: cartoonOpacity, thickness: cartoonThickness,},
+                                stick: {color: 'white', hidden: true},
+                            }
+                        );
+                    }
+                }
+                    
                 if (surfaceVisible) {
                     if (activeModel == "superposition") {
                         for (const [key, value] of Object.entries(surfsDict["superposition"])) {
@@ -103,12 +130,14 @@ document.getElementById('chartCanvas').addEventListener('mousemove', function(e)
                         {cartoon:{style:'oval', color: 'white', arrows: true, opacity: cartoonOpacity, thickness: cartoonThickness,},}
                     );
                 }
-
                 if (surfaceVisible) { // if surface is visible
                     if (activeModel == "superposition") {
                         for (const [key, value] of Object.entries(surfsDict["superposition"])) {
                             if (key == pointLabel) {
                                 viewer.setSurfaceMaterialStyle(value.surfid, {color: siteColor, opacity: 0.9}); // change the surface color of the hovered binding site row
+                            }
+                            else if (key == previousPointLabel) {
+                                viewer.setSurfaceMaterialStyle(value.surfid, {color: previousSiteColor, opacity: 0.8}); // change the surface color of the previously hovered binding site row
                             }
                         }
                     }
@@ -117,6 +146,14 @@ document.getElementById('chartCanvas').addEventListener('mousemove', function(e)
                             for (const [key2, value2] of Object.entries(value)) {
                                 if (key == pointLabel) {
                                     viewer.setSurfaceMaterialStyle(value2.surfid, {color: siteColor, opacity:0.9}); // change the surface color of the hovered binding site row
+                                }
+                                else if (key == previousPointLabel) {
+                                    if (contactsVisible) {
+                                        viewer.setSurfaceMaterialStyle(value2.surfid, {opacity: surfaceHiddenOpacity}); // change the surface color of the hovered binding site row
+                                    }
+                                    else {
+                                        viewer.setSurfaceMaterialStyle(value2.surfid, {color: previousSiteColor, opacity:0.8}); // change the surface color of the previously hovered binding site row
+                                    }
                                 }
                             }
                         }
@@ -133,10 +170,21 @@ document.getElementById('chartCanvas').addEventListener('mousemove', function(e)
 
                 SuppHoveredSiteResidues = {model: suppModels, resi: siteSuppPDBResNums, chain: repPdbChainId, hetflag: false};
 
+                // viewer.setStyle(// colour everything white except for clicked site. To make disappear before hovering on other site (can happen when two sites are close in the graph)
+                //     //{model: suppModels, not: SuppClickedSiteResidues, hetflag: false},
+                //     {model: suppModels, hetflag: false},
+                //     {
+                //         cartoon: {style:'oval', color: 'white', arrows: true, opacity: cartoonOpacity, thickness: cartoonThickness,},
+                //         stick: {color: 'white', hidden: true},
+                //     }
+                // );
+
                 viewer.setStyle(
                     SuppHoveredSiteResidues,
-                    {cartoon:{style:'oval', color: siteColor, arrows: true, opacity: cartoonOpacity, thickness: cartoonThickness,},
-                    stick:{color: siteColor,}, }
+                    {
+                        cartoon:{style:'oval', color: siteColor, arrows: true, opacity: cartoonOpacity, thickness: cartoonThickness,},
+                        stick:{color: siteColor,},
+                    }
                 );
             }
             else {
@@ -148,6 +196,49 @@ document.getElementById('chartCanvas').addEventListener('mousemove', function(e)
                     let assemblySel = {model: activeModel, resi: siteAssemblyPDBResNum, chain: element, hetflag: false};
                     AssemblyHoveredSiteResidues.push(assemblySel);
                 });
+                // if (contactsVisible) { // don't want to hide ligand-binding sites if CONTACTS is ON
+                //     if (AssemblyClickedSiteResidues.length === 0) { // a site is  not clicked
+                //         viewer.setStyle(
+                //             //{model: activeModel, not: {or: AssemblyClickedSiteResidues}, not: {or: allBindingRess}, hetflag: false},
+                //             {model: activeModel, not: {allBindingRess}, hetflag: false},
+                //             {
+                //                 cartoon: {style:'oval', color: 'white', arrows: true, opacity: cartoonOpacity, thickness: cartoonThickness,},
+                //                 stick: {color: 'white', hidden: true},
+                //             }
+                //         )
+                //     }
+                //     else {
+                //         viewer.setStyle(
+                //             //{model: activeModel, not: {or: AssemblyClickedSiteResidues}, not: {or: allBindingRess}, hetflag: false},
+                //             {model: activeModel, not: {or: AssemblyClickedSiteResidues.concat(allBindingRess)}, hetflag: false},
+                //             {
+                //                 cartoon: {style:'oval', color: 'white', arrows: true, opacity: cartoonOpacity, thickness: cartoonThickness,},
+                //                 stick: {color: 'white', hidden: true},
+                //             }
+                //         )
+                //     }
+                // }
+                // else {
+                //     if (AssemblyClickedSiteResidues.length === 0) { // a site is not clicked
+                //         viewer.setStyle(
+                //             {model: activeModel, hetflag: false},
+                //             {
+                //                 cartoon: {style:'oval', color: 'white', arrows: true, opacity: cartoonOpacity, thickness: cartoonThickness,},
+                //                 stick: {color: 'white', hidden: true},
+                //             }
+                //         )
+                //     }
+                //     else {
+                //         viewer.setStyle(
+                //             {model: activeModel, not: {or: AssemblyClickedSiteResidues}, hetflag: false},
+                //             {
+                //                 cartoon: {style:'oval', color: 'white', arrows: true, opacity: cartoonOpacity, thickness: cartoonThickness,},
+                //                 stick: {color: 'white', hidden: true},
+                //             }
+                //         )
+                //     }
+                // }
+
                 viewer.setStyle(
                     {model: activeModel, or: AssemblyHoveredSiteResidues},
                     {
@@ -156,10 +247,15 @@ document.getElementById('chartCanvas').addEventListener('mousemove', function(e)
                     }
                 );
             }
-            viewer.render();            
+            viewer.render();       
+            
+            clearHighlightedRow();
+
+            lastHoveredPoint1 = firstPoint.index;
         }
 
-    } else if (lastHoveredPoint1 !== null) { // when no data point is being hovered on, but the last hovered point is not null (recently hovered on a point)
+    }
+    else if (lastHoveredPoint1 !== null) { // when no data point is being hovered on, but the last hovered point is not null (recently hovered on a point)
         // lastHoveredPoint1 = null;
 
         // clearHighlightedRow();
@@ -173,48 +269,54 @@ document.getElementById('chartCanvas').addEventListener('mousemove', function(e)
             let clickedSiteColor = chartColors[Number(clickedPointLabel)]; // color of the clicked binding site
 
             if (activeModel == "superposition") {
-                let siteSuppPDBResNumsClicked = seg_ress_dict[clickedPointLabel]
-                    .filter(el => Up2PdbDict[repPdbId][repPdbChainId].hasOwnProperty(el))
-                    .map(el => Up2PdbDict[repPdbId][repPdbChainId][el]);
+
+                // let siteSuppPDBResNumsClicked = seg_ress_dict[clickedPointLabel]
+                //     .filter(el => Up2PdbDict[repPdbId][repPdbChainId].hasOwnProperty(el))
+                //     .map(el => Up2PdbDict[repPdbId][repPdbChainId][el]);
 
                 viewer.setStyle(
                     {
-                        and:[{model: suppModels, resi: siteSuppPDBResNumsClicked, invert: true}, {hetflag: false}] // all protein residues except clicked site (we want to keep ligands)
+                        //and:[{model: suppModels, resi: siteSuppPDBResNumsClicked, invert: true}, {hetflag: false}] // all protein residues except clicked site (we want to keep ligands)
+                        model: suppModels, hetflag: false, not: SuppClickedSiteResidues, // all protein residues except clicked site (we want to keep ligands),
+                        
                     },
                     {cartoon: {style:'oval', color: 'white', arrows: true, opacity: cartoonOpacity, thickness: cartoonThickness,}}
                 );
                 viewer.setStyle( // colouring the clicked site (necessary as sometimes there is overlap between sites)
-                    {model: suppModels, resi: siteSuppPDBResNumsClicked, chain: repPdbChainId, hetflag: false},
+                    //{model: suppModels, resi: siteSuppPDBResNumsClicked, chain: repPdbChainId, hetflag: false},
+                    SuppClickedSiteResidues,
                     {cartoon:{style:'oval', color: clickedSiteColor, arrows: true, opacity: cartoonOpacity, thickness: cartoonThickness,},
                     stick:{color: clickedSiteColor,}, }
                 );
             }
             else {
-                let siteAssemblyRessClicked = [];
-                proteinChains.forEach((element) => { // in case of multiple copies of protein of interest
-                    let siteAssemblyPDBResNumClicked = seg_ress_dict[clickedPointLabel]
-                        .filter(el => Up2PdbMapAssembly[chainsMapAssembly[element]].hasOwnProperty(el))
-                        .map(el => Up2PdbMapAssembly[chainsMapAssembly[element]][el]);
-                    siteAssemblyPDBResNumsClicked.push([element, siteAssemblyPDBResNumClicked]);
+                // let siteAssemblyRessClicked = [];
+                // proteinChains.forEach((element) => { // in case of multiple copies of protein of interest
+                //     let siteAssemblyPDBResNumClicked = seg_ress_dict[clickedPointLabel]
+                //         .filter(el => Up2PdbMapAssembly[chainsMapAssembly[element]].hasOwnProperty(el))
+                //         .map(el => Up2PdbMapAssembly[chainsMapAssembly[element]][el]);
+                //     siteAssemblyPDBResNumsClicked.push([element, siteAssemblyPDBResNumClicked]);
                     viewer.setStyle(
                         {
-                            and:[{model: activeModel, resi: siteAssemblyPDBResNumClicked, chain: element, invert: true}, {hetflag: false}] // all protein residues except clicked site (we want to keep ligands)
+                            //and:[{model: activeModel, resi: siteAssemblyPDBResNumClicked, chain: element, invert: true}, {hetflag: false}] // all protein residues except clicked site (we want to keep ligands)
+                            model: activeModel, hetflag: false, not: {or: AssemblyClickedSiteResidues}, // all protein residues except clicked site (we want to keep ligands)
                         },
                         {cartoon: {style:'oval', color: 'white', arrows: true, opacity: cartoonOpacity, thickness: cartoonThickness,}}
                     );
-                    let sel = {model: activeModel, resi: siteAssemblyPDBResNumClicked, chain: element, hetflag: false};
+                    //let sel = {model: activeModel, resi: siteAssemblyPDBResNumClicked, chain: element, hetflag: false};
                     viewer.setStyle( // colouring the clicked site (necessary as sometimes there is overlap between sites)
-                        sel,
+                        //sel,
+                        {model: activeModel, or: AssemblyClickedSiteResidues},
                         {cartoon:{style:'oval', color: clickedSiteColor, arrows: true, opacity: cartoonOpacity, thickness: cartoonThickness,},
                         stick:{color: clickedSiteColor,}, }
                     );
-                    siteAssemblyRessClicked.push(sel);
+                    //siteAssemblyRessClicked.push(sel);
                     // }
-                });
+                // });
                 if (contactsVisible) { // don't want to hide ligand-binding sites if CONTACTS is ON
                     viewer.setStyle(
                         {
-                            model: activeModel, hetflag: false, not: {or: allBindingRess}, not: {or: siteAssemblyRessClicked} // all protein residues except clicked site (we want to keep ligands)
+                            model: activeModel, hetflag: false, not: {or: allBindingRess}, not: {or: AssemblyClickedSiteResidues} // all protein residues except clicked site (we want to keep ligands)
                         },
                         {cartoon: {style:'oval', color: 'white', arrows: true, opacity: cartoonOpacity, thickness: cartoonThickness,}}
                     );
@@ -227,7 +329,6 @@ document.getElementById('chartCanvas').addEventListener('mousemove', function(e)
                     }
                 }
             }
-
             if (surfaceVisible) { // if surface is visible (when hovering on a site on the chart and a row is clicked)
                 if (activeModel == "superposition") {
                     for (const [key, value] of Object.entries(surfsDict["superposition"])) {
@@ -257,9 +358,7 @@ document.getElementById('chartCanvas').addEventListener('mousemove', function(e)
                     }
                 }
             }
-
             resetChartStyles(myChart, clickedPointLabel, "#bfd4cb", 10, 16); // changes chart styles to highlight the newly clicked site
-
         }
         else { // no row is clicked
 
@@ -418,8 +517,7 @@ document.getElementById('chartCanvas').addEventListener('click', function(e) { /
 
                 clickedPointLabel = null; // reset clickedPointLabel
 
-                // here if surface is active: go back to show surfaces as by default
-                if (surfaceVisible) {
+                if (surfaceVisible) { // here if surface is active: go back to show surfaces as by default
                     if (activeModel == "superposition") {
                         for (const [key, value] of Object.entries(surfsDict["superposition"])) {
                             if (key == "non_binding") {
@@ -458,13 +556,13 @@ document.getElementById('chartCanvas').addEventListener('click', function(e) { /
                         }
                     }
                 }
+
                 SuppClickedSiteResidues = null; // reset clicked site residues
                 AssemblyClickedSiteResidues = [];  // reset clicked site residues
             }
 
             else {
                 if (activeModel == "superposition") {
-
                     viewer.setStyle( // colour white previously clicked site residues
                             SuppClickedSiteResidues,
                             {
@@ -485,6 +583,9 @@ document.getElementById('chartCanvas').addEventListener('click', function(e) { /
 
                 resetChartStyles(myChart, pointLabel, "#bfd4cb", 10, 16); // changes chart styles to highlight the newly clicked site
 
+                SuppClickedSiteResidues = null; // reset clicked site residues
+                AssemblyClickedSiteResidues = [];  // reset clicked site residues 
+
                 if (activeModel == "superposition") {
                     siteSuppPDBResNums = seg_ress_dict[index]
                         .filter(el => Up2PdbDict[repPdbId][repPdbChainId].hasOwnProperty(el)) // this accounts not for missing residues in the structure (unresolved)
@@ -492,7 +593,6 @@ document.getElementById('chartCanvas').addEventListener('click', function(e) { /
                     
                     SuppClickedSiteResidues = {model: suppModels, resi: siteSuppPDBResNums, chain: repPdbChainId, hetflag: false};
                 }
-        
                 else {
                     proteinChains.forEach((element) => { // in case of multiple copies of protein of interest
                         let siteAssemblyPDBResNum = seg_ress_dict[index]
@@ -504,7 +604,6 @@ document.getElementById('chartCanvas').addEventListener('click', function(e) { /
                         AssemblyClickedSiteResidues.push(assemblySel);
                     });
                 }
-
                 if (labelsVisible) {
                     labelsHash["clickedSite"] = [];
                     if (activeModel == "superposition") {
@@ -546,9 +645,7 @@ document.getElementById('chartCanvas').addEventListener('click', function(e) { /
                         }
                     }
                 }
-
-                // hide other surfaces and show clicked one
-                if (surfaceVisible) {
+                if (surfaceVisible) { // hide other surfaces and show clicked one
                     if (activeModel == "superposition") {
                         for (const [key, value] of Object.entries(surfsDict["superposition"])) {
                             if (key == pointLabel) {
@@ -590,6 +687,14 @@ document.getElementById('chartCanvas').addEventListener('click', function(e) { /
                     .map(el => Up2PdbDict[repPdbId][repPdbChainId][el]);
                 
                 SuppClickedSiteResidues = {model: suppModels, resi: siteSuppPDBResNums, chain: repPdbChainId, hetflag: false};
+
+                viewer.setStyle(
+                    SuppClickedSiteResidues,
+                    {
+                        cartoon: {style:'oval', color: pointColor, arrows: true, opacity: cartoonOpacity, thickness: cartoonThickness,},
+                        stick:{color: pointColor},
+                    },
+                );
             }
     
             else {
@@ -602,28 +707,34 @@ document.getElementById('chartCanvas').addEventListener('click', function(e) { /
                     let assemblySel = {model: activeModel, resi: siteAssemblyPDBResNum, chain: element, hetflag: false};
                     AssemblyClickedSiteResidues.push(assemblySel);
                 });
-            }
 
-            if (activeModel == "superposition") {
                 viewer.setStyle(
-                    //{model: suppModels, resi: siteSuppPDBResNums, chain: repPdbChainId, hetflag: false},
-                    SuppClickedSiteResidues,
-    
-                    {cartoon: {style:'oval', color: pointColor, arrows: true, opacity: cartoonOpacity, thickness: cartoonThickness,}, stick:{color: pointColor},},
+                    {model: activeModel, or: AssemblyClickedSiteResidues},
+                    {
+                        cartoon: {style:'oval', color: pointColor, arrows: true, opacity: cartoonOpacity, thickness: cartoonThickness,},
+                        stick:{color: pointColor},
+                    },
                 );
             }
-            else {
-                //for ([element, siteAssemblyPDBResNum] of siteAssemblyPDBResNums) {
-                    viewer.setStyle(
-                        //{model: activeModel, resi: siteAssemblyPDBResNum, chain: element, hetflag: false},
-                        {model: activeModel, or: AssemblyClickedSiteResidues},
-                        {
-                            cartoon: {style:'oval', color: pointColor, arrows: true, opacity: cartoonOpacity, thickness: cartoonThickness,},
-                            stick:{color: pointColor},
-                        },
-                    );
-                //}
-            }
+
+            // if (activeModel == "superposition") {
+            //     viewer.setStyle(
+            //         SuppClickedSiteResidues,
+            //         {
+            //             cartoon: {style:'oval', color: pointColor, arrows: true, opacity: cartoonOpacity, thickness: cartoonThickness,},
+            //             stick:{color: pointColor},
+            //         },
+            //     );
+            // }
+            // else {
+            //     viewer.setStyle(
+            //         {model: activeModel, or: AssemblyClickedSiteResidues},
+            //         {
+            //             cartoon: {style:'oval', color: pointColor, arrows: true, opacity: cartoonOpacity, thickness: cartoonThickness,},
+            //             stick:{color: pointColor},
+            //         },
+            //     );
+            // }
 
             if (labelsVisible) {
                 //viewer.removeAllLabels(); // clearing labels from previous clicked site
@@ -668,8 +779,7 @@ document.getElementById('chartCanvas').addEventListener('click', function(e) { /
                     }
                 }
             }
-            // hide other surfaces and show clicked one
-            if (surfaceVisible) {
+            if (surfaceVisible) { // hide other surfaces and show clicked one
                 if (activeModel == "superposition") {
                     for (const [key, value] of Object.entries(surfsDict["superposition"])) {
                         if (key == pointLabel) {
@@ -693,7 +803,6 @@ document.getElementById('chartCanvas').addEventListener('click', function(e) { /
                                 else {
                                     viewer.setSurfaceMaterialStyle(value2.surfid, {color: 'white', opacity: surfaceHiddenOpacity});
                                 }
-                                //viewer.render();
                             }
                         }
                         
@@ -701,31 +810,7 @@ document.getElementById('chartCanvas').addEventListener('click', function(e) { /
                 }
             }
         }
-
-        // style here.
-
-        // if (activeModel == "superposition") {
-        //     viewer.setStyle(
-        //         //{model: suppModels, resi: siteSuppPDBResNums, chain: repPdbChainId, hetflag: false},
-        //         SuppClickedSiteResidues,
-
-        //         {cartoon: {style:'oval', color: pointColor, arrows: true, opacity: cartoonOpacity, thickness: cartoonThickness,}, stick:{color: pointColor},},
-        //     );
-        // }
-        // else {
-        //     //for ([element, siteAssemblyPDBResNum] of siteAssemblyPDBResNums) {
-        //         viewer.setStyle(
-        //             //{model: activeModel, resi: siteAssemblyPDBResNum, chain: element, hetflag: false},
-        //             {model: activeModel, or: AssemblyClickedSiteResidues},
-        //             {
-        //                 cartoon: {style:'oval', color: pointColor, arrows: true, opacity: cartoonOpacity, thickness: cartoonThickness,},
-        //                 stick:{color: pointColor},
-        //             },
-        //         );
-        //     //}
-        // }
         viewer.render();
-
     }
 });
 
