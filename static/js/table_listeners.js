@@ -372,12 +372,24 @@ $('table#bss_table tbody').on('mouseover', 'tr', function () { // event listener
                     //         }
                     //     );
                     // });
-                    viewer.setStyle(
-                        {model: activeModel, or: AssemblyClickedSiteResidues},
-                        {
-                            cartoon: {style:'oval', color: 'white', arrows: true, opacity: cartoonOpacity, thickness: cartoonThickness,}
-                        }
-                    );
+                    if (contactsVisible) {
+                        // pass
+                        console.log("Contacts visible when clicking on a new site");
+                        viewer.setStyle(
+                            {model: activeModel, or: AssemblyClickedSiteResidues, not: {or: allBindingRess}},  
+                            {
+                                cartoon: {style:'oval', color: 'white', arrows: true, opacity: cartoonOpacity, thickness: cartoonThickness,}
+                            }
+                        );
+                    }
+                    else {
+                        viewer.setStyle(
+                            {model: activeModel, or: AssemblyClickedSiteResidues},
+                            {
+                                cartoon: {style:'oval', color: 'white', arrows: true, opacity: cartoonOpacity, thickness: cartoonThickness,}
+                            }
+                        );
+                    }
                     
                 }
                 viewer.render();
@@ -422,6 +434,10 @@ $('table#bss_table tbody').on('mouseover', 'tr', function () { // event listener
 
         if (labelsVisible) {
             //viewer.removeAllLabels(); // clearing labels from previous clicked site
+            for (const label of labelsHash["hoveredRes"]) { // don't know how, I guess fast hovering from residues table/chart might leave one label left
+                viewer.removeLabel(label);
+            }
+            labelsHash["hoveredRes"] = [];
 
             if (activeModel == "superposition") {
                 for (siteSuppPDBResNum of siteSuppPDBResNums) {
@@ -541,6 +557,11 @@ $('table#bs_ress_table tbody').on('mouseover', 'tr', function () { // event list
         }
 
         if (labelsVisible) {
+            for (const label of labelsHash["hoveredRes"]) {
+                viewer.removeLabel(label);
+            }
+            labelsHash["hoveredRes"] = [];
+
             if (activeModel == "superposition") {
                 if (SuppPDBResNum !== undefined) {
                     let resSel = {model: suppModels, resi: SuppPDBResNum, chain: repPdbChainId, hetflag: false}
@@ -580,8 +601,7 @@ $('table#bs_ress_table tbody').on('mouseover', 'tr', function () { // event list
                 });
             }
         }
-
-        viewer.render({});
+        viewer.render();
     }
 
 }).on('mouseout', 'tr', function () { // event listener for mouseout on table rows
@@ -603,30 +623,48 @@ $('table#bs_ress_table tbody').on('mouseover', 'tr', function () { // event list
             for (const label of labelsHash["hoveredRes"]) {
                 viewer.removeLabel(label);
             }
+            labelsHash["hoveredRes"] = [];
         }
 
         let PDBResNum = Up2PdbDict[repPdbId][repPdbChainId][rowId];
 
         if (activeModel == "superposition") {
-            viewer.setStyle({model: suppModels, resi: SuppPDBResNum, hetflag: false}, {cartoon: {style:'oval', color: 'white', arrows: true, opacity: cartoonOpacity, thickness: cartoonThickness,}});
+            viewer.setStyle({model: suppModels, hetflag: false}, {cartoon: {style:'oval', color: 'white', arrows: true, opacity: cartoonOpacity, thickness: cartoonThickness,}});
+            //viewer.setStyle({model: suppModels, resi: SuppPDBResNum, hetflag: false}, {cartoon: {style:'oval', color: 'white', arrows: true, opacity: cartoonOpacity, thickness: cartoonThickness,}});
             // if (labelsVisible) {
             //     viewer.removeAllLabels(); // clearing labels from previous clicked site, unless still clicked
             // }
         }
         else {
-            AssemblyPDBResNums.forEach(([chain, resNum]) => {
-                viewer.setStyle({model: activeModel, resi: resNum, chain: chain, hetflag: false}, {cartoon: {style:'oval', color: 'white', arrows: true, opacity: cartoonOpacity, thickness: cartoonThickness,}});
-            });
+            // AssemblyPDBResNums.forEach(([chain, resNum]) => {
+            //     viewer.setStyle({model: activeModel, resi: resNum, chain: chain, hetflag: false}, {cartoon: {style:'oval', color: 'white', arrows: true, opacity: cartoonOpacity, thickness: cartoonThickness,}});
+            // });
             // if (labelsVisible) {
             //     //viewer.removeAllLabels(); // clearing labels from previous clicked site, unless still clicked
             //     for (const label of labelsHash["hoveredRes"]) {
             //         viewer.removeLabel(label);
             //     }
             // }
+            if (contactsVisible) {
+                viewer.setStyle({model: activeModel, hetflag: false, not: {or: allBindingRess}}, {cartoon: {style:'oval', color: 'white', arrows: true, opacity: cartoonOpacity, thickness: cartoonThickness,}});
+                
+                for (const [key, value] of Object.entries(ligandSitesHash[activeModel])) {
+                    let ligColor = chartColors[strucProtData[key][1]];
+                    viewer.setStyle( // displaying and colouring again the ligand-interacting residues
+                        {model: activeModel, hetflag: false, or: value},
+                        {
+                            cartoon:{style:'oval', color: ligColor, arrows: true, opacity: cartoonOpacity, thickness: cartoonThickness,},
+                            stick:{hidden: false, color: ligColor,}
+                        }
+                    );
+                }
+            }
+            else {
+                viewer.setStyle({model: activeModel, hetflag: false}, {cartoon: {style:'oval', color: 'white', arrows: true, opacity: cartoonOpacity, thickness: cartoonThickness,}});
+            }
         }
-        viewer.render({});
+        viewer.render();
     }
-
 });
 
 // THIS IS THE EVENT LISTENER THAT CHANGES THE AXES OF THE BINDING SITES PLOTS ACCORDING TO DROPDOWNS

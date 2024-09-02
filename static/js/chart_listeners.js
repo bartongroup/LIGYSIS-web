@@ -171,9 +171,9 @@ document.getElementById('chartCanvas').addEventListener('mousemove', function(e)
         }
 
     } else if (lastHoveredPoint1 !== null) { // when no data point is being hovered on, but the last hovered point is not null (recently hovered on a point)
-        lastHoveredPoint1 = null;
+        // lastHoveredPoint1 = null;
 
-        clearHighlightedRow();
+        // clearHighlightedRow();
 
         if (clickedElements.length > 0) { // a row is clicked
 
@@ -310,20 +310,24 @@ document.getElementById('chartCanvas').addEventListener('mousemove', function(e)
                     }
                 }
                 else {
-                    for (const [key, value] of Object.entries(surfsDict[activeModel])) {
-                        for (const [key2, value2] of Object.entries(value)) {
-                            if (key == "lig_inters") {
-                                // pass
-                            }
-                            // else {
-                            //     viewer.setSurfaceMaterialStyle(value2.surfid, {opacity: surfaceHiddenOpacity});
-                            // }
-                            else if (key == "non_binding") {
-                                viewer.setSurfaceMaterialStyle(value2.surfid, {color: 'white', opacity:0.7});
-                            }
-                            else {
-                                let siteColor = chartColors[Number(key.split("_").pop())];
-                                viewer.setSurfaceMaterialStyle(value2.surfid, {color: siteColor, opacity:0.8});
+                    if (contactsVisible) {
+                        for (const [key, value] of Object.entries(surfsDict[activeModel][lastHoveredPoint1])) {
+                            viewer.setSurfaceMaterialStyle(value.surfid, {opacity: surfaceHiddenOpacity});
+                        }
+                    }
+                    else {
+                        for (const [key, value] of Object.entries(surfsDict[activeModel])) {
+                            for (const [key2, value2] of Object.entries(value)) {
+                                if (key == "lig_inters") { // do nothing for these surfaces
+                                    // pass
+                                }
+                                else if (key == "non_binding") {
+                                    viewer.setSurfaceMaterialStyle(value2.surfid, {color: 'white', opacity:0.7});
+                                }
+                                else {
+                                    let siteColor = chartColors[Number(key.split("_").pop())];
+                                    viewer.setSurfaceMaterialStyle(value2.surfid, {color: siteColor, opacity:0.8});
+                                }
                             }
                         }
                     }
@@ -332,6 +336,10 @@ document.getElementById('chartCanvas').addEventListener('mousemove', function(e)
         }
         
         viewer.render();
+
+        lastHoveredPoint1 = null;
+
+        clearHighlightedRow();
     }
 });
 
@@ -898,13 +906,10 @@ document.getElementById('newChartCanvas').addEventListener('mousemove', function
                             );
                             labelsHash["hoveredRes"].push(label);
                         });
-
                     }
                 }
-
-                viewer.render({});
+                viewer.render();
             }
-            
         }
     } else if (newLastHoveredPoint !== null) { // when no data point is being hovered on, but the last hovered point is not null (recently hovered on a point)
 
@@ -920,6 +925,18 @@ document.getElementById('newChartCanvas').addEventListener('mousemove', function
             else {
                 if (contactsVisible) {
                     viewer.setStyle({model: activeModel, hetflag: false, not: {or: allBindingRess}}, {cartoon: {style:'oval', color: 'white', arrows: true, opacity: cartoonOpacity, thickness: cartoonThickness,}});
+
+                    for (const [key, value] of Object.entries(ligandSitesHash[activeModel])) {
+                        let ligColor = chartColors[strucProtData[key][1]];
+                        viewer.setStyle( // displaying and colouring again the ligand-interacting residues
+                            {model: activeModel, hetflag: false, or: value},
+                            {
+                                cartoon:{style:'oval', color: ligColor, arrows: true, opacity: cartoonOpacity, thickness: cartoonThickness,},
+                                stick:{hidden: false, color: ligColor,}
+                            }
+                        );
+                    }
+                    
                 }
                 else {
                     viewer.setStyle({model: activeModel, hetflag: false}, {cartoon: {style:'oval', color: 'white', arrows: true, opacity: cartoonOpacity, thickness: cartoonThickness,}});
