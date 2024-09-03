@@ -5,10 +5,11 @@ import re
 import io
 import csv
 import pickle
+import zipfile
 import numpy as np
 import pandas as pd
 
-from flask import Flask, render_template, url_for, request, redirect, jsonify, Response
+from flask import Flask, render_template, url_for, request, redirect, jsonify, Response, send_file
 
 from config import BASE_DIR, DATA_FOLDER, SITE_TABLES_FOLDER, RES_TABLES_FOLDER, REP_STRUCS_FOLDER, BS_RESS_FOLDER, MAPPINGS_FOLDER, STATS_FOLDER, ENTRY_NAMES_FOLDER
 
@@ -430,6 +431,73 @@ def get_uniprot_mapping(): # route to get UniProt residue and chain mapping for 
     }
 
     return jsonify(response_data)
+
+@app.route('/download_superposition', methods=['POST'])
+def download_superposition():
+
+    # Get JSON data from the POST request
+    data = request.get_json()
+    
+    prot_id = data.get('proteinId')
+    seg_id = data.get('segmentId')
+    #simple_pdbs = data.get('simplePdbs')
+
+    simple_dir = os.path.join(DATA_FOLDER, prot_id, str(seg_id), "simple")
+    simple_pdbs = os.listdir(simple_dir)
+    simple_pdbs = [f'{simple_dir}/{el}' for el in simple_pdbs if el.endswith(".cif")]
+
+    #print(simple_pdbs)
+
+    seg_name = f'{prot_id}_{seg_id}'
+    cxc_in =f'{DATA_FOLDER}/{prot_id}/{seg_id}/simple/{seg_name}_ALL_inf_average_0.5.cxc' # ChimeraX command file
+    attr_in =  f'{DATA_FOLDER}/{prot_id}/{seg_id}/simple/{seg_name}_ALL_inf_average_0.5.defattr' # ChimeraX attribute file
+    
+    # Validate the received data
+    if not prot_id or not seg_id or not simple_pdbs:
+        return jsonify({'error': 'Missing data'}), 400
+
+    # Create a BytesIO object to hold the in-memory zip file
+    memory_file = io.BytesIO()
+
+    files_to_zip = simple_pdbs + [attr_in, cxc_in]
+
+    # # Create a directory to save the zip file if it doesn't exist
+    # local_save_directory = f'{DATA_FOLDER}/test'
+    # if not os.path.exists(local_save_directory):
+    #     os.makedirs(local_save_directory)
+    
+    # # Define the local file path for saving
+    # zip_filename = f'{prot_id}_{seg_id}_superposition.zip'
+    # local_file_path = os.path.join(local_save_directory, zip_filename)
+    
+    # # Create a ZipFile object to save locally
+    # with zipfile.ZipFile(local_file_path, 'w') as zf:
+    #     for file_path in files_to_zip:
+    #         #print(file_path)
+    #         if os.path.exists(file_path):  # Check if the file exists
+    #             print(file_path)
+    #             zf.write(file_path, os.path.basename(file_path))
+    #         else:
+    #             return jsonify({'error': f"File {file_path} not found"}), 404
+    
+    # Create a ZipFile object for in-memory use
+    with zipfile.ZipFile(memory_file, 'w') as zf:
+        for file_path in files_to_zip:
+            if os.path.exists(file_path):  # Check if the file exists
+                zf.write(file_path, os.path.basename(file_path))
+            else:
+                return f"File {file_path} not found", 404
+    
+    # Make sure to seek to the beginning of the BytesIO object before sending it
+    memory_file.seek(0)
+    
+    # Send the zip file to the client as a downloadable file
+    return send_file(
+        memory_file,
+        mimetype='application/zip',
+        as_attachment=True,
+        download_name=f'{prot_id}_{seg_id}_superposition.zip'
+    )
 
 ### LAUNCHING SERVER ###
 

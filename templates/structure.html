@@ -137,24 +137,15 @@
                     </a>
                 </h5>
             </div>
-            <div class="row mb-3 custom-padding">
+            <div class="row mb-2 custom-padding">
                 <div style="border: 2px solid black;" class="d-flex px-0">
                     <div id="container-01" style="height: 598px; width: 598px;" class="applet-border d-flex">
                         <script src="/static/js/3DMol_applet_DEV.js"></script>
                     </div>
                 </div>
             </div>
-            <div class="row mb-3 justify-content-between align-items-stretch custom-padding">
-                <div class="col-6 col-md-3 col-lg-6 col-xl-3 d-flex justify-content-center mb-2 mb-md-6 mb-lg-2 mb-xl-6">
-                    <input id="surfButton" type="button" value="Surface OFF" style="font-weight: bold; color: #674ea7;"
-                    onclick="toggleSurfaceVisibility()"></input>
-                </div>
-                <div class="col-6 col-md-3 col-lg-6 col-xl-3 d-flex justify-content-center mb-2 mb-md-6 mb-lg-2 mb-xl-6">
-                    <input id="labelButton" type="button" value="Labels OFF" style="font-weight: bold; color: #674ea7;"
-                    onclick="toggleLabelsVisibility()"></input>
-                </div>
-
-                <div class="col-6 col-md-3 col-lg-6 col-xl-3 d-flex justify-content-center mb-2 mb-md-6 mb-lg-2 mb-xl-6">
+            <div class="row mb-2 justify-content-between align-items-stretch custom-padding">
+                <div class="col d-flex justify-content-center">
                     <div class="dropup">
                         <button class="dropup-button" style="font-weight: bold; color: black;">Superposition</button>
                         <div class="dropup-content">
@@ -163,29 +154,56 @@
                         </div>
                     </div>
                 </div>
+            </div>
+            <div class="row mb-2 justify-content-between align-items-stretch custom-padding">
+
+                <div class="col-6 col-md-3 col-lg-6 col-xl-2 d-flex justify-content-center">
+                    <input id="surfButton" type="button" value="Surface OFF" style="font-weight: bold; color: #674ea7;"
+                    onclick="toggleSurfaceVisibility()"></input>
+                </div>
+
+                <div class="col-6 col-md-3 col-lg-6 col-xl-2 d-flex justify-content-center">
+                    <input id="labelButton" type="button" value="Labels OFF" style="font-weight: bold; color: #674ea7;"
+                    onclick="toggleLabelsVisibility()"></input>
+                </div>
                 
-                <div class="col-6 col-md-3 col-lg-6 col-xl-3 d-flex justify-content-center mb-2 mb-md-6 mb-lg-2 mb-xl-6">
+                <div class="col-6 col-md-3 col-lg-6 col-xl-2 d-flex justify-content-center">
                     <input id="ligandButton" type="button" value="Ligands OFF" style="font-weight: bold; color:  #674ea7;"
                     onclick="toggleLigandsVisibility()"></input>
                 </div>
-                <div class="col-6 col-md-3 col-lg-6 col-xl-3 d-flex justify-content-center mb-2 mb-md-6 mb-lg-2 mb-xl-6">
+
+                <div class="col-6 col-md-3 col-lg-6 col-xl-2 d-flex justify-content-center">
                     <input id="waterButton" type="button" value="Waters OFF" style="font-weight: bold; color:  #674ea7;"
                     onclick="toggleWatersVisibility()"></input>
                 </div>
 
-                <div class="col-6 col-md-3 col-lg-6 col-xl-3 d-flex justify-content-center mb-2 mb-md-6 mb-lg-2 mb-xl-6">
+                <div class="col-6 col-md-3 col-lg-6 col-xl-2 d-flex justify-content-center">
                     <input id="contactsButton" type="button" value="Contacts OFF" style="color: darkgray;"
                     onclick="toggleContactsVisibility()" disabled></input>
                 </div>
+            </div> 
+            <div class="row mb-2 justify-content-around align-items-stretch custom-padding">
 
-                <div class="col-6 col-md-3 col-lg-6 col-xl-3 d-flex justify-content-center mb-2 mb-md-6 mb-lg-2 mb-xl-6">
+                <div class="col-6 col-md-3 col-lg-6 col-xl-2 d-flex justify-content-center">
                     <input id="saveImageButton" type="button" value="Save Image" style="color: black;"
                     onclick="saveImage('3DmolCanvas', `${segmentName}_struc`)"></input>
                 </div>
-                <div class="col-6 col-md-3 col-lg-6 col-xl-3 d-flex justify-content-center mb-2 mb-md-6 mb-lg-2 mb-xl-6">
-                    <input id="saveStrucButton" type="button" value="Save Structure" style="color: black;"
+
+                <div class="col-6 col-md-3 col-lg-6 col-xl-2 d-flex justify-content-center">
+                    <input id="saveSuppButton" type="button" value="Save Superposition" style="color: black;"
+                    onclick="saveSuperposition()"></input>
+                </div>
+
+                <div class="col-6 col-md-3 col-lg-6 col-xl-2 d-flex justify-content-center">
+                    <input id="saveAssemblyButton" type="button" value="Save Assembly" style="color: darkgray;"
+                    onclick="downloadFile(`/static/data/biolip/split/structures/cif/${segmentReps[segmentId]['rep']}.cif`)" disabled></input>
+                </div>
+
+                <div class="col-6 col-md-3 col-lg-6 col-xl-2 d-flex justify-content-center">
+                    <input id="saveAssembliesButton" type="button" value="Save Assemblies" style="color: black;"
                     onclick="downloadFile(`/static/data/biolip/split/structures/cif/${segmentReps[segmentId]['rep']}.cif`)"></input>
                 </div>
+
             </div>
         </div>
         <div class="col-lg-3 col-sm-12 mb-3 d-flex flex-column column order-1">
@@ -370,14 +388,54 @@
 <script src="/static/js/3DMol_open_assemblies.js"></script>
 
 <script type="text/javascript">
+    
     function downloadCSV(filepath) {
         window.location.href = '/download-csv?filepath=' + filepath;
     }
+
+    function saveSuperposition() {
+
+        const data = { // need Protein and Segment ID to access correct files
+            proteinId: proteinId,
+            segmentId: segmentId,
+        };
+    
+        // Send a POST request to the Flask route
+        fetch('/download_superposition', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(data)
+        })
+        .then(response => {
+            if (response.ok) {
+                return response.blob();
+            } else {
+                throw new Error('Failed to download file.');
+            }
+        })
+        .then(blob => {
+            const url = window.URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `${proteinId}_${segmentId}_superposition.zip`;
+            document.body.appendChild(a);
+            a.click();
+            a.remove();
+        })
+        .catch(error => {
+            console.error('Error:', error);
+        });
+
+    }
+
     let contactsButton = document.getElementById('contactsButton');
     let ligandButton = document.getElementById('ligandButton');
     let waterButton = document.getElementById('waterButton');
     let labelButton = document.getElementById('labelButton');
     let surfButton = document.getElementById('surfButton');
+
 </script>
 
 {% endblock%}
