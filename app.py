@@ -13,17 +13,6 @@ from flask import Flask, render_template, url_for, request, redirect, jsonify, R
 
 from config import BASE_DIR, DATA_FOLDER, SITE_TABLES_FOLDER, RES_TABLES_FOLDER, REP_STRUCS_FOLDER, BS_RESS_FOLDER, MAPPINGS_FOLDER, STATS_FOLDER, ENTRY_NAMES_FOLDER
 
-### VARIABLES ###
-
-arpeggio_cols = [
-    'contact', 'distance',
-    'auth_asym_id_end', 'auth_atom_id_end', 'auth_seq_id_end',
-    'label_comp_id_end', 'auth_asym_id_bgn',
-    'auth_atom_id_bgn', 'auth_seq_id_bgn', 'label_comp_id_bgn',
-    'orig_label_asym_id_end', 'UniProt_ResNum_end',
-    'coords_end', 'coords_bgn', 'width', 'color'
-]
-
 ### FUNCTIONS ###
 
 def load_pickle(f_in): # loads pickle and returns data
@@ -144,10 +133,6 @@ def generate_pseudobond_lines(df):
             output.append(formatted_string)
     
     return output
-    
-### READING INPUT DATA ###
-
-prot_ids = load_pickle(os.path.join(DATA_FOLDER, "biolip_up_ids_15000_accs.pkl")) # protein idshon
 
 ### SOME FIXED VARIABLES ###
 
@@ -177,6 +162,40 @@ bs_ress_table_tooltips = [ # hover tooltips for binding residue table
     "This is the residue's RSA",
     "This is the residue's secondary structure",
 ]
+
+
+arpeggio_cols = [
+    'contact', 'distance',
+    'auth_asym_id_end', 'auth_atom_id_end', 'auth_seq_id_end',
+    'label_comp_id_end', 'auth_asym_id_bgn',
+    'auth_atom_id_bgn', 'auth_seq_id_bgn', 'label_comp_id_bgn',
+    'orig_label_asym_id_end', 'UniProt_ResNum_end',
+    'coords_end', 'coords_bgn', 'width', 'color'
+]
+
+### INTERACTIONS README ###
+contacts_info = """
+Arpeggio protein-ligand contacts visualisation
+
+The Arpeggio colour scheme is used to visually represent different types of interactions. Below are the hex codes, their corresponding color names and the interactions they represent.
+
+- #000000: Black - Represents 'clash' interactions.
+- #999999: Dim Gray - Used for 'covalent', 'vdw_clash', 'vdw', and 'proximal' interactions.
+- #f04646: Red Orange - Used for 'hbond' and 'polar' interactions.
+- #fc7600: Pumpkin - Represents 'weak_hbond' and 'weak_polar' interactions.
+- #3977db: Royal Blue - Indicates 'xbond' (halogen bond) interactions.
+- #e3e159: Pale Goldenrod - Represents 'ionic' interactions.
+- #800080: Purple - Used for 'metal_complex' interactions.
+- #00ccff: Vivid Sky Blue - Indicates 'aromatic' interactions.
+- #006633: Dark Green - Represents 'hydrophobic' interactions.
+- #ff007f: Bright Pink - Used for 'carbonyl' interactions.
+
+The width of the pseudobonds represents the distance between the interacting atoms. Width of 0.125 if the atoms are within VdW Clash distance, otherwise 0.0625.
+"""
+
+### READING INPUT DATA ###
+
+prot_ids = load_pickle(os.path.join(DATA_FOLDER, "biolip_up_ids_15000_accs.pkl")) # protein idshon
 
 #### FLASK APP ###
 
@@ -402,13 +421,9 @@ def get_contacts():
 
     struc_ligs = {k: v for k, v in bs_membership_rev.items() if k.startswith(active_model)}
 
-    #struc_ligs_data = transform_dict(struc_ligs)
-
     arpeggio_cons_filt["LIGAND_ID"] = arpeggio_cons_filt.label_comp_id_bgn + "_" + arpeggio_cons_filt.auth_asym_id_bgn + "_" + arpeggio_cons_filt.auth_seq_id_bgn.astype(str)
 
-    #print(arpeggio_cons_filt)
-
-    struc_prot_data = list(arpeggio_cons_filt[["label_comp_id_end", "auth_asym_id_end", "auth_seq_id_end"]].drop_duplicates().itertuples(index=False, name=None))
+    #struc_prot_data = list(arpeggio_cons_filt[["label_comp_id_end", "auth_asym_id_end", "auth_seq_id_end"]].drop_duplicates().itertuples(index=False, name=None))
 
     struc_prot_data = {}
     for k, v in struc_ligs.items():
@@ -420,19 +435,10 @@ def get_contacts():
             ligand_site
         ]
 
-
     response_data = {
         'contacts': json_cons,
-        #'ligands': struc_ligs_data,
         'protein': struc_prot_data,
     }
-
-    # print(struc_ligs)
-    # print(len(json_cons))
-    # print(len(struc_ligs_data))
-    # print(struc_ligs_data)
-    # print(len(struc_prot_data))
-    #print(struc_prot_data)
 
     return jsonify(response_data) # send jasonified data back to client
 
@@ -551,13 +557,53 @@ def download_assembly():
     pseudobond_lines = "\n".join(generate_pseudobond_lines(arpeggio_cons_filt))
     pseudobond_file = f'{prot_id}_{seg_id}_{pdb_id}.pb'
 
-    aas_str = ""
-    for _, row in arpeggio_cons_filt.drop_duplicates(["auth_asym_id_end", "auth_seq_id_end"]).iterrows():
-        aas_str += f'disp /{row.auth_asym_id_end}:{row.auth_seq_id_end}; '
+    bs_membership = pd.read_pickle(f'{DATA_FOLDER}/example/other/{prot_id}_{seg_id}_ALL_inf_bss_membership.pkl')
 
-    ligs_str = ""
-    for _, row in arpeggio_cons_filt.drop_duplicates(["auth_asym_id_bgn", "auth_seq_id_bgn"]).iterrows():
-        ligs_str += f'disp /{row.auth_asym_id_bgn}:{row.auth_seq_id_bgn}; '
+    bs_membership_rev = {v: k for k, vs in bs_membership.items() for v in vs}
+
+    struc_ligs = {k: v for k, v in bs_membership_rev.items() if k.startswith(pdb_id)}
+
+    arpeggio_cons_filt["LIGAND_ID"] = arpeggio_cons_filt.label_comp_id_bgn + "_" + arpeggio_cons_filt.auth_asym_id_bgn + "_" + arpeggio_cons_filt.auth_seq_id_bgn.astype(str)
+
+    struc_prot_data = {}
+    for k, v in struc_ligs.items():
+        ligand_id = "_".join(k.split("_")[1:])
+        ligand_site = v
+        ligand_rows = arpeggio_cons_filt[arpeggio_cons_filt.LIGAND_ID == ligand_id]
+        struc_prot_data[ligand_id] = [
+            list(ligand_rows[["label_comp_id_end", "auth_asym_id_end", "auth_seq_id_end"]].drop_duplicates().itertuples(index=False, name=None)),
+            ligand_site
+        ]
+
+    print(struc_prot_data)
+
+    aas_str = []#""
+    # for _, row in arpeggio_cons_filt.drop_duplicates(["auth_asym_id_end", "auth_seq_id_end"]).iterrows():
+    #     aas_str += f'disp /{row.auth_asym_id_end}:{row.auth_seq_id_end}; '
+
+    ligs_str = []#""
+    # for _, row in arpeggio_cons_filt.drop_duplicates(["auth_asym_id_bgn", "auth_seq_id_bgn"]).iterrows():
+    #     ligs_str += f'disp /{row.auth_asym_id_bgn}:{row.auth_seq_id_bgn}; '
+    for k, v in struc_prot_data.items():
+        lig_resn, lig_chain, lig_resi = k.split("_")
+        ress = v[0]
+        col_key = v[1]
+        prot_sel_str = 'sel ' + ' '.join([f'/{el[1]}:{el[2]}' for el in ress]) + ';'
+        prot_col_str = f'col sel {colors[col_key]}'
+        prot_disp_str = 'disp sel'
+
+        lig_sel_str = 'sel ' + f'/{lig_chain}:{lig_resi};'
+        lig_col_str = f'col sel {colors[col_key]}'
+        lig_disp_str = 'disp sel'
+
+        # aas_str += f'{prot_sel_str} {prot_col_str}'
+        # ligs_str += f'{ligs_str} {ligs_col_str}'
+
+        aas_str.extend([prot_sel_str, prot_col_str, prot_disp_str])
+        ligs_str.extend([lig_sel_str, lig_col_str, lig_disp_str])
+
+        # for el in ress:
+        #     ligs_str += f'disp /{el[1]}:{el[2]}; '
 
     cxc_lines = "\n".join(
         [
@@ -569,12 +615,14 @@ def download_assembly():
             '~disp',
             'surface',
             'transparency 30',
-            aas_str,
-            ligs_str,
-        ]
+        ]  + aas_str + ligs_str + ['~sel']
     )
 
+    print(cxc_lines)
+
     cxc_file = f'{prot_id}_{seg_id}_{pdb_id}.cxc'
+
+    info_file = "README.txt"
 
     files_to_zip = [
         assembly_file, 
@@ -606,7 +654,8 @@ def download_assembly():
     cxc_file_in_memory = io.BytesIO()
     cxc_file_in_memory.write(cxc_lines.encode('utf-8'))
         
-        
+    info_file_in_memory = io.BytesIO()
+    info_file_in_memory.write(contacts_info.encode('utf-8'))
     
     # Additionally, create an in-memory zip file for sending to the client
     memory_file = io.BytesIO()
@@ -622,6 +671,9 @@ def download_assembly():
 
         cxc_file_in_memory.seek(0)
         zf.writestr(cxc_file, cxc_file_in_memory.read())
+
+        info_file_in_memory.seek(0)
+        zf.writestr(info_file, info_file_in_memory.read())
     
     # Seek to the beginning of the in-memory zip file before sending it
     memory_file.seek(0)
