@@ -472,13 +472,10 @@ def download_superposition():
     
     prot_id = data.get('proteinId')
     seg_id = data.get('segmentId')
-    #simple_pdbs = data.get('simplePdbs')
 
     simple_dir = os.path.join(DATA_FOLDER, prot_id, str(seg_id), "simple")
     simple_pdbs = os.listdir(simple_dir)
     simple_pdbs = [f'{simple_dir}/{el}' for el in simple_pdbs if el.endswith(".cif")]
-
-    #print(simple_pdbs)
 
     seg_name = f'{prot_id}_{seg_id}'
     cxc_in =f'{DATA_FOLDER}/{prot_id}/{seg_id}/simple/{seg_name}_ALL_inf_average_0.5.cxc' # ChimeraX command file
@@ -493,25 +490,6 @@ def download_superposition():
 
     files_to_zip = simple_pdbs + [attr_in, cxc_in]
 
-    # # Create a directory to save the zip file if it doesn't exist
-    # local_save_directory = f'{DATA_FOLDER}/test'
-    # if not os.path.exists(local_save_directory):
-    #     os.makedirs(local_save_directory)
-    
-    # # Define the local file path for saving
-    # zip_filename = f'{prot_id}_{seg_id}_superposition.zip'
-    # local_file_path = os.path.join(local_save_directory, zip_filename)
-    
-    # # Create a ZipFile object to save locally
-    # with zipfile.ZipFile(local_file_path, 'w') as zf:
-    #     for file_path in files_to_zip:
-    #         #print(file_path)
-    #         if os.path.exists(file_path):  # Check if the file exists
-    #             print(file_path)
-    #             zf.write(file_path, os.path.basename(file_path))
-    #         else:
-    #             return jsonify({'error': f"File {file_path} not found"}), 404
-    
     # Create a ZipFile object for in-memory use
     with zipfile.ZipFile(memory_file, 'w') as zf:
         for file_path in files_to_zip:
@@ -577,13 +555,10 @@ def download_assembly():
 
     print(struc_prot_data)
 
-    aas_str = []#""
-    # for _, row in arpeggio_cons_filt.drop_duplicates(["auth_asym_id_end", "auth_seq_id_end"]).iterrows():
-    #     aas_str += f'disp /{row.auth_asym_id_end}:{row.auth_seq_id_end}; '
+    aas_str = []
 
-    ligs_str = []#""
-    # for _, row in arpeggio_cons_filt.drop_duplicates(["auth_asym_id_bgn", "auth_seq_id_bgn"]).iterrows():
-    #     ligs_str += f'disp /{row.auth_asym_id_bgn}:{row.auth_seq_id_bgn}; '
+    ligs_str = []
+
     for k, v in struc_prot_data.items():
         lig_resn, lig_chain, lig_resi = k.split("_")
         ress = v[0]
@@ -596,18 +571,13 @@ def download_assembly():
         lig_col_str = f'col sel {colors[col_key]}'
         lig_disp_str = 'disp sel'
 
-        # aas_str += f'{prot_sel_str} {prot_col_str}'
-        # ligs_str += f'{ligs_str} {ligs_col_str}'
-
         aas_str.extend([prot_sel_str, prot_col_str, prot_disp_str])
         ligs_str.extend([lig_sel_str, lig_col_str, lig_disp_str])
-
-        # for el in ress:
-        #     ligs_str += f'disp /{el[1]}:{el[2]}; '
 
     cxc_lines = "\n".join(
         [
             f'open {pdb_id}_bio.cif',
+            'color white', 
             f'open {pseudobond_file}',
             'set bgColor white',
             'set silhouette ON',
@@ -629,23 +599,6 @@ def download_assembly():
         #pseudobond_file, 
         #cxc_file
     ]
-    
-    # # Create a directory to save the zip file if it doesn't exist
-    # local_save_directory = '/path/to/save/directory'
-    # if not os.path.exists(local_save_directory):
-    #     os.makedirs(local_save_directory)
-    
-    # # Define the local file path for saving
-    # zip_filename = f'{protein_id}_{segment_id}_assembly.zip'
-    # local_file_path = os.path.join(local_save_directory, zip_filename)
-    
-    # # Create a ZipFile object to save locally
-    # with zipfile.ZipFile(local_file_path, 'w') as zf:
-    #     for file_path in files_to_zip:
-    #         if os.path.exists(file_path):  # Check if the file exists
-    #             zf.write(file_path, os.path.basename(file_path))
-    #         else:
-    #             return jsonify({'error': f"File {file_path} not found"}), 404
 
     # Create and add in-memory files directly to the zip
     pb_file_in_memory = io.BytesIO()
@@ -657,7 +610,7 @@ def download_assembly():
     info_file_in_memory = io.BytesIO()
     info_file_in_memory.write(contacts_info.encode('utf-8'))
     
-    # Additionally, create an in-memory zip file for sending to the client
+    # Create an in-memory zip file for sending to the client
     memory_file = io.BytesIO()
     with zipfile.ZipFile(memory_file, 'w') as zf:
         # Add the existing files to the in-memory zip
@@ -686,6 +639,140 @@ def download_assembly():
         download_name=f'{prot_id}_{seg_id}_{pdb_id}_assembly.zip'
     )
 ### LAUNCHING SERVER ###
+
+@app.route('/download_all_assemblies', methods=['POST'])
+def download_all_assemblies():
+    # Get JSON data from the POST request
+    data = request.get_json()
+    
+    prot_id = data.get('proteinId')
+    seg_id = data.get('segmentId')
+    assembly_pdb_ids = data.get('assemblyPdbIds')  # This is your array
+
+    bs_membership = pd.read_pickle(f'{DATA_FOLDER}/example/other/{prot_id}_{seg_id}_ALL_inf_bss_membership.pkl')
+
+    bs_membership_rev = {v: k for k, vs in bs_membership.items() for v in vs}
+
+    # print(prot_id, seg_id, assembly_pdb_ids)
+
+    if not prot_id or not seg_id or not assembly_pdb_ids: # Validate the received data
+        return jsonify({'error': 'Missing data'}), 400
+    
+    memory_file = io.BytesIO() # Create an in-memory zip file for sending to the client
+    with zipfile.ZipFile(memory_file, 'w') as zf:
+        for pdb_id in assembly_pdb_ids: # Loop through each assembly PDB ID to create corresponding folders in the zip
+            folder_name = f'{pdb_id}'
+
+            assembly_file = f'{DATA_FOLDER}/{prot_id}/{seg_id}/assemblies/{pdb_id}_bio.cif' # assembly cif file
+
+            arpeggio_cons = pd.read_pickle(f'{DATA_FOLDER}/{prot_id}/{seg_id}/arpeggio/{pdb_id}_bio_proc.pkl')
+
+            arpeggio_cons_filt = arpeggio_cons[
+                (arpeggio_cons['contact'].apply(lambda x: x != ["proximal"])) &
+                (arpeggio_cons['interacting_entities'] == "INTER") &
+                (arpeggio_cons['type'] == "atom-atom")
+            ].copy()
+
+            pseudobond_lines = "\n".join(generate_pseudobond_lines(arpeggio_cons_filt))
+            pseudobond_file = f'{prot_id}_{seg_id}_{pdb_id}.pb'
+
+            struc_ligs = {k: v for k, v in bs_membership_rev.items() if k.startswith(pdb_id)}
+
+            arpeggio_cons_filt["LIGAND_ID"] = arpeggio_cons_filt.label_comp_id_bgn + "_" + arpeggio_cons_filt.auth_asym_id_bgn + "_" + arpeggio_cons_filt.auth_seq_id_bgn.astype(str)
+
+            struc_prot_data = {}
+            for k, v in struc_ligs.items():
+                ligand_id = "_".join(k.split("_")[1:])
+                ligand_site = v
+                ligand_rows = arpeggio_cons_filt[arpeggio_cons_filt.LIGAND_ID == ligand_id]
+                struc_prot_data[ligand_id] = [
+                    list(ligand_rows[["label_comp_id_end", "auth_asym_id_end", "auth_seq_id_end"]].drop_duplicates().itertuples(index=False, name=None)),
+                    ligand_site
+                ]
+
+            aas_str = []
+
+            ligs_str = []
+
+            for k, v in struc_prot_data.items():
+                lig_resn, lig_chain, lig_resi = k.split("_")
+                ress = v[0]
+                col_key = v[1]
+                prot_sel_str = 'sel ' + ' '.join([f'/{el[1]}:{el[2]}' for el in ress]) + ';'
+                prot_col_str = f'col sel {colors[col_key]}'
+                prot_disp_str = 'disp sel'
+
+                lig_sel_str = 'sel ' + f'/{lig_chain}:{lig_resi};'
+                lig_col_str = f'col sel {colors[col_key]}'
+                lig_disp_str = 'disp sel'
+
+                aas_str.extend([prot_sel_str, prot_col_str, prot_disp_str])
+                ligs_str.extend([lig_sel_str, lig_col_str, lig_disp_str])
+
+            cxc_lines = "\n".join(
+                [
+                    f'open {pdb_id}_bio.cif',
+                    'color white', 
+                    f'open {pseudobond_file}',
+                    'set bgColor white',
+                    'set silhouette ON',
+                    'set silhouettewidth 2',
+                    '~disp',
+                    'surface',
+                    'transparency 30',
+                ]  + aas_str + ligs_str + ['~sel']
+            )
+
+            # print(cxc_lines)
+
+            cxc_file = f'{prot_id}_{seg_id}_{pdb_id}.cxc'
+
+            info_file = "README.txt"
+
+            files_to_zip = [
+                assembly_file, 
+                #pseudobond_file, 
+                #cxc_file
+            ]
+
+            # Create and add in-memory files directly to the zip
+            pb_file_in_memory = io.BytesIO()
+            pb_file_in_memory.write(pseudobond_lines.encode('utf-8'))
+
+            cxc_file_in_memory = io.BytesIO()
+            cxc_file_in_memory.write(cxc_lines.encode('utf-8'))
+            
+            for file_path in files_to_zip:
+                if os.path.exists(file_path):  # Check if the file exists
+                    zf.write(file_path, os.path.join(folder_name, os.path.basename(file_path)))
+
+            # Add the in-memory files directly to the in-memory zip
+            pb_file_in_memory.seek(0)
+            zf.writestr(os.path.join(folder_name, pseudobond_file), pb_file_in_memory.read())
+
+            cxc_file_in_memory.seek(0)
+            zf.writestr(os.path.join(folder_name, cxc_file), cxc_file_in_memory.read())
+
+        info_file_in_memory = io.BytesIO()
+        info_file_in_memory.write(contacts_info.encode('utf-8'))
+
+        info_file_in_memory.seek(0)
+        zf.writestr(info_file, info_file_in_memory.read())
+        
+        # # Add the same in-memory file to the in-memory zip
+        # in_memory_file.seek(0)
+        # zf.writestr(f'{protein_id}_{segment_id}/in_memory_file.txt', in_memory_file.read())
+    
+    # Seek to the beginning of the in-memory zip file before sending it
+    memory_file.seek(0)
+    
+    # Send the zip file to the client as a downloadable file
+    return send_file(
+        memory_file,
+        mimetype='application/zip',
+        as_attachment=True,
+        download_name=f'{prot_id}_{seg_id}_all_assemblies.zip'
+    )
 
 if __name__ == "__main__":
     app.run(port = 9000, debug = True) # run Flask LIGYSIS app on port 9000
