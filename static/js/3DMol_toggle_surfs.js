@@ -601,16 +601,9 @@ function toggleContactsVisibility() {
                         labelsHash["contactSites"].push(label);
                     }
                 }
-                // check if a site is clicked
-                // let clickedElements = document.getElementsByClassName("clicked-row");
-                // if (clickedElements.length > 0) { // if a row is clicked i just show the surface of the clicked site
-                //     let clickedElement = clickedElements[0];
-                //     let clickedElementId = clickedElement.id;
-                //     // need to keep the residues of the clicked site displayed
 
-                // else {
                 viewer.addStyle({model: activeModel, or:ligandSitesHash[activeModel][ligNam]}, {cartoon:{hidden: false, color: ligColor}, stick: {hidden: false, color: ligColor, radius: stickRadius}});
-                // }
+
                 viewer.addStyle({model: activeModel, resi: ligResi, chain: ligChain, resn: ligMol}, {stick: {hidden: false, color: ligColor, radius: stickRadius}});
                 // add ligand-interacting residues surfaces
                 surfsDict[activeModel]["lig_inters"][ligNam] = viewer.addSurface(
@@ -631,7 +624,6 @@ function toggleContactsVisibility() {
                 if (clickedElements.length > 0) { // if a row is clicked i just show the surface of the clicked site
                     let clickedElement = clickedElements[0];
                     let clickedElementId = clickedElement.id;
-                    //let siteColor = chartColors[Number(clickedElementId.split("_").pop())];
                     for (const [key, value] of Object.entries(surfsDict[activeModel])) { // show surfaces of ligand-interacting residues
                         if (key == "lig_inters") {
                             for (const [key2, value2] of Object.entries(value)) {
@@ -664,10 +656,9 @@ function toggleContactsVisibility() {
                         }
                     }
                 }   
-
             }
-
             viewer.render();
+            
             contactsButton.value = 'Contacts ON'; // Change the button text
             contactsButton.style = "font-weight: bold; color:#B22222;";
             contactsVisible = true;

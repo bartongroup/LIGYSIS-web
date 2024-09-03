@@ -119,6 +119,32 @@ def convert_mapping_dict(d):
                 #     rfd[k1][k2][k3][int(k4)] = int(v4)
     return rfd
 
+def generate_pseudobond_lines(df):
+    # Create an empty list to store the formatted strings
+    output = []
+    
+    # Group the DataFrame by the 'width' column
+    grouped = df.groupby('width')
+    
+    # Iterate over each group (by width)
+    for width, group in grouped:
+        # Add the radius line
+        output.append(f"; radius = {width}")
+        
+        # Iterate over each row in the group
+        for _, row in group.iterrows():
+            # Extract necessary information for the format
+            end_part = f"/{row['auth_asym_id_end']}:{row['auth_seq_id_end']}@{row['auth_atom_id_end']}"
+            begin_part = f"/{row['auth_asym_id_bgn']}:{row['auth_seq_id_bgn']}@{row['auth_atom_id_bgn']}"
+            
+            # Combine end, begin parts, and add the color
+            formatted_string = f"{end_part} {begin_part} {row['color']}"
+            
+            # Append the formatted string to the output list
+            output.append(formatted_string)
+    
+    return output
+    
 ### READING INPUT DATA ###
 
 prot_ids = load_pickle(os.path.join(DATA_FOLDER, "biolip_up_ids_15000_accs.pkl")) # protein idshon
@@ -499,6 +525,114 @@ def download_superposition():
         download_name=f'{prot_id}_{seg_id}_superposition.zip'
     )
 
+@app.route('/download_assembly', methods=['POST'])
+def download_assembly():
+    # Get JSON data from the POST request
+    data = request.get_json()
+    
+    prot_id = data.get('proteinId')
+    seg_id = data.get('segmentId')
+    pdb_id = data.get('pdbId')
+    
+    # Validate the received data
+    if not prot_id or not seg_id or not pdb_id:
+        return jsonify({'error': 'Missing data'}), 400
+
+    assembly_file = f'{DATA_FOLDER}/{prot_id}/{seg_id}/assemblies/{pdb_id}_bio.cif' # assembly cif file
+
+    arpeggio_cons = pd.read_pickle(f'{DATA_FOLDER}/{prot_id}/{seg_id}/arpeggio/{pdb_id}_bio_proc.pkl')
+
+    arpeggio_cons_filt = arpeggio_cons[
+        (arpeggio_cons['contact'].apply(lambda x: x != ["proximal"])) &
+        (arpeggio_cons['interacting_entities'] == "INTER") &
+        (arpeggio_cons['type'] == "atom-atom")
+    ].copy()
+
+    pseudobond_lines = "\n".join(generate_pseudobond_lines(arpeggio_cons_filt))
+    pseudobond_file = f'{prot_id}_{seg_id}_{pdb_id}.pb'
+
+    aas_str = ""
+    for _, row in arpeggio_cons_filt.drop_duplicates(["auth_asym_id_end", "auth_seq_id_end"]).iterrows():
+        aas_str += f'disp /{row.auth_asym_id_end}:{row.auth_seq_id_end}; '
+
+    ligs_str = ""
+    for _, row in arpeggio_cons_filt.drop_duplicates(["auth_asym_id_bgn", "auth_seq_id_bgn"]).iterrows():
+        ligs_str += f'disp /{row.auth_asym_id_bgn}:{row.auth_seq_id_bgn}; '
+
+    cxc_lines = "\n".join(
+        [
+            f'open {pdb_id}_bio.cif',
+            f'open {pseudobond_file}',
+            'set bgColor white',
+            'set silhouette ON',
+            'set silhouettewidth 2',
+            '~disp',
+            'surface',
+            'transparency 30',
+            aas_str,
+            ligs_str,
+        ]
+    )
+
+    cxc_file = f'{prot_id}_{seg_id}_{pdb_id}.cxc'
+
+    files_to_zip = [
+        assembly_file, 
+        #pseudobond_file, 
+        #cxc_file
+    ]
+    
+    # # Create a directory to save the zip file if it doesn't exist
+    # local_save_directory = '/path/to/save/directory'
+    # if not os.path.exists(local_save_directory):
+    #     os.makedirs(local_save_directory)
+    
+    # # Define the local file path for saving
+    # zip_filename = f'{protein_id}_{segment_id}_assembly.zip'
+    # local_file_path = os.path.join(local_save_directory, zip_filename)
+    
+    # # Create a ZipFile object to save locally
+    # with zipfile.ZipFile(local_file_path, 'w') as zf:
+    #     for file_path in files_to_zip:
+    #         if os.path.exists(file_path):  # Check if the file exists
+    #             zf.write(file_path, os.path.basename(file_path))
+    #         else:
+    #             return jsonify({'error': f"File {file_path} not found"}), 404
+
+    # Create and add in-memory files directly to the zip
+    pb_file_in_memory = io.BytesIO()
+    pb_file_in_memory.write(pseudobond_lines.encode('utf-8'))
+
+    cxc_file_in_memory = io.BytesIO()
+    cxc_file_in_memory.write(cxc_lines.encode('utf-8'))
+        
+        
+    
+    # Additionally, create an in-memory zip file for sending to the client
+    memory_file = io.BytesIO()
+    with zipfile.ZipFile(memory_file, 'w') as zf:
+        # Add the existing files to the in-memory zip
+        for file_path in files_to_zip:
+            if os.path.exists(file_path):  # Check if the file exists
+                zf.write(file_path, os.path.basename(file_path))
+        
+        # Add the in-memory files directly to the in-memory zip
+        pb_file_in_memory.seek(0)
+        zf.writestr(pseudobond_file, pb_file_in_memory.read())
+
+        cxc_file_in_memory.seek(0)
+        zf.writestr(cxc_file, cxc_file_in_memory.read())
+    
+    # Seek to the beginning of the in-memory zip file before sending it
+    memory_file.seek(0)
+    
+    # Send the zip file to the client as a downloadable file
+    return send_file(
+        memory_file,
+        mimetype='application/zip',
+        as_attachment=True,
+        download_name=f'{prot_id}_{seg_id}_{pdb_id}_assembly.zip'
+    )
 ### LAUNCHING SERVER ###
 
 if __name__ == "__main__":
