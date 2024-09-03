@@ -38,7 +38,6 @@ function selectOption(option) {
             waterButton.value = 'Waters OFF';
             waterButton.style = "font-weight: bold; color: #674ea7;";
             watersVisible = false;
-
         }
 
         if (labelsVisible) { // if labels were visible, hide them
@@ -96,6 +95,9 @@ function selectOption(option) {
             contactsButton.style.color = '#674ea7';  // Active font color
             contactsButton.style.fontWeight = 'bold'; // Bold font when active
 
+            saveAssemblyButton.disabled = false;
+            saveAssemblyButton.style.color = 'black';  // Active font color
+
             openStructure(option);
         }
 
@@ -149,12 +151,18 @@ function selectOption(option) {
                 contactsButton.disabled = false;
                 contactsButton.style.color = '#674ea7';  // Active font color
                 contactsButton.style.fontWeight = 'bold'; // Bold font when active
+
+                saveAssemblyButton.disabled = false;
+                saveAssemblyButton.style.color = 'black';  // Active font color
             }
             else {
 
                 contactsButton.disabled = true;
                 contactsButton.style.color = 'darkgray';
                 contactsButton.style.fontWeight = 'normal'; // Bold font when active
+
+                saveAssemblyButton.disabled = true;
+                saveAssemblyButton.style.color = 'darkgray';  // Active font color
 
                 console.log(`Reading SIFTS mapping for ${repPdbId} chain ${repPdbChainId}`);
 

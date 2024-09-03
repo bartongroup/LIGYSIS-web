@@ -196,7 +196,7 @@
 
                 <div class="col-6 col-md-3 col-lg-6 col-xl-2 d-flex justify-content-center">
                     <input id="saveAssemblyButton" type="button" value="Save Assembly" style="color: darkgray;"
-                    onclick="downloadFile(`/static/data/biolip/split/structures/cif/${segmentReps[segmentId]['rep']}.cif`)" disabled></input>
+                    onclick="saveAssembly()" disabled></input>
                 </div>
 
                 <div class="col-6 col-md-3 col-lg-6 col-xl-2 d-flex justify-content-center">
@@ -388,7 +388,7 @@
 <script src="/static/js/3DMol_open_assemblies.js"></script>
 
 <script type="text/javascript">
-    
+
     function downloadCSV(filepath) {
         window.location.href = '/download-csv?filepath=' + filepath;
     }
