@@ -173,6 +173,14 @@ arpeggio_cols = [
     'coords_end', 'coords_bgn', 'width', 'color'
 ]
 
+extra_cxc_lines = [
+    "color white; set bgColor white;",
+    "set silhouette ON; set silhouetteWidth 2; set silhouetteColor black;",
+    "~disp; select ~protein; ~select : HOH; ~select ::binding_site==-1; disp sel; ~sel;",
+    "col :HOH orange; col ::binding_site==-1 grey;",
+    "surf protein; transparency 30 s;",
+]
+
 ### INTERACTIONS README ###
 contacts_info = """
 Arpeggio protein-ligand contacts visualisation
@@ -467,8 +475,7 @@ def get_uniprot_mapping(): # route to get UniProt residue and chain mapping for 
 @app.route('/download_superposition', methods=['POST'])
 def download_superposition():
 
-    # Get JSON data from the POST request
-    data = request.get_json()
+    data = request.get_json() # Get JSON data from the POST request
     
     prot_id = data.get('proteinId')
     seg_id = data.get('segmentId')
@@ -480,29 +487,57 @@ def download_superposition():
     seg_name = f'{prot_id}_{seg_id}'
     cxc_in =f'{DATA_FOLDER}/{prot_id}/{seg_id}/simple/{seg_name}_ALL_inf_average_0.5.cxc' # ChimeraX command file
     attr_in =  f'{DATA_FOLDER}/{prot_id}/{seg_id}/simple/{seg_name}_ALL_inf_average_0.5.defattr' # ChimeraX attribute file
+
+    bs_membership = pd.read_pickle(f'{DATA_FOLDER}/example/other/{prot_id}_{seg_id}_ALL_inf_bss_membership.pkl')
+
+    bs_ids = list(bs_membership.keys())
     
-    # Validate the received data
-    if not prot_id or not seg_id or not simple_pdbs:
+    if not prot_id or not seg_id or not simple_pdbs: # Validate the received data
         return jsonify({'error': 'Missing data'}), 400
 
-    # Create a BytesIO object to hold the in-memory zip file
-    memory_file = io.BytesIO()
+    # read lines in cxc_in and push to cxc_lines
+    cxc_lines = []
+    with open(cxc_in, 'r') as file:
+        for line in file:
+            if line.strip() == '':
+                continue
+            else:
+                cxc_lines.append(line.strip())
+                if line.strip().startswith("# colouring"):
+                    break
 
-    files_to_zip = simple_pdbs + [attr_in, cxc_in]
+    for el in extra_cxc_lines:
+        cxc_lines.append(el)
+    
+    for bs_id in bs_ids:
+        cxc_lines.append((f'col ::binding_site=={bs_id} {colors[bs_id]};'))
+    
+    cxc_lines.append(f'save {prot_id}_{seg_id}_ALL_inf_average_0.5.cxs;')
+    cxc_lines_string = "\n".join(cxc_lines)
 
-    # Create a ZipFile object for in-memory use
-    with zipfile.ZipFile(memory_file, 'w') as zf:
+    # Create and add in-memory files directly to the zip
+    cxc_file = f'{seg_name}_ALL_inf_average_0.5.cxc'
+    cxc_file_in_memory = io.BytesIO()
+    cxc_file_in_memory.write(cxc_lines_string.encode('utf-8'))
+
+    files_to_zip = simple_pdbs + [attr_in, ]#cxc_in]
+
+    memory_file = io.BytesIO() # Create a BytesIO object to hold the in-memory zip file
+
+    with zipfile.ZipFile(memory_file, 'w') as zf: # Create a ZipFile object for in-memory use
         for file_path in files_to_zip:
             if os.path.exists(file_path):  # Check if the file exists
                 zf.write(file_path, os.path.basename(file_path))
             else:
                 return f"File {file_path} not found", 404
+        
+        # Add the in-memory files directly to the in-memory zip
+        cxc_file_in_memory.seek(0)
+        zf.writestr(cxc_file, cxc_file_in_memory.read())
     
-    # Make sure to seek to the beginning of the BytesIO object before sending it
-    memory_file.seek(0)
+    memory_file.seek(0)  # Seek to the beginning of the BytesIO object before sending it
     
-    # Send the zip file to the client as a downloadable file
-    return send_file(
+    return send_file( # Send the zip file to the client as a downloadable file
         memory_file,
         mimetype='application/zip',
         as_attachment=True,
@@ -511,15 +546,13 @@ def download_superposition():
 
 @app.route('/download_assembly', methods=['POST'])
 def download_assembly():
-    # Get JSON data from the POST request
-    data = request.get_json()
+    data = request.get_json() # Get JSON data from the POST request
     
     prot_id = data.get('proteinId')
     seg_id = data.get('segmentId')
     pdb_id = data.get('pdbId')
     
-    # Validate the received data
-    if not prot_id or not seg_id or not pdb_id:
+    if not prot_id or not seg_id or not pdb_id: # Validate the received data
         return jsonify({'error': 'Missing data'}), 400
 
     assembly_file = f'{DATA_FOLDER}/{prot_id}/{seg_id}/assemblies/{pdb_id}_bio.cif' # assembly cif file
@@ -552,8 +585,6 @@ def download_assembly():
             list(ligand_rows[["label_comp_id_end", "auth_asym_id_end", "auth_seq_id_end"]].drop_duplicates().itertuples(index=False, name=None)),
             ligand_site
         ]
-
-    print(struc_prot_data)
 
     aas_str = []
 
@@ -588,16 +619,12 @@ def download_assembly():
         ]  + aas_str + ligs_str + ['~sel']
     )
 
-    print(cxc_lines)
-
     cxc_file = f'{prot_id}_{seg_id}_{pdb_id}.cxc'
 
     info_file = "README.txt"
 
     files_to_zip = [
         assembly_file, 
-        #pseudobond_file, 
-        #cxc_file
     ]
 
     # Create and add in-memory files directly to the zip
@@ -638,12 +665,10 @@ def download_assembly():
         as_attachment=True,
         download_name=f'{prot_id}_{seg_id}_{pdb_id}_assembly.zip'
     )
-### LAUNCHING SERVER ###
 
 @app.route('/download_all_assemblies', methods=['POST'])
 def download_all_assemblies():
-    # Get JSON data from the POST request
-    data = request.get_json()
+    data = request.get_json() # Get JSON data from the POST request
     
     prot_id = data.get('proteinId')
     seg_id = data.get('segmentId')
@@ -652,8 +677,6 @@ def download_all_assemblies():
     bs_membership = pd.read_pickle(f'{DATA_FOLDER}/example/other/{prot_id}_{seg_id}_ALL_inf_bss_membership.pkl')
 
     bs_membership_rev = {v: k for k, vs in bs_membership.items() for v in vs}
-
-    # print(prot_id, seg_id, assembly_pdb_ids)
 
     if not prot_id or not seg_id or not assembly_pdb_ids: # Validate the received data
         return jsonify({'error': 'Missing data'}), 400
@@ -723,16 +746,12 @@ def download_all_assemblies():
                 ]  + aas_str + ligs_str + ['~sel']
             )
 
-            # print(cxc_lines)
-
             cxc_file = f'{prot_id}_{seg_id}_{pdb_id}.cxc'
 
             info_file = "README.txt"
 
             files_to_zip = [
                 assembly_file, 
-                #pseudobond_file, 
-                #cxc_file
             ]
 
             # Create and add in-memory files directly to the zip
@@ -758,10 +777,6 @@ def download_all_assemblies():
 
         info_file_in_memory.seek(0)
         zf.writestr(info_file, info_file_in_memory.read())
-        
-        # # Add the same in-memory file to the in-memory zip
-        # in_memory_file.seek(0)
-        # zf.writestr(f'{protein_id}_{segment_id}/in_memory_file.txt', in_memory_file.read())
     
     # Seek to the beginning of the in-memory zip file before sending it
     memory_file.seek(0)
@@ -773,6 +788,8 @@ def download_all_assemblies():
         as_attachment=True,
         download_name=f'{prot_id}_{seg_id}_all_assemblies.zip'
     )
+
+### LAUNCHING SERVER ###
 
 if __name__ == "__main__":
     app.run(port = 9000, debug = True) # run Flask LIGYSIS app on port 9000
