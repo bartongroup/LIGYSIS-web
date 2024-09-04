@@ -75,7 +75,7 @@ function loadAllModels(simplePdbs) { // Load all structures
 
         suppModels = Array.from({length: models.length}, (_, i) => 0 + i); // Create an array of model IDs from 0 to N-1 where N is the number of superposition models
 
-        viewer.setViewStyle({style: "outline", width: outlineWidth, color: outlineColor}); // cartoon outline
+        viewer.setViewStyle({style: "outline", width: outlineWidth, color: outlineColor, "maxpixels": 2}); // cartoon outline
         viewer.setStyle({model: suppModels, hetflag: false}, {cartoon: {hidden: false, style: 'oval', color: 'white', arrows: true, thickness: cartoonThickness, opacity: cartoonOpacity}}); // cartoon representation for protein
         viewer.setStyle({model: suppModels, hetflag: true}, {stick: {hidden: true, radius: 0}}); // stick representation for ligands (HETATM), hidden by default
 
