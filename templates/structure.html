@@ -28,8 +28,10 @@
     let newChartData = {{ first_site_data | tojson }}
     let headings = {{ headings | tojson }}
     let segStats = {{ seg_stats | tojson  }}
-    let repStruc = segmentReps[segmentId]["rep"]
-    let [repPdbId, repPdbChainId] = repStruc.split("_");
+    let protAtomsRep = {{ prot_atoms_rep | tojson }}
+    let [repPdbId, repPdbChainId] = protAtomsRep.split("_");
+    // let repStruc = segmentReps[segmentId]["rep"]
+    // let [repPdbId, repPdbChainId] = repStruc.split("_");
 
     console.log(`Reading SIFTS mapping for ${repPdbId} chain ${repPdbChainId}`);
 

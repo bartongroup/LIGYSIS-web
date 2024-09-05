@@ -284,19 +284,30 @@ def results(prot_id, seg_id): # route for results site. Takes Prot ID and Seg ID
     # print(seg_ress_dict)
 
     # should read the dict {seg_id: protein_atom_structure} here
+    protein_atoms_dict = load_pickle(os.path.join(DATA_FOLDER, "segment_prot_struc_dict_DEF.pkl"))
 
-    pdb2up_dict = load_pickle(os.path.join(MAPPINGS_FOLDER, "pdb2up", "{}_pdb2up_mapping.pkl".format(segment_reps[int(seg_id)]["rep"]))) # the problem is the one with protein atoms is not this one.
+    prot_atoms_rep = list(protein_atoms_dict[prot_id][seg_id].keys())[0]
 
-    up2pdb_dict = load_pickle(os.path.join(MAPPINGS_FOLDER, "up2pdb", "{}_up2pdb_mapping.pkl".format(segment_reps[int(seg_id)]["rep"]))) # the problem is the one with protein atoms is not this one.
+    prot_pdb_id, prot_pdb_chain = prot_atoms_rep.split("_")
+
+    # print(prot_atoms_pdb)
+
+    pdb2up_dict = load_pickle(f'{DATA_FOLDER}/{prot_id}/{seg_id}/mapping/{prot_pdb_id}_pdb2up.pkl')
+    up2pdb_dict = load_pickle(f'{DATA_FOLDER}/{prot_id}/{seg_id}/mapping/{prot_pdb_id}_up2pdb.pkl')
+    
+    # pdb2up_dict = load_pickle(os.path.join(MAPPINGS_FOLDER, "pdb2up", "{}_pdb2up_mapping.pkl".format(segment_reps[int(seg_id)]["rep"]))) # the problem is the one with protein atoms is not this one.
+
+    # up2pdb_dict = load_pickle(os.path.join(MAPPINGS_FOLDER, "up2pdb", "{}_up2pdb_mapping.pkl".format(segment_reps[int(seg_id)]["rep"]))) # the problem is the one with protein atoms is not this one.
+
+    # print(pdb2up_dict)
+
+    # print(up2pdb_dict)
 
     # simple chains here come from ASYM unit, so reading SIFTS mapping dict will work. (NOT ASSEMBLY)
 
     seg_stats = load_pickle(os.path.join(STATS_FOLDER, "{}_stats.pkl".format(seg_name)))
 
     entry_name = load_pickle(os.path.join(ENTRY_NAMES_FOLDER, "{}_name.pkl".format(prot_id)))[prot_id]
-
-    # for v in seg_stats[prot_id][seg_id].values():
-    #     v = int(v)
     
     seg_stats_converted = convert_numpy(seg_stats) # converting data type of Segment summary statistics
 
@@ -321,7 +332,7 @@ def results(prot_id, seg_id): # route for results site. Takes Prot ID and Seg ID
         seg_ress_dict = seg_ress_dict, prot_id = prot_id, seg_id = seg_id, segment_reps = segment_reps,
         first_site_data = first_site_data, bs_table_tooltips = bs_table_tooltips, bs_ress_table_tooltips = bs_ress_table_tooltips,
         pdb2up_dict = pdb2up_dict_converted, up2pdb_dict = up2pdb_dict_converted, seg_stats = seg_stats_converted, entry_name = entry_name,
-        simple_pdbs = simple_pdbs_full_path, assembly_pdb_ids = assembly_pdb_ids
+        simple_pdbs = simple_pdbs_full_path, assembly_pdb_ids = assembly_pdb_ids, prot_atoms_rep = prot_atoms_rep
     )
 
 @app.route('/about')
