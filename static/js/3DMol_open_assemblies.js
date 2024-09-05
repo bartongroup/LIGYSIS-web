@@ -211,7 +211,8 @@ function openStructure(pdbId) {
             Chain2AccMapAssembly = allMappings['chain2acc'];
             chainsMapAssembly = allMappings['chains'];
 
-            proteinChains = Object.keys(Chain2AccMapAssembly).filter(key => Chain2AccMapAssembly[key] === proteinId);
+            proteinChains = Object.keys(chainsMapAssembly)
+                .filter(key => Chain2AccMapAssembly[chainsMapAssembly[key]] === proteinId);
 
             console.log('UniProt mappings received!');
 
