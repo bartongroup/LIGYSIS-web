@@ -182,6 +182,9 @@ function selectOption(option) {
                 );
 
                 viewer.setStyle({model: suppModels}, {cartoon: {hidden: false, style: 'oval', color: 'white', arrows: true, thickness: cartoonThickness, opacity: cartoonOpacity}});
+
+                viewer.center({model: suppModels}); // center on suppModels again
+
                 viewer.render();
             }
         }
