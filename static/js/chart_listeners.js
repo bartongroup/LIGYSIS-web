@@ -231,7 +231,7 @@ document.getElementById('chartCanvas').addEventListener('mousemove', function(e)
                         },
                         {cartoon: {style:'oval', color: 'white', arrows: true, opacity: cartoonOpacity, thickness: cartoonThickness,}}
                     );
-                     viewer.setStyle( // colouring the clicked site (necessary as sometimes there is overlap between sites)
+                    viewer.setStyle( // colouring the clicked site (necessary as sometimes there is overlap between sites)
                         {model: activeModel, or: AssemblyClickedSiteResidues},
                         {cartoon:{style:'oval', color: clickedSiteColor, arrows: true, opacity: cartoonOpacity, thickness: cartoonThickness,},
                         stick:{color: clickedSiteColor,}, }

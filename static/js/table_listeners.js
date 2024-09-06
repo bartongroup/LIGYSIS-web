@@ -172,15 +172,22 @@ $('table#bss_table tbody').on('mouseover', 'tr', function () { // event listener
         else {
             let clickedElement = clickedElements[0]; // clicked row
             
-            clickedPointLabel = chartData[chartLab][clickedElement.id]; // label of the clicked binding site row
-
-            let clickedSiteColor = chartColors[Number(clickedPointLabel)]; // color of the clicked binding site
-
-            viewer.setStyle( // colouring the clicked site (necessary as sometimes there is overlap between sites)
-                SuppClickedSiteResidues,
-                {cartoon:{style:'oval', color: clickedSiteColor, arrows: true, opacity: cartoonOpacity, thickness: cartoonThickness,},
-                stick:{color: clickedSiteColor,}, }
-            );
+            let clickedSiteColor = chartColors[Number(clickedElement.id)]; // color of the clicked binding site
+            
+            if (activeModel == "superposition") {
+                viewer.setStyle( // colouring the clicked site (necessary as sometimes there is overlap between sites)
+                    SuppClickedSiteResidues,
+                    {cartoon:{style:'oval', color: clickedSiteColor, arrows: true, opacity: cartoonOpacity, thickness: cartoonThickness,},
+                    stick:{color: clickedSiteColor,}, }
+                );
+            }
+            else {
+                viewer.setStyle( // colouring the clicked site (necessary as sometimes there is overlap between sites)
+                    {model: activeModel, or: AssemblyClickedSiteResidues},
+                    {cartoon:{style:'oval', color: clickedSiteColor, arrows: true, opacity: cartoonOpacity, thickness: cartoonThickness,},
+                    stick:{color: clickedSiteColor,}, }
+                );
+            }
             if (surfaceVisible) {
                 if (activeModel == "superposition") {
                     for (const [key, value] of Object.entries(surfsDict["superposition"])) {
@@ -387,7 +394,6 @@ $('table#bss_table tbody').on('mouseover', 'tr', function () { // event listener
         // I DO NOT COLOUR THE CLICKED SITE, BECAUSE IN PRINCIPLE, YOU CAN'T CLICK WITHOUT HOVERING FIRST, SO THE SITE IS ALREADY COLOURED.
 
         if (labelsVisible) {
-            //viewer.removeAllLabels(); // clearing labels from previous clicked site
             for (const label of labelsHash["hoveredRes"]) { // don't know how, I guess fast hovering from residues table/chart might leave one label left
                 viewer.removeLabel(label);
             }
