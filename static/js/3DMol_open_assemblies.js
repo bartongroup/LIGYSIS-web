@@ -214,8 +214,8 @@ function openStructure(pdbId) {
             Chain2AccMapAssembly = allMappings['chain2acc'];
             chainsMapAssembly = allMappings['chains'];
 
-            proteinChains = Object.keys(chainsMapAssembly)
-                .filter(key => Chain2AccMapAssembly[chainsMapAssembly[key]] === proteinId);
+            proteinChains = Object.keys(chainsMapAssembly) // the BIO UNIT chain IDs
+                .filter(key => Chain2AccMapAssembly[chainsMapAssembly[key]] === proteinId); // which ASYM UNIT chain equivalents belong to protein of interest
 
             console.log('UniProt mappings received!');
 

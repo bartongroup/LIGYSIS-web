@@ -200,9 +200,6 @@ document.getElementById('chartCanvas').addEventListener('mousemove', function(e)
         }
     }
     else if (lastHoveredPoint1 !== null) { // when no data point is being hovered on, but the last hovered point is not null (recently hovered on a point)
-        // lastHoveredPoint1 = null;
-
-        // clearHighlightedRow();
 
         if (clickedElements.length > 0) { // a row is clicked
 
@@ -214,49 +211,31 @@ document.getElementById('chartCanvas').addEventListener('mousemove', function(e)
 
             if (activeModel == "superposition") {
 
-                // let siteSuppPDBResNumsClicked = seg_ress_dict[clickedPointLabel]
-                //     .filter(el => Up2PdbDict[repPdbId][repPdbChainId].hasOwnProperty(el))
-                //     .map(el => Up2PdbDict[repPdbId][repPdbChainId][el]);
-
                 viewer.setStyle(
                     {
-                        //and:[{model: suppModels, resi: siteSuppPDBResNumsClicked, invert: true}, {hetflag: false}] // all protein residues except clicked site (we want to keep ligands)
                         model: suppModels, hetflag: false, not: SuppClickedSiteResidues, // all protein residues except clicked site (we want to keep ligands),
                         
                     },
                     {cartoon: {style:'oval', color: 'white', arrows: true, opacity: cartoonOpacity, thickness: cartoonThickness,}}
                 );
                 viewer.setStyle( // colouring the clicked site (necessary as sometimes there is overlap between sites)
-                    //{model: suppModels, resi: siteSuppPDBResNumsClicked, chain: repPdbChainId, hetflag: false},
                     SuppClickedSiteResidues,
                     {cartoon:{style:'oval', color: clickedSiteColor, arrows: true, opacity: cartoonOpacity, thickness: cartoonThickness,},
                     stick:{color: clickedSiteColor,}, }
                 );
             }
             else {
-                // let siteAssemblyRessClicked = [];
-                // proteinChains.forEach((element) => { // in case of multiple copies of protein of interest
-                //     let siteAssemblyPDBResNumClicked = seg_ress_dict[clickedPointLabel]
-                //         .filter(el => Up2PdbMapAssembly[chainsMapAssembly[element]].hasOwnProperty(el))
-                //         .map(el => Up2PdbMapAssembly[chainsMapAssembly[element]][el]);
-                //     siteAssemblyPDBResNumsClicked.push([element, siteAssemblyPDBResNumClicked]);
                     viewer.setStyle(
                         {
-                            //and:[{model: activeModel, resi: siteAssemblyPDBResNumClicked, chain: element, invert: true}, {hetflag: false}] // all protein residues except clicked site (we want to keep ligands)
                             model: activeModel, hetflag: false, not: {or: AssemblyClickedSiteResidues}, // all protein residues except clicked site (we want to keep ligands)
                         },
                         {cartoon: {style:'oval', color: 'white', arrows: true, opacity: cartoonOpacity, thickness: cartoonThickness,}}
                     );
-                    //let sel = {model: activeModel, resi: siteAssemblyPDBResNumClicked, chain: element, hetflag: false};
-                    viewer.setStyle( // colouring the clicked site (necessary as sometimes there is overlap between sites)
-                        //sel,
+                     viewer.setStyle( // colouring the clicked site (necessary as sometimes there is overlap between sites)
                         {model: activeModel, or: AssemblyClickedSiteResidues},
                         {cartoon:{style:'oval', color: clickedSiteColor, arrows: true, opacity: cartoonOpacity, thickness: cartoonThickness,},
                         stick:{color: clickedSiteColor,}, }
                     );
-                    //siteAssemblyRessClicked.push(sel);
-                    // }
-                // });
                 if (contactsVisible) { // don't want to hide ligand-binding sites if CONTACTS is ON
                     viewer.setStyle(
                         {

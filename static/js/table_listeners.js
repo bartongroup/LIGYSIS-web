@@ -170,6 +170,17 @@ $('table#bss_table tbody').on('mouseover', 'tr', function () { // event listener
             }
         }
         else {
+            let clickedElement = clickedElements[0]; // clicked row
+            
+            clickedPointLabel = chartData[chartLab][clickedElement.id]; // label of the clicked binding site row
+
+            let clickedSiteColor = chartColors[Number(clickedPointLabel)]; // color of the clicked binding site
+
+            viewer.setStyle( // colouring the clicked site (necessary as sometimes there is overlap between sites)
+                SuppClickedSiteResidues,
+                {cartoon:{style:'oval', color: clickedSiteColor, arrows: true, opacity: cartoonOpacity, thickness: cartoonThickness,},
+                stick:{color: clickedSiteColor,}, }
+            );
             if (surfaceVisible) {
                 if (activeModel == "superposition") {
                     for (const [key, value] of Object.entries(surfsDict["superposition"])) {

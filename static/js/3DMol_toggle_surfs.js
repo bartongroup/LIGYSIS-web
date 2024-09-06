@@ -185,9 +185,6 @@ function toggleLabelsVisibility() {
                         siteAssemblyPDBResNums.push([element, siteAssemblyPDBResNum]);
                     });
                     for ([element, siteAssemblyPDBResNum] of siteAssemblyPDBResNums) {
-                        // let siteAssemblyPDBResNum = seg_ress_dict[clickedElementId]
-                        //     .filter(el => Up2PdbMapAssembly[chainsMapAssembly[element]].hasOwnProperty(el))
-                        //     .map(el => Up2PdbMapAssembly[chainsMapAssembly[element]][el]);
                         for (siteAssemblyPDBResNumber of siteAssemblyPDBResNum) { // variable name not ideal as siteAssemblyPDBResNum is an array
                             let resSel = {model: activeModel, resi: siteAssemblyPDBResNumber, chain: element, hetflag: false}
                             let resName = viewer.selectedAtoms(resSel)[0].resn
