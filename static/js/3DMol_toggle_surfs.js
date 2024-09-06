@@ -189,7 +189,7 @@ function toggleLabelsVisibility() {
                             let resSel = {model: activeModel, resi: siteAssemblyPDBResNumber, chain: element, hetflag: false}
                             let resName = viewer.selectedAtoms(resSel)[0].resn
                             let label = viewer.addLabel(
-                                resName + String(Pdb2UpMapAssembly[element][siteAssemblyPDBResNumber]),
+                                resName + String(Pdb2UpMapAssembly[chainsMapAssembly[element]][siteAssemblyPDBResNumber]),
                                 {
                                     alignment: 'center', backgroundColor: 'white', backgroundOpacity: 1,
                                     borderColor: 'black', borderOpacity: 1, borderThickness: 2,
@@ -379,7 +379,6 @@ function toggleContactsVisibility() {
         }        
 
         if (labelsVisible) {
-            //viewer.removeAllLabels(); // remove ligand-binding residue labels
             for (label of labelsHash["contactSites"]) {
                 viewer.removeLabel(label);
             }
@@ -394,8 +393,6 @@ function toggleContactsVisibility() {
 
 
         if (clickedElements.length > 0) { // if a row is clicked i just show the surface of the clicked site
-            //let clickedElement = clickedElements[0];
-            //let clickedElementId = clickedElement.id;
             viewer.addStyle(
                 {model: activeModel, or:allBindingRess, not: {or: AssemblyClickedSiteResidues}},
                 {

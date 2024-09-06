@@ -173,7 +173,7 @@ $('table#bss_table tbody').on('mouseover', 'tr', function () { // event listener
             let clickedElement = clickedElements[0]; // clicked row
             
             let clickedSiteColor = chartColors[Number(clickedElement.id)]; // color of the clicked binding site
-            
+
             if (activeModel == "superposition") {
                 viewer.setStyle( // colouring the clicked site (necessary as sometimes there is overlap between sites)
                     SuppClickedSiteResidues,
@@ -424,7 +424,7 @@ $('table#bss_table tbody').on('mouseover', 'tr', function () { // event listener
                         let resSel = {model: activeModel, resi: siteAssemblyPDBResNumber, chain: element, hetflag: false}
                         let resName = viewer.selectedAtoms(resSel)[0].resn
                         let label = viewer.addLabel(
-                            resName + String(Pdb2UpMapAssembly[element][siteAssemblyPDBResNumber]),
+                            resName + String(Pdb2UpMapAssembly[chainsMapAssembly[element]][siteAssemblyPDBResNumber]),
                             {
                                 alignment: 'center', backgroundColor: 'white', backgroundOpacity: 1,
                                 borderColor: 'black', borderOpacity: 1, borderThickness: 2,
@@ -543,7 +543,7 @@ $('table#bs_ress_table tbody').on('mouseover', 'tr', function () { // event list
                         let resSel = {model: activeModel, resi: resNum, chain: chain, hetflag: false}
                         let resName = viewer.selectedAtoms(resSel)[0].resn
                         let label = viewer.addLabel(
-                            resName + String(Pdb2UpMapAssembly[chain][resNum]),
+                            resName + String(Pdb2UpMapAssembly[chainsMapAssembly[chain]][resNum]),
                             {
                                 alignment: 'center', backgroundColor: 'white', backgroundOpacity: 1,
                                 borderColor: 'black', borderOpacity: 1, borderThickness: 2,
