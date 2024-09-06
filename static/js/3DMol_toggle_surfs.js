@@ -213,10 +213,8 @@ function toggleLabelsVisibility() {
                 let ligColor = chartColors[Number(bingingSite)];
                 for (let i = 0; i < value.length; i++) {
                     let sel = value[i];
-                    //let resName = viewer.selectedAtoms(sel)[0].resn
-                    // console.log(sel.resn + String(Pdb2UpMapAssembly[sel.chain][sel.resi])); 
                     let label = viewer.addLabel(
-                        sel.resn + String(Pdb2UpMapAssembly[sel.chain][sel.resi]),
+                        sel.resn + String(Pdb2UpMapAssembly[chainsMapAssembly[sel.chain]][sel.resi]),
                         {
                             alignment: 'center', backgroundColor: 'white', backgroundOpacity: 1,
                             borderColor: 'black', borderOpacity: 1, borderThickness: 2,
@@ -231,10 +229,6 @@ function toggleLabelsVisibility() {
             }
             viewer.render();
         }
-        // else{
-        //     // pass 
-        //     //console.log("No site clicked!");
-        // }
     }
     labelsVisible = !labelsVisible; // Toggle the visibility state
 
@@ -585,7 +579,7 @@ function toggleContactsVisibility() {
                     // add labels 
                     if (labelsVisible) {
                         let label = viewer.addLabel(
-                            protResn + String(Pdb2UpMapAssembly[protChain][protResi]),
+                            protResn + String(Pdb2UpMapAssembly[chainsMapAssembly[protChain]][protResi]),
                             {
                                 alignment: 'center', backgroundColor: 'white', backgroundOpacity: 1,
                                 borderColor: 'black', borderOpacity: 1, borderThickness: 2,
