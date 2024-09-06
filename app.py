@@ -589,7 +589,6 @@ def download_assembly():
         lig_col_str = f'col sel {colors[col_key]}'
         lig_disp_str = 'disp sel'
 
-        # aas_str.extend([prot_sel_str, prot_col_str, prot_disp_str])
         ligs_str.extend([lig_sel_str, lig_col_str, lig_disp_str])
 
     cxc_lines = "\n".join(
@@ -708,15 +707,16 @@ def download_all_assemblies():
                 lig_resn, lig_chain, lig_resi = k.split("_")
                 ress = v[0]
                 col_key = v[1]
-                prot_sel_str = 'sel ' + ' '.join([f'/{el[1]}:{el[2]}' for el in ress]) + ';'
-                prot_col_str = f'col sel {colors[col_key]}'
-                prot_disp_str = 'disp sel'
+                if ress != []:
+                    prot_sel_str = 'sel ' + ' '.join([f'/{el[1]}:{el[2]}' for el in ress]) + ';'
+                    prot_col_str = f'col sel {colors[col_key]}'
+                    prot_disp_str = 'disp sel'
+                    aas_str.extend([prot_sel_str, prot_col_str, prot_disp_str])
 
                 lig_sel_str = 'sel ' + f'/{lig_chain}:{lig_resi};'
                 lig_col_str = f'col sel {colors[col_key]}'
                 lig_disp_str = 'disp sel'
 
-                aas_str.extend([prot_sel_str, prot_col_str, prot_disp_str])
                 ligs_str.extend([lig_sel_str, lig_col_str, lig_disp_str])
 
             cxc_lines = "\n".join(
