@@ -237,8 +237,6 @@ def results(prot_id, seg_id): # route for results site. Takes Prot ID and Seg ID
     bss_data = bss_data.fillna("NaN") # pre-processing could also be done before saving the pickle
     bss_data.columns = headings # changing table column names
 
-    # print(bss_data.shape)
-
     bss_prot = bss_data[bss_data.ID.str.contains(seg_name)].copy() # extracting Segment of interest rows from table
 
     bss_prot.ID = bss_prot.ID.str.split("_").str[2] # extracting binding site ID from binding site name, which is UniProt ID _ Segment ID _ Binding Site ID
@@ -254,15 +252,9 @@ def results(prot_id, seg_id): # route for results site. Takes Prot ID and Seg ID
     bss_ress = pd.read_pickle(os.path.join(RES_TABLES_FOLDER, "{}_ress.pkl".format(seg_name))) # residue data
     bss_ress = bss_ress.fillna("NaN") # pre-processing could also be done before saving the pickle
 
-    # print(bss_ress.shape)
-
     first_site_data = bss_ress.query('bs_id == @first_site_name')[cc_new].to_dict(orient="list") # data of first binding site residues
 
-    # print(bss_prot)
-
     data1 = bss_prot.to_dict(orient="list") # converting table to dictionary to pass to client
-
-    # print(data1)
 
     prot_ress = bss_ress.query('up_acc == @prot_id')[cc_new]
 
@@ -270,40 +262,23 @@ def results(prot_id, seg_id): # route for results site. Takes Prot ID and Seg ID
 
     segment_reps = prot_seg_rep_strucs[prot_id]
 
-    # segment_reps = dict(sorted(segment_reps.items())) # should not be necessary since I sorted it beforehand
-
     data2 = prot_ress.to_dict(orient="list")
 
-    #bs_ress_dict = load_pickle(os.path.join(BS_RESS_FOLDER, "{}_bs_ress.pkl".format(prot_id)))
     bs_ress_dict = load_pickle(os.path.join(DATA_FOLDER, "example", "other", f'{prot_id}_{seg_id}_ALL_inf_bss_ress.pkl'))
 
     seg_ress_dict = bs_ress_dict#[prot_id][seg_id]
     seg_ress_dict = {str(key): value for key, value in seg_ress_dict.items()}
-    # add key: "ALL_BINDING" and value a sorted set of all binding residues
-    seg_ress_dict["ALL_BINDING"] = sorted(list(set([el2 for el in seg_ress_dict.values() for el2 in el])))
-    # print(seg_ress_dict)
-
-    # should read the dict {seg_id: protein_atom_structure} here
+    
+    seg_ress_dict["ALL_BINDING"] = sorted(list(set([el2 for el in seg_ress_dict.values() for el2 in el]))) # add key: "ALL_BINDING" and value a sorted set of all binding residues
+    
     protein_atoms_dict = load_pickle(os.path.join(DATA_FOLDER, "segment_prot_struc_dict_DEF.pkl"))
 
     prot_atoms_rep = list(protein_atoms_dict[prot_id][seg_id].keys())[0]
 
     prot_pdb_id, prot_pdb_chain = prot_atoms_rep.split("_")
 
-    # print(prot_atoms_pdb)
-
     pdb2up_dict = load_pickle(f'{DATA_FOLDER}/{prot_id}/{seg_id}/mapping/{prot_pdb_id}_pdb2up.pkl')
     up2pdb_dict = load_pickle(f'{DATA_FOLDER}/{prot_id}/{seg_id}/mapping/{prot_pdb_id}_up2pdb.pkl')
-    
-    # pdb2up_dict = load_pickle(os.path.join(MAPPINGS_FOLDER, "pdb2up", "{}_pdb2up_mapping.pkl".format(segment_reps[int(seg_id)]["rep"]))) # the problem is the one with protein atoms is not this one.
-
-    # up2pdb_dict = load_pickle(os.path.join(MAPPINGS_FOLDER, "up2pdb", "{}_up2pdb_mapping.pkl".format(segment_reps[int(seg_id)]["rep"]))) # the problem is the one with protein atoms is not this one.
-
-    # print(pdb2up_dict)
-
-    # print(up2pdb_dict)
-
-    # simple chains here come from ASYM unit, so reading SIFTS mapping dict will work. (NOT ASSEMBLY)
 
     seg_stats = load_pickle(os.path.join(STATS_FOLDER, "{}_stats.pkl".format(seg_name)))
 
@@ -324,8 +299,6 @@ def results(prot_id, seg_id): # route for results site. Takes Prot ID and Seg ID
     simple_pdbs = [el for el in simple_pdbs if el.endswith(".cif")]
 
     simple_pdbs_full_path = [f'/static/data/{prot_id}/{seg_id}/simple/{el}' for el in simple_pdbs]
-
-    # print(assembly_pdb_ids)
     
     return render_template(
         'structure.html', data = data1, headings = headings, data2 = data2, cc_new = cc_new, colors = colors,
@@ -605,15 +578,18 @@ def download_assembly():
         lig_resn, lig_chain, lig_resi = k.split("_")
         ress = v[0]
         col_key = v[1]
-        prot_sel_str = 'sel ' + ' '.join([f'/{el[1]}:{el[2]}' for el in ress]) + ';'
-        prot_col_str = f'col sel {colors[col_key]}'
-        prot_disp_str = 'disp sel'
+        print(k, ress)
+        if ress != []:
+            prot_sel_str = 'sel ' + ' '.join([f'/{el[1]}:{el[2]}' for el in ress]) + ';'
+            prot_col_str = f'col sel {colors[col_key]}'
+            prot_disp_str = 'disp sel'
+            aas_str.extend([prot_sel_str, prot_col_str, prot_disp_str])
 
         lig_sel_str = 'sel ' + f'/{lig_chain}:{lig_resi};'
         lig_col_str = f'col sel {colors[col_key]}'
         lig_disp_str = 'disp sel'
 
-        aas_str.extend([prot_sel_str, prot_col_str, prot_disp_str])
+        # aas_str.extend([prot_sel_str, prot_col_str, prot_disp_str])
         ligs_str.extend([lig_sel_str, lig_col_str, lig_disp_str])
 
     cxc_lines = "\n".join(
