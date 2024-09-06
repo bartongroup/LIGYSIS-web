@@ -553,7 +553,7 @@ document.getElementById('chartCanvas').addEventListener('click', function(e) { /
                                 let resSel = {model: activeModel, resi: siteAssemblyPDBResNumber, chain: element, hetflag: false}
                                 let resName = viewer.selectedAtoms(resSel)[0].resn
                                 let label = viewer.addLabel(
-                                    resName + String(Pdb2UpMapAssembly[element][siteAssemblyPDBResNumber]),
+                                    resName + String(Pdb2UpMapAssembly[chainsMapAssembly[element]][siteAssemblyPDBResNumber]),
                                     {
                                         alignment: 'center', backgroundColor: 'white', backgroundOpacity: 1,
                                         borderColor: 'black', borderOpacity: 1, borderThickness: 2,
@@ -668,7 +668,7 @@ document.getElementById('chartCanvas').addEventListener('click', function(e) { /
                             let resSel = {model: activeModel, resi: siteAssemblyPDBResNumber, chain: element, hetflag: false}
                             let resName = viewer.selectedAtoms(resSel)[0].resn
                             let label = viewer.addLabel(
-                                resName + String(Pdb2UpMapAssembly[element][siteAssemblyPDBResNumber]),
+                                resName + String(Pdb2UpMapAssembly[chainsMapAssembly[element]][siteAssemblyPDBResNumber]),
                                 {
                                     alignment: 'center', backgroundColor: 'white', backgroundOpacity: 1,
                                     borderColor: 'black', borderOpacity: 1, borderThickness: 2,
@@ -809,7 +809,7 @@ document.getElementById('newChartCanvas').addEventListener('mousemove', function
                             let resSel = {model: activeModel, resi: resNum, chain: chain, hetflag: false}
                             let resName = viewer.selectedAtoms(resSel)[0].resn
                             let label = viewer.addLabel(
-                                resName + String(Pdb2UpMapAssembly[chain][resNum]),
+                                resName + String(Pdb2UpMapAssembly[chainsMapAssembly[chain]][resNum]),
                                 {
                                     alignment: 'center', backgroundColor: 'white', backgroundOpacity: 1,
                                     borderColor: 'black', borderOpacity: 1, borderThickness: 2,
