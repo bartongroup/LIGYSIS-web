@@ -138,10 +138,12 @@ function toggleLabelsVisibility() {
         //viewer.removeAllLabels();
         for (const [key, value] of Object.entries(labelsHash)) {
             for (let i = 0; i < value.length; i++) {
-                viewer.removeLabel(value[i]);
+                // viewer.removeLabel(value[i]);
+                value[i].hide();
             }
-            labelsHash[key] = [];
+            // labelsHash[key] = [];
         }
+        viewer.render();
     }
     else {
         labelButton.value = "Labels ON"; // Change the button text
@@ -208,19 +210,21 @@ function toggleLabelsVisibility() {
         // show labels if CONTACTS is on
         if (contactsVisible) {
             for (const [key, value] of Object.entries(ligandSitesHash[activeModel])) {
-                let bingingSite = strucProtData[key][1];
-                let ligColor = chartColors[Number(bingingSite)];
-                for (let i = 0; i < value.length; i++) {
-                    let sel = value[i];
+                // let bingingSite = strucProtData[key][1];
+                // let ligColor = chartColors[Number(bingingSite)];
+                for (const bindingRes of value[0]) {
+                //for (let i = 0; i < value.length; i++) {
+                    //let sel = value[i];
+
                     let label = viewer.addLabel(
-                        sel.resn + String(Pdb2UpMapAssembly[chainsMapAssembly[sel.chain]][sel.resi]),
+                        bindingRes.resn + String(Pdb2UpMapAssembly[chainsMapAssembly[bindingRes.chain]][bindingRes.resi]),
                         {
                             alignment: 'center', backgroundColor: 'white', backgroundOpacity: 1,
                             borderColor: 'black', borderOpacity: 1, borderThickness: 2,
-                            font: 'Arial', fontColor: ligColor, fontOpacity: 1, fontSize: 12,
+                            font: 'Arial', fontColor: value[2], fontOpacity: 1, fontSize: 12,
                             inFront: true, screenOffset: [0, 0, 0], showBackground: true
                         },
-                        sel,
+                        bindingRes,
                         true,
                     );
                     labelsHash["contactSites"].push(label);
@@ -286,19 +290,23 @@ function toggleLigandsVisibility() {
             contactsButton.style = "font-weight: bold; color: #674ea7;";
 
             // loop through contactCylinders and delete using removeShape, then empty list
-            for (let i = 0; i < contactCylinders.length; i++) {
-                viewer.removeShape(contactCylinders[i]);
+            for (const cylinder of contactCylinders[activeModel]) {
+                cylinder.updateStyle({hidden: true})
             }
-            contactCylinders = [];
+            // for (let i = 0; i < contactCylinders.length; i++) {
+            //     viewer.removeShape(contactCylinders[i]);
+            // }
+            //contactCylinders = [];
 
             viewer.addStyle({model: activeModel, hetflag: false}, {cartoon: {color: 'white'}, stick: {hidden: true}}); // remove ligand-interacting sticks and colour cartoon white
 
             if (labelsVisible) {
                 // viewer.removeAllLabels(); // remove ligand-binding residue labels
                 for (label of labelsHash["contactSites"]) {
-                    viewer.removeLabel(label);
+                    //viewer.removeLabel(label);
+                    label.hide();
                 }
-                labelsHash["contactSites"] = [];
+                //labelsHash["contactSites"] = [];
             }
 
             if (surfaceVisible) {
@@ -379,9 +387,10 @@ function toggleContactsVisibility() {
 
         if (labelsVisible) {
             for (label of labelsHash["contactSites"]) {
-                viewer.removeLabel(label);
+                //viewer.removeLabel(label);
+                label.hide();
             }
-            labelsHash["contactSites"] = [];
+            //labelsHash["contactSites"] = [];
         }
 
         // loop through contactCylinders and delete using removeShape, then empty list
@@ -670,6 +679,33 @@ function toggleContactsVisibility() {
             for (const [resSel, ligSel, ligCol] of Object.values(ligandSitesHash[activeModel])) {
                 viewer.addStyle({model: activeModel, or: resSel}, {cartoon:{hidden: false, color: ligCol}, stick: {hidden: false, color: ligCol, radius: stickRadius}});
                 viewer.addStyle(ligSel, {stick: {hidden: false, color: ligCol, radius: stickRadius}});
+            }
+
+            if (labelsVisible) {
+                for (const label of labelsHash["contactSites"]) {
+                    label.show();
+                }
+                // for (const [key, value] of Object.entries(ligandSitesHash[activeModel])) {
+                //     // let bingingSite = strucProtData[key][1];
+                //     // let ligColor = chartColors[Number(bingingSite)];
+                //     for (const bindingRes of value[0]) {
+                //     //for (let i = 0; i < value.length; i++) {
+                //         //let sel = value[i];
+    
+                //         let label = viewer.addLabel(
+                //             bindingRes.resn + String(Pdb2UpMapAssembly[chainsMapAssembly[bindingRes.chain]][bindingRes.resi]),
+                //             {
+                //                 alignment: 'center', backgroundColor: 'white', backgroundOpacity: 1,
+                //                 borderColor: 'black', borderOpacity: 1, borderThickness: 2,
+                //                 font: 'Arial', fontColor: value[2], fontOpacity: 1, fontSize: 12,
+                //                 inFront: true, screenOffset: [0, 0, 0], showBackground: true
+                //             },
+                //             bindingRes,
+                //             true,
+                //         );
+                //         labelsHash["contactSites"].push(label);
+                //     }
+                // }
             }
         }
         // will execute regardless of whether contacts are being created or read

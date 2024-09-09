@@ -301,7 +301,7 @@ function openStructure(pdbId) {
                         models.push(model); // add model at the end of list
                         loadedCount++; // Increment counter
 
-                        contactCylinders[activeModel] = [];
+                        contactCylinders[activeModel] = []; // Initialize contactCylinders for the new assembly (previous ones are untouched and keep their cylinders)
                     }
 
                     // let model = viewer.addModel(data, "cif",); // Load data
