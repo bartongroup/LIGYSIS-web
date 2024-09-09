@@ -111,12 +111,12 @@ $('table#bss_table tbody').on('mouseover', 'tr', function () { // event listener
                 );
                 // colour ligand-binding residues again
                 for (const [key, value] of Object.entries(ligandSitesHash[activeModel])) {
-                    let ligColor = chartColors[strucProtData[key][1]];
+                    //let ligColor = chartColors[strucProtData[key][1]];
                     viewer.setStyle( // displaying and colouring again the ligand-interacting residues
-                        {model: activeModel, hetflag: false, or: value},
+                        {model: activeModel, hetflag: false, or: value[0]}, // value[0] are the ligand-binding residues selection
                         {
-                            cartoon:{style:'oval', color: ligColor, arrows: true, opacity: cartoonOpacity, thickness: cartoonThickness,},
-                            stick:{hidden: false, color: ligColor,}
+                            cartoon:{style:'oval', color: value[2], arrows: true, opacity: cartoonOpacity, thickness: cartoonThickness,},
+                            stick:{hidden: false, color: value[2],} // value[2] is colour of the binding site
                         }
                     );
                 }
@@ -218,11 +218,14 @@ $('table#bss_table tbody').on('mouseover', 'tr', function () { // event listener
     let classList = this.classList;
     let clickedElements = document.getElementsByClassName("clicked-row");
 
-    if (labelsVisible) {
-        for (const label of labelsHash["clickedSite"]) {
-            viewer.removeLabel(label);
+    if (clickedSite !== null) {
+        if (labelsVisible) {
+            for (const label of labelsHash[activeModel]["clickedSite"][clickedSite]) {
+                label.hide();
+                //viewer.removeLabel(label);
+            }
+            //labelsHash["clickedSite"] = [];
         }
-        labelsHash["clickedSite"] = [];
     }
     
     if (classList.contains('clicked-row')) { // row is already clicked
@@ -390,32 +393,44 @@ $('table#bss_table tbody').on('mouseover', 'tr', function () { // event listener
         }
 
         clickTableRow(this);
+        clickedSite = rowId; // assigning new value to clickedSite so that we keep track of which site is clicked. Necessary to remove labels when another site is clicked
 
         // I DO NOT COLOUR THE CLICKED SITE, BECAUSE IN PRINCIPLE, YOU CAN'T CLICK WITHOUT HOVERING FIRST, SO THE SITE IS ALREADY COLOURED.
 
         if (labelsVisible) {
-            for (const label of labelsHash["hoveredRes"]) { // don't know how, I guess fast hovering from residues table/chart might leave one label left
+            for (const label of labelsHash[activeModel]["hoveredRes"]) { // don't know how, I guess fast hovering from residues table/chart might leave one label left
                 viewer.removeLabel(label);
             }
-            labelsHash["hoveredRes"] = [];
+            labelsHash[activeModel]["hoveredRes"] = [];
 
             if (activeModel == "superposition") {
-                for (siteSuppPDBResNum of siteSuppPDBResNums) {
-                    let resSel = {model: suppModels, resi: siteSuppPDBResNum, chain: repPdbChainId, hetflag: false}
-                    let resName = viewer.selectedAtoms(resSel)[0].resn
-                    // console.log(resSel, resName);
-                    let label = viewer.addLabel(
-                        resName + String(Pdb2UpDict[repPdbId][repPdbChainId][siteSuppPDBResNum]),
-                        {
-                            alignment: 'center', backgroundColor: 'white', backgroundOpacity: 1,
-                            borderColor: 'black', borderOpacity: 1, borderThickness: 2,
-                            font: 'Arial', fontColor: siteColor, fontOpacity: 1, fontSize: 12,
-                            inFront: true, screenOffset: [0, 0, 0], showBackground: true
-                        },
-                        resSel,
-                        false,
-                    );
-                    labelsHash["clickedSite"].push(label);
+                // check if rowId in labelsHash[activeModel]["clickedSite"]
+                if (labelsHash[activeModel]["clickedSite"].hasOwnProperty(rowId)) {
+                    console.log(`Site ${rowId} already clicked and labels exist`);
+                    for (const label of labelsHash[activeModel]["clickedSite"][rowId]) {
+                        label.show();
+                    }
+                }
+                else {
+                    console.log(`Site ${rowId} not clicked yet. Creating labels...`);
+                    labelsHash[activeModel]["clickedSite"][rowId] = [];
+                    for (siteSuppPDBResNum of siteSuppPDBResNums) {
+                        let resSel = {model: suppModels, resi: siteSuppPDBResNum, chain: repPdbChainId, hetflag: false}
+                        let resName = viewer.selectedAtoms(resSel)[0].resn
+                        // console.log(resSel, resName);
+                        let label = viewer.addLabel(
+                            resName + String(Pdb2UpDict[repPdbId][repPdbChainId][siteSuppPDBResNum]),
+                            {
+                                alignment: 'center', backgroundColor: 'white', backgroundOpacity: 1,
+                                borderColor: 'black', borderOpacity: 1, borderThickness: 2,
+                                font: 'Arial', fontColor: siteColor, fontOpacity: 1, fontSize: 12,
+                                inFront: true, screenOffset: [0, 0, 0], showBackground: true
+                            },
+                            resSel,
+                            false,
+                        );
+                        labelsHash[activeModel]["clickedSite"][rowId].push(label);
+                    }
                 }
             }
             else {
@@ -434,7 +449,7 @@ $('table#bss_table tbody').on('mouseover', 'tr', function () { // event listener
                             resSel,
                             false,
                         );
-                        labelsHash["clickedSite"].push(label);
+                        labelsHash[activeModel]["clickedSite"][rowId].push(label);
                     }
                 }
             }
@@ -514,13 +529,16 @@ $('table#bs_ress_table tbody').on('mouseover', 'tr', function () { // event list
         }
 
         if (labelsVisible) {
-            for (const label of labelsHash["hoveredRes"]) {
-                viewer.removeLabel(label);
+            if (labelsHash[activeModel]["hoveredRes"].length > 0) {
+                for (const label of [activeModel]["hoveredRes"]) {
+                    viewer.removeLabel(label);
+                }
+                labelsHash[activeModel]["hoveredRes"] = [];
             }
-            labelsHash["hoveredRes"] = [];
 
             if (activeModel == "superposition") {
                 if (SuppPDBResNum !== undefined) {
+                    labelsHash[activeModel]["hoveredRes"] = [];
                     let resSel = {model: suppModels, resi: SuppPDBResNum, chain: repPdbChainId, hetflag: false}
                     let resName = viewer.selectedAtoms(resSel)[0].resn
                     let label = viewer.addLabel(
@@ -534,7 +552,7 @@ $('table#bs_ress_table tbody').on('mouseover', 'tr', function () { // event list
                         resSel,
                         true,
                     );
-                    labelsHash["hoveredRes"].push(label);
+                    labelsHash[activeModel]["hoveredRes"].push(label);
                 }
             }
             else {
@@ -553,7 +571,7 @@ $('table#bs_ress_table tbody').on('mouseover', 'tr', function () { // event list
                             resSel,
                             true,
                         );
-                        labelsHash["hoveredRes"].push(label);
+                        labelsHash[activeModel]["hoveredRes"].push(label);
                     }
                 });
             }
@@ -576,10 +594,12 @@ $('table#bs_ress_table tbody').on('mouseover', 'tr', function () { // event list
     if (clickedElements.length == 0) {
 
         if (labelsVisible) {
-            for (const label of labelsHash["hoveredRes"]) {
-                viewer.removeLabel(label);
+            if (labelsHash[activeModel]["hoveredRes"].length > 0) {
+                for (const label of labelsHash[activeModel]["hoveredRes"]) {
+                    viewer.removeLabel(label);
+                }
+                labelsHash[activeModel]["hoveredRes"] = [];
             }
-            labelsHash["hoveredRes"] = [];
         }
 
         let PDBResNum = Up2PdbDict[repPdbId][repPdbChainId][rowId];
@@ -592,12 +612,12 @@ $('table#bs_ress_table tbody').on('mouseover', 'tr', function () { // event list
                 viewer.setStyle({model: activeModel, hetflag: false, not: {or: allBindingRess}}, {cartoon: {style:'oval', color: 'white', arrows: true, opacity: cartoonOpacity, thickness: cartoonThickness,}});
 
                 for (const [key, value] of Object.entries(ligandSitesHash[activeModel])) {
-                    let ligColor = chartColors[strucProtData[key][1]];
+                    //let ligColor = chartColors[strucProtData[key][1]];
                     viewer.setStyle( // displaying and colouring again the ligand-interacting residues
-                        {model: activeModel, hetflag: false, or: value},
+                        {model: activeModel, hetflag: false, or: value[0]}, // value[0] are the ligand-binding residues selection
                         {
-                            cartoon:{style:'oval', color: ligColor, arrows: true, opacity: cartoonOpacity, thickness: cartoonThickness,},
-                            stick:{hidden: false, color: ligColor,}
+                            cartoon:{style:'oval', color: value[2], arrows: true, opacity: cartoonOpacity, thickness: cartoonThickness,},
+                            stick:{hidden: false, color: value[2],}  // value[2] is colour of the binding site
                         }
                     );
                 }

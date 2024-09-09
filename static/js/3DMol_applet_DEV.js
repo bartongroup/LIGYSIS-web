@@ -155,7 +155,9 @@ function loadAllModels(simplePdbs) { // Load all structures
         console.log("Surfaces added");
 
         viewer.zoomTo(); 
-        viewer.render(); 
+        viewer.render();
+
+        labelsHash['superposition'] = {"clickedSite": {}, "hoveredRes": [], };
 
     }).catch(error => {
         console.error('Error loading one or more models:', error);

@@ -244,10 +244,13 @@ document.getElementById('chartCanvas').addEventListener('mousemove', function(e)
                         {cartoon: {style:'oval', color: 'white', arrows: true, opacity: cartoonOpacity, thickness: cartoonThickness,}}
                     );
                     for (const [key, value] of Object.entries(ligandSitesHash[activeModel])) { // colour again in case some bingind residues are part of another site and got colouterd
-                        let ligColor = chartColors[strucProtData[key][1]];
+                        //let ligColor = chartColors[strucProtData[key][1]];
                         viewer.setStyle(
-                            {model: activeModel, hetflag: false, or: value},
-                            {cartoon:{style:'oval', color: ligColor, arrows: true, opacity: cartoonOpacity, thickness: cartoonThickness,}, stick:{hidden: false, color: ligColor,}}
+                            {model: activeModel, hetflag: false, or: value[0]},  // value[0] are the ligand-binding residues selection
+                            {
+                                cartoon:{style:'oval', color: value[2], arrows: true, opacity: cartoonOpacity, thickness: cartoonThickness,},
+                                stick:{hidden: false, color: value[2],} // value[2] is colour of the binding site
+                            }
                         );
                     }
                 }
@@ -289,15 +292,18 @@ document.getElementById('chartCanvas').addEventListener('mousemove', function(e)
                 // pass
                 //let allBindingRess = Object.values(ligandSitesHash[activeModel]).flat();
                 viewer.setStyle(
-                    {model: activeModel, hetflag: false, not:{or:allBindingRess}},
+                    {model: activeModel, hetflag: false, not:{or: allBindingRess}},
                     {cartoon:{style:'oval', color: 'white', arrows: true, opacity: cartoonOpacity, thickness: cartoonThickness,},}
                 );
                 // also recolour the ligand-interacting residues as some might be in multiple sites
                 for (const [key, value] of Object.entries(ligandSitesHash[activeModel])) {
-                    let ligColor = chartColors[strucProtData[key][1]];
+                    //let ligColor = chartColors[strucProtData[key][1]];
                     viewer.setStyle(
-                        {model: activeModel, hetflag: false, or: value},
-                        {cartoon:{style:'oval', color: ligColor, arrows: true, opacity: cartoonOpacity, thickness: cartoonThickness,}, stick:{hidden: false, color: ligColor,}}
+                        {model: activeModel, hetflag: false, or: value[0]}, // value[0] are the ligand-binding residues selection
+                        {
+                            cartoon:{style:'oval', color: value[2], arrows: true, opacity: cartoonOpacity, thickness: cartoonThickness,},
+                            stick:{hidden: false, color: value[2],} // value[2] is colour of the binding site
+                        }
                     );
                 }
             }
@@ -428,10 +434,11 @@ document.getElementById('chartCanvas').addEventListener('click', function(e) { /
             resetChartStyles(myChart, clickedPointLabel, "black", 1, 12); // changes chart styles to default for the previously clicked site  
 
             if (labelsVisible) {
-                for (label of labelsHash["clickedSite"]) {
-                    viewer.removeLabel(label);
+                for (label of labelsHash[activeModel]["clickedSite"]) {
+                    label.hide();
+                    //viewer.removeLabel(label);
                 }
-                labelsHash["clickedSite"] = [];
+                //labelsHash["clickedSite"] = [];
             }
 
             // check is clicked row is the same as the newly clicked data point
@@ -528,7 +535,7 @@ document.getElementById('chartCanvas').addEventListener('click', function(e) { /
                     });
                 }
                 if (labelsVisible) {
-                    labelsHash["clickedSite"] = [];
+                    labelsHash[activeModel]["clickedSite"] = [];
                     if (activeModel == "superposition") {
                         for (siteSuppPDBResNum of siteSuppPDBResNums) {
                             let resSel = {model: suppModels, resi: siteSuppPDBResNum, chain: repPdbChainId, hetflag: false};
@@ -544,7 +551,7 @@ document.getElementById('chartCanvas').addEventListener('click', function(e) { /
                                 resSel,
                                 false,
                             );
-                            labelsHash["clickedSite"].push(label);
+                            labelsHash[activeModel]["clickedSite"].push(label);
                         }
                     }
                     else {
@@ -563,7 +570,7 @@ document.getElementById('chartCanvas').addEventListener('click', function(e) { /
                                     resSel,
                                     false,
                                 );
-                                labelsHash["clickedSite"].push(label);
+                                labelsHash[activeModel]["clickedSite"].push(label);
                             }
                         }
                     }
@@ -642,7 +649,7 @@ document.getElementById('chartCanvas').addEventListener('click', function(e) { /
 
             if (labelsVisible) {
                 //viewer.removeAllLabels(); // clearing labels from previous clicked site
-                labelsHash["clickedSite"] = [];
+                labelsHash[activeModel]["clickedSite"] = [];
                 if (activeModel == "superposition") {
                     for (siteSuppPDBResNum of siteSuppPDBResNums) {
                         let resSel = {model: suppModels, resi: siteSuppPDBResNum}
@@ -659,7 +666,7 @@ document.getElementById('chartCanvas').addEventListener('click', function(e) { /
                             resSel,
                             false,
                         );
-                        labelsHash["clickedSite"].push(label);
+                        labelsHash[activeModel]["clickedSite"].push(label);
                     }
                 }
                 else {
@@ -678,7 +685,7 @@ document.getElementById('chartCanvas').addEventListener('click', function(e) { /
                                 resSel,
                                 false,
                             );
-                            labelsHash["clickedSite"].push(label);
+                            labelsHash[activeModel]["clickedSite"].push(label);
                         }
                     }
                 }
@@ -778,10 +785,10 @@ document.getElementById('newChartCanvas').addEventListener('mousemove', function
                 }
 
                 if (labelsVisible) {
-                    for (label of labelsHash["hoveredRes"]) {
+                    for (label of labelsHash[activeModel]["hoveredRes"]) {
                         viewer.removeLabel(label);
                     }
-                    labelsHash["hoveredRes"] = [];
+                    labelsHash[activeModel]["hoveredRes"] = [];
 
                     if (activeModel == "superposition") {
                         if (SuppPDBResNum != undefined) {
@@ -798,7 +805,7 @@ document.getElementById('newChartCanvas').addEventListener('mousemove', function
                                 resSel,
                                 true,
                             );
-                            labelsHash["hoveredRes"].push(label);
+                            labelsHash[activeModel]["hoveredRes"].push(label);
                         }
                         else {
                             console.log(`Residue ${newPointLabel} not found in the structure!`);
@@ -819,7 +826,7 @@ document.getElementById('newChartCanvas').addEventListener('mousemove', function
                                 resSel,
                                 true,
                             );
-                            labelsHash["hoveredRes"].push(label);
+                            labelsHash[activeModel]["hoveredRes"].push(label);
                         });
                     }
                 }
@@ -858,10 +865,10 @@ document.getElementById('newChartCanvas').addEventListener('mousemove', function
             }
 
             if (labelsVisible) {
-                for (label of labelsHash["hoveredRes"]) {
+                for (label of labelsHash[activeModel]["hoveredRes"]) {
                     viewer.removeLabel(label);
                 }
-                labelsHash["hoveredRes"] = [];
+                labelsHash[activeModel]["hoveredRes"] = [];
             }
 
             viewer.render();

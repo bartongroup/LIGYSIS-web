@@ -136,10 +136,11 @@ function toggleLabelsVisibility() {
         labelButton.style = "font-weight: bold; color: #674ea7;";
 
         //viewer.removeAllLabels();
-        for (const [key, value] of Object.entries(labelsHash)) {
-            for (let i = 0; i < value.length; i++) {
+        for (const [key, value] of Object.entries(labelsHash[activeModel])) {
+            for (const label of value) {
+            //for (let i = 0; i < value.length; i++) {
                 // viewer.removeLabel(value[i]);
-                value[i].hide();
+                label.hide();
             }
             // labelsHash[key] = [];
         }
@@ -173,7 +174,7 @@ function toggleLabelsVisibility() {
                             resSel,
                             true,
                         );
-                        labelsHash["clickedSite"].push(label);
+                        labelsHash[activeModel]["clickedSite"].push(label);
                     }
                     viewer.render();
                 }
@@ -200,7 +201,7 @@ function toggleLabelsVisibility() {
                                 resSel,
                                 true,
                             );
-                            labelsHash["clickedSite"].push(label);
+                            labelsHash[activeModel]["clickedSite"].push(label);
                         }
                     }
                 }
@@ -227,7 +228,7 @@ function toggleLabelsVisibility() {
                         bindingRes,
                         true,
                     );
-                    labelsHash["contactSites"].push(label);
+                    labelsHash[activeModel]["contactSites"].push(label);
                 }
             }
             viewer.render();
@@ -302,7 +303,7 @@ function toggleLigandsVisibility() {
 
             if (labelsVisible) {
                 // viewer.removeAllLabels(); // remove ligand-binding residue labels
-                for (label of labelsHash["contactSites"]) {
+                for (label of labelsHash[activeModel]["contactSites"]) {
                     //viewer.removeLabel(label);
                     label.hide();
                 }
@@ -386,7 +387,7 @@ function toggleContactsVisibility() {
         }        
 
         if (labelsVisible) {
-            for (label of labelsHash["contactSites"]) {
+            for (label of labelsHash[activeModel]["contactSites"]) {
                 //viewer.removeLabel(label);
                 label.hide();
             }
@@ -599,7 +600,7 @@ function toggleContactsVisibility() {
                                 sel,
                                 true,
                             );
-                            labelsHash["contactSites"].push(label);
+                            labelsHash[activeModel]["contactSites"].push(label);
                         }
                     }
 
@@ -682,7 +683,7 @@ function toggleContactsVisibility() {
             }
 
             if (labelsVisible) {
-                for (const label of labelsHash["contactSites"]) {
+                for (const label of labelsHash[activeModel]["contactSites"]) {
                     label.show();
                 }
                 // for (const [key, value] of Object.entries(ligandSitesHash[activeModel])) {
