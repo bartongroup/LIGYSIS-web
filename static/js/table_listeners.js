@@ -231,6 +231,7 @@ $('table#bss_table tbody').on('mouseover', 'tr', function () { // event listener
     if (classList.contains('clicked-row')) { // row is already clicked
         
         clearClickedRows();
+        clickedSite = null;
 
         if (index !== -1) {
             resetChartStyles(myChart, index, "#ffff99", 10, 16); // changes chart styles to highlight the binding site

@@ -433,8 +433,8 @@ document.getElementById('chartCanvas').addEventListener('click', function(e) { /
 
             resetChartStyles(myChart, clickedPointLabel, "black", 1, 12); // changes chart styles to default for the previously clicked site  
 
-            if (labelsVisible) {
-                for (label of labelsHash[activeModel]["clickedSite"]) {
+            if (labelsVisible) { // hide labels of the previously clicked site
+                for (label of labelsHash[activeModel]["clickedSite"][clickedSite]) {
                     label.hide();
                     //viewer.removeLabel(label);
                 }
@@ -444,8 +444,6 @@ document.getElementById('chartCanvas').addEventListener('click', function(e) { /
             // check is clicked row is the same as the newly clicked data point
 
             if (clickedPointLabel == pointLabel) { // same binding site is clicked
-
-                clickedPointLabel = null; // reset clickedPointLabel
 
                 if (surfaceVisible) { // here if surface is active: go back to show surfaces as by default
                     if (activeModel == "superposition") {
@@ -489,6 +487,9 @@ document.getElementById('chartCanvas').addEventListener('click', function(e) { /
 
                 SuppClickedSiteResidues = null; // reset clicked site residues
                 AssemblyClickedSiteResidues = [];  // reset clicked site residues
+
+                clickedPointLabel = null; // reset clickedPointLabel
+                clickedSite = null; // reset clickedSite
             }
 
             else {
@@ -510,6 +511,8 @@ document.getElementById('chartCanvas').addEventListener('click', function(e) { /
                 }
 
                 clickTableTowById(pointLabel) // click the table row of the newly clicked data point
+
+                clickedSite = index; // set clicked site to the newly clicked data point
 
                 resetChartStyles(myChart, pointLabel, "#bfd4cb", 10, 16); // changes chart styles to highlight the newly clicked site
 
@@ -535,32 +538,20 @@ document.getElementById('chartCanvas').addEventListener('click', function(e) { /
                     });
                 }
                 if (labelsVisible) {
-                    labelsHash[activeModel]["clickedSite"] = [];
-                    if (activeModel == "superposition") {
-                        for (siteSuppPDBResNum of siteSuppPDBResNums) {
-                            let resSel = {model: suppModels, resi: siteSuppPDBResNum, chain: repPdbChainId, hetflag: false};
-                            let resName = viewer.selectedAtoms(resSel)[0].resn;
-                            let label = viewer.addLabel(
-                                resName + String(Pdb2UpDict[repPdbId][repPdbChainId][siteSuppPDBResNum]),
-                                {
-                                    alignment: 'center', backgroundColor: 'white', backgroundOpacity: 1,
-                                    borderColor: 'black', borderOpacity: 1, borderThickness: 2,
-                                    font: 'Arial', fontColor: pointColor, fontOpacity: 1, fontSize: 12,
-                                    inFront: true, screenOffset: [0, 0, 0], showBackground: true
-                                },
-                                resSel,
-                                false,
-                            );
-                            labelsHash[activeModel]["clickedSite"].push(label);
+                    if (labelsHash[activeModel]["clickedSite"].hasOwnProperty(index)) {
+                        console.log(`Site ${index} already clicked and labels exist`);
+                        for (const label of labelsHash[activeModel]["clickedSite"][index]) {
+                            label.show();
                         }
                     }
                     else {
-                        for ([element, siteAssemblyPDBResNum] of siteAssemblyPDBResNums) {
-                            for (siteAssemblyPDBResNumber of siteAssemblyPDBResNum) { // variable name not ideal as siteAssemblyPDBResNum is an array
-                                let resSel = {model: activeModel, resi: siteAssemblyPDBResNumber, chain: element, hetflag: false}
-                                let resName = viewer.selectedAtoms(resSel)[0].resn
+                        labelsHash[activeModel]["clickedSite"][index] = [];
+                        if (activeModel == "superposition") {
+                            for (siteSuppPDBResNum of siteSuppPDBResNums) {
+                                let resSel = {model: suppModels, resi: siteSuppPDBResNum, chain: repPdbChainId, hetflag: false};
+                                let resName = viewer.selectedAtoms(resSel)[0].resn;
                                 let label = viewer.addLabel(
-                                    resName + String(Pdb2UpMapAssembly[chainsMapAssembly[element]][siteAssemblyPDBResNumber]),
+                                    resName + String(Pdb2UpDict[repPdbId][repPdbChainId][siteSuppPDBResNum]),
                                     {
                                         alignment: 'center', backgroundColor: 'white', backgroundOpacity: 1,
                                         borderColor: 'black', borderOpacity: 1, borderThickness: 2,
@@ -570,7 +561,27 @@ document.getElementById('chartCanvas').addEventListener('click', function(e) { /
                                     resSel,
                                     false,
                                 );
-                                labelsHash[activeModel]["clickedSite"].push(label);
+                                labelsHash[activeModel]["clickedSite"][index].push(label);
+                            }
+                        }
+                        else {
+                            for ([element, siteAssemblyPDBResNum] of siteAssemblyPDBResNums) {
+                                for (siteAssemblyPDBResNumber of siteAssemblyPDBResNum) { // variable name not ideal as siteAssemblyPDBResNum is an array
+                                    let resSel = {model: activeModel, resi: siteAssemblyPDBResNumber, chain: element, hetflag: false}
+                                    let resName = viewer.selectedAtoms(resSel)[0].resn
+                                    let label = viewer.addLabel(
+                                        resName + String(Pdb2UpMapAssembly[chainsMapAssembly[element]][siteAssemblyPDBResNumber]),
+                                        {
+                                            alignment: 'center', backgroundColor: 'white', backgroundOpacity: 1,
+                                            borderColor: 'black', borderOpacity: 1, borderThickness: 2,
+                                            font: 'Arial', fontColor: pointColor, fontOpacity: 1, fontSize: 12,
+                                            inFront: true, screenOffset: [0, 0, 0], showBackground: true
+                                        },
+                                        resSel,
+                                        false,
+                                    );
+                                    labelsHash[activeModel]["clickedSite"][index].push(label);
+                                }
                             }
                         }
                     }
@@ -608,6 +619,7 @@ document.getElementById('chartCanvas').addEventListener('click', function(e) { /
         else { // no row is clicked (at this point the variables should always be null and [])
 
             clickTableTowById(pointLabel) // click the table row of the newly clicked data point
+            clickedSite = index; // set clicked site to the newly clicked data point
 
             resetChartStyles(myChart, pointLabel, "#bfd4cb", 10, 16); // changes chart styles to highlight the newly clicked site
 
@@ -648,34 +660,22 @@ document.getElementById('chartCanvas').addEventListener('click', function(e) { /
             }
 
             if (labelsVisible) {
-                //viewer.removeAllLabels(); // clearing labels from previous clicked site
-                labelsHash[activeModel]["clickedSite"] = [];
-                if (activeModel == "superposition") {
-                    for (siteSuppPDBResNum of siteSuppPDBResNums) {
-                        let resSel = {model: suppModels, resi: siteSuppPDBResNum}
-                        let resName = viewer.selectedAtoms(resSel)[0].resn
-                        // console.log(resSel, resName);
-                        let label = viewer.addLabel(
-                            resName + String(Pdb2UpDict[repPdbId][repPdbChainId][siteSuppPDBResNum]),
-                            {
-                                alignment: 'center', backgroundColor: 'white', backgroundOpacity: 1,
-                                borderColor: 'black', borderOpacity: 1, borderThickness: 2,
-                                font: 'Arial', fontColor: pointColor, fontOpacity: 1, fontSize: 12,
-                                inFront: true, screenOffset: [0, 0, 0], showBackground: true
-                            },
-                            resSel,
-                            false,
-                        );
-                        labelsHash[activeModel]["clickedSite"].push(label);
+                if (labelsHash[activeModel]["clickedSite"].hasOwnProperty(index)) {
+                    console.log(`Site ${index} already clicked and labels exist`);
+                    for (const label of labelsHash[activeModel]["clickedSite"][index]) {
+                        label.show();
                     }
                 }
                 else {
-                    for ([element, siteAssemblyPDBResNum] of siteAssemblyPDBResNums) {
-                        for (siteAssemblyPDBResNumber of siteAssemblyPDBResNum) { // variable name not ideal as siteAssemblyPDBResNum is an array
-                            let resSel = {model: activeModel, resi: siteAssemblyPDBResNumber, chain: element, hetflag: false}
+                    //viewer.removeAllLabels(); // clearing labels from previous clicked site
+                    labelsHash[activeModel]["clickedSite"][index] = [];
+                    if (activeModel == "superposition") {
+                        for (siteSuppPDBResNum of siteSuppPDBResNums) {
+                            let resSel = {model: suppModels, resi: siteSuppPDBResNum}
                             let resName = viewer.selectedAtoms(resSel)[0].resn
+                            // console.log(resSel, resName);
                             let label = viewer.addLabel(
-                                resName + String(Pdb2UpMapAssembly[chainsMapAssembly[element]][siteAssemblyPDBResNumber]),
+                                resName + String(Pdb2UpDict[repPdbId][repPdbChainId][siteSuppPDBResNum]),
                                 {
                                     alignment: 'center', backgroundColor: 'white', backgroundOpacity: 1,
                                     borderColor: 'black', borderOpacity: 1, borderThickness: 2,
@@ -685,7 +685,27 @@ document.getElementById('chartCanvas').addEventListener('click', function(e) { /
                                 resSel,
                                 false,
                             );
-                            labelsHash[activeModel]["clickedSite"].push(label);
+                            labelsHash[activeModel]["clickedSite"][index].push(label);
+                        }
+                    }
+                    else {
+                        for ([element, siteAssemblyPDBResNum] of siteAssemblyPDBResNums) {
+                            for (siteAssemblyPDBResNumber of siteAssemblyPDBResNum) { // variable name not ideal as siteAssemblyPDBResNum is an array
+                                let resSel = {model: activeModel, resi: siteAssemblyPDBResNumber, chain: element, hetflag: false}
+                                let resName = viewer.selectedAtoms(resSel)[0].resn
+                                let label = viewer.addLabel(
+                                    resName + String(Pdb2UpMapAssembly[chainsMapAssembly[element]][siteAssemblyPDBResNumber]),
+                                    {
+                                        alignment: 'center', backgroundColor: 'white', backgroundOpacity: 1,
+                                        borderColor: 'black', borderOpacity: 1, borderThickness: 2,
+                                        font: 'Arial', fontColor: pointColor, fontOpacity: 1, fontSize: 12,
+                                        inFront: true, screenOffset: [0, 0, 0], showBackground: true
+                                    },
+                                    resSel,
+                                    false,
+                                );
+                                labelsHash[activeModel]["clickedSite"][index].push(label);
+                            }
                         }
                     }
                 }
