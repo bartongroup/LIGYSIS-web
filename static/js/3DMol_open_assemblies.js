@@ -111,10 +111,13 @@ function selectOption(option) {
             if (contactsVisible) { // if contacts were visible, hide them}
 
                 // loop through contactCylinders and delete using removeShape, then empty list
-                for (let i = 0; i < contactCylinders.length; i++) {
-                    viewer.removeShape(contactCylinders[i]);
+                // for (let i = 0; i < contactCylinders.length; i++) {
+                //     viewer.removeShape(contactCylinders[i]);
+                // }
+                // contactCylinders = [];
+                for (const cylinder of contactCylinders[activeModel]) {
+                    cylinder.updateStyle({hidden: true})
                 }
-                contactCylinders = [];
 
                 contactsButton.value = 'Contacts OFF';
                 contactsButton.style = "font-weight: bold; color: #674ea7;";
@@ -297,6 +300,8 @@ function openStructure(pdbId) {
                         modelOrderRev[modelID] = pdbID; // populate dictionary
                         models.push(model); // add model at the end of list
                         loadedCount++; // Increment counter
+
+                        contactCylinders[activeModel] = [];
                     }
 
                     // let model = viewer.addModel(data, "cif",); // Load data
