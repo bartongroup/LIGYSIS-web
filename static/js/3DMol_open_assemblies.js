@@ -98,7 +98,12 @@ function selectOption(option) {
             saveAssemblyButton.disabled = false;
             saveAssemblyButton.style.color = 'black';  // Active font color
 
-            openStructure(option);
+            // hide ligand superposition models using suppModels array
+            for (const model of suppModels) {
+                viewer.getModel(model).hide();
+            }
+
+            openStructure(option); // act here if model is already open
         }
 
         if (previousSelection !== 'Superposition') {
@@ -119,7 +124,8 @@ function selectOption(option) {
             if (surfaceVisible) { // if surface was visible, hide it
                 for (const [key, value] of Object.entries(surfsDict[activeModel])) { 
                     for (const [key2, value2] of Object.entries(value)) {
-                        viewer.removeSurface(value2.surfid); // Remove surfaces from previous assembly
+                        viewer.setSurfaceMaterialStyle(value2.surfid, {opacity: 0.0}); // 0.7
+                        // /viewer.removeSurface(value2.surfid); // Remove surfaces from previous assembly
                     }
                 }
 
@@ -146,7 +152,9 @@ function selectOption(option) {
 
             if (option !== 'Superposition') {
 
-                openStructure(option);
+                viewer.getModel(activeModel).hide(); // Hide the active assembly
+
+                openStructure(option); // act heere if model is not already open
 
                 contactsButton.disabled = false;
                 contactsButton.style.color = '#674ea7';  // Active font color
@@ -170,9 +178,11 @@ function selectOption(option) {
                     viewer.getModel(i).show(); // Show all ligand superposition models
                 }
                 
-                for (let i = simplePdbs.length; i <= models.length-1; i++) { 
-                    viewer.getModel(i).hide(); // Hide all assemblies 
-                }
+                // for (let i = simplePdbs.length; i <= models.length-1; i++) { 
+                //     viewer.getModel(i).hide(); // Hide all assemblies 
+                // }
+
+                viewer.getModel(activeModel).hide(); // Hide the active assembly
 
                 activeModel = 'superposition';
 
@@ -194,11 +204,15 @@ function selectOption(option) {
     toggleMenu(); // Optionally hide the menu after selection
 }
 
+let modelID;
+
 function openStructure(pdbId) {
     // Example function call to 3DMol.js to load a structure
     console.log("Opening structure:", pdbId);
     //let path = '/static/data/' + proteinId + '/' + segmentId + '/assemblies/' + pdbId + '_bio.cif';
     let pdbUri = `/static/data/${proteinId}/${segmentId}/assemblies/${pdbId}_bio.cif`; //path to assembly cif
+    
+    let cifName = `${pdbId}_bio.cif`;
     
     $.ajax({ // get UniProt residue mappings when loading a new assembly
         type: 'POST', 
@@ -221,15 +235,79 @@ function openStructure(pdbId) {
 
             jQuery.ajax( pdbUri, { 
                 success: function(data) {
-                    let model = viewer.addModel(data, "cif",); // Load data
-                    let modelID = model.getID(); // Gets the ID of the GLModel
-                    activeModel = modelID;
-                    surfsDict[activeModel] = {"non_binding": {}, "lig_inters": {},}; // Initialize dictionary for the new assembly
+
+
+                    if (cifName in modelOrder) { // if the model is already loaded, just show it
+                        console.log(`Model has already been loaded with modelID = ${modelOrder[cifName]}!`);
+                        modelID = modelOrder[cifName];
+                        activeModel = modelID;
+                        viewer.getModel(modelID).show(); // Show the model
+                    }
+                    else {
+                        let model = viewer.addModel(data, "cif",); // Load data
+                        modelID = model.getID(); // Gets the ID of the GLModel
+                        activeModel = modelID;
+                        surfsDict[activeModel] = {"non_binding": {}, "lig_inters": {},}; // Initialize dictionary for the new assembly
+
+                        // implement surface addition for binding sites
+            
+                        for (const [key, value] of Object.entries(seg_ress_dict)) { 
+
+                            if (key !== "ALL_BINDING") {
+                                surfsDict[activeModel][key] = {}; // Initialize dictionary for each binding site
+                            }
+
+                            proteinChains.forEach((element) => { // in case of multiple copies of protein of interest
+        
+                                let surfAssemblyPDBResNums = seg_ress_dict[key]
+                                    .filter(el => Up2PdbMapAssembly[chainsMapAssembly[element]].hasOwnProperty(el))
+                                    .map(el => Up2PdbMapAssembly[chainsMapAssembly[element]][el]);
+                                    
+                                if (key == "ALL_BINDING") {
+                            
+                                    surfsDict[activeModel]["non_binding"][element] = viewer.addSurface(
+                                        $3Dmol.SurfaceType.ISO,
+                                        {
+                                            color: 'white',
+                                            opacity: surfaceHiddenOpacity,
+                                        },
+                                        {model: activeModel, not:{resi: surfAssemblyPDBResNums}, chain: element},
+                                        {model: activeModel, not:{resi: surfAssemblyPDBResNums}, chain: element},
+                                    );
+                                }
+                                else {
+                                    let siteColor = chartColors[Number(key.split("_").pop())];
+                                    surfsDict[activeModel][key][element] = viewer.addSurface(
+                                        $3Dmol.SurfaceType.ISO,
+                                        {
+                                            color: siteColor,
+                                            opacity: surfaceHiddenOpacity,
+                                        },
+                                        {model: activeModel, resi: surfAssemblyPDBResNums, chain: element},
+                                        {model: activeModel, resi: surfAssemblyPDBResNums, chain: element},
+                                    );
+                                }
+                            });
+                        }
+
+                        let baseName = pdbUri.split("/").pop() // Name of the structure (.cif) file
+                        let pdbID = baseName.split("_")[0]; // PDB ID from file name
+                        ligandSitesHash[activeModel] = {};
+                        modelOrder[baseName] = modelID; // populate dictionary
+                        modelOrderRev[modelID] = pdbID; // populate dictionary
+                        models.push(model); // add model at the end of list
+                        loadedCount++; // Increment counter
+                    }
+
+                    // let model = viewer.addModel(data, "cif",); // Load data
+                    // let modelID = model.getID(); // Gets the ID of the GLModel
+                    // activeModel = modelID;
+                    // surfsDict[activeModel] = {"non_binding": {}, "lig_inters": {},}; // Initialize dictionary for the new assembly
         
                     // Hide ligand superposition models
-                    for (let i = 0; i <= models.length-1; i++) {
-                        viewer.getModel(i).hide();    
-                    }
+                    // for (let i = 0; i <= models.length-1; i++) {
+                    //     viewer.getModel(i).hide();    
+                    // }
         
                     viewer.setStyle({model: modelID}, {cartoon: {hidden: false, style: 'oval', color: 'white', arrows: true, thickness: cartoonThickness, opacity: cartoonOpacity}});
                     viewer.center({model: modelID});
@@ -240,56 +318,56 @@ function openStructure(pdbId) {
                         removeHoverLabel,
                     );
         
-                    // implement surface addition for binding sites
+                    // // implement surface addition for binding sites
         
-                    for (const [key, value] of Object.entries(seg_ress_dict)) { 
+                    // for (const [key, value] of Object.entries(seg_ress_dict)) { 
 
-                        if (key !== "ALL_BINDING") {
-                            surfsDict[activeModel][key] = {}; // Initialize dictionary for each binding site
-                        }
+                    //     if (key !== "ALL_BINDING") {
+                    //         surfsDict[activeModel][key] = {}; // Initialize dictionary for each binding site
+                    //     }
 
-                        proteinChains.forEach((element) => { // in case of multiple copies of protein of interest
+                    //     proteinChains.forEach((element) => { // in case of multiple copies of protein of interest
     
-                            let surfAssemblyPDBResNums = seg_ress_dict[key]
-                                .filter(el => Up2PdbMapAssembly[chainsMapAssembly[element]].hasOwnProperty(el))
-                                .map(el => Up2PdbMapAssembly[chainsMapAssembly[element]][el]);
+                    //         let surfAssemblyPDBResNums = seg_ress_dict[key]
+                    //             .filter(el => Up2PdbMapAssembly[chainsMapAssembly[element]].hasOwnProperty(el))
+                    //             .map(el => Up2PdbMapAssembly[chainsMapAssembly[element]][el]);
                                 
-                            if (key == "ALL_BINDING") {
+                    //         if (key == "ALL_BINDING") {
                         
-                                surfsDict[activeModel]["non_binding"][element] = viewer.addSurface(
-                                    $3Dmol.SurfaceType.ISO,
-                                    {
-                                        color: 'white',
-                                        opacity: surfaceHiddenOpacity,
-                                    },
-                                    {model: activeModel, not:{resi: surfAssemblyPDBResNums}, chain: element},
-                                    {model: activeModel, not:{resi: surfAssemblyPDBResNums}, chain: element},
-                                );
-                            }
-                            else {
-                                let siteColor = chartColors[Number(key.split("_").pop())];
-                                surfsDict[activeModel][key][element] = viewer.addSurface(
-                                    $3Dmol.SurfaceType.ISO,
-                                    {
-                                        color: siteColor,
-                                        opacity: surfaceHiddenOpacity,
-                                    },
-                                    {model: activeModel, resi: surfAssemblyPDBResNums, chain: element},
-                                    {model: activeModel, resi: surfAssemblyPDBResNums, chain: element},
-                                );
-                            }
-                        });
-                    }
+                    //             surfsDict[activeModel]["non_binding"][element] = viewer.addSurface(
+                    //                 $3Dmol.SurfaceType.ISO,
+                    //                 {
+                    //                     color: 'white',
+                    //                     opacity: surfaceHiddenOpacity,
+                    //                 },
+                    //                 {model: activeModel, not:{resi: surfAssemblyPDBResNums}, chain: element},
+                    //                 {model: activeModel, not:{resi: surfAssemblyPDBResNums}, chain: element},
+                    //             );
+                    //         }
+                    //         else {
+                    //             let siteColor = chartColors[Number(key.split("_").pop())];
+                    //             surfsDict[activeModel][key][element] = viewer.addSurface(
+                    //                 $3Dmol.SurfaceType.ISO,
+                    //                 {
+                    //                     color: siteColor,
+                    //                     opacity: surfaceHiddenOpacity,
+                    //                 },
+                    //                 {model: activeModel, resi: surfAssemblyPDBResNums, chain: element},
+                    //                 {model: activeModel, resi: surfAssemblyPDBResNums, chain: element},
+                    //             );
+                    //         }
+                    //     });
+                    // }
 
                     viewer.render();
         
-                    let baseName = pdbUri.split("/").pop() // Name of the structure (.cif) file
-                    let pdbID = baseName.split("_")[0]; // PDB ID from file name
-                    ligandSitesHash[activeModel] = {};
-                    modelOrder[baseName] = modelID; // populate dictionary
-                    modelOrderRev[modelID] = pdbID; // populate dictionary
-                    models.push(model); // add model at the end of list
-                    loadedCount++; // Increment counter
+                    // let baseName = pdbUri.split("/").pop() // Name of the structure (.cif) file
+                    // let pdbID = baseName.split("_")[0]; // PDB ID from file name
+                    // ligandSitesHash[activeModel] = {};
+                    // modelOrder[baseName] = modelID; // populate dictionary
+                    // modelOrderRev[modelID] = pdbID; // populate dictionary
+                    // models.push(model); // add model at the end of list
+                    // loadedCount++; // Increment counter
                 },
                 error: function(hdr, status, err) {
                     console.error( "Failed to load PDB " + pdbUri + ": " + err );

@@ -700,7 +700,6 @@ def download_all_assemblies():
                 ]
 
             aas_str = []
-
             ligs_str = []
 
             for k, v in struc_prot_data.items():

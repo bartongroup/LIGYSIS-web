@@ -117,7 +117,6 @@ function toggleSurfaceVisibility() {
                                     let siteColor = chartColors[Number(key.split("_").pop())];
                                     viewer.setSurfaceMaterialStyle(surfsDict[activeModel][key][key2].surfid, {color: siteColor, opacity: 0.8}); //0.8
                                 }
-                                //viewer.render();
                             }
                         }
                     }
