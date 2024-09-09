@@ -399,22 +399,24 @@ $('table#bss_table tbody').on('mouseover', 'tr', function () { // event listener
         // I DO NOT COLOUR THE CLICKED SITE, BECAUSE IN PRINCIPLE, YOU CAN'T CLICK WITHOUT HOVERING FIRST, SO THE SITE IS ALREADY COLOURED.
 
         if (labelsVisible) {
+            //if (labelsHash[activeModel]["hoveredRes"].length > 0) {
             for (const label of labelsHash[activeModel]["hoveredRes"]) { // don't know how, I guess fast hovering from residues table/chart might leave one label left
                 viewer.removeLabel(label);
             }
             labelsHash[activeModel]["hoveredRes"] = [];
+            //}
 
-            if (activeModel == "superposition") {
-                // check if rowId in labelsHash[activeModel]["clickedSite"]
-                if (labelsHash[activeModel]["clickedSite"].hasOwnProperty(rowId)) {
-                    console.log(`Site ${rowId} already clicked and labels exist`);
-                    for (const label of labelsHash[activeModel]["clickedSite"][rowId]) {
-                        label.show();
-                    }
+            // check if rowId in labelsHash[activeModel]["clickedSite"]
+            if (labelsHash[activeModel]["clickedSite"].hasOwnProperty(rowId)) {
+                console.log(`Site ${rowId} already clicked and labels exist`);
+                for (const label of labelsHash[activeModel]["clickedSite"][rowId]) {
+                    label.show();
                 }
-                else {
-                    console.log(`Site ${rowId} not clicked yet. Creating labels...`);
-                    labelsHash[activeModel]["clickedSite"][rowId] = [];
+            }
+            else {
+                console.log(`Site ${rowId} not clicked yet. Creating labels...`);
+                labelsHash[activeModel]["clickedSite"][rowId] = [];
+                if (activeModel == "superposition") {
                     for (siteSuppPDBResNum of siteSuppPDBResNums) {
                         let resSel = {model: suppModels, resi: siteSuppPDBResNum, chain: repPdbChainId, hetflag: false}
                         let resName = viewer.selectedAtoms(resSel)[0].resn
@@ -433,24 +435,24 @@ $('table#bss_table tbody').on('mouseover', 'tr', function () { // event listener
                         labelsHash[activeModel]["clickedSite"][rowId].push(label);
                     }
                 }
-            }
-            else {
-                for ([element, siteAssemblyPDBResNum] of siteAssemblyPDBResNums) {
-                    for (siteAssemblyPDBResNumber of siteAssemblyPDBResNum) { // variable name not ideal as siteAssemblyPDBResNum is an array
-                        let resSel = {model: activeModel, resi: siteAssemblyPDBResNumber, chain: element, hetflag: false}
-                        let resName = viewer.selectedAtoms(resSel)[0].resn
-                        let label = viewer.addLabel(
-                            resName + String(Pdb2UpMapAssembly[chainsMapAssembly[element]][siteAssemblyPDBResNumber]),
-                            {
-                                alignment: 'center', backgroundColor: 'white', backgroundOpacity: 1,
-                                borderColor: 'black', borderOpacity: 1, borderThickness: 2,
-                                font: 'Arial', fontColor: siteColor, fontOpacity: 1, fontSize: 12,
-                                inFront: true, screenOffset: [0, 0, 0], showBackground: true
-                            },
-                            resSel,
-                            false,
-                        );
-                        labelsHash[activeModel]["clickedSite"][rowId].push(label);
+                else {
+                    for ([element, siteAssemblyPDBResNum] of siteAssemblyPDBResNums) {
+                        for (siteAssemblyPDBResNumber of siteAssemblyPDBResNum) { // variable name not ideal as siteAssemblyPDBResNum is an array
+                            let resSel = {model: activeModel, resi: siteAssemblyPDBResNumber, chain: element, hetflag: false}
+                            let resName = viewer.selectedAtoms(resSel)[0].resn
+                            let label = viewer.addLabel(
+                                resName + String(Pdb2UpMapAssembly[chainsMapAssembly[element]][siteAssemblyPDBResNumber]),
+                                {
+                                    alignment: 'center', backgroundColor: 'white', backgroundOpacity: 1,
+                                    borderColor: 'black', borderOpacity: 1, borderThickness: 2,
+                                    font: 'Arial', fontColor: siteColor, fontOpacity: 1, fontSize: 12,
+                                    inFront: true, screenOffset: [0, 0, 0], showBackground: true
+                                },
+                                resSel,
+                                false,
+                            );
+                            labelsHash[activeModel]["clickedSite"][rowId].push(label);
+                        }
                     }
                 }
             }
@@ -530,12 +532,12 @@ $('table#bs_ress_table tbody').on('mouseover', 'tr', function () { // event list
         }
 
         if (labelsVisible) {
-            if (labelsHash[activeModel]["hoveredRes"].length > 0) {
-                for (const label of [activeModel]["hoveredRes"]) {
-                    viewer.removeLabel(label);
-                }
-                labelsHash[activeModel]["hoveredRes"] = [];
+            //if (labelsHash[activeModel]["hoveredRes"].length > 0) {
+            for (const label of labelsHash[activeModel]["hoveredRes"]) {
+                viewer.removeLabel(label);
             }
+            labelsHash[activeModel]["hoveredRes"] = [];
+            //}
 
             if (activeModel == "superposition") {
                 if (SuppPDBResNum !== undefined) {
@@ -595,12 +597,12 @@ $('table#bs_ress_table tbody').on('mouseover', 'tr', function () { // event list
     if (clickedElements.length == 0) {
 
         if (labelsVisible) {
-            if (labelsHash[activeModel]["hoveredRes"].length > 0) {
-                for (const label of labelsHash[activeModel]["hoveredRes"]) {
-                    viewer.removeLabel(label);
-                }
-                labelsHash[activeModel]["hoveredRes"] = [];
+            // if (labelsHash[activeModel]["hoveredRes"].length > 0) {
+            for (const label of labelsHash[activeModel]["hoveredRes"]) {
+                viewer.removeLabel(label);
             }
+            labelsHash[activeModel]["hoveredRes"] = [];
+            // }
         }
 
         let PDBResNum = Up2PdbDict[repPdbId][repPdbChainId][rowId];

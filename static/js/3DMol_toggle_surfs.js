@@ -138,15 +138,22 @@ function toggleLabelsVisibility() {
         //viewer.removeAllLabels();
         for (const [key, value] of Object.entries(labelsHash[activeModel])) {
             if (key === 'hoveredRes') {
+                // if (value.length > 0) {
                 for (const label of value) {
                     label.hide();
                 }
+                // }
             }
-            else {
+            else if (key === 'clickedSite') {
                 for (const [key2, value2] of Object.entries(value)) {
                     for (const label of value2) {
                         label.hide();
                     }
+                }
+            }
+            else if (key === 'contactSites') {
+                for (const label of value) {
+                    label.hide();
                 }
             }
             //for (const label of value) {

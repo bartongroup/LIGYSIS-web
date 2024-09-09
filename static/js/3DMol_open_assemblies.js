@@ -45,13 +45,20 @@ function selectOption(option) {
 
             for ([key, value] of Object.entries(labelsHash[activeModel])) {
                 if (key === 'hoveredRes') {
-                    if (value.length > 0) {
+                    // if (value.length > 0) {
+                    for (const label of value) {
+                        label.hide();
+                    }
+                    // }
+                }
+                else if (key === 'contactSites') {
+                    // if (value.length > 0) {
                         for (const label of value) {
                             label.hide();
                         }
-                    }
+                    // }
                 }
-                else {
+                else if (key === 'clickedSite') {
                     for (const [key2, value2] of Object.entries(value)) {
                         for (const label of value2) {
                             label.hide();
@@ -269,6 +276,7 @@ function openStructure(pdbId) {
                         modelID = model.getID(); // Gets the ID of the GLModel
                         activeModel = modelID;
                         surfsDict[activeModel] = {"non_binding": {}, "lig_inters": {},}; // Initialize dictionary for the new assembly
+                        labelsHash[activeModel] =  {"clickedSite": {}, "hoveredRes": [], "contactSites": []};
 
                         // implement surface addition for binding sites
             
