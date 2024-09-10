@@ -111,7 +111,6 @@ $('table#bss_table tbody').on('mouseover', 'tr', function () { // event listener
                 );
                 // colour ligand-binding residues again
                 for (const [key, value] of Object.entries(ligandSitesHash[activeModel])) {
-                    //let ligColor = chartColors[strucProtData[key][1]];
                     viewer.setStyle( // displaying and colouring again the ligand-interacting residues
                         {model: activeModel, hetflag: false, or: value[0]}, // value[0] are the ligand-binding residues selection
                         {
@@ -222,9 +221,7 @@ $('table#bss_table tbody').on('mouseover', 'tr', function () { // event listener
         if (labelsVisible) {
             for (const label of labelsHash[activeModel]["clickedSite"][clickedSite]) {
                 label.hide();
-                //viewer.removeLabel(label);
             }
-            //labelsHash["clickedSite"] = [];
         }
     }
     
@@ -311,11 +308,7 @@ $('table#bss_table tbody').on('mouseover', 'tr', function () { // event listener
                 newChart.data.datasets[0].backgroundColor = siteColor;
                 newChart.data.datasets[0].pointHoverBackgroundColor = siteColor;
                 newChart.data.labels = newChartData[newChartX];  // New labels (if needed)
-
-                // Update the chart
-                newChart.update();
-
-
+                newChart.update(); // Update the chart
             },
             error: function(jqXHR, textStatus, errorThrown) {
                 console.error('Request failed:');
@@ -338,7 +331,6 @@ $('table#bss_table tbody').on('mouseover', 'tr', function () { // event listener
                 }
                 else {
                     if (contactsVisible) {
-                        // pass
                         console.log("Contacts visible when clicking on a new site");
                         viewer.setStyle(
                             {model: activeModel, or: AssemblyClickedSiteResidues, not: {or: allBindingRess}},  
@@ -399,12 +391,10 @@ $('table#bss_table tbody').on('mouseover', 'tr', function () { // event listener
         // I DO NOT COLOUR THE CLICKED SITE, BECAUSE IN PRINCIPLE, YOU CAN'T CLICK WITHOUT HOVERING FIRST, SO THE SITE IS ALREADY COLOURED.
 
         if (labelsVisible) {
-            //if (labelsHash[activeModel]["hoveredRes"].length > 0) {
             for (const label of labelsHash[activeModel]["hoveredRes"]) { // don't know how, I guess fast hovering from residues table/chart might leave one label left
                 viewer.removeLabel(label);
             }
             labelsHash[activeModel]["hoveredRes"] = [];
-            //}
 
             // check if rowId in labelsHash[activeModel]["clickedSite"]
             if (labelsHash[activeModel]["clickedSite"].hasOwnProperty(rowId)) {
@@ -420,7 +410,6 @@ $('table#bss_table tbody').on('mouseover', 'tr', function () { // event listener
                     for (siteSuppPDBResNum of siteSuppPDBResNums) {
                         let resSel = {model: suppModels, resi: siteSuppPDBResNum, chain: repPdbChainId, hetflag: false}
                         let resName = viewer.selectedAtoms(resSel)[0].resn
-                        // console.log(resSel, resName);
                         let label = viewer.addLabel(
                             resName + String(Pdb2UpDict[repPdbId][repPdbChainId][siteSuppPDBResNum]),
                             {
@@ -498,7 +487,6 @@ $('table#bs_ress_table tbody').on('mouseover', 'tr', function () { // event list
 
     AssemblyPDBResNums = [];
 
-    
     if (index !== -1) { // will always be true if we hover over a row
         
         resetChartStyles(newChart, index, "#ffff99", 10, 16); // changes chart styles to highlight the binding site
@@ -532,12 +520,10 @@ $('table#bs_ress_table tbody').on('mouseover', 'tr', function () { // event list
         }
 
         if (labelsVisible) {
-            //if (labelsHash[activeModel]["hoveredRes"].length > 0) {
             for (const label of labelsHash[activeModel]["hoveredRes"]) {
                 viewer.removeLabel(label);
             }
             labelsHash[activeModel]["hoveredRes"] = [];
-            //}
 
             if (activeModel == "superposition") {
                 if (SuppPDBResNum !== undefined) {
@@ -584,8 +570,6 @@ $('table#bs_ress_table tbody').on('mouseover', 'tr', function () { // event list
 
 }).on('mouseout', 'tr', function () { // event listener for mouseout on table rows
 
-    // AssemblyPDBResNums = [];
-
     let rowId = Number(this.id);  // gets the row id of the table row that is hovered over
 
     let index = newChartData[newChartLab].indexOf(rowId); // gets the index of the row id in the chart data
@@ -597,12 +581,10 @@ $('table#bs_ress_table tbody').on('mouseover', 'tr', function () { // event list
     if (clickedElements.length == 0) {
 
         if (labelsVisible) {
-            // if (labelsHash[activeModel]["hoveredRes"].length > 0) {
             for (const label of labelsHash[activeModel]["hoveredRes"]) {
                 viewer.removeLabel(label);
             }
             labelsHash[activeModel]["hoveredRes"] = [];
-            // }
         }
 
         let PDBResNum = Up2PdbDict[repPdbId][repPdbChainId][rowId];
@@ -615,7 +597,6 @@ $('table#bs_ress_table tbody').on('mouseover', 'tr', function () { // event list
                 viewer.setStyle({model: activeModel, hetflag: false, not: {or: allBindingRess}}, {cartoon: {style:'oval', color: 'white', arrows: true, opacity: cartoonOpacity, thickness: cartoonThickness,}});
 
                 for (const [key, value] of Object.entries(ligandSitesHash[activeModel])) {
-                    //let ligColor = chartColors[strucProtData[key][1]];
                     viewer.setStyle( // displaying and colouring again the ligand-interacting residues
                         {model: activeModel, hetflag: false, or: value[0]}, // value[0] are the ligand-binding residues selection
                         {

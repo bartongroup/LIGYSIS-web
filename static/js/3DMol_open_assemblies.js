@@ -35,8 +35,7 @@ function selectOption(option) {
 
             viewer.addStyle({resn: "HOH"}, {sphere: {hidden: true, color: waterColor, radius: sphereRadius}}); // hide all water molecules from superposition
 
-            // turn waterButton off
-            waterButton.value = 'Waters OFF';
+            waterButton.value = 'Waters OFF'; // turn waterButton off
             waterButton.style = "font-weight: bold; color: #674ea7;";
             watersVisible = false;
         }
@@ -45,18 +44,14 @@ function selectOption(option) {
 
             for ([key, value] of Object.entries(labelsHash[activeModel])) {
                 if (key === 'hoveredRes') {
-                    // if (value.length > 0) {
                     for (const label of value) {
                         label.hide();
                     }
-                    // }
                 }
                 else if (key === 'contactSites') {
-                    // if (value.length > 0) {
-                        for (const label of value) {
-                            label.hide();
-                        }
-                    // }
+                    for (const label of value) {
+                        label.hide();
+                    }
                 }
                 else if (key === 'clickedSite') {
                     for (const [key2, value2] of Object.entries(value)) {
@@ -65,17 +60,9 @@ function selectOption(option) {
                         }
                     }
                 }
-                //for (const label of value) {
-                    //label.hide();
-                // for (let i = 0; i < value.length; i++) {
-
-                //     viewer.removeLabel(value[i]);
             }
-                // labelsHash[key] = [];
-            
 
-            // turn labelButton off
-            labelButton.value = 'Labels OFF';
+            labelButton.value = 'Labels OFF';  // turn labelButton off
             labelButton.style = "font-weight: bold; color: #674ea7;";
             labelsVisible = false;
         }
@@ -93,8 +80,8 @@ function selectOption(option) {
                         viewer.setSurfaceMaterialStyle(surfsDict["superposition"][key].surfid, {color: siteColor, opacity: surfaceHiddenOpacity});
                     }
                 }
-                // turn surfButton off
-                surfButton.value = 'Surface OFF';
+                
+                surfButton.value = 'Surface OFF'; // turn surfButton off
                 surfButton.style = "font-weight: bold; color: #674ea7;";
                 surfaceVisible = false;
             }
@@ -105,8 +92,7 @@ function selectOption(option) {
                 viewer.addStyle({model: suppModels, hetflag: true, not:{resn: "HOH"}, not: {properties:{ bs: -1}}}, {stick: {hidden: true, colorscheme: myScheme, radius: stickRadius}});
                 viewer.addStyle({model: suppModels, hetflag: true, not:{resn: "HOH"}, not: {properties:{ bs: -1}}}, {sphere: {hidden: true, colorscheme: myScheme, radius: sphereRadius}});
 
-                // turn ligandButton off
-                ligandButton.value = 'Ligands OFF';
+                ligandButton.value = 'Ligands OFF'; // turn ligandButton off
                 ligandButton.style = "font-weight: bold; color: #674ea7;";
                 ligandsVisible = false;
             }
@@ -123,8 +109,8 @@ function selectOption(option) {
             saveAssemblyButton.disabled = false;
             saveAssemblyButton.style.color = 'black';  // Active font color
 
-            // hide ligand superposition models using suppModels array
-            for (const model of suppModels) {
+            
+            for (const model of suppModels) { // hide ligand superposition models using suppModels array
                 viewer.getModel(model).hide();
             }
 
@@ -135,11 +121,7 @@ function selectOption(option) {
 
             if (contactsVisible) { // if contacts were visible, hide them}
 
-                // loop through contactCylinders and delete using removeShape, then empty list
-                // for (let i = 0; i < contactCylinders.length; i++) {
-                //     viewer.removeShape(contactCylinders[i]);
-                // }
-                // contactCylinders = [];
+                // loop through contactCylinders and hide using updateStyle
                 for (const cylinder of contactCylinders[activeModel]) {
                     cylinder.updateStyle({hidden: true})
                 }
@@ -152,8 +134,7 @@ function selectOption(option) {
             if (surfaceVisible) { // if surface was visible, hide it
                 for (const [key, value] of Object.entries(surfsDict[activeModel])) { 
                     for (const [key2, value2] of Object.entries(value)) {
-                        viewer.setSurfaceMaterialStyle(value2.surfid, {opacity: 0.0}); // 0.7
-                        // /viewer.removeSurface(value2.surfid); // Remove surfaces from previous assembly
+                        viewer.setSurfaceMaterialStyle(value2.surfid, {opacity: surfaceHiddenOpacity}); // 0.7
                     }
                 }
 
@@ -167,8 +148,7 @@ function selectOption(option) {
                 viewer.addStyle({model: activeModel, hetflag: true, not:{resn: "HOH"}}, {stick: {hidden: true, colorscheme: myScheme, radius: stickRadius}});
                 viewer.addStyle({model: activeModel, hetflag: true, not:{resn: "HOH"}}, {sphere: {hidden: true, colorscheme: myScheme, radius: sphereRadius}});
 
-                // turn ligandButton off
-                ligandButton.value = 'Ligands OFF';
+                ligandButton.value = 'Ligands OFF'; // turn ligandButton off
                 ligandButton.style = "font-weight: bold; color: #674ea7;";
                 ligandsVisible = false;
             }
@@ -205,10 +185,6 @@ function selectOption(option) {
                 for (let i = 0; i <= simplePdbs.length-1; i++) {
                     viewer.getModel(i).show(); // Show all ligand superposition models
                 }
-                
-                // for (let i = simplePdbs.length; i <= models.length-1; i++) { 
-                //     viewer.getModel(i).hide(); // Hide all assemblies 
-                // }
 
                 viewer.getModel(activeModel).hide(); // Hide the active assembly
 
@@ -329,16 +305,6 @@ function openStructure(pdbId) {
 
                         contactCylinders[activeModel] = []; // Initialize contactCylinders for the new assembly (previous ones are untouched and keep their cylinders)
                     }
-
-                    // let model = viewer.addModel(data, "cif",); // Load data
-                    // let modelID = model.getID(); // Gets the ID of the GLModel
-                    // activeModel = modelID;
-                    // surfsDict[activeModel] = {"non_binding": {}, "lig_inters": {},}; // Initialize dictionary for the new assembly
-        
-                    // Hide ligand superposition models
-                    // for (let i = 0; i <= models.length-1; i++) {
-                    //     viewer.getModel(i).hide();    
-                    // }
         
                     viewer.setStyle({model: modelID}, {cartoon: {hidden: false, style: 'oval', color: 'white', arrows: true, thickness: cartoonThickness, opacity: cartoonOpacity}});
                     viewer.center({model: modelID});
@@ -348,57 +314,7 @@ function openStructure(pdbId) {
                         showHoverLabel,
                         removeHoverLabel,
                     );
-        
-                    // // implement surface addition for binding sites
-        
-                    // for (const [key, value] of Object.entries(seg_ress_dict)) { 
-
-                    //     if (key !== "ALL_BINDING") {
-                    //         surfsDict[activeModel][key] = {}; // Initialize dictionary for each binding site
-                    //     }
-
-                    //     proteinChains.forEach((element) => { // in case of multiple copies of protein of interest
-    
-                    //         let surfAssemblyPDBResNums = seg_ress_dict[key]
-                    //             .filter(el => Up2PdbMapAssembly[chainsMapAssembly[element]].hasOwnProperty(el))
-                    //             .map(el => Up2PdbMapAssembly[chainsMapAssembly[element]][el]);
-                                
-                    //         if (key == "ALL_BINDING") {
-                        
-                    //             surfsDict[activeModel]["non_binding"][element] = viewer.addSurface(
-                    //                 $3Dmol.SurfaceType.ISO,
-                    //                 {
-                    //                     color: 'white',
-                    //                     opacity: surfaceHiddenOpacity,
-                    //                 },
-                    //                 {model: activeModel, not:{resi: surfAssemblyPDBResNums}, chain: element},
-                    //                 {model: activeModel, not:{resi: surfAssemblyPDBResNums}, chain: element},
-                    //             );
-                    //         }
-                    //         else {
-                    //             let siteColor = chartColors[Number(key.split("_").pop())];
-                    //             surfsDict[activeModel][key][element] = viewer.addSurface(
-                    //                 $3Dmol.SurfaceType.ISO,
-                    //                 {
-                    //                     color: siteColor,
-                    //                     opacity: surfaceHiddenOpacity,
-                    //                 },
-                    //                 {model: activeModel, resi: surfAssemblyPDBResNums, chain: element},
-                    //                 {model: activeModel, resi: surfAssemblyPDBResNums, chain: element},
-                    //             );
-                    //         }
-                    //     });
-                    // }
-
                     viewer.render();
-        
-                    // let baseName = pdbUri.split("/").pop() // Name of the structure (.cif) file
-                    // let pdbID = baseName.split("_")[0]; // PDB ID from file name
-                    // ligandSitesHash[activeModel] = {};
-                    // modelOrder[baseName] = modelID; // populate dictionary
-                    // modelOrderRev[modelID] = pdbID; // populate dictionary
-                    // models.push(model); // add model at the end of list
-                    // loadedCount++; // Increment counter
                 },
                 error: function(hdr, status, err) {
                     console.error( "Failed to load PDB " + pdbUri + ": " + err );

@@ -37,7 +37,6 @@ document.getElementById('chartCanvas').addEventListener('mousemove', function(e)
                 
                 let clickedElement = clickedElements[0]; // clicked row
 
-                //siteSuppPDBResNumsClicked = [];
                 siteAssemblyPDBResNumsClicked = [];
                 
                 clickedPointLabel = chartData[chartLab][clickedElement.id]; // label of the clicked binding site row
@@ -111,9 +110,7 @@ document.getElementById('chartCanvas').addEventListener('mousemove', function(e)
                     }
                 }
             }
-
             else { // no row is clicked
-
                 if (contactsVisible) { // don't want to hide ligand-binding sites if CONTACTS is ON
                     viewer.setStyle(
                         {model: activeModel, hetflag: false, not:{or:allBindingRess}},
@@ -214,7 +211,6 @@ document.getElementById('chartCanvas').addEventListener('mousemove', function(e)
                 viewer.setStyle(
                     {
                         model: suppModels, hetflag: false, not: SuppClickedSiteResidues, // all protein residues except clicked site (we want to keep ligands),
-                        
                     },
                     {cartoon: {style:'oval', color: 'white', arrows: true, opacity: cartoonOpacity, thickness: cartoonThickness,}}
                 );
@@ -244,7 +240,6 @@ document.getElementById('chartCanvas').addEventListener('mousemove', function(e)
                         {cartoon: {style:'oval', color: 'white', arrows: true, opacity: cartoonOpacity, thickness: cartoonThickness,}}
                     );
                     for (const [key, value] of Object.entries(ligandSitesHash[activeModel])) { // colour again in case some bingind residues are part of another site and got colouterd
-                        //let ligColor = chartColors[strucProtData[key][1]];
                         viewer.setStyle(
                             {model: activeModel, hetflag: false, or: value[0]},  // value[0] are the ligand-binding residues selection
                             {
@@ -289,15 +284,12 @@ document.getElementById('chartCanvas').addEventListener('mousemove', function(e)
         else { // no row is clicked
 
             if (contactsVisible) { // don't want to hide ligand-binding sites if CONTACTS is ON
-                // pass
-                //let allBindingRess = Object.values(ligandSitesHash[activeModel]).flat();
                 viewer.setStyle(
                     {model: activeModel, hetflag: false, not:{or: allBindingRess}},
                     {cartoon:{style:'oval', color: 'white', arrows: true, opacity: cartoonOpacity, thickness: cartoonThickness,},}
                 );
                 // also recolour the ligand-interacting residues as some might be in multiple sites
                 for (const [key, value] of Object.entries(ligandSitesHash[activeModel])) {
-                    //let ligColor = chartColors[strucProtData[key][1]];
                     viewer.setStyle(
                         {model: activeModel, hetflag: false, or: value[0]}, // value[0] are the ligand-binding residues selection
                         {
@@ -406,9 +398,7 @@ document.getElementById('chartCanvas').addEventListener('click', function(e) { /
                 newChart.data.datasets[0].backgroundColor = pointColor;
                 newChart.data.datasets[0].pointHoverBackgroundColor = pointColor;
                 newChart.data.labels = newChartData[newChartX];  // New labels (if needed)
-
-                // Update the chart
-                newChart.update();
+                newChart.update(); // Update the chart
 
             },
             error: function(jqXHR, textStatus, errorThrown) {
@@ -436,9 +426,7 @@ document.getElementById('chartCanvas').addEventListener('click', function(e) { /
             if (labelsVisible) { // hide labels of the previously clicked site
                 for (label of labelsHash[activeModel]["clickedSite"][clickedSite]) {
                     label.hide();
-                    //viewer.removeLabel(label);
                 }
-                //labelsHash["clickedSite"] = [];
             }
 
             // check is clicked row is the same as the newly clicked data point
@@ -667,13 +655,11 @@ document.getElementById('chartCanvas').addEventListener('click', function(e) { /
                     }
                 }
                 else {
-                    //viewer.removeAllLabels(); // clearing labels from previous clicked site
                     labelsHash[activeModel]["clickedSite"][index] = [];
                     if (activeModel == "superposition") {
                         for (siteSuppPDBResNum of siteSuppPDBResNums) {
                             let resSel = {model: suppModels, resi: siteSuppPDBResNum}
                             let resName = viewer.selectedAtoms(resSel)[0].resn
-                            // console.log(resSel, resName);
                             let label = viewer.addLabel(
                                 resName + String(Pdb2UpDict[repPdbId][repPdbChainId][siteSuppPDBResNum]),
                                 {
@@ -869,7 +855,6 @@ document.getElementById('newChartCanvas').addEventListener('mousemove', function
                     viewer.setStyle({model: activeModel, hetflag: false, not: {or: allBindingRess}}, {cartoon: {style:'oval', color: 'white', arrows: true, opacity: cartoonOpacity, thickness: cartoonThickness,}});
 
                     for (const [key, value] of Object.entries(ligandSitesHash[activeModel])) {
-                        //let ligColor = chartColors[strucProtData[key][1]];
                         viewer.setStyle( // displaying and colouring again the ligand-interacting residues
                             {model: activeModel, hetflag: false, or: value[0]}, // value[0] are the ligand-binding residues selection
                             {
