@@ -869,12 +869,12 @@ document.getElementById('newChartCanvas').addEventListener('mousemove', function
                     viewer.setStyle({model: activeModel, hetflag: false, not: {or: allBindingRess}}, {cartoon: {style:'oval', color: 'white', arrows: true, opacity: cartoonOpacity, thickness: cartoonThickness,}});
 
                     for (const [key, value] of Object.entries(ligandSitesHash[activeModel])) {
-                        let ligColor = chartColors[strucProtData[key][1]];
+                        //let ligColor = chartColors[strucProtData[key][1]];
                         viewer.setStyle( // displaying and colouring again the ligand-interacting residues
-                            {model: activeModel, hetflag: false, or: value},
+                            {model: activeModel, hetflag: false, or: value[0]}, // value[0] are the ligand-binding residues selection
                             {
-                                cartoon:{style:'oval', color: ligColor, arrows: true, opacity: cartoonOpacity, thickness: cartoonThickness,},
-                                stick:{hidden: false, color: ligColor,}
+                                cartoon:{style:'oval', color: value[2], arrows: true, opacity: cartoonOpacity, thickness: cartoonThickness,},
+                                stick:{hidden: false, color: value[2],} // value[2] is colour of the binding site
                             }
                         );
                     }

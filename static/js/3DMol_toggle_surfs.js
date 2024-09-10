@@ -76,7 +76,8 @@ function toggleSurfaceVisibility() {
             else {
                 if (contactsVisible) { // if contacts are visible, show only surface of ligand interacting residues
                     for (const [key, value] of Object.entries(surfsDict[activeModel]['lig_inters'])) {
-                        let ligColor = chartColors[strucProtData[key][1]];
+                        //let ligColor = chartColors[strucProtData[key][1]];
+                        let ligColor = ligandSitesHash[activeModel][key][2]
                         viewer.setSurfaceMaterialStyle(value.surfid, {color: ligColor, opacity: 0.9});
                     }
                 }
@@ -102,7 +103,8 @@ function toggleSurfaceVisibility() {
             else {
                 if (contactsVisible) { // if contacts are visible, show only surface of ligand interacting residues
                     for (const [key, value] of Object.entries(surfsDict[activeModel]['lig_inters'])) {
-                        let ligColor = chartColors[strucProtData[key][1]];
+                        //let ligColor = chartColors[strucProtData[key][1]];
+                        let ligColor = ligandSitesHash[activeModel][key][2]
                         viewer.setSurfaceMaterialStyle(value.surfid, {color: ligColor, opacity: 0.9});
                     }
                 }
@@ -654,7 +656,47 @@ function toggleContactsVisibility() {
                 //allBindingRess = Object.values(ligandSitesHash[activeModel][0]).flat()
                 allBindingRess = Object.values(ligandSitesHash[activeModel])
                     .map(item => item[0]) // Get the first element from each array
-                    .flat();   
+                    .flat();
+
+                if (surfaceVisible) {
+                    let clickedElements = document.getElementsByClassName("clicked-row");
+                    if (clickedElements.length > 0) { // if a row is clicked i just show the surface of the clicked site
+                        let clickedElement = clickedElements[0];
+                        let clickedElementId = clickedElement.id;
+                        for (const [key, value] of Object.entries(surfsDict[activeModel])) { // show surfaces of ligand-interacting residues
+                            if (key == "lig_inters") {
+                                for (const [key2, value2] of Object.entries(value)) {
+                                    let ligColor = chartColors[strucProtData[key2][1]];
+                                    viewer.setSurfaceMaterialStyle(value2.surfid, {color: ligColor, opacity: 0.9});
+                                }
+                            }
+                            else if (key == clickedElementId) {
+                                // pass
+                            }
+                            else {
+                                for (const [key2, value2] of Object.entries(value)) {
+                                    viewer.setSurfaceMaterialStyle(value2.surfid, {opacity: surfaceHiddenOpacity});
+                                }
+                            }
+                        }
+                    }
+                    else {
+                        for (const [key, value] of Object.entries(surfsDict[activeModel])) { // show surfaces of ligand-interacting residues
+                            if (key == "lig_inters") {
+                                for (const [key2, value2] of Object.entries(value)) {
+                                    let ligColor = chartColors[strucProtData[key2][1]];
+                                    viewer.setSurfaceMaterialStyle(value2.surfid, {color: ligColor, opacity: 0.9});
+                                }
+                            }
+                            else {
+                                for (const [key2, value2] of Object.entries(value)) {
+                                    viewer.setSurfaceMaterialStyle(value2.surfid, {opacity: surfaceHiddenOpacity});
+                                }
+                            }
+                        }
+                    }   
+                }
+                viewer.render();
 
                 // if (surfaceVisible) {
                 //     let clickedElements = document.getElementsByClassName("clicked-row");
@@ -738,6 +780,47 @@ function toggleContactsVisibility() {
                 //     }
                 // }
             }
+            if (surfaceVisible) {
+                let clickedElements = document.getElementsByClassName("clicked-row");
+                if (clickedElements.length > 0) { // if a row is clicked i just show the surface of the clicked site
+                    let clickedElement = clickedElements[0];
+                    let clickedElementId = clickedElement.id;
+                    for (const [key, value] of Object.entries(surfsDict[activeModel])) { // show surfaces of ligand-interacting residues
+                        if (key == "lig_inters") {
+                            for (const [key2, value2] of Object.entries(value)) {
+                                //let ligColor = chartColors[strucProtData[key2][1]];
+                                let ligColor = ligandSitesHash[activeModel][key2][2]
+                                viewer.setSurfaceMaterialStyle(value2.surfid, {color: ligColor, opacity: 0.9});
+                            }
+                        }
+                        else if (key == clickedElementId) {
+                            // pass
+                        }
+                        else {
+                            for (const [key2, value2] of Object.entries(value)) {
+                                viewer.setSurfaceMaterialStyle(value2.surfid, {opacity: surfaceHiddenOpacity});
+                            }
+                        }
+                    }
+                }
+                else {
+                    for (const [key, value] of Object.entries(surfsDict[activeModel])) { // show surfaces of ligand-interacting residues
+                        if (key == "lig_inters") {
+                            for (const [key2, value2] of Object.entries(value)) {
+                                //let ligColor = chartColors[strucProtData[key2][1]];
+                                let ligColor = ligandSitesHash[activeModel][key2][2]
+                                viewer.setSurfaceMaterialStyle(value2.surfid, {color: ligColor, opacity: 0.9});
+                            }
+                        }
+                        else {
+                            for (const [key2, value2] of Object.entries(value)) {
+                                viewer.setSurfaceMaterialStyle(value2.surfid, {opacity: surfaceHiddenOpacity});
+                            }
+                        }
+                    }
+                }   
+            }
+            viewer.render();
         }
         // will execute regardless of whether contacts are being created or read
 
@@ -751,46 +834,46 @@ function toggleContactsVisibility() {
         //     viewer.addStyle(ligSel, {stick: {hidden: false, color: ligCol, radius: stickRadius}});
         // }
 
-        if (surfaceVisible) {
-            let clickedElements = document.getElementsByClassName("clicked-row");
-            if (clickedElements.length > 0) { // if a row is clicked i just show the surface of the clicked site
-                let clickedElement = clickedElements[0];
-                let clickedElementId = clickedElement.id;
-                for (const [key, value] of Object.entries(surfsDict[activeModel])) { // show surfaces of ligand-interacting residues
-                    if (key == "lig_inters") {
-                        for (const [key2, value2] of Object.entries(value)) {
-                            let ligColor = chartColors[strucProtData[key2][1]];
-                            viewer.setSurfaceMaterialStyle(value2.surfid, {color: ligColor, opacity: 0.9});
-                        }
-                    }
-                    else if (key == clickedElementId) {
-                        // pass
-                    }
-                    else {
-                        for (const [key2, value2] of Object.entries(value)) {
-                            viewer.setSurfaceMaterialStyle(value2.surfid, {opacity: surfaceHiddenOpacity});
-                        }
-                    }
-                }
-            }
-            else {
-                for (const [key, value] of Object.entries(surfsDict[activeModel])) { // show surfaces of ligand-interacting residues
-                    if (key == "lig_inters") {
-                        for (const [key2, value2] of Object.entries(value)) {
-                            let ligColor = chartColors[strucProtData[key2][1]];
-                            viewer.setSurfaceMaterialStyle(value2.surfid, {color: ligColor, opacity: 0.9});
-                        }
-                    }
-                    else {
-                        for (const [key2, value2] of Object.entries(value)) {
-                            viewer.setSurfaceMaterialStyle(value2.surfid, {opacity: surfaceHiddenOpacity});
-                        }
-                    }
-                }
-            }   
-        }
+        // if (surfaceVisible) {
+        //     let clickedElements = document.getElementsByClassName("clicked-row");
+        //     if (clickedElements.length > 0) { // if a row is clicked i just show the surface of the clicked site
+        //         let clickedElement = clickedElements[0];
+        //         let clickedElementId = clickedElement.id;
+        //         for (const [key, value] of Object.entries(surfsDict[activeModel])) { // show surfaces of ligand-interacting residues
+        //             if (key == "lig_inters") {
+        //                 for (const [key2, value2] of Object.entries(value)) {
+        //                     //let ligColor = chartColors[strucProtData[key2][1]];
+        //                     viewer.setSurfaceMaterialStyle(value2.surfid, {color: "red", opacity: 0.9});
+        //                 }
+        //             }
+        //             else if (key == clickedElementId) {
+        //                 // pass
+        //             }
+        //             else {
+        //                 for (const [key2, value2] of Object.entries(value)) {
+        //                     viewer.setSurfaceMaterialStyle(value2.surfid, {opacity: surfaceHiddenOpacity});
+        //                 }
+        //             }
+        //         }
+        //     }
+        //     else {
+        //         for (const [key, value] of Object.entries(surfsDict[activeModel])) { // show surfaces of ligand-interacting residues
+        //             if (key == "lig_inters") {
+        //                 for (const [key2, value2] of Object.entries(value)) {
+        //                     let ligColor = chartColors[strucProtData[key2][1]];
+        //                     viewer.setSurfaceMaterialStyle(value2.surfid, {color: ligColor, opacity: 0.9});
+        //                 }
+        //             }
+        //             else {
+        //                 for (const [key2, value2] of Object.entries(value)) {
+        //                     viewer.setSurfaceMaterialStyle(value2.surfid, {opacity: surfaceHiddenOpacity});
+        //                 }
+        //             }
+        //         }
+        //     }   
+        // }
 
-        viewer.render();
+        // viewer.render();
 
         contactsButton.value = 'Contacts ON'; // Change the button text
         contactsButton.style = "font-weight: bold; color:#B22222;";
