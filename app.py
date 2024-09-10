@@ -456,7 +456,7 @@ def get_uniprot_mapping(): # route to get UniProt residue and chain mapping for 
 
     return jsonify(response_data)
 
-@app.route('/download_superposition', methods=['POST'])
+@app.route('/download-superposition', methods=['POST'])
 def download_superposition():
 
     data = request.get_json() # Get JSON data from the POST request
@@ -528,7 +528,7 @@ def download_superposition():
         download_name=f'{prot_id}_{seg_id}_superposition.zip'
     )
 
-@app.route('/download_assembly', methods=['POST'])
+@app.route('/download-assembly', methods=['POST'])
 def download_assembly():
     data = request.get_json() # Get JSON data from the POST request
     
@@ -652,7 +652,7 @@ def download_assembly():
         download_name=f'{prot_id}_{seg_id}_{pdb_id}_assembly.zip'
     )
 
-@app.route('/download_all_assemblies', methods=['POST'])
+@app.route('/download-all-assemblies', methods=['POST'])
 def download_all_assemblies():
     data = request.get_json() # Get JSON data from the POST request
     
@@ -775,6 +775,30 @@ def download_all_assemblies():
         download_name=f'{prot_id}_{seg_id}_all_assemblies.zip'
     )
 
+# create route to download Arpeggio contacts data for an assembly --> /download-assembly-contact-data
+@app.route('/download-assembly-contact-data', methods=['POST'])
+def download_assembly_contact_data():
+    data = request.get_json()
+
+    prot_id = data.get('proteinId')
+    seg_id = data.get('segmentId')
+    pdb_id = data.get('pdbId')
+
+    arpeggio_df = pd.read_pickle(f'{DATA_FOLDER}/{prot_id}/{seg_id}/arpeggio/{pdb_id}_bio_proc.pkl')
+
+    # Convert the DataFrame to CSV
+    csv_data = io.StringIO()
+    arpeggio_df.to_csv(csv_data, index=False)
+    csv_data.seek(0)
+
+    # Return the CSV file as a downloadable response
+    return send_file(
+        io.BytesIO(csv_data.getvalue().encode('utf-8')),
+            mimetype='text/csv',
+            as_attachment=True,
+            download_name=f'{prot_id}_{seg_id}_{pdb_id}_contacts.csv'
+        )
+    
 ### LAUNCHING SERVER ###
 
 if __name__ == "__main__":

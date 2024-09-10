@@ -209,7 +209,7 @@
             <div class="row mb-2 justify-content-around align-items-stretch custom-padding">
                 <div class="col-6 col-md-3 col-lg-6 col-xl-2 d-flex justify-content-center">
                     <input id="saveArpeggioDataButton" type="button" value="Save Assembly Contacts Data" style="color: darkgray;"
-                    onclick="saveAllAssemblies()" disabled></input>
+                    onclick="saveAssemblyContactData()" disabled></input>
                 </div>
                 <div class="col-6 col-md-3 col-lg-6 col-xl-2 d-flex justify-content-center">
                     <input id="saveAllArpeggioDataButton" type="button" value="Save Assemblies Conctacts Data" style="color: black;"
@@ -413,7 +413,7 @@
         };
     
         // Send a POST request to the Flask route
-        fetch('/download_superposition', {
+        fetch('/download-superposition', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
@@ -453,7 +453,7 @@
         };
     
         // Send a POST request to the Flask route
-        fetch('/download_assembly', {
+        fetch('/download-assembly', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
@@ -491,7 +491,7 @@
         };
     
         // Send a POST request to the Flask route
-        fetch('/download_all_assemblies', {
+        fetch('/download-all-assemblies', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
@@ -519,6 +519,46 @@
         });
     }
     
+    function saveAssemblyContactData() {
+        // Assuming proteinId, segmentId, and modelOrderRev[activeModel] are available in your JavaScript context
+        let pdbId = modelOrderRev[activeModel];  // Replace with your actual modelOrderRev[activeModel] variable
+        
+        // Create an object with all the data you want to send
+        const data = {
+            proteinId: proteinId,
+            segmentId: segmentId,
+            pdbId: pdbId
+        };
+    
+        // Send a POST request to the Flask route
+        fetch('/download-assembly-contact-data', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(data)
+        })
+        .then(response => {
+            if (response.ok) {
+                return response.blob();
+            } else {
+                throw new Error('Failed to download file.');
+            }
+        })
+        .then(blob => {
+            const url = window.URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `${proteinId}_${segmentId}_${pdbId}_contacts.csv`;
+            document.body.appendChild(a);
+            a.click();
+            a.remove();
+        })
+        .catch(error => {
+            console.error('Error:', error);
+        });
+    }
+
     let contactsButton = document.getElementById('contactsButton');
     let ligandButton = document.getElementById('ligandButton');
     let waterButton = document.getElementById('waterButton');
