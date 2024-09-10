@@ -46,7 +46,7 @@ $('table#bss_table tbody').on('mouseover', 'tr', function () { // event listener
             .filter(el => Up2PdbDict[repPdbId][repPdbChainId].hasOwnProperty(el)) // this accounts not for missing residues in the structure (unresolved)
             .map(el => Up2PdbDict[repPdbId][repPdbChainId][el]);
 
-        SuppHoveredSiteResidues = {model: suppModels, resi: siteSuppPDBResNums, chain: repPdbChainId, hetflag: false}
+        SuppHoveredSiteResidues = {model: suppModels, resi: siteSuppPDBResNums, chain: repPdbChainId, hetflag: false, not: {atom: ['N', 'C', 'O']}}
 
         viewer.setStyle(
             SuppHoveredSiteResidues,
@@ -64,7 +64,7 @@ $('table#bss_table tbody').on('mouseover', 'tr', function () { // event listener
 
             siteAssemblyPDBResNums.push([element, siteAssemblyPDBResNum]);
 
-            let assemblySel = {model: activeModel, resi: siteAssemblyPDBResNum, chain: element, hetflag: false};
+            let assemblySel = {model: activeModel, resi: siteAssemblyPDBResNum, chain: element, hetflag: false, not: {atom: ['N', 'C', 'O']}};
             AssemblyHoveredSiteResidues.push(assemblySel);
         });
 
@@ -279,7 +279,6 @@ $('table#bss_table tbody').on('mouseover', 'tr', function () { // event listener
             }
         }
     }
-
     else {
         let fullPointLabel = segmentName + "_" + rowId;
         $.ajax({ // AJAX request to get the table data from the server
@@ -366,7 +365,9 @@ $('table#bss_table tbody').on('mouseover', 'tr', function () { // event listener
                 .filter(el => Up2PdbDict[repPdbId][repPdbChainId].hasOwnProperty(el)) // this accounts not for missing residues in the structure (unresolved)
                 .map(el => Up2PdbDict[repPdbId][repPdbChainId][el]);
 
-            SuppClickedSiteResidues = {model: suppModels, resi: siteSuppPDBResNums, chain: repPdbChainId, hetflag: false}
+            SuppClickedSiteResidues = {model: suppModels, resi: siteSuppPDBResNums, chain: repPdbChainId, hetflag: false, not: {atom: ['N', 'C', 'O']}}
+            // update selection so that it ignores backbone atoms
+            //SuppClickedSiteResiduesSideChains = {model: suppModels, resi: siteSuppPDBResNums, chain: repPdbChainId, hetflag: false, and: {not: {atomname: ['N', 'CA', 'C', 'O']}}}
         }
     
         else {

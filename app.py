@@ -799,6 +799,38 @@ def download_assembly_contact_data():
             download_name=f'{prot_id}_{seg_id}_{pdb_id}_contacts.csv'
         )
     
+# create route to download Arpeggio contacts data for all assemblies --> /download-all-assemblies-contact-data
+@app.route('/download-all-assemblies-contact-data', methods=['POST'])
+def download_all_assemblies_contact_data():
+    data = request.get_json()
+
+    prot_id = data.get('proteinId')
+    seg_id = data.get('segmentId')
+    assembly_pdb_ids = data.get('assemblyPdbIds')
+
+    memory_file = io.BytesIO()
+
+    with zipfile.ZipFile(memory_file, 'w') as zf:
+        for pdb_id in assembly_pdb_ids:
+            arpeggio_df = pd.read_pickle(f'{DATA_FOLDER}/{prot_id}/{seg_id}/arpeggio/{pdb_id}_bio_proc.pkl')
+
+            # Convert the DataFrame to CSV
+            csv_data = io.StringIO()
+            arpeggio_df.to_csv(csv_data, index=False)
+            csv_data.seek(0)
+
+            # Write the CSV data to the in-memory zip file
+            zf.writestr(f'{prot_id}_{seg_id}_{pdb_id}_contacts.csv', csv_data.getvalue())
+
+    memory_file.seek(0)
+
+    return send_file(
+        memory_file,
+        mimetype='application/zip',
+        as_attachment=True,
+        download_name=f'{prot_id}_{seg_id}_all_assemblies_contacts.zip'
+    )
+
 ### LAUNCHING SERVER ###
 
 if __name__ == "__main__":

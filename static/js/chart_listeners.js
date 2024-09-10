@@ -161,7 +161,7 @@ document.getElementById('chartCanvas').addEventListener('mousemove', function(e)
                     .filter(el => Up2PdbDict[repPdbId][repPdbChainId].hasOwnProperty(el)) // this accounts not for missing residues in the structure (unresolved)
                     .map(el => Up2PdbDict[repPdbId][repPdbChainId][el]);
 
-                SuppHoveredSiteResidues = {model: suppModels, resi: siteSuppPDBResNums, chain: repPdbChainId, hetflag: false};
+                SuppHoveredSiteResidues = {model: suppModels, resi: siteSuppPDBResNums, chain: repPdbChainId, hetflag: false, not: {atom: ['N', 'C', 'O']}};
 
                 viewer.setStyle(
                     SuppHoveredSiteResidues,
@@ -177,7 +177,7 @@ document.getElementById('chartCanvas').addEventListener('mousemove', function(e)
                         .filter(el => Up2PdbMapAssembly[chainsMapAssembly[element]].hasOwnProperty(el))
                         .map(el => Up2PdbMapAssembly[chainsMapAssembly[element]][el]);
                     siteAssemblyPDBResNums.push([element, siteAssemblyPDBResNum]);
-                    let assemblySel = {model: activeModel, resi: siteAssemblyPDBResNum, chain: element, hetflag: false};
+                    let assemblySel = {model: activeModel, resi: siteAssemblyPDBResNum, chain: element, hetflag: false, not: {atom: ['N', 'C', 'O']}};
                     AssemblyHoveredSiteResidues.push(assemblySel);
                 });
 
@@ -512,7 +512,7 @@ document.getElementById('chartCanvas').addEventListener('click', function(e) { /
                         .filter(el => Up2PdbDict[repPdbId][repPdbChainId].hasOwnProperty(el)) // this accounts not for missing residues in the structure (unresolved)
                         .map(el => Up2PdbDict[repPdbId][repPdbChainId][el]);
                     
-                    SuppClickedSiteResidues = {model: suppModels, resi: siteSuppPDBResNums, chain: repPdbChainId, hetflag: false};
+                    SuppClickedSiteResidues = {model: suppModels, resi: siteSuppPDBResNums, chain: repPdbChainId, hetflag: false, not: {atom: ['N', 'C', 'O']}};
                 }
                 else {
                     proteinChains.forEach((element) => { // in case of multiple copies of protein of interest
@@ -521,7 +521,7 @@ document.getElementById('chartCanvas').addEventListener('click', function(e) { /
                             .map(el => Up2PdbMapAssembly[chainsMapAssembly[element]][el]);
                         siteAssemblyPDBResNums.push([element, siteAssemblyPDBResNum]);
                     
-                        let assemblySel = {model: activeModel, resi: siteAssemblyPDBResNum, chain: element, hetflag: false};
+                        let assemblySel = {model: activeModel, resi: siteAssemblyPDBResNum, chain: element, hetflag: false, not: {atom: ['N', 'C', 'O']}};
                         AssemblyClickedSiteResidues.push(assemblySel);
                     });
                 }
@@ -616,7 +616,7 @@ document.getElementById('chartCanvas').addEventListener('click', function(e) { /
                     .filter(el => Up2PdbDict[repPdbId][repPdbChainId].hasOwnProperty(el)) // this accounts not for missing residues in the structure (unresolved)
                     .map(el => Up2PdbDict[repPdbId][repPdbChainId][el]);
                 
-                SuppClickedSiteResidues = {model: suppModels, resi: siteSuppPDBResNums, chain: repPdbChainId, hetflag: false};
+                SuppClickedSiteResidues = {model: suppModels, resi: siteSuppPDBResNums, chain: repPdbChainId, hetflag: false, not: {atom: ['N', 'C', 'O']}};
 
                 viewer.setStyle(
                     SuppClickedSiteResidues,
@@ -634,7 +634,7 @@ document.getElementById('chartCanvas').addEventListener('click', function(e) { /
                         .map(el => Up2PdbMapAssembly[chainsMapAssembly[element]][el]);
                     siteAssemblyPDBResNums.push([element, siteAssemblyPDBResNum]);
                 
-                    let assemblySel = {model: activeModel, resi: siteAssemblyPDBResNum, chain: element, hetflag: false};
+                    let assemblySel = {model: activeModel, resi: siteAssemblyPDBResNum, chain: element, hetflag: false, not: {atom: ['N', 'C', 'O']}};
                     AssemblyClickedSiteResidues.push(assemblySel);
                 });
 

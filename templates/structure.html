@@ -213,7 +213,7 @@
                 </div>
                 <div class="col-6 col-md-3 col-lg-6 col-xl-2 d-flex justify-content-center">
                     <input id="saveAllArpeggioDataButton" type="button" value="Save Assemblies Conctacts Data" style="color: black;"
-                    onclick="saveAllAssemblies()"></input>
+                    onclick="saveAllAssembliesContactData()"></input>
                 </div>
             </div>
         </div>
@@ -550,6 +550,44 @@
             const a = document.createElement('a');
             a.href = url;
             a.download = `${proteinId}_${segmentId}_${pdbId}_contacts.csv`;
+            document.body.appendChild(a);
+            a.click();
+            a.remove();
+        })
+        .catch(error => {
+            console.error('Error:', error);
+        });
+    }
+
+    function saveAllAssembliesContactData() {
+        
+        // Create an object with all the data you want to send
+        const data = {
+            proteinId: proteinId,
+            segmentId: segmentId,
+            assemblyPdbIds: assemblyPdbIds
+        };
+    
+        // Send a POST request to the Flask route
+        fetch('/download-all-assemblies-contact-data', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(data)
+        })
+        .then(response => {
+            if (response.ok) {
+                return response.blob();
+            } else {
+                throw new Error('Failed to download file.');
+            }
+        })
+        .then(blob => {
+            const url = window.URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `${proteinId}_${segmentId}_all_assemblies_contacts.zip`;
             document.body.appendChild(a);
             a.click();
             a.remove();
