@@ -402,7 +402,8 @@ def get_contacts():
     arpeggio_cons_filt = arpeggio_cons[
         (arpeggio_cons['contact'].apply(lambda x: x != ["proximal"])) &
         (arpeggio_cons['interacting_entities'] == "INTER") &
-        (arpeggio_cons['type'] == "atom-atom")
+        (arpeggio_cons['type'] == "atom-atom") & 
+        (~arpeggio_cons['auth_atom_id_end'].isin(['C',]))
     ].copy()
 
     json_cons = arpeggio_cons_filt[arpeggio_cols].to_json(orient='records')

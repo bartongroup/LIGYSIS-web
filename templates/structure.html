@@ -97,6 +97,11 @@
     const waterColor = "gold";
 
     let suppLigsSels = {};
+
+    const modAas = ['TPO', 'SEP', 'PTR', 'PYL', 'MLY', 'MSE', 'CSO', 'CME', 'CSD', 'CSW', 'CSX', 'CSS', 'CSH', 'CSL', 'CSZ', 'CSK', 'CSM', 'CSR', 'CSS', 'CSU'];
+    const modAasSels = modAas.map(function(residue) {
+        return { resn: residue };
+    })
 </script>
 
 {% endblock %}
