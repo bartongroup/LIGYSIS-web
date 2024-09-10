@@ -408,9 +408,7 @@ function toggleContactsVisibility() {
                     cartoon:{color: 'white'},
                     stick: {hidden: true}
                 }
-            );
-            
-            
+            );            
         }
         else {
             viewer.addStyle({model: activeModel, hetflag: false}, {cartoon: {color: 'white'}, stick: {hidden: true}}); // needs to change if site is clicked
@@ -580,7 +578,7 @@ function toggleContactsVisibility() {
                         let protResn = protRes[0];
                         let protChain = protRes[1];
                         let protResi = protRes[2];
-                        let sel = {model: activeModel, resi: protResi, chain: protChain, resn: protResn};
+                        let sel = {model: activeModel, resi: protResi, chain: protChain, resn: protResn, not: {atom: ['N', 'C', 'O']}};
                         ligandSitesHash[activeModel][ligNam][0].push(sel);
 
                         // add labels 
