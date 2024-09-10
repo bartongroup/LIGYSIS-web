@@ -762,7 +762,13 @@ document.getElementById('newChartCanvas').addEventListener('mousemove', function
                     viewer.setStyle({hetflag: false}, {cartoon: {style:'oval', color: 'white', arrows: true, opacity: cartoonOpacity, thickness: cartoonThickness,}}); // this is done so only a single point is highlighted when hovered on (some are really close.)
                     SuppPDBResNum = Up2PdbDict[repPdbId][repPdbChainId][newPointLabel];
                     if (SuppPDBResNum != undefined) {
-                        viewer.setStyle({model: suppModels, chain: repPdbChainId, resi: SuppPDBResNum, hetflag: false}, {cartoon:{style:'oval', color: pointColor, arrows: true, opacity: cartoonOpacity, thickness: cartoonThickness,}, stick:{color: pointColor}, });
+                        viewer.setStyle(
+                            {model: suppModels, chain: repPdbChainId, resi: SuppPDBResNum, hetflag: false, not: {atom: ['N', 'C', 'O']}},
+                            {
+                                cartoon:{style:'oval', color: pointColor, arrows: true, opacity: cartoonOpacity, thickness: cartoonThickness,},
+                                stick:{color: pointColor},
+                            }
+                        );
                     }
                     else {
                         console.log(`Residue ${newPointLabel} not found in the structure!`);
@@ -770,7 +776,10 @@ document.getElementById('newChartCanvas').addEventListener('mousemove', function
                 }
                 else {
                     if (contactsVisible) {
-                        viewer.setStyle({model: activeModel, hetflag: false, not: {or: allBindingRess}}, {cartoon: {style:'oval', color: 'white', arrows: true, opacity: cartoonOpacity, thickness: cartoonThickness,}});
+                        viewer.setStyle(
+                            {model: activeModel, hetflag: false, not: {or: allBindingRess}},
+                            {cartoon: {style:'oval', color: 'white', arrows: true, opacity: cartoonOpacity, thickness: cartoonThickness,}}
+                        );
                     }
                     else {
                         viewer.setStyle({model: activeModel, hetflag: false}, {cartoon: {style:'oval', color: 'white', arrows: true, opacity: cartoonOpacity, thickness: cartoonThickness,}});
@@ -780,7 +789,7 @@ document.getElementById('newChartCanvas').addEventListener('mousemove', function
                         if (AssemblyPDBResNum  != undefined) {
                             AssemblyPDBResNums.push([element, AssemblyPDBResNum]);
                             viewer.setStyle(
-                                {model: activeModel, resi: AssemblyPDBResNum, chain: element, hetflag: false},
+                                {model: activeModel, resi: AssemblyPDBResNum, chain: element, hetflag: false, not: {atom: ['N', 'C', 'O']}},
                                 {
                                     cartoon:{style:'oval', color: pointColor, arrows: true, opacity: cartoonOpacity, thickness: cartoonThickness,},
                                     stick:{color: pointColor},

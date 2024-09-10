@@ -495,7 +495,7 @@ $('table#bs_ress_table tbody').on('mouseover', 'tr', function () { // event list
         if (activeModel == "superposition") { // in this case, only one residue as this is a supperposition of single chains
             SuppPDBResNum = Up2PdbDict[repPdbId][repPdbChainId][rowId];
             if (SuppPDBResNum !== undefined) {
-                viewer.setStyle({resi: SuppPDBResNum, hetflag: false}, {cartoon:{style:'oval', color: rowColorHex, arrows: true, opacity: cartoonOpacity, thickness: cartoonThickness,}, stick:{color: rowColorHex}, });
+                viewer.setStyle({resi: SuppPDBResNum, hetflag: false, not: {atom: ['N', 'C', 'O']}}, {cartoon:{style:'oval', color: rowColorHex, arrows: true, opacity: cartoonOpacity, thickness: cartoonThickness,}, stick:{color: rowColorHex}, });
             }
             else {
                 console.log("Residue not found in structure!");
@@ -507,7 +507,7 @@ $('table#bs_ress_table tbody').on('mouseover', 'tr', function () { // event list
                 AssemblyPDBResNums.push([element, AssemblyPDBResNum]);
                 if (AssemblyPDBResNum !== undefined) {
                     viewer.setStyle(
-                        {model: activeModel, resi: AssemblyPDBResNum, chain: element, hetflag: false},
+                        {model: activeModel, resi: AssemblyPDBResNum, chain: element, hetflag: false, not: {atom: ['N', 'C', 'O']}},
                         {
                             cartoon:{style:'oval', color: rowColorHex, arrows: true, opacity: cartoonOpacity, thickness: cartoonThickness,},
                             stick:{color: rowColorHex},
