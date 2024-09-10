@@ -136,29 +136,29 @@
     </div>
     <div class="row justify-content-around">
         <div id="3DMolAppletHolder" class="col-lg-4 col-sm-12 d-flex flex-column align-items-center justify-content-center align-self-start column order-2">
-            <div class="row my-2 custom-padding align-self-center">
-                <h5>
-                    Structure panel&nbsp;
-                    <a href="/help#structurePanelHelp">
-                        <i class="bi bi-info-circle" style="color: black;"></i>
-                    </a>
-                </h5>
-            </div>
-            <div class="row mb-2 custom-padding">
-                <div style="border: 2px solid black;" class="d-flex px-0">
-                    <div id="container-01" style="height: 598px; width: 598px;" class="applet-border d-flex">
-                        <script src="/static/js/3DMol_applet_DEV.js"></script>
-                    </div>
+            <div class="row my-2 custom-padding align-self-center justify-content-between">
+                <div class="col d-flex align-items-center justify-content-start">
+                    <h5 class="d-flex align-items-center" style="white-space: nowrap;">
+                        <span>Structure panel</span>
+                            <a href="/help#structurePanelHelp" class="d-flex align-items-center" style="margin-left: 8px;">
+                                <i class="bi bi-info-circle" style="color: black;"></i>
+                            </a>
+                    </h5>
                 </div>
-            </div>
-            <div class="row mb-2 justify-content-between align-items-stretch custom-padding">
-                <div class="col d-flex justify-content-center">
+                <div class="col d-flex align-items-center justify-content-end">
                     <div class="dropup">
                         <button class="dropup-button" style="font-weight: bold; color: black;">Superposition</button>
                         <div class="dropup-content">
                             <a href="#" onclick="selectOption('Superposition')">Superposition</a>
                             <!-- Additional options will be populated here -->
                         </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row mb-2 custom-padding">
+                <div style="border: 2px solid black;" class="d-flex px-0">
+                    <div id="container-01" style="height: 598px; width: 598px;" class="applet-border d-flex">
+                        <script src="/static/js/3DMol_applet_DEV.js"></script>
                     </div>
                 </div>
             </div>
