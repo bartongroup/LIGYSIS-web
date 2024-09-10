@@ -109,6 +109,9 @@ function selectOption(option) {
             saveAssemblyButton.disabled = false;
             saveAssemblyButton.style.color = 'black';  // Active font color
 
+            saveArpeggioDataButton.disabled = false;
+            saveArpeggioDataButton.style.color = 'black';  // Active font color
+
             
             for (const model of suppModels) { // hide ligand superposition models using suppModels array
                 viewer.getModel(model).hide();
@@ -170,6 +173,9 @@ function selectOption(option) {
 
                 saveAssemblyButton.disabled = false;
                 saveAssemblyButton.style.color = 'black';  // Active font color
+
+                saveArpeggioDataButton.disabled = false;
+                saveArpeggioDataButton.style.color = 'black';  // Active font color
             }
             else {
 
@@ -179,6 +185,9 @@ function selectOption(option) {
 
                 saveAssemblyButton.disabled = true;
                 saveAssemblyButton.style.color = 'darkgray';  // Active font color
+
+                saveArpeggioDataButton.disabled = true;
+                saveArpeggioDataButton.style.color = 'darkgray';  // Active font color
 
                 console.log(`Reading SIFTS mapping for ${repPdbId} chain ${repPdbChainId}`);
 
