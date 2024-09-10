@@ -259,7 +259,7 @@ function toggleWatersVisibility() {
         waterButton.value = 'Waters OFF'; // Change the button text
         waterButton.style = "font-weight: bold; color: #674ea7;";
         if (activeModel == "superposition") {
-            viewer.addStyle({model: suppModels, resn: "HOH"}, {sphere: {hidden: true, color: waterColor, radius: sphereRadius}});
+            viewer.addStyle(suppLigsSels["water"], {sphere: {hidden: true, color: waterColor, radius: sphereRadius}});
             // console.log(`Waters hidden for ${activeModel} models!`);
         }
         else {
@@ -271,7 +271,7 @@ function toggleWatersVisibility() {
         waterButton.value = 'Waters ON'; // Change the button text
         waterButton.style = "font-weight: bold; color:#B22222;";
         if (activeModel == "superposition") {
-            viewer.addStyle({model: suppModels, resn: "HOH"}, {sphere: {hidden: false, color: waterColor, radius: sphereRadius}});
+            viewer.addStyle(suppLigsSels["water"], {sphere: {hidden: false, color: waterColor, radius: sphereRadius}});
             // console.log(`Waters shown for ${activeModel} models!`);
         }
         else {
@@ -290,16 +290,16 @@ function toggleLigandsVisibility() {
         ligandButton.style = "font-weight: bold; color: #674ea7;";
 
         if (activeModel == "superposition") {
-            viewer.addStyle({and:[{model: suppModels, hetflag: true}, {not:{resn: "HOH"}}, {properties:{ bs: -1}}]}, {stick: {hidden: true, colorscheme: myScheme, radius: stickRadius}});
-            viewer.addStyle({and:[{model: suppModels, hetflag: true}, {not:{resn: "HOH"}}, {properties:{ bs: -1}}]}, {sphere: {hidden: true, colorscheme: myScheme, radius: sphereRadius}});
-            viewer.addStyle({and:[{model: suppModels, hetflag: true}, {not:{resn: "HOH"}}, {not: {properties:{ bs: -1}}}]}, {stick: {hidden: true, colorscheme: myScheme, radius: stickRadius}});
-            viewer.addStyle({and:[{model: suppModels, hetflag: true}, {not:{resn: "HOH"}}, {not: {properties:{ bs: -1}}}]}, {sphere: {hidden: true, colorscheme: myScheme, radius: sphereRadius}});
-            console.log(`Ligands hidden for ${activeModel} model!`);
+            //viewer.addStyle({and:[{model: suppModels, hetflag: true}, {not:{resn: "HOH"}}, {properties:{ bs: -1}}]}, {stick: {hidden: true, colorscheme: myScheme, radius: stickRadius}});
+            //viewer.addStyle({and:[{model: suppModels, hetflag: true}, {not:{resn: "HOH"}}, {properties:{ bs: -1}}]}, {sphere: {hidden: true, colorscheme: myScheme, radius: sphereRadius}});
+            viewer.addStyle(suppLigsSels["clust"], {stick: {hidden: true, colorscheme: myScheme, radius: stickRadius}});
+            //viewer.addStyle({and:[{model: suppModels, hetflag: true}, {not:{resn: "HOH"}}, {not: {properties:{ bs: -1}}}]}, {sphere: {hidden: true, colorscheme: myScheme, radius: sphereRadius}});
+            // console.log(`Ligands hidden for ${activeModel} model!`);
         }
         else {
             viewer.addStyle({model: activeModel, hetflag: true, not:{resn: "HOH"}}, {stick: {hidden: true, radius: stickRadius}});
             viewer.addStyle({model: activeModel, hetflag: true, not:{resn: "HOH"}}, {sphere: {hidden: true, radius: sphereRadius}})
-            console.log(`Ligands hidden for model ${activeModel}!`);
+            // console.log(`Ligands hidden for model ${activeModel}!`);
         }
 
         if (contactsVisible) {
@@ -335,10 +335,10 @@ function toggleLigandsVisibility() {
         ligandButton.style = "font-weight: bold; color:#B22222;";
 
         if (activeModel == "superposition") {
-            viewer.addStyle({and:[{hetflag: true}, {not:{resn: "HOH"}}, {properties:{ bs: -1}}]}, {stick: {hidden: true, colorscheme: myScheme, radius: stickRadius}});
-            viewer.addStyle({and:[{hetflag: true}, {not:{resn: "HOH"}}, {properties:{ bs: -1}}]}, {sphere: {hidden: true, colorscheme: myScheme, radius: sphereRadius}});
-            viewer.addStyle({and:[{hetflag: true}, {not:{resn: "HOH"}}, {not: {properties:{ bs: -1}}}]}, {stick: {hidden: false, colorscheme: myScheme, radius: stickRadius}});
-            viewer.addStyle({and:[{hetflag: true}, {not:{resn: "HOH"}}, {not: {properties:{ bs: -1}}}]}, {sphere: {hidden: false, colorscheme: myScheme, radius: sphereRadius}});
+            //viewer.addStyle({and:[{hetflag: true}, {not:{resn: "HOH"}}, {properties:{ bs: -1}}]}, {stick: {hidden: true, colorscheme: myScheme, radius: stickRadius}});
+            //viewer.addStyle({and:[{hetflag: true}, {not:{resn: "HOH"}}, {properties:{ bs: -1}}]}, {sphere: {hidden: true, colorscheme: myScheme, radius: sphereRadius}});
+            viewer.addStyle(suppLigsSels["clust"], {stick: {hidden: false}});
+            //viewer.addStyle({and:[{hetflag: true}, {not:{resn: "HOH"}}, {not: {properties:{ bs: -1}}}]}, {sphere: {hidden: false, colorscheme: myScheme, radius: sphereRadius}});
             console.log(`Ligands shown for ${activeModel} models!`);
         }
         else {
