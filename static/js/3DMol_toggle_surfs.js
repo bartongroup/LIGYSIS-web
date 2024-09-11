@@ -209,7 +209,7 @@ function toggleLabelsVisibility() {
                         });
                         for ([element, siteAssemblyPDBResNum] of siteAssemblyPDBResNums) {
                             for (siteAssemblyPDBResNumber of siteAssemblyPDBResNum) { // variable name not ideal as siteAssemblyPDBResNum is an array
-                                let resSel = {model: activeModel, resi: siteAssemblyPDBResNumber, chain: element, hetflag: false}
+                                let resSel = {model: activeModel, resi: siteAssemblyPDBResNumber, chain: element}
                                 let resName = viewer.selectedAtoms(resSel)[0].resn
                                 let label = viewer.addLabel(
                                     resName + String(Pdb2UpMapAssembly[chainsMapAssembly[element]][siteAssemblyPDBResNumber]),
@@ -297,8 +297,12 @@ function toggleLigandsVisibility() {
             // console.log(`Ligands hidden for ${activeModel} model!`);
         }
         else {
-            viewer.addStyle({model: activeModel, hetflag: true, not:{resn: "HOH"}}, {stick: {hidden: true, radius: stickRadius}});
-            viewer.addStyle({model: activeModel, hetflag: true, not:{resn: "HOH"}}, {sphere: {hidden: true, radius: sphereRadius}})
+            //viewer.addStyle({model: activeModel, hetflag: true, not:{resn: "HOH"}}, {stick: {hidden: true, radius: stickRadius}});
+            viewer.addStyle(
+                {...hetAtomsNotHoh, model: activeModel},
+                {stick: {hidden: true, radius: stickRadius}}
+            )
+            //viewer.addStyle({model: activeModel, hetflag: true, not:{resn: "HOH"}}, {sphere: {hidden: true, radius: sphereRadius}})
             // console.log(`Ligands hidden for model ${activeModel}!`);
         }
 
@@ -311,7 +315,11 @@ function toggleLigandsVisibility() {
                 cylinder.updateStyle({hidden: true})
             }
 
-            viewer.addStyle({model: activeModel, hetflag: false}, {cartoon: {color: 'white'}, stick: {hidden: true}}); // remove ligand-interacting sticks and colour cartoon white
+            viewer.addStyle(
+                //{model: activeModel, hetflag: false},
+                {...protAtomsModel, model: activeModel},
+                {cartoon: {color: 'white'}, stick: {hidden: true}}
+            ); // remove ligand-interacting sticks and colour cartoon white
 
             if (labelsVisible) {
                 for (label of labelsHash[activeModel]["contactSites"]) {
@@ -342,8 +350,12 @@ function toggleLigandsVisibility() {
             console.log(`Ligands shown for ${activeModel} models!`);
         }
         else {
-            viewer.addStyle({model: activeModel, hetflag: true, not:{resn: "HOH"}}, {stick: {hidden: false, radius: stickRadius}});
-            viewer.addStyle({model: activeModel, hetflag: true, not:{resn: "HOH"}}, {sphere: {hidden: false, radius: sphereRadius}});
+            viewer.addStyle(
+                //{model: activeModel, hetflag: true, not:{resn: "HOH"}},
+                {...hetAtomsNotHoh, model: activeModel},
+                {stick: {hidden: false, radius: stickRadius}}
+                );
+            //viewer.addStyle({model: activeModel, hetflag: true, not:{resn: "HOH"}}, {sphere: {hidden: false, radius: sphereRadius}});
             console.log(`Ligands shown for model ${activeModel}!`);
         }
     }
@@ -413,8 +425,12 @@ function toggleContactsVisibility() {
         else {
             viewer.addStyle({model: activeModel, hetflag: false}, {cartoon: {color: 'white'}, stick: {hidden: true}}); // needs to change if site is clicked
         }
-        viewer.addStyle({model: activeModel, hetflag: true, not:{resn: 'HOH'}}, {stick: {hidden: true}});
-        viewer.addStyle({model: activeModel, hetflag: true, not:{resn: 'HOH'}}, {sphere: {hidden: true}});
+        viewer.addStyle(
+            //{model: activeModel, hetflag: true, not:{resn: 'HOH'}},
+            {...hetAtomsNotHoh, model: activeModel},
+            {stick: {hidden: true}}
+        );
+        //viewer.addStyle({model: activeModel, hetflag: true, not:{resn: 'HOH'}}, {sphere: {hidden: true}});
 
         // turn ligandButton off
         ligandButton.value = 'Ligands OFF';
