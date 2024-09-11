@@ -45,8 +45,8 @@ document.getElementById('chartCanvas').addEventListener('mousemove', function(e)
 
                 if (activeModel == "superposition") {
                     viewer.setStyle(// colour everything white except for clicked site. To make disappear before hovering on other site (can happen when two sites are close in the graph)
-                        {model: suppModels, not: SuppClickedSiteResidues, hetflag: false},
-                        
+                        {...protAtoms, model: protAtomsModel, not: SuppClickedSiteResidues},
+                        //{model: suppModels, not: SuppClickedSiteResidues, hetflag: false},
                         {
                             cartoon: {style:'oval', color: 'white', arrows: true, opacity: cartoonOpacity, thickness: cartoonThickness,},
                             stick: {color: 'white', hidden: true},
@@ -56,7 +56,8 @@ document.getElementById('chartCanvas').addEventListener('mousemove', function(e)
                 else  {
                     if (contactsVisible) { // don't want to hide ligand-binding sites if CONTACTS is ON
                         viewer.setStyle(
-                            {model: activeModel, not: {or: AssemblyClickedSiteResidues.concat(allBindingRess)}, hetflag: false},
+                            //{model: activeModel, not: {or: AssemblyClickedSiteResidues.concat(allBindingRess)}, hetflag: false},
+                            {...protAtoms, model: activeModel, not: {or: AssemblyClickedSiteResidues.concat(allBindingRess)},},
                             {
                                 cartoon: {style:'oval', color: 'white', arrows: true, opacity: cartoonOpacity, thickness: cartoonThickness,},
                                 stick: {color: 'white', hidden: true},
@@ -65,7 +66,8 @@ document.getElementById('chartCanvas').addEventListener('mousemove', function(e)
                     }
                     else {
                         viewer.setStyle(// colour everything white except for clicked site. To make disappear before hovering on other site (can happen when two sites are close in the graph)
-                            {model: activeModel, not: {or: AssemblyClickedSiteResidues}, hetflag: false},
+                            //{model: activeModel, not: {or: AssemblyClickedSiteResidues}, hetflag: false},
+                            {...protAtoms, model: activeModel, not: {or: AssemblyClickedSiteResidues},},
                             {
                                 cartoon: {style:'oval', color: 'white', arrows: true, opacity: cartoonOpacity, thickness: cartoonThickness,},
                                 stick: {color: 'white', hidden: true},
@@ -113,13 +115,15 @@ document.getElementById('chartCanvas').addEventListener('mousemove', function(e)
             else { // no row is clicked
                 if (contactsVisible) { // don't want to hide ligand-binding sites if CONTACTS is ON
                     viewer.setStyle(
-                        {model: activeModel, hetflag: false, not:{or:allBindingRess}},
+                        //{model: activeModel, hetflag: false, not:{or:allBindingRess}},
+                        {...protAtoms, model: activeModel, not:{or:allBindingRess}},
                         {cartoon:{style:'oval', color: 'white', arrows: true, opacity: cartoonOpacity, thickness: cartoonThickness,},}
                     );   
                 }
                 else {
                     viewer.setStyle(
-                        {hetflag: false,}, // don't want to remove ligands
+                        //{hetflag: false,}, // don't want to remove ligands
+                        protAtoms,
                         {cartoon:{style:'oval', color: 'white', arrows: true, opacity: cartoonOpacity, thickness: cartoonThickness,},}
                     );
                 }
@@ -161,7 +165,8 @@ document.getElementById('chartCanvas').addEventListener('mousemove', function(e)
                     .filter(el => Up2PdbDict[repPdbId][repPdbChainId].hasOwnProperty(el)) // this accounts not for missing residues in the structure (unresolved)
                     .map(el => Up2PdbDict[repPdbId][repPdbChainId][el]);
 
-                SuppHoveredSiteResidues = {model: suppModels, resi: siteSuppPDBResNums, chain: repPdbChainId, hetflag: false, not: {atom: ['N', 'C', 'O']}};
+                //SuppHoveredSiteResidues = {model: suppModels, resi: siteSuppPDBResNums, chain: repPdbChainId, hetflag: false, not: {atom: ['N', 'C', 'O']}};
+                SuppHoveredSiteResidues = {model: protAtomsModel, resi: siteSuppPDBResNums, chain: repPdbChainId, not: {atom: ['N', 'C', 'O']}};
 
                 viewer.setStyle(
                     SuppHoveredSiteResidues,
@@ -177,7 +182,7 @@ document.getElementById('chartCanvas').addEventListener('mousemove', function(e)
                         .filter(el => Up2PdbMapAssembly[chainsMapAssembly[element]].hasOwnProperty(el))
                         .map(el => Up2PdbMapAssembly[chainsMapAssembly[element]][el]);
                     siteAssemblyPDBResNums.push([element, siteAssemblyPDBResNum]);
-                    let assemblySel = {model: activeModel, resi: siteAssemblyPDBResNum, chain: element, hetflag: false, not: {atom: ['N', 'C', 'O']}};
+                    let assemblySel = {model: activeModel, resi: siteAssemblyPDBResNum, chain: element, not: {atom: ['N', 'C', 'O']}};
                     AssemblyHoveredSiteResidues.push(assemblySel);
                 });
 
@@ -210,7 +215,8 @@ document.getElementById('chartCanvas').addEventListener('mousemove', function(e)
 
                 viewer.setStyle(
                     {
-                        model: suppModels, hetflag: false, not: SuppClickedSiteResidues, // all protein residues except clicked site (we want to keep ligands),
+                        //model: suppModels, hetflag: false, not: SuppClickedSiteResidues, // all protein residues except clicked site (we want to keep ligands),
+                        ...protAtoms, model: protAtomsModel, not: SuppClickedSiteResidues, // all protein residues except clicked site (we want to keep ligands),
                     },
                     {cartoon: {style:'oval', color: 'white', arrows: true, opacity: cartoonOpacity, thickness: cartoonThickness,}}
                 );
@@ -223,7 +229,8 @@ document.getElementById('chartCanvas').addEventListener('mousemove', function(e)
             else {
                     viewer.setStyle(
                         {
-                            model: activeModel, hetflag: false, not: {or: AssemblyClickedSiteResidues}, // all protein residues except clicked site (we want to keep ligands)
+                           // model: activeModel, hetflag: false, not: {or: AssemblyClickedSiteResidues}, // all protein residues except clicked site (we want to keep ligands)
+                            ...protAtoms, model: activeModel, not: {or: AssemblyClickedSiteResidues}, // all protein residues except clicked site (we want to keep ligands)
                         },
                         {cartoon: {style:'oval', color: 'white', arrows: true, opacity: cartoonOpacity, thickness: cartoonThickness,}}
                     );
@@ -235,13 +242,14 @@ document.getElementById('chartCanvas').addEventListener('mousemove', function(e)
                 if (contactsVisible) { // don't want to hide ligand-binding sites if CONTACTS is ON
                     viewer.setStyle(
                         {
-                            model: activeModel, hetflag: false, not: {or: allBindingRess}, not: {or: AssemblyClickedSiteResidues} // all protein residues except clicked site (we want to keep ligands)
+                            //model: activeModel, hetflag: false, not: {or: allBindingRess}, not: {or: AssemblyClickedSiteResidues} // all protein residues except clicked site (we want to keep ligands)
+                            ...protAtoms, model: activeModel, not: {or: AssemblyClickedSiteResidues.concat(allBindingRess)} // all protein residues except clicked site (we want to keep ligands)
                         },
                         {cartoon: {style:'oval', color: 'white', arrows: true, opacity: cartoonOpacity, thickness: cartoonThickness,}}
                     );
                     for (const [key, value] of Object.entries(ligandSitesHash[activeModel])) { // colour again in case some bingind residues are part of another site and got colouterd
                         viewer.setStyle(
-                            {model: activeModel, hetflag: false, or: value[0]},  // value[0] are the ligand-binding residues selection
+                            {model: activeModel, or: value[0]},  // value[0] are the ligand-binding residues selection
                             {
                                 cartoon:{style:'oval', color: value[2], arrows: true, opacity: cartoonOpacity, thickness: cartoonThickness,},
                                 stick:{hidden: false, color: value[2],} // value[2] is colour of the binding site
@@ -285,13 +293,14 @@ document.getElementById('chartCanvas').addEventListener('mousemove', function(e)
 
             if (contactsVisible) { // don't want to hide ligand-binding sites if CONTACTS is ON
                 viewer.setStyle(
-                    {model: activeModel, hetflag: false, not:{or: allBindingRess}},
+                    //{model: activeModel, hetflag: false, not:{or: allBindingRess}},
+                    {...protAtoms, model: activeModel, not:{or: allBindingRess}},
                     {cartoon:{style:'oval', color: 'white', arrows: true, opacity: cartoonOpacity, thickness: cartoonThickness,},}
                 );
                 // also recolour the ligand-interacting residues as some might be in multiple sites
                 for (const [key, value] of Object.entries(ligandSitesHash[activeModel])) {
                     viewer.setStyle(
-                        {model: activeModel, hetflag: false, or: value[0]}, // value[0] are the ligand-binding residues selection
+                        {model: activeModel, or: value[0]}, // value[0] are the ligand-binding residues selection
                         {
                             cartoon:{style:'oval', color: value[2], arrows: true, opacity: cartoonOpacity, thickness: cartoonThickness,},
                             stick:{hidden: false, color: value[2],} // value[2] is colour of the binding site
@@ -301,7 +310,8 @@ document.getElementById('chartCanvas').addEventListener('mousemove', function(e)
             }
             else {
                 viewer.setStyle( // this generic selection works are CONTACTS are OFF and no row is clicked
-                    {hetflag: false,}, // don't want to remove ligands
+                    //{hetflag: false,}, // don't want to remove ligands
+                    protAtoms,
                     {cartoon: {style:'oval', color: 'white', arrows: true, opacity: cartoonOpacity, thickness: cartoonThickness,}}
                 ); // remove sidechains and colour white everything except ligands (all protein atoms)
             }
@@ -512,7 +522,8 @@ document.getElementById('chartCanvas').addEventListener('click', function(e) { /
                         .filter(el => Up2PdbDict[repPdbId][repPdbChainId].hasOwnProperty(el)) // this accounts not for missing residues in the structure (unresolved)
                         .map(el => Up2PdbDict[repPdbId][repPdbChainId][el]);
                     
-                    SuppClickedSiteResidues = {model: suppModels, resi: siteSuppPDBResNums, chain: repPdbChainId, hetflag: false, not: {atom: ['N', 'C', 'O']}};
+                    //SuppClickedSiteResidues = {model: suppModels, resi: siteSuppPDBResNums, chain: repPdbChainId, hetflag: false, not: {atom: ['N', 'C', 'O']}};
+                    SuppClickedSiteResidues = {model: protAtomsModel, resi: siteSuppPDBResNums, chain: repPdbChainId, not: {atom: ['N', 'C', 'O']}};
                 }
                 else {
                     proteinChains.forEach((element) => { // in case of multiple copies of protein of interest
@@ -521,7 +532,7 @@ document.getElementById('chartCanvas').addEventListener('click', function(e) { /
                             .map(el => Up2PdbMapAssembly[chainsMapAssembly[element]][el]);
                         siteAssemblyPDBResNums.push([element, siteAssemblyPDBResNum]);
                     
-                        let assemblySel = {model: activeModel, resi: siteAssemblyPDBResNum, chain: element, hetflag: false, not: {atom: ['N', 'C', 'O']}};
+                        let assemblySel = {model: activeModel, resi: siteAssemblyPDBResNum, chain: element, not: {atom: ['N', 'C', 'O']}};
                         AssemblyClickedSiteResidues.push(assemblySel);
                     });
                 }
@@ -536,7 +547,7 @@ document.getElementById('chartCanvas').addEventListener('click', function(e) { /
                         labelsHash[activeModel]["clickedSite"][index] = [];
                         if (activeModel == "superposition") {
                             for (siteSuppPDBResNum of siteSuppPDBResNums) {
-                                let resSel = {model: suppModels, resi: siteSuppPDBResNum, chain: repPdbChainId, hetflag: false};
+                                let resSel = {model: protAtomsModel, resi: siteSuppPDBResNum, chain: repPdbChainId};
                                 let resName = viewer.selectedAtoms(resSel)[0].resn;
                                 let label = viewer.addLabel(
                                     resName + String(Pdb2UpDict[repPdbId][repPdbChainId][siteSuppPDBResNum]),
@@ -555,7 +566,7 @@ document.getElementById('chartCanvas').addEventListener('click', function(e) { /
                         else {
                             for ([element, siteAssemblyPDBResNum] of siteAssemblyPDBResNums) {
                                 for (siteAssemblyPDBResNumber of siteAssemblyPDBResNum) { // variable name not ideal as siteAssemblyPDBResNum is an array
-                                    let resSel = {model: activeModel, resi: siteAssemblyPDBResNumber, chain: element, hetflag: false}
+                                    let resSel = {model: activeModel, resi: siteAssemblyPDBResNumber, chain: element}
                                     let resName = viewer.selectedAtoms(resSel)[0].resn
                                     let label = viewer.addLabel(
                                         resName + String(Pdb2UpMapAssembly[chainsMapAssembly[element]][siteAssemblyPDBResNumber]),
@@ -616,7 +627,8 @@ document.getElementById('chartCanvas').addEventListener('click', function(e) { /
                     .filter(el => Up2PdbDict[repPdbId][repPdbChainId].hasOwnProperty(el)) // this accounts not for missing residues in the structure (unresolved)
                     .map(el => Up2PdbDict[repPdbId][repPdbChainId][el]);
                 
-                SuppClickedSiteResidues = {model: suppModels, resi: siteSuppPDBResNums, chain: repPdbChainId, hetflag: false, not: {atom: ['N', 'C', 'O']}};
+                //SuppClickedSiteResidues = {model: suppModels, resi: siteSuppPDBResNums, chain: repPdbChainId, hetflag: false, not: {atom: ['N', 'C', 'O']}};
+                SuppClickedSiteResidues = {model: protAtomsModel, resi: siteSuppPDBResNums, chain: repPdbChainId, not: {atom: ['N', 'C', 'O']}};
 
                 viewer.setStyle(
                     SuppClickedSiteResidues,
@@ -634,7 +646,7 @@ document.getElementById('chartCanvas').addEventListener('click', function(e) { /
                         .map(el => Up2PdbMapAssembly[chainsMapAssembly[element]][el]);
                     siteAssemblyPDBResNums.push([element, siteAssemblyPDBResNum]);
                 
-                    let assemblySel = {model: activeModel, resi: siteAssemblyPDBResNum, chain: element, hetflag: false, not: {atom: ['N', 'C', 'O']}};
+                    let assemblySel = {model: activeModel, resi: siteAssemblyPDBResNum, chain: element, not: {atom: ['N', 'C', 'O']}};
                     AssemblyClickedSiteResidues.push(assemblySel);
                 });
 
@@ -677,7 +689,7 @@ document.getElementById('chartCanvas').addEventListener('click', function(e) { /
                     else {
                         for ([element, siteAssemblyPDBResNum] of siteAssemblyPDBResNums) {
                             for (siteAssemblyPDBResNumber of siteAssemblyPDBResNum) { // variable name not ideal as siteAssemblyPDBResNum is an array
-                                let resSel = {model: activeModel, resi: siteAssemblyPDBResNumber, chain: element, hetflag: false}
+                                let resSel = {model: activeModel, resi: siteAssemblyPDBResNumber, chain: element}
                                 let resName = viewer.selectedAtoms(resSel)[0].resn
                                 let label = viewer.addLabel(
                                     resName + String(Pdb2UpMapAssembly[chainsMapAssembly[element]][siteAssemblyPDBResNumber]),
@@ -759,11 +771,16 @@ document.getElementById('newChartCanvas').addEventListener('mousemove', function
             if (clickedElements.length == 0) { // no row is clicked
 
                 if (activeModel == "superposition") { // in this case, only one residue as this is a supperposition of single chains
-                    viewer.setStyle({hetflag: false}, {cartoon: {style:'oval', color: 'white', arrows: true, opacity: cartoonOpacity, thickness: cartoonThickness,}}); // this is done so only a single point is highlighted when hovered on (some are really close.)
+                    viewer.setStyle(
+                        //{hetflag: false},
+                        {...protAtoms, model: protAtomsModel},
+                        {cartoon: {style:'oval', color: 'white', arrows: true, opacity: cartoonOpacity, thickness: cartoonThickness,}}
+                    ); // this is done so only a single point is highlighted when hovered on (some are really close.)
                     SuppPDBResNum = Up2PdbDict[repPdbId][repPdbChainId][newPointLabel];
                     if (SuppPDBResNum != undefined) {
                         viewer.setStyle(
-                            {model: suppModels, chain: repPdbChainId, resi: SuppPDBResNum, hetflag: false, not: {atom: ['N', 'C', 'O']}},
+                            //{model: suppModels, chain: repPdbChainId, resi: SuppPDBResNum, hetflag: false, not: {atom: ['N', 'C', 'O']}},
+                            {model: protAtomsModel, chain: repPdbChainId, resi: SuppPDBResNum, not: {atom: ['N', 'C', 'O']}},
                             {
                                 cartoon:{style:'oval', color: pointColor, arrows: true, opacity: cartoonOpacity, thickness: cartoonThickness,},
                                 stick:{color: pointColor},
@@ -777,19 +794,24 @@ document.getElementById('newChartCanvas').addEventListener('mousemove', function
                 else {
                     if (contactsVisible) {
                         viewer.setStyle(
-                            {model: activeModel, hetflag: false, not: {or: allBindingRess}},
+                            //{model: activeModel, hetflag: false, not: {or: allBindingRess}},
+                            {...protAtoms, model: activeModel, not: {or: allBindingRess}},
                             {cartoon: {style:'oval', color: 'white', arrows: true, opacity: cartoonOpacity, thickness: cartoonThickness,}}
                         );
                     }
                     else {
-                        viewer.setStyle({model: activeModel, hetflag: false}, {cartoon: {style:'oval', color: 'white', arrows: true, opacity: cartoonOpacity, thickness: cartoonThickness,}});
+                        viewer.setStyle(
+                            //{model: activeModel, hetflag: false},
+                            {...protAtoms, model: activeModel},
+                            {cartoon: {style:'oval', color: 'white', arrows: true, opacity: cartoonOpacity, thickness: cartoonThickness,}}
+                        );
                     }
                     proteinChains.forEach((element) => { // in case of multiple copies of protein of interest
                         let AssemblyPDBResNum = Up2PdbMapAssembly[chainsMapAssembly[element]][newPointLabel]
                         if (AssemblyPDBResNum  != undefined) {
                             AssemblyPDBResNums.push([element, AssemblyPDBResNum]);
                             viewer.setStyle(
-                                {model: activeModel, resi: AssemblyPDBResNum, chain: element, hetflag: false, not: {atom: ['N', 'C', 'O']}},
+                                {model: activeModel, resi: AssemblyPDBResNum, chain: element, not: {atom: ['N', 'C', 'O']}},
                                 {
                                     cartoon:{style:'oval', color: pointColor, arrows: true, opacity: cartoonOpacity, thickness: cartoonThickness,},
                                     stick:{color: pointColor},
@@ -807,7 +829,7 @@ document.getElementById('newChartCanvas').addEventListener('mousemove', function
 
                     if (activeModel == "superposition") {
                         if (SuppPDBResNum != undefined) {
-                            let resSel = {model: suppModels, resi: SuppPDBResNum, chain: repPdbChainId, hetflag: false};
+                            let resSel = {model: protAtomsModel, resi: SuppPDBResNum, chain: repPdbChainId};
                             let resName = viewer.selectedAtoms(resSel)[0].resn
                             let label = viewer.addLabel(
                                 resName + String(Pdb2UpDict[repPdbId][repPdbChainId][SuppPDBResNum]),
@@ -828,7 +850,7 @@ document.getElementById('newChartCanvas').addEventListener('mousemove', function
                     }
                     else{
                         AssemblyPDBResNums.forEach(([chain, resNum]) => {
-                            let resSel = {model: activeModel, resi: resNum, chain: chain, hetflag: false}
+                            let resSel = {model: activeModel, resi: resNum, chain: chain}
                             let resName = viewer.selectedAtoms(resSel)[0].resn
                             let label = viewer.addLabel(
                                 resName + String(Pdb2UpMapAssembly[chainsMapAssembly[chain]][resNum]),
@@ -857,15 +879,23 @@ document.getElementById('newChartCanvas').addEventListener('mousemove', function
         if (clickedElements.length == 0) {
 
             if (activeModel == "superposition") {
-                viewer.setStyle({model: suppModels, hetflag: false}, {cartoon: {style:'oval', color: 'white', arrows: true, opacity: cartoonOpacity, thickness: cartoonThickness,}});
+                viewer.setStyle(
+                    //{model: suppModels, hetflag: false},
+                    {...protAtoms, model: protAtomsModel},
+                    {cartoon: {style:'oval', color: 'white', arrows: true, opacity: cartoonOpacity, thickness: cartoonThickness,}}
+                );
             }
             else {
                 if (contactsVisible) {
-                    viewer.setStyle({model: activeModel, hetflag: false, not: {or: allBindingRess}}, {cartoon: {style:'oval', color: 'white', arrows: true, opacity: cartoonOpacity, thickness: cartoonThickness,}});
+                    viewer.setStyle(
+                        //{model: activeModel, hetflag: false, not: {or: allBindingRess}}
+                        {...protAtoms, model: activeModel, not: {or: allBindingRess}},
+                        {cartoon: {style:'oval', color: 'white', arrows: true, opacity: cartoonOpacity, thickness: cartoonThickness,}}
+                    );
 
                     for (const [key, value] of Object.entries(ligandSitesHash[activeModel])) {
                         viewer.setStyle( // displaying and colouring again the ligand-interacting residues
-                            {model: activeModel, hetflag: false, or: value[0]}, // value[0] are the ligand-binding residues selection
+                            {model: activeModel, or: value[0]}, // value[0] are the ligand-binding residues selection
                             {
                                 cartoon:{style:'oval', color: value[2], arrows: true, opacity: cartoonOpacity, thickness: cartoonThickness,},
                                 stick:{hidden: false, color: value[2],} // value[2] is colour of the binding site
@@ -874,7 +904,11 @@ document.getElementById('newChartCanvas').addEventListener('mousemove', function
                     }
                 }
                 else {
-                    viewer.setStyle({model: activeModel, hetflag: false}, {cartoon: {style:'oval', color: 'white', arrows: true, opacity: cartoonOpacity, thickness: cartoonThickness,}});
+                    viewer.setStyle(
+                        //{model: activeModel, hetflag: false},
+                        {...protAtoms, model: activeModel},
+                        {cartoon: {style:'oval', color: 'white', arrows: true, opacity: cartoonOpacity, thickness: cartoonThickness,}}
+                    );
                 }
             }
 
