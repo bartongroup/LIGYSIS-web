@@ -97,11 +97,16 @@
     const waterColor = "gold";
 
     let suppLigsSels = {};
-
+    const canAas = ['CYS', 'MET', 'HIS', 'GLU', 'ASP', 'LYS', 'ARG', 'SER', 'THR', 'ASN', 'GLN', 'TRP', 'TYR', 'PHE', 'ILE', 'LEU', 'VAL', 'ALA', 'PRO', 'GLY'];
     const modAas = ['TPO', 'SEP', 'PTR', 'PYL', 'MLY', 'MSE', 'CSO', 'CME', 'CSD', 'CSW', 'CSX', 'CSS', 'CSH', 'CSL', 'CSZ', 'CSK', 'CSM', 'CSR', 'CSS', 'CSU'];
-    const modAasSels = modAas.map(function(residue) {
+    const allAas = canAas.concat(modAas);
+    const aasSel = allAas.map(function(residue) {
         return { resn: residue };
     })
+    const protAtoms = {or: aasSel}; // all protein atoms, including 20 canonical AAs and 20 modified AAs
+    const hetAtoms = {not: protAtoms}; // all non-protein atoms
+    const hetAtomsNotHoh = {and: [hetAtoms, {not: {resn: 'HOH'}}]}; // all non-protein atoms except water
+    const hohAtoms = {resn: 'HOH'}; // all water atoms
 </script>
 
 {% endblock %}
