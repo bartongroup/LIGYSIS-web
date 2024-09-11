@@ -180,7 +180,7 @@ function loadAllModels(simplePdbs) { // Load all structures
                     surfSel,
                     surfSel,
                 );
-                console.log(PDBResNums);
+                //console.log(PDBResNums);
             }
             else {
                 let surfSel = {...protAtoms, model: protAtomsModel, resi: PDBResNums, chain: repPdbChainId}
