@@ -151,45 +151,46 @@ def generate_pseudobond_lines(df): # generates pseudobond lines for ChimeraX
     
     return output
 
-def chimeraX2PyMol(simple_dir, cxc_in, defattr_in, pml_out): # converts ChimeraX command and attribute files to PyMol script
+def chimeraX2PyMol(cxc_in, attr_in): # converts ChimeraX command and attribute files to PyMol script
     """
     Converts ChimeraX command and attribute files to a PyMol
     script that will do the same thing as the ChimeraX script.
     """
     model_order = extract_open_files(cxc_in)
     
-    pymol_lines, bs_ids = transform_lines(defattr_in, model_order)
+    pymol_attrs, bs_ids = transform_lines_PyMol(attr_in, model_order)
     
-    with open(pml_out, "w") as f:
-        f.write("# styling\n")
-        for l in looks:
-            f.write("{}\n".format(l))
+    pymol_lines = []
+    pymol_lines.append('# styling')
+    for l in pymol_looks:
+        pymol_lines.append(f'{l}')
 
-        f.write("# load models\n")
-        for model in model_order.values():
-            f.write("load {}\n".format(os.path.join(simple_dir, model)))
+    pymol_lines.append('# load models')
+    for model in model_order.values():
+        pymol_lines.append(f'load {model}')
 
-        f.write("alter all, p.bs = -4 # all atoms have BS = -4\n")
+    pymol_lines.append('alter all, p.bs = -3 # all atoms have BS = -3')
 
-        f.write("# assignig BS IDs\n")
-        for l in pymol_lines:
-            f.write("{}\n".format(l))
+    pymol_lines.append('# assignig binding site IDs')
+    for l in pymol_attrs:
+        pymol_lines.append(f'{l}')
 
-        f.write("# formatting\n")
-        for l in format_commands:
-            f.write("{}\n".format(l))
-            
-        f.write("# colouring by binding site ID\n")
+    pymol_lines.append('# formatting')
+    for l in pymol_formats:
+        pymol_lines.append(f'{l}')
+        
+    pymol_lines.append('# colouring by binding site ID')
 
-        f.write("color grey, unclust_ligs\n")
-        clust_bs_ids = [bs_id for bs_id in bs_ids if bs_id != -1]
-        for bs_id in clust_bs_ids:
-            rgb = hex_to_rgb(colors[bs_id])
-            f.write(f'select BS{bs_id}, p.bs = {bs_id}\n')
-            f.write(f'set_color BS{bs_id}_color, {rgb}\n')
-            f.write(f'color BS{bs_id}_color, BS{bs_id}\n')
-        f.write("deselect\n")
+    pymol_lines.append('color grey, unclust_ligs')
+    clust_bs_ids = [bs_id for bs_id in bs_ids if bs_id != -1]
+    for bs_id in clust_bs_ids:
+        rgb = hex_to_rgb(colors[bs_id])
+        pymol_lines.append(f'select BS{bs_id}, p.bs = {bs_id}')
+        pymol_lines.append(f'set_color BS{bs_id}_color, {rgb}')
+        pymol_lines.append(f'color BS{bs_id}_color, BS{bs_id}')
+    pymol_lines.append('deselect')
 
+    return pymol_lines
 ### SOME FIXED VARIABLES ###
 
 colors = load_pickle(os.path.join(DATA_FOLDER, "sample_colors_hex.pkl")) # sample colors
@@ -219,7 +220,6 @@ bs_ress_table_tooltips = [ # hover tooltips for binding residue table
     "This is the residue's secondary structure",
 ]
 
-
 arpeggio_cols = [
     'contact', 'distance',
     'auth_asym_id_end', 'auth_atom_id_end', 'auth_seq_id_end',
@@ -234,7 +234,7 @@ extra_cxc_lines = [
     "set silhouette ON; set silhouetteWidth 2; set silhouetteColor black;",
     "~disp; select ~protein; ~select : HOH; ~select ::binding_site==-1; disp sel; ~sel;",
     "col :HOH orange; col ::binding_site==-1 grey;",
-    "surf protein; transparency 30 s;",
+    #"surf protein; transparency 30 s;",
 ]
 
 pymol_looks = [
@@ -250,8 +250,8 @@ pymol_looks = [
 ]
 
 pymol_formats = [
-    "color white",
-    "hide",
+    "color white, all",
+    "hide everything, all",
     "select prot, polymer.protein",
     "select water, resn HOH",
     "show cartoon, prot",
@@ -540,13 +540,16 @@ def get_uniprot_mapping(): # route to get UniProt residue and chain mapping for 
 
     return jsonify(response_data)
 
-@app.route('/download-superposition', methods=['POST'])
-def download_superposition():
+@app.route('/download-superposition-ChimeraX', methods=['POST'])
+def download_superposition_ChimeraX():
 
     data = request.get_json() # Get JSON data from the POST request
     
     prot_id = data.get('proteinId')
     seg_id = data.get('segmentId')
+
+    if not prot_id or not seg_id: # Validate the received data
+        return jsonify({'error': 'Missing data'}), 400
 
     simple_dir = os.path.join(DATA_FOLDER, prot_id, str(seg_id), "simple")
     simple_pdbs = os.listdir(simple_dir)
@@ -559,9 +562,6 @@ def download_superposition():
     bs_membership = pd.read_pickle(f'{DATA_FOLDER}/example/other/{prot_id}_{seg_id}_ALL_inf_bss_membership.pkl')
 
     bs_ids = list(bs_membership.keys())
-    
-    if not prot_id or not seg_id or not simple_pdbs: # Validate the received data
-        return jsonify({'error': 'Missing data'}), 400
 
     # read lines in cxc_in and push to cxc_lines
     cxc_lines = []
@@ -580,6 +580,7 @@ def download_superposition():
     for bs_id in bs_ids:
         cxc_lines.append((f'col ::binding_site=={bs_id} {colors[bs_id]};'))
     
+    cxc_lines.append('delete pseudobond;')
     cxc_lines.append(f'save {prot_id}_{seg_id}_ALL_inf_average_0.5.cxs;')
     cxc_lines_string = "\n".join(cxc_lines)
 
@@ -609,8 +610,64 @@ def download_superposition():
         memory_file,
         mimetype='application/zip',
         as_attachment=True,
-        download_name=f'{prot_id}_{seg_id}_superposition.zip'
+        download_name=f'{prot_id}_{seg_id}_superposition_ChimeraX.zip'
     )
+
+# route to download PyMol script
+@app.route('/download-superposition-PyMol', methods=['POST'])
+def download_superposition_PyMol():
+    
+    data = request.get_json() # Get JSON data from the POST request
+    
+    prot_id = data.get('proteinId')
+    seg_id = data.get('segmentId')
+
+    if not prot_id or not seg_id: # Validate the received data
+        return jsonify({'error': 'Missing data'}), 400
+
+    simple_dir = os.path.join(DATA_FOLDER, prot_id, str(seg_id), "simple")
+    simple_pdbs = os.listdir(simple_dir)
+    simple_pdbs = [f'{simple_dir}/{el}' for el in simple_pdbs if el.endswith(".cif")]
+
+    seg_name = f'{prot_id}_{seg_id}'
+    cxc_in =f'{DATA_FOLDER}/{prot_id}/{seg_id}/simple/{seg_name}_ALL_inf_average_0.5.cxc' # ChimeraX command file
+    attr_in =  f'{DATA_FOLDER}/{prot_id}/{seg_id}/simple/{seg_name}_ALL_inf_average_0.5.defattr' # ChimeraX attribute file
+
+    pymol_lines = chimeraX2PyMol(cxc_in, attr_in)
+    pymol_lines_string = "\n".join(pymol_lines)
+
+    # Create and add in-memory files directly to the zip
+    pymol_file = f'{seg_name}_ALL_inf_average_0.5.pml'
+    pymol_file_in_memory = io.BytesIO()
+    pymol_file_in_memory.write(pymol_lines_string.encode('utf-8'))
+
+    memory_file = io.BytesIO() # Create a BytesIO object to hold the in-memory zip file
+
+    with zipfile.ZipFile(memory_file, 'w') as zf: # Create a ZipFile object for in-memory use
+        for file_path in simple_pdbs:
+            if os.path.exists(file_path):  # Check if the file exists
+                zf.write(file_path, os.path.basename(file_path))
+            else:
+                return f"File {file_path} not found", 404
+        
+        # Add the in-memory files directly to the in-memory zip
+        pymol_file_in_memory.seek(0)
+        zf.writestr(pymol_file, pymol_file_in_memory.read())
+    
+    memory_file.seek(0)  # Seek to the beginning of the BytesIO object before sending it
+    
+    return send_file( # Send the zip file to the client as a downloadable file
+        memory_file,
+        mimetype='application/zip',
+        as_attachment=True,
+        download_name=f'{prot_id}_{seg_id}_superposition_PyMol.zip'
+    )
+
+
+
+
+
+
 
 @app.route('/download-assembly', methods=['POST'])
 def download_assembly():
