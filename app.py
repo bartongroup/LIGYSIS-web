@@ -420,8 +420,6 @@ def get_table(): # route to get binding site residues for a given binding site
 
     site_data = site_ress.to_dict(orient="list")
 
-    #print(site_data)
-
     return jsonify(site_data)
 
 @app.route('/download-csv')
@@ -663,14 +661,8 @@ def download_superposition_PyMol():
         download_name=f'{prot_id}_{seg_id}_superposition_PyMol.zip'
     )
 
-
-
-
-
-
-
-@app.route('/download-assembly', methods=['POST'])
-def download_assembly():
+@app.route('/download-assembly-ChimeraX', methods=['POST'])
+def download_assembly_ChimeraX():
     data = request.get_json() # Get JSON data from the POST request
     
     prot_id = data.get('proteinId')
@@ -719,7 +711,6 @@ def download_assembly():
         lig_resn, lig_chain, lig_resi = k.split("_")
         ress = v[0]
         col_key = v[1]
-        print(k, ress)
         if ress != []:
             prot_sel_str = 'sel ' + ' '.join([f'/{el[1]}:{el[2]}' for el in ress]) + ';'
             prot_col_str = f'col sel {colors[col_key]}'
@@ -741,7 +732,7 @@ def download_assembly():
             'set silhouette ON',
             'set silhouettewidth 2',
             '~disp',
-            'surface',
+            #'surface',
             'transparency 30',
         ]  + aas_str + ligs_str + ['~sel']
     )
@@ -790,11 +781,11 @@ def download_assembly():
         memory_file,
         mimetype='application/zip',
         as_attachment=True,
-        download_name=f'{prot_id}_{seg_id}_{pdb_id}_assembly.zip'
+        download_name=f'{prot_id}_{seg_id}_{pdb_id}_assembly_ChimeraX.zip'
     )
 
-@app.route('/download-all-assemblies', methods=['POST'])
-def download_all_assemblies():
+@app.route('/download-all-assemblies-ChimeraX', methods=['POST'])
+def download_all_assemblies_ChimeraX():
     data = request.get_json() # Get JSON data from the POST request
     
     prot_id = data.get('proteinId')
@@ -868,7 +859,7 @@ def download_all_assemblies():
                     'set silhouette ON',
                     'set silhouettewidth 2',
                     '~disp',
-                    'surface',
+                    #'surface',
                     'transparency 30',
                 ]  + aas_str + ligs_str + ['~sel']
             )
@@ -913,10 +904,9 @@ def download_all_assemblies():
         memory_file,
         mimetype='application/zip',
         as_attachment=True,
-        download_name=f'{prot_id}_{seg_id}_all_assemblies.zip'
+        download_name=f'{prot_id}_{seg_id}_all_assemblies_ChimeraX.zip'
     )
 
-# create route to download Arpeggio contacts data for an assembly --> /download-assembly-contact-data
 @app.route('/download-assembly-contact-data', methods=['POST'])
 def download_assembly_contact_data():
     data = request.get_json()
@@ -940,7 +930,6 @@ def download_assembly_contact_data():
             download_name=f'{prot_id}_{seg_id}_{pdb_id}_contacts.csv'
         )
     
-# create route to download Arpeggio contacts data for all assemblies --> /download-all-assemblies-contact-data
 @app.route('/download-all-assemblies-contact-data', methods=['POST'])
 def download_all_assemblies_contact_data():
     data = request.get_json()

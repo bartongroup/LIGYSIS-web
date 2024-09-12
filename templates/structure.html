@@ -217,11 +217,11 @@
                 </div>
                 <div class="col-6 col-md-3 col-lg-6 col-xl-2 d-flex justify-content-center">
                     <input id="saveAssemblyButton" type="button" value="Save Assembly" style="color: darkgray;"
-                    onclick="saveAssembly()" disabled></input>
+                    onclick="saveAssemblyChimeraX()" disabled></input>
                 </div>
                 <div class="col-6 col-md-3 col-lg-6 col-xl-2 d-flex justify-content-center">
                     <input id="saveAssembliesButton" type="button" value="Save Assemblies" style="color: black;"
-                    onclick="saveAllAssemblies()"></input>
+                    onclick="saveAllAssembliesChimeraX()"></input>
                 </div>
             </div>
             <div class="row mb-2 justify-content-around align-items-stretch custom-padding">
@@ -495,7 +495,7 @@
         });
     }
     
-    function saveAssembly() {
+    function saveAssemblyChimeraX() {
         // Assuming proteinId, segmentId, and modelOrderRev[activeModel] are available in your JavaScript context
         let pdbId = modelOrderRev[activeModel];  // Replace with your actual modelOrderRev[activeModel] variable
         
@@ -507,7 +507,7 @@
         };
     
         // Send a POST request to the Flask route
-        fetch('/download-assembly', {
+        fetch('/download-assembly-ChimeraX', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
@@ -525,7 +525,7 @@
             const url = window.URL.createObjectURL(blob);
             const a = document.createElement('a');
             a.href = url;
-            a.download = `${proteinId}_${segmentId}_${pdbId}_assembly.zip`;
+            a.download = `${proteinId}_${segmentId}_${pdbId}_assembly_ChimeraX.zip`;
             document.body.appendChild(a);
             a.click();
             a.remove();
@@ -535,7 +535,7 @@
         });
     }
 
-    function saveAllAssemblies() {
+    function saveAllAssembliesChimeraX() {
         
         // Create an object with all the data you want to send
         const data = {
@@ -545,7 +545,7 @@
         };
     
         // Send a POST request to the Flask route
-        fetch('/download-all-assemblies', {
+        fetch('/download-all-assemblies-ChimeraX', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
@@ -563,7 +563,7 @@
             const url = window.URL.createObjectURL(blob);
             const a = document.createElement('a');
             a.href = url;
-            a.download = `${proteinId}_${segmentId}_all_assemblies.zip`;
+            a.download = `${proteinId}_${segmentId}_all_assemblies_ChimeraX.zip`;
             document.body.appendChild(a);
             a.click();
             a.remove();
