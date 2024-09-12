@@ -207,7 +207,7 @@ function selectOption(option) {
 
                 viewer.setStyle(
                     {model: protAtomsModel},
-                    {cartoon: {hidden: false, style: cartoonStyle, color: defaultColor, arrows: cartoonArrows, thickness: cartoonThickness, opacity: cartoonOpacity}}
+                    {cartoon: {hidden: false, style: cartoonStyle, color: defaultColor, arrows: cartoonArrows, tubes: cartoonTubes, thickness: cartoonThickness, opacity: cartoonOpacity}}
                 );
 
                 viewer.center({model: protAtomsModel}); // center on suppModels again
@@ -319,7 +319,7 @@ function openStructure(pdbId) {
                         contactCylinders[activeModel] = []; // Initialize contactCylinders for the new assembly (previous ones are untouched and keep their cylinders)
                     }
         
-                    viewer.setStyle({model: modelID}, {cartoon: {hidden: false, style: cartoonStyle, color: defaultColor, arrows: cartoonArrows, thickness: cartoonThickness, opacity: cartoonOpacity}});
+                    viewer.setStyle({model: modelID}, {cartoon: {hidden: false, style: cartoonStyle, color: defaultColor, arrows: cartoonArrows, tubes: cartoonTubes, thickness: cartoonThickness, opacity: cartoonOpacity}});
                     viewer.center({model: modelID});
                     viewer.zoomTo({model: modelID})
         

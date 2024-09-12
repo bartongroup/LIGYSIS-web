@@ -51,7 +51,7 @@ $('table#bss_table tbody').on('mouseover', 'tr', function () { // event listener
         viewer.setStyle(
             SuppHoveredSiteResidues,
             {
-                cartoon:{style: cartoonStyle, color: siteColor, arrows: cartoonArrows, opacity: cartoonOpacity, thickness: cartoonThickness,},
+                cartoon:{style: cartoonStyle, color: siteColor, arrows: cartoonArrows, tubes: cartoonTubes, opacity: cartoonOpacity, thickness: cartoonThickness,},
                 stick:{color: siteColor},
             }
         );
@@ -71,7 +71,7 @@ $('table#bss_table tbody').on('mouseover', 'tr', function () { // event listener
         viewer.setStyle(
             {model: activeModel, or: AssemblyHoveredSiteResidues},
             {
-                cartoon:{style: cartoonStyle, color: siteColor, arrows: cartoonArrows, opacity: cartoonOpacity, thickness: cartoonThickness,},
+                cartoon:{style: cartoonStyle, color: siteColor, arrows: cartoonArrows, tubes: cartoonTubes, opacity: cartoonOpacity, thickness: cartoonThickness,},
                 stick:{color: siteColor},
             }
         );
@@ -97,7 +97,7 @@ $('table#bss_table tbody').on('mouseover', 'tr', function () { // event listener
             viewer.setStyle(
                 SuppHoveredSiteResidues,
                 {
-                    cartoon: {style: cartoonStyle, color: defaultColor, arrows: cartoonArrows, opacity: cartoonOpacity, thickness: cartoonThickness,}
+                    cartoon: {style: cartoonStyle, color: defaultColor, arrows: cartoonArrows, tubes: cartoonTubes, opacity: cartoonOpacity, thickness: cartoonThickness,}
                 }
             );
         }
@@ -106,7 +106,7 @@ $('table#bss_table tbody').on('mouseover', 'tr', function () { // event listener
                 viewer.setStyle(
                     {model: activeModel, or: AssemblyHoveredSiteResidues}, // hiding all the hovered site residues
                     {
-                        cartoon:{style: cartoonStyle, color: defaultColor, arrows: cartoonArrows, opacity: cartoonOpacity, thickness: cartoonThickness,},
+                        cartoon:{style: cartoonStyle, color: defaultColor, arrows: cartoonArrows, tubes: cartoonTubes, opacity: cartoonOpacity, thickness: cartoonThickness,},
                     }
                 );
                 // colour ligand-binding residues again
@@ -114,7 +114,7 @@ $('table#bss_table tbody').on('mouseover', 'tr', function () { // event listener
                     viewer.setStyle( // displaying and colouring again the ligand-interacting residues
                         {model: activeModel, or: value[0]}, // value[0] are the ligand-binding residues selection
                         {
-                            cartoon:{style: cartoonStyle, color: value[2], arrows: cartoonArrows, opacity: cartoonOpacity, thickness: cartoonThickness,},
+                            cartoon:{style: cartoonStyle, color: value[2], arrows: cartoonArrows, tubes: cartoonTubes, opacity: cartoonOpacity, thickness: cartoonThickness,},
                             stick:{hidden: false, color: value[2],} // value[2] is colour of the binding site
                         }
                     );
@@ -124,7 +124,7 @@ $('table#bss_table tbody').on('mouseover', 'tr', function () { // event listener
                 viewer.setStyle(
                     {model: activeModel, or: AssemblyHoveredSiteResidues},
                     {
-                        cartoon:{style: cartoonStyle, color: defaultColor, arrows: cartoonArrows, opacity: cartoonOpacity, thickness: cartoonThickness,},
+                        cartoon:{style: cartoonStyle, color: defaultColor, arrows: cartoonArrows, tubes: cartoonTubes, opacity: cartoonOpacity, thickness: cartoonThickness,},
                     }
                 );
             }
@@ -176,14 +176,14 @@ $('table#bss_table tbody').on('mouseover', 'tr', function () { // event listener
             if (activeModel == "superposition") {
                 viewer.setStyle( // colouring the clicked site (necessary as sometimes there is overlap between sites)
                     SuppClickedSiteResidues,
-                    {cartoon:{style: cartoonStyle, color: clickedSiteColor, arrows: cartoonArrows, opacity: cartoonOpacity, thickness: cartoonThickness,},
+                    {cartoon:{style: cartoonStyle, color: clickedSiteColor, arrows: cartoonArrows, tubes: cartoonTubes, opacity: cartoonOpacity, thickness: cartoonThickness,},
                     stick:{color: clickedSiteColor,}, }
                 );
             }
             else {
                 viewer.setStyle( // colouring the clicked site (necessary as sometimes there is overlap between sites)
                     {model: activeModel, or: AssemblyClickedSiteResidues},
-                    {cartoon:{style: cartoonStyle, color: clickedSiteColor, arrows: cartoonArrows, opacity: cartoonOpacity, thickness: cartoonThickness,},
+                    {cartoon:{style: cartoonStyle, color: clickedSiteColor, arrows: cartoonArrows, tubes: cartoonTubes, opacity: cartoonOpacity, thickness: cartoonThickness,},
                     stick:{color: clickedSiteColor,}, }
                 );
             }
@@ -324,7 +324,7 @@ $('table#bss_table tbody').on('mouseover', 'tr', function () { // event listener
                     viewer.setStyle( // colour white previously clicked site residues
                         SuppClickedSiteResidues,
                         {
-                            cartoon: {style: cartoonStyle, color: defaultColor, arrows: cartoonArrows, opacity: cartoonOpacity, thickness: cartoonThickness,}
+                            cartoon: {style: cartoonStyle, color: defaultColor, arrows: cartoonArrows, tubes: cartoonTubes, opacity: cartoonOpacity, thickness: cartoonThickness,}
                         }
                     );
                 }
@@ -334,7 +334,7 @@ $('table#bss_table tbody').on('mouseover', 'tr', function () { // event listener
                         viewer.setStyle(
                             {model: activeModel, or: AssemblyClickedSiteResidues, not: {or: allBindingRess}},  
                             {
-                                cartoon: {style: cartoonStyle, color: defaultColor, arrows: cartoonArrows, opacity: cartoonOpacity, thickness: cartoonThickness,}
+                                cartoon: {style: cartoonStyle, color: defaultColor, arrows: cartoonArrows, tubes: cartoonTubes, opacity: cartoonOpacity, thickness: cartoonThickness,}
                             }
                         );
                     }
@@ -342,7 +342,7 @@ $('table#bss_table tbody').on('mouseover', 'tr', function () { // event listener
                         viewer.setStyle(
                             {model: activeModel, or: AssemblyClickedSiteResidues},
                             {
-                                cartoon: {style: cartoonStyle, color: defaultColor, arrows: cartoonArrows, opacity: cartoonOpacity, thickness: cartoonThickness,}
+                                cartoon: {style: cartoonStyle, color: defaultColor, arrows: cartoonArrows, tubes: cartoonTubes, opacity: cartoonOpacity, thickness: cartoonThickness,}
                             }
                         );
                     }
@@ -372,7 +372,7 @@ $('table#bss_table tbody').on('mouseover', 'tr', function () { // event listener
             viewer.setStyle(
                 SuppClickedSiteResidues,
                 {
-                    cartoon:{style: cartoonStyle, color: siteColor, arrows: cartoonArrows, opacity: cartoonOpacity, thickness: cartoonThickness,},
+                    cartoon:{style: cartoonStyle, color: siteColor, arrows: cartoonArrows, tubes: cartoonTubes, opacity: cartoonOpacity, thickness: cartoonThickness,},
                     stick:{color: siteColor},
                 }
             );
@@ -392,7 +392,7 @@ $('table#bss_table tbody').on('mouseover', 'tr', function () { // event listener
             viewer.setStyle(
                 {model: activeModel, or: AssemblyClickedSiteResidues},
                 {
-                    cartoon:{style: cartoonStyle, color: siteColor, arrows: cartoonArrows, opacity: cartoonOpacity, thickness: cartoonThickness,},
+                    cartoon:{style: cartoonStyle, color: siteColor, arrows: cartoonArrows, tubes: cartoonTubes, opacity: cartoonOpacity, thickness: cartoonThickness,},
                     stick:{color: siteColor},
                 }
             );
@@ -514,7 +514,7 @@ $('table#bs_ress_table tbody').on('mouseover', 'tr', function () { // event list
                 viewer.setStyle(
                     {model: protAtomsModel, chain: repPdbChainId, resi: SuppPDBResNum, not: {atom: bboneAtoms}},
                     {
-                        cartoon:{style: cartoonStyle, color: rowColorHex, arrows: cartoonArrows, opacity: cartoonOpacity, thickness: cartoonThickness,},
+                        cartoon:{style: cartoonStyle, color: rowColorHex, arrows: cartoonArrows, tubes: cartoonTubes, opacity: cartoonOpacity, thickness: cartoonThickness,},
                         stick:{color: rowColorHex},
                     }
                 );
@@ -531,7 +531,7 @@ $('table#bs_ress_table tbody').on('mouseover', 'tr', function () { // event list
                     viewer.setStyle(
                         {model: activeModel, resi: AssemblyPDBResNum, chain: element, not: {atom: bboneAtoms}},
                         {
-                            cartoon:{style: cartoonStyle, color: rowColorHex, arrows: cartoonArrows, opacity: cartoonOpacity, thickness: cartoonThickness,},
+                            cartoon:{style: cartoonStyle, color: rowColorHex, arrows: cartoonArrows, tubes: cartoonTubes, opacity: cartoonOpacity, thickness: cartoonThickness,},
                             stick:{color: rowColorHex},
                         }
                     );
@@ -615,21 +615,21 @@ $('table#bs_ress_table tbody').on('mouseover', 'tr', function () { // event list
         if (activeModel == "superposition") {
             viewer.setStyle(
                 {...protAtoms, model: protAtomsModel},
-                {cartoon: {style: cartoonStyle, color: defaultColor, arrows: cartoonArrows, opacity: cartoonOpacity, thickness: cartoonThickness,}}
+                {cartoon: {style: cartoonStyle, color: defaultColor, arrows: cartoonArrows, tubes: cartoonTubes, opacity: cartoonOpacity, thickness: cartoonThickness,}}
             );
         }
         else {
             if (contactsVisible) {
                 viewer.setStyle(
                     {...protAtoms, model: activeModel, not: {or: allBindingRess}},
-                    {cartoon: {style: cartoonStyle, color: defaultColor, arrows: cartoonArrows, opacity: cartoonOpacity, thickness: cartoonThickness,}}
+                    {cartoon: {style: cartoonStyle, color: defaultColor, arrows: cartoonArrows, tubes: cartoonTubes, opacity: cartoonOpacity, thickness: cartoonThickness,}}
                 );
 
                 for (const [key, value] of Object.entries(ligandSitesHash[activeModel])) {
                     viewer.setStyle( // displaying and colouring again the ligand-interacting residues
                         {model: activeModel, or: value[0]}, // value[0] are the ligand-binding residues selection
                         {
-                            cartoon:{style: cartoonStyle, color: value[2], arrows: cartoonArrows, opacity: cartoonOpacity, thickness: cartoonThickness,},
+                            cartoon:{style: cartoonStyle, color: value[2], arrows: cartoonArrows, tubes: cartoonTubes, opacity: cartoonOpacity, thickness: cartoonThickness,},
                             stick:{hidden: false, color: value[2],}  // value[2] is colour of the binding site
                         }
                     );
@@ -638,7 +638,7 @@ $('table#bs_ress_table tbody').on('mouseover', 'tr', function () { // event list
             else {
                 viewer.setStyle(
                     {...protAtoms, model: activeModel},
-                    {cartoon: {style: cartoonStyle, color: defaultColor, arrows: cartoonArrows, opacity: cartoonOpacity, thickness: cartoonThickness,}}
+                    {cartoon: {style: cartoonStyle, color: defaultColor, arrows: cartoonArrows, tubes: cartoonTubes, opacity: cartoonOpacity, thickness: cartoonThickness,}}
                 );
                 
             }

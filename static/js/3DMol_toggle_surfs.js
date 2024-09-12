@@ -612,7 +612,7 @@ function toggleContactsVisibility() {
                     viewer.addStyle(
                         {model: activeModel, or:ligandSitesHash[activeModel][ligNam][0]},
                         {
-                            cartoon:{hidden: false, style: cartoonStyle, color: ligColor, arrows: cartoonArrows, opacity: cartoonOpacity, thickness: cartoonThickness,},
+                            cartoon:{hidden: false, style: cartoonStyle, color: ligColor, arrows: cartoonArrows, tubes: cartoonTubes, opacity: cartoonOpacity, thickness: cartoonThickness,},
                             stick: {hidden: false, color: ligColor, radius: stickRadius}
                         }
                     );
@@ -685,7 +685,7 @@ function toggleContactsVisibility() {
                 viewer.addStyle(
                     {model: activeModel, or: resSel},
                     {
-                        cartoon:{hidden: false, color: ligCol, style: cartoonStyle, arrows: cartoonArrows, thickness: cartoonThickness, opacity: cartoonOpacity},
+                        cartoon:{hidden: false, color: ligCol, style: cartoonStyle, arrows: cartoonArrows, tubes: cartoonTubes, thickness: cartoonThickness, opacity: cartoonOpacity},
                         stick: {hidden: false, color: ligCol, radius: stickRadius}
                     }
                 );
