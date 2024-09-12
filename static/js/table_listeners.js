@@ -367,6 +367,15 @@ $('table#bss_table tbody').on('mouseover', 'tr', function () { // event listener
 
             SuppClickedSiteResidues = {model: protAtomsModel, resi: siteSuppPDBResNums, chain: repPdbChainId, not: {atom: ['N', 'C', 'O']}}
             // update selection so that it ignores backbone atoms
+
+            // need to colour the clicked site residues here. Before we were not as it was already hovered. However, when overlap between sites, we need to colour the clicked site.
+            viewer.setStyle(
+                SuppClickedSiteResidues,
+                {
+                    cartoon:{style:'oval', color: siteColor, arrows: true, opacity: cartoonOpacity, thickness: cartoonThickness,},
+                    stick:{color: siteColor},
+                }
+            );
         }
     
         else {
@@ -376,9 +385,17 @@ $('table#bss_table tbody').on('mouseover', 'tr', function () { // event listener
                     .map(el => Up2PdbMapAssembly[chainsMapAssembly[element]][el]);
     
                 siteAssemblyPDBResNums.push([element, siteAssemblyPDBResNum]);
-                let assemblySel = {model: activeModel, resi: siteAssemblyPDBResNum, chain: element};
+                let assemblySel = {model: activeModel, resi: siteAssemblyPDBResNum, chain: element, not: {atom: ['N', 'C', 'O']}};
                 AssemblyClickedSiteResidues.push(assemblySel);
             });
+
+            viewer.setStyle(
+                {model: activeModel, or: AssemblyClickedSiteResidues},
+                {
+                    cartoon:{style:'oval', color: siteColor, arrows: true, opacity: cartoonOpacity, thickness: cartoonThickness,},
+                    stick:{color: siteColor},
+                }
+            );
         }
 
         if (index !== -1) {
