@@ -337,7 +337,7 @@ function toggleLigandsVisibility() {
         ligandButton.style = "font-weight: bold; color:#B22222;";
 
         if (activeModel == "superposition") {
-            viewer.addStyle(suppLigsSels["clust"], {stick: {hidden: false}});
+            viewer.addStyle(suppLigsSels["clust"], {stick: {hidden: false, colorscheme: myScheme, radius: stickRadius}});
             // console.log(`Ligands shown for ${activeModel} models!`);
         }
         else {

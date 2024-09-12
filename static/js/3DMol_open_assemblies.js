@@ -87,10 +87,9 @@ function selectOption(option) {
             }
 
             if (ligandsVisible) { // if ligands were visible, hide them
-                viewer.addStyle({model: suppModels, hetflag: true, not:{resn: "HOH"}, properties:{ bs: -1}}, {stick: {hidden: true, colorscheme: myScheme, radius: stickRadius}});
-                viewer.addStyle({model: suppModels, hetflag: true, not:{resn: "HOH"}, properties:{ bs: -1}}, {sphere: {hidden: true, colorscheme: myScheme, radius: sphereRadius}});
-                viewer.addStyle({model: suppModels, hetflag: true, not:{resn: "HOH"}, not: {properties:{ bs: -1}}}, {stick: {hidden: true, colorscheme: myScheme, radius: stickRadius}});
-                viewer.addStyle({model: suppModels, hetflag: true, not:{resn: "HOH"}, not: {properties:{ bs: -1}}}, {sphere: {hidden: true, colorscheme: myScheme, radius: sphereRadius}});
+
+                viewer.addStyle(suppLigsSels["not_clust"], {stick: {hidden: true, colorscheme: myScheme, radius: stickRadius}});
+                viewer.addStyle(suppLigsSels["clust"], {stick: {hidden: true, colorscheme: myScheme, radius: stickRadius}});
 
                 ligandButton.value = 'Ligands OFF'; // turn ligandButton off
                 ligandButton.style = "font-weight: bold; color: #674ea7;";
@@ -148,8 +147,10 @@ function selectOption(option) {
             }
 
             if (ligandsVisible) { // if ligands were visible, hide them
-                viewer.addStyle({model: activeModel, hetflag: true, not:{resn: "HOH"}}, {stick: {hidden: true, colorscheme: myScheme, radius: stickRadius}});
-                viewer.addStyle({model: activeModel, hetflag: true, not:{resn: "HOH"}}, {sphere: {hidden: true, colorscheme: myScheme, radius: sphereRadius}});
+                viewer.addStyle(
+                    {...hetAtomsNotHoh, model: activeModel},
+                    {stick: {hidden: true, colorscheme: myScheme, radius: stickRadius}}
+                );
 
                 ligandButton.value = 'Ligands OFF'; // turn ligandButton off
                 ligandButton.style = "font-weight: bold; color: #674ea7;";
