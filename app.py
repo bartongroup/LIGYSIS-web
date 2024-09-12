@@ -132,7 +132,7 @@ def convert_mapping_dict(d): # converts mapping dictionary to correct data type
                 rfd[k1][k2][int(k3)] = int(v3)
     return rfd
 
-def generate_pseudobond_lines(df): # generates pseudobond lines for ChimeraX
+def generate_pseudobond_lines_ChimeraX(df): # generates pseudobond lines for ChimeraX
     output = [] # Eempty list to store the formatted strings
 
     grouped = df.groupby('width') # Group the DataFrame by the 'width' column
@@ -148,6 +148,29 @@ def generate_pseudobond_lines(df): # generates pseudobond lines for ChimeraX
             formatted_string = f"{end_part} {begin_part} {row['color']}"
             
             output.append(formatted_string)
+    
+    return output
+
+def generate_distance_lines_PyMol(df, mult = 1): # generates pseudobond lines for ChimeraX
+    output = [] # Eempty list to store the formatted strings
+
+    cons = df.copy().reset_index(drop=True) # Reset the index of the DataFrame
+
+    for idx, row in cons.iterrows(): # Iterate over each row in the group
+        # Extract necessary information for the format
+        end_part = f"///{row['auth_asym_id_end']}/{row['auth_seq_id_end']}/{row['auth_atom_id_end']}"
+        begin_part = f"///{row['auth_asym_id_bgn']}/{row['auth_seq_id_bgn']}/{row['auth_atom_id_bgn']}"
+
+        d_idx = idx + 1
+    
+        distance_string = f"distance d{d_idx}, {end_part}, {begin_part}"
+        colour_string = f"set dash_color, {hex_to_rgb(row['color'])}, d{d_idx}"
+        radius_string = f"set dash_radius, {row['width']*mult}, d{d_idx}"
+        labels_string = f"hide labels, d{d_idx}"
+        
+        pymol_strs = [distance_string, colour_string, radius_string, labels_string]
+        
+        output.extend(pymol_strs)
     
     return output
 
@@ -191,6 +214,7 @@ def chimeraX2PyMol(cxc_in, attr_in): # converts ChimeraX command and attribute f
     pymol_lines.append('deselect')
 
     return pymol_lines
+
 ### SOME FIXED VARIABLES ###
 
 colors = load_pickle(os.path.join(DATA_FOLDER, "sample_colors_hex.pkl")) # sample colors
@@ -682,7 +706,7 @@ def download_assembly_ChimeraX():
         (arpeggio_cons['type'] == "atom-atom")
     ].copy()
 
-    pseudobond_lines = "\n".join(generate_pseudobond_lines(arpeggio_cons_filt))
+    pseudobond_lines = "\n".join(generate_pseudobond_lines_ChimeraX(arpeggio_cons_filt))
     pseudobond_file = f'{prot_id}_{seg_id}_{pdb_id}.pb'
 
     bs_membership = pd.read_pickle(f'{DATA_FOLDER}/example/other/{prot_id}_{seg_id}_ALL_inf_bss_membership.pkl')
@@ -784,6 +808,80 @@ def download_assembly_ChimeraX():
         download_name=f'{prot_id}_{seg_id}_{pdb_id}_assembly_ChimeraX.zip'
     )
 
+# route to download PyMol script
+@app.route('/download-assembly-PyMol', methods=['POST'])
+def download_assembly_PyMol():
+    data = request.get_json() # Get JSON data from the POST request
+    
+    prot_id = data.get('proteinId')
+    seg_id = data.get('segmentId')
+    pdb_id = data.get('pdbId')
+    
+    if not prot_id or not seg_id or not pdb_id: # Validate the received data
+        return jsonify({'error': 'Missing data'}), 400
+
+    assembly_file = f'{DATA_FOLDER}/{prot_id}/{seg_id}/assemblies/{pdb_id}_bio.cif' # assembly cif file
+
+    arpeggio_cons = pd.read_pickle(f'{DATA_FOLDER}/{prot_id}/{seg_id}/arpeggio/{pdb_id}_bio_proc.pkl')
+
+    arpeggio_cons_filt = arpeggio_cons[
+        (arpeggio_cons['contact'].apply(lambda x: x != ["proximal"])) &
+        (arpeggio_cons['interacting_entities'] == "INTER") &
+        (arpeggio_cons['type'] == "atom-atom")
+    ].copy()
+
+    distance_lines = "\n".join(generate_distance_lines_PyMol(arpeggio_cons_filt, mult = 1.5))
+
+    print(distance_lines)
+
+    bs_membership = pd.read_pickle(f'{DATA_FOLDER}/example/other/{prot_id}_{seg_id}_ALL_inf_bss_membership.pkl')
+
+    bs_membership_rev = {v: k for k, vs in bs_membership.items() for v in vs}
+
+    struc_ligs = {k: v for k, v in bs_membership_rev.items() if k.startswith(pdb_id)}
+
+    arpeggio_cons_filt["LIGAND_ID"] = arpeggio_cons_filt.label_comp_id_bgn + "_" + arpeggio_cons_filt.auth_asym_id_bgn + "_" + arpeggio_cons_filt.auth_seq_id_bgn.astype(str)
+
+    struc_prot_data = {}
+    for k, v in struc_ligs.items():
+        ligand_id = "_".join(k.split("_")[1:])
+        ligand_site = v
+        ligand_rows = arpeggio_cons_filt[arpeggio_cons_filt.LIGAND_ID == ligand_id]
+        struc_prot_data[ligand_id] = [
+            list(ligand_rows[["label_comp_id_end", "auth_asym_id_end", "auth_seq_id_end"]].drop_duplicates().itertuples(index=False, name=None)),
+            ligand_site
+        ]
+
+    aas_str = []
+    ligs_str = []
+    for k, v in struc_prot_data.items():
+        lig_resn, lig_chain, lig_resi = k.split("_")
+        ress = v[0]
+        col_key = v[1]
+        if ress != []:
+            prot_sel_str = f'select BS{col_key}, ' + ' '.join([f'///{el[1]}/{el[2]}' for el in ress])
+            prot_set_col_str = f'set_color BS{col_key}_color, {hex_to_rgb(colors[col_key])}'
+            prot_col_str = f'color BS{col_key}_color, BS{col_key}'
+            prot_disp_str = f'show licorice, BS{col_key}'
+            aas_str.extend([prot_sel_str, prot_set_col_str, prot_col_str, prot_disp_str])
+
+        lig_sel_str = f'select BS{col_key}_ligs, ///{lig_chain}/{lig_resi}'
+        lig_col_str = f'color BS{col_key}_color, BS{col_key}_ligs'
+        lig_disp_str = f'show licorice, BS{col_key}_ligs'
+
+        ligs_str.extend([lig_sel_str, lig_col_str, lig_disp_str])
+
+    #print(aas_str)
+    for aa_line in aas_str:
+        print(aa_line)
+
+    for lig_line in ligs_str:
+        print(lig_line)
+
+
+
+
+
 @app.route('/download-all-assemblies-ChimeraX', methods=['POST'])
 def download_all_assemblies_ChimeraX():
     data = request.get_json() # Get JSON data from the POST request
@@ -814,7 +912,7 @@ def download_all_assemblies_ChimeraX():
                 (arpeggio_cons['type'] == "atom-atom")
             ].copy()
 
-            pseudobond_lines = "\n".join(generate_pseudobond_lines(arpeggio_cons_filt))
+            pseudobond_lines = "\n".join(generate_pseudobond_lines_ChimeraX(arpeggio_cons_filt))
             pseudobond_file = f'{prot_id}_{seg_id}_{pdb_id}.pb'
 
             struc_ligs = {k: v for k, v in bs_membership_rev.items() if k.startswith(pdb_id)}
