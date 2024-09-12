@@ -47,8 +47,8 @@ document.getElementById('chartCanvas').addEventListener('mousemove', function(e)
                     viewer.setStyle(// colour everything white except for clicked site. To make disappear before hovering on other site (can happen when two sites are close in the graph)
                         {...protAtoms, model: protAtomsModel, not: SuppClickedSiteResidues},
                         {
-                            cartoon: {style:'oval', color: 'white', arrows: true, opacity: cartoonOpacity, thickness: cartoonThickness,},
-                            stick: {color: 'white', hidden: true},
+                            cartoon: {style: cartoonStyle, color: defaultColor, arrows: cartoonArrows, opacity: cartoonOpacity, thickness: cartoonThickness,},
+                            stick: {color: defaultColor, hidden: true},
                         }
                     );     
                 }
@@ -57,8 +57,8 @@ document.getElementById('chartCanvas').addEventListener('mousemove', function(e)
                         viewer.setStyle(
                             {...protAtoms, model: activeModel, not: {or: AssemblyClickedSiteResidues.concat(allBindingRess)},},
                             {
-                                cartoon: {style:'oval', color: 'white', arrows: true, opacity: cartoonOpacity, thickness: cartoonThickness,},
-                                stick: {color: 'white', hidden: true},
+                                cartoon: {style: cartoonStyle, color: defaultColor, arrows: cartoonArrows, opacity: cartoonOpacity, thickness: cartoonThickness,},
+                                stick: {color: defaultColor, hidden: true},
                             }
                         );
                     }
@@ -66,8 +66,8 @@ document.getElementById('chartCanvas').addEventListener('mousemove', function(e)
                         viewer.setStyle(// colour everything white except for clicked site. To make disappear before hovering on other site (can happen when two sites are close in the graph)
                             {...protAtoms, model: activeModel, not: {or: AssemblyClickedSiteResidues},},
                             {
-                                cartoon: {style:'oval', color: 'white', arrows: true, opacity: cartoonOpacity, thickness: cartoonThickness,},
-                                stick: {color: 'white', hidden: true},
+                                cartoon: {style: cartoonStyle, color: defaultColor, arrows: cartoonArrows, opacity: cartoonOpacity, thickness: cartoonThickness,},
+                                stick: {color: defaultColor, hidden: true},
                             }
                         );
                     }
@@ -77,13 +77,13 @@ document.getElementById('chartCanvas').addEventListener('mousemove', function(e)
                     if (activeModel == "superposition") {
                         for (const [key, value] of Object.entries(surfsDict["superposition"])) {
                             if (key == pointLabel) {
-                                viewer.setSurfaceMaterialStyle(value.surfid, {color: siteColor, opacity:0.8}); // show surface of hovered site visible at 80% opacity
+                                viewer.setSurfaceMaterialStyle(value.surfid, {color: siteColor, opacity: surfMediumOpacity}); // show surface of hovered site visible at 80% opacity
                             }
                             else if (key == clickedPointLabel) {
-                                viewer.setSurfaceMaterialStyle(value.surfid, {color: clickedSiteColor, opacity:0.9}); // keep surface of clicked table row site visible at 90% opacity
+                                viewer.setSurfaceMaterialStyle(value.surfid, {color: clickedSiteColor, opacity: surfHighOpacity}); // keep surface of clicked table row site visible at 90% opacity
                             }
                             else {
-                                viewer.setSurfaceMaterialStyle(value.surfid, {color: 'white', opacity: surfaceHiddenOpacity}); // hide all other surfaces
+                                viewer.setSurfaceMaterialStyle(value.surfid, {color: defaultColor, opacity: surfHiddenOpacity}); // hide all other surfaces
                             }
                         }
                     }
@@ -91,10 +91,10 @@ document.getElementById('chartCanvas').addEventListener('mousemove', function(e)
                         for (const [key, value] of Object.entries(surfsDict[activeModel])) {
                             for (const [key2, value2] of Object.entries(value)) {
                                 if (key == pointLabel) {
-                                    viewer.setSurfaceMaterialStyle(value2.surfid, {color: siteColor, opacity:0.8}); // show surface of hovered site visible at 80% opacity
+                                    viewer.setSurfaceMaterialStyle(value2.surfid, {color: siteColor, opacity: surfMediumOpacity}); // show surface of hovered site visible at 80% opacity
                                 }
                                 else if (key == clickedPointLabel) {
-                                    viewer.setSurfaceMaterialStyle(value2.surfid, {color: clickedSiteColor, opacity:0.9}); // keep surface of clicked table row site visible at 90% opacity
+                                    viewer.setSurfaceMaterialStyle(value2.surfid, {color: clickedSiteColor, opacity: surfHighOpacity}); // keep surface of clicked table row site visible at 90% opacity
                                 }
                                 else if (key == "lig_inters") {
                                     if (contactsVisible) {
@@ -102,7 +102,7 @@ document.getElementById('chartCanvas').addEventListener('mousemove', function(e)
                                     }
                                 }
                                 else {
-                                    viewer.setSurfaceMaterialStyle(value2.surfid, {color: 'white', opacity: surfaceHiddenOpacity}); // hide all other surfaces
+                                    viewer.setSurfaceMaterialStyle(value2.surfid, {color: defaultColor, opacity: surfHiddenOpacity}); // hide all other surfaces
                                 }
                             }
                         }
@@ -113,23 +113,23 @@ document.getElementById('chartCanvas').addEventListener('mousemove', function(e)
                 if (contactsVisible) { // don't want to hide ligand-binding sites if CONTACTS is ON
                     viewer.setStyle(
                         {...protAtoms, model: activeModel, not:{or:allBindingRess}},
-                        {cartoon:{style:'oval', color: 'white', arrows: true, opacity: cartoonOpacity, thickness: cartoonThickness,},}
+                        {cartoon:{style: cartoonStyle, color: defaultColor, arrows: cartoonArrows, opacity: cartoonOpacity, thickness: cartoonThickness,},}
                     );   
                 }
                 else {
                     viewer.setStyle(
                         protAtoms,
-                        {cartoon:{style:'oval', color: 'white', arrows: true, opacity: cartoonOpacity, thickness: cartoonThickness,},}
+                        {cartoon:{style: cartoonStyle, color: defaultColor, arrows: cartoonArrows, opacity: cartoonOpacity, thickness: cartoonThickness,},}
                     );
                 }
                 if (surfaceVisible) { // if surface is visible
                     if (activeModel == "superposition") {
                         for (const [key, value] of Object.entries(surfsDict["superposition"])) {
                             if (key == pointLabel) {
-                                viewer.setSurfaceMaterialStyle(value.surfid, {color: siteColor, opacity: 0.9}); // change the surface color of the hovered binding site row
+                                viewer.setSurfaceMaterialStyle(value.surfid, {color: siteColor, opacity: surfHighOpacity}); // change the surface color of the hovered binding site row
                             }
                             else if (key == previousPointLabel) {
-                                viewer.setSurfaceMaterialStyle(value.surfid, {color: previousSiteColor, opacity: 0.8}); // change the surface color of the previously hovered binding site row
+                                viewer.setSurfaceMaterialStyle(value.surfid, {color: previousSiteColor, opacity: surfMediumOpacity}); // change the surface color of the previously hovered binding site row
                             }
                         }
                     }
@@ -137,14 +137,14 @@ document.getElementById('chartCanvas').addEventListener('mousemove', function(e)
                         for (const [key, value] of Object.entries(surfsDict[activeModel])) {
                             for (const [key2, value2] of Object.entries(value)) {
                                 if (key == pointLabel) {
-                                    viewer.setSurfaceMaterialStyle(value2.surfid, {color: siteColor, opacity:0.9}); // change the surface color of the hovered binding site row
+                                    viewer.setSurfaceMaterialStyle(value2.surfid, {color: siteColor, opacity: surfHighOpacity}); // change the surface color of the hovered binding site row
                                 }
                                 else if (key == previousPointLabel) {
                                     if (contactsVisible) {
-                                        viewer.setSurfaceMaterialStyle(value2.surfid, {opacity: surfaceHiddenOpacity}); // change the surface color of the hovered binding site row
+                                        viewer.setSurfaceMaterialStyle(value2.surfid, {opacity: surfHiddenOpacity}); // change the surface color of the hovered binding site row
                                     }
                                     else {
-                                        viewer.setSurfaceMaterialStyle(value2.surfid, {color: previousSiteColor, opacity:0.8}); // change the surface color of the previously hovered binding site row
+                                        viewer.setSurfaceMaterialStyle(value2.surfid, {color: previousSiteColor, opacity: surfMediumOpacity}); // change the surface color of the previously hovered binding site row
                                     }
                                 }
                             }
@@ -160,12 +160,12 @@ document.getElementById('chartCanvas').addEventListener('mousemove', function(e)
                     .filter(el => Up2PdbDict[repPdbId][repPdbChainId].hasOwnProperty(el)) // this accounts not for missing residues in the structure (unresolved)
                     .map(el => Up2PdbDict[repPdbId][repPdbChainId][el]);
 
-                SuppHoveredSiteResidues = {model: protAtomsModel, resi: siteSuppPDBResNums, chain: repPdbChainId, not: {atom: ['N', 'C', 'O']}};
+                SuppHoveredSiteResidues = {model: protAtomsModel, resi: siteSuppPDBResNums, chain: repPdbChainId, not: {atom: bboneAtoms}};
 
                 viewer.setStyle(
                     SuppHoveredSiteResidues,
                     {
-                        cartoon:{style:'oval', color: siteColor, arrows: true, opacity: cartoonOpacity, thickness: cartoonThickness,},
+                        cartoon:{style: cartoonStyle, color: siteColor, arrows: cartoonArrows, opacity: cartoonOpacity, thickness: cartoonThickness,},
                         stick:{color: siteColor,},
                     }
                 );
@@ -176,14 +176,14 @@ document.getElementById('chartCanvas').addEventListener('mousemove', function(e)
                         .filter(el => Up2PdbMapAssembly[chainsMapAssembly[element]].hasOwnProperty(el))
                         .map(el => Up2PdbMapAssembly[chainsMapAssembly[element]][el]);
                     siteAssemblyPDBResNums.push([element, siteAssemblyPDBResNum]);
-                    let assemblySel = {model: activeModel, resi: siteAssemblyPDBResNum, chain: element, not: {atom: ['N', 'C', 'O']}};
+                    let assemblySel = {model: activeModel, resi: siteAssemblyPDBResNum, chain: element, not: {atom: bboneAtoms}};
                     AssemblyHoveredSiteResidues.push(assemblySel);
                 });
 
                 viewer.setStyle(
                     {model: activeModel, or: AssemblyHoveredSiteResidues},
                     {
-                        cartoon:{style:'oval', color: siteColor, arrows: true, opacity: cartoonOpacity, thickness: cartoonThickness,},
+                        cartoon:{style: cartoonStyle, color: siteColor, arrows: true, opacity: cartoonOpacity, thickness: cartoonThickness,},
                         stick:{color: siteColor},
                     }
                 );
@@ -211,11 +211,11 @@ document.getElementById('chartCanvas').addEventListener('mousemove', function(e)
                     {
                         ...protAtoms, model: protAtomsModel, not: SuppClickedSiteResidues, // all protein residues except clicked site (we want to keep ligands),
                     },
-                    {cartoon: {style:'oval', color: 'white', arrows: true, opacity: cartoonOpacity, thickness: cartoonThickness,}}
+                    {cartoon: {style: cartoonStyle, color: defaultColor, arrows: cartoonArrows, opacity: cartoonOpacity, thickness: cartoonThickness,}}
                 );
                 viewer.setStyle( // colouring the clicked site (necessary as sometimes there is overlap between sites)
                     SuppClickedSiteResidues,
-                    {cartoon:{style:'oval', color: clickedSiteColor, arrows: true, opacity: cartoonOpacity, thickness: cartoonThickness,},
+                    {cartoon:{style: cartoonStyle, color: clickedSiteColor, arrows: cartoonArrows, opacity: cartoonOpacity, thickness: cartoonThickness,},
                     stick:{color: clickedSiteColor,}, }
                 );
             }
@@ -224,11 +224,11 @@ document.getElementById('chartCanvas').addEventListener('mousemove', function(e)
                         {
                            ...protAtoms, model: activeModel, not: {or: AssemblyClickedSiteResidues}, // all protein residues except clicked site (we want to keep ligands)
                         },
-                        {cartoon: {style:'oval', color: 'white', arrows: true, opacity: cartoonOpacity, thickness: cartoonThickness,}}
+                        {cartoon: {style: cartoonStyle, color: defaultColor, arrows: cartoonArrows, opacity: cartoonOpacity, thickness: cartoonThickness,}}
                     );
                     viewer.setStyle( // colouring the clicked site (necessary as sometimes there is overlap between sites)
                         {model: activeModel, or: AssemblyClickedSiteResidues},
-                        {cartoon:{style:'oval', color: clickedSiteColor, arrows: true, opacity: cartoonOpacity, thickness: cartoonThickness,},
+                        {cartoon:{style: cartoonStyle, color: clickedSiteColor, arrows: cartoonArrows, opacity: cartoonOpacity, thickness: cartoonThickness,},
                         stick:{color: clickedSiteColor,}, }
                     );
                 if (contactsVisible) { // don't want to hide ligand-binding sites if CONTACTS is ON
@@ -236,13 +236,13 @@ document.getElementById('chartCanvas').addEventListener('mousemove', function(e)
                         {
                             ...protAtoms, model: activeModel, not: {or: AssemblyClickedSiteResidues.concat(allBindingRess)} // all protein residues except clicked site (we want to keep ligands)
                         },
-                        {cartoon: {style:'oval', color: 'white', arrows: true, opacity: cartoonOpacity, thickness: cartoonThickness,}}
+                        {cartoon: {style: cartoonStyle, color: defaultColor, arrows: cartoonArrows, opacity: cartoonOpacity, thickness: cartoonThickness,}}
                     );
                     for (const [key, value] of Object.entries(ligandSitesHash[activeModel])) { // colour again in case some bingind residues are part of another site and got colouterd
                         viewer.setStyle(
                             {model: activeModel, or: value[0]},  // value[0] are the ligand-binding residues selection
                             {
-                                cartoon:{style:'oval', color: value[2], arrows: true, opacity: cartoonOpacity, thickness: cartoonThickness,},
+                                cartoon:{style: cartoonStyle, color: value[2], arrows: cartoonArrows, opacity: cartoonOpacity, thickness: cartoonThickness,},
                                 stick:{hidden: false, color: value[2],} // value[2] is colour of the binding site
                             }
                         );
@@ -253,10 +253,10 @@ document.getElementById('chartCanvas').addEventListener('mousemove', function(e)
                 if (activeModel == "superposition") {
                     for (const [key, value] of Object.entries(surfsDict["superposition"])) {
                         if (key == clickedPointLabel) { 
-                            viewer.setSurfaceMaterialStyle(surfsDict["superposition"][key].surfid, {color: clickedSiteColor, opacity:0.9}); // keep surface of clicked site visible at 90% opacity
+                            viewer.setSurfaceMaterialStyle(surfsDict["superposition"][key].surfid, {color: clickedSiteColor, opacity: surfHighOpacity}); // keep surface of clicked site visible at 90% opacity
                         }
                         else {
-                            viewer.setSurfaceMaterialStyle(surfsDict["superposition"][key].surfid, {color: 'white', opacity: surfaceHiddenOpacity}); // hide all other surfaces
+                            viewer.setSurfaceMaterialStyle(surfsDict["superposition"][key].surfid, {color: defaultColor, opacity: surfHiddenOpacity}); // hide all other surfaces
                         }
                     }
                 }
@@ -264,7 +264,7 @@ document.getElementById('chartCanvas').addEventListener('mousemove', function(e)
                     for (const [key, value] of Object.entries(surfsDict[activeModel])) {
                         for (const [key2, value2] of Object.entries(value)) {
                             if (key == clickedPointLabel) {
-                                viewer.setSurfaceMaterialStyle(value2.surfid, {color: clickedSiteColor, opacity:0.9}); // keep surface of clicked site visible at 90% opacity
+                                viewer.setSurfaceMaterialStyle(value2.surfid, {color: clickedSiteColor, opacity: surfHighOpacity}); // keep surface of clicked site visible at 90% opacity
                             }
                             else if (key == "lig_inters") {
                                 if (contactsVisible) {
@@ -272,7 +272,7 @@ document.getElementById('chartCanvas').addEventListener('mousemove', function(e)
                                 }
                             }
                             else {
-                                viewer.setSurfaceMaterialStyle(value2.surfid, {color: 'white', opacity: surfaceHiddenOpacity}); // hide all other surfaces
+                                viewer.setSurfaceMaterialStyle(value2.surfid, {color: defaultColor, opacity: surfHiddenOpacity}); // hide all other surfaces
                             }
                         }
                     }
@@ -285,14 +285,14 @@ document.getElementById('chartCanvas').addEventListener('mousemove', function(e)
             if (contactsVisible) { // don't want to hide ligand-binding sites if CONTACTS is ON
                 viewer.setStyle(
                     {...protAtoms, model: activeModel, not:{or: allBindingRess}},
-                    {cartoon:{style:'oval', color: 'white', arrows: true, opacity: cartoonOpacity, thickness: cartoonThickness,},}
+                    {cartoon:{style: cartoonStyle, color: defaultColor, arrows: cartoonArrows, opacity: cartoonOpacity, thickness: cartoonThickness,},}
                 );
                 // also recolour the ligand-interacting residues as some might be in multiple sites
                 for (const [key, value] of Object.entries(ligandSitesHash[activeModel])) {
                     viewer.setStyle(
                         {model: activeModel, or: value[0]}, // value[0] are the ligand-binding residues selection
                         {
-                            cartoon:{style:'oval', color: value[2], arrows: true, opacity: cartoonOpacity, thickness: cartoonThickness,},
+                            cartoon:{style: cartoonStyle, color: value[2], arrows: cartoonArrows, opacity: cartoonOpacity, thickness: cartoonThickness,},
                             stick:{hidden: false, color: value[2],} // value[2] is colour of the binding site
                         }
                     );
@@ -301,7 +301,7 @@ document.getElementById('chartCanvas').addEventListener('mousemove', function(e)
             else {
                 viewer.setStyle( // this generic selection works are CONTACTS are OFF and no row is clicked
                     protAtoms,
-                    {cartoon: {style:'oval', color: 'white', arrows: true, opacity: cartoonOpacity, thickness: cartoonThickness,}}
+                    {cartoon: {style: cartoonStyle, color: defaultColor, arrows: cartoonArrows, opacity: cartoonOpacity, thickness: cartoonThickness,}}
                 ); // remove sidechains and colour white everything except ligands (all protein atoms)
             }
 
@@ -309,18 +309,18 @@ document.getElementById('chartCanvas').addEventListener('mousemove', function(e)
                 if (activeModel == "superposition") {
                     for (const [key, value] of Object.entries(surfsDict["superposition"])) {
                         if (key == 'non_binding') {
-                            viewer.setSurfaceMaterialStyle(value.surfid, {color: 'white', opacity:0.7});
+                            viewer.setSurfaceMaterialStyle(value.surfid, {color: defaultColor, opacity: surfLowOpacity});
                         }
                         else {
                             let siteColor = chartColors[Number(key.split("_").pop())];
-                            viewer.setSurfaceMaterialStyle(value.surfid, {color: siteColor, opacity:0.8});
+                            viewer.setSurfaceMaterialStyle(value.surfid, {color: siteColor, opacity: surfMediumOpacity});
                         }
                     }
                 }
                 else {
                     if (contactsVisible) {
                         for (const [key, value] of Object.entries(surfsDict[activeModel][lastHoveredPoint1])) {
-                            viewer.setSurfaceMaterialStyle(value.surfid, {opacity: surfaceHiddenOpacity});
+                            viewer.setSurfaceMaterialStyle(value.surfid, {opacity: surfHiddenOpacity});
                         }
                     }
                     else {
@@ -330,11 +330,11 @@ document.getElementById('chartCanvas').addEventListener('mousemove', function(e)
                                     // pass
                                 }
                                 else if (key == "non_binding") {
-                                    viewer.setSurfaceMaterialStyle(value2.surfid, {color: 'white', opacity:0.7});
+                                    viewer.setSurfaceMaterialStyle(value2.surfid, {color: defaultColor, opacity: surfLowOpacity});
                                 }
                                 else {
                                     let siteColor = chartColors[Number(key.split("_").pop())];
-                                    viewer.setSurfaceMaterialStyle(value2.surfid, {color: siteColor, opacity:0.8});
+                                    viewer.setSurfaceMaterialStyle(value2.surfid, {color: siteColor, opacity: surfMediumOpacity});
                                 }
                             }
                         }
@@ -436,11 +436,11 @@ document.getElementById('chartCanvas').addEventListener('click', function(e) { /
                     if (activeModel == "superposition") {
                         for (const [key, value] of Object.entries(surfsDict["superposition"])) {
                             if (key == "non_binding") {
-                                viewer.setSurfaceMaterialStyle(surfsDict["superposition"][key].surfid, {color: 'white', opacity:0.7});
+                                viewer.setSurfaceMaterialStyle(surfsDict["superposition"][key].surfid, {color: defaultColor, opacity: surfLowOpacity});
                             }
                             else {
                                 let siteColor = chartColors[Number(key.split("_").pop())];
-                                viewer.setSurfaceMaterialStyle(surfsDict["superposition"][key].surfid, {color: siteColor, opacity:0.8});
+                                viewer.setSurfaceMaterialStyle(surfsDict["superposition"][key].surfid, {color: siteColor, opacity: surfMediumOpacity});
                             }
                         }
                     }
@@ -452,7 +452,7 @@ document.getElementById('chartCanvas').addEventListener('click', function(e) { /
                                         // pass
                                     }
                                     else { // hide other surfaces
-                                        viewer.setSurfaceMaterialStyle(value2.surfid, {color: 'white', opacity: surfaceHiddenOpacity});
+                                        viewer.setSurfaceMaterialStyle(value2.surfid, {color: defaultColor, opacity: surfHiddenOpacity});
                                     }
                                 }
                                 else {
@@ -460,11 +460,11 @@ document.getElementById('chartCanvas').addEventListener('click', function(e) { /
                                         // pass
                                     }
                                     else if (key == "non_binding") {
-                                        viewer.setSurfaceMaterialStyle(value2.surfid, {color: 'white', opacity:0.7});
+                                        viewer.setSurfaceMaterialStyle(value2.surfid, {color: defaultColor, opacity: surfLowOpacity});
                                     }
                                     else {
                                         let siteColor = chartColors[Number(key.split("_").pop())];
-                                        viewer.setSurfaceMaterialStyle(value2.surfid, {color: siteColor, opacity:0.8});
+                                        viewer.setSurfaceMaterialStyle(value2.surfid, {color: siteColor, opacity: surfMediumOpacity});
                                     }
                                 }  
                             }
@@ -484,7 +484,7 @@ document.getElementById('chartCanvas').addEventListener('click', function(e) { /
                     viewer.setStyle( // colour white previously clicked site residues
                             SuppClickedSiteResidues,
                             {
-                                cartoon: {style:'oval', color: 'white', arrows: true, opacity: cartoonOpacity, thickness: cartoonThickness,}
+                                cartoon: {style: cartoonStyle, color: defaultColor, arrows: cartoonArrows, opacity: cartoonOpacity, thickness: cartoonThickness,}
                             }
                         );
                 }
@@ -492,7 +492,7 @@ document.getElementById('chartCanvas').addEventListener('click', function(e) { /
                     viewer.setStyle(
                         {model: activeModel, or: AssemblyClickedSiteResidues},
                         {
-                            cartoon: {style:'oval', color: 'white', arrows: true, opacity: cartoonOpacity, thickness: cartoonThickness,}
+                            cartoon: {style: cartoonStyle, color: defaultColor, arrows: cartoonArrows, opacity: cartoonOpacity, thickness: cartoonThickness,}
                         }
                     );
                 }
@@ -511,12 +511,12 @@ document.getElementById('chartCanvas').addEventListener('click', function(e) { /
                         .filter(el => Up2PdbDict[repPdbId][repPdbChainId].hasOwnProperty(el)) // this accounts not for missing residues in the structure (unresolved)
                         .map(el => Up2PdbDict[repPdbId][repPdbChainId][el]);
                     
-                    SuppClickedSiteResidues = {model: protAtomsModel, resi: siteSuppPDBResNums, chain: repPdbChainId, not: {atom: ['N', 'C', 'O']}};
+                    SuppClickedSiteResidues = {model: protAtomsModel, resi: siteSuppPDBResNums, chain: repPdbChainId, not: {atom: bboneAtoms}};
 
                     viewer.setStyle(
                         SuppClickedSiteResidues,
                         {
-                            cartoon: {style:'oval', color: pointColor, arrows: true, opacity: cartoonOpacity, thickness: cartoonThickness,},
+                            cartoon: {style: cartoonStyle, color: pointColor, arrows: cartoonArrows, opacity: cartoonOpacity, thickness: cartoonThickness,},
                             stick:{color: pointColor},
                         },
                     );
@@ -528,14 +528,14 @@ document.getElementById('chartCanvas').addEventListener('click', function(e) { /
                             .map(el => Up2PdbMapAssembly[chainsMapAssembly[element]][el]);
                         siteAssemblyPDBResNums.push([element, siteAssemblyPDBResNum]);
                     
-                        let assemblySel = {model: activeModel, resi: siteAssemblyPDBResNum, chain: element, not: {atom: ['N', 'C', 'O']}};
+                        let assemblySel = {model: activeModel, resi: siteAssemblyPDBResNum, chain: element, not: {atom: bboneAtoms}};
                         AssemblyClickedSiteResidues.push(assemblySel);
                     });
 
                     viewer.setStyle(
                         {model: activeModel, or: AssemblyClickedSiteResidues},
                         {
-                            cartoon: {style:'oval', color: pointColor, arrows: true, opacity: cartoonOpacity, thickness: cartoonThickness,},
+                            cartoon: {style: cartoonStyle, color: pointColor, arrows: cartoonArrows, opacity: cartoonOpacity, thickness: cartoonThickness,},
                             stick:{color: pointColor},
                         },
                     );
@@ -593,10 +593,10 @@ document.getElementById('chartCanvas').addEventListener('click', function(e) { /
                     if (activeModel == "superposition") {
                         for (const [key, value] of Object.entries(surfsDict["superposition"])) {
                             if (key == pointLabel) {
-                                viewer.setSurfaceMaterialStyle(value.surfid, {color: pointColor, opacity:0.9});
+                                viewer.setSurfaceMaterialStyle(value.surfid, {color: pointColor, opacity: surfHighOpacity});
                             }
                             else {
-                                viewer.setSurfaceMaterialStyle(value.surfid, {color: 'white', opacity: surfaceHiddenOpacity});
+                                viewer.setSurfaceMaterialStyle(value.surfid, {color: defaultColor, opacity: surfHiddenOpacity});
                             }
                         }
                     }
@@ -607,10 +607,10 @@ document.getElementById('chartCanvas').addEventListener('click', function(e) { /
                                     // pass
                                 }
                                 else if (key == pointLabel) {
-                                    viewer.setSurfaceMaterialStyle(value2.surfid, {color: pointColor, opacity:0.9});
+                                    viewer.setSurfaceMaterialStyle(value2.surfid, {color: pointColor, opacity: surfHighOpacity});
                                 }
                                 else {
-                                    viewer.setSurfaceMaterialStyle(value2.surfid, {color: 'white', opacity: surfaceHiddenOpacity});
+                                    viewer.setSurfaceMaterialStyle(value2.surfid, {color: defaultColor, opacity: surfHiddenOpacity});
                                 }
                             }
                         }
@@ -631,12 +631,12 @@ document.getElementById('chartCanvas').addEventListener('click', function(e) { /
                     .filter(el => Up2PdbDict[repPdbId][repPdbChainId].hasOwnProperty(el)) // this accounts not for missing residues in the structure (unresolved)
                     .map(el => Up2PdbDict[repPdbId][repPdbChainId][el]);
                 
-                SuppClickedSiteResidues = {model: protAtomsModel, resi: siteSuppPDBResNums, chain: repPdbChainId, not: {atom: ['N', 'C', 'O']}};
+                SuppClickedSiteResidues = {model: protAtomsModel, resi: siteSuppPDBResNums, chain: repPdbChainId, not: {atom: bboneAtoms}};
 
                 viewer.setStyle(
                     SuppClickedSiteResidues,
                     {
-                        cartoon: {style:'oval', color: pointColor, arrows: true, opacity: cartoonOpacity, thickness: cartoonThickness,},
+                        cartoon: {style: cartoonStyle, color: pointColor, arrows: cartoonArrows, opacity: cartoonOpacity, thickness: cartoonThickness,},
                         stick:{color: pointColor},
                     },
                 );
@@ -649,14 +649,14 @@ document.getElementById('chartCanvas').addEventListener('click', function(e) { /
                         .map(el => Up2PdbMapAssembly[chainsMapAssembly[element]][el]);
                     siteAssemblyPDBResNums.push([element, siteAssemblyPDBResNum]);
                 
-                    let assemblySel = {model: activeModel, resi: siteAssemblyPDBResNum, chain: element, not: {atom: ['N', 'C', 'O']}};
+                    let assemblySel = {model: activeModel, resi: siteAssemblyPDBResNum, chain: element, not: {atom: bboneAtoms}};
                     AssemblyClickedSiteResidues.push(assemblySel);
                 });
 
                 viewer.setStyle(
                     {model: activeModel, or: AssemblyClickedSiteResidues},
                     {
-                        cartoon: {style:'oval', color: pointColor, arrows: true, opacity: cartoonOpacity, thickness: cartoonThickness,},
+                        cartoon: {style: cartoonStyle, color: pointColor, arrows: cartoonArrows, opacity: cartoonOpacity, thickness: cartoonThickness,},
                         stick:{color: pointColor},
                     },
                 );
@@ -716,10 +716,10 @@ document.getElementById('chartCanvas').addEventListener('click', function(e) { /
                 if (activeModel == "superposition") {
                     for (const [key, value] of Object.entries(surfsDict["superposition"])) {
                         if (key == pointLabel) {
-                            viewer.setSurfaceMaterialStyle(value.surfid, {color: pointColor, opacity:0.9});
+                            viewer.setSurfaceMaterialStyle(value.surfid, {color: pointColor, opacity: surfHighOpacity});
                         }
                         else {
-                            viewer.setSurfaceMaterialStyle(value.surfid, {color: 'white', opacity: surfaceHiddenOpacity});
+                            viewer.setSurfaceMaterialStyle(value.surfid, {color: defaultColor, opacity: surfHiddenOpacity});
                         }
                     }
                 }
@@ -731,10 +731,10 @@ document.getElementById('chartCanvas').addEventListener('click', function(e) { /
                         else {
                             for (const [key2, value2] of Object.entries(value)) {
                                 if (key == pointLabel) {
-                                    viewer.setSurfaceMaterialStyle(value2.surfid, {color: pointColor, opacity:0.9});
+                                    viewer.setSurfaceMaterialStyle(value2.surfid, {color: pointColor, opacity: surfHighOpacity});
                                 }
                                 else {
-                                    viewer.setSurfaceMaterialStyle(value2.surfid, {color: 'white', opacity: surfaceHiddenOpacity});
+                                    viewer.setSurfaceMaterialStyle(value2.surfid, {color: defaultColor, opacity: surfHiddenOpacity});
                                 }
                             }
                         }
@@ -776,14 +776,14 @@ document.getElementById('newChartCanvas').addEventListener('mousemove', function
                 if (activeModel == "superposition") { // in this case, only one residue as this is a supperposition of single chains
                     viewer.setStyle(
                         {...protAtoms, model: protAtomsModel},
-                        {cartoon: {style:'oval', color: 'white', arrows: true, opacity: cartoonOpacity, thickness: cartoonThickness,}}
+                        {cartoon: {style: cartoonStyle, color: defaultColor, arrows: cartoonArrows, opacity: cartoonOpacity, thickness: cartoonThickness,}}
                     ); // this is done so only a single point is highlighted when hovered on (some are really close.)
                     SuppPDBResNum = Up2PdbDict[repPdbId][repPdbChainId][newPointLabel];
                     if (SuppPDBResNum != undefined) {
                         viewer.setStyle(
-                            {model: protAtomsModel, chain: repPdbChainId, resi: SuppPDBResNum, not: {atom: ['N', 'C', 'O']}},
+                            {model: protAtomsModel, chain: repPdbChainId, resi: SuppPDBResNum, not: {atom: bboneAtoms}},
                             {
-                                cartoon:{style:'oval', color: pointColor, arrows: true, opacity: cartoonOpacity, thickness: cartoonThickness,},
+                                cartoon:{style: cartoonStyle, color: pointColor, arrows: cartoonArrows, opacity: cartoonOpacity, thickness: cartoonThickness,},
                                 stick:{color: pointColor},
                             }
                         );
@@ -796,13 +796,13 @@ document.getElementById('newChartCanvas').addEventListener('mousemove', function
                     if (contactsVisible) {
                         viewer.setStyle(
                             {...protAtoms, model: activeModel, not: {or: allBindingRess}},
-                            {cartoon: {style:'oval', color: 'white', arrows: true, opacity: cartoonOpacity, thickness: cartoonThickness,}}
+                            {cartoon: {style: cartoonStyle, color: defaultColor, arrows: cartoonArrows, opacity: cartoonOpacity, thickness: cartoonThickness,}}
                         );
                     }
                     else {
                         viewer.setStyle(
                             {...protAtoms, model: activeModel},
-                            {cartoon: {style:'oval', color: 'white', arrows: true, opacity: cartoonOpacity, thickness: cartoonThickness,}}
+                            {cartoon: {style: cartoonStyle, color: defaultColor, arrows: cartoonArrows, opacity: cartoonOpacity, thickness: cartoonThickness,}}
                         );
                     }
                     proteinChains.forEach((element) => { // in case of multiple copies of protein of interest
@@ -810,9 +810,9 @@ document.getElementById('newChartCanvas').addEventListener('mousemove', function
                         if (AssemblyPDBResNum  != undefined) {
                             AssemblyPDBResNums.push([element, AssemblyPDBResNum]);
                             viewer.setStyle(
-                                {model: activeModel, resi: AssemblyPDBResNum, chain: element, not: {atom: ['N', 'C', 'O']}},
+                                {model: activeModel, resi: AssemblyPDBResNum, chain: element, not: {atom: bboneAtoms}},
                                 {
-                                    cartoon:{style:'oval', color: pointColor, arrows: true, opacity: cartoonOpacity, thickness: cartoonThickness,},
+                                    cartoon:{style: cartoonStyle, color: pointColor, arrows: cartoonArrows, opacity: cartoonOpacity, thickness: cartoonThickness,},
                                     stick:{color: pointColor},
                                 }
                             );
@@ -880,21 +880,21 @@ document.getElementById('newChartCanvas').addEventListener('mousemove', function
             if (activeModel == "superposition") {
                 viewer.setStyle(
                     {...protAtoms, model: protAtomsModel},
-                    {cartoon: {style:'oval', color: 'white', arrows: true, opacity: cartoonOpacity, thickness: cartoonThickness,}}
+                    {cartoon: {style: cartoonStyle, color: defaultColor, arrows: cartoonArrows, opacity: cartoonOpacity, thickness: cartoonThickness,}}
                 );
             }
             else {
                 if (contactsVisible) {
                     viewer.setStyle(
                         {...protAtoms, model: activeModel, not: {or: allBindingRess}},
-                        {cartoon: {style:'oval', color: 'white', arrows: true, opacity: cartoonOpacity, thickness: cartoonThickness,}}
+                        {cartoon: {style: cartoonStyle, color: defaultColor, arrows: cartoonArrows, opacity: cartoonOpacity, thickness: cartoonThickness,}}
                     );
 
                     for (const [key, value] of Object.entries(ligandSitesHash[activeModel])) {
                         viewer.setStyle( // displaying and colouring again the ligand-interacting residues
                             {model: activeModel, or: value[0]}, // value[0] are the ligand-binding residues selection
                             {
-                                cartoon:{style:'oval', color: value[2], arrows: true, opacity: cartoonOpacity, thickness: cartoonThickness,},
+                                cartoon:{style: cartoonStyle, color: value[2], arrows: cartoonArrows, opacity: cartoonOpacity, thickness: cartoonThickness,},
                                 stick:{hidden: false, color: value[2],} // value[2] is colour of the binding site
                             }
                         );
@@ -903,7 +903,7 @@ document.getElementById('newChartCanvas').addEventListener('mousemove', function
                 else {
                     viewer.setStyle(
                         {...protAtoms, model: activeModel},
-                        {cartoon: {style:'oval', color: 'white', arrows: true, opacity: cartoonOpacity, thickness: cartoonThickness,}}
+                        {cartoon: {style: cartoonStyle, color: defaultColor, arrows: cartoonArrows, opacity: cartoonOpacity, thickness: cartoonThickness,}}
                     );
                 }
             }

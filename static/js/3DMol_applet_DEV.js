@@ -3,7 +3,7 @@
 let element = document.querySelector('#container-01'); // get structure viewer container element
 
 let config = { // viewer configuration
-    backgroundColor: 'white',
+    backgroundColor: bgColor,
     id: "3DmolCanvas",
 }
 
@@ -91,9 +91,9 @@ function loadAllModels(simplePdbs) { // Load all structures
         hetAtomsNotHohSuppModelSel = {...hetAtomsNotHoh, model: suppModels} // this is generating a new selection object including ligands (not water) of a specific model
         protAtomsSuppModelsSel = {...protAtoms, model: suppModelsNoProt} // this is generating a new selection object including protein atoms of all models
 
-        viewer.setStyle(protAtomsProtModelSel, {cartoon: {hidden: false, style: 'oval', color: 'white', arrows: true, thickness: cartoonThickness, opacity: cartoonOpacity}}); // cartoon representation for protein
+        viewer.setStyle(protAtomsProtModelSel, {cartoon: {hidden: false, style: cartoonStyle, color: defaultColor, arrows: cartoonArrows, thickness: cartoonThickness, opacity: cartoonOpacity}}); // cartoon representation for protein
         viewer.setStyle(hetAtomsNotHohSuppModelSel, {stick: {hidden: true, radius: 0}}); // stick representation for ligands (HETATM), hidden by default
-        viewer.setStyle(protAtomsSuppModelsSel, {cartoon: {hidden: true}}); // hide protein atoms in the superposition models
+        viewer.setStyle(protAtomsSuppModelsSel, {cartoon: {hidden: true, style: cartoonStyle, arrows: cartoonArrows, thickness: cartoonThickness, opacity: cartoonOpacity}}); // hide protein atoms in the superposition models
 
         // Send modelOrder to Flask
         fetch('/process-model-order', {
@@ -151,8 +151,8 @@ function loadAllModels(simplePdbs) { // Load all structures
                 surfsDict["superposition"]["non_binding"] = viewer.addSurface(
                     $3Dmol.SurfaceType.ISO,
                     {
-                        color: 'white',
-                        opacity: surfaceHiddenOpacity,
+                        color: defaultColor,
+                        opacity: surfHiddenOpacity,
                     },
                     surfSel,
                     surfSel,
@@ -166,7 +166,7 @@ function loadAllModels(simplePdbs) { // Load all structures
                     $3Dmol.SurfaceType.ISO,
                     {
                         color: siteColor,
-                        opacity: surfaceHiddenOpacity,
+                        opacity: surfHiddenOpacity,
                     },
                     surfSel,
                     surfSel,

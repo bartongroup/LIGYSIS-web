@@ -24,7 +24,7 @@ $('table#bss_table tbody').on('mouseover', 'tr', function () { // event listener
             if (activeModel == "superposition") {
                 for (const [key, value] of Object.entries(surfsDict["superposition"])) {
                     if (key == rowId) {
-                        viewer.setSurfaceMaterialStyle(value.surfid, {color: siteColor, opacity: 0.9}); // change the surface color of the hovered binding site row
+                        viewer.setSurfaceMaterialStyle(value.surfid, {color: siteColor, opacity: surfHighOpacity}); // change the surface color of the hovered binding site row
                     }
                 }
             }
@@ -32,7 +32,7 @@ $('table#bss_table tbody').on('mouseover', 'tr', function () { // event listener
                 for (const [key, value] of Object.entries(surfsDict[activeModel])) {
                     for (const [key2, value2] of Object.entries(value)) {
                         if (key == rowId) {
-                            viewer.setSurfaceMaterialStyle(value2.surfid, {color: siteColor, opacity: 0.9}); // change the surface color of the hovered binding site row
+                            viewer.setSurfaceMaterialStyle(value2.surfid, {color: siteColor, opacity: surfHighOpacity}); // change the surface color of the hovered binding site row
                         }
                     }
                 }
@@ -46,12 +46,12 @@ $('table#bss_table tbody').on('mouseover', 'tr', function () { // event listener
             .filter(el => Up2PdbDict[repPdbId][repPdbChainId].hasOwnProperty(el)) // this accounts not for missing residues in the structure (unresolved)
             .map(el => Up2PdbDict[repPdbId][repPdbChainId][el]);
 
-        SuppHoveredSiteResidues = {model: protAtomsModel, resi: siteSuppPDBResNums, chain: repPdbChainId, not: {atom: ['N', 'C', 'O']}}
+        SuppHoveredSiteResidues = {model: protAtomsModel, resi: siteSuppPDBResNums, chain: repPdbChainId, not: {atom: bboneAtoms}}
 
         viewer.setStyle(
             SuppHoveredSiteResidues,
             {
-                cartoon:{style:'oval', color: siteColor, arrows: true, opacity: cartoonOpacity, thickness: cartoonThickness,},
+                cartoon:{style: cartoonStyle, color: siteColor, arrows: cartoonArrows, opacity: cartoonOpacity, thickness: cartoonThickness,},
                 stick:{color: siteColor},
             }
         );
@@ -64,14 +64,14 @@ $('table#bss_table tbody').on('mouseover', 'tr', function () { // event listener
 
             siteAssemblyPDBResNums.push([element, siteAssemblyPDBResNum]);
 
-            let assemblySel = {model: protAtomsModel, resi: siteAssemblyPDBResNum, chain: element, not: {atom: ['N', 'C', 'O']}};
+            let assemblySel = {model: protAtomsModel, resi: siteAssemblyPDBResNum, chain: element, not: {atom: bboneAtoms}};
             AssemblyHoveredSiteResidues.push(assemblySel);
         });
 
         viewer.setStyle(
             {model: activeModel, or: AssemblyHoveredSiteResidues},
             {
-                cartoon:{style:'oval', color: siteColor, arrows: true, opacity: cartoonOpacity, thickness: cartoonThickness,},
+                cartoon:{style: cartoonStyle, color: siteColor, arrows: cartoonArrows, opacity: cartoonOpacity, thickness: cartoonThickness,},
                 stick:{color: siteColor},
             }
         );
@@ -97,7 +97,7 @@ $('table#bss_table tbody').on('mouseover', 'tr', function () { // event listener
             viewer.setStyle(
                 SuppHoveredSiteResidues,
                 {
-                    cartoon: {style:'oval', color: 'white', arrows: true, opacity: cartoonOpacity, thickness: cartoonThickness,}
+                    cartoon: {style: cartoonStyle, color: defaultColor, arrows: cartoonArrows, opacity: cartoonOpacity, thickness: cartoonThickness,}
                 }
             );
         }
@@ -106,7 +106,7 @@ $('table#bss_table tbody').on('mouseover', 'tr', function () { // event listener
                 viewer.setStyle(
                     {model: activeModel, or: AssemblyHoveredSiteResidues}, // hiding all the hovered site residues
                     {
-                        cartoon:{style:'oval', color: 'white', arrows: true, opacity: cartoonOpacity, thickness: cartoonThickness,},
+                        cartoon:{style: cartoonStyle, color: defaultColor, arrows: cartoonArrows, opacity: cartoonOpacity, thickness: cartoonThickness,},
                     }
                 );
                 // colour ligand-binding residues again
@@ -114,7 +114,7 @@ $('table#bss_table tbody').on('mouseover', 'tr', function () { // event listener
                     viewer.setStyle( // displaying and colouring again the ligand-interacting residues
                         {model: activeModel, or: value[0]}, // value[0] are the ligand-binding residues selection
                         {
-                            cartoon:{style:'oval', color: value[2], arrows: true, opacity: cartoonOpacity, thickness: cartoonThickness,},
+                            cartoon:{style: cartoonStyle, color: value[2], arrows: cartoonArrows, opacity: cartoonOpacity, thickness: cartoonThickness,},
                             stick:{hidden: false, color: value[2],} // value[2] is colour of the binding site
                         }
                     );
@@ -124,7 +124,7 @@ $('table#bss_table tbody').on('mouseover', 'tr', function () { // event listener
                 viewer.setStyle(
                     {model: activeModel, or: AssemblyHoveredSiteResidues},
                     {
-                        cartoon:{style:'oval', color:  'white', arrows: true, opacity: cartoonOpacity, thickness: cartoonThickness,},
+                        cartoon:{style: cartoonStyle, color: defaultColor, arrows: cartoonArrows, opacity: cartoonOpacity, thickness: cartoonThickness,},
                     }
                 );
             }
@@ -135,18 +135,18 @@ $('table#bss_table tbody').on('mouseover', 'tr', function () { // event listener
                 if (activeModel == "superposition") {
                     for (const [key, value] of Object.entries(surfsDict["superposition"])) {
                         if (key == "non_binding") {
-                            viewer.setSurfaceMaterialStyle(value.surfid, {color: 'white', opacity:0.7});
+                            viewer.setSurfaceMaterialStyle(value.surfid, {color: defaultColor, opacity: surfLowOpacity});
                         }
                         else {
                             let siteColor = chartColors[Number(key.split("_").pop())];
-                            viewer.setSurfaceMaterialStyle(value.surfid, {color: siteColor, opacity:0.8});
+                            viewer.setSurfaceMaterialStyle(value.surfid, {color: siteColor, opacity: surfMediumOpacity});
                         }
                     }
                 }
                 else {
                     if (contactsVisible) {
                         for (const [key, value] of Object.entries(surfsDict[activeModel][rowId])) {
-                            viewer.setSurfaceMaterialStyle(value.surfid, {color: siteColor, opacity: surfaceHiddenOpacity});
+                            viewer.setSurfaceMaterialStyle(value.surfid, {color: siteColor, opacity: surfHiddenOpacity});
                         }
                     }
                     else {
@@ -156,11 +156,11 @@ $('table#bss_table tbody').on('mouseover', 'tr', function () { // event listener
                                     // pass
                                 }
                                 else if (key == "non_binding") {
-                                    viewer.setSurfaceMaterialStyle(value2.surfid, {color: 'white', opacity:0.7});
+                                    viewer.setSurfaceMaterialStyle(value2.surfid, {color: defaultColor, opacity: surfLowOpacity});
                                 }
                                 else {
                                     let siteColor = chartColors[Number(key.split("_").pop())];
-                                    viewer.setSurfaceMaterialStyle(value2.surfid, {color: siteColor, opacity:0.8});
+                                    viewer.setSurfaceMaterialStyle(value2.surfid, {color: siteColor, opacity: surfMediumOpacity});
                                 }
                             }
                         }
@@ -176,14 +176,14 @@ $('table#bss_table tbody').on('mouseover', 'tr', function () { // event listener
             if (activeModel == "superposition") {
                 viewer.setStyle( // colouring the clicked site (necessary as sometimes there is overlap between sites)
                     SuppClickedSiteResidues,
-                    {cartoon:{style:'oval', color: clickedSiteColor, arrows: true, opacity: cartoonOpacity, thickness: cartoonThickness,},
+                    {cartoon:{style: cartoonStyle, color: clickedSiteColor, arrows: cartoonArrows, opacity: cartoonOpacity, thickness: cartoonThickness,},
                     stick:{color: clickedSiteColor,}, }
                 );
             }
             else {
                 viewer.setStyle( // colouring the clicked site (necessary as sometimes there is overlap between sites)
                     {model: activeModel, or: AssemblyClickedSiteResidues},
-                    {cartoon:{style:'oval', color: clickedSiteColor, arrows: true, opacity: cartoonOpacity, thickness: cartoonThickness,},
+                    {cartoon:{style: cartoonStyle, color: clickedSiteColor, arrows: cartoonArrows, opacity: cartoonOpacity, thickness: cartoonThickness,},
                     stick:{color: clickedSiteColor,}, }
                 );
             }
@@ -191,7 +191,7 @@ $('table#bss_table tbody').on('mouseover', 'tr', function () { // event listener
                 if (activeModel == "superposition") {
                     for (const [key, value] of Object.entries(surfsDict["superposition"])) {
                         if (key == rowId) {
-                            viewer.setSurfaceMaterialStyle(value.surfid, {color: siteColor, opacity: surfaceHiddenOpacity});
+                            viewer.setSurfaceMaterialStyle(value.surfid, {color: siteColor, opacity: surfHiddenOpacity});
                         }
                     }
                 }
@@ -199,7 +199,7 @@ $('table#bss_table tbody').on('mouseover', 'tr', function () { // event listener
                     for (const [key, value] of Object.entries(surfsDict[activeModel])) {
                         for (const [key2, value2] of Object.entries(value)) {
                             if (key == rowId) {
-                                viewer.setSurfaceMaterialStyle(value2.surfid, {color: siteColor, opacity: surfaceHiddenOpacity});
+                                viewer.setSurfaceMaterialStyle(value2.surfid, {color: siteColor, opacity: surfHiddenOpacity});
                             }
                         }
                     }
@@ -243,11 +243,11 @@ $('table#bss_table tbody').on('mouseover', 'tr', function () { // event listener
             if (activeModel == "superposition") {
                 for (const [key, value] of Object.entries(surfsDict["superposition"])) {
                     if (key == "non_binding") {
-                        viewer.setSurfaceMaterialStyle(surfsDict["superposition"][key].surfid, {color: 'white', opacity:0.7});
+                        viewer.setSurfaceMaterialStyle(surfsDict["superposition"][key].surfid, {color: defaultColor, opacity: surfLowOpacity});
                     }
                     else {
                         let siteColor = chartColors[Number(key.split("_").pop())];
-                        viewer.setSurfaceMaterialStyle(surfsDict["superposition"][key].surfid, {color: siteColor, opacity:0.8});
+                        viewer.setSurfaceMaterialStyle(surfsDict["superposition"][key].surfid, {color: siteColor, opacity: surfMediumOpacity});
                     }
                 }
             }
@@ -259,7 +259,7 @@ $('table#bss_table tbody').on('mouseover', 'tr', function () { // event listener
                                 // pass
                             }
                             else if (key == rowId) {
-                                viewer.setSurfaceMaterialStyle(value2.surfid, {color: siteColor, opacity: surfaceHiddenOpacity});
+                                viewer.setSurfaceMaterialStyle(value2.surfid, {color: siteColor, opacity: surfHiddenOpacity});
                             }
                         }
                         else {
@@ -267,11 +267,11 @@ $('table#bss_table tbody').on('mouseover', 'tr', function () { // event listener
                                 // pass
                             }
                             else if (key == "non_binding") {
-                                viewer.setSurfaceMaterialStyle(value2.surfid, {color: 'white', opacity:0.7});
+                                viewer.setSurfaceMaterialStyle(value2.surfid, {color: defaultColor, opacity: surfLowOpacity});
                             }
                             else {
                                 let siteColor = chartColors[Number(key.split("_").pop())];
-                                viewer.setSurfaceMaterialStyle(value2.surfid, {color: siteColor, opacity:0.8});
+                                viewer.setSurfaceMaterialStyle(value2.surfid, {color: siteColor, opacity: surfMediumOpacity});
                             }
                         }
                     }
@@ -324,7 +324,7 @@ $('table#bss_table tbody').on('mouseover', 'tr', function () { // event listener
                     viewer.setStyle( // colour white previously clicked site residues
                         SuppClickedSiteResidues,
                         {
-                            cartoon: {style:'oval', color: 'white', arrows: true, opacity: cartoonOpacity, thickness: cartoonThickness,}
+                            cartoon: {style: cartoonStyle, color: defaultColor, arrows: cartoonArrows, opacity: cartoonOpacity, thickness: cartoonThickness,}
                         }
                     );
                 }
@@ -334,7 +334,7 @@ $('table#bss_table tbody').on('mouseover', 'tr', function () { // event listener
                         viewer.setStyle(
                             {model: activeModel, or: AssemblyClickedSiteResidues, not: {or: allBindingRess}},  
                             {
-                                cartoon: {style:'oval', color: 'white', arrows: true, opacity: cartoonOpacity, thickness: cartoonThickness,}
+                                cartoon: {style: cartoonStyle, color: defaultColor, arrows: cartoonArrows, opacity: cartoonOpacity, thickness: cartoonThickness,}
                             }
                         );
                     }
@@ -342,7 +342,7 @@ $('table#bss_table tbody').on('mouseover', 'tr', function () { // event listener
                         viewer.setStyle(
                             {model: activeModel, or: AssemblyClickedSiteResidues},
                             {
-                                cartoon: {style:'oval', color: 'white', arrows: true, opacity: cartoonOpacity, thickness: cartoonThickness,}
+                                cartoon: {style: cartoonStyle, color: defaultColor, arrows: cartoonArrows, opacity: cartoonOpacity, thickness: cartoonThickness,}
                             }
                         );
                     }
@@ -365,14 +365,14 @@ $('table#bss_table tbody').on('mouseover', 'tr', function () { // event listener
                 .filter(el => Up2PdbDict[repPdbId][repPdbChainId].hasOwnProperty(el)) // this accounts not for missing residues in the structure (unresolved)
                 .map(el => Up2PdbDict[repPdbId][repPdbChainId][el]);
 
-            SuppClickedSiteResidues = {model: protAtomsModel, resi: siteSuppPDBResNums, chain: repPdbChainId, not: {atom: ['N', 'C', 'O']}}
+            SuppClickedSiteResidues = {model: protAtomsModel, resi: siteSuppPDBResNums, chain: repPdbChainId, not: {atom: bboneAtoms}}
             // update selection so that it ignores backbone atoms
 
             // need to colour the clicked site residues here. Before we were not as it was already hovered. However, when overlap between sites, we need to colour the clicked site.
             viewer.setStyle(
                 SuppClickedSiteResidues,
                 {
-                    cartoon:{style:'oval', color: siteColor, arrows: true, opacity: cartoonOpacity, thickness: cartoonThickness,},
+                    cartoon:{style: cartoonStyle, color: siteColor, arrows: cartoonArrows, opacity: cartoonOpacity, thickness: cartoonThickness,},
                     stick:{color: siteColor},
                 }
             );
@@ -385,14 +385,14 @@ $('table#bss_table tbody').on('mouseover', 'tr', function () { // event listener
                     .map(el => Up2PdbMapAssembly[chainsMapAssembly[element]][el]);
     
                 siteAssemblyPDBResNums.push([element, siteAssemblyPDBResNum]);
-                let assemblySel = {model: activeModel, resi: siteAssemblyPDBResNum, chain: element, not: {atom: ['N', 'C', 'O']}};
+                let assemblySel = {model: activeModel, resi: siteAssemblyPDBResNum, chain: element, not: {atom: bboneAtoms}};
                 AssemblyClickedSiteResidues.push(assemblySel);
             });
 
             viewer.setStyle(
                 {model: activeModel, or: AssemblyClickedSiteResidues},
                 {
-                    cartoon:{style:'oval', color: siteColor, arrows: true, opacity: cartoonOpacity, thickness: cartoonThickness,},
+                    cartoon:{style: cartoonStyle, color: siteColor, arrows: cartoonArrows, opacity: cartoonOpacity, thickness: cartoonThickness,},
                     stick:{color: siteColor},
                 }
             );
@@ -467,10 +467,10 @@ $('table#bss_table tbody').on('mouseover', 'tr', function () { // event listener
             if (activeModel == "superposition") {
                 for (const [key, value] of Object.entries(surfsDict["superposition"])) {
                     if (key == rowId) {
-                        viewer.setSurfaceMaterialStyle(value.surfid, {color: siteColor, opacity:0.9});
+                        viewer.setSurfaceMaterialStyle(value.surfid, {color: siteColor, opacity: surfHighOpacity});
                     }
                     else {
-                        viewer.setSurfaceMaterialStyle(value.surfid, {color: 'white', opacity:0.0});
+                        viewer.setSurfaceMaterialStyle(value.surfid, {color: defaultColor, opacity: surfHiddenOpacity});
                     }
                 }
             }
@@ -482,10 +482,10 @@ $('table#bss_table tbody').on('mouseover', 'tr', function () { // event listener
                     else {
                         for (const [key2, value2] of Object.entries(value)) {
                             if (key == rowId) {
-                                viewer.setSurfaceMaterialStyle(value2.surfid, {color: siteColor, opacity:0.9});
+                                viewer.setSurfaceMaterialStyle(value2.surfid, {color: siteColor, opacity: surfHighOpacity});
                             }
                             else {
-                                viewer.setSurfaceMaterialStyle(value2.surfid, {color: 'white', opacity: surfaceHiddenOpacity});
+                                viewer.setSurfaceMaterialStyle(value2.surfid, {color: defaultColor, opacity: surfHiddenOpacity});
                             }
                         }
                     }
@@ -512,9 +512,9 @@ $('table#bs_ress_table tbody').on('mouseover', 'tr', function () { // event list
             SuppPDBResNum = Up2PdbDict[repPdbId][repPdbChainId][rowId];
             if (SuppPDBResNum !== undefined) {
                 viewer.setStyle(
-                    {model: protAtomsModel, chain: repPdbChainId, resi: SuppPDBResNum, not: {atom: ['N', 'C', 'O']}},
+                    {model: protAtomsModel, chain: repPdbChainId, resi: SuppPDBResNum, not: {atom: bboneAtoms}},
                     {
-                        cartoon:{style:'oval', color: rowColorHex, arrows: true, opacity: cartoonOpacity, thickness: cartoonThickness,},
+                        cartoon:{style: cartoonStyle, color: rowColorHex, arrows: cartoonArrows, opacity: cartoonOpacity, thickness: cartoonThickness,},
                         stick:{color: rowColorHex},
                     }
                 );
@@ -529,9 +529,9 @@ $('table#bs_ress_table tbody').on('mouseover', 'tr', function () { // event list
                 AssemblyPDBResNums.push([element, AssemblyPDBResNum]);
                 if (AssemblyPDBResNum !== undefined) {
                     viewer.setStyle(
-                        {model: activeModel, resi: AssemblyPDBResNum, chain: element, not: {atom: ['N', 'C', 'O']}},
+                        {model: activeModel, resi: AssemblyPDBResNum, chain: element, not: {atom: bboneAtoms}},
                         {
-                            cartoon:{style:'oval', color: rowColorHex, arrows: true, opacity: cartoonOpacity, thickness: cartoonThickness,},
+                            cartoon:{style: cartoonStyle, color: rowColorHex, arrows: cartoonArrows, opacity: cartoonOpacity, thickness: cartoonThickness,},
                             stick:{color: rowColorHex},
                         }
                     );
@@ -615,21 +615,21 @@ $('table#bs_ress_table tbody').on('mouseover', 'tr', function () { // event list
         if (activeModel == "superposition") {
             viewer.setStyle(
                 {...protAtoms, model: protAtomsModel},
-                {cartoon: {style:'oval', color: 'white', arrows: true, opacity: cartoonOpacity, thickness: cartoonThickness,}}
+                {cartoon: {style: cartoonStyle, color: defaultColor, arrows: cartoonArrows, opacity: cartoonOpacity, thickness: cartoonThickness,}}
             );
         }
         else {
             if (contactsVisible) {
                 viewer.setStyle(
                     {...protAtoms, model: activeModel, not: {or: allBindingRess}},
-                    {cartoon: {style:'oval', color: 'white', arrows: true, opacity: cartoonOpacity, thickness: cartoonThickness,}}
+                    {cartoon: {style: cartoonStyle, color: defaultColor, arrows: cartoonArrows, opacity: cartoonOpacity, thickness: cartoonThickness,}}
                 );
 
                 for (const [key, value] of Object.entries(ligandSitesHash[activeModel])) {
                     viewer.setStyle( // displaying and colouring again the ligand-interacting residues
                         {model: activeModel, or: value[0]}, // value[0] are the ligand-binding residues selection
                         {
-                            cartoon:{style:'oval', color: value[2], arrows: true, opacity: cartoonOpacity, thickness: cartoonThickness,},
+                            cartoon:{style: cartoonStyle, color: value[2], arrows: cartoonArrows, opacity: cartoonOpacity, thickness: cartoonThickness,},
                             stick:{hidden: false, color: value[2],}  // value[2] is colour of the binding site
                         }
                     );
@@ -638,7 +638,7 @@ $('table#bs_ress_table tbody').on('mouseover', 'tr', function () { // event list
             else {
                 viewer.setStyle(
                     {...protAtoms, model: activeModel},
-                    {cartoon: {style:'oval', color: 'white', arrows: true, opacity: cartoonOpacity, thickness: cartoonThickness,}}
+                    {cartoon: {style: cartoonStyle, color: defaultColor, arrows: cartoonArrows, opacity: cartoonOpacity, thickness: cartoonThickness,}}
                 );
                 
             }

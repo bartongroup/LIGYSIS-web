@@ -73,11 +73,11 @@ function selectOption(option) {
 
                 for (const [key, value] of Object.entries(surfsDict["superposition"])) { // hiding all surfaces from ligand superposition
                     if (key == "non_binding") {
-                        viewer.setSurfaceMaterialStyle(surfsDict["superposition"][key].surfid, {color: 'white', opacity: surfaceHiddenOpacity});
+                        viewer.setSurfaceMaterialStyle(surfsDict["superposition"][key].surfid, {color: defaultColor, opacity: surfHiddenOpacity});
                     }
                     else {
                         let siteColor = chartColors[Number(key.split("_").pop())];
-                        viewer.setSurfaceMaterialStyle(surfsDict["superposition"][key].surfid, {color: siteColor, opacity: surfaceHiddenOpacity});
+                        viewer.setSurfaceMaterialStyle(surfsDict["superposition"][key].surfid, {color: siteColor, opacity: surfHiddenOpacity});
                     }
                 }
                 
@@ -136,7 +136,7 @@ function selectOption(option) {
             if (surfaceVisible) { // if surface was visible, hide it
                 for (const [key, value] of Object.entries(surfsDict[activeModel])) { 
                     for (const [key2, value2] of Object.entries(value)) {
-                        viewer.setSurfaceMaterialStyle(value2.surfid, {opacity: surfaceHiddenOpacity}); // 0.7
+                        viewer.setSurfaceMaterialStyle(value2.surfid, {opacity: surfHiddenOpacity});
                     }
                 }
 
@@ -205,9 +205,12 @@ function selectOption(option) {
                     removeHoverLabel,
                 );
 
-                viewer.setStyle({model: suppModels}, {cartoon: {hidden: false, style: 'oval', color: 'white', arrows: true, thickness: cartoonThickness, opacity: cartoonOpacity}});
+                viewer.setStyle(
+                    {model: protAtomsModel},
+                    {cartoon: {hidden: false, style: cartoonStyle, color: defaultColor, arrows: cartoonArrows, thickness: cartoonThickness, opacity: cartoonOpacity}}
+                );
 
-                viewer.center({model: suppModels}); // center on suppModels again
+                viewer.center({model: protAtomsModel}); // center on suppModels again
 
                 viewer.render();
             }
@@ -283,8 +286,8 @@ function openStructure(pdbId) {
                                     surfsDict[activeModel]["non_binding"][element] = viewer.addSurface(
                                         $3Dmol.SurfaceType.ISO,
                                         {
-                                            color: 'white',
-                                            opacity: surfaceHiddenOpacity,
+                                            color: defaultColor,
+                                            opacity: surfHiddenOpacity,
                                         },
                                         {model: activeModel, not:{resi: surfAssemblyPDBResNums}, chain: element},
                                         {model: activeModel, not:{resi: surfAssemblyPDBResNums}, chain: element},
@@ -296,7 +299,7 @@ function openStructure(pdbId) {
                                         $3Dmol.SurfaceType.ISO,
                                         {
                                             color: siteColor,
-                                            opacity: surfaceHiddenOpacity,
+                                            opacity: surfHiddenOpacity,
                                         },
                                         {model: activeModel, resi: surfAssemblyPDBResNums, chain: element},
                                         {model: activeModel, resi: surfAssemblyPDBResNums, chain: element},
@@ -316,7 +319,7 @@ function openStructure(pdbId) {
                         contactCylinders[activeModel] = []; // Initialize contactCylinders for the new assembly (previous ones are untouched and keep their cylinders)
                     }
         
-                    viewer.setStyle({model: modelID}, {cartoon: {hidden: false, style: 'oval', color: 'white', arrows: true, thickness: cartoonThickness, opacity: cartoonOpacity}});
+                    viewer.setStyle({model: modelID}, {cartoon: {hidden: false, style: cartoonStyle, color: defaultColor, arrows: cartoonArrows, thickness: cartoonThickness, opacity: cartoonOpacity}});
                     viewer.center({model: modelID});
                     viewer.zoomTo({model: modelID})
         

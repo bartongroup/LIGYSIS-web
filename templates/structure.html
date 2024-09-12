@@ -88,22 +88,28 @@
 
     // variables to format viewer  styles
     const outlineWidth = 0.0625;
-    const outlineColor = "black";
+    const outlineColor = 'black';
     const cartoonThickness = 0.25;
     const cartoonOpacity = 1.0;
+    const cartoonStyle = 'oval';
+    const cartoonArrows = false;
     const stickRadius = 0.25;
     const sphereRadius = 0.20;
-    const surfaceHiddenOpacity = 0.0;
-    const waterColor = "gold";
+    
+    const waterColor = 'gold';
+    const bboneAtoms = ['N', 'C', 'O']; // backbone atoms that are not displayed as sticks
+    const defaultColor = 'white';
+    const bgColor = 'white';
+
+    const surfHighOpacity = 0.95;
+    const surfMediumOpacity = 0.85;
+    const surfLowOpacity = 0.75;
+    const surfHiddenOpacity = 0.0;
 
     let suppLigsSels = {};
     const canAas = ['CYS', 'MET', 'HIS', 'GLU', 'ASP', 'LYS', 'ARG', 'SER', 'THR', 'ASN', 'GLN', 'TRP', 'TYR', 'PHE', 'ILE', 'LEU', 'VAL', 'ALA', 'PRO', 'GLY'];
     const modAas = ['TPO', 'SEP', 'PTR', 'PYL', 'MLY', 'MSE', 'CSO', 'CME', 'CSD', 'CSW', 'CSX', 'CSS', 'CSH', 'CSL', 'CSZ', 'CSK', 'CSM', 'CSR', 'CSS', 'CSU'];
     const allAas = canAas.concat(modAas);
-    //const aasSel = allAas.map(function(residue) {
-    //    return { resn: residue };
-    //})
-    //const protAtoms = {or: aasSel}; // all protein atoms, including 20 canonical AAs and 20 modified AAs
     const protAtoms = {resn: allAas};  
     const hetAtoms = {not: protAtoms}; // all non-protein atoms
     const hetAtomsNotHoh = {and: [hetAtoms, {not: {resn: 'HOH'}}]}; // all non-protein atoms except water
