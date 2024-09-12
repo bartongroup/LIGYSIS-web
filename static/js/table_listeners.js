@@ -46,7 +46,6 @@ $('table#bss_table tbody').on('mouseover', 'tr', function () { // event listener
             .filter(el => Up2PdbDict[repPdbId][repPdbChainId].hasOwnProperty(el)) // this accounts not for missing residues in the structure (unresolved)
             .map(el => Up2PdbDict[repPdbId][repPdbChainId][el]);
 
-        //SuppHoveredSiteResidues = {model: suppModels, resi: siteSuppPDBResNums, chain: repPdbChainId, hetflag: false, not: {atom: ['N', 'C', 'O']}}
         SuppHoveredSiteResidues = {model: protAtomsModel, resi: siteSuppPDBResNums, chain: repPdbChainId, not: {atom: ['N', 'C', 'O']}}
 
         viewer.setStyle(
@@ -65,7 +64,6 @@ $('table#bss_table tbody').on('mouseover', 'tr', function () { // event listener
 
             siteAssemblyPDBResNums.push([element, siteAssemblyPDBResNum]);
 
-            //let assemblySel = {model: activeModel, resi: siteAssemblyPDBResNum, chain: element, hetflag: false, not: {atom: ['N', 'C', 'O']}};
             let assemblySel = {model: protAtomsModel, resi: siteAssemblyPDBResNum, chain: element, not: {atom: ['N', 'C', 'O']}};
             AssemblyHoveredSiteResidues.push(assemblySel);
         });
@@ -367,10 +365,8 @@ $('table#bss_table tbody').on('mouseover', 'tr', function () { // event listener
                 .filter(el => Up2PdbDict[repPdbId][repPdbChainId].hasOwnProperty(el)) // this accounts not for missing residues in the structure (unresolved)
                 .map(el => Up2PdbDict[repPdbId][repPdbChainId][el]);
 
-            //SuppClickedSiteResidues = {model: suppModels, resi: siteSuppPDBResNums, chain: repPdbChainId, hetflag: false, not: {atom: ['N', 'C', 'O']}}
             SuppClickedSiteResidues = {model: protAtomsModel, resi: siteSuppPDBResNums, chain: repPdbChainId, not: {atom: ['N', 'C', 'O']}}
             // update selection so that it ignores backbone atoms
-            //SuppClickedSiteResiduesSideChains = {model: suppModels, resi: siteSuppPDBResNums, chain: repPdbChainId, hetflag: false, and: {not: {atomname: ['N', 'CA', 'C', 'O']}}}
         }
     
         else {
@@ -412,7 +408,6 @@ $('table#bss_table tbody').on('mouseover', 'tr', function () { // event listener
                 labelsHash[activeModel]["clickedSite"][rowId] = [];
                 if (activeModel == "superposition") {
                     for (siteSuppPDBResNum of siteSuppPDBResNums) {
-                        //let resSel = {model: suppModels, resi: siteSuppPDBResNum, chain: repPdbChainId, hetflag: false}
                         let resSel = {model: protAtomsModel, resi: siteSuppPDBResNum, chain: repPdbChainId}
                         let resName = viewer.selectedAtoms(resSel)[0].resn
                         let label = viewer.addLabel(
@@ -539,7 +534,6 @@ $('table#bs_ress_table tbody').on('mouseover', 'tr', function () { // event list
             if (activeModel == "superposition") {
                 if (SuppPDBResNum !== undefined) {
                     labelsHash[activeModel]["hoveredRes"] = [];
-                    //let resSel = {model: suppModels, resi: SuppPDBResNum, chain: repPdbChainId, hetflag: false}
                     let resSel = {model: protAtomsModel, resi: SuppPDBResNum, chain: repPdbChainId}
                     let resName = viewer.selectedAtoms(resSel)[0].resn
                     let label = viewer.addLabel(
@@ -602,9 +596,7 @@ $('table#bs_ress_table tbody').on('mouseover', 'tr', function () { // event list
         let PDBResNum = Up2PdbDict[repPdbId][repPdbChainId][rowId];
 
         if (activeModel == "superposition") {
-            //viewer.setStyle({model: suppModels, hetflag: false}, {cartoon: {style:'oval', color: 'white', arrows: true, opacity: cartoonOpacity, thickness: cartoonThickness,}});
             viewer.setStyle(
-                //{model: protAtomsModel, hetflag: false},
                 {...protAtoms, model: protAtomsModel},
                 {cartoon: {style:'oval', color: 'white', arrows: true, opacity: cartoonOpacity, thickness: cartoonThickness,}}
             );
@@ -613,7 +605,6 @@ $('table#bs_ress_table tbody').on('mouseover', 'tr', function () { // event list
             if (contactsVisible) {
                 viewer.setStyle(
                     {...protAtoms, model: activeModel, not: {or: allBindingRess}},
-                    //{model: activeModel, hetflag: false, not: {or: allBindingRess}},
                     {cartoon: {style:'oval', color: 'white', arrows: true, opacity: cartoonOpacity, thickness: cartoonThickness,}}
                 );
 
@@ -628,8 +619,11 @@ $('table#bs_ress_table tbody').on('mouseover', 'tr', function () { // event list
                 }
             }
             else {
-                viewer.setStyle({...protAtoms, model: activeModel}, {cartoon: {style:'oval', color: 'white', arrows: true, opacity: cartoonOpacity, thickness: cartoonThickness,}});
-                //viewer.setStyle({model: activeModel, hetflag: false}, {cartoon: {style:'oval', color: 'white', arrows: true, opacity: cartoonOpacity, thickness: cartoonThickness,}});
+                viewer.setStyle(
+                    {...protAtoms, model: activeModel},
+                    {cartoon: {style:'oval', color: 'white', arrows: true, opacity: cartoonOpacity, thickness: cartoonThickness,}}
+                );
+                
             }
         }
         viewer.render();

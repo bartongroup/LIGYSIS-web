@@ -290,19 +290,14 @@ function toggleLigandsVisibility() {
         ligandButton.style = "font-weight: bold; color: #674ea7;";
 
         if (activeModel == "superposition") {
-            //viewer.addStyle({and:[{model: suppModels, hetflag: true}, {not:{resn: "HOH"}}, {properties:{ bs: -1}}]}, {stick: {hidden: true, colorscheme: myScheme, radius: stickRadius}});
-            //viewer.addStyle({and:[{model: suppModels, hetflag: true}, {not:{resn: "HOH"}}, {properties:{ bs: -1}}]}, {sphere: {hidden: true, colorscheme: myScheme, radius: sphereRadius}});
             viewer.addStyle(suppLigsSels["clust"], {stick: {hidden: true, colorscheme: myScheme, radius: stickRadius}});
-            //viewer.addStyle({and:[{model: suppModels, hetflag: true}, {not:{resn: "HOH"}}, {not: {properties:{ bs: -1}}}]}, {sphere: {hidden: true, colorscheme: myScheme, radius: sphereRadius}});
             // console.log(`Ligands hidden for ${activeModel} model!`);
         }
         else {
-            //viewer.addStyle({model: activeModel, hetflag: true, not:{resn: "HOH"}}, {stick: {hidden: true, radius: stickRadius}});
             viewer.addStyle(
                 {...hetAtomsNotHoh, model: activeModel},
                 {stick: {hidden: true, radius: stickRadius}}
             )
-            //viewer.addStyle({model: activeModel, hetflag: true, not:{resn: "HOH"}}, {sphere: {hidden: true, radius: sphereRadius}})
             // console.log(`Ligands hidden for model ${activeModel}!`);
         }
 
@@ -316,7 +311,6 @@ function toggleLigandsVisibility() {
             }
 
             viewer.addStyle(
-                //{model: activeModel, hetflag: false},
                 {...protAtomsModel, model: activeModel},
                 {cartoon: {color: 'white'}, stick: {hidden: true}}
             ); // remove ligand-interacting sticks and colour cartoon white
@@ -343,20 +337,15 @@ function toggleLigandsVisibility() {
         ligandButton.style = "font-weight: bold; color:#B22222;";
 
         if (activeModel == "superposition") {
-            //viewer.addStyle({and:[{hetflag: true}, {not:{resn: "HOH"}}, {properties:{ bs: -1}}]}, {stick: {hidden: true, colorscheme: myScheme, radius: stickRadius}});
-            //viewer.addStyle({and:[{hetflag: true}, {not:{resn: "HOH"}}, {properties:{ bs: -1}}]}, {sphere: {hidden: true, colorscheme: myScheme, radius: sphereRadius}});
             viewer.addStyle(suppLigsSels["clust"], {stick: {hidden: false}});
-            //viewer.addStyle({and:[{hetflag: true}, {not:{resn: "HOH"}}, {not: {properties:{ bs: -1}}}]}, {sphere: {hidden: false, colorscheme: myScheme, radius: sphereRadius}});
-            console.log(`Ligands shown for ${activeModel} models!`);
+            // console.log(`Ligands shown for ${activeModel} models!`);
         }
         else {
             viewer.addStyle(
-                //{model: activeModel, hetflag: true, not:{resn: "HOH"}},
                 {...hetAtomsNotHoh, model: activeModel},
                 {stick: {hidden: false, radius: stickRadius}}
                 );
-            //viewer.addStyle({model: activeModel, hetflag: true, not:{resn: "HOH"}}, {sphere: {hidden: false, radius: sphereRadius}});
-            console.log(`Ligands shown for model ${activeModel}!`);
+            //console.log(`Ligands shown for model ${activeModel}!`);
         }
     }
     ligandsVisible = !ligandsVisible;
@@ -423,14 +412,15 @@ function toggleContactsVisibility() {
             );            
         }
         else {
-            viewer.addStyle({model: activeModel, hetflag: false}, {cartoon: {color: 'white'}, stick: {hidden: true}}); // needs to change if site is clicked
+            viewer.addStyle(
+                {...protAtomsModel, model: activeModel},
+                {cartoon: {color: 'white'}, stick: {hidden: true}}
+            ); // needs to change if site is clicked
         }
         viewer.addStyle(
-            //{model: activeModel, hetflag: true, not:{resn: 'HOH'}},
             {...hetAtomsNotHoh, model: activeModel},
             {stick: {hidden: true}}
         );
-        //viewer.addStyle({model: activeModel, hetflag: true, not:{resn: 'HOH'}}, {sphere: {hidden: true}});
 
         // turn ligandButton off
         ligandButton.value = 'Ligands OFF';

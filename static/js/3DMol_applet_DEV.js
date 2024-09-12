@@ -86,8 +86,6 @@ function loadAllModels(simplePdbs) { // Load all structures
         suppModelsNoProt = suppModels.filter(model => model !== protAtomsModel); // Create an array of model IDs without the protein atoms model
 
         viewer.setViewStyle({style: "outline", width: outlineWidth, color: outlineColor, "maxpixels": 2}); // cartoon outline
-        // viewer.setStyle({model: suppModels, hetflag: false}, {cartoon: {hidden: false, style: 'oval', color: 'white', arrows: true, thickness: cartoonThickness, opacity: cartoonOpacity}}); // cartoon representation for protein
-        // viewer.setStyle({model: suppModels, hetflag: true}, {stick: {hidden: true, radius: 0}}); // stick representation for ligands (HETATM), hidden by default
 
         protAtomsProtModelSel = {...protAtoms, model: protAtomsModel} // this is generating a new selection object including protein atoms of a specific model
         hetAtomsNotHohSuppModelSel = {...hetAtomsNotHoh, model: suppModels} // this is generating a new selection object including ligands (not water) of a specific model
@@ -96,11 +94,6 @@ function loadAllModels(simplePdbs) { // Load all structures
         viewer.setStyle(protAtomsProtModelSel, {cartoon: {hidden: false, style: 'oval', color: 'white', arrows: true, thickness: cartoonThickness, opacity: cartoonOpacity}}); // cartoon representation for protein
         viewer.setStyle(hetAtomsNotHohSuppModelSel, {stick: {hidden: true, radius: 0}}); // stick representation for ligands (HETATM), hidden by default
         viewer.setStyle(protAtomsSuppModelsSel, {cartoon: {hidden: true}}); // hide protein atoms in the superposition models
-
-
-        //viewer.addStyle({model: suppModels, hetflag: true, not:{resn: "HOH"}}, {stick: {hidden: true, color: "blue", radius: stickRadius}}); // stick representation for ligands (not HOH)
-        //viewer.addStyle({model: suppModels, hetflag: true, not:{resn: "HOH"}}, {sphere: {hidden: true, color: "red", radius: sphereRadius}}); // make ligand (not HOH) spheres smaller so only stick is visible
-        //viewer.addStyle({model: suppModels, resn: "HOH"}, {sphere: {hidden: true, color: waterColor, radius: sphereRadius}}); // water molecules represented as gold spheres
 
         // Send modelOrder to Flask
         fetch('/process-model-order', {
@@ -128,29 +121,17 @@ function loadAllModels(simplePdbs) { // Load all structures
             myMap[-1] = "grey";
             myScheme = {prop: "bs", map: myMap}
 
-            //suppLigsSels["clust"] = {model: suppModels, hetflag: true, not:{resn: "HOH"}, not: {properties:{ bs: -1}}}
             suppLigsSels["clust"] = {...hetAtomsNotHoh, model: suppModels, not: {properties: {bs: -1}}}
 
-            //suppLigsSels["not_clust"] = {model: suppModels, hetflag: true, not:{resn: "HOH"}, properties:{ bs: -1}}
             suppLigsSels["not_clust"] = {...hetAtomsNotHoh, model: suppModels, properties: {bs: -1}}
             
-            //suppLigsSels["water"] = {model: suppModels, resn: "HOH"}
             suppLigsSels["water"] = {...hohAtoms, model: suppModels}
 
             viewer.addStyle(suppLigsSels["clust"], {stick: {hidden: true, colorscheme: myScheme, radius: stickRadius}});
-            //viewer.addStyle({model: suppModels, hetflag: true, not:{resn: "HOH"}, properties:{ bs: -1}}, {stick: {hidden: true, colorscheme: myScheme, radius: stickRadius}});
-
-            //viewer.addStyle({model: suppModels, hetflag: true, not:{resn: "HOH"}, properties:{ bs: -1}}, {sphere: {hidden: true, colorscheme: myScheme, radius: sphereRadius}});
         
             viewer.addStyle(suppLigsSels["not_clust"], {stick: {hidden: true, colorscheme: myScheme, radius: stickRadius}});
-            //viewer.addStyle({model: suppModels, hetflag: true, not:{resn: "HOH"}, not: {properties:{ bs: -1}}}, {stick: {hidden: true, colorscheme: myScheme, radius: stickRadius}});
-
-            //viewer.addStyle({model: suppModels, hetflag: true, not:{resn: "HOH"}, not: {properties:{ bs: -1}}}, {sphere: {hidden: true, colorscheme: myScheme, radius: sphereRadius}}); 
-        
-            //viewer.addStyle({model: suppModels, resn: "HOH"}, {stick: {hidden: true, color: waterColor, radius: stickRadius}});
 
             viewer.addStyle(suppLigsSels["water"], {sphere: {hidden: true, color: waterColor, radius: sphereRadius}});
-            //viewer.addStyle({model: suppModels, resn: "HOH"}, {sphere: {hidden: true, color: waterColor, radius: sphereRadius}});
 
             viewer.render();
 
@@ -173,14 +154,9 @@ function loadAllModels(simplePdbs) { // Load all structures
                         color: 'white',
                         opacity: surfaceHiddenOpacity,
                     },
-                    //{model: suppModels, not:{resi: PDBResNums}, chain: repPdbChainId, hetflag: false},
-                    //{model: suppModels, not:{resi: PDBResNums}, chain: repPdbChainId, hetflag: false},
-                    // {and:[{model: protAtomsModel}, {not:{resi: PDBResNums}}, {chain: repPdbChainId}, protAtoms]},
-                    // {and:[{model: protAtomsModel}, {not:{resi: PDBResNums}}, {chain: repPdbChainId}, protAtoms]},
                     surfSel,
                     surfSel,
                 );
-                //console.log(PDBResNums);
             }
             else {
                 let surfSel = {...protAtoms, model: protAtomsModel, resi: PDBResNums, chain: repPdbChainId}
@@ -192,8 +168,6 @@ function loadAllModels(simplePdbs) { // Load all structures
                         color: siteColor,
                         opacity: surfaceHiddenOpacity,
                     },
-                    // {model: suppModels, resi: PDBResNums, chain: repPdbChainId, hetflag: false},
-                    // {model: suppModels, resi: PDBResNums, chain: repPdbChainId, hetflag: false},
                     surfSel,
                     surfSel,
                 );
