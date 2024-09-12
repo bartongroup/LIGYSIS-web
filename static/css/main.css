@@ -340,7 +340,7 @@ img.responsive-logo {
     bottom: 100%;
     z-index: 1;
     overflow-y: auto;
-    max-height: 180px; /* Adjust based on your requirement */
+    max-height: 175px; /* Adjust based on your requirement */
     box-shadow: 5px 8px 16px 0px rgba(0,0,0,0.2);
     border-radius: 5px; /* Optional: Adds rounded corners */
     outline: 1px solid black;
