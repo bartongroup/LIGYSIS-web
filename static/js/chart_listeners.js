@@ -512,6 +512,14 @@ document.getElementById('chartCanvas').addEventListener('click', function(e) { /
                         .map(el => Up2PdbDict[repPdbId][repPdbChainId][el]);
                     
                     SuppClickedSiteResidues = {model: protAtomsModel, resi: siteSuppPDBResNums, chain: repPdbChainId, not: {atom: ['N', 'C', 'O']}};
+
+                    viewer.setStyle(
+                        SuppClickedSiteResidues,
+                        {
+                            cartoon: {style:'oval', color: pointColor, arrows: true, opacity: cartoonOpacity, thickness: cartoonThickness,},
+                            stick:{color: pointColor},
+                        },
+                    );
                 }
                 else {
                     proteinChains.forEach((element) => { // in case of multiple copies of protein of interest
@@ -523,6 +531,14 @@ document.getElementById('chartCanvas').addEventListener('click', function(e) { /
                         let assemblySel = {model: activeModel, resi: siteAssemblyPDBResNum, chain: element, not: {atom: ['N', 'C', 'O']}};
                         AssemblyClickedSiteResidues.push(assemblySel);
                     });
+
+                    viewer.setStyle(
+                        {model: activeModel, or: AssemblyClickedSiteResidues},
+                        {
+                            cartoon: {style:'oval', color: pointColor, arrows: true, opacity: cartoonOpacity, thickness: cartoonThickness,},
+                            stick:{color: pointColor},
+                        },
+                    );
                 }
                 if (labelsVisible) {
                     if (labelsHash[activeModel]["clickedSite"].hasOwnProperty(index)) {
