@@ -153,9 +153,9 @@
         
     </div>
     <div class="row justify-content-around">
-        <div id="3DMolAppletHolder" class="col-lg-4 col-sm-12 d-flex flex-column align-items-center justify-content-center align-self-start column order-2">
-            <div class="row my-2 custom-padding align-self-center justify-content-between">
-                <div class="col d-flex align-items-center justify-content-start">
+        <div id="3DMolAppletHolder" class="col-lg-4 col-sm-12 d-flex flex-column align-items-stretch justify-content-center align-self-start column order-2">
+            <div class="row my-2 custom-padding align-self-stretch justify-content-between">
+                <div class="col d-flex align-items-center justify-content-center" style="padding-left:0px;">
                     <h5 class="d-flex align-items-center" style="white-space: nowrap;">
                         <span>Structure Panel&nbsp;&nbsp;&nbsp;</span>
                             <a href="/help#structurePanelHelp" class="d-flex align-items-center" style="margin-left: 8px;">
@@ -163,7 +163,7 @@
                             </a>
                     </h5>
                 </div>
-                <div class="col d-flex align-items-center justify-content-end">
+                <div class="col d-flex align-items-center justify-content-end" style="padding-right:0px;">
                     <div class="dropup">
                         <button class="dropup-button" style="font-weight: bold; color: black;">Superposition</button>
                         <div class="dropup-content">
@@ -181,56 +181,81 @@
                 </div>
             </div>
             <div class="row mb-2 justify-content-between align-items-stretch custom-padding">
-                <div class="col-6 col-md-3 col-lg-6 col-xl-2 d-flex justify-content-center">
-                    <input id="surfButton" type="button" value="Surface OFF" style="font-weight: bold; color: #674ea7;"
-                    onclick="toggleSurfaceVisibility()"></input>
-                </div>
-
-                <div class="col-6 col-md-3 col-lg-6 col-xl-2 d-flex justify-content-center">
-                    <input id="labelButton" type="button" value="Labels OFF" style="font-weight: bold; color: #674ea7;"
-                    onclick="toggleLabelsVisibility()"></input>
+                <div class="col-auto justify-content-start" style="padding-left:0px; padding-right:0px;">
+                    <button id="surfButton" style="border: 1px solid black; border-width: 1; border-color: #ffa500; color: #ffa500; font-weight: normal; display: flex; align-items: center; border-radius: 5px; padding: 5px 10px;" onclick="toggleSurfaceVisibility()">
+                        SURFACE ✘
+                    </button>
                 </div>
                 
-                <div class="col-6 col-md-3 col-lg-6 col-xl-2 d-flex justify-content-center">
-                    <input id="ligandButton" type="button" value="Ligands OFF" style="font-weight: bold; color:  #674ea7;"
-                    onclick="toggleLigandsVisibility()"></input>
+                <div class="col-auto justify-content-center" style="padding-left:0px; padding-right:0px;">
+                    <button id="labelButton" style="border: 1px solid black; border-width: 1; border-color: #ffa500; color: #ffa500; font-weight: normal; display: flex; align-items: center; border-radius: 5px; padding: 5px 10px;" onclick="toggleLabelsVisibility()">
+                        LABELS ✘
+                    </button>
                 </div>
-
-                <div class="col-6 col-md-3 col-lg-6 col-xl-2 d-flex justify-content-center">
-                    <input id="waterButton" type="button" value="Waters OFF" style="font-weight: bold; color:  #674ea7;"
-                    onclick="toggleWatersVisibility()"></input>
+                
+                <div class="col-auto justify-content-center" style="padding-left:0px; padding-right:0px;">
+                    <button id="ligandButton" style="border: 1px solid black; border-width: 1; border-color: #ffa500; color: #ffa500; font-weight: normal; display: flex; align-items: center; border-radius: 5px; padding: 5px 10px;" onclick="toggleLigandsVisibility()">
+                        LIGANDS ✘
+                    </button>
                 </div>
-
-                <div class="col-6 col-md-3 col-lg-6 col-xl-2 d-flex justify-content-center">
-                    <input id="contactsButton" type="button" value="Contacts OFF" style="color: darkgray;"
-                    onclick="toggleContactsVisibility()" disabled></input>
+                
+                <div class="col-auto justify-content-center" style="padding-left:0px; padding-right:0px;">
+                    <button id="waterButton" style="border: 1px solid black; border-width: 1; border-color: #ffa500; color: #ffa500; font-weight: normal; display: flex; align-items: center; border-radius: 5px; padding: 5px 10px;" onclick="toggleWatersVisibility()">
+                        WATERS ✘
+                    </button>
                 </div>
+                
+                <div class="col-auto justify-content-end" style="padding-left:0px; padding-right:0px;">
+                    <button id="contactsButton" style="border: 1px solid darkgray; border-width: 1; color: darkgray; font-weight: normal; display: flex; align-items: center; border-radius: 5px; padding: 5px 10px;" onclick="toggleContactsVisibility()" disabled>
+                        CONTACTS ✘
+                    </button>
+                </div>
+                
             </div> 
-            <div class="row mb-2 justify-content-around align-items-stretch custom-padding">
-                <div class="col-6 col-md-3 col-lg-6 col-xl-5 d-flex flex-grow justify-content-center">
-                    <input id="saveArpeggioDataButton" type="button" value="Save Current Assembly Contacts" style="color: darkgray;" onclick="saveAssemblyContactData()" disabled="">
-                </div>
-                <div class="col-6 col-md-3 col-lg-6 col-xl-2 d-flex justify-content-center">
+            <div class="row mb-2 justify-content-between align-items-stretch custom-padding">
+                <div class="col-auto justify-content-start" style="padding-left:0px; padding-right:0px;">
+                    <button id="saveArpeggioDataButton" 
+                            style="border: 1px solid darkgray; color: darkgray; display: flex; align-items: center; border-radius: 5px; padding: 5px 10px;" 
+                            onclick="saveAssemblyContactData()" 
+                            disabled>
+                            &nbsp;<img id="saveAssemblyContactsDownloadIcon" src="/static/images/download_gray.svg" alt="Download Icon" style="width: 1.5rem; height: 1.5rem; margin-right: 8px;">
+                            &nbsp;Current Assembly Contacts&nbsp;
+                    </button>
+                </div>                
+                <div class="col-auto justify-content-center" style="padding-left:0px; padding-right:0px;">
                     <img src="/static/images/camera.svg" alt="Save Image" style="width: 2rem; height: 2rem; cursor: pointer;" 
                     onclick="saveImage('3DmolCanvas', `${segmentName}_struc`)">
                 </div>
-                <div class="col-6 col-md-3 col-lg-6 col-xl-5 d-flex flex-grow justify-content-center">
-                    <input id="saveAllArpeggioDataButton" type="button" value="Save ALL Assemblies Conctacts" style="color: black;" onclick="saveAllAssembliesContactData()">
+                <div class="col-auto justify-content-end" style="padding-left:0px; padding-right:0px;">
+                    <button id="saveAllArpeggioDataButton" 
+                            style="border: 1px solid black; color: black; display: flex; align-items: center; border-radius: 5px; padding: 5px 10px;" 
+                            onclick="saveAllAssembliesContactData()">
+                            &nbsp;<img src="/static/images/download.svg" alt="Download Icon" style="width: 1.5rem; height: 1.5rem; margin-right: 8px;">
+                        &nbsp;<b>ALL</b>&nbsp;Assemblies Contacts&nbsp;
+                    </button>
                 </div>
-
             </div>
-            <div class="row mb-2 justify-content-around align-items-stretch custom-padding">
-                <div class="col-6 col-md-3 col-lg-6 col-xl-2 d-flex justify-content-center">
-                    <input id="saveAssemblyButton" type="button" value="Save Current Assembly" style="color: darkgray;"
-                    onclick="showMenu('saveAssembly')" disabled></input>
+            <div class="row mb-2 justify-content-between align-items-stretch custom-padding">
+                <div class="col-auto justify-content-start" style="padding-left:0px; padding-right:0px;">
+                    <button id="saveAssemblyButton" 
+                            style="border: 1px solid darkgray; color: darkgray; display: flex; align-items: center; border-radius: 5px; padding: 5px 10px;" 
+                            onclick="showMenu('saveAssembly')" 
+                            disabled>
+                            &nbsp;<img id="saveAssemblyDownloadIcon" src="/static/images/download_gray.svg" alt="Download Icon" style="width: 1.5rem; height: 1.5rem; margin-right: 8px;">
+                            &nbsp;Current Assembly&nbsp;
+                    </button>
                 </div>
-                <div class="col-6 col-md-3 col-lg-6 col-xl-2 d-flex justify-content-center">
-                    <input id="saveSuppButton" type="button" value="Save Superposition" style="color: black;"
-                    onclick="showMenu('saveSuperposition')"></input>
+                <div class="col-auto justify-content-center" style="padding-left:0px; padding-right:0px;">
+                    <button id="saveSuppButton" style="border: 1px solid black; color: black; display: flex; align-items: center; border-radius: 5px; padding: 5px 10px;" onclick="showMenu('saveSuperposition')">
+                        &nbsp;<img src="/static/images/download.svg" alt="Download Icon" style="width: 1.5rem; height: 1.5rem; margin-right: 8px;">
+                        &nbsp;Superposition&nbsp;
+                    </button>
                 </div>
-                <div class="col-6 col-md-3 col-lg-6 col-xl-2 d-flex justify-content-center">
-                    <input id="saveAssembliesButton" type="button" value="Save ALL Assemblies" style="color: black;"
-                    onclick="showMenu('saveAllAssemblies')"></input>
+                <div class="col-auto justify-content-end" style="padding-left:0px; padding-right:0px;">
+                    <button id="saveAssembliesButton" style="border: 1px solid black; color: black; display: flex; align-items: center; border-radius: 5px;  padding: 5px 10px;" onclick="showMenu('saveAllAssemblies')">
+                        &nbsp;<img src="/static/images/download.svg" alt="Download Icon" style="width: 1.5rem; height: 1.5rem; margin-right: 8px;">
+                        &nbsp;<b>ALL</b>&nbsp;Assemblies&nbsp;
+                    </button>
                 </div>
             </div>
             <div id="menuRow" class="row mb-2 justify-content-around align-items-stretch custom-padding" style="display: none;">

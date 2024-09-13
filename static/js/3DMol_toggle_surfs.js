@@ -61,8 +61,12 @@ function toggleSurfaceVisibility() {
                 }
             }
         }
-        surfButton.value = 'Surface OFF'; // Change the button text
-        surfButton.style = "font-weight: bold; color: #674ea7;";
+        document.getElementById("surfButton").textContent = "SURFACE ✘";
+        surfButton.style.borderColor = "#ffa500";
+        surfButton.style.fontWeight = "normal";
+        surfButton.style.color = "#ffa500";
+        surfButton.style.borderWidth = "1px";
+
         
     }
     else {
@@ -126,8 +130,11 @@ function toggleSurfaceVisibility() {
                 }
             }
         }
-        surfButton.value = "Surface ON"; // Change the button text
-        surfButton.style = "font-weight: bold; color: #B22222;";
+        document.getElementById("surfButton").textContent = "SURFACE ✓";
+        surfButton.style.fontWeight = "bold";
+        surfButton.style.color = "#007bff";
+        surfButton.style.borderColor = "#007bff";
+        surfButton.style.borderWidth = "2.5px";
     }
     surfaceVisible = !surfaceVisible; // Toggle the visibility state
     viewer.render();
@@ -135,8 +142,14 @@ function toggleSurfaceVisibility() {
 
 function toggleLabelsVisibility() {
     if (labelsVisible) {
-        labelButton.value = 'Labels OFF'; // Change the button text
-        labelButton.style = "font-weight: bold; color: #674ea7;";
+        // labelButton.value = 'Labels OFF'; // Change the button text
+        // labelButton.style = "font-weight: bold; color: #674ea7;";
+
+        document.getElementById("labelButton").textContent = "LABELS ✘";
+        labelButton.style.borderColor = "#ffa500";
+        labelButton.style.fontWeight = "normal";
+        labelButton.style.color = "#ffa500";
+        labelButton.style.borderWidth = "1px";
 
         for (const [key, value] of Object.entries(labelsHash[activeModel])) {
             if (key === 'hoveredRes') {
@@ -160,8 +173,15 @@ function toggleLabelsVisibility() {
         viewer.render();
     }
     else { // add labels if any site is clicked already
-        labelButton.value = "Labels ON"; // Change the button text
-        labelButton.style = "font-weight: bold; color: #B22222;";
+        // labelButton.value = "LABELS ✓"; // Change the button text
+        // labelButton.style = "font-weight: bold; color: #B22222;";
+
+        document.getElementById("labelButton").textContent = "LABELS ✓";
+        labelButton.style.fontWeight = "bold";
+        labelButton.style.color = "#007bff";
+        labelButton.style.borderColor = "#007bff";
+        labelButton.style.borderWidth = "2.5px";
+
         let clickedElements = document.getElementsByClassName("clicked-row");
         if (clickedElements) { // any row is already clicked
             for (var i = 0; i < clickedElements.length; i++) {
@@ -256,8 +276,16 @@ function toggleLabelsVisibility() {
 
 function toggleWatersVisibility() {
     if (watersVisible) {
-        waterButton.value = 'Waters OFF'; // Change the button text
-        waterButton.style = "font-weight: bold; color: #674ea7;";
+            // waterButton.value = 'Waters OFF'; // Change the button text
+            // waterButton.style = "font-weight: bold; color: #674ea7;";
+
+        document.getElementById("waterButton").textContent = "WATERS ✘";
+        waterButton.style.borderColor = "#ffa500";
+        waterButton.style.fontWeight = "normal";
+        waterButton.style.color = "#ffa500";
+        waterButton.style.borderWidth = "1px";
+
+        
         if (activeModel == "superposition") {
             viewer.addStyle(suppLigsSels["water"], {sphere: {hidden: true, color: waterColor, radius: sphereRadius}});
             // console.log(`Waters hidden for ${activeModel} models!`);
@@ -268,8 +296,16 @@ function toggleWatersVisibility() {
         }
     }
     else {
-        waterButton.value = 'Waters ON'; // Change the button text
-        waterButton.style = "font-weight: bold; color:#B22222;";
+        // waterButton.value = 'Waters ON'; // Change the button text
+        // waterButton.style = "font-weight: bold; color:#B22222;";
+
+        document.getElementById("waterButton").textContent = "WATERS ✓";
+        waterButton.style.fontWeight = "bold";
+        waterButton.style.color = "#007bff";
+        waterButton.style.borderColor = "#007bff";
+        waterButton.style.borderWidth = "2.5px";
+
+
         if (activeModel == "superposition") {
             viewer.addStyle(suppLigsSels["water"], {sphere: {hidden: false, color: waterColor, radius: sphereRadius}});
             // console.log(`Waters shown for ${activeModel} models!`);
@@ -286,8 +322,14 @@ function toggleWatersVisibility() {
 
 function toggleLigandsVisibility() {
     if (ligandsVisible) {
-        ligandButton.value = 'Ligands OFF'; // Change the button text
-        ligandButton.style = "font-weight: bold; color: #674ea7;";
+        // ligandButton.value = 'Ligands OFF'; // Change the button text
+        // ligandButton.style = "font-weight: bold; color: #674ea7;";
+
+        document.getElementById("ligandButton").textContent = "LIGANDS ✘";
+        ligandButton.style.borderColor = "#ffa500";
+        ligandButton.style.fontWeight = "normal";
+        ligandButton.style.color = "#ffa500";
+        ligandButton.style.borderWidth = "1px";
 
         if (activeModel == "superposition") {
             viewer.addStyle(suppLigsSels["clust"], {stick: {hidden: true, colorscheme: myScheme, radius: stickRadius}});
@@ -302,8 +344,15 @@ function toggleLigandsVisibility() {
         }
 
         if (contactsVisible) {
-            contactsButton.value = 'Contacts OFF'; // Change the button text
-            contactsButton.style = "font-weight: bold; color: #674ea7;";
+            // contactsButton.value = 'Contacts OFF'; // Change the button text
+            // contactsButton.style = "font-weight: bold; color: #674ea7;";
+
+            document.getElementById("contactsButton").textContent = "CONTACTS ✘";
+            contactsButton.style.borderColor = "#ffa500";
+            contactsButton.style.fontWeight = "normal";
+            contactsButton.style.color = "#ffa500";
+            contactsButton.style.borderWidth = "1px";
+
 
             // loop through contactCylinders and delete using removeShape, then empty list
             for (const cylinder of contactCylinders[activeModel]) {
@@ -325,19 +374,66 @@ function toggleLigandsVisibility() {
             }
 
             if (surfaceVisible) {
-                for (const [key, value] of Object.entries(surfsDict[activeModel]['lig_inters'])) { // hide surfaces of ligand-interacting residues
-                    viewer.setSurfaceMaterialStyle(value.surfid, {opacity:0.0});
+                for (const [key, value] of Object.entries(surfsDict[activeModel])) { // hide surfaces of ligand-interacting residues
+                    if (key == "lig_inters") {
+                        for (const [key2, value2] of Object.entries(value)) {
+                            viewer.setSurfaceMaterialStyle(value2.surfid, {opacity: surfHiddenOpacity});
+                        }
+                    }
+                    else if (key == "non_binding") {
+                        if (clickedSite == null) {
+                            for (const [key2, value2] of Object.entries(value)) {
+                                viewer.setSurfaceMaterialStyle(value2.surfid, {opacity:surfLowOpacity, color: defaultColor});
+                            }
+                        }
+                        else {
+                            for (const [key2, value2] of Object.entries(value)) {
+                                viewer.setSurfaceMaterialStyle(value2.surfid, {opacity:surfHiddenOpacity, color: defaultColor});
+                            }
+                        }
+                    }
+                    else {
+                        if (clickedSite == null) {
+                            for (const [key2, value2] of Object.entries(value)) {
+                                let siteColor = chartColors[Number(key.split("_").pop())];
+                                viewer.setSurfaceMaterialStyle(value2.surfid, {opacity:surfMediumOpacity, color: siteColor});
+                            }
+                        }
+                        else {
+                            if (key == clickedSite) {
+                                for (const [key2, value2] of Object.entries(value)) {
+                                    let siteColor = chartColors[Number(key.split("_").pop())];
+                                    viewer.setSurfaceMaterialStyle(value2.surfid, {opacity:surfHighOpacity, color: siteColor});
+                                }
+                            }
+                        }
+                        
+                    }
                 }
-                surfButton.value = 'Surface OFF'; // Change the button text
-                surfButton.style = "font-weight: bold; color: #674ea7;";
-                surfaceVisible = !surfaceVisible; // Toggle the visibility state
+                // for (const [key, value] of Object.entries(surfsDict[activeModel]['lig_inters'])) { // hide surfaces of ligand-interacting residues
+                //     viewer.setSurfaceMaterialStyle(value.surfid, {opacity:0.0});
+                // }
+
+                // surfButton.value = 'Surface OFF'; // Change the button text
+                // surfButton.style = "font-weight: bold; color: #674ea7;";
+
+                
+                // surfaceVisible = !surfaceVisible; // Toggle the visibility state
             }
             contactsVisible = false;
         }
     }
     else {
-        ligandButton.value = 'Ligands ON'; // Change the button text
-        ligandButton.style = "font-weight: bold; color:#B22222;";
+        // ligandButton.value = 'Ligands ON'; // Change the button text
+        // ligandButton.style = "font-weight: bold; color:#B22222;";
+
+        document.getElementById("ligandButton").textContent = "LIGANDS ✓";
+        ligandButton.style.fontWeight = "bold";
+        ligandButton.style.color = "#007bff";
+        ligandButton.style.borderColor = "#007bff";
+        ligandButton.style.borderWidth = "2.5px";
+
+
 
         if (activeModel == "superposition") {
             viewer.addStyle(suppLigsSels["clust"], {stick: {hidden: false, colorscheme: myScheme, radius: stickRadius}});
@@ -357,8 +453,14 @@ function toggleLigandsVisibility() {
 
 function toggleContactsVisibility() {
     if (contactsVisible) {
-        contactsButton.value = 'Contacts OFF'; // Change the button text
-        contactsButton.style = "font-weight: bold; color: #674ea7;";
+        // contactsButton.value = 'Contacts OFF'; // Change the button text
+        // contactsButton.style = "font-weight: bold; color: #674ea7;";
+
+        document.getElementById("contactsButton").textContent = "CONTACTS ✘";
+        contactsButton.style.borderColor = "#ffa500";
+        contactsButton.style.fontWeight = "normal";
+        contactsButton.style.color = "#ffa500";
+        contactsButton.style.borderWidth = "1px";
 
         let clickedElements = document.getElementsByClassName("clicked-row");
 
@@ -426,11 +528,18 @@ function toggleContactsVisibility() {
         );
 
         // turn ligandButton off
-        ligandButton.value = 'Ligands OFF';
-        ligandButton.style = "font-weight: bold; color: #674ea7;";
+        // ligandButton.value = 'Ligands OFF';
+        // ligandButton.style = "font-weight: bold; color: #674ea7;";
+
+        document.getElementById("ligandButton").textContent = "LIGANDS ✘";
+        ligandButton.style.borderColor = "#ffa500";
+        ligandButton.style.fontWeight = "normal";
+        ligandButton.style.color = "#ffa500";
+        ligandButton.style.borderWidth = "1px";
+
         ligandsVisible = false;
 
-        console.log("Contacts removed!");
+        // console.log("Contacts removed!");
         contactsVisible = false;
         viewer.render();
     }
@@ -738,8 +847,16 @@ function toggleContactsVisibility() {
             viewer.render();
         }
         // will execute regardless of whether contacts are being created or read
-        contactsButton.value = 'Contacts ON'; // Change the button text
-        contactsButton.style = "font-weight: bold; color:#B22222;";
+        // contactsButton.value = 'Contacts ON'; // Change the button text
+        // contactsButton.style = "font-weight: bold; color:#B22222;";
+
+        document.getElementById("contactsButton").textContent = "CONTACTS ✓";
+        contactsButton.style.fontWeight = "bold";
+        contactsButton.style.color = "#007bff";
+        contactsButton.style.borderColor = "#007bff";
+        contactsButton.style.borderWidth = "2.5px";
+
+
         contactsVisible = true;
 
     }

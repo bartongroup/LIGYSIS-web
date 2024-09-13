@@ -35,8 +35,15 @@ function selectOption(option) {
 
             viewer.addStyle({resn: "HOH"}, {sphere: {hidden: true, color: waterColor, radius: sphereRadius}}); // hide all water molecules from superposition
 
-            waterButton.value = 'Waters OFF'; // turn waterButton off
-            waterButton.style = "font-weight: bold; color: #674ea7;";
+            // waterButton.value = 'Waters OFF'; // turn waterButton off
+            // waterButton.style = "font-weight: bold; color: #674ea7;";
+
+            document.getElementById("waterButton").textContent = "WATERS ✘";
+            waterButton.style.borderColor = "#ffa500";
+            waterButton.style.fontWeight = "normal";
+            waterButton.style.color = "#ffa500";
+            waterButton.style.borderWidth = "1px";
+
             watersVisible = false;
         }
 
@@ -62,8 +69,15 @@ function selectOption(option) {
                 }
             }
 
-            labelButton.value = 'Labels OFF';  // turn labelButton off
-            labelButton.style = "font-weight: bold; color: #674ea7;";
+            // labelButton.value = 'Labels OFF';  // turn labelButton off
+            // labelButton.style = "font-weight: bold; color: #674ea7;";
+
+            document.getElementById("labelButton").textContent = "LABELS ✘";
+            labelButton.style.borderColor = "#ffa500";
+            labelButton.style.fontWeight = "normal";
+            labelButton.style.color = "#ffa500";
+            labelButton.style.borderWidth = "1px";
+
             labelsVisible = false;
         }
 
@@ -81,8 +95,15 @@ function selectOption(option) {
                     }
                 }
                 
-                surfButton.value = 'Surface OFF'; // turn surfButton off
-                surfButton.style = "font-weight: bold; color: #674ea7;";
+                // surfButton.value = 'Surface OFF'; // turn surfButton off
+                // surfButton.style = "font-weight: bold; color: #674ea7;";
+
+                document.getElementById("surfButton").textContent = "SURFACE ✘";
+                surfButton.style.borderColor = "#ffa500";
+                surfButton.style.fontWeight = "normal";
+                surfButton.style.color = "#ffa500";
+                surfButton.style.borderWidth = "1px";
+
                 surfaceVisible = false;
             }
 
@@ -91,8 +112,15 @@ function selectOption(option) {
                 viewer.addStyle(suppLigsSels["not_clust"], {stick: {hidden: true, colorscheme: myScheme, radius: stickRadius}});
                 viewer.addStyle(suppLigsSels["clust"], {stick: {hidden: true, colorscheme: myScheme, radius: stickRadius}});
 
-                ligandButton.value = 'Ligands OFF'; // turn ligandButton off
-                ligandButton.style = "font-weight: bold; color: #674ea7;";
+                // ligandButton.value = 'Ligands OFF'; // turn ligandButton off
+                // ligandButton.style = "font-weight: bold; color: #674ea7;";
+
+                document.getElementById("ligandButton").textContent = "LIGANDS ✘";
+                ligandButton.style.borderColor = "#ffa500";
+                ligandButton.style.fontWeight = "normal";
+                ligandButton.style.color = "#ffa500";
+                ligandButton.style.borderWidth = "1px";
+
                 ligandsVisible = false;
             }
 
@@ -102,14 +130,27 @@ function selectOption(option) {
             );
 
             contactsButton.disabled = false;
-            contactsButton.style.color = '#674ea7';  // Active font color
-            contactsButton.style.fontWeight = 'bold'; // Bold font when active
+
+            // document.getElementById("contactsButton").textContent = "CONTACTS ✘";
+            contactsButton.style.borderColor = "#ffa500";
+            contactsButton.style.fontWeight = "normal";
+            contactsButton.style.color = "#ffa500";
+            contactsButton.style.borderWidth = "1px";
+
+
+            // contactsButton.style.color = '#674ea7';  // Active font color
+            // contactsButton.style.fontWeight = 'bold'; // Bold font when active
 
             saveAssemblyButton.disabled = false;
             saveAssemblyButton.style.color = 'black';  // Active font color
+            saveAssemblyButton.style.borderColor = 'black';  // Active font color
+            saveAssemblyDownloadIcon.setAttribute('src', '/static/images/download.svg');
+
 
             saveArpeggioDataButton.disabled = false;
             saveArpeggioDataButton.style.color = 'black';  // Active font color
+            saveArpeggioDataButton.style.borderColor = 'black';  // Active font color
+            saveAssemblyContactsDownloadIcon.setAttribute('src', '/static/images/download.svg');
 
             
             for (const model of suppModels) { // hide ligand superposition models using suppModels array
@@ -128,8 +169,15 @@ function selectOption(option) {
                     cylinder.updateStyle({hidden: true})
                 }
 
-                contactsButton.value = 'Contacts OFF';
-                contactsButton.style = "font-weight: bold; color: #674ea7;";
+                // contactsButton.value = 'Contacts OFF';
+                // contactsButton.style = "font-weight: bold; color: #674ea7;";
+
+                document.getElementById("contactsButton").textContent = "CONTACTS ✘";
+                contactsButton.style.borderColor = "#ffa500";
+                contactsButton.style.fontWeight = "normal";
+                contactsButton.style.color = "#ffa500";
+                contactsButton.style.borderWidth = "1px";
+
                 contactsVisible = false;
             }
 
@@ -140,10 +188,17 @@ function selectOption(option) {
                     }
                 }
 
-                surfButton.value = 'Surface OFF';
-                surfButton.style = "font-weight: bold; color: #674ea7;";
+                // surfButton.value = 'Surface OFF';
+                // surfButton.style = "font-weight: bold; color: #674ea7;";
+
+                document.getElementById("surfButton").textContent = "SURFACE ✘";
+                surfButton.style.borderColor = "#ffa500";
+                surfButton.style.fontWeight = "normal";
+                surfButton.style.color = "#ffa500";
+                surfButton.style.borderWidth = "1px";
+
                 surfaceVisible = false;
-                console.log("Assembly surfaces removed!");
+                // console.log("Assembly surfaces removed!");
             }
 
             if (ligandsVisible) { // if ligands were visible, hide them
@@ -152,8 +207,15 @@ function selectOption(option) {
                     {stick: {hidden: true, colorscheme: myScheme, radius: stickRadius}}
                 );
 
-                ligandButton.value = 'Ligands OFF'; // turn ligandButton off
-                ligandButton.style = "font-weight: bold; color: #674ea7;";
+                // ligandButton.value = 'Ligands OFF'; // turn ligandButton off
+                // ligandButton.style = "font-weight: bold; color: #674ea7;";
+
+                document.getElementById("ligandButton").textContent = "LIGANDS ✘";
+                ligandButton.style.borderColor = "#ffa500";
+                ligandButton.style.fontWeight = "normal";
+                ligandButton.style.color = "#ffa500";
+                ligandButton.style.borderWidth = "1px";
+
                 ligandsVisible = false;
             }
 
@@ -169,26 +231,47 @@ function selectOption(option) {
                 openStructure(option); // act heere if model is not already open
 
                 contactsButton.disabled = false;
-                contactsButton.style.color = '#674ea7';  // Active font color
-                contactsButton.style.fontWeight = 'bold'; // Bold font when active
+                // contactsButton.style.color = '#674ea7';  // Active font color
+                // contactsButton.style.fontWeight = 'bold'; // Bold font when active
+
+                // document.getElementById("contactsButton").textContent = "CONTACTS ✘";
+                contactsButton.style.borderColor = "#ffa500";
+                contactsButton.style.fontWeight = "normal";
+                contactsButton.style.color = "#ffa500";
+                contactsButton.style.borderWidth = "1px";
+
 
                 saveAssemblyButton.disabled = false;
                 saveAssemblyButton.style.color = 'black';  // Active font color
+                saveAssemblyButton.style.borderColor = 'black';  // Active font color
+                saveAssemblyDownloadIcon.setAttribute('src', '/static/images/download.svg');
 
                 saveArpeggioDataButton.disabled = false;
                 saveArpeggioDataButton.style.color = 'black';  // Active font color
+                saveArpeggioDataButton.style.borderColor = 'black';  // Active font color
+                saveAssemblyContactsDownloadIcon.setAttribute('src', '/static/images/download.svg');
             }
             else {
 
                 contactsButton.disabled = true;
-                contactsButton.style.color = 'darkgray';
-                contactsButton.style.fontWeight = 'normal'; // Bold font when active
+                // contactsButton.style.color = 'darkgray';
+                // contactsButton.style.fontWeight = 'normal'; // Bold font when active
+
+                document.getElementById("ligandButton").textContent = "LIGANDS ✘";
+                contactsButton.style.borderColor = "darkgray";
+                contactsButton.style.fontWeight = "normal";
+                contactsButton.style.color = "darkgray";
+                contactsButton.style.borderWidth = "1px";
 
                 saveAssemblyButton.disabled = true;
                 saveAssemblyButton.style.color = 'darkgray';  // Active font color
+                saveAssemblyButton.style.borderColor = 'darkgray';  // Active font color
+                saveAssemblyDownloadIcon.setAttribute('src', '/static/images/download_gray.svg');
 
                 saveArpeggioDataButton.disabled = true;
                 saveArpeggioDataButton.style.color = 'darkgray';  // Active font color
+                saveArpeggioDataButton.style.borderColor = 'darkgray';  // Active font color
+                saveAssemblyContactsDownloadIcon.setAttribute('src', '/static/images/download_gray.svg');
 
                 console.log(`Reading SIFTS mapping for ${repPdbId} chain ${repPdbChainId}`);
 
