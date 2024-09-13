@@ -420,14 +420,13 @@
 
 <script type="text/javascript">
 
-    function downloadCSV(filepath) {
-        window.location.href = '/download-csv?filepath=' + filepath;
-    }
-
     let currentFunction = '';
 
-    // Show the menu when a button is clicked
-    function showMenu(functionName) {
+    function downloadCSV(filepath) { // Download a CSV file from the server
+        window.location.href = '/download-csv?filepath=' + filepath;
+    }
+    
+    function showMenu(functionName) { // Show the ChimeraX/PyMol menu when a button is clicked
         if (menuRow.style.display === 'block' && currentFunction === functionName) {
             menuRow.style.display = 'none';  // Hide menu if the same button is clicked again
         }
@@ -438,8 +437,7 @@
         }
     }
 
-    // Execute the function based on the selected option
-    function executeFunction() {
+    function executeFunction() { // Execute the download function based on the selected option
         const selectedTool = document.getElementById('toolSelect').value;
         const functionName = currentFunction + selectedTool;  // Concatenate function name and tool
         if (typeof window[functionName] === 'function') {
@@ -450,7 +448,7 @@
         document.getElementById('menuRow').style.display = 'none';  // Hide menu after selection
     }
     
-    function saveSuperpositionChimeraX() {
+    function saveSuperpositionChimeraX() { // Save the superposition script for ChimeraX
 
         const data = { // need Protein and Segment ID to access correct files
             proteinId: proteinId,
@@ -486,7 +484,7 @@
         });
     }
 
-    function saveSuperpositionPyMol() {
+    function saveSuperpositionPyMol() { // Save the superposition script for PyMol
 
         const data = { // need Protein and Segment ID to access correct files
             proteinId: proteinId,
@@ -522,8 +520,7 @@
         });
     }
     
-    function saveAssemblyChimeraX() {
-        // Assuming proteinId, segmentId, and modelOrderRev[activeModel] are available in your JavaScript context
+    function saveAssemblyChimeraX() { // Save the assembly script for ChimeraX
         let pdbId = modelOrderRev[activeModel];  // Replace with your actual modelOrderRev[activeModel] variable
         
         // Create an object with all the data you want to send
@@ -562,8 +559,7 @@
         });
     }
 
-    function saveAssemblyPyMol() {
-        // Assuming proteinId, segmentId, and modelOrderRev[activeModel] are available in your JavaScript context
+    function saveAssemblyPyMol() { // Save the assembly script for PyMol
         let pdbId = modelOrderRev[activeModel];  // Replace with your actual modelOrderRev[activeModel] variable
         
         // Create an object with all the data you want to send
@@ -602,7 +598,7 @@
         });
     }
     
-    function saveAllAssembliesChimeraX() {
+    function saveAllAssembliesChimeraX() { // Save all assemblies script for ChimeraX
         
         // Create an object with all the data you want to send
         const data = {
@@ -640,7 +636,7 @@
         });
     }
     
-    function saveAllAssembliesPyMol() {
+    function saveAllAssembliesPyMol() { // Save all assemblies script for PyMol
             
             // Create an object with all the data you want to send
             const data = {
@@ -678,8 +674,7 @@
             });
     }
     
-    function saveAssemblyContactData() {
-        // Assuming proteinId, segmentId, and modelOrderRev[activeModel] are available in your JavaScript context
+    function saveAssemblyContactData() { // Save the assembly contact data for the active model
         let pdbId = modelOrderRev[activeModel];  // Replace with your actual modelOrderRev[activeModel] variable
         
         // Create an object with all the data you want to send
@@ -718,7 +713,7 @@
         });
     }
 
-    function saveAllAssembliesContactData() {
+    function saveAllAssembliesContactData() { // Save the assembly contact data for all assemblies
         
         // Create an object with all the data you want to send
         const data = {
