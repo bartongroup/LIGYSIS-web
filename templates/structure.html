@@ -207,40 +207,48 @@
                 </div>
             </div> 
             <div class="row mb-2 justify-content-around align-items-stretch custom-padding">
-                <div class="col-6 col-md-3 col-lg-6 col-xl-2 d-flex justify-content-center">
-                    <input id="saveImageButton" type="button" value="Save Image" style="color: black;"
-                    onclick="saveImage('3DmolCanvas', `${segmentName}_struc`)"></input>
+                <div class="col-6 col-md-3 col-lg-6 col-xl-5 d-flex flex-grow justify-content-center">
+                    <input id="saveArpeggioDataButton" type="button" value="Save Current Assembly Contacts" style="color: darkgray;" onclick="saveAssemblyContactData()" disabled="">
                 </div>
                 <div class="col-6 col-md-3 col-lg-6 col-xl-2 d-flex justify-content-center">
-                    <input id="saveArpeggioDataButton" type="button" value="Save Assembly Contacts Data" style="color: darkgray;"
-                    onclick="saveAssemblyContactData()" disabled></input>
+                    <img src="/static/images/camera_JSU.svg" alt="Save Image" style="width: 2rem; height: 2rem; cursor: pointer;" 
+                    onclick="saveImage('3DmolCanvas', `${segmentName}_struc`)">
                 </div>
-                <div class="col-6 col-md-3 col-lg-6 col-xl-2 d-flex justify-content-center">
-                    <input id="saveAllArpeggioDataButton" type="button" value="Save Assemblies Conctacts Data" style="color: black;"
-                    onclick="saveAllAssembliesContactData()"></input>
+                <div class="col-6 col-md-3 col-lg-6 col-xl-5 d-flex flex-grow justify-content-center">
+                    <input id="saveAllArpeggioDataButton" type="button" value="Save ALL Assemblies Conctacts" style="color: black;" onclick="saveAllAssembliesContactData()">
                 </div>
 
             </div>
             <div class="row mb-2 justify-content-around align-items-stretch custom-padding">
                 <div class="col-6 col-md-3 col-lg-6 col-xl-2 d-flex justify-content-center">
+                    <input id="saveAssemblyButton" type="button" value="Save Current Assembly" style="color: darkgray;"
+                    onclick="showMenu('saveAssembly')" disabled></input>
+                </div>
+                <div class="col-6 col-md-3 col-lg-6 col-xl-2 d-flex justify-content-center">
                     <input id="saveSuppButton" type="button" value="Save Superposition" style="color: black;"
                     onclick="showMenu('saveSuperposition')"></input>
                 </div>
                 <div class="col-6 col-md-3 col-lg-6 col-xl-2 d-flex justify-content-center">
-                    <input id="saveAssemblyButton" type="button" value="Save Assembly" style="color: darkgray;"
-                    onclick="showMenu('saveAssembly')" disabled></input>
-                </div>
-                <div class="col-6 col-md-3 col-lg-6 col-xl-2 d-flex justify-content-center">
-                    <input id="saveAssembliesButton" type="button" value="Save Assemblies" style="color: black;"
+                    <input id="saveAssembliesButton" type="button" value="Save ALL Assemblies" style="color: black;"
                     onclick="showMenu('saveAllAssemblies')"></input>
                 </div>
+            </div>
+            <div id="menuRow" class="row mb-2 justify-content-around align-items-stretch custom-padding" style="display: none;">
                 <!-- Dropdown Menu for selection -->
-                <div id="menu" style="display:none; position: absolute;">
-                    <select id="toolSelect">
-                        <option value="PyMol">PyMol</option>
-                        <option value="ChimeraX">ChimeraX</option>
-                    </select>
-                    <button onclick="executeFunction()">Download</button>
+                <div class="col d-flex justify-content-center">
+                    <div id="menu" class="row mb-2 align-items-center custom-padding">
+                        <!-- First Column with Dropdown -->
+                        <div class="col-6 d-flex justify-content-center">
+                            <select id="toolSelect" class="form-select" style="border: 1px solid black; width: auto;">
+                                <option value="PyMol">PyMol</option>
+                                <option value="ChimeraX">ChimeraX</option>
+                            </select>
+                        </div>
+                        <!-- Second Column with Button -->
+                        <div class="col-6 d-flex justify-content-center">
+                            <button class="btn btn-primary" onclick="executeFunction()">Download</button>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -274,8 +282,8 @@
                     </select>
                 </div>
                 <div class="col-6 col-sm-4 col-lg-8 col-xl-4 d-flex justify-content-center">
-                    <i class="bi bi-camera" style="color: black; font-size: 2rem; cursor: pointer;"
-                    onclick="saveImage('chartCanvas', `${segmentName}_sites_graph`)"></i>
+                    <img src="/static/images/camera_JSU.svg" alt="Save Image" style="width: 2rem; height: 2rem; cursor: pointer;" 
+                    onclick="saveImage('chartCanvas', `${segmentName}_sites_graph`)">
                 </div>
             </div>
             <div class="row mb-0 justify-content-center custom-padding">
@@ -355,8 +363,8 @@
                     </select>
                 </div>
                 <div class="col-sm-4 col-lg-8 col-xl-4 mb-2 d-flex justify-content-center align-items-center">
-                    <i class="bi bi-camera" style="color: black; font-size: 2rem; cursor: pointer;"
-                    onclick="saveImage('newChartCanvas', `${segmentName}_residues_graph`)"></i>
+                    <img src="/static/images/camera_JSU.svg" alt="Save Image" style="width: 2rem; height: 2rem; cursor: pointer;" 
+                    onclick="saveImage('newChartCanvas', `${segmentName}_residues_graph`)">
                 </div>
             </div>
             <div class="row mb-1 justify-content-center custom-padding">
@@ -420,9 +428,14 @@
 
     // Show the menu when a button is clicked
     function showMenu(functionName) {
-        currentFunction = functionName;
-        const menu = document.getElementById('menu');
-        menu.style.display = 'block';  // Show menu (you can customize positioning)
+        if (menuRow.style.display === 'block' && currentFunction === functionName) {
+            menuRow.style.display = 'none';  // Hide menu if the same button is clicked again
+        }
+        else {
+            currentFunction = functionName;
+            const menuRow = document.getElementById('menuRow');
+            menuRow.style.display = 'block';  // Show menu (you can customize positioning)
+        }
     }
 
     // Execute the function based on the selected option
@@ -434,7 +447,7 @@
         } else {
             alert('Function not available: ' + functionName);
         }
-        document.getElementById('menu').style.display = 'none';  // Hide menu after selection
+        document.getElementById('menuRow').style.display = 'none';  // Hide menu after selection
     }
     
     function saveSuperpositionChimeraX() {
