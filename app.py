@@ -103,24 +103,39 @@ def transform_lines_PyMol(defattr_in, open_files_dict): # gets binding site ID a
     bs_ids = sorted(int(item) for item in set(bs_ids))
     return transformed_lines, bs_ids
 
-def transform_dict(input_dict): # transforms dictionary to list of tuples
-    """
-    Transforms a dictionary where keys are in the format 'prefix_ATP_D_400'
-    into a list of tuples in the format [("ATP", "D", 400, value),]
+# def transform_dict(input_dict): # transforms dictionary to list of tuples
+#     """
+#     Transforms a dictionary where keys are in the format 'prefix_ATP_D_400'
+#     into a list of tuples in the format [("ATP", "D", 400, value),]
 
-    Args:
-    input_dict (dict): Dictionary to be transformed.
+#     Args:
+#     input_dict (dict): Dictionary to be transformed.
 
-    Returns:
-    list: A list of tuples containing transformed data.
-    """
-    result_list = []
-    for key, value in input_dict.items():
-        # Split the key by '_' and extract necessary parts
-        parts = key.split('_')
-        # Append the new tuple to the result list
-        result_list.append((parts[1], parts[2], int(parts[3]), value))
-    return result_list
+#     Returns:
+#     list: A list of tuples containing transformed data.
+#     """
+#     result_list = []
+#     for key, value in input_dict.items():
+#         # Split the key by '_' and extract necessary parts
+#         parts = key.split('_')
+#         # Append the new tuple to the result list
+#         result_list.append((parts[1], parts[2], int(parts[3]), value))
+#     return result_list
+
+def transform_dict2(input_dict):
+    output_dict = {}
+    for k, v in input_dict.items():
+        key_list, value_list = v[0], v[1]
+        
+        # If the integer (v[1]) is not already a key in the new dictionary, create it
+        if value_list not in output_dict:
+            output_dict[value_list] = [[], []]
+        
+        # Append the original key to the list of keys and its corresponding tuples to the list of values
+        output_dict[value_list][0].append(k)
+        output_dict[value_list][1].extend(key_list)
+    
+    return output_dict
 
 def convert_mapping_dict(d): # converts mapping dictionary to correct data type
     rfd = {}
@@ -287,6 +302,26 @@ pymol_formats = [
     "deselect",
     "hide everything, water",
 ]
+
+pymol_dash = [
+        'set dash_as_cylinders, true',
+        'set dash_gap, 0.15',
+        'set dash_length, 0.25',
+        'set dash_round_ends, false',
+]
+
+basic_pymol_format = [
+    "color white, all",
+    "hide everything, all",
+    "select prot, polymer.protein",
+    "select water, resn HOH",
+    "show cartoon, prot",
+    "color gold, water",
+    "deselect",
+    "hide everything, water",
+]
+
+info_file = "README.txt" # info file about contacts visualisation
 
 ### INTERACTIONS README ###
 contacts_info = """
@@ -473,7 +508,7 @@ def download_csv(): # route to download .csv tables
         )
 
 @app.route('/process-model-order', methods=['POST'])
-def process_model_order():
+def process_model_order(): # route to process model order data from ChimeraX files
     data = request.json
     loaded_order = data['modelOrder'] # this is the order in which files have been loaded by 3DMol.js
     segment_name = data['segmentName'] # name of the segment
@@ -495,7 +530,7 @@ def process_model_order():
     return jsonify(response_data) # send jasonified data back to client
 
 @app.route('/get-contacts', methods=['POST'])
-def get_contacts():
+def get_contacts(): # route to get contacts data from Arpeggio table for a given assembly
 
     data = request.json
     active_model = data['modelData']
@@ -563,7 +598,7 @@ def get_uniprot_mapping(): # route to get UniProt residue and chain mapping for 
     return jsonify(response_data)
 
 @app.route('/download-superposition-ChimeraX', methods=['POST'])
-def download_superposition_ChimeraX():
+def download_superposition_ChimeraX(): # route to download ChimeraX script to visualise ligand superposition
 
     data = request.get_json() # Get JSON data from the POST request
     
@@ -635,9 +670,8 @@ def download_superposition_ChimeraX():
         download_name=f'{prot_id}_{seg_id}_superposition_ChimeraX.zip'
     )
 
-# route to download PyMol script
 @app.route('/download-superposition-PyMol', methods=['POST'])
-def download_superposition_PyMol():
+def download_superposition_PyMol(): # route to download PyMol script to visualise ligand superposition
     
     data = request.get_json() # Get JSON data from the POST request
     
@@ -686,7 +720,7 @@ def download_superposition_PyMol():
     )
 
 @app.route('/download-assembly-ChimeraX', methods=['POST'])
-def download_assembly_ChimeraX():
+def download_assembly_ChimeraX(): # route to download ChimeraX script to visualise assembly
     data = request.get_json() # Get JSON data from the POST request
     
     prot_id = data.get('proteinId')
@@ -763,8 +797,6 @@ def download_assembly_ChimeraX():
 
     cxc_file = f'{prot_id}_{seg_id}_{pdb_id}.cxc'
 
-    info_file = "README.txt"
-
     files_to_zip = [
         assembly_file, 
     ]
@@ -808,9 +840,8 @@ def download_assembly_ChimeraX():
         download_name=f'{prot_id}_{seg_id}_{pdb_id}_assembly_ChimeraX.zip'
     )
 
-# route to download PyMol script
 @app.route('/download-assembly-PyMol', methods=['POST'])
-def download_assembly_PyMol():
+def download_assembly_PyMol(): # route to download PyMol script to visualise assembly
     data = request.get_json() # Get JSON data from the POST request
     
     prot_id = data.get('proteinId')
@@ -830,9 +861,7 @@ def download_assembly_PyMol():
         (arpeggio_cons['type'] == "atom-atom")
     ].copy()
 
-    distance_lines = "\n".join(generate_distance_lines_PyMol(arpeggio_cons_filt, mult = 1.5))
-
-    print(distance_lines)
+    distance_lines = generate_distance_lines_PyMol(arpeggio_cons_filt, mult = 1.5)
 
     bs_membership = pd.read_pickle(f'{DATA_FOLDER}/example/other/{prot_id}_{seg_id}_ALL_inf_bss_membership.pkl')
 
@@ -852,38 +881,70 @@ def download_assembly_PyMol():
             ligand_site
         ]
 
-    aas_str = []
-    ligs_str = []
-    for k, v in struc_prot_data.items():
-        lig_resn, lig_chain, lig_resi = k.split("_")
-        ress = v[0]
-        col_key = v[1]
+    struc_prot_data_rf = transform_dict2(struc_prot_data)
+
+    aas_lines = []
+    ligs_lines = []
+    for k, v in struc_prot_data_rf.items():
+        col_key = k
+        ligs = v[0]
+        ress = v[1]
+        if ligs != []:
+            lig_sels = []
+            for el in ligs:
+                lig_d = el.split("_")
+                lig_sels.append(f'///{lig_d[1]}/{lig_d[2]}')
+            lig_sel_str = f'select BS{col_key}_ligs, '+ ' '.join(lig_sels)
+            bs_set_col_str = f'set_color BS{col_key}_color, {hex_to_rgb(colors[col_key])}'
+            lig_col_str = f'color BS{col_key}_color, BS{col_key}_ligs'
+            lig_disp_str = f'show licorice, BS{col_key}_ligs'
+            ligs_lines.extend([lig_sel_str, bs_set_col_str, lig_col_str, lig_disp_str])
         if ress != []:
             prot_sel_str = f'select BS{col_key}, ' + ' '.join([f'///{el[1]}/{el[2]}' for el in ress])
-            prot_set_col_str = f'set_color BS{col_key}_color, {hex_to_rgb(colors[col_key])}'
             prot_col_str = f'color BS{col_key}_color, BS{col_key}'
             prot_disp_str = f'show licorice, BS{col_key}'
-            aas_str.extend([prot_sel_str, prot_set_col_str, prot_col_str, prot_disp_str])
+            aas_lines.extend([prot_sel_str, prot_col_str, prot_disp_str])
 
-        lig_sel_str = f'select BS{col_key}_ligs, ///{lig_chain}/{lig_resi}'
-        lig_col_str = f'color BS{col_key}_color, BS{col_key}_ligs'
-        lig_disp_str = f'show licorice, BS{col_key}_ligs'
+    load_line = [f'load {os.path.basename(assembly_file)}']
 
-        ligs_str.extend([lig_sel_str, lig_col_str, lig_disp_str])
+    pml_lines = pymol_looks + pymol_dash + load_line + basic_pymol_format + distance_lines + ligs_lines + aas_lines + ["deselect",]
+    pml_string = "\n".join(pml_lines)
 
-    #print(aas_str)
-    for aa_line in aas_str:
-        print(aa_line)
+    pml_file = f'{prot_id}_{seg_id}_{pdb_id}.pml'
 
-    for lig_line in ligs_str:
-        print(lig_line)
+    files_to_zip = [
+        assembly_file, 
+    ]
 
+    pml_file_in_memory = io.BytesIO()
+    pml_file_in_memory.write(pml_string.encode('utf-8'))
+        
+    info_file_in_memory = io.BytesIO()
+    info_file_in_memory.write(contacts_info.encode('utf-8'))
 
+    memory_file = io.BytesIO() # Create an in-memory zip file for sending to the client
+    with zipfile.ZipFile(memory_file, 'w') as zf:
+        for file_path in files_to_zip: # Add the existing files to the in-memory zip
+            if os.path.exists(file_path):  # Check if the file exists
+                zf.write(file_path, os.path.basename(file_path))
 
+        pml_file_in_memory.seek(0)
+        zf.writestr(pml_file, pml_file_in_memory.read())
 
+        info_file_in_memory.seek(0)
+        zf.writestr(info_file, info_file_in_memory.read())
+    
+    memory_file.seek(0) # Seek to the beginning of the in-memory zip file before sending it
+    
+    return send_file( # Send the zip file to the client as a downloadable file
+        memory_file,
+        mimetype='application/zip',
+        as_attachment=True,
+        download_name=f'{prot_id}_{seg_id}_{pdb_id}_assembly_PyMol.zip'
+    )
 
 @app.route('/download-all-assemblies-ChimeraX', methods=['POST'])
-def download_all_assemblies_ChimeraX():
+def download_all_assemblies_ChimeraX(): # route to download ChimeraX scripts to visualise all assemblies
     data = request.get_json() # Get JSON data from the POST request
     
     prot_id = data.get('proteinId')
@@ -964,8 +1025,6 @@ def download_all_assemblies_ChimeraX():
 
             cxc_file = f'{prot_id}_{seg_id}_{pdb_id}.cxc'
 
-            info_file = "README.txt"
-
             files_to_zip = [
                 assembly_file, 
             ]
@@ -1006,7 +1065,7 @@ def download_all_assemblies_ChimeraX():
     )
 
 @app.route('/download-assembly-contact-data', methods=['POST'])
-def download_assembly_contact_data():
+def download_assembly_contact_data(): # route to download contacts data for a given assembly
     data = request.get_json()
 
     prot_id = data.get('proteinId')
@@ -1029,7 +1088,7 @@ def download_assembly_contact_data():
         )
     
 @app.route('/download-all-assemblies-contact-data', methods=['POST'])
-def download_all_assemblies_contact_data():
+def download_all_assemblies_contact_data(): # route to download contacts data for all assemblies
     data = request.get_json()
 
     prot_id = data.get('proteinId')
