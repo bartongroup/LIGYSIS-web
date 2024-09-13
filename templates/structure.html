@@ -157,7 +157,7 @@
             <div class="row my-2 custom-padding align-self-center justify-content-between">
                 <div class="col d-flex align-items-center justify-content-start">
                     <h5 class="d-flex align-items-center" style="white-space: nowrap;">
-                        <span>Structure panel</span>
+                        <span>Structure panel&nbsp;&nbsp;&nbsp;</span>
                             <a href="/help#structurePanelHelp" class="d-flex align-items-center" style="margin-left: 8px;">
                                 <i class="bi bi-info-circle" style="color: black;"></i>
                             </a>
@@ -212,20 +212,6 @@
                     onclick="saveImage('3DmolCanvas', `${segmentName}_struc`)"></input>
                 </div>
                 <div class="col-6 col-md-3 col-lg-6 col-xl-2 d-flex justify-content-center">
-                    <input id="saveSuppButton" type="button" value="Save Superposition" style="color: black;"
-                    onclick="saveSuperpositionPyMol()"></input>
-                </div>
-                <div class="col-6 col-md-3 col-lg-6 col-xl-2 d-flex justify-content-center">
-                    <input id="saveAssemblyButton" type="button" value="Save Assembly" style="color: darkgray;"
-                    onclick="saveAssemblyPyMol()" disabled></input>
-                </div>
-                <div class="col-6 col-md-3 col-lg-6 col-xl-2 d-flex justify-content-center">
-                    <input id="saveAssembliesButton" type="button" value="Save Assemblies" style="color: black;"
-                    onclick="saveAllAssembliesPyMol()"></input>
-                </div>
-            </div>
-            <div class="row mb-2 justify-content-around align-items-stretch custom-padding">
-                <div class="col-6 col-md-3 col-lg-6 col-xl-2 d-flex justify-content-center">
                     <input id="saveArpeggioDataButton" type="button" value="Save Assembly Contacts Data" style="color: darkgray;"
                     onclick="saveAssemblyContactData()" disabled></input>
                 </div>
@@ -233,31 +219,54 @@
                     <input id="saveAllArpeggioDataButton" type="button" value="Save Assemblies Conctacts Data" style="color: black;"
                     onclick="saveAllAssembliesContactData()"></input>
                 </div>
+
+            </div>
+            <div class="row mb-2 justify-content-around align-items-stretch custom-padding">
+                <div class="col-6 col-md-3 col-lg-6 col-xl-2 d-flex justify-content-center">
+                    <input id="saveSuppButton" type="button" value="Save Superposition" style="color: black;"
+                    onclick="showMenu('saveSuperposition')"></input>
+                </div>
+                <div class="col-6 col-md-3 col-lg-6 col-xl-2 d-flex justify-content-center">
+                    <input id="saveAssemblyButton" type="button" value="Save Assembly" style="color: darkgray;"
+                    onclick="showMenu('saveAssembly')" disabled></input>
+                </div>
+                <div class="col-6 col-md-3 col-lg-6 col-xl-2 d-flex justify-content-center">
+                    <input id="saveAssembliesButton" type="button" value="Save Assemblies" style="color: black;"
+                    onclick="showMenu('saveAllAssemblies')"></input>
+                </div>
+                <!-- Dropdown Menu for selection -->
+                <div id="menu" style="display:none; position: absolute;">
+                    <select id="toolSelect">
+                        <option value="PyMol">PyMol</option>
+                        <option value="ChimeraX">ChimeraX</option>
+                    </select>
+                    <button onclick="executeFunction()">Download</button>
+                </div>
             </div>
         </div>
         <div class="col-lg-3 col-sm-12 mb-3 d-flex flex-column column order-1">
             <div class="row my-2 custom-padding align-self-center">
                 <h5>
-                    Binding sites panel&nbsp;
+                    Binding sites panel&nbsp;&nbsp;&nbsp;
                     <a href="/help#sitePanelHelp">
                         <i class="bi bi-info-circle" style="color: black;"></i>
                     </a>
                 </h5>
             </div>
-            <div class="row mb-2 justify-content-center custom-padding">
+            <div class="row mb-0 justify-content-center custom-padding">
                 <canvas id="chartCanvas" width="275" height="275"></canvas>
             </div>
             <div class="row mb-2 justify-content-around custom-padding">
-                <div class="col-6 col-sm-4 col-lg-8 col-xl-4 mb-2 d-flex justify-content-center align-items-center">
-                    <span style="font-weight: 500; font-size: 1.25rem;">Y</span>:&nbsp;
+                <div class="col-6 col-sm-4 col-lg-8 col-xl-4 d-flex justify-content-center align-items-center">
+                    <span style="font-weight: 500; font-size: 1.25rem;">Y</span>:&nbsp;&nbsp;&nbsp;
                     <select id="yAxisTitle">
                         {% for header in headings[1:] %}
                         <option value="{{ header }}">{{ header }}</option>
                         {% endfor %}
                     </select>
                 </div>
-                <div class="col-6 col-sm-4 col-lg-8 col-xl-4 mb-2 d-flex justify-content-center align-items-center">
-                    <span style="font-weight: 500; font-size: 1.25rem;">X</span>:&nbsp;
+                <div class="col-6 col-sm-4 col-lg-8 col-xl-4 d-flex justify-content-center align-items-center">
+                    <span style="font-weight: 500; font-size: 1.25rem;">X</span>:&nbsp;&nbsp;&nbsp;
                     <select id="xAxisTitle">
                         {% for header in headings[1:] %}
                         <option value="{{ header }}">{{ header }}</option>
@@ -265,8 +274,8 @@
                     </select>
                 </div>
                 <div class="col-6 col-sm-4 col-lg-8 col-xl-4 d-flex justify-content-center">
-                    <input id="saveImageButton" type="button" value="Save Image" style="color: black;"
-                    onclick="saveImage('chartCanvas', `${segmentName}_sites_graph`)"></input>
+                    <i class="bi bi-camera" style="color: black; font-size: 2rem; cursor: pointer;"
+                    onclick="saveImage('chartCanvas', `${segmentName}_sites_graph`)"></i>
                 </div>
             </div>
             <div class="row mb-0 justify-content-center custom-padding">
@@ -297,42 +306,38 @@
                 </div>
             </div>
             <div class="row mb-3 justify-content-center custom-padding">
-                <div class="col-3 col-md-1 col-lg-3 col-xl-1 d-flex justify-content-center align-items-center">
+                <div class="col-3 col-md-1 col-lg-3 col-xl-6 d-flex justify-content-center align-items-center">
                     <i
                     class="bi bi-download"
                     style="color: black; cursor: pointer; font-size: 1.5rem;"
                     
                     onclick="downloadCSV(`/static/data/biolip/split/site_tables/${proteinId}_bss.pkl`)"
                     ></i>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Download Table
                 </div>
-                <div class="col-9 col-md-5 col-lg-9 col-xl-5 d-flex justify-content-start align-items-center">
-                    Download table.
-                </div>
-                <div class="col-3 col-md-1 col-lg-3 col-xl-1 d-flex justify-content-center align-items-center">
+                <div class="col-3 col-md-1 col-lg-3 col-xl-6 d-flex justify-content-center align-items-center">
                     <a href="/help#sitePanelHelp">
                         <i class="bi bi-info-circle" style="color: black; font-size: 1.5rem;"></i>
                     </a>
-                </div>
-                <div class="col-9 col-md-5 col-lg-9 col-xl-5 d-flex justify-content-start align-items-center">
-                    Information about the columns.
+                    &nbsp;&nbsp;&nbsp;&nbsp;Column Information
                 </div>
             </div>
         </div>
         <div class="col-lg-4 d-flex flex-column order-3 column">
             <div class="row my-2 align-self-center">
                 <h5>
-                    Binding residues panel&nbsp;
+                    Binding residues panel&nbsp;&nbsp;&nbsp;
                     <a href="/help#siteResiduesPanelHelp">
                         <i class="bi bi-info-circle" style="color: black;"></i>
                     </a>
                 </h5>
             </div>
-            <div class="row mb-2 justify-content-center custom-padding">
+            <div class="row mb-0 justify-content-center custom-padding">
                 <canvas id="newChartCanvas" width="650" height="420"></canvas>
             </div>
-            <div class="row mb-2 justify-content-around custom-padding">
+            <div class="row mb-0 justify-content-around custom-padding">
                 <div class="col-sm-4 col-lg-8 col-xl-4 mb-2 d-flex justify-content-center align-items-center">
-                    <span style="font-weight: 500; font-size: 1.25rem;">Y</span>:&nbsp;
+                    <span style="font-weight: 500; font-size: 1.25rem;">Y</span>:&nbsp;&nbsp;&nbsp;
                     <select id="yAxisTitle2" class="axis-dropdown2 y-axis-dropdown2">
                         <option selected hidden>MES</option>
                         {% for header in cc_new[1:] %}
@@ -340,9 +345,8 @@
                         {% endfor %}
                     </select>
                 </div>
-
                 <div class="col-sm-4 col-lg-8 col-xl-4 mb-2 d-flex justify-content-center align-items-center">
-                    <span style="font-weight: 500; font-size: 1.25rem;">X</span>:&nbsp;
+                    <span style="font-weight: 500; font-size: 1.25rem;">X</span>:&nbsp;&nbsp;&nbsp;
                     <select id="xAxisTitle2" class="axis-dropdown2 x-axis-dropdown2">
                         <option selected hidden>DS</option>
                         {% for header in cc_new[1:] %}
@@ -350,17 +354,10 @@
                         {% endfor %}
                     </select>
                 </div>
-
                 <div class="col-sm-4 col-lg-8 col-xl-4 mb-2 d-flex justify-content-center align-items-center">
-                <input
-                    id="saveImageButton"
-                    type="button" value="Save Image"
-                    style="color: black;"
-                    onclick="saveImage('newChartCanvas', `${segmentName}_residues_graph`)"
-                >
-                </input>
+                    <i class="bi bi-camera" style="color: black; font-size: 2rem; cursor: pointer;"
+                    onclick="saveImage('newChartCanvas', `${segmentName}_residues_graph`)"></i>
                 </div>
-                
             </div>
             <div class="row mb-1 justify-content-center custom-padding">
                 <div class="table-responsive px-0 uniwidthsans">
@@ -386,24 +383,20 @@
                     </table>
                 </div>
             </div>
-            <div class="row mb-3 justify-content-center custom-padding">
-                <div class="col-3 col-md-1 col-lg-3 col-xl-1 d-flex justify-content-center align-items-center">
+            <div class="row mb-0 justify-content-center custom-padding">
+                <div class="col-3 col-md-1 col-lg-3 col-xl-6 d-flex justify-content-center align-items-center">
                     <i
                     class="bi bi-download"
                     style="color: black; cursor: pointer; font-size: 1.5rem;"
                     onclick="downloadCSV(`/static/data/biolip/split/res_tables/${segmentName}_ress.pkl`)"
                     ></i>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Download Table
                 </div>
-                <div class="col-9 col-md-5 col-lg-9 col-xl-5 d-flex justify-content-start align-items-center">
-                    Download table.
-                </div>
-                <div class="col-3 col-md-1 col-lg-3 col-xl-1 d-flex justify-content-center align-items-center">
+                <div class="col-3 col-md-1 col-lg-3 col-xl-6 d-flex justify-content-center align-items-center">
                     <a href="/help#{{ header }}siteResiduesPanelHelp">
                         <i class="bi bi-info-circle" style="color: black; font-size: 1.5rem;"></i>
                     </a>
-                </div>
-                <div class="col-9 col-md-5 col-lg-9 col-xl-5 d-flex justify-content-start align-items-center">
-                    Information about the columns.
+                    &nbsp;&nbsp;&nbsp;&nbsp;Column Information
                 </div>
             </div>
         </div>
@@ -423,6 +416,27 @@
         window.location.href = '/download-csv?filepath=' + filepath;
     }
 
+    let currentFunction = '';
+
+    // Show the menu when a button is clicked
+    function showMenu(functionName) {
+        currentFunction = functionName;
+        const menu = document.getElementById('menu');
+        menu.style.display = 'block';  // Show menu (you can customize positioning)
+    }
+
+    // Execute the function based on the selected option
+    function executeFunction() {
+        const selectedTool = document.getElementById('toolSelect').value;
+        const functionName = currentFunction + selectedTool;  // Concatenate function name and tool
+        if (typeof window[functionName] === 'function') {
+            window[functionName]();  // Call the respective function
+        } else {
+            alert('Function not available: ' + functionName);
+        }
+        document.getElementById('menu').style.display = 'none';  // Hide menu after selection
+    }
+    
     function saveSuperpositionChimeraX() {
 
         const data = { // need Protein and Segment ID to access correct files

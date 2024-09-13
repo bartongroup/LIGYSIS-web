@@ -371,3 +371,19 @@ img.responsive-logo {
     /* outline: 1px solid black; Adds the outline */
     border-radius: 5px; /* Optional: Adds rounded corners */
 }
+
+
+/* .button-container {
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+}
+
+.button-container div {
+    flex-grow: 1;
+    margin: 0 10px;
+}
+
+input[type="button"] {
+    width: 100%;
+} */
