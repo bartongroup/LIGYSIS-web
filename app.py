@@ -103,25 +103,6 @@ def transform_lines_PyMol(defattr_in, open_files_dict): # gets binding site ID a
     bs_ids = sorted(int(item) for item in set(bs_ids))
     return transformed_lines, bs_ids
 
-# def transform_dict(input_dict): # transforms dictionary to list of tuples
-#     """
-#     Transforms a dictionary where keys are in the format 'prefix_ATP_D_400'
-#     into a list of tuples in the format [("ATP", "D", 400, value),]
-
-#     Args:
-#     input_dict (dict): Dictionary to be transformed.
-
-#     Returns:
-#     list: A list of tuples containing transformed data.
-#     """
-#     result_list = []
-#     for key, value in input_dict.items():
-#         # Split the key by '_' and extract necessary parts
-#         parts = key.split('_')
-#         # Append the new tuple to the result list
-#         result_list.append((parts[1], parts[2], int(parts[3]), value))
-#     return result_list
-
 def transform_dict2(input_dict):
     output_dict = {}
     for k, v in input_dict.items():
