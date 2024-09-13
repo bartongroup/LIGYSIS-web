@@ -157,9 +157,9 @@
             <div class="row my-2 custom-padding align-self-center justify-content-between">
                 <div class="col d-flex align-items-center justify-content-start">
                     <h5 class="d-flex align-items-center" style="white-space: nowrap;">
-                        <span>Structure panel&nbsp;&nbsp;&nbsp;</span>
+                        <span>Structure Panel&nbsp;&nbsp;&nbsp;</span>
                             <a href="/help#structurePanelHelp" class="d-flex align-items-center" style="margin-left: 8px;">
-                                <i class="bi bi-info-circle" style="color: black;"></i>
+                                <img src="/static/images/info.svg" alt="Info Icon" style="width: 1.5rem; height: 1.5rem;">
                             </a>
                     </h5>
                 </div>
@@ -211,7 +211,7 @@
                     <input id="saveArpeggioDataButton" type="button" value="Save Current Assembly Contacts" style="color: darkgray;" onclick="saveAssemblyContactData()" disabled="">
                 </div>
                 <div class="col-6 col-md-3 col-lg-6 col-xl-2 d-flex justify-content-center">
-                    <img src="/static/images/camera_JSU.svg" alt="Save Image" style="width: 2rem; height: 2rem; cursor: pointer;" 
+                    <img src="/static/images/camera.svg" alt="Save Image" style="width: 2rem; height: 2rem; cursor: pointer;" 
                     onclick="saveImage('3DmolCanvas', `${segmentName}_struc`)">
                 </div>
                 <div class="col-6 col-md-3 col-lg-6 col-xl-5 d-flex flex-grow justify-content-center">
@@ -255,9 +255,9 @@
         <div class="col-lg-3 col-sm-12 mb-3 d-flex flex-column column order-1">
             <div class="row my-2 custom-padding align-self-center">
                 <h5>
-                    Binding sites panel&nbsp;&nbsp;&nbsp;
+                    Binding Sites Panel&nbsp;&nbsp;&nbsp;
                     <a href="/help#sitePanelHelp">
-                        <i class="bi bi-info-circle" style="color: black;"></i>
+                        <img src="/static/images/info.svg" alt="Info Icon" style="width: 1.5rem; height: 1.5rem;">
                     </a>
                 </h5>
             </div>
@@ -282,7 +282,7 @@
                     </select>
                 </div>
                 <div class="col-6 col-sm-4 col-lg-8 col-xl-4 d-flex justify-content-center">
-                    <img src="/static/images/camera_JSU.svg" alt="Save Image" style="width: 2rem; height: 2rem; cursor: pointer;" 
+                    <img src="/static/images/camera.svg" alt="Save Image" style="width: 2rem; height: 2rem; cursor: pointer;" 
                     onclick="saveImage('chartCanvas', `${segmentName}_sites_graph`)">
                 </div>
             </div>
@@ -315,17 +315,17 @@
             </div>
             <div class="row mb-3 justify-content-center custom-padding">
                 <div class="col-3 col-md-1 col-lg-3 col-xl-6 d-flex justify-content-center align-items-center">
-                    <i
-                    class="bi bi-download"
-                    style="color: black; cursor: pointer; font-size: 1.5rem;"
-                    
-                    onclick="downloadCSV(`/static/data/biolip/split/site_tables/${proteinId}_bss.pkl`)"
-                    ></i>
+                    <img
+                        src="/static/images/download.svg"
+                        alt="Download Icon"
+                        style="width: 1.5rem; height: 1.5rem; cursor: pointer;"
+                        onclick="downloadCSV(`/static/data/biolip/split/site_tables/${proteinId}_bss.pkl`)"
+                    />
                     &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Download Table
                 </div>
                 <div class="col-3 col-md-1 col-lg-3 col-xl-6 d-flex justify-content-center align-items-center">
                     <a href="/help#sitePanelHelp">
-                        <i class="bi bi-info-circle" style="color: black; font-size: 1.5rem;"></i>
+                        <img src="/static/images/info.svg" alt="Info Icon" style="width: 1.5rem; height: 1.5rem;">
                     </a>
                     &nbsp;&nbsp;&nbsp;&nbsp;Column Information
                 </div>
@@ -334,9 +334,9 @@
         <div class="col-lg-4 d-flex flex-column order-3 column">
             <div class="row my-2 align-self-center">
                 <h5>
-                    Binding residues panel&nbsp;&nbsp;&nbsp;
+                    Binding Residues Panel&nbsp;&nbsp;&nbsp;
                     <a href="/help#siteResiduesPanelHelp">
-                        <i class="bi bi-info-circle" style="color: black;"></i>
+                        <img src="/static/images/info.svg" alt="Info Icon" style="width: 1.5rem; height: 1.5rem;">
                     </a>
                 </h5>
             </div>
@@ -363,7 +363,7 @@
                     </select>
                 </div>
                 <div class="col-sm-4 col-lg-8 col-xl-4 mb-2 d-flex justify-content-center align-items-center">
-                    <img src="/static/images/camera_JSU.svg" alt="Save Image" style="width: 2rem; height: 2rem; cursor: pointer;" 
+                    <img src="/static/images/camera.svg" alt="Save Image" style="width: 2rem; height: 2rem; cursor: pointer;" 
                     onclick="saveImage('newChartCanvas', `${segmentName}_residues_graph`)">
                 </div>
             </div>
@@ -393,16 +393,17 @@
             </div>
             <div class="row mb-0 justify-content-center custom-padding">
                 <div class="col-3 col-md-1 col-lg-3 col-xl-6 d-flex justify-content-center align-items-center">
-                    <i
-                    class="bi bi-download"
-                    style="color: black; cursor: pointer; font-size: 1.5rem;"
-                    onclick="downloadCSV(`/static/data/biolip/split/res_tables/${segmentName}_ress.pkl`)"
-                    ></i>
+                    <img
+                        src="/static/images/download.svg"
+                        alt="Download Icon"
+                        style="width: 1.5rem; height: 1.5rem; cursor: pointer;"
+                        onclick="downloadCSV(`/static/data/biolip/split/res_tables/${segmentName}_ress.pkl`)"
+                    />
                     &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Download Table
                 </div>
                 <div class="col-3 col-md-1 col-lg-3 col-xl-6 d-flex justify-content-center align-items-center">
                     <a href="/help#{{ header }}siteResiduesPanelHelp">
-                        <i class="bi bi-info-circle" style="color: black; font-size: 1.5rem;"></i>
+                        <img src="/static/images/info.svg" alt="Info Icon" style="width: 1.5rem; height: 1.5rem;">
                     </a>
                     &nbsp;&nbsp;&nbsp;&nbsp;Column Information
                 </div>
