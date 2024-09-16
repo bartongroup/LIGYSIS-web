@@ -472,6 +472,13 @@ document.getElementById('chartCanvas').addEventListener('click', function(e) { /
                     }
                 }
 
+                if (activeModel == "superposition") {
+                    viewer.zoomTo({model: protAtomsModel});
+                }
+                else {
+                    viewer.zoomTo({model: activeModel});
+                }
+
                 SuppClickedSiteResidues = null; // reset clicked site residues
                 AssemblyClickedSiteResidues = [];  // reset clicked site residues
 
@@ -520,6 +527,7 @@ document.getElementById('chartCanvas').addEventListener('click', function(e) { /
                             stick:{color: pointColor},
                         },
                     );
+                    viewer.zoomTo(SuppClickedSiteResidues);
                 }
                 else {
                     proteinChains.forEach((element) => { // in case of multiple copies of protein of interest
@@ -539,6 +547,7 @@ document.getElementById('chartCanvas').addEventListener('click', function(e) { /
                             stick:{color: pointColor},
                         },
                     );
+                    viewer.zoomTo({model: activeModel, or: AssemblyClickedSiteResidues});
                 }
                 if (labelsVisible) {
                     if (labelsHash[activeModel]["clickedSite"].hasOwnProperty(index)) {
@@ -640,6 +649,7 @@ document.getElementById('chartCanvas').addEventListener('click', function(e) { /
                         stick:{color: pointColor},
                     },
                 );
+                viewer.zoomTo(SuppClickedSiteResidues);
             }
     
             else {
@@ -660,6 +670,7 @@ document.getElementById('chartCanvas').addEventListener('click', function(e) { /
                         stick:{color: pointColor},
                     },
                 );
+                viewer.zoomTo({model: activeModel, or: AssemblyClickedSiteResidues});
             }
 
             if (labelsVisible) {

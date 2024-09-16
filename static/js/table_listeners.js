@@ -277,6 +277,12 @@ $('table#bss_table tbody').on('mouseover', 'tr', function () { // event listener
                     }
                 }
             }
+            if (activeModel == "superposition") {
+                viewer.zoomTo({model: protAtomsModel});
+            }
+            else {
+                viewer.zoomTo({model: activeModel});
+            }
         }
     }
     else {
