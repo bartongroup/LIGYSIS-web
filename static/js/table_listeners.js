@@ -376,6 +376,7 @@ $('table#bss_table tbody').on('mouseover', 'tr', function () { // event listener
                     stick:{color: siteColor},
                 }
             );
+            viewer.zoomTo(SuppClickedSiteResidues);
         }
     
         else {
@@ -396,6 +397,7 @@ $('table#bss_table tbody').on('mouseover', 'tr', function () { // event listener
                     stick:{color: siteColor},
                 }
             );
+            viewer.zoomTo({model: activeModel, or: AssemblyClickedSiteResidues});
         }
 
         if (index !== -1) {
