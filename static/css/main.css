@@ -7,7 +7,6 @@ header{
     padding-right: 5%;
     padding-top: 1rem;
     padding-bottom: 1rem;
-    /* flex: 1; */
 }
 
 h2 {
@@ -21,7 +20,6 @@ p {
 }
 
 .home {
-    /* padding: 15px 15px; */
     text-align: left;
     display: flex;
     flex-direction: column;
@@ -32,20 +30,11 @@ body {
     display: flex;
     flex-direction: column;
     min-height: 100vh;
-    /* margin: 0; */
 }
 
 main {
-    /* padding-top:1em; */
-    /* padding-bottom:1em; */
     flex-grow: 1;
 }
-
-/* footer {
-    padding-top:0;
-    padding-bottom:1em;
-} */
-
 
 a {
     color: #428bca;
@@ -140,7 +129,6 @@ strong {
     color: inherit;  /* This makes the table cell text color inherit the row's text color */
 }
 
-
 .sticky-header {
     position: sticky;
     top: 0;
@@ -171,9 +159,6 @@ strong {
     box-sizing: border-box;  /* Ensures that height is consistent */
 }
 
-
-
-
 .featurette-divider {
     border-top: 3px solid #734A98;
 }
@@ -190,13 +175,10 @@ strong {
 }
 
 .applet-border {
-    /* border: 2px solid #000000; */ /* Removed for new 3Dmol.js viewer */
     width: 100%; 
     max-width: 700px;
     max-height: 700px;
-    /* height: 100%;  */
     position: relative;
-    /* padding-bottom: 100%;  */
 }
 
 .navbar-brand {
@@ -226,15 +208,6 @@ img.responsive-logo {
     padding-right: 2rem;
 
 }
-
-/* #chartCanvas {
-    max-height: 446px;
-    max-width: 446px;
-}
-
-#bss_table {
-    max-width: 446px;
-} */
 
 .custom-padding {
     padding-right: calc(var(--bs-gutter-x) * .5);
@@ -294,8 +267,6 @@ img.responsive-logo {
     left: -5%;
     bottom: 0;
     top: 0;
-    
-    /* margin-right: calc(-5%); */
 } 
 
 .column:nth-child(1)::after {
@@ -307,23 +278,18 @@ img.responsive-logo {
     right: -5%;
     bottom: 0;
     top: 0;
-    
-    /* margin-right: calc(-5%); */
 }
 
 .ui-autocomplete {
     max-height: 200px;
     overflow-y: auto;
-    /* prevent horizontal scrollbar */
     overflow-x: hidden;
-    /* add padding to account for vertical scrollbar */
     padding-right: 20px;
 }
 
 .ui-menu-item .ui-menu-item-wrapper.ui-state-active {
     color: #734A98 !important;
 } 
-
 
 /* Custom dropdown styling */
 
@@ -357,10 +323,6 @@ img.responsive-logo {
 
 .dropup-content a:hover {background-color: #f1f1f1}
 
-/* .dropup:hover .dropup-content {
-    display: block;
-} */
-
 .dropup-button {
     background-color:#f1f1f1;
     color: black;
@@ -368,22 +330,5 @@ img.responsive-logo {
     font-size: 16px;
     border: 1px solid black;
     cursor: pointer;
-    /* outline: 1px solid black; Adds the outline */
     border-radius: 5px; /* Optional: Adds rounded corners */
 }
-
-
-/* .button-container {
-    display: flex;
-    justify-content: space-between;
-    width: 100%;
-}
-
-.button-container div {
-    flex-grow: 1;
-    margin: 0 10px;
-}
-
-input[type="button"] {
-    width: 100%;
-} */

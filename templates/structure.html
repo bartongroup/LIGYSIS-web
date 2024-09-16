@@ -122,50 +122,35 @@
 {% block main %}
 
 <div class="container-fluid">
-    <div class="row mb-1 align-items-center">
-        <div class="col-12 col-sm-8 col-md-6 col-lg-4 col-xl-2 d-flex flex-column align-items-center align-items-md-start">
-            <a href="https://www.uniprot.org/uniprotkb/{{ prot_id }}/entry">
-                <h1 class="mb-3 mb-md-0">
-                    {{ prot_id }}&nbsp;
-                </h1>
-            </a>
-        </div>
-        <div class="col-12 col-sm-8 col-md-6 col-lg-4 col-xl-3 d-flex flex-column align-items-center align-items-md-start">
-            <h2  class="mb-3 my-md-0">
-                &nbsp;{{ entry_name }}
-            </h2>
-        </div>
-        <div class="col-xl-4 d-flex flex-column align-items-center align-items-md-start">
-            <h3 class="mb-3 mb-md-0">
-                ({{ seg_stats[prot_id][seg_id]["strucs"]}}&nbsp;Structures,&nbsp;&nbsp;
-                {{ seg_stats[prot_id][seg_id]["ligs"]}}&nbsp;Ligands,&nbsp;&nbsp;
-                {{ seg_stats[prot_id][seg_id]["bss"]}}&nbsp;Binding Sites)
-            </h3>
-        </div>
-        <div class="col-12 col-sm-8 col-md-6 col-lg-4 col-xl-3 d-flex flex-column align-items-center align-items-md-end">
-            <select id="selectSegment" class="form-select" aria-label="Selecting structural segment">
-                <option selected>Segment {{ seg_id }} ({{ segment_reps[seg_id | int]["start"] }} - {{ segment_reps[seg_id | int]["end"] }})</option>
-                {% for key, value in segment_reps.items() if key != seg_id | int %}
-                    <option value="/results/{{ prot_id }}/{{ key }}">Segment {{ key}} ({{ value["start"] }} - {{ value["end"] }})</option>
-                {% endfor %}
-            </select>
-        </div>
-        
-    </div>
     <div class="row justify-content-around">
         <div id="3DMolAppletHolder" class="col-lg-4 col-sm-12 d-flex flex-column align-items-stretch justify-content-center align-self-start column order-2">
+            <div class="row my-2 custom-padding align-self-stretch justify-content-center">
+                <div class="col-xl-auto d-flex flex-column align-items-center align-self-center justify-content-center" style="padding-left: 0px; padding-right:0px;">
+                    <h3 style="margin-bottom:0px;">
+                        cAMP-dependent protein kinase catalytic subunit alpha
+                    </h3>
+                </div>
+            </div>
             <div class="row my-2 custom-padding align-self-stretch justify-content-between">
-                <div class="col d-flex align-items-center justify-content-center" style="padding-left:0px;">
-                    <h5 class="d-flex align-items-center" style="white-space: nowrap;">
+                <div class="col-auto d-flex align-items-center justify-content-start" style="padding-left:0px; padding-right: 0px;">
+                    <h5 class="d-flex align-items-center" style="white-space: nowrap; margin-bottom: 0px;">
                         <span>Structure Panel&nbsp;&nbsp;&nbsp;</span>
                             <a href="/help#structurePanelHelp" class="d-flex align-items-center" style="margin-left: 8px;">
                                 <img src="/static/images/info.svg" alt="Info Icon" style="width: 1.5rem; height: 1.5rem;">
                             </a>
                     </h5>
                 </div>
-                <div class="col d-flex align-items-center justify-content-end" style="padding-right:0px;">
+                <div class="col-12 col-sm-8 col-md-6 col-lg-4 col-xl-auto d-flex flex-column align-items-center align-self-center align-items-md-end" style="padding-left: 0px; padding-right:0px;">
+                    <select id="selectSegment" class="form-select" aria-label="Selecting structural segment">
+                        <option selected>Segment {{ seg_id }} ({{ segment_reps[seg_id | int]["start"] }} - {{ segment_reps[seg_id | int]["end"] }})</option>
+                        {% for key, value in segment_reps.items() if key != seg_id | int %}
+                            <option value="/results/{{ prot_id }}/{{ key }}">Segment {{ key}} ({{ value["start"] }} - {{ value["end"] }})</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div class="col-xl-auto d-flex align-items-center justify-content-end" style="padding-left: 0px; padding-right:0px;">
                     <div class="dropup">
-                        <button class="dropup-button" style="font-weight: bold; color: black;">Superposition</button>
+                        <button class="dropup-button" style="font-weight: bold; color: black; padding-top: 5px; padding-bottom: 5px;">Superposition</button>
                         <div class="dropup-content">
                             <a href="#" onclick="selectOption('Superposition')">Superposition</a>
                             <!-- Additional options will be populated here -->
@@ -263,34 +248,52 @@
                 <div class="col d-flex justify-content-center">
                     <div id="menu" class="row mb-2 align-items-center custom-padding">
                         <!-- First Column with Dropdown -->
-                        <div class="col-6 d-flex justify-content-center">
-                            <select id="toolSelect" class="form-select" style="border: 1px solid black; width: auto;">
+                        <div class="col-auto d-flex justify-content-center">
+                            <select id="toolSelect" class="form-select" style="border: 1px solid black; color: black; width: auto;">
                                 <option value="PyMol">PyMol</option>
                                 <option value="ChimeraX">ChimeraX</option>
                             </select>
                         </div>
                         <!-- Second Column with Button -->
-                        <div class="col-6 d-flex justify-content-center">
-                            <button class="btn btn-primary" onclick="executeFunction()">Download</button>
+                        <div class="col-auto d-flex justify-content-center">
+                            <button style="border: 1px solid black; color: black; display: flex; align-items: center; border-radius: 5px;  padding: 5px 10px;"  onclick="executeFunction()">
+                                &nbsp;&nbsp;<img src="/static/images/download.svg" alt="Download Icon" style="width: 1.5rem; height: 1.5rem; margin-right: 8px;">&nbsp;
+                            </button>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
         <div class="col-lg-3 col-sm-12 mb-3 d-flex flex-column column order-1">
-            <div class="row my-2 custom-padding align-self-center">
-                <h5>
-                    Binding Sites Panel&nbsp;&nbsp;&nbsp;
-                    <a href="/help#sitePanelHelp">
-                        <img src="/static/images/info.svg" alt="Info Icon" style="width: 1.5rem; height: 1.5rem;">
+            <div class="row my-2 align-self-stretch justify-content-around custom-padding">
+                <div class="col-xl-auto d-flex flex-column align-items-center align-items-md-start align-self-center justify-content-xl-end" style="padding-left: 0px; padding-right:0px;">
+                    <a href="https://www.uniprot.org/uniprotkb/{{ prot_id }}/entry">
+                        <h2>
+                            {{ prot_id }}&nbsp;
+                        </h2>
                     </a>
-                </h5>
+                </div>
+                <div class="col-xl-auto d-flex flex-column align-items-center align-items-md-start align-self-center justify-content-xl-end">
+                    <h2>
+                        &nbsp;{{ entry_name }}
+                    </h2>
+                </div>
+            </div>
+            <div class="row my-2 custom-padding align-self-stretch justify-content-center">
+                <div class="col-xl-auto d-flex flex-column align-items-center align-items-md-start align-self-center justify-content-xl-end" style="padding-left: 0px; padding-right:0px;">
+                    <h5 style="margin-bottom:0px;">
+                        Binding Sites Panel&nbsp;&nbsp;&nbsp;
+                        <a href="/help#sitePanelHelp">
+                            <img src="/static/images/info.svg" alt="Info Icon" style="width: 1.5rem; height: 1.5rem;">
+                        </a>
+                    </h5>
+                </div>
             </div>
             <div class="row mb-0 justify-content-center custom-padding">
                 <canvas id="chartCanvas" width="275" height="275"></canvas>
             </div>
             <div class="row mb-2 justify-content-around custom-padding">
-                <div class="col-6 col-sm-4 col-lg-8 col-xl-4 d-flex justify-content-center align-items-center">
+                <div class="col-6 col-sm-4 col-lg-8 col-xl-4 d-flex justify-content-center align-items-center" style="padding-left:0px; padding-right:0px">
                     <span style="font-weight: 500; font-size: 1.25rem;">Y</span>:&nbsp;&nbsp;&nbsp;
                     <select id="yAxisTitle">
                         {% for header in headings[1:] %}
@@ -298,7 +301,7 @@
                         {% endfor %}
                     </select>
                 </div>
-                <div class="col-6 col-sm-4 col-lg-8 col-xl-4 d-flex justify-content-center align-items-center">
+                <div class="col-6 col-sm-4 col-lg-8 col-xl-4 d-flex justify-content-center align-items-center" style="padding-left:0px; padding-right:0px">
                     <span style="font-weight: 500; font-size: 1.25rem;">X</span>:&nbsp;&nbsp;&nbsp;
                     <select id="xAxisTitle">
                         {% for header in headings[1:] %}
@@ -306,22 +309,19 @@
                         {% endfor %}
                     </select>
                 </div>
-                <div class="col-6 col-sm-4 col-lg-8 col-xl-4 d-flex justify-content-center">
+                <div class="col-6 col-sm-4 col-lg-8 col-xl-4 d-flex justify-content-center" style="padding-left:0px; padding-right:0px">
                     <img src="/static/images/camera.svg" alt="Save Image" style="width: 2rem; height: 2rem; cursor: pointer;" 
                     onclick="saveImage('chartCanvas', `${segmentName}_sites_graph`)">
                 </div>
             </div>
             <div class="row mb-0 justify-content-center custom-padding">
-                <div class="table-responsive px-0 uniwidthsans">
+                <div class="table-responsive px-0 uniwidthsans" style="margin-right: 0px;">
                     <table class="table table-bordered sortable"id="bss_table">
                         <thead class="sticky-header">
                             <tr class="table__header">
                                 {% for header in headings %}
                                 <th>
                                     <span data-toggle="tooltip" title= "{{ bs_table_tooltips[loop.index0] }}">{{ header }}</span>
-                                    <!-- <a href="/help#{{ header }}SiteHelp" data-toggle="tooltip" title= "{{ bs_table_tooltips[loop.index0] }}">
-                                        <i class="bi bi-info-circle" style="color: black;"></i>
-                                    </a> -->
                                 </th>
                                 {% endfor %}
                             </tr>
@@ -339,7 +339,7 @@
                 </div>
             </div>
             <div class="row mb-3 justify-content-center custom-padding">
-                <div class="col-3 col-md-1 col-lg-3 col-xl-6 d-flex justify-content-center align-items-center">
+                <div class="col-3 col-md-1 col-lg-3 col-xl-6 d-flex justify-content-center align-items-center" style="padding-left:0px; padding-right:0px">
                     <img
                         src="/static/images/download.svg"
                         alt="Download Icon"
@@ -348,7 +348,7 @@
                     />
                     &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Download Table
                 </div>
-                <div class="col-3 col-md-1 col-lg-3 col-xl-6 d-flex justify-content-center align-items-center">
+                <div class="col-3 col-md-1 col-lg-3 col-xl-6 d-flex justify-content-center align-items-center" style="padding-left:0px; padding-right:0px">
                     <a href="/help#sitePanelHelp">
                         <img src="/static/images/info.svg" alt="Info Icon" style="width: 1.5rem; height: 1.5rem;">
                     </a>
@@ -357,19 +357,30 @@
             </div>
         </div>
         <div class="col-lg-4 d-flex flex-column order-3 column">
-            <div class="row my-2 align-self-center">
-                <h5>
-                    Binding Residues Panel&nbsp;&nbsp;&nbsp;
-                    <a href="/help#siteResiduesPanelHelp">
-                        <img src="/static/images/info.svg" alt="Info Icon" style="width: 1.5rem; height: 1.5rem;">
-                    </a>
-                </h5>
+            <div class="row my-2 align-self-stretch justify-content-center custom-padding">
+                <div class="col-xl-auto d-flex flex-column align-items-center align-items-md-start align-self-center justify-content-xl-end" style="padding-left:0px; padding-right:0px">
+                    <h3 style="margin-top: 8px;">
+                        N<sub>Structures</sub>&nbsp;=&nbsp;{{ seg_stats[prot_id][seg_id]["strucs"]}};&nbsp;&nbsp;
+                        N<sub>Ligands</sub>&nbsp;=&nbsp;{{ seg_stats[prot_id][seg_id]["ligs"]}};&nbsp;&nbsp;
+                        N<sub>Binding Sites</sub>&nbsp;=&nbsp;{{ seg_stats[prot_id][seg_id]["bss"]}}&nbsp;
+                    </h3>
+                </div>
+            </div>
+            <div class="row my-2 custom-padding align-self-stretch justify-content-center">
+                <div class="col-auto d-flex align-items-center justify-content-start" style="padding-left:0px;">
+                    <h5 class="d-flex align-items-center" style="white-space: nowrap; margin-bottom: 0px;">
+                        Binding Residues Panel&nbsp;&nbsp;&nbsp;
+                        <a href="/help#siteResiduesPanelHelp" class="d-flex align-items-center" style="margin-left: 8px;">
+                            <img src="/static/images/info.svg" alt="Info Icon" style="width: 1.5rem; height: 1.5rem;">
+                        </a>
+                    </h5>
+                </div>
             </div>
             <div class="row mb-0 justify-content-center custom-padding">
                 <canvas id="newChartCanvas" width="650" height="420"></canvas>
             </div>
             <div class="row mb-0 justify-content-around custom-padding">
-                <div class="col-sm-4 col-lg-8 col-xl-4 mb-2 d-flex justify-content-center align-items-center">
+                <div class="col-sm-4 col-lg-8 col-xl-4 mb-2 d-flex justify-content-center align-items-center" style="padding-left:0px; padding-right:0px">
                     <span style="font-weight: 500; font-size: 1.25rem;">Y</span>:&nbsp;&nbsp;&nbsp;
                     <select id="yAxisTitle2" class="axis-dropdown2 y-axis-dropdown2">
                         <option selected hidden>MES</option>
@@ -378,7 +389,7 @@
                         {% endfor %}
                     </select>
                 </div>
-                <div class="col-sm-4 col-lg-8 col-xl-4 mb-2 d-flex justify-content-center align-items-center">
+                <div class="col-sm-4 col-lg-8 col-xl-4 mb-2 d-flex justify-content-center align-items-center" style="padding-left:0px; padding-right:0px">
                     <span style="font-weight: 500; font-size: 1.25rem;">X</span>:&nbsp;&nbsp;&nbsp;
                     <select id="xAxisTitle2" class="axis-dropdown2 x-axis-dropdown2">
                         <option selected hidden>DS</option>
@@ -387,13 +398,13 @@
                         {% endfor %}
                     </select>
                 </div>
-                <div class="col-sm-4 col-lg-8 col-xl-4 mb-2 d-flex justify-content-center align-items-center">
+                <div class="col-sm-4 col-lg-8 col-xl-4 mb-2 d-flex justify-content-center align-items-center" style="padding-left:0px; padding-right:0px">
                     <img src="/static/images/camera.svg" alt="Save Image" style="width: 2rem; height: 2rem; cursor: pointer;" 
                     onclick="saveImage('newChartCanvas', `${segmentName}_residues_graph`)">
                 </div>
             </div>
             <div class="row mb-1 justify-content-center custom-padding">
-                <div class="table-responsive px-0 uniwidthsans">
+                <div class="table-responsive px-0 uniwidthsans" style="margin-right: 0px;">
                     <table class="table table-bordered table-hover sortable" id="bs_ress_table">
                         <thead class="sticky-header">
                             <tr class="table__header">
@@ -417,7 +428,7 @@
                 </div>
             </div>
             <div class="row mb-0 justify-content-center custom-padding">
-                <div class="col-3 col-md-1 col-lg-3 col-xl-6 d-flex justify-content-center align-items-center">
+                <div class="col-3 col-md-1 col-lg-3 col-xl-6 d-flex justify-content-center align-items-center" style="padding-left:0px; padding-right:0px">
                     <img
                         src="/static/images/download.svg"
                         alt="Download Icon"
@@ -426,7 +437,7 @@
                     />
                     &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Download Table
                 </div>
-                <div class="col-3 col-md-1 col-lg-3 col-xl-6 d-flex justify-content-center align-items-center">
+                <div class="col-3 col-md-1 col-lg-3 col-xl-6 d-flex justify-content-center align-items-center" style="padding-left:0px; padding-right:0px">
                     <a href="/help#{{ header }}siteResiduesPanelHelp">
                         <img src="/static/images/info.svg" alt="Info Icon" style="width: 1.5rem; height: 1.5rem;">
                     </a>
