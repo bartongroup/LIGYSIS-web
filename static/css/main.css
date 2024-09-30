@@ -54,11 +54,11 @@ a:focus {
 
 
 .purple-link {
-    color: #734A98;
+    color: #3084c5;
 }
 
 .purple-link:hover {
-    color: #a067d2
+    color: #6fadde;
 }
 
 .nav-link:hover {
@@ -76,9 +76,9 @@ strong {
 }
 
 .btn-primary {
-    --bs-btn-bg: #734A98;
+    --bs-btn-bg: #3084c5;
     --bs-btn-border-color: black;
-    --bs-btn-hover-bg: #a067d2;
+    --bs-btn-hover-bg: #6fadde;
     --bs-btn-hover-border-color: black;
 }
 
@@ -160,11 +160,11 @@ strong {
 }
 
 .featurette-divider {
-    border-top: 3px solid #734A98;
+    border-top: 3px solid #3084c5;
 }
 
 .box {
-    border: 5px solid #734A98;
+    border: 5px solid #3084c5;
     border-radius: 5px;
     padding: 0px;
 }
@@ -222,7 +222,7 @@ img.responsive-logo {
 }
 
 .table-responsive::-webkit-scrollbar-thumb {
-    background-color: #734A98;
+    background-color: #3084c5;
     border-radius: 10px;
     border: 1px solid black;
 }
@@ -262,7 +262,7 @@ img.responsive-logo {
     content: "";
     height: 100%;
     background-color: transparent;
-    border-right: 2px dashed #b22222; /* or any color of your choice */
+    border-right: 2px dashed #3084c5; /* or any color of your choice */
     position: absolute;
     left: -5%;
     bottom: 0;
@@ -273,7 +273,7 @@ img.responsive-logo {
     content: "";
     height: 100%;
     background-color: transparent;
-    border-right: 2px dashed #b22222; /* or any color of your choice */
+    border-right: 2px dashed #3084c5; /* or any color of your choice */
     position: absolute;
     right: -5%;
     bottom: 0;

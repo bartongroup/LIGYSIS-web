@@ -326,7 +326,11 @@ The width of the pseudobonds represents the distance between the interacting ato
 
 ### READING INPUT DATA ###
 
-prot_ids = load_pickle(os.path.join(DATA_FOLDER, "biolip_up_ids_15000_accs.pkl")) # protein idshon
+#prot_ids = load_pickle(os.path.join(DATA_FOLDER, "biolip_up_ids_15000_accs.pkl")) # protein ids list
+
+LIGYSIS_prots_data = load_pickle(f'{DATA_FOLDER}/LIGYSIS_protein_names_dict.pkl')
+
+prot_ids = sorted(list(LIGYSIS_prots_data.keys()))
 
 #### FLASK APP ###
 
@@ -405,7 +409,13 @@ def results(prot_id, seg_id): # route for results site. Takes Prot ID and Seg ID
 
     seg_stats = load_pickle(os.path.join(STATS_FOLDER, "{}_stats.pkl".format(seg_name)))
 
-    entry_name = load_pickle(os.path.join(ENTRY_NAMES_FOLDER, "{}_name.pkl".format(prot_id)))[prot_id]
+    #entry_name = load_pickle(os.path.join(ENTRY_NAMES_FOLDER, "{}_name.pkl".format(prot_id)))[prot_id]
+    
+    entry_name = LIGYSIS_prots_data[prot_id]["entry"]
+
+    upid_name = LIGYSIS_prots_data[prot_id]["upid"]
+
+    prot_long_name = LIGYSIS_prots_data[prot_id]["prot_name_long"]
     
     seg_stats_converted = convert_numpy(seg_stats) # converting data type of Segment summary statistics
 
@@ -427,7 +437,7 @@ def results(prot_id, seg_id): # route for results site. Takes Prot ID and Seg ID
         'structure.html', data = data1, headings = headings, data2 = data2, cc_new = cc_new, colors = colors,
         seg_ress_dict = seg_ress_dict, prot_id = prot_id, seg_id = seg_id, segment_reps = segment_reps,
         first_site_data = first_site_data, bs_table_tooltips = bs_table_tooltips, bs_ress_table_tooltips = bs_ress_table_tooltips,
-        pdb2up_dict = pdb2up_dict_converted, up2pdb_dict = up2pdb_dict_converted, seg_stats = seg_stats_converted, entry_name = entry_name,
+        pdb2up_dict = pdb2up_dict_converted, up2pdb_dict = up2pdb_dict_converted, seg_stats = seg_stats_converted, entry_name = entry_name, upid_name = upid_name, prot_long_name = prot_long_name,
         simple_pdbs = simple_pdbs_full_path, assembly_pdb_ids = assembly_pdb_ids, prot_atoms_rep = prot_atoms_rep
     )
 
