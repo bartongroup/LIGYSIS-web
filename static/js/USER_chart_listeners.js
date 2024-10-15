@@ -157,10 +157,15 @@ document.getElementById('chartCanvas').addEventListener('mousemove', function(e)
 
             if (activeModel == "superposition") {
                 siteSuppPDBResNums = seg_ress_dict[pointLabel]
-                    .filter(el => Up2PdbDict[repPdbId][repPdbChainId].hasOwnProperty(el)) // this accounts not for missing residues in the structure (unresolved)
-                    .map(el => Up2PdbDict[repPdbId][repPdbChainId][el]);
+                    .filter(el => Up2PdbDict.hasOwnProperty(el))
+                    .flatMap(el => {
+                        let dataArray = Up2PdbDict[el]; // Get the array of tuples
+                        return dataArray.map(data => {
+                            return { chain: data[0], resi: data[1] }; // Extract chain and resi for each element
+                        });
+                    });
 
-                SuppHoveredSiteResidues = {model: protAtomsModel, resi: siteSuppPDBResNums, chain: repPdbChainId, not: {atom: bboneAtoms}};
+                SuppHoveredSiteResidues = {model: protAtomsModel, or: siteSuppPDBResNums, not: {atom: bboneAtoms}}
 
                 viewer.setStyle(
                     SuppHoveredSiteResidues,
@@ -369,11 +374,11 @@ document.getElementById('chartCanvas').addEventListener('click', function(e) { /
 
         let pointColor = chartColors[index]; // color of the clicked data point
 
-        let fullPointLabel = segmentName + "_" + pointLabel;
+        let fullPointLabel = jobId + "_" + pointLabel;
 
         $.ajax({ // AJAX request to get the table data from the server
             type: 'POST', // POST request
-            url: '/get-table', // URL to send the request to
+            url: '/user-get-table', // URL to send the request to
             contentType: 'application/json;charset=UTF-8', // content type
             data: JSON.stringify({'label': fullPointLabel}), // data to send
             success: function(response) { // function to execute when the request is successful
@@ -515,10 +520,15 @@ document.getElementById('chartCanvas').addEventListener('click', function(e) { /
 
                 if (activeModel == "superposition") {
                     siteSuppPDBResNums = seg_ress_dict[index]
-                        .filter(el => Up2PdbDict[repPdbId][repPdbChainId].hasOwnProperty(el)) // this accounts not for missing residues in the structure (unresolved)
-                        .map(el => Up2PdbDict[repPdbId][repPdbChainId][el]);
+                        .filter(el => Up2PdbDict.hasOwnProperty(el))
+                        .flatMap(el => {
+                            let dataArray = Up2PdbDict[el]; // Get the array of tuples
+                            return dataArray.map(data => {
+                                return { chain: data[0], resi: data[1] }; // Extract chain and resi for each element
+                            });
+                        });
                     
-                    SuppClickedSiteResidues = {model: protAtomsModel, resi: siteSuppPDBResNums, chain: repPdbChainId, not: {atom: bboneAtoms}};
+                    SuppClickedSiteResidues = {model: protAtomsModel, or: siteSuppPDBResNums, not: {atom: bboneAtoms}};
 
                     viewer.setStyle(
                         SuppClickedSiteResidues,
@@ -560,10 +570,12 @@ document.getElementById('chartCanvas').addEventListener('click', function(e) { /
                         labelsHash[activeModel]["clickedSite"][index] = [];
                         if (activeModel == "superposition") {
                             for (siteSuppPDBResNum of siteSuppPDBResNums) {
-                                let resSel = {model: protAtomsModel, resi: siteSuppPDBResNum, chain: repPdbChainId};
-                                let resName = viewer.selectedAtoms(resSel)[0].resn;
+                                let resChain = siteSuppPDBResNum['chain'];
+                                let resNum = siteSuppPDBResNum['resi'];
+                                let resSel = {model: protAtomsModel, resi: resNum, chain: resChain}
+                                let resName = viewer.selectedAtoms(resSel)[0].resn
                                 let label = viewer.addLabel(
-                                    resName + String(Pdb2UpDict[repPdbId][repPdbChainId][siteSuppPDBResNum]),
+                                    resName + String(Pdb2UpDict[resChain][resNum]),
                                     {
                                         alignment: 'center', backgroundColor: 'white', backgroundOpacity: 1,
                                         borderColor: 'black', borderOpacity: 1, borderThickness: 2,
@@ -637,10 +649,15 @@ document.getElementById('chartCanvas').addEventListener('click', function(e) { /
 
             if (activeModel == "superposition") {
                 siteSuppPDBResNums = seg_ress_dict[index]
-                    .filter(el => Up2PdbDict[repPdbId][repPdbChainId].hasOwnProperty(el)) // this accounts not for missing residues in the structure (unresolved)
-                    .map(el => Up2PdbDict[repPdbId][repPdbChainId][el]);
-                
-                SuppClickedSiteResidues = {model: protAtomsModel, resi: siteSuppPDBResNums, chain: repPdbChainId, not: {atom: bboneAtoms}};
+                        .filter(el => Up2PdbDict.hasOwnProperty(el))
+                        .flatMap(el => {
+                            let dataArray = Up2PdbDict[el]; // Get the array of tuples
+                            return dataArray.map(data => {
+                                return { chain: data[0], resi: data[1] }; // Extract chain and resi for each element
+                            });
+                        });
+                    
+                SuppClickedSiteResidues = {model: protAtomsModel, or: siteSuppPDBResNums, not: {atom: bboneAtoms}};
 
                 viewer.setStyle(
                     SuppClickedSiteResidues,
@@ -684,10 +701,12 @@ document.getElementById('chartCanvas').addEventListener('click', function(e) { /
                     labelsHash[activeModel]["clickedSite"][index] = [];
                     if (activeModel == "superposition") {
                         for (siteSuppPDBResNum of siteSuppPDBResNums) {
-                            let resSel = {model: suppModels, resi: siteSuppPDBResNum}
+                            let resChain = siteSuppPDBResNum['chain'];
+                            let resNum = siteSuppPDBResNum['resi'];
+                            let resSel = {model: protAtomsModel, resi: resNum, chain: resChain}
                             let resName = viewer.selectedAtoms(resSel)[0].resn
                             let label = viewer.addLabel(
-                                resName + String(Pdb2UpDict[repPdbId][repPdbChainId][siteSuppPDBResNum]),
+                            resName + String(Pdb2UpDict[resChain][resNum]),
                                 {
                                     alignment: 'center', backgroundColor: 'white', backgroundOpacity: 1,
                                     borderColor: 'black', borderOpacity: 1, borderThickness: 2,
@@ -789,10 +808,14 @@ document.getElementById('newChartCanvas').addEventListener('mousemove', function
                         {...protAtoms, model: protAtomsModel},
                         {cartoon: {style: cartoonStyle, color: defaultColor, arrows: cartoonArrows, tubes: cartoonTubes, opacity: cartoonOpacity, thickness: cartoonThickness,}}
                     ); // this is done so only a single point is highlighted when hovered on (some are really close.)
-                    SuppPDBResNum = Up2PdbDict[repPdbId][repPdbChainId][newPointLabel];
+                    SuppPDBResNum = Up2PdbDict[newPointLabel]; // this is now an array (anticipating multimeric structures)
+                    let SuppPDBResNumSel = SuppPDBResNum.map(tuple => {
+                        return { chain: tuple[0], resi: tuple[1] };
+                    });
+                    
                     if (SuppPDBResNum != undefined) {
                         viewer.setStyle(
-                            {model: protAtomsModel, chain: repPdbChainId, resi: SuppPDBResNum, not: {atom: bboneAtoms}},
+                            {model: protAtomsModel, or: SuppPDBResNumSel, not: {atom: bboneAtoms}},
                             {
                                 cartoon:{style: cartoonStyle, color: pointColor, arrows: cartoonArrows, tubes: cartoonTubes, opacity: cartoonOpacity, thickness: cartoonThickness,},
                                 stick:{color: pointColor},
@@ -838,21 +861,28 @@ document.getElementById('newChartCanvas').addEventListener('mousemove', function
                     labelsHash[activeModel]["hoveredRes"] = [];
 
                     if (activeModel == "superposition") {
-                        if (SuppPDBResNum != undefined) {
-                            let resSel = {model: protAtomsModel, resi: SuppPDBResNum, chain: repPdbChainId};
-                            let resName = viewer.selectedAtoms(resSel)[0].resn
-                            let label = viewer.addLabel(
-                                resName + String(Pdb2UpDict[repPdbId][repPdbChainId][SuppPDBResNum]),
-                                {
-                                    alignment: 'center', backgroundColor: 'white', backgroundOpacity: 1,
-                                    borderColor: 'black', borderOpacity: 1, borderThickness: 2,
-                                    font: 'Arial', fontColor: pointColor, fontOpacity: 1, fontSize: 12,
-                                    inFront: true, screenOffset: [0, 0, 0], showBackground: true
-                                },
-                                resSel,
-                                true,
-                            );
-                            labelsHash[activeModel]["hoveredRes"].push(label);
+                        if (SuppPDBResNum != undefined) { // this is now an array of (chain, resi) anticipating for multimeric structures
+                            let SuppPDBResNumSel = SuppPDBResNum.map(tuple => {
+                                return { chain: tuple[0], resi: tuple[1] };
+                            });
+                            SuppPDBResNumSel.forEach((residue) => {
+                                let resChain = residue['chain'];
+                                let resNum = residue['resi'];
+                                let resSel = {model: protAtomsModel, resi: resNum, chain: resChain};
+                                let resName = viewer.selectedAtoms(resSel)[0].resn
+                                let label = viewer.addLabel(
+                                    resName + String(Pdb2UpDict[resChain][resNum]),
+                                    {
+                                        alignment: 'center', backgroundColor: 'white', backgroundOpacity: 1,
+                                        borderColor: 'black', borderOpacity: 1, borderThickness: 2,
+                                        font: 'Arial', fontColor: pointColor, fontOpacity: 1, fontSize: 12,
+                                        inFront: true, screenOffset: [0, 0, 0], showBackground: true
+                                    },
+                                    resSel,
+                                    true,
+                                );
+                                labelsHash[activeModel]["hoveredRes"].push(label);
+                                });
                         }
                         else {
                             console.log(`Residue ${newPointLabel} not found in the structure!`);

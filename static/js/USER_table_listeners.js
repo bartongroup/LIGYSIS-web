@@ -448,7 +448,6 @@ $('table#bss_table tbody').on('mouseover', 'tr', function () { // event listener
                 labelsHash[activeModel]["clickedSite"][rowId] = [];
                 if (activeModel == "superposition") {
                     for (siteSuppPDBResNum of siteSuppPDBResNums) {
-                        
                         let resChain = siteSuppPDBResNum['chain'];
                         let resNum = siteSuppPDBResNum['resi'];
                         let resSel = {model: protAtomsModel, resi: resNum, chain: resChain}
@@ -535,7 +534,7 @@ $('table#bs_ress_table tbody').on('mouseover', 'tr', function () { // event list
         resetChartStyles(newChart, index, "#ffff99", 10, 16); // changes chart styles to highlight the binding site
 
         if (activeModel == "superposition") { // in this case, only one residue as this is a supperposition of single chains
-            SuppPDBResNum = Up2PdbDict[repPdbId][repPdbChainId][rowId];
+            SuppPDBResNum = Up2PdbDict[rowId]; // this is an array of tuples, anticipating multimeric structures
             if (SuppPDBResNum !== undefined) {
                 viewer.setStyle(
                     {model: protAtomsModel, chain: repPdbChainId, resi: SuppPDBResNum, not: {atom: bboneAtoms}},
