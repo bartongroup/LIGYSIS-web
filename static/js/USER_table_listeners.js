@@ -535,9 +535,12 @@ $('table#bs_ress_table tbody').on('mouseover', 'tr', function () { // event list
 
         if (activeModel == "superposition") { // in this case, only one residue as this is a supperposition of single chains
             SuppPDBResNum = Up2PdbDict[rowId]; // this is an array of tuples, anticipating multimeric structures
+            let SuppPDBResNumSel = SuppPDBResNum.map(tuple => {
+                return { chain: tuple[0], resi: tuple[1] };
+            });
             if (SuppPDBResNum !== undefined) {
                 viewer.setStyle(
-                    {model: protAtomsModel, chain: repPdbChainId, resi: SuppPDBResNum, not: {atom: bboneAtoms}},
+                    {model: protAtomsModel, or: SuppPDBResNumSel, not: {atom: bboneAtoms}},
                     {
                         cartoon:{style: cartoonStyle, color: rowColorHex, arrows: cartoonArrows, tubes: cartoonTubes, opacity: cartoonOpacity, thickness: cartoonThickness,},
                         stick:{color: rowColorHex},
@@ -576,20 +579,27 @@ $('table#bs_ress_table tbody').on('mouseover', 'tr', function () { // event list
             if (activeModel == "superposition") {
                 if (SuppPDBResNum !== undefined) {
                     labelsHash[activeModel]["hoveredRes"] = [];
-                    let resSel = {model: protAtomsModel, resi: SuppPDBResNum, chain: repPdbChainId}
-                    let resName = viewer.selectedAtoms(resSel)[0].resn
-                    let label = viewer.addLabel(
-                        resName + String(Pdb2UpDict[repPdbId][repPdbChainId][SuppPDBResNum]),
-                        {
-                            alignment: 'center', backgroundColor: 'white', backgroundOpacity: 1,
-                            borderColor: 'black', borderOpacity: 1, borderThickness: 2,
-                            font: 'Arial', fontColor: rowColorHex, fontOpacity: 1, fontSize: 12,
-                            inFront: true, screenOffset: [0, 0, 0], showBackground: true
-                        },
-                        resSel,
-                        true,
-                    );
-                    labelsHash[activeModel]["hoveredRes"].push(label);
+                    let SuppPDBResNumSel = SuppPDBResNum.map(tuple => {
+                        return { chain: tuple[0], resi: tuple[1] };
+                    });
+                    SuppPDBResNumSel.forEach((residue) => {
+                        let resChain = residue['chain'];
+                        let resNum = residue['resi'];
+                        let resSel = {model: protAtomsModel, resi: resNum, chain: resChain};
+                        let resName = viewer.selectedAtoms(resSel)[0].resn
+                        let label = viewer.addLabel(
+                            resName + String(Pdb2UpDict[resChain][resNum]),
+                            {
+                                alignment: 'center', backgroundColor: 'white', backgroundOpacity: 1,
+                                borderColor: 'black', borderOpacity: 1, borderThickness: 2,
+                                font: 'Arial', fontColor: rowColorHex, fontOpacity: 1, fontSize: 12,
+                                inFront: true, screenOffset: [0, 0, 0], showBackground: true
+                            },
+                            resSel,
+                            true,
+                        );
+                        labelsHash[activeModel]["hoveredRes"].push(label);
+                    });
                 }
             }
             else {
@@ -635,7 +645,7 @@ $('table#bs_ress_table tbody').on('mouseover', 'tr', function () { // event list
             labelsHash[activeModel]["hoveredRes"] = [];
         }
 
-        let PDBResNum = Up2PdbDict[repPdbId][repPdbChainId][rowId];
+        //let PDBResNum = Up2PdbDict[rowId];
 
         if (activeModel == "superposition") {
             viewer.setStyle(
