@@ -21,19 +21,14 @@
     const chartColors = {{ colors | tojson }}
     const cc = {{ cc_new | tojson }}
     const seg_ress_dict = {{ seg_ress_dict | tojson }}
-    const proteinId = "PROTEIN_ID_PLACEHOLDER"
-    const segmentId = "SEGMENT_ID_PLACEHOLDER"
-    const segmentName = proteinId + "_" + segmentId
+    const jobId = {{ job_id | tojson }}
     
     let newChartData = {{ first_site_data | tojson }}
     let headings = {{ headings | tojson }}
     let segStats = {{ seg_stats | tojson  }}
-    let protAtomsRep = {{ prot_atoms_rep | tojson }}
-    let [repPdbId, repPdbChainId] = protAtomsRep.split("_");
-    // let repStruc = segmentReps[segmentId]["rep"]
-    // let [repPdbId, repPdbChainId] = repStruc.split("_");
+    let protAtomsStruc = {{ prot_atoms_struc | tojson }}
 
-    console.log(`Reading SIFTS mapping for ${repPdbId} chain ${repPdbChainId}`);
+    console.log(`Reading SIFTS mapping for ${protAtomsStruc}`);
 
     const Pdb2UpDict = {{ pdb2up_dict | tojson   }}
     const Up2PdbDict = {{ up2pdb_dict  | tojson  }}
@@ -154,7 +149,7 @@
             <div class="row mb-2 custom-padding">
                 <div style="border: 2px solid black;" class="d-flex px-0">
                     <div id="container-01" style="height: 598px; width: 598px;" class="applet-border d-flex">
-                        <script src="/static/js/3DMol_applet_DEV.js"></script>
+                        <script src="/static/js/USER_3DMol_applet.js"></script>
                     </div>
                 </div>
             </div>
@@ -441,9 +436,8 @@
     </div>
 </div>
 <script src="/static/js/charts.js"></script>
-<script src="/static/js/table_listeners.js"></script>
-<script src="/static/js/chart_listeners.js"></script>
-<script src="/static/js/change_segment.js"></script>
+<script src="/static/js/USER_table_listeners.js"></script>
+<script src="/static/js/USER_chart_listeners.js"></script>
 <script src="/static/js/3DMol_resize.js"></script>
 <script src="/static/js/3DMol_toggle_surfs.js"></script>
 <script src="/static/js/3DMol_open_assemblies.js"></script>
