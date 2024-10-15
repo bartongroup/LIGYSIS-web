@@ -1,0 +1,792 @@
+{% extends 'base.html' %}
+
+{% block head %}
+
+<title>LIGYSIS results</title>
+
+<script src="https://code.jquery.com/jquery-3.6.1.min.js"></script>
+
+<script src="https://www.kryogenix.org/code/browser/sorttable/sorttable.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/chartjs-plugin-annotation/1.4.0/chartjs-plugin-annotation.js"></script>
+
+<script src="/static/js/event_functions.js"></script>
+
+<script src="https://3Dmol.org/build/3Dmol-min.js"></script>     
+<script src="https://3Dmol.org/build/3Dmol.ui-min.js"></script> 
+
+
+<script> // some variable definitions from the server
+    const chartData = {{ data | tojson }}
+    const chartColors = {{ colors | tojson }}
+    const cc = {{ cc_new | tojson }}
+    const seg_ress_dict = {{ seg_ress_dict | tojson }}
+    const proteinId = "PROTEIN_ID_PLACEHOLDER"
+    const segmentId = "SEGMENT_ID_PLACEHOLDER"
+    const segmentName = proteinId + "_" + segmentId
+    
+    let newChartData = {{ first_site_data | tojson }}
+    let headings = {{ headings | tojson }}
+    let segStats = {{ seg_stats | tojson  }}
+    let protAtomsRep = {{ prot_atoms_rep | tojson }}
+    let [repPdbId, repPdbChainId] = protAtomsRep.split("_");
+    // let repStruc = segmentReps[segmentId]["rep"]
+    // let [repPdbId, repPdbChainId] = repStruc.split("_");
+
+    console.log(`Reading SIFTS mapping for ${repPdbId} chain ${repPdbChainId}`);
+
+    const Pdb2UpDict = {{ pdb2up_dict | tojson   }}
+    const Up2PdbDict = {{ up2pdb_dict  | tojson  }}
+
+    let Pdb2UpMapAssembly; // this gets populated by the PDB --> UniProt mapping for the active assembly model
+    let Up2PdbMapAssembly; // this gets populated by the UniProt --> PDB mapping for the active assembly model
+    let Chain2AccMapAssembly; // this gets populated by the Chain ID --> UniProt ID mapping for the active assembly model
+    let chainsMapAssembly; // this gets populated by chain remapping data (BIO --> ASYM unit) for the active assembly model
+    let proteinChains; // chain IDs corresponding to the protein of interest
+    
+    const simplePdbs = {{ simple_pdbs | tojson }}
+    const assemblyPdbIds = {{ assembly_pdb_ids | tojson }}
+
+    let surfaceVisible = false;
+    let labelsVisible = false;
+    let watersVisible = false;
+    let ligandsVisible = false;
+    let sitePointClicked = false;
+    let siteRowClicked = false;
+    let wholeSurf;
+    let surfsDict = {"superposition": {}, };
+    let exploreVisible = false;
+    let contactsVisible = false;
+
+    let clickedPointLabel = null;
+    let activeModel = 'superposition';
+    let activeModelSurf;
+
+    let contactCylinders = {};
+    let cylinderLabels = {};
+    let bindingRess = [];
+    let bindingLigs = [];
+    //let labelsHash = {"clickedSite": [], "hoveredRes": [], "contactSites": []};
+    let labelsHash = {};
+
+    let clickedSite = null;
+
+    let AssemblyPDBResNums;
+    let SuppPDBResNum;
+    let siteSuppPDBResNums;
+    let siteAssemblyPDBResNums;
+
+    let AssemblyClickedSiteResidues = [];
+    let AssemblyHoveredSiteResidues = [];
+    let AssemblyClickedResidue = [];
+    let AssebmlyHoveredResidue = [];
+
+    let SuppClickedSiteResidues = null;
+    let SuppHoveredSiteResidues = null;
+    let SuppClickedResidue = null;
+    let SuppHoveredResidue = null;
+
+    // variables to format viewer  styles
+    const outlineWidth = 0.0625;
+    const outlineColor = 'black';
+    const cartoonThickness = 0.25;
+    const cartoonOpacity = 1.0;
+    const cartoonStyle = 'oval';
+    const cartoonArrows = true;
+    const cartoonTubes = false;
+    const stickRadius = 0.25;
+    const sphereRadius = 0.20;
+    
+    const waterColor = 'gold';
+    const bboneAtoms = ['N', 'C', 'O']; // backbone atoms that are not displayed as sticks
+    const defaultColor = 'white';
+    const bgColor = 'white';
+
+    const surfHighOpacity = 0.95;
+    const surfMediumOpacity = 0.85;
+    const surfLowOpacity = 0.75;
+    const surfHiddenOpacity = 0.0;
+
+    let suppLigsSels = {};
+    const canAas = ['CYS', 'MET', 'HIS', 'GLU', 'ASP', 'LYS', 'ARG', 'SER', 'THR', 'ASN', 'GLN', 'TRP', 'TYR', 'PHE', 'ILE', 'LEU', 'VAL', 'ALA', 'PRO', 'GLY'];
+    const modAas = ['TPO', 'SEP', 'PTR', 'PYL', 'MLY', 'MSE', 'CSO', 'CME', 'CSD', 'CSW', 'CSX', 'CSS', 'CSH', 'CSL', 'CSZ', 'CSK', 'CSM', 'CSR', 'CSS', 'CSU'];
+    const allAas = canAas.concat(modAas);
+    const protAtoms = {resn: allAas};  
+    const hetAtoms = {not: protAtoms}; // all non-protein atoms
+    const hetAtomsNotHoh = {and: [hetAtoms, {not: {resn: 'HOH'}}]}; // all non-protein atoms except water
+    const hohAtoms = {resn: 'HOH'}; // all water atoms
+</script>
+
+{% endblock %}
+
+{% block main %}
+
+<div class="container-fluid">
+    <div class="row justify-content-around">
+        <div id="3DMolAppletHolder" class="col-lg-4 col-sm-12 d-flex flex-column align-items-stretch justify-content-center align-self-start column order-2">
+            <div class="row my-2 custom-padding align-self-stretch justify-content-center">
+                <div class="col-xl-auto d-flex flex-column align-items-center align-self-center justify-content-center" style="padding-left: 0px; padding-right:0px;">
+                    <h3 style="margin-bottom:0px;">
+                        {{ prot_long_name }}
+                        <!-- cAMP-dependent protein kinase catalytic subunit alpha -->
+                    </h3>
+                </div>
+            </div>
+            <div class="row my-2 custom-padding align-self-stretch justify-content-between">
+                <div class="col-auto d-flex align-items-center justify-content-start" style="padding-left:0px; padding-right: 0px;">
+                    <h5 class="d-flex align-items-center" style="white-space: nowrap; margin-bottom: 0px;">
+                        <span>Structure Panel&nbsp;&nbsp;&nbsp;</span>
+                            <a href="/help#structurePanelHelp" class="d-flex align-items-center" style="margin-left: 8px;">
+                                <img src="/static/images/info.svg" alt="Info Icon" style="width: 1.5rem; height: 1.5rem;">
+                            </a>
+                    </h5>
+                </div>
+                <div class="col-xl-auto d-flex align-items-center justify-content-end" style="padding-left: 0px; padding-right:0px;">
+                    <div class="dropup">
+                        <button class="dropup-button" style="font-weight: bold; color: black; padding-top: 5px; padding-bottom: 5px;">Superposition</button>
+                        <div class="dropup-content">
+                            <a href="#" onclick="selectOption('Superposition')">Superposition</a>
+                            <!-- Additional options will be populated here -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row mb-2 custom-padding">
+                <div style="border: 2px solid black;" class="d-flex px-0">
+                    <div id="container-01" style="height: 598px; width: 598px;" class="applet-border d-flex">
+                        <script src="/static/js/3DMol_applet_DEV.js"></script>
+                    </div>
+                </div>
+            </div>
+            <div class="row mb-2 justify-content-between align-items-stretch custom-padding">
+                <div class="col-auto justify-content-start" style="padding-left:0px; padding-right:0px;">
+                    <button id="surfButton" style="border: 1px solid black; border-width: 1; border-color: #ffa500; color: #ffa500; font-weight: normal; display: flex; align-items: center; border-radius: 5px; padding: 5px 10px;" onclick="toggleSurfaceVisibility()">
+                        SURFACE ✘
+                    </button>
+                </div>
+                
+                <div class="col-auto justify-content-center" style="padding-left:0px; padding-right:0px;">
+                    <button id="labelButton" style="border: 1px solid black; border-width: 1; border-color: #ffa500; color: #ffa500; font-weight: normal; display: flex; align-items: center; border-radius: 5px; padding: 5px 10px;" onclick="toggleLabelsVisibility()">
+                        LABELS ✘
+                    </button>
+                </div>
+                
+                <div class="col-auto justify-content-center" style="padding-left:0px; padding-right:0px;">
+                    <button id="ligandButton" style="border: 1px solid black; border-width: 1; border-color: #ffa500; color: #ffa500; font-weight: normal; display: flex; align-items: center; border-radius: 5px; padding: 5px 10px;" onclick="toggleLigandsVisibility()">
+                        LIGANDS ✘
+                    </button>
+                </div>
+                
+                <div class="col-auto justify-content-center" style="padding-left:0px; padding-right:0px;">
+                    <button id="waterButton" style="border: 1px solid black; border-width: 1; border-color: #ffa500; color: #ffa500; font-weight: normal; display: flex; align-items: center; border-radius: 5px; padding: 5px 10px;" onclick="toggleWatersVisibility()">
+                        WATERS ✘
+                    </button>
+                </div>
+                
+                <div class="col-auto justify-content-end" style="padding-left:0px; padding-right:0px;">
+                    <button id="contactsButton" style="border: 1px solid darkgray; border-width: 1; color: darkgray; font-weight: normal; display: flex; align-items: center; border-radius: 5px; padding: 5px 10px;" onclick="toggleContactsVisibility()" disabled>
+                        CONTACTS ✘
+                    </button>
+                </div>
+                
+            </div> 
+            <div class="row mb-2 justify-content-between align-items-stretch custom-padding">
+                <div class="col-auto justify-content-start" style="padding-left:0px; padding-right:0px;">
+                    <button id="saveArpeggioDataButton" 
+                            style="border: 1px solid darkgray; color: darkgray; display: flex; align-items: center; border-radius: 5px; padding: 5px 10px;" 
+                            onclick="saveAssemblyContactData()" 
+                            disabled>
+                            &nbsp;<img id="saveAssemblyContactsDownloadIcon" src="/static/images/download_gray.svg" alt="Download Icon" style="width: 1.5rem; height: 1.5rem; margin-right: 8px;">
+                            &nbsp;Current Assembly Contacts&nbsp;
+                    </button>
+                </div>                
+                <div class="col-auto justify-content-center" style="padding-left:0px; padding-right:0px;">
+                    <img src="/static/images/camera.svg" alt="Save Image" style="width: 2rem; height: 2rem; cursor: pointer;" 
+                    onclick="saveImage('3DmolCanvas', `${segmentName}_struc`)">
+                </div>
+                <div class="col-auto justify-content-end" style="padding-left:0px; padding-right:0px;">
+                    <button id="saveAllArpeggioDataButton" 
+                            style="border: 1px solid black; color: black; display: flex; align-items: center; border-radius: 5px; padding: 5px 10px;" 
+                            onclick="saveAllAssembliesContactData()">
+                            &nbsp;<img src="/static/images/download.svg" alt="Download Icon" style="width: 1.5rem; height: 1.5rem; margin-right: 8px;">
+                        &nbsp;<b>ALL</b>&nbsp;Assemblies Contacts&nbsp;
+                    </button>
+                </div>
+            </div>
+            <div class="row mb-2 justify-content-between align-items-stretch custom-padding">
+                <div class="col-auto justify-content-start" style="padding-left:0px; padding-right:0px;">
+                    <button id="saveAssemblyButton" 
+                            style="border: 1px solid darkgray; color: darkgray; display: flex; align-items: center; border-radius: 5px; padding: 5px 10px;" 
+                            onclick="showMenu('saveAssembly')" 
+                            disabled>
+                            &nbsp;<img id="saveAssemblyDownloadIcon" src="/static/images/download_gray.svg" alt="Download Icon" style="width: 1.5rem; height: 1.5rem; margin-right: 8px;">
+                            &nbsp;Current Assembly&nbsp;
+                    </button>
+                </div>
+                <div class="col-auto justify-content-center" style="padding-left:0px; padding-right:0px;">
+                    <button id="saveSuppButton" style="border: 1px solid black; color: black; display: flex; align-items: center; border-radius: 5px; padding: 5px 10px;" onclick="showMenu('saveSuperposition')">
+                        &nbsp;<img src="/static/images/download.svg" alt="Download Icon" style="width: 1.5rem; height: 1.5rem; margin-right: 8px;">
+                        &nbsp;Superposition&nbsp;
+                    </button>
+                </div>
+                <div class="col-auto justify-content-end" style="padding-left:0px; padding-right:0px;">
+                    <button id="saveAssembliesButton" style="border: 1px solid black; color: black; display: flex; align-items: center; border-radius: 5px;  padding: 5px 10px;" onclick="showMenu('saveAllAssemblies')">
+                        &nbsp;<img src="/static/images/download.svg" alt="Download Icon" style="width: 1.5rem; height: 1.5rem; margin-right: 8px;">
+                        &nbsp;<b>ALL</b>&nbsp;Assemblies&nbsp;
+                    </button>
+                </div>
+            </div>
+            <div id="menuRow" class="row mb-2 justify-content-around align-items-stretch custom-padding" style="display: none;">
+                <!-- Dropdown Menu for selection -->
+                <div class="col d-flex justify-content-center">
+                    <div id="menu" class="row mb-2 align-items-center custom-padding">
+                        <!-- First Column with Dropdown -->
+                        <div class="col-auto d-flex justify-content-center">
+                            <select id="toolSelect" class="form-select" style="border: 1px solid black; color: black; width: auto;">
+                                <option value="PyMol">PyMol</option>
+                                <option value="ChimeraX">ChimeraX</option>
+                            </select>
+                        </div>
+                        <!-- Second Column with Button -->
+                        <div class="col-auto d-flex justify-content-center">
+                            <button style="border: 1px solid black; color: black; display: flex; align-items: center; border-radius: 5px;  padding: 5px 10px;"  onclick="executeFunction()">
+                                &nbsp;&nbsp;<img src="/static/images/download.svg" alt="Download Icon" style="width: 1.5rem; height: 1.5rem; margin-right: 8px;">&nbsp;
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-3 col-sm-12 mb-3 d-flex flex-column column order-1">
+            <div class="row my-2 align-self-stretch justify-content-around custom-padding">
+                <div class="col-xl-auto d-flex flex-column align-items-center align-items-md-start align-self-center justify-content-xl-end" style="padding-left: 0px; padding-right:0px;">
+                    <a href="https://www.uniprot.org/uniprotkb/{{ prot_id }}/entry">
+                        <h2>
+                            {{ upid_name }}&nbsp;
+                        </h2>
+                    </a>
+                </div>
+                <div class="col-xl-auto d-flex flex-column align-items-center align-items-md-start align-self-center justify-content-xl-end">
+                    <h2>
+                        &nbsp;{{ entry_name }}
+                    </h2>
+                </div>
+            </div>
+            <div class="row my-2 custom-padding align-self-stretch justify-content-center">
+                <div class="col-xl-auto d-flex flex-column align-items-center align-items-md-start align-self-center justify-content-xl-end" style="padding-left: 0px; padding-right:0px;">
+                    <h5 style="margin-bottom:0px;">
+                        Binding Sites Panel&nbsp;&nbsp;&nbsp;
+                        <a href="/help#sitePanelHelp">
+                            <img src="/static/images/info.svg" alt="Info Icon" style="width: 1.5rem; height: 1.5rem;">
+                        </a>
+                    </h5>
+                </div>
+            </div>
+            <div class="row mb-0 justify-content-center custom-padding">
+                <canvas id="chartCanvas" width="275" height="275"></canvas>
+            </div>
+            <div class="row mb-2 justify-content-around custom-padding">
+                <div class="col-6 col-sm-4 col-lg-8 col-xl-4 d-flex justify-content-center align-items-center" style="padding-left:0px; padding-right:0px">
+                    <span style="font-weight: 500; font-size: 1.25rem;">Y</span>:&nbsp;&nbsp;&nbsp;
+                    <select id="yAxisTitle">
+                        {% for header in headings[1:] %}
+                        <option value="{{ header }}">{{ header }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div class="col-6 col-sm-4 col-lg-8 col-xl-4 d-flex justify-content-center align-items-center" style="padding-left:0px; padding-right:0px">
+                    <span style="font-weight: 500; font-size: 1.25rem;">X</span>:&nbsp;&nbsp;&nbsp;
+                    <select id="xAxisTitle">
+                        {% for header in headings[1:] %}
+                        <option value="{{ header }}">{{ header }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div class="col-6 col-sm-4 col-lg-8 col-xl-4 d-flex justify-content-center" style="padding-left:0px; padding-right:0px">
+                    <img src="/static/images/camera.svg" alt="Save Image" style="width: 2rem; height: 2rem; cursor: pointer;" 
+                    onclick="saveImage('chartCanvas', `${segmentName}_sites_graph`)">
+                </div>
+            </div>
+            <div class="row mb-0 justify-content-center custom-padding">
+                <div class="table-responsive px-0 uniwidthsans" style="margin-right: 0px;">
+                    <table class="table table-bordered sortable"id="bss_table">
+                        <thead class="sticky-header">
+                            <tr class="table__header">
+                                {% for header in headings %}
+                                <th>
+                                    <span data-toggle="tooltip" title= "{{ bs_table_tooltips[loop.index0] }}">{{ header }}</span>
+                                </th>
+                                {% endfor %}
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for i in range(data["ID"]|length) %}
+                            <tr class="custom-row" style="color: {{ colors[loop.index0] }} !important;" id="{{ data['ID'][loop.index0] }}">
+                                    {% for k in data.keys() %}
+                                        <td class="table__cell">{{ data[k][i] }}</td>
+                                    {% endfor %}
+                                </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <div class="row mb-3 justify-content-center custom-padding">
+                <div class="col-3 col-md-1 col-lg-3 col-xl-6 d-flex justify-content-center align-items-center" style="padding-left:0px; padding-right:0px">
+                    <img
+                        src="/static/images/download.svg"
+                        alt="Download Icon"
+                        style="width: 1.5rem; height: 1.5rem; cursor: pointer;"
+                        onclick="downloadCSV(`/static/data/biolip/split/site_tables/${proteinId}_bss.pkl`)"
+                    />
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Download Table
+                </div>
+                <div class="col-3 col-md-1 col-lg-3 col-xl-6 d-flex justify-content-center align-items-center" style="padding-left:0px; padding-right:0px">
+                    <a href="/help#sitePanelHelp">
+                        <img src="/static/images/info.svg" alt="Info Icon" style="width: 1.5rem; height: 1.5rem;">
+                    </a>
+                    &nbsp;&nbsp;&nbsp;&nbsp;Column Information
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-4 d-flex flex-column order-3 column">
+            <div class="row my-2 align-self-stretch justify-content-center custom-padding">
+                <div class="col-xl-auto d-flex flex-column align-items-center align-items-md-start align-self-center justify-content-xl-end" style="padding-left:0px; padding-right:0px">
+                    <h3 style="margin-top: 8px;">
+                        N<sub>Structures</sub>&nbsp;=&nbsp;{{ seg_stats["strucs"]}};&nbsp;&nbsp;
+                        N<sub>Ligands</sub>&nbsp;=&nbsp;{{ seg_stats["ligs"]}};&nbsp;&nbsp;
+                        N<sub>Binding Sites</sub>&nbsp;=&nbsp;{{ seg_stats["bss"]}}&nbsp;
+                    </h3>
+                </div>
+            </div>
+            <div class="row my-2 custom-padding align-self-stretch justify-content-center">
+                <div class="col-auto d-flex align-items-center justify-content-start" style="padding-left:0px;">
+                    <h5 class="d-flex align-items-center" style="white-space: nowrap; margin-bottom: 0px;">
+                        Binding Residues Panel&nbsp;&nbsp;&nbsp;
+                        <a href="/help#siteResiduesPanelHelp" class="d-flex align-items-center" style="margin-left: 8px;">
+                            <img src="/static/images/info.svg" alt="Info Icon" style="width: 1.5rem; height: 1.5rem;">
+                        </a>
+                    </h5>
+                </div>
+            </div>
+            <div class="row mb-0 justify-content-center custom-padding">
+                <canvas id="newChartCanvas" width="650" height="420"></canvas>
+            </div>
+            <div class="row mb-0 justify-content-around custom-padding">
+                <div class="col-sm-4 col-lg-8 col-xl-4 mb-2 d-flex justify-content-center align-items-center" style="padding-left:0px; padding-right:0px">
+                    <span style="font-weight: 500; font-size: 1.25rem;">Y</span>:&nbsp;&nbsp;&nbsp;
+                    <select id="yAxisTitle2" class="axis-dropdown2 y-axis-dropdown2">
+                        <option selected hidden>MES</option>
+                        {% for header in cc_new[1:] %}
+                        <option value="{{ header }}">{{ header }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div class="col-sm-4 col-lg-8 col-xl-4 mb-2 d-flex justify-content-center align-items-center" style="padding-left:0px; padding-right:0px">
+                    <span style="font-weight: 500; font-size: 1.25rem;">X</span>:&nbsp;&nbsp;&nbsp;
+                    <select id="xAxisTitle2" class="axis-dropdown2 x-axis-dropdown2">
+                        <option selected hidden>DS</option>
+                        {% for header in cc_new[1:] %}
+                        <option value="{{ header }}">{{ header }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div class="col-sm-4 col-lg-8 col-xl-4 mb-2 d-flex justify-content-center align-items-center" style="padding-left:0px; padding-right:0px">
+                    <img src="/static/images/camera.svg" alt="Save Image" style="width: 2rem; height: 2rem; cursor: pointer;" 
+                    onclick="saveImage('newChartCanvas', `${segmentName}_residues_graph`)">
+                </div>
+            </div>
+            <div class="row mb-1 justify-content-center custom-padding">
+                <div class="table-responsive px-0 uniwidthsans" style="margin-right: 0px;">
+                    <table class="table table-bordered table-hover sortable" id="bs_ress_table">
+                        <thead class="sticky-header">
+                            <tr class="table__header">
+                                {% for header in cc_new %}
+                                <th class="table__cell">
+                                    <span data-toggle="tooltip" title= "{{ bs_ress_table_tooltips[loop.index0] }}">{{ header }}</span><br>
+                                </th>
+                                {% endfor %}
+                            </tr>
+                        </thead>
+                        <tbody> 
+                            {% for i in range(first_site_data["UPResNum"]|length) %}
+                            <tr class="custom-row" style="color: {{ colors[0] }} !important;" id="{{ first_site_data['UPResNum'][i] }}">
+                                    {% for k in first_site_data.keys() %}
+                                        <td class="table__cell">{{ first_site_data[k][i] }}</td>
+                                    {% endfor %}
+                                </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <div class="row mb-0 justify-content-center custom-padding">
+                <div class="col-3 col-md-1 col-lg-3 col-xl-6 d-flex justify-content-center align-items-center" style="padding-left:0px; padding-right:0px">
+                    <img
+                        src="/static/images/download.svg"
+                        alt="Download Icon"
+                        style="width: 1.5rem; height: 1.5rem; cursor: pointer;"
+                        onclick="downloadCSV(`/static/data/biolip/split/res_tables/${segmentName}_ress.pkl`)"
+                    />
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Download Table
+                </div>
+                <div class="col-3 col-md-1 col-lg-3 col-xl-6 d-flex justify-content-center align-items-center" style="padding-left:0px; padding-right:0px">
+                    <a href="/help#{{ header }}siteResiduesPanelHelp">
+                        <img src="/static/images/info.svg" alt="Info Icon" style="width: 1.5rem; height: 1.5rem;">
+                    </a>
+                    &nbsp;&nbsp;&nbsp;&nbsp;Column Information
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script src="/static/js/charts.js"></script>
+<script src="/static/js/table_listeners.js"></script>
+<script src="/static/js/chart_listeners.js"></script>
+<script src="/static/js/change_segment.js"></script>
+<script src="/static/js/3DMol_resize.js"></script>
+<script src="/static/js/3DMol_toggle_surfs.js"></script>
+<script src="/static/js/3DMol_open_assemblies.js"></script>
+
+<script type="text/javascript">
+
+    let currentFunction = '';
+
+    function downloadCSV(filepath) { // Download a CSV file from the server
+        window.location.href = '/download-csv?filepath=' + filepath;
+    }
+    
+    function showMenu(functionName) { // Show the ChimeraX/PyMol menu when a button is clicked
+        if (menuRow.style.display === 'block' && currentFunction === functionName) {
+            menuRow.style.display = 'none';  // Hide menu if the same button is clicked again
+        }
+        else {
+            currentFunction = functionName;
+            const menuRow = document.getElementById('menuRow');
+            menuRow.style.display = 'block';  // Show menu (you can customize positioning)
+        }
+    }
+
+    function executeFunction() { // Execute the download function based on the selected option
+        const selectedTool = document.getElementById('toolSelect').value;
+        const functionName = currentFunction + selectedTool;  // Concatenate function name and tool
+        if (typeof window[functionName] === 'function') {
+            window[functionName]();  // Call the respective function
+        } else {
+            alert('Function not available: ' + functionName);
+        }
+        document.getElementById('menuRow').style.display = 'none';  // Hide menu after selection
+    }
+    
+    function saveSuperpositionChimeraX() { // Save the superposition script for ChimeraX
+
+        const data = { // need Protein and Segment ID to access correct files
+            proteinId: proteinId,
+            segmentId: segmentId,
+        };
+    
+        // Send a POST request to the Flask route
+        fetch('/download-superposition-ChimeraX', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(data)
+        })
+        .then(response => {
+            if (response.ok) {
+                return response.blob();
+            } else {
+                throw new Error('Failed to download file.');
+            }
+        })
+        .then(blob => {
+            const url = window.URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `${proteinId}_${segmentId}_superposition_ChimeraX.zip`;
+            document.body.appendChild(a);
+            a.click();
+            a.remove();
+        })
+        .catch(error => {
+            console.error('Error:', error);
+        });
+    }
+
+    function saveSuperpositionPyMol() { // Save the superposition script for PyMol
+
+        const data = { // need Protein and Segment ID to access correct files
+            proteinId: proteinId,
+            segmentId: segmentId,
+        };
+    
+        // Send a POST request to the Flask route
+        fetch('/download-superposition-PyMol', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(data)
+        })
+        .then(response => {
+            if (response.ok) {
+                return response.blob();
+            } else {
+                throw new Error('Failed to download file.');
+            }
+        })
+        .then(blob => {
+            const url = window.URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `${proteinId}_${segmentId}_superposition_PyMol.zip`;
+            document.body.appendChild(a);
+            a.click();
+            a.remove();
+        })
+        .catch(error => {
+            console.error('Error:', error);
+        });
+    }
+    
+    function saveAssemblyChimeraX() { // Save the assembly script for ChimeraX
+        let pdbId = modelOrderRev[activeModel];  // Replace with your actual modelOrderRev[activeModel] variable
+        
+        // Create an object with all the data you want to send
+        const data = {
+            proteinId: proteinId,
+            segmentId: segmentId,
+            pdbId: pdbId
+        };
+    
+        // Send a POST request to the Flask route
+        fetch('/download-assembly-ChimeraX', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(data)
+        })
+        .then(response => {
+            if (response.ok) {
+                return response.blob();
+            } else {
+                throw new Error('Failed to download file.');
+            }
+        })
+        .then(blob => {
+            const url = window.URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `${proteinId}_${segmentId}_${pdbId}_assembly_ChimeraX.zip`;
+            document.body.appendChild(a);
+            a.click();
+            a.remove();
+        })
+        .catch(error => {
+            console.error('Error:', error);
+        });
+    }
+
+    function saveAssemblyPyMol() { // Save the assembly script for PyMol
+        let pdbId = modelOrderRev[activeModel];  // Replace with your actual modelOrderRev[activeModel] variable
+        
+        // Create an object with all the data you want to send
+        const data = {
+            proteinId: proteinId,
+            segmentId: segmentId,
+            pdbId: pdbId
+        };
+    
+        // Send a POST request to the Flask route
+        fetch('/download-assembly-PyMol', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(data)
+        })
+        .then(response => {
+            if (response.ok) {
+                return response.blob();
+            } else {
+                throw new Error('Failed to download file.');
+            }
+        })
+        .then(blob => {
+            const url = window.URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `${proteinId}_${segmentId}_${pdbId}_assembly_PyMol.zip`;
+            document.body.appendChild(a);
+            a.click();
+            a.remove();
+        })
+        .catch(error => {
+            console.error('Error:', error);
+        });
+    }
+    
+    function saveAllAssembliesChimeraX() { // Save all assemblies script for ChimeraX
+        
+        // Create an object with all the data you want to send
+        const data = {
+            proteinId: proteinId,
+            segmentId: segmentId,
+            assemblyPdbIds: assemblyPdbIds
+        };
+    
+        // Send a POST request to the Flask route
+        fetch('/download-all-assemblies-ChimeraX', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(data)
+        })
+        .then(response => {
+            if (response.ok) {
+                return response.blob();
+            } else {
+                throw new Error('Failed to download file.');
+            }
+        })
+        .then(blob => {
+            const url = window.URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `${proteinId}_${segmentId}_all_assemblies_ChimeraX.zip`;
+            document.body.appendChild(a);
+            a.click();
+            a.remove();
+        })
+        .catch(error => {
+            console.error('Error:', error);
+        });
+    }
+    
+    function saveAllAssembliesPyMol() { // Save all assemblies script for PyMol
+            
+            // Create an object with all the data you want to send
+            const data = {
+                proteinId: proteinId,
+                segmentId: segmentId,
+                assemblyPdbIds: assemblyPdbIds
+            };
+        
+            // Send a POST request to the Flask route
+            fetch('/download-all-assemblies-PyMol', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(data)
+            })
+            .then(response => {
+                if (response.ok) {
+                    return response.blob();
+                } else {
+                    throw new Error('Failed to download file.');
+                }
+            })
+            .then(blob => {
+                const url = window.URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = `${proteinId}_${segmentId}_all_assemblies_PyMol.zip`;
+                document.body.appendChild(a);
+                a.click();
+                a.remove();
+            })
+            .catch(error => {
+                console.error('Error:', error);
+            });
+    }
+    
+    function saveAssemblyContactData() { // Save the assembly contact data for the active model
+        let pdbId = modelOrderRev[activeModel];  // Replace with your actual modelOrderRev[activeModel] variable
+        
+        // Create an object with all the data you want to send
+        const data = {
+            proteinId: proteinId,
+            segmentId: segmentId,
+            pdbId: pdbId
+        };
+    
+        // Send a POST request to the Flask route
+        fetch('/download-assembly-contact-data', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(data)
+        })
+        .then(response => {
+            if (response.ok) {
+                return response.blob();
+            } else {
+                throw new Error('Failed to download file.');
+            }
+        })
+        .then(blob => {
+            const url = window.URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `${proteinId}_${segmentId}_${pdbId}_contacts.csv`;
+            document.body.appendChild(a);
+            a.click();
+            a.remove();
+        })
+        .catch(error => {
+            console.error('Error:', error);
+        });
+    }
+
+    function saveAllAssembliesContactData() { // Save the assembly contact data for all assemblies
+        
+        // Create an object with all the data you want to send
+        const data = {
+            proteinId: proteinId,
+            segmentId: segmentId,
+            assemblyPdbIds: assemblyPdbIds
+        };
+    
+        // Send a POST request to the Flask route
+        fetch('/download-all-assemblies-contact-data', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(data)
+        })
+        .then(response => {
+            if (response.ok) {
+                return response.blob();
+            } else {
+                throw new Error('Failed to download file.');
+            }
+        })
+        .then(blob => {
+            const url = window.URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `${proteinId}_${segmentId}_all_assemblies_contacts.zip`;
+            document.body.appendChild(a);
+            a.click();
+            a.remove();
+        })
+        .catch(error => {
+            console.error('Error:', error);
+        });
+    }
+
+    let contactsButton = document.getElementById('contactsButton');
+    let ligandButton = document.getElementById('ligandButton');
+    let waterButton = document.getElementById('waterButton');
+    let labelButton = document.getElementById('labelButton');
+    let surfButton = document.getElementById('surfButton');
+
+</script>
+
+{% endblock%}

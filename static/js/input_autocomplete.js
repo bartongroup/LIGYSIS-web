@@ -20,3 +20,10 @@ document.getElementById('UniProtIdSubmit').addEventListener('click', function(ev
         inputField.value = inputField.placeholder;
     }
 });
+
+document.getElementById('jobIdSubmit').addEventListener('click', function(event) {
+    var inputField = document.getElementById('autocompleteJobId');
+    if (inputField.value === '') {
+        inputField.value = inputField.placeholder;
+    }
+});
