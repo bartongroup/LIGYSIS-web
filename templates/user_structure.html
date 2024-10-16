@@ -742,13 +742,12 @@
         
         // Create an object with all the data you want to send
         const data = {
-            proteinId: proteinId,
-            segmentId: segmentId,
+            jobId: jobId,
             assemblyPdbIds: assemblyPdbIds
         };
     
         // Send a POST request to the Flask route
-        fetch('/download-all-assemblies-contact-data', {
+        fetch('/user-download-all-assemblies-contact-data', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
@@ -766,7 +765,7 @@
             const url = window.URL.createObjectURL(blob);
             const a = document.createElement('a');
             a.href = url;
-            a.download = `${proteinId}_${segmentId}_all_assemblies_contacts.zip`;
+            a.download = `${jobId}_all_assemblies_contacts.zip`;
             document.body.appendChild(a);
             a.click();
             a.remove();

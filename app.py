@@ -1480,6 +1480,42 @@ def user_get_contacts(): # route to get contacts data from Arpeggio table for a 
 
     return jsonify(response_data) # send jasonified data back to client
 
+@app.route('/user-download-all-assemblies-contact-data', methods=['POST'])
+def user_download_all_assemblies_contact_data(): # route to download contacts data for all assemblies
+    data = request.get_json()
+
+    job_id = data.get('jobId')
+    assembly_pdb_ids = data.get('assemblyPdbIds')
+
+    job_output_dir = os.path.join(USER_JOBS_OUT_FOLDER, job_id)
+    job_arpeggio_dir = os.path.join(job_output_dir, "arpeggio")
+
+    memory_file = io.BytesIO()
+
+    with zipfile.ZipFile(memory_file, 'w') as zf:
+        for pdb_id in assembly_pdb_ids:
+            struc_name, _ = os.path.splitext(pdb_id)
+            try:
+                arpeggio_df = pd.read_pickle(f'{job_arpeggio_dir}/{struc_name}_proc.pkl')
+
+                # Convert the DataFrame to CSV
+                csv_data = io.StringIO()
+                arpeggio_df.to_csv(csv_data, index=False)
+                csv_data.seek(0)
+
+                # Write the CSV data to the in-memory zip file
+                zf.writestr(f'{job_id}_{struc_name}_contacts.csv', csv_data.getvalue())
+            except:
+                print(f"No Arpeggio contacts found for {pdb_id}")
+
+    memory_file.seek(0)
+
+    return send_file(
+        memory_file,
+        mimetype='application/zip',
+        as_attachment=True,
+        download_name=f'{job_id}_all_assemblies_contacts.zip'
+    )
 
 ### LAUNCHING SERVER ###
 
