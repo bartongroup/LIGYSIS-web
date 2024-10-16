@@ -548,6 +548,8 @@
             jobId: jobId,
             pdbId: pdbId
         };
+
+        let strucName = pdbId.substring(0, pdbId.lastIndexOf('.'));
     
         // Send a POST request to the Flask route
         fetch('/user-download-structure-ChimeraX', {
@@ -568,7 +570,7 @@
             const url = window.URL.createObjectURL(blob);
             const a = document.createElement('a');
             a.href = url;
-            a.download = `${jobId}_${pdbId}_structure_ChimeraX.zip`;
+            a.download = `${jobId}_${strucName}_structure_ChimeraX.zip`;
             document.body.appendChild(a);
             a.click();
             a.remove();
@@ -583,10 +585,11 @@
         
         // Create an object with all the data you want to send
         const data = {
-            proteinId: proteinId,
-            segmentId: segmentId,
+            jobId: jobId,
             pdbId: pdbId
         };
+        // strucName is pdbId without extension, but there could be other "." on the filename
+        let strucName = pdbId.substring(0, pdbId.lastIndexOf('.'));
     
         // Send a POST request to the Flask route
         fetch('/user-download-structure-PyMol', {
@@ -607,7 +610,7 @@
             const url = window.URL.createObjectURL(blob);
             const a = document.createElement('a');
             a.href = url;
-            a.download = `${jobId}_${pdbId}_structure_PyMol.zip`;
+            a.download = `${jobId}_${strucName}_structure_PyMol.zip`;
             document.body.appendChild(a);
             a.click();
             a.remove();
