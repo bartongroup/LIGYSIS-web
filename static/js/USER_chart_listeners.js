@@ -847,11 +847,10 @@ document.getElementById('newChartCanvas').addEventListener('mousemove', function
                         );
                     }
                     let AssemblyPDBResNum = Up2PdbMapAssembly[newPointLabel]
-                    let AssemblyPDBResNumSel = AssemblyPDBResNum.map(tuple => {
-                        return { chain: tuple[0], resi: tuple[1] };
-                    });
                     if (AssemblyPDBResNum  != undefined) {
-
+                        let AssemblyPDBResNumSel = AssemblyPDBResNum.map(tuple => {
+                            return { chain: tuple[0], resi: tuple[1] };
+                        });
                         //AssemblyPDBResNums.push([element, AssemblyPDBResNum]);
                         AssemblyPDBResNums = AssemblyPDBResNumSel;
                         viewer.setStyle(

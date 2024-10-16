@@ -588,22 +588,27 @@ $('table#bs_ress_table tbody').on('mouseover', 'tr', function () { // event list
             }
         }
         else {
-            proteinChains.forEach((element) => { // in case of multiple copies of protein of interest
-                let AssemblyPDBResNum = Up2PdbMapAssembly[chainsMapAssembly[element]][rowId]
-                AssemblyPDBResNums.push([element, AssemblyPDBResNum]);
-                if (AssemblyPDBResNum !== undefined) {
-                    viewer.setStyle(
-                        {model: activeModel, resi: AssemblyPDBResNum, chain: element, not: {atom: bboneAtoms}},
-                        {
-                            cartoon:{style: cartoonStyle, color: rowColorHex, arrows: cartoonArrows, tubes: cartoonTubes, opacity: cartoonOpacity, thickness: cartoonThickness,},
-                            stick:{color: rowColorHex},
-                        }
-                    );
-                }
-                else {
-                    console.log("Residue not found in assembly!");
-                }
-            });
+            let AssemblyPDBResNum = Up2PdbMapAssembly[rowId]
+            // proteinChains.forEach((element) => { // in case of multiple copies of protein of interest
+            // let AssemblyPDBResNum = Up2PdbMapAssembly[chainsMapAssembly[element]][rowId]
+            // AssemblyPDBResNums.push([element, AssemblyPDBResNum]);
+            if (AssemblyPDBResNum !== undefined) {
+                let AssemblyPDBResNumSel = AssemblyPDBResNum.map(tuple => {
+                    return { chain: tuple[0], resi: tuple[1] };
+                });
+                AssemblyPDBResNums = AssemblyPDBResNumSel;
+                viewer.setStyle(
+                    {model: activeModel, or: AssemblyPDBResNumSel, not: {atom: bboneAtoms}},
+                    {
+                        cartoon:{style: cartoonStyle, color: rowColorHex, arrows: cartoonArrows, tubes: cartoonTubes, opacity: cartoonOpacity, thickness: cartoonThickness,},
+                        stick:{color: rowColorHex},
+                    }
+                );
+            }
+            else {
+                console.log("Residue not found in assembly!");
+            }
+            // });
         }
 
         if (labelsVisible) {
@@ -639,24 +644,42 @@ $('table#bs_ress_table tbody').on('mouseover', 'tr', function () { // event list
                 }
             }
             else {
-                AssemblyPDBResNums.forEach(([chain, resNum]) => {
-                    if (resNum !== undefined) {
-                        let resSel = {model: activeModel, resi: resNum, chain: chain}
-                        let resName = viewer.selectedAtoms(resSel)[0].resn
-                        let label = viewer.addLabel(
-                            resName + String(Pdb2UpMapAssembly[chainsMapAssembly[chain]][resNum]),
-                            {
-                                alignment: 'center', backgroundColor: 'white', backgroundOpacity: 1,
-                                borderColor: 'black', borderOpacity: 1, borderThickness: 2,
-                                font: 'Arial', fontColor: rowColorHex, fontOpacity: 1, fontSize: 12,
-                                inFront: true, screenOffset: [0, 0, 0], showBackground: true
-                            },
-                            resSel,
-                            true,
-                        );
-                        labelsHash[activeModel]["hoveredRes"].push(label);
-                    }
+                AssemblyPDBResNums.forEach((residue) => {
+                    let resChain = residue['chain'];
+                    let resNum = residue['resi'];
+                    let resSel = {model: activeModel, resi: resNum, chain: resChain}
+                    let resName = viewer.selectedAtoms(resSel)[0].resn
+                    let label = viewer.addLabel(
+                        resName + String(Pdb2UpMapAssembly[resChain][resNum]),
+                        {
+                            alignment: 'center', backgroundColor: 'white', backgroundOpacity: 1,
+                            borderColor: 'black', borderOpacity: 1, borderThickness: 2,
+                            font: 'Arial', fontColor: rowColorHex, fontOpacity: 1, fontSize: 12,
+                            inFront: true, screenOffset: [0, 0, 0], showBackground: true
+                        },
+                        resSel,
+                        true,
+                    );
+                    labelsHash[activeModel]["hoveredRes"].push(label);
                 });
+                // AssemblyPDBResNums.forEach(([chain, resNum]) => {
+                //     if (resNum !== undefined) {
+                //         let resSel = {model: activeModel, resi: resNum, chain: chain}
+                //         let resName = viewer.selectedAtoms(resSel)[0].resn
+                //         let label = viewer.addLabel(
+                //             resName + String(Pdb2UpMapAssembly[chainsMapAssembly[chain]][resNum]),
+                //             {
+                //                 alignment: 'center', backgroundColor: 'white', backgroundOpacity: 1,
+                //                 borderColor: 'black', borderOpacity: 1, borderThickness: 2,
+                //                 font: 'Arial', fontColor: rowColorHex, fontOpacity: 1, fontSize: 12,
+                //                 inFront: true, screenOffset: [0, 0, 0], showBackground: true
+                //             },
+                //             resSel,
+                //             true,
+                //         );
+                //         labelsHash[activeModel]["hoveredRes"].push(label);
+                //     }
+                // });
             }
         }
         viewer.render();
