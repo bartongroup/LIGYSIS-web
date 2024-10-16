@@ -173,8 +173,6 @@ function toggleLabelsVisibility() {
         viewer.render();
     }
     else { // add labels if any site is clicked already
-        // labelButton.value = "LABELS ✓"; // Change the button text
-        // labelButton.style = "font-weight: bold; color: #B22222;";
 
         document.getElementById("labelButton").textContent = "LABELS ✓";
         labelButton.style.fontWeight = "bold";
@@ -232,30 +230,61 @@ function toggleLabelsVisibility() {
                     }
                     else {
                         siteAssemblyPDBResNums = [];
-                        proteinChains.forEach((element) => { // in case of multiple copies of protein of interest
-                            let siteAssemblyPDBResNum = seg_ress_dict[clickedElementId]
-                                .filter(el => Up2PdbMapAssembly[chainsMapAssembly[element]].hasOwnProperty(el))
-                                .map(el => Up2PdbMapAssembly[chainsMapAssembly[element]][el]);
-                            siteAssemblyPDBResNums.push([element, siteAssemblyPDBResNum]);
-                        });
-                        for ([element, siteAssemblyPDBResNum] of siteAssemblyPDBResNums) {
-                            for (siteAssemblyPDBResNumber of siteAssemblyPDBResNum) { // variable name not ideal as siteAssemblyPDBResNum is an array
-                                let resSel = {model: activeModel, resi: siteAssemblyPDBResNumber, chain: element}
-                                let resName = viewer.selectedAtoms(resSel)[0].resn
-                                let label = viewer.addLabel(
-                                    resName + String(Pdb2UpMapAssembly[chainsMapAssembly[element]][siteAssemblyPDBResNumber]),
-                                    {
-                                        alignment: 'center', backgroundColor: 'white', backgroundOpacity: 1,
-                                        borderColor: 'black', borderOpacity: 1, borderThickness: 2,
-                                        font: 'Arial', fontColor: siteColor, fontOpacity: 1, fontSize: 12,
-                                        inFront: true, screenOffset: [0, 0, 0], showBackground: true
-                                    },
-                                    resSel,
-                                    true,
-                                );
-                                labelsHash[activeModel]["clickedSite"][clickedElementId].push(label);
-                            }
+
+                        let siteAssemblyPDBResNum = seg_ress_dict[clickedElementId]
+                            .filter(el => Up2PdbMapAssembly.hasOwnProperty(el))
+                            .flatMap(el => {
+                                let dataArray = Up2PdbMapAssembly[el]; // Get the array of tuples
+                                return dataArray.map(data => {
+                                    return { chain: data[0], resi: data[1] }; // Extract chain and resi for each element
+                                });
+                            });
+                        siteAssemblyPDBResNums = siteAssemblyPDBResNum // this is now an array of dictionaries: {chain: chain, resi: resi}
+
+                        for (let residue of siteAssemblyPDBResNums) {
+                            let resChain = residue['chain'];
+                            let resNum = residue['resi'];
+                            let resSel = {model: activeModel, resi: resNum, chain: resChain}
+                            let resName = viewer.selectedAtoms(resSel)[0].resn
+                            let label = viewer.addLabel(
+                                resName + String(Pdb2UpMapAssembly[resChain][resNum]),
+                                {
+                                    alignment: 'center', backgroundColor: 'white', backgroundOpacity: 1,
+                                    borderColor: 'black', borderOpacity: 1, borderThickness: 2,
+                                    font: 'Arial', fontColor: siteColor, fontOpacity: 1, fontSize: 12,
+                                    inFront: true, screenOffset: [0, 0, 0], showBackground: true
+                                },
+                                resSel,
+                                false,
+                            );
+                            labelsHash[activeModel]["clickedSite"][clickedElementId].push(label);
+                            
                         }
+
+                        // proteinChains.forEach((element) => { // in case of multiple copies of protein of interest
+                        //     let siteAssemblyPDBResNum = seg_ress_dict[clickedElementId]
+                        //         .filter(el => Up2PdbMapAssembly[chainsMapAssembly[element]].hasOwnProperty(el))
+                        //         .map(el => Up2PdbMapAssembly[chainsMapAssembly[element]][el]);
+                        //     siteAssemblyPDBResNums.push([element, siteAssemblyPDBResNum]);
+                        // });
+                        // for ([element, siteAssemblyPDBResNum] of siteAssemblyPDBResNums) {
+                        //     for (siteAssemblyPDBResNumber of siteAssemblyPDBResNum) { // variable name not ideal as siteAssemblyPDBResNum is an array
+                        //         let resSel = {model: activeModel, resi: siteAssemblyPDBResNumber, chain: element}
+                        //         let resName = viewer.selectedAtoms(resSel)[0].resn
+                        //         let label = viewer.addLabel(
+                        //             resName + String(Pdb2UpMapAssembly[chainsMapAssembly[element]][siteAssemblyPDBResNumber]),
+                        //             {
+                        //                 alignment: 'center', backgroundColor: 'white', backgroundOpacity: 1,
+                        //                 borderColor: 'black', borderOpacity: 1, borderThickness: 2,
+                        //                 font: 'Arial', fontColor: siteColor, fontOpacity: 1, fontSize: 12,
+                        //                 inFront: true, screenOffset: [0, 0, 0], showBackground: true
+                        //             },
+                        //             resSel,
+                        //             true,
+                        //         );
+                        //         labelsHash[activeModel]["clickedSite"][clickedElementId].push(label);
+                        //     }
+                        // }
                     }
                 }
                 viewer.render();
