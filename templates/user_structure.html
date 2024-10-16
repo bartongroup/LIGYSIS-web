@@ -192,7 +192,7 @@
                             onclick="saveAssemblyContactData()" 
                             disabled>
                             &nbsp;<img id="saveAssemblyContactsDownloadIcon" src="/static/images/download_gray.svg" alt="Download Icon" style="width: 1.5rem; height: 1.5rem; margin-right: 8px;">
-                            &nbsp;Current Assembly Contacts&nbsp;
+                            &nbsp;Current Structure Contacts&nbsp;
                     </button>
                 </div>                
                 <div class="col-auto justify-content-center" style="padding-left:0px; padding-right:0px;">
@@ -202,9 +202,9 @@
                 <div class="col-auto justify-content-end" style="padding-left:0px; padding-right:0px;">
                     <button id="saveAllArpeggioDataButton" 
                             style="border: 1px solid black; color: black; display: flex; align-items: center; border-radius: 5px; padding: 5px 10px;" 
-                            onclick="saveAllAssembliesContactData()">
+                            onclick="saveAllStructuresContactData()">
                             &nbsp;<img src="/static/images/download.svg" alt="Download Icon" style="width: 1.5rem; height: 1.5rem; margin-right: 8px;">
-                        &nbsp;<b>ALL</b>&nbsp;Assemblies Contacts&nbsp;
+                        &nbsp;<b>ALL</b>&nbsp;Structures Contacts&nbsp;
                     </button>
                 </div>
             </div>
@@ -215,7 +215,7 @@
                             onclick="showMenu('saveAssembly')" 
                             disabled>
                             &nbsp;<img id="saveAssemblyDownloadIcon" src="/static/images/download_gray.svg" alt="Download Icon" style="width: 1.5rem; height: 1.5rem; margin-right: 8px;">
-                            &nbsp;Current Assembly&nbsp;
+                            &nbsp;Current Structure&nbsp;
                     </button>
                 </div>
                 <div class="col-auto justify-content-center" style="padding-left:0px; padding-right:0px;">
@@ -225,9 +225,9 @@
                     </button>
                 </div>
                 <div class="col-auto justify-content-end" style="padding-left:0px; padding-right:0px;">
-                    <button id="saveAssembliesButton" style="border: 1px solid black; color: black; display: flex; align-items: center; border-radius: 5px;  padding: 5px 10px;" onclick="showMenu('saveAllAssemblies')">
+                    <button id="saveAssembliesButton" style="border: 1px solid black; color: black; display: flex; align-items: center; border-radius: 5px;  padding: 5px 10px;" onclick="showMenu('saveAllStructures')">
                         &nbsp;<img src="/static/images/download.svg" alt="Download Icon" style="width: 1.5rem; height: 1.5rem; margin-right: 8px;">
-                        &nbsp;<b>ALL</b>&nbsp;Assemblies&nbsp;
+                        &nbsp;<b>ALL</b>&nbsp;Structures&nbsp;
                     </button>
                 </div>
             </div>
@@ -476,12 +476,11 @@
     function saveSuperpositionChimeraX() { // Save the superposition script for ChimeraX
 
         const data = { // need Protein and Segment ID to access correct files
-            proteinId: proteinId,
-            segmentId: segmentId,
+            jobId: jobId,
         };
     
         // Send a POST request to the Flask route
-        fetch('/download-superposition-ChimeraX', {
+        fetch('/user-download-superposition-ChimeraX', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
@@ -499,7 +498,7 @@
             const url = window.URL.createObjectURL(blob);
             const a = document.createElement('a');
             a.href = url;
-            a.download = `${proteinId}_${segmentId}_superposition_ChimeraX.zip`;
+            a.download = `${jobId}_superposition_ChimeraX.zip`;
             document.body.appendChild(a);
             a.click();
             a.remove();
@@ -623,7 +622,7 @@
         });
     }
     
-    function saveAllAssembliesChimeraX() { // Save all assemblies script for ChimeraX
+    function saveAllStructuresChimeraX() { // Save all structures script for ChimeraX
         
         // Create an object with all the data you want to send
         const data = {
@@ -633,7 +632,7 @@
         };
     
         // Send a POST request to the Flask route
-        fetch('/download-all-assemblies-ChimeraX', {
+        fetch('/user-download-all-structures-ChimeraX', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
@@ -651,7 +650,7 @@
             const url = window.URL.createObjectURL(blob);
             const a = document.createElement('a');
             a.href = url;
-            a.download = `${proteinId}_${segmentId}_all_assemblies_ChimeraX.zip`;
+            a.download = `${jobId}_all_structures_ChimeraX.zip`;
             document.body.appendChild(a);
             a.click();
             a.remove();
@@ -661,7 +660,7 @@
         });
     }
     
-    function saveAllAssembliesPyMol() { // Save all assemblies script for PyMol
+    function saveAllStructuresPyMol() { // Save all structures script for PyMol
             
             // Create an object with all the data you want to send
             const data = {
@@ -671,7 +670,7 @@
             };
         
             // Send a POST request to the Flask route
-            fetch('/download-all-assemblies-PyMol', {
+            fetch('/user-download-all-structures-PyMol', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
@@ -689,7 +688,7 @@
                 const url = window.URL.createObjectURL(blob);
                 const a = document.createElement('a');
                 a.href = url;
-                a.download = `${proteinId}_${segmentId}_all_assemblies_PyMol.zip`;
+                a.download = `${jobId}_all_structures_PyMol.zip`;
                 document.body.appendChild(a);
                 a.click();
                 a.remove();
@@ -738,7 +737,7 @@
         });
     }
 
-    function saveAllAssembliesContactData() { // Save the assembly contact data for all assemblies
+    function saveAllStructuresContactData() { // Save the assembly contact data for all structures
         
         // Create an object with all the data you want to send
         const data = {
@@ -747,7 +746,7 @@
         };
     
         // Send a POST request to the Flask route
-        fetch('/user-download-all-assemblies-contact-data', {
+        fetch('/user-download-all-structures-contact-data', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
@@ -765,7 +764,7 @@
             const url = window.URL.createObjectURL(blob);
             const a = document.createElement('a');
             a.href = url;
-            a.download = `${jobId}_all_assemblies_contacts.zip`;
+            a.download = `${jobId}_all_structures_contacts.zip`;
             document.body.appendChild(a);
             a.click();
             a.remove();

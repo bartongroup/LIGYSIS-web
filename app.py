@@ -1480,8 +1480,8 @@ def user_get_contacts(): # route to get contacts data from Arpeggio table for a 
 
     return jsonify(response_data) # send jasonified data back to client
 
-@app.route('/user-download-all-assemblies-contact-data', methods=['POST'])
-def user_download_all_assemblies_contact_data(): # route to download contacts data for all assemblies
+@app.route('/user-download-all-structures-contact-data', methods=['POST'])
+def user_download_all_structures_contact_data(): # route to download contacts data for all structures
     data = request.get_json()
 
     job_id = data.get('jobId')
@@ -1514,7 +1514,133 @@ def user_download_all_assemblies_contact_data(): # route to download contacts da
         memory_file,
         mimetype='application/zip',
         as_attachment=True,
-        download_name=f'{job_id}_all_assemblies_contacts.zip'
+        download_name=f'{job_id}_all_structures_contacts.zip'
+    )
+
+@app.route('/user-download-superposition-ChimeraX', methods=['POST'])
+def user_download_superposition_ChimeraX(): # route to download ChimeraX script to visualise ligand superposition
+
+    data = request.get_json() # Get JSON data from the POST request
+    
+    job_id = data.get('jobId')
+
+    if not job_id: # Validate the received data
+        return jsonify({'error': 'Missing data'}), 400
+
+    job_output_dir = os.path.join(USER_JOBS_OUT_FOLDER, job_id)
+    job_simple_dir = os.path.join(job_output_dir, "simple_pdbs")
+    job_results_dir = os.path.join(job_output_dir, "results")
+    
+
+    # simple_dir = os.path.join(DATA_FOLDER, prot_id, str(seg_id), "simple")
+    simple_pdbs = os.listdir(job_simple_dir)
+    simple_pdbs = [f'{job_simple_dir}/{el}' for el in simple_pdbs if el.endswith(".cif") or el.endswith(".pdb")]
+
+    # seg_name = f'{prot_id}_{seg_id}'
+    cxc_in =f'{job_simple_dir}/{job_id}_average_0.5.cxc' # ChimeraX command file
+    attr_in =  f'{job_simple_dir}/{job_id}_average_0.5.defattr' # ChimeraX attribute file
+
+    bs_membership = pd.read_pickle(f'{job_results_dir}/{job_id}_bss_membership.pkl')
+
+    bs_ids = list(bs_membership.keys())
+
+    # read lines in cxc_in and push to cxc_lines
+    cxc_lines = []
+    with open(cxc_in, 'r') as file:
+        for line in file:
+            if line.strip() == '':
+                continue
+            else:
+                cxc_lines.append(line.strip())
+                if line.strip().startswith("# colouring"):
+                    break
+
+    for el in extra_cxc_lines:
+        cxc_lines.append(el)
+    
+    for bs_id in bs_ids:
+        cxc_lines.append((f'col ::binding_site=={bs_id} {colors[bs_id]};'))
+    
+    cxc_lines.append('delete pseudobond;')
+    cxc_lines.append(f'save {job_id}_average_0.5.cxs;')
+    cxc_lines_string = "\n".join(cxc_lines)
+
+    # Create and add in-memory files directly to the zip
+    cxc_file = f'{job_id}_average_0.5.cxc'
+    cxc_file_in_memory = io.BytesIO()
+    cxc_file_in_memory.write(cxc_lines_string.encode('utf-8'))
+
+    files_to_zip = simple_pdbs + [attr_in, ]#cxc_in]
+
+    memory_file = io.BytesIO() # Create a BytesIO object to hold the in-memory zip file
+
+    with zipfile.ZipFile(memory_file, 'w') as zf: # Create a ZipFile object for in-memory use
+        for file_path in files_to_zip:
+            if os.path.exists(file_path):  # Check if the file exists
+                zf.write(file_path, os.path.basename(file_path))
+            else:
+                return f"File {file_path} not found", 404
+        
+        # Add the in-memory files directly to the in-memory zip
+        cxc_file_in_memory.seek(0)
+        zf.writestr(cxc_file, cxc_file_in_memory.read())
+    
+    memory_file.seek(0)  # Seek to the beginning of the BytesIO object before sending it
+    
+    return send_file( # Send the zip file to the client as a downloadable file
+        memory_file,
+        mimetype='application/zip',
+        as_attachment=True,
+        download_name=f'{job_id}_superposition_ChimeraX.zip'
+    )
+
+@app.route('/user-download-superposition-PyMol', methods=['POST'])
+def user_download_superposition_PyMol(): # route to download PyMol script to visualise ligand superposition
+    
+    data = request.get_json() # Get JSON data from the POST request
+    
+    prot_id = data.get('proteinId')
+    seg_id = data.get('segmentId')
+
+    if not prot_id or not seg_id: # Validate the received data
+        return jsonify({'error': 'Missing data'}), 400
+
+    simple_dir = os.path.join(DATA_FOLDER, prot_id, str(seg_id), "simple")
+    simple_pdbs = os.listdir(simple_dir)
+    simple_pdbs = [f'{simple_dir}/{el}' for el in simple_pdbs if el.endswith(".cif")]
+
+    seg_name = f'{prot_id}_{seg_id}'
+    cxc_in =f'{DATA_FOLDER}/{prot_id}/{seg_id}/simple/{seg_name}_ALL_inf_average_0.5.cxc' # ChimeraX command file
+    attr_in =  f'{DATA_FOLDER}/{prot_id}/{seg_id}/simple/{seg_name}_ALL_inf_average_0.5.defattr' # ChimeraX attribute file
+
+    pymol_lines = chimeraX2PyMol(cxc_in, attr_in)
+    pymol_lines_string = "\n".join(pymol_lines)
+
+    # Create and add in-memory files directly to the zip
+    pymol_file = f'{seg_name}_ALL_inf_average_0.5.pml'
+    pymol_file_in_memory = io.BytesIO()
+    pymol_file_in_memory.write(pymol_lines_string.encode('utf-8'))
+
+    memory_file = io.BytesIO() # Create a BytesIO object to hold the in-memory zip file
+
+    with zipfile.ZipFile(memory_file, 'w') as zf: # Create a ZipFile object for in-memory use
+        for file_path in simple_pdbs:
+            if os.path.exists(file_path):  # Check if the file exists
+                zf.write(file_path, os.path.basename(file_path))
+            else:
+                return f"File {file_path} not found", 404
+        
+        # Add the in-memory files directly to the in-memory zip
+        pymol_file_in_memory.seek(0)
+        zf.writestr(pymol_file, pymol_file_in_memory.read())
+    
+    memory_file.seek(0)  # Seek to the beginning of the BytesIO object before sending it
+    
+    return send_file( # Send the zip file to the client as a downloadable file
+        memory_file,
+        mimetype='application/zip',
+        as_attachment=True,
+        download_name=f'{prot_id}_{seg_id}_superposition_PyMol.zip'
     )
 
 ### LAUNCHING SERVER ###
