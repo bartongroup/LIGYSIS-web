@@ -170,14 +170,16 @@ def generate_distance_lines_PyMol(df, mult = 1): # generates pseudobond lines fo
     
     return output
 
-def chimeraX2PyMol(cxc_in, attr_in): # converts ChimeraX command and attribute files to PyMol script
+def chimeraX2PyMol(cxc_in, attr_in, fmt = 'cif'): # converts ChimeraX command and attribute files to PyMol script
     """
     Converts ChimeraX command and attribute files to a PyMol
     script that will do the same thing as the ChimeraX script.
     """
-    model_order = extract_open_files(cxc_in)
+    model_order = extract_open_files(cxc_in, fmt = fmt) # extract model order from ChimeraX command file
     
     pymol_attrs, bs_ids = transform_lines_PyMol(attr_in, model_order)
+
+    print(model_order)
     
     pymol_lines = []
     pymol_lines.append('# styling')
@@ -1599,25 +1601,29 @@ def user_download_superposition_PyMol(): # route to download PyMol script to vis
     
     data = request.get_json() # Get JSON data from the POST request
     
-    prot_id = data.get('proteinId')
-    seg_id = data.get('segmentId')
+    job_id = data.get('jobId')
 
-    if not prot_id or not seg_id: # Validate the received data
+    if not job_id: # Validate the received data
         return jsonify({'error': 'Missing data'}), 400
 
-    simple_dir = os.path.join(DATA_FOLDER, prot_id, str(seg_id), "simple")
-    simple_pdbs = os.listdir(simple_dir)
-    simple_pdbs = [f'{simple_dir}/{el}' for el in simple_pdbs if el.endswith(".cif")]
+    job_output_dir = os.path.join(USER_JOBS_OUT_FOLDER, job_id)
+    job_simple_dir = os.path.join(job_output_dir, "simple_pdbs")
+    job_results_dir = os.path.join(job_output_dir, "results")
+    
 
-    seg_name = f'{prot_id}_{seg_id}'
-    cxc_in =f'{DATA_FOLDER}/{prot_id}/{seg_id}/simple/{seg_name}_ALL_inf_average_0.5.cxc' # ChimeraX command file
-    attr_in =  f'{DATA_FOLDER}/{prot_id}/{seg_id}/simple/{seg_name}_ALL_inf_average_0.5.defattr' # ChimeraX attribute file
+    # simple_dir = os.path.join(DATA_FOLDER, prot_id, str(seg_id), "simple")
+    simple_pdbs = os.listdir(job_simple_dir)
+    simple_pdbs = [f'{job_simple_dir}/{el}' for el in simple_pdbs if el.endswith(".cif") or el.endswith(".pdb")]
 
-    pymol_lines = chimeraX2PyMol(cxc_in, attr_in)
+    # seg_name = f'{prot_id}_{seg_id}'
+    cxc_in =f'{job_simple_dir}/{job_id}_average_0.5.cxc' # ChimeraX command file
+    attr_in =  f'{job_simple_dir}/{job_id}_average_0.5.defattr' # ChimeraX attribute file
+
+    pymol_lines = chimeraX2PyMol(cxc_in, attr_in, fmt = "pdb") ## TODO FIX ME: what about formats? BE CONSISTENT!!!
     pymol_lines_string = "\n".join(pymol_lines)
 
     # Create and add in-memory files directly to the zip
-    pymol_file = f'{seg_name}_ALL_inf_average_0.5.pml'
+    pymol_file = f'{job_id}_average_0.5.pml'
     pymol_file_in_memory = io.BytesIO()
     pymol_file_in_memory.write(pymol_lines_string.encode('utf-8'))
 
@@ -1640,7 +1646,7 @@ def user_download_superposition_PyMol(): # route to download PyMol script to vis
         memory_file,
         mimetype='application/zip',
         as_attachment=True,
-        download_name=f'{prot_id}_{seg_id}_superposition_PyMol.zip'
+        download_name=f'{job_id}_superposition_PyMol.zip'
     )
 
 ### LAUNCHING SERVER ###

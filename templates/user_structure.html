@@ -511,12 +511,11 @@
     function saveSuperpositionPyMol() { // Save the superposition script for PyMol
 
         const data = { // need Protein and Segment ID to access correct files
-            proteinId: proteinId,
-            segmentId: segmentId,
+            jobId: jobId,
         };
     
         // Send a POST request to the Flask route
-        fetch('/download-superposition-PyMol', {
+        fetch('/user-download-superposition-PyMol', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
@@ -534,7 +533,7 @@
             const url = window.URL.createObjectURL(blob);
             const a = document.createElement('a');
             a.href = url;
-            a.download = `${proteinId}_${segmentId}_superposition_PyMol.zip`;
+            a.download = `${jobId}_superposition_PyMol.zip`;
             document.body.appendChild(a);
             a.click();
             a.remove();
