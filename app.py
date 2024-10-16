@@ -1324,7 +1324,7 @@ def user_results(job_id): # route for user results site. Takes Job ID
     assembly_pdbs = os.listdir(os.path.join(job_supp_cifs_dir)) # CIF bio assembly file names
     assembly_pdbs = [el for el in assembly_pdbs if el.endswith(".cif")]
 
-    assembly_pdb_ids = sorted(list(set([el.split("_")[0] for el in assembly_pdbs])),) # sorted unique PDB IDs
+    assembly_pdb_ids = sorted(list(set([el for el in assembly_pdbs])),) # sorted unique PDB IDs
 
     simple_pdbs = os.listdir(job_simple_pdbs_dir) # simple PDB file names (single chain)
     simple_pdbs = [el for el in simple_pdbs if el.endswith(".pdb")] # TODO NEED TO FIGURE THIS OUT
@@ -1401,6 +1401,26 @@ def user_get_table(): # route to get binding site residues for a given binding s
 
     return jsonify(site_data)
 
+@app.route('/user-get-uniprot-mapping', methods=['POST'])
+def user_get_uniprot_mapping(): # route to get UniProt residue and chain mapping for a given pdb
+    data = request.json
+    job_id = data['jobId']
+    pdb_file = data['pdbFile']
+
+    pdb_id, _ = os.path.splitext(pdb_file)
+
+    job_output_dir = os.path.join(USER_JOBS_OUT_FOLDER, job_id)
+    job_mappings_dir = os.path.join(job_output_dir, "mappings")
+
+    pdb2up_map = load_pickle(f'{job_mappings_dir}/{pdb_id}_pdb2up.pkl')
+    up2pdb_map = load_pickle(f'{job_mappings_dir}/{pdb_id}_up2pdb.pkl')
+    
+    response_data = {
+        'pdb2up': pdb2up_map, # convert_mapping_dict(pdb2up_map),
+        'up2pdb': up2pdb_map, # convert_mapping_dict(up2pdb_map),
+    }
+
+    return jsonify(response_data)
 
 ### LAUNCHING SERVER ###
 

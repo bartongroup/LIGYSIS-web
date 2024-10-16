@@ -52,7 +52,7 @@ function loadModel(simplePdb) { // Load a structure for each one of the simple p
                 let model = viewer.addModel(data, "pdb"); // Add the model to the viewer
                 let modelID = model.getID(); // Get the model ID. Used throughout to refere to a specific model
                 let baseName = simplePdb.split("/").pop(); // Get the base name of the file (without the path)
-                let pdbID = baseName.split("_")[0]; // Get the PDB ID
+                let pdbID = baseName; // Get the PDB ID
                 modelOrder[baseName] = modelID; // Store the model ID in the modelOrder dictionary: pdb file name --> model ID
                 modelOrderRev[modelID] = pdbID; // Store the pdb ID in the modelOrderRev dictionary: model ID --> pdb ID
                 models.push(model); // Add the model to the models list
