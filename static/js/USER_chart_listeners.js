@@ -187,15 +187,6 @@ document.getElementById('chartCanvas').addEventListener('mousemove', function(e)
                     });
                 siteAssemblyPDBResNums = siteAssemblyPDBResNum // this is now an array of dictionaries: {chain: chain, resi: resi}
 
-                // proteinChains.forEach((element) => { // in case of multiple copies of protein of interest
-                //     siteAssemblyPDBResNum = seg_ress_dict[pointLabel]
-                //         .filter(el => Up2PdbMapAssembly[chainsMapAssembly[element]].hasOwnProperty(el))
-                //         .map(el => Up2PdbMapAssembly[chainsMapAssembly[element]][el]);
-                //     siteAssemblyPDBResNums.push([element, siteAssemblyPDBResNum]);
-                //     let assemblySel = {model: activeModel, resi: siteAssemblyPDBResNum, chain: element, not: {atom: bboneAtoms}};
-                //     AssemblyHoveredSiteResidues.push(assemblySel);
-                // });
-
                 viewer.setStyle(
                     {model: activeModel, or: siteAssemblyPDBResNums, not: {atom: bboneAtoms}},
                     {
@@ -563,16 +554,6 @@ document.getElementById('chartCanvas').addEventListener('click', function(e) { /
                     siteAssemblyPDBResNums = siteAssemblyPDBResNum // this is now an array of dictionaries: {chain: chain, resi: resi}
                     AssemblyClickedSiteResidues = siteAssemblyPDBResNums;  
 
-                    // proteinChains.forEach((element) => { // in case of multiple copies of protein of interest
-                    //     let siteAssemblyPDBResNum = seg_ress_dict[index]
-                    //         .filter(el => Up2PdbMapAssembly[chainsMapAssembly[element]].hasOwnProperty(el))
-                    //         .map(el => Up2PdbMapAssembly[chainsMapAssembly[element]][el]);
-                    //     siteAssemblyPDBResNums.push([element, siteAssemblyPDBResNum]);
-                    
-                    //     let assemblySel = {model: activeModel, resi: siteAssemblyPDBResNum, chain: element, not: {atom: bboneAtoms}};
-                    //     AssemblyClickedSiteResidues.push(assemblySel);
-                    // });
-
                     viewer.setStyle(
                         {model: activeModel, or: siteAssemblyPDBResNums, not: {atom: bboneAtoms}},
                         {
@@ -613,7 +594,6 @@ document.getElementById('chartCanvas').addEventListener('click', function(e) { /
                         }
                         else {
                             for (residue of siteAssemblyPDBResNums) {
-                                // for (siteAssemblyPDBResNumber of siteAssemblyPDBResNum) { // variable name not ideal as siteAssemblyPDBResNum is an array
                                 let resChain = residue['chain'];
                                 let resNum = residue['resi'];
                                 let resSel = {model: activeModel, resi: resNum, chain: resChain}
@@ -630,26 +610,7 @@ document.getElementById('chartCanvas').addEventListener('click', function(e) { /
                                     false,
                                 );
                                 labelsHash[activeModel]["clickedSite"][index].push(label);
-                                // }
                             }
-                            // for ([element, siteAssemblyPDBResNum] of siteAssemblyPDBResNums) {
-                            //     for (siteAssemblyPDBResNumber of siteAssemblyPDBResNum) { // variable name not ideal as siteAssemblyPDBResNum is an array
-                            //         let resSel = {model: activeModel, resi: siteAssemblyPDBResNumber, chain: element}
-                            //         let resName = viewer.selectedAtoms(resSel)[0].resn
-                            //         let label = viewer.addLabel(
-                            //             resName + String(Pdb2UpMapAssembly[chainsMapAssembly[element]][siteAssemblyPDBResNumber]),
-                            //             {
-                            //                 alignment: 'center', backgroundColor: 'white', backgroundOpacity: 1,
-                            //                 borderColor: 'black', borderOpacity: 1, borderThickness: 2,
-                            //                 font: 'Arial', fontColor: pointColor, fontOpacity: 1, fontSize: 12,
-                            //                 inFront: true, screenOffset: [0, 0, 0], showBackground: true
-                            //             },
-                            //             resSel,
-                            //             false,
-                            //         );
-                            //         labelsHash[activeModel]["clickedSite"][index].push(label);
-                            //     }
-                            // }
                         }
                     }
                 }
@@ -724,15 +685,6 @@ document.getElementById('chartCanvas').addEventListener('click', function(e) { /
                     });
                 siteAssemblyPDBResNums = siteAssemblyPDBResNum // this is now an array of dictionaries: {chain: chain, resi: resi}
                 AssemblyClickedSiteResidues = siteAssemblyPDBResNums;
-                // proteinChains.forEach((element) => { // in case of multiple copies of protein of interest
-                //     let siteAssemblyPDBResNum = seg_ress_dict[index]
-                //         .filter(el => Up2PdbMapAssembly[chainsMapAssembly[element]].hasOwnProperty(el))
-                //         .map(el => Up2PdbMapAssembly[chainsMapAssembly[element]][el]);
-                //     siteAssemblyPDBResNums.push([element, siteAssemblyPDBResNum]);
-                
-                //     let assemblySel = {model: activeModel, resi: siteAssemblyPDBResNum, chain: element, not: {atom: bboneAtoms}};
-                //     AssemblyClickedSiteResidues.push(assemblySel);
-                // });
 
                 viewer.setStyle(
                     {model: activeModel, or: siteAssemblyPDBResNums, not: {atom: bboneAtoms}},
@@ -894,19 +846,35 @@ document.getElementById('newChartCanvas').addEventListener('mousemove', function
                             {cartoon: {style: cartoonStyle, color: defaultColor, arrows: cartoonArrows, tubes: cartoonTubes, opacity: cartoonOpacity, thickness: cartoonThickness,}}
                         );
                     }
-                    proteinChains.forEach((element) => { // in case of multiple copies of protein of interest
-                        let AssemblyPDBResNum = Up2PdbMapAssembly[chainsMapAssembly[element]][newPointLabel]
-                        if (AssemblyPDBResNum  != undefined) {
-                            AssemblyPDBResNums.push([element, AssemblyPDBResNum]);
-                            viewer.setStyle(
-                                {model: activeModel, resi: AssemblyPDBResNum, chain: element, not: {atom: bboneAtoms}},
-                                {
-                                    cartoon:{style: cartoonStyle, color: pointColor, arrows: cartoonArrows, tubes: cartoonTubes, opacity: cartoonOpacity, thickness: cartoonThickness,},
-                                    stick:{color: pointColor},
-                                }
-                            );
-                        }
+                    let AssemblyPDBResNum = Up2PdbMapAssembly[newPointLabel]
+                    let AssemblyPDBResNumSel = AssemblyPDBResNum.map(tuple => {
+                        return { chain: tuple[0], resi: tuple[1] };
                     });
+                    if (AssemblyPDBResNum  != undefined) {
+
+                        //AssemblyPDBResNums.push([element, AssemblyPDBResNum]);
+                        AssemblyPDBResNums = AssemblyPDBResNumSel;
+                        viewer.setStyle(
+                            {model: activeModel, or: AssemblyPDBResNumSel, not: {atom: bboneAtoms}},
+                            {
+                                cartoon:{style: cartoonStyle, color: pointColor, arrows: cartoonArrows, tubes: cartoonTubes, opacity: cartoonOpacity, thickness: cartoonThickness,},
+                                stick:{color: pointColor},
+                            }
+                        );
+                    }
+                    // proteinChains.forEach((element) => { // in case of multiple copies of protein of interest
+                    //     let AssemblyPDBResNum = Up2PdbMapAssembly[chainsMapAssembly[element]][newPointLabel]
+                    //     if (AssemblyPDBResNum  != undefined) {
+                    //         AssemblyPDBResNums.push([element, AssemblyPDBResNum]);
+                    //         viewer.setStyle(
+                    //             {model: activeModel, resi: AssemblyPDBResNum, chain: element, not: {atom: bboneAtoms}},
+                    //             {
+                    //                 cartoon:{style: cartoonStyle, color: pointColor, arrows: cartoonArrows, tubes: cartoonTubes, opacity: cartoonOpacity, thickness: cartoonThickness,},
+                    //                 stick:{color: pointColor},
+                    //             }
+                    //         );
+                    //     }
+                    // });
                 }
 
                 if (labelsVisible) {
@@ -944,11 +912,13 @@ document.getElementById('newChartCanvas').addEventListener('mousemove', function
                         }
                     }
                     else{
-                        AssemblyPDBResNums.forEach(([chain, resNum]) => {
-                            let resSel = {model: activeModel, resi: resNum, chain: chain}
+                        AssemblyPDBResNums.forEach((residue) => {
+                            let resChain = residue['chain'];
+                            let resNum = residue['resi'];
+                            let resSel = {model: activeModel, resi: resNum, chain: resChain}
                             let resName = viewer.selectedAtoms(resSel)[0].resn
                             let label = viewer.addLabel(
-                                resName + String(Pdb2UpMapAssembly[chainsMapAssembly[chain]][resNum]),
+                                resName + String(Pdb2UpMapAssembly[resChain][resNum]),
                                 {
                                     alignment: 'center', backgroundColor: 'white', backgroundOpacity: 1,
                                     borderColor: 'black', borderOpacity: 1, borderThickness: 2,
