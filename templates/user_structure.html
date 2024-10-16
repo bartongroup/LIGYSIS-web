@@ -701,10 +701,11 @@
         
         // Create an object with all the data you want to send
         const data = {
-            proteinId: proteinId,
-            segmentId: segmentId,
+            jobId: jobId,
             pdbId: pdbId
         };
+
+        let strucName = pdbId.substring(0, pdbId.lastIndexOf('.'));
     
         // Send a POST request to the Flask route
         fetch('/user-download-structure-contact-data', {
@@ -725,7 +726,7 @@
             const url = window.URL.createObjectURL(blob);
             const a = document.createElement('a');
             a.href = url;
-            a.download = `${jobId}_${pdbId}_contacts.csv`;
+            a.download = `${jobId}_${strucName}_contacts.csv`;
             document.body.appendChild(a);
             a.click();
             a.remove();

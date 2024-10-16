@@ -1778,7 +1778,7 @@ def user_download_structure_ChimeraX(): # route to download ChimeraX script to v
     )
 
 @app.route('/user-download-structure-PyMol', methods=['POST'])
-def user_download_structure_PyMol(): # route to download PyMol script to visualise assembly
+def user_download_structure_PyMol(): # route to download PyMol script to visualise structure
     data = request.get_json() # Get JSON data from the POST request
     
     job_id = data.get('jobId')
@@ -1886,6 +1886,35 @@ def user_download_structure_PyMol(): # route to download PyMol script to visuali
         download_name=f'{job_id}_{struc_name}_structure_PyMol.zip'
     )
 
+@app.route('/user-download-structure-contact-data', methods=['POST'])
+def user_download_structure_contact_data(): # route to download contacts data for a given structure
+    data = request.get_json()
+
+    job_id = data.get('jobId')
+    pdb_id = data.get('pdbId')
+
+    if not job_id or not pdb_id: # Validate the received data
+        return jsonify({'error': 'Missing data'}), 400
+
+    struc_name, _ = os.path.splitext(pdb_id)
+
+    job_output_dir = os.path.join(USER_JOBS_OUT_FOLDER, job_id)
+    job_arpeggio_dir = os.path.join(job_output_dir, "arpeggio")
+
+    arpeggio_df = pd.read_pickle(f'{job_arpeggio_dir}/{struc_name}_proc.pkl')
+
+    # Convert the DataFrame to CSV
+    csv_data = io.StringIO()
+    arpeggio_df.to_csv(csv_data, index=False)
+    csv_data.seek(0)
+
+    # Return the CSV file as a downloadable response
+    return send_file(
+        io.BytesIO(csv_data.getvalue().encode('utf-8')),
+            mimetype='text/csv',
+            as_attachment=True,
+            download_name=f'{job_id}_{struc_name}_contacts.csv'
+        )
 
 ### LAUNCHING SERVER ###
 
