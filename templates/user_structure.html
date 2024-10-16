@@ -197,7 +197,7 @@
                 </div>                
                 <div class="col-auto justify-content-center" style="padding-left:0px; padding-right:0px;">
                     <img src="/static/images/camera.svg" alt="Save Image" style="width: 2rem; height: 2rem; cursor: pointer;" 
-                    onclick="saveImage('3DmolCanvas', `${segmentName}_struc`)">
+                    onclick="saveImage('3DmolCanvas', `${jobId}_struc`)">
                 </div>
                 <div class="col-auto justify-content-end" style="padding-left:0px; padding-right:0px;">
                     <button id="saveAllArpeggioDataButton" 
@@ -299,7 +299,7 @@
                 </div>
                 <div class="col-6 col-sm-4 col-lg-8 col-xl-4 d-flex justify-content-center" style="padding-left:0px; padding-right:0px">
                     <img src="/static/images/camera.svg" alt="Save Image" style="width: 2rem; height: 2rem; cursor: pointer;" 
-                    onclick="saveImage('chartCanvas', `${segmentName}_sites_graph`)">
+                    onclick="saveImage('chartCanvas', `${jobId}_sites_graph`)">
                 </div>
             </div>
             <div class="row mb-0 justify-content-center custom-padding">
@@ -327,12 +327,13 @@
                 </div>
             </div>
             <div class="row mb-3 justify-content-center custom-padding">
+                <!-- TODO: FIX ME. NEED TO DO SOMETHING ABOUT BSS TABLE. CURRENTLY IT DOES NOT EXIST TO DOWNLOAD.-->
                 <div class="col-3 col-md-1 col-lg-3 col-xl-6 d-flex justify-content-center align-items-center" style="padding-left:0px; padding-right:0px">
                     <img
                         src="/static/images/download.svg"
                         alt="Download Icon"
                         style="width: 1.5rem; height: 1.5rem; cursor: pointer;"
-                        onclick="downloadCSV(`/static/data/biolip/split/site_tables/${proteinId}_bss.pkl`)"
+                        onclick="downloadCSV(`/static/data/USER_JOBS/OUT/${jobId}/results/${proteinId}_bss.pkl`)"
                     />
                     &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Download Table
                 </div>
@@ -388,7 +389,7 @@
                 </div>
                 <div class="col-sm-4 col-lg-8 col-xl-4 mb-2 d-flex justify-content-center align-items-center" style="padding-left:0px; padding-right:0px">
                     <img src="/static/images/camera.svg" alt="Save Image" style="width: 2rem; height: 2rem; cursor: pointer;" 
-                    onclick="saveImage('newChartCanvas', `${segmentName}_residues_graph`)">
+                    onclick="saveImage('newChartCanvas', `${jobId}_residues_graph`)">
                 </div>
             </div>
             <div class="row mb-1 justify-content-center custom-padding">
@@ -421,7 +422,7 @@
                         src="/static/images/download.svg"
                         alt="Download Icon"
                         style="width: 1.5rem; height: 1.5rem; cursor: pointer;"
-                        onclick="downloadCSV(`/static/data/biolip/split/res_tables/${segmentName}_ress.pkl`)"
+                        onclick="downloadCSV(`/static/data/USER_JOBS/OUT/${jobId}/results/${jobId}_results_table.pkl`)"
                     />
                     &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Download Table
                 </div>
