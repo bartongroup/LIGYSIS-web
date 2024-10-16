@@ -64,7 +64,7 @@ $('table#bss_table tbody').on('mouseover', 'tr', function () { // event listener
 
             siteAssemblyPDBResNums.push([element, siteAssemblyPDBResNum]);
 
-            let assemblySel = {model: protAtomsModel, resi: siteAssemblyPDBResNum, chain: element, not: {atom: bboneAtoms}};
+            let assemblySel = {model: activeModel, resi: siteAssemblyPDBResNum, chain: element, not: {atom: bboneAtoms}}; // used to be protAtomsModel. WRONG!?
             AssemblyHoveredSiteResidues.push(assemblySel);
         });
 

@@ -42,10 +42,6 @@ $('table#bss_table tbody').on('mouseover', 'tr', function () { // event listener
 
     if (activeModel == "superposition") {
 
-        // siteSuppPDBResNums = seg_ress_dict[rowId]
-        //     .filter(el => Up2PdbDict[repPdbId][repPdbChainId].hasOwnProperty(el)) // this accounts not for missing residues in the structure (unresolved)
-        //     .map(el => Up2PdbDict[repPdbId][repPdbChainId][el]);
-
         siteSuppPDBResNums = seg_ress_dict[rowId]
             .filter(el => Up2PdbDict.hasOwnProperty(el))
             .flatMap(el => {
@@ -66,19 +62,30 @@ $('table#bss_table tbody').on('mouseover', 'tr', function () { // event listener
         );
     }
     else {
-        proteinChains.forEach((element) => { // in case of multiple copies of protein of interest
-            let siteAssemblyPDBResNum = seg_ress_dict[rowId]
-                .filter(el => Up2PdbMapAssembly[chainsMapAssembly[element]].hasOwnProperty(el)) // filters out site residues not present in this assembly. otherwise mapping is undefined and causes problems later...
-                .map(el => Up2PdbMapAssembly[chainsMapAssembly[element]][el]);
+        // proteinChains.forEach((element) => { // in case of multiple copies of protein of interest
+        //     let siteAssemblyPDBResNum = seg_ress_dict[rowId]
+        //         .filter(el => Up2PdbMapAssembly[chainsMapAssembly[element]].hasOwnProperty(el)) // filters out site residues not present in this assembly. otherwise mapping is undefined and causes problems later...
+        //         .map(el => Up2PdbMapAssembly[chainsMapAssembly[element]][el]);
 
-            siteAssemblyPDBResNums.push([element, siteAssemblyPDBResNum]);
+        //     siteAssemblyPDBResNums.push([element, siteAssemblyPDBResNum]);
 
-            let assemblySel = {model: protAtomsModel, resi: siteAssemblyPDBResNum, chain: element, not: {atom: bboneAtoms}};
-            AssemblyHoveredSiteResidues.push(assemblySel);
-        });
+        //     let assemblySel = {model: protAtomsModel, resi: siteAssemblyPDBResNum, chain: element, not: {atom: bboneAtoms}};
+        //     AssemblyHoveredSiteResidues.push(assemblySel);
+        // });
+
+        siteAssemblyPDBResNum = seg_ress_dict[rowId]
+                    .filter(el => Up2PdbMapAssembly.hasOwnProperty(el))
+                    .flatMap(el => {
+                        let dataArray = Up2PdbMapAssembly[el]; // Get the array of tuples
+                        return dataArray.map(data => {
+                            return { chain: data[0], resi: data[1] }; // Extract chain and resi for each element
+                        });
+                    });
+        siteAssemblyPDBResNums = siteAssemblyPDBResNum // this is now an array of dictionaries: {chain: chain, resi: resi}
+        AssemblyHoveredSiteResidues = siteAssemblyPDBResNums
 
         viewer.setStyle(
-            {model: activeModel, or: AssemblyHoveredSiteResidues},
+            {model: activeModel, or: AssemblyHoveredSiteResidues, not: {atom: bboneAtoms}},
             {
                 cartoon:{style: cartoonStyle, color: siteColor, arrows: cartoonArrows, tubes: cartoonTubes, opacity: cartoonOpacity, thickness: cartoonThickness,},
                 stick:{color: siteColor},
@@ -113,7 +120,7 @@ $('table#bss_table tbody').on('mouseover', 'tr', function () { // event listener
         else{
             if (contactsVisible) {
                 viewer.setStyle(
-                    {model: activeModel, or: AssemblyHoveredSiteResidues}, // hiding all the hovered site residues
+                    {model: activeModel, or: AssemblyHoveredSiteResidues, not: {atom: bboneAtoms}}, // hiding all the hovered site residues
                     {
                         cartoon:{style: cartoonStyle, color: defaultColor, arrows: cartoonArrows, tubes: cartoonTubes, opacity: cartoonOpacity, thickness: cartoonThickness,},
                     }
@@ -131,7 +138,7 @@ $('table#bss_table tbody').on('mouseover', 'tr', function () { // event listener
             }
             else {
                 viewer.setStyle(
-                    {model: activeModel, or: AssemblyHoveredSiteResidues},
+                    {model: activeModel, or: AssemblyHoveredSiteResidues, not: {atom: bboneAtoms}},
                     {
                         cartoon:{style: cartoonStyle, color: defaultColor, arrows: cartoonArrows, tubes: cartoonTubes, opacity: cartoonOpacity, thickness: cartoonThickness,},
                     }
@@ -191,7 +198,7 @@ $('table#bss_table tbody').on('mouseover', 'tr', function () { // event listener
             }
             else {
                 viewer.setStyle( // colouring the clicked site (necessary as sometimes there is overlap between sites)
-                    {model: activeModel, or: AssemblyClickedSiteResidues},
+                    {model: activeModel, or: AssemblyClickedSiteResidues, not: {atom: bboneAtoms}},
                     {cartoon:{style: cartoonStyle, color: clickedSiteColor, arrows: cartoonArrows, tubes: cartoonTubes, opacity: cartoonOpacity, thickness: cartoonThickness,},
                     stick:{color: clickedSiteColor,}, }
                 );
@@ -356,7 +363,7 @@ $('table#bss_table tbody').on('mouseover', 'tr', function () { // event listener
                     }
                     else {
                         viewer.setStyle(
-                            {model: activeModel, or: AssemblyClickedSiteResidues},
+                            {model: activeModel, or: AssemblyClickedSiteResidues, not: {atom: bboneAtoms}},
                             {
                                 cartoon: {style: cartoonStyle, color: defaultColor, arrows: cartoonArrows, tubes: cartoonTubes, opacity: cartoonOpacity, thickness: cartoonThickness,}
                             }
@@ -401,24 +408,35 @@ $('table#bss_table tbody').on('mouseover', 'tr', function () { // event listener
         }
     
         else {
-            proteinChains.forEach((element) => { // in case of multiple copies of protein of interest
-                let siteAssemblyPDBResNum = seg_ress_dict[rowId]
-                    .filter(el => Up2PdbMapAssembly[chainsMapAssembly[element]].hasOwnProperty(el))
-                    .map(el => Up2PdbMapAssembly[chainsMapAssembly[element]][el]);
+            // proteinChains.forEach((element) => { // in case of multiple copies of protein of interest
+            //     let siteAssemblyPDBResNum = seg_ress_dict[rowId]
+            //         .filter(el => Up2PdbMapAssembly[chainsMapAssembly[element]].hasOwnProperty(el))
+            //         .map(el => Up2PdbMapAssembly[chainsMapAssembly[element]][el]);
     
-                siteAssemblyPDBResNums.push([element, siteAssemblyPDBResNum]);
-                let assemblySel = {model: activeModel, resi: siteAssemblyPDBResNum, chain: element, not: {atom: bboneAtoms}};
-                AssemblyClickedSiteResidues.push(assemblySel);
-            });
+            //     siteAssemblyPDBResNums.push([element, siteAssemblyPDBResNum]);
+            //     let assemblySel = {model: activeModel, resi: siteAssemblyPDBResNum, chain: element, not: {atom: bboneAtoms}};
+            //     AssemblyClickedSiteResidues.push(assemblySel);
+            // });
+
+            let siteAssemblyPDBResNum = seg_ress_dict[rowId]
+                .filter(el => Up2PdbMapAssembly.hasOwnProperty(el))
+                .flatMap(el => {
+                    let dataArray = Up2PdbMapAssembly[el]; // Get the array of tuples
+                    return dataArray.map(data => {
+                        return { chain: data[0], resi: data[1] }; // Extract chain and resi for each element
+                    });
+                });
+            siteAssemblyPDBResNums = siteAssemblyPDBResNum // this is now an array of dictionaries: {chain: chain, resi: resi}
+            AssemblyClickedSiteResidues = siteAssemblyPDBResNums;  
 
             viewer.setStyle(
-                {model: activeModel, or: AssemblyClickedSiteResidues},
+                {model: activeModel, or: AssemblyClickedSiteResidues, not: {atom: bboneAtoms}},
                 {
                     cartoon:{style: cartoonStyle, color: siteColor, arrows: cartoonArrows, tubes: cartoonTubes, opacity: cartoonOpacity, thickness: cartoonThickness,},
                     stick:{color: siteColor},
                 }
             );
-            viewer.zoomTo({model: activeModel, or: AssemblyClickedSiteResidues});
+            viewer.zoomTo({model: activeModel, or: AssemblyClickedSiteResidues, not: {atom: bboneAtoms}});
         }
 
         if (index !== -1) {
@@ -467,24 +485,42 @@ $('table#bss_table tbody').on('mouseover', 'tr', function () { // event listener
                     }
                 }
                 else {
-                    for ([element, siteAssemblyPDBResNum] of siteAssemblyPDBResNums) {
-                        for (siteAssemblyPDBResNumber of siteAssemblyPDBResNum) { // variable name not ideal as siteAssemblyPDBResNum is an array
-                            let resSel = {model: activeModel, resi: siteAssemblyPDBResNumber, chain: element}
-                            let resName = viewer.selectedAtoms(resSel)[0].resn
-                            let label = viewer.addLabel(
-                                resName + String(Pdb2UpMapAssembly[chainsMapAssembly[element]][siteAssemblyPDBResNumber]),
-                                {
-                                    alignment: 'center', backgroundColor: 'white', backgroundOpacity: 1,
-                                    borderColor: 'black', borderOpacity: 1, borderThickness: 2,
-                                    font: 'Arial', fontColor: siteColor, fontOpacity: 1, fontSize: 12,
-                                    inFront: true, screenOffset: [0, 0, 0], showBackground: true
-                                },
-                                resSel,
-                                false,
-                            );
-                            labelsHash[activeModel]["clickedSite"][rowId].push(label);
-                        }
+                    for (residue of siteAssemblyPDBResNums) {
+                        let resChain = residue['chain'];
+                        let resNum = residue['resi'];
+                        let resSel = {model: activeModel, resi: resNum, chain: resChain}
+                        let resName = viewer.selectedAtoms(resSel)[0].resn
+                        let label = viewer.addLabel(
+                            resName + String(Pdb2UpMapAssembly[resChain][resNum]),
+                            {
+                                alignment: 'center', backgroundColor: 'white', backgroundOpacity: 1,
+                                borderColor: 'black', borderOpacity: 1, borderThickness: 2,
+                                font: 'Arial', fontColor: siteColor, fontOpacity: 1, fontSize: 12,
+                                inFront: true, screenOffset: [0, 0, 0], showBackground: true
+                            },
+                            resSel,
+                            false,
+                        );
+                        labelsHash[activeModel]["clickedSite"][index].push(label);
                     }
+                    // for ([element, siteAssemblyPDBResNum] of siteAssemblyPDBResNums) {
+                    //     for (siteAssemblyPDBResNumber of siteAssemblyPDBResNum) { // variable name not ideal as siteAssemblyPDBResNum is an array
+                    //         let resSel = {model: activeModel, resi: siteAssemblyPDBResNumber, chain: element}
+                    //         let resName = viewer.selectedAtoms(resSel)[0].resn
+                    //         let label = viewer.addLabel(
+                    //             resName + String(Pdb2UpMapAssembly[chainsMapAssembly[element]][siteAssemblyPDBResNumber]),
+                    //             {
+                    //                 alignment: 'center', backgroundColor: 'white', backgroundOpacity: 1,
+                    //                 borderColor: 'black', borderOpacity: 1, borderThickness: 2,
+                    //                 font: 'Arial', fontColor: siteColor, fontOpacity: 1, fontSize: 12,
+                    //                 inFront: true, screenOffset: [0, 0, 0], showBackground: true
+                    //             },
+                    //             resSel,
+                    //             false,
+                    //         );
+                    //         labelsHash[activeModel]["clickedSite"][rowId].push(label);
+                    //     }
+                    // }
                 }
             }
         }
