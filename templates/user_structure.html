@@ -33,11 +33,8 @@
     const Pdb2UpDict = {{ pdb2up_dict | tojson   }}
     const Up2PdbDict = {{ up2pdb_dict  | tojson  }}
 
-    let Pdb2UpMapAssembly; // this gets populated by the PDB --> UniProt mapping for the active assembly model
-    let Up2PdbMapAssembly; // this gets populated by the UniProt --> PDB mapping for the active assembly model
-    let Chain2AccMapAssembly; // this gets populated by the Chain ID --> UniProt ID mapping for the active assembly model
-    let chainsMapAssembly; // this gets populated by chain remapping data (BIO --> ASYM unit) for the active assembly model
-    let proteinChains; // chain IDs corresponding to the protein of interest
+    let Pdb2UpMapAssembly; // this gets populated by the PDB --> UniProt mapping for the active structure model
+    let Up2PdbMapAssembly; // this gets populated by the UniProt --> PDB mapping for the active structure model
     
     const simplePdbs = {{ simple_pdbs | tojson }}
     const assemblyPdbIds = {{ assembly_pdb_ids | tojson }}
@@ -189,9 +186,9 @@
                 <div class="col-auto justify-content-start" style="padding-left:0px; padding-right:0px;">
                     <button id="saveArpeggioDataButton" 
                             style="border: 1px solid darkgray; color: darkgray; display: flex; align-items: center; border-radius: 5px; padding: 5px 10px;" 
-                            onclick="saveAssemblyContactData()" 
+                            onclick="saveStructureContactData()" 
                             disabled>
-                            &nbsp;<img id="saveAssemblyContactsDownloadIcon" src="/static/images/download_gray.svg" alt="Download Icon" style="width: 1.5rem; height: 1.5rem; margin-right: 8px;">
+                            &nbsp;<img id="saveStructureContactsDownloadIcon" src="/static/images/download_gray.svg" alt="Download Icon" style="width: 1.5rem; height: 1.5rem; margin-right: 8px;">
                             &nbsp;Current Structure Contacts&nbsp;
                     </button>
                 </div>                
@@ -210,11 +207,11 @@
             </div>
             <div class="row mb-2 justify-content-between align-items-stretch custom-padding">
                 <div class="col-auto justify-content-start" style="padding-left:0px; padding-right:0px;">
-                    <button id="saveAssemblyButton" 
+                    <button id="saveStructureButton" 
                             style="border: 1px solid darkgray; color: darkgray; display: flex; align-items: center; border-radius: 5px; padding: 5px 10px;" 
-                            onclick="showMenu('saveAssembly')" 
+                            onclick="showMenu('saveStructure')" 
                             disabled>
-                            &nbsp;<img id="saveAssemblyDownloadIcon" src="/static/images/download_gray.svg" alt="Download Icon" style="width: 1.5rem; height: 1.5rem; margin-right: 8px;">
+                            &nbsp;<img id="saveStructureDownloadIcon" src="/static/images/download_gray.svg" alt="Download Icon" style="width: 1.5rem; height: 1.5rem; margin-right: 8px;">
                             &nbsp;Current Structure&nbsp;
                     </button>
                 </div>
@@ -225,7 +222,7 @@
                     </button>
                 </div>
                 <div class="col-auto justify-content-end" style="padding-left:0px; padding-right:0px;">
-                    <button id="saveAssembliesButton" style="border: 1px solid black; color: black; display: flex; align-items: center; border-radius: 5px;  padding: 5px 10px;" onclick="showMenu('saveAllStructures')">
+                    <button id="saveStructuresButton" style="border: 1px solid black; color: black; display: flex; align-items: center; border-radius: 5px;  padding: 5px 10px;" onclick="showMenu('saveAllStructures')">
                         &nbsp;<img src="/static/images/download.svg" alt="Download Icon" style="width: 1.5rem; height: 1.5rem; margin-right: 8px;">
                         &nbsp;<b>ALL</b>&nbsp;Structures&nbsp;
                     </button>
@@ -543,18 +540,17 @@
         });
     }
     
-    function saveAssemblyChimeraX() { // Save the assembly script for ChimeraX
+    function saveStructureChimeraX() { // Save the structure script for ChimeraX
         let pdbId = modelOrderRev[activeModel];  // Replace with your actual modelOrderRev[activeModel] variable
         
         // Create an object with all the data you want to send
         const data = {
-            proteinId: proteinId,
-            segmentId: segmentId,
+            jobId: jobId,
             pdbId: pdbId
         };
     
         // Send a POST request to the Flask route
-        fetch('/download-assembly-ChimeraX', {
+        fetch('/user-download-structure-ChimeraX', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
@@ -572,7 +568,7 @@
             const url = window.URL.createObjectURL(blob);
             const a = document.createElement('a');
             a.href = url;
-            a.download = `${proteinId}_${segmentId}_${pdbId}_assembly_ChimeraX.zip`;
+            a.download = `${jobId}_${pdbId}_structure_ChimeraX.zip`;
             document.body.appendChild(a);
             a.click();
             a.remove();
@@ -582,7 +578,7 @@
         });
     }
 
-    function saveAssemblyPyMol() { // Save the assembly script for PyMol
+    function saveStructurePyMol() { // Save the structure script for PyMol
         let pdbId = modelOrderRev[activeModel];  // Replace with your actual modelOrderRev[activeModel] variable
         
         // Create an object with all the data you want to send
@@ -593,7 +589,7 @@
         };
     
         // Send a POST request to the Flask route
-        fetch('/download-assembly-PyMol', {
+        fetch('/user-download-structure-PyMol', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
@@ -611,7 +607,7 @@
             const url = window.URL.createObjectURL(blob);
             const a = document.createElement('a');
             a.href = url;
-            a.download = `${proteinId}_${segmentId}_${pdbId}_assembly_PyMol.zip`;
+            a.download = `${jobId}_${pdbId}_structure_PyMol.zip`;
             document.body.appendChild(a);
             a.click();
             a.remove();
@@ -697,7 +693,7 @@
             });
     }
     
-    function saveAssemblyContactData() { // Save the assembly contact data for the active model
+    function saveStructureContactData() { // Save the structure contact data for the active model
         let pdbId = modelOrderRev[activeModel];  // Replace with your actual modelOrderRev[activeModel] variable
         
         // Create an object with all the data you want to send
@@ -708,7 +704,7 @@
         };
     
         // Send a POST request to the Flask route
-        fetch('/download-assembly-contact-data', {
+        fetch('/user-download-structure-contact-data', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
@@ -726,7 +722,7 @@
             const url = window.URL.createObjectURL(blob);
             const a = document.createElement('a');
             a.href = url;
-            a.download = `${proteinId}_${segmentId}_${pdbId}_contacts.csv`;
+            a.download = `${jobId}_${pdbId}_contacts.csv`;
             document.body.appendChild(a);
             a.click();
             a.remove();
@@ -736,7 +732,7 @@
         });
     }
 
-    function saveAllStructuresContactData() { // Save the assembly contact data for all structures
+    function saveAllStructuresContactData() { // Save the structure contact data for all structures
         
         // Create an object with all the data you want to send
         const data = {

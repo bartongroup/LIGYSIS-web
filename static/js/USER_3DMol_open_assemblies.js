@@ -126,16 +126,16 @@ function selectOption(option) {
             contactsButton.style.color = "#ffa500";
             contactsButton.style.borderWidth = "1px";
 
-            saveAssemblyButton.disabled = false;
-            saveAssemblyButton.style.color = 'black';  // Active font color
-            saveAssemblyButton.style.borderColor = 'black';  // Active font color
-            saveAssemblyDownloadIcon.setAttribute('src', '/static/images/download.svg');
+            saveStructureButton.disabled = false;
+            saveStructureButton.style.color = 'black';  // Active font color
+            saveStructureButton.style.borderColor = 'black';  // Active font color
+            saveStructureDownloadIcon.setAttribute('src', '/static/images/download.svg');
 
 
             saveArpeggioDataButton.disabled = false;
             saveArpeggioDataButton.style.color = 'black';  // Active font color
             saveArpeggioDataButton.style.borderColor = 'black';  // Active font color
-            saveAssemblyContactsDownloadIcon.setAttribute('src', '/static/images/download.svg');
+            saveStructureContactsDownloadIcon.setAttribute('src', '/static/images/download.svg');
 
             
             for (const model of suppModels) { // hide ligand superposition models using suppModels array
@@ -213,15 +213,15 @@ function selectOption(option) {
                 contactsButton.style.borderWidth = "1px";
 
 
-                saveAssemblyButton.disabled = false;
-                saveAssemblyButton.style.color = 'black';  // Active font color
-                saveAssemblyButton.style.borderColor = 'black';  // Active font color
-                saveAssemblyDownloadIcon.setAttribute('src', '/static/images/download.svg');
+                saveStructureButton.disabled = false;
+                saveStructureButton.style.color = 'black';  // Active font color
+                saveStructureButton.style.borderColor = 'black';  // Active font color
+                saveStructureDownloadIcon.setAttribute('src', '/static/images/download.svg');
 
                 saveArpeggioDataButton.disabled = false;
                 saveArpeggioDataButton.style.color = 'black';  // Active font color
                 saveArpeggioDataButton.style.borderColor = 'black';  // Active font color
-                saveAssemblyContactsDownloadIcon.setAttribute('src', '/static/images/download.svg');
+                saveStructureContactsDownloadIcon.setAttribute('src', '/static/images/download.svg');
             }
             else {
 
@@ -233,15 +233,15 @@ function selectOption(option) {
                 contactsButton.style.color = "darkgray";
                 contactsButton.style.borderWidth = "1px";
 
-                saveAssemblyButton.disabled = true;
-                saveAssemblyButton.style.color = 'darkgray';  // Active font color
-                saveAssemblyButton.style.borderColor = 'darkgray';  // Active font color
-                saveAssemblyDownloadIcon.setAttribute('src', '/static/images/download_gray.svg');
+                saveStructureButton.disabled = true;
+                saveStructureButton.style.color = 'darkgray';  // Active font color
+                saveStructureButton.style.borderColor = 'darkgray';  // Active font color
+                saveStructureDownloadIcon.setAttribute('src', '/static/images/download_gray.svg');
 
                 saveArpeggioDataButton.disabled = true;
                 saveArpeggioDataButton.style.color = 'darkgray';  // Active font color
                 saveArpeggioDataButton.style.borderColor = 'darkgray';  // Active font color
-                saveAssemblyContactsDownloadIcon.setAttribute('src', '/static/images/download_gray.svg');
+                saveStructureContactsDownloadIcon.setAttribute('src', '/static/images/download_gray.svg');
 
                 console.log(`Reading SIFTS mapping for ${protAtomsStruc}`);
 
