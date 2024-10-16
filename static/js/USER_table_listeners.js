@@ -408,15 +408,6 @@ $('table#bss_table tbody').on('mouseover', 'tr', function () { // event listener
         }
     
         else {
-            // proteinChains.forEach((element) => { // in case of multiple copies of protein of interest
-            //     let siteAssemblyPDBResNum = seg_ress_dict[rowId]
-            //         .filter(el => Up2PdbMapAssembly[chainsMapAssembly[element]].hasOwnProperty(el))
-            //         .map(el => Up2PdbMapAssembly[chainsMapAssembly[element]][el]);
-    
-            //     siteAssemblyPDBResNums.push([element, siteAssemblyPDBResNum]);
-            //     let assemblySel = {model: activeModel, resi: siteAssemblyPDBResNum, chain: element, not: {atom: bboneAtoms}};
-            //     AssemblyClickedSiteResidues.push(assemblySel);
-            // });
 
             let siteAssemblyPDBResNum = seg_ress_dict[rowId]
                 .filter(el => Up2PdbMapAssembly.hasOwnProperty(el))
@@ -478,7 +469,7 @@ $('table#bss_table tbody').on('mouseover', 'tr', function () { // event listener
                                 font: 'Arial', fontColor: siteColor, fontOpacity: 1, fontSize: 12,
                                 inFront: true, screenOffset: [0, 0, 0], showBackground: true
                             },
-                            resSel,
+                            {model: protAtomsModel, resi: resNum, chain: resChain, atom: 'CA'},
                             false,
                         );
                         labelsHash[activeModel]["clickedSite"][rowId].push(label);
@@ -498,29 +489,12 @@ $('table#bss_table tbody').on('mouseover', 'tr', function () { // event listener
                                 font: 'Arial', fontColor: siteColor, fontOpacity: 1, fontSize: 12,
                                 inFront: true, screenOffset: [0, 0, 0], showBackground: true
                             },
-                            resSel,
+                            {model: activeModel, resi: resNum, chain: resChain, atom: 'CA'},
                             false,
                         );
                         labelsHash[activeModel]["clickedSite"][index].push(label);
                     }
-                    // for ([element, siteAssemblyPDBResNum] of siteAssemblyPDBResNums) {
-                    //     for (siteAssemblyPDBResNumber of siteAssemblyPDBResNum) { // variable name not ideal as siteAssemblyPDBResNum is an array
-                    //         let resSel = {model: activeModel, resi: siteAssemblyPDBResNumber, chain: element}
-                    //         let resName = viewer.selectedAtoms(resSel)[0].resn
-                    //         let label = viewer.addLabel(
-                    //             resName + String(Pdb2UpMapAssembly[chainsMapAssembly[element]][siteAssemblyPDBResNumber]),
-                    //             {
-                    //                 alignment: 'center', backgroundColor: 'white', backgroundOpacity: 1,
-                    //                 borderColor: 'black', borderOpacity: 1, borderThickness: 2,
-                    //                 font: 'Arial', fontColor: siteColor, fontOpacity: 1, fontSize: 12,
-                    //                 inFront: true, screenOffset: [0, 0, 0], showBackground: true
-                    //             },
-                    //             resSel,
-                    //             false,
-                    //         );
-                    //         labelsHash[activeModel]["clickedSite"][rowId].push(label);
-                    //     }
-                    // }
+
                 }
             }
         }
@@ -589,9 +563,7 @@ $('table#bs_ress_table tbody').on('mouseover', 'tr', function () { // event list
         }
         else {
             let AssemblyPDBResNum = Up2PdbMapAssembly[rowId]
-            // proteinChains.forEach((element) => { // in case of multiple copies of protein of interest
-            // let AssemblyPDBResNum = Up2PdbMapAssembly[chainsMapAssembly[element]][rowId]
-            // AssemblyPDBResNums.push([element, AssemblyPDBResNum]);
+
             if (AssemblyPDBResNum !== undefined) {
                 let AssemblyPDBResNumSel = AssemblyPDBResNum.map(tuple => {
                     return { chain: tuple[0], resi: tuple[1] };
@@ -636,7 +608,7 @@ $('table#bs_ress_table tbody').on('mouseover', 'tr', function () { // event list
                                 font: 'Arial', fontColor: rowColorHex, fontOpacity: 1, fontSize: 12,
                                 inFront: true, screenOffset: [0, 0, 0], showBackground: true
                             },
-                            resSel,
+                            {model: protAtomsModel, resi: resNum, chain: resChain, atom: 'CA'},
                             true,
                         );
                         labelsHash[activeModel]["hoveredRes"].push(label);
@@ -657,29 +629,11 @@ $('table#bs_ress_table tbody').on('mouseover', 'tr', function () { // event list
                             font: 'Arial', fontColor: rowColorHex, fontOpacity: 1, fontSize: 12,
                             inFront: true, screenOffset: [0, 0, 0], showBackground: true
                         },
-                        resSel,
+                        {model: activeModel, resi: resNum, chain: resChain, atom: 'CA'},
                         true,
                     );
                     labelsHash[activeModel]["hoveredRes"].push(label);
                 });
-                // AssemblyPDBResNums.forEach(([chain, resNum]) => {
-                //     if (resNum !== undefined) {
-                //         let resSel = {model: activeModel, resi: resNum, chain: chain}
-                //         let resName = viewer.selectedAtoms(resSel)[0].resn
-                //         let label = viewer.addLabel(
-                //             resName + String(Pdb2UpMapAssembly[chainsMapAssembly[chain]][resNum]),
-                //             {
-                //                 alignment: 'center', backgroundColor: 'white', backgroundOpacity: 1,
-                //                 borderColor: 'black', borderOpacity: 1, borderThickness: 2,
-                //                 font: 'Arial', fontColor: rowColorHex, fontOpacity: 1, fontSize: 12,
-                //                 inFront: true, screenOffset: [0, 0, 0], showBackground: true
-                //             },
-                //             resSel,
-                //             true,
-                //         );
-                //         labelsHash[activeModel]["hoveredRes"].push(label);
-                //     }
-                // });
             }
         }
         viewer.render();

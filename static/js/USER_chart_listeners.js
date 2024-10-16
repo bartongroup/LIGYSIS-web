@@ -586,7 +586,7 @@ document.getElementById('chartCanvas').addEventListener('click', function(e) { /
                                         font: 'Arial', fontColor: pointColor, fontOpacity: 1, fontSize: 12,
                                         inFront: true, screenOffset: [0, 0, 0], showBackground: true
                                     },
-                                    resSel,
+                                    {model: protAtomsModel, resi: resNum, chain: resChain, atom: 'CA'},
                                     false,
                                 );
                                 labelsHash[activeModel]["clickedSite"][index].push(label);
@@ -606,7 +606,7 @@ document.getElementById('chartCanvas').addEventListener('click', function(e) { /
                                         font: 'Arial', fontColor: pointColor, fontOpacity: 1, fontSize: 12,
                                         inFront: true, screenOffset: [0, 0, 0], showBackground: true
                                     },
-                                    resSel,
+                                    {model: activeModel, resi: resNum, chain: resChain, atom: 'CA'},
                                     false,
                                 );
                                 labelsHash[activeModel]["clickedSite"][index].push(label);
@@ -719,7 +719,7 @@ document.getElementById('chartCanvas').addEventListener('click', function(e) { /
                                     font: 'Arial', fontColor: pointColor, fontOpacity: 1, fontSize: 12,
                                     inFront: true, screenOffset: [0, 0, 0], showBackground: true
                                 },
-                                resSel,
+                                {model: protAtomsModel, resi: resNum, chain: resChain, atom: 'CA'},
                                 false,
                             );
                             labelsHash[activeModel]["clickedSite"][index].push(label);
@@ -739,7 +739,7 @@ document.getElementById('chartCanvas').addEventListener('click', function(e) { /
                                     font: 'Arial', fontColor: pointColor, fontOpacity: 1, fontSize: 12,
                                     inFront: true, screenOffset: [0, 0, 0], showBackground: true
                                 },
-                                resSel,
+                                {model: activeModel, resi: resNum, chain: resChain, atom: 'CA'},
                                 false,
                             );
                             labelsHash[activeModel]["clickedSite"][index].push(label);
@@ -900,7 +900,7 @@ document.getElementById('newChartCanvas').addEventListener('mousemove', function
                                         font: 'Arial', fontColor: pointColor, fontOpacity: 1, fontSize: 12,
                                         inFront: true, screenOffset: [0, 0, 0], showBackground: true
                                     },
-                                    resSel,
+                                    {model: protAtomsModel, resi: resNum, chain: resChain, atom: 'CA'},
                                     true,
                                 );
                                 labelsHash[activeModel]["hoveredRes"].push(label);
@@ -924,7 +924,7 @@ document.getElementById('newChartCanvas').addEventListener('mousemove', function
                                     font: 'Arial', fontColor: pointColor, fontOpacity: 1, fontSize: 12,
                                     inFront: true, screenOffset: [0, 0, 0], showBackground: true
                                 },
-                                resSel,
+                                {model: activeModel, resi: resNum, chain: resChain, atom: 'CA'},
                                 true,
                             );
                             labelsHash[activeModel]["hoveredRes"].push(label);

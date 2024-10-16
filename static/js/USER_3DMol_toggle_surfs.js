@@ -221,7 +221,7 @@ function toggleLabelsVisibility() {
                                     font: 'Arial', fontColor: siteColor, fontOpacity: 1, fontSize: 12,
                                     inFront: true, screenOffset: [0, 0, 0], showBackground: true
                                 },
-                                resSel,
+                                {model: protAtomsModel, resi: resNum, chain: resChain, atom: 'CA'},
                                 true,
                             );
                             labelsHash[activeModel]["clickedSite"][clickedElementId].push(label);
@@ -254,37 +254,12 @@ function toggleLabelsVisibility() {
                                     font: 'Arial', fontColor: siteColor, fontOpacity: 1, fontSize: 12,
                                     inFront: true, screenOffset: [0, 0, 0], showBackground: true
                                 },
-                                resSel,
+                                {model: activeModel, resi: resNum, chain: resChain, atom: 'CA'},
                                 false,
                             );
                             labelsHash[activeModel]["clickedSite"][clickedElementId].push(label);
                             
                         }
-
-                        // proteinChains.forEach((element) => { // in case of multiple copies of protein of interest
-                        //     let siteAssemblyPDBResNum = seg_ress_dict[clickedElementId]
-                        //         .filter(el => Up2PdbMapAssembly[chainsMapAssembly[element]].hasOwnProperty(el))
-                        //         .map(el => Up2PdbMapAssembly[chainsMapAssembly[element]][el]);
-                        //     siteAssemblyPDBResNums.push([element, siteAssemblyPDBResNum]);
-                        // });
-                        // for ([element, siteAssemblyPDBResNum] of siteAssemblyPDBResNums) {
-                        //     for (siteAssemblyPDBResNumber of siteAssemblyPDBResNum) { // variable name not ideal as siteAssemblyPDBResNum is an array
-                        //         let resSel = {model: activeModel, resi: siteAssemblyPDBResNumber, chain: element}
-                        //         let resName = viewer.selectedAtoms(resSel)[0].resn
-                        //         let label = viewer.addLabel(
-                        //             resName + String(Pdb2UpMapAssembly[chainsMapAssembly[element]][siteAssemblyPDBResNumber]),
-                        //             {
-                        //                 alignment: 'center', backgroundColor: 'white', backgroundOpacity: 1,
-                        //                 borderColor: 'black', borderOpacity: 1, borderThickness: 2,
-                        //                 font: 'Arial', fontColor: siteColor, fontOpacity: 1, fontSize: 12,
-                        //                 inFront: true, screenOffset: [0, 0, 0], showBackground: true
-                        //             },
-                        //             resSel,
-                        //             true,
-                        //         );
-                        //         labelsHash[activeModel]["clickedSite"][clickedElementId].push(label);
-                        //     }
-                        // }
                     }
                 }
                 viewer.render();
@@ -294,14 +269,14 @@ function toggleLabelsVisibility() {
             for (const [key, value] of Object.entries(ligandSitesHash[activeModel])) {
                 for (const bindingRes of value[0]) {
                     let label = viewer.addLabel(
-                        bindingRes.resn + String(Pdb2UpMapAssembly[chainsMapAssembly[bindingRes.chain]][bindingRes.resi]),
+                        bindingRes.resn + String(Pdb2UpMapAssembly[bindingRes.chain][bindingRes.resi]),
                         {
                             alignment: 'center', backgroundColor: 'white', backgroundOpacity: 1,
                             borderColor: 'black', borderOpacity: 1, borderThickness: 2,
                             font: 'Arial', fontColor: value[2], fontOpacity: 1, fontSize: 12,
                             inFront: true, screenOffset: [0, 0, 0], showBackground: true
                         },
-                        bindingRes,
+                        {model: bindingRes.model, resi: bindingRes.resi, chain: bindingRes.chain, atom: 'CA'},
                         true,
                     );
                     labelsHash[activeModel]["contactSites"].push(label);
@@ -558,16 +533,15 @@ function toggleContactsVisibility() {
     }
     else {
         if (contactCylinders[activeModel].length == 0) { // first time switching contacts on for this model
-            fetch('/get-contacts', {
+            fetch('/user-get-contacts', {
                 method: 'POST', // Use POST method to send data
                 headers: {
                     'Content-Type': 'application/json'
                 },
                 body: JSON.stringify(
                     {
-                        modelData: modelOrderRev[activeModel],
-                        proteinId: proteinId,
-                        segmentId: segmentId,
+                        jobId: jobId,
+                        strucFile: modelOrderRev[activeModel],
                     }
                 ) // Send the data as JSON
             })
@@ -715,14 +689,14 @@ function toggleContactsVisibility() {
                         // add labels 
                         if (labelsVisible) {
                             let label = viewer.addLabel(
-                                protResn + String(Pdb2UpMapAssembly[chainsMapAssembly[protChain]][protResi]),
+                                protResn + String(Pdb2UpMapAssembly[protChain][protResi]),
                                 {
                                     alignment: 'center', backgroundColor: 'white', backgroundOpacity: 1,
                                     borderColor: 'black', borderOpacity: 1, borderThickness: 2,
                                     font: 'Arial', fontColor: ligColor, fontOpacity: 1, fontSize: 12,
                                     inFront: true, screenOffset: [0, 0, 0], showBackground: true
                                 },
-                                sel,
+                                {model: activeModel, resi: protResi, chain: protChain, resn: protResn, atom: 'CA'},
                                 true,
                             );
                             labelsHash[activeModel]["contactSites"].push(label);

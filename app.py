@@ -287,6 +287,15 @@ arpeggio_cols = [
     'coords_end', 'coords_bgn', 'width', 'color'
 ]
 
+USER_arpeggio_cols = [
+    'contact', 'distance',
+    'auth_asym_id_end', 'auth_atom_id_end', 'auth_seq_id_end',
+    'label_comp_id_end', 'auth_asym_id_bgn',
+    'auth_atom_id_bgn', 'auth_seq_id_bgn', 'label_comp_id_bgn',
+    'UniProt_ResNum_end',
+    'coords_end', 'coords_bgn', 'width', 'color'
+]
+
 extra_cxc_lines = [
     "color white; set bgColor white;",
     "set silhouette ON; set silhouetteWidth 2; set silhouetteColor black;",
@@ -1421,6 +1430,56 @@ def user_get_uniprot_mapping(): # route to get UniProt residue and chain mapping
     }
 
     return jsonify(response_data)
+
+@app.route('/user-get-contacts', methods=['POST'])
+def user_get_contacts(): # route to get contacts data from Arpeggio table for a given assembly
+
+    data = request.json
+    job_id = data['jobId']
+    struc_file = data['strucFile']
+    struc_name, _ = os.path.splitext(struc_file)
+
+    job_output_dir = os.path.join(USER_JOBS_OUT_FOLDER, job_id)
+    job_arpeggio_dir = os.path.join(job_output_dir, "arpeggio")
+    job_results_dir = os.path.join(job_output_dir, "results")
+    
+    arpeggio_cons = pd.read_pickle(f'{job_arpeggio_dir}/{struc_name}_proc.pkl')
+
+    arpeggio_cons_filt = arpeggio_cons[
+        (arpeggio_cons['contact'].apply(lambda x: x != ["proximal"])) &
+        (arpeggio_cons['interacting_entities'] == "INTER") &
+        (arpeggio_cons['type'] == "atom-atom") & 
+        (~arpeggio_cons['auth_atom_id_end'].isin(['N', 'O',]))
+    ].copy()
+
+    json_cons = arpeggio_cons_filt[USER_arpeggio_cols].to_json(orient='records')
+
+    bs_membership = pd.read_pickle(f'{job_results_dir}/{job_id}_bss_membership.pkl')
+
+    bs_membership_rev = {v: k for k, vs in bs_membership.items() for v in vs}
+
+    struc_ligs = {k: v for k, v in bs_membership_rev.items() if k.startswith(struc_name)}
+
+    arpeggio_cons_filt["LIGAND_ID"] = arpeggio_cons_filt.label_comp_id_bgn + "_" + arpeggio_cons_filt.auth_asym_id_bgn + "_" + arpeggio_cons_filt.auth_seq_id_bgn.astype(str)
+
+    struc_prot_data = {}
+    for k, v in struc_ligs.items():
+        ligand_id = k.replace(f'{struc_name}_', "")
+        print(ligand_id)
+        ligand_site = v
+        ligand_rows = arpeggio_cons_filt[arpeggio_cons_filt.LIGAND_ID == ligand_id]
+        struc_prot_data[ligand_id] = [
+            list(ligand_rows[["label_comp_id_end", "auth_asym_id_end", "auth_seq_id_end"]].drop_duplicates().itertuples(index=False, name=None)),
+            ligand_site
+        ]
+
+    response_data = {
+        'contacts': json_cons,
+        'protein': struc_prot_data,
+    }
+
+    return jsonify(response_data) # send jasonified data back to client
+
 
 ### LAUNCHING SERVER ###
 

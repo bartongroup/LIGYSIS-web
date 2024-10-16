@@ -357,7 +357,7 @@ function openStructure(pdbId) {
                         }
 
                         let baseName = pdbUri.split("/").pop() // Name of the structure (.cif) file
-                        let pdbID = baseName.split("_")[0]; // PDB ID from file name
+                        let pdbID = baseName// .split("_")[0]; // PDB ID from file name
                         ligandSitesHash[activeModel] = {};
                         modelOrder[baseName] = modelID; // populate dictionary
                         modelOrderRev[modelID] = pdbID; // populate dictionary
