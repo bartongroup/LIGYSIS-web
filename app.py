@@ -2083,6 +2083,147 @@ def user_download_all_structures_ChimeraX(): # route to download ChimeraX script
         download_name=f'{job_id}_all_structures_ChimeraX.zip'
     )
 
+@app.route('/user-download-all-structures-PyMol', methods=['POST'])
+def user_download_all_structures_PyMol(): # route to download PyMol scripts to visualise all structures
+    data = request.get_json() # Get JSON data from the POST request
+    
+    job_id = data.get('jobId')
+    assembly_pdb_ids = data.get('assemblyPdbIds')  # This is your array
+
+    job_output_dir = os.path.join(USER_JOBS_OUT_FOLDER, job_id)
+    job_supp_cifs_dir = os.path.join(job_output_dir, "supp_cifs")
+    job_arpeggio_dir = os.path.join(job_output_dir, "arpeggio")
+    job_results_dir = os.path.join(job_output_dir, "results")
+
+    bs_membership = pd.read_pickle(f'{job_results_dir}/{job_id}_bss_membership.pkl')
+
+    bs_membership_rev = {v: k for k, vs in bs_membership.items() for v in vs}
+
+    if not job_id or not assembly_pdb_ids: # Validate the received data
+        return jsonify({'error': 'Missing data'}), 400
+    
+    memory_file = io.BytesIO() # Create an in-memory zip file for sending to the client
+    with zipfile.ZipFile(memory_file, 'w') as zf:
+        for pdb_id in assembly_pdb_ids: # Loop through each assembly PDB ID to create corresponding folders in the zip
+
+            struc_name, _ = os.path.splitext(pdb_id)
+
+            folder_name = f'{struc_name}'
+
+            assembly_file = f'{job_supp_cifs_dir}/{struc_name}.cif' # structure cif file
+
+            try:
+
+                arpeggio_cons = pd.read_pickle(f'{job_arpeggio_dir}/{struc_name}_proc.pkl')
+
+                arpeggio_cons_filt = arpeggio_cons[
+                    (arpeggio_cons['contact'].apply(lambda x: x != ["proximal"])) &
+                    (arpeggio_cons['interacting_entities'] == "INTER") &
+                    (arpeggio_cons['type'] == "atom-atom")
+                ].copy()
+
+                distance_lines = generate_distance_lines_PyMol(arpeggio_cons_filt, mult = 1.5)
+
+                struc_ligs = {k: v for k, v in bs_membership_rev.items() if k.startswith(struc_name)}
+
+                arpeggio_cons_filt["LIGAND_ID"] = arpeggio_cons_filt.label_comp_id_bgn + "_" + arpeggio_cons_filt.auth_asym_id_bgn + "_" + arpeggio_cons_filt.auth_seq_id_bgn.astype(str)
+
+                struc_prot_data = {}
+                for k, v in struc_ligs.items():
+                    ligand_id = k.replace(f'{struc_name}_', "")
+                    ligand_site = v
+                    ligand_rows = arpeggio_cons_filt[arpeggio_cons_filt.LIGAND_ID == ligand_id]
+                    struc_prot_data[ligand_id] = [
+                        list(ligand_rows[["label_comp_id_end", "auth_asym_id_end", "auth_seq_id_end"]].drop_duplicates().itertuples(index=False, name=None)),
+                        ligand_site
+                    ]
+
+                struc_prot_data_rf = transform_dict2(struc_prot_data)
+
+                aas_lines = []
+                ligs_lines = []
+                for k, v in struc_prot_data_rf.items():
+                    col_key = k
+                    ligs = v[0]
+                    ress = v[1]
+                    if ligs != []:
+                        lig_sels = []
+                        for el in ligs:
+                            lig_d = el.split("_")
+                            lig_sels.append(f'///{lig_d[1]}/{lig_d[2]}')
+                        lig_sel_str = f'select BS{col_key}_ligs, '+ ' '.join(lig_sels)
+                        bs_set_col_str = f'set_color BS{col_key}_color, {hex_to_rgb(colors[col_key])}'
+                        lig_col_str = f'color BS{col_key}_color, BS{col_key}_ligs'
+                        lig_disp_str = f'show licorice, BS{col_key}_ligs'
+                        ligs_lines.extend([lig_sel_str, bs_set_col_str, lig_col_str, lig_disp_str])
+                    if ress != []:
+                        prot_sel_str = f'select BS{col_key}, ' + ' '.join([f'///{el[1]}/{el[2]}' for el in ress])
+                        prot_col_str = f'color BS{col_key}_color, BS{col_key}'
+                        prot_disp_str = f'show licorice, BS{col_key}'
+                        aas_lines.extend([prot_sel_str, prot_col_str, prot_disp_str])
+
+                load_line = [f'load {os.path.basename(assembly_file)}']
+
+                pml_lines = pymol_looks + pymol_dash + load_line + basic_pymol_format + distance_lines + ligs_lines + aas_lines + ["deselect",]
+                pml_string = "\n".join(pml_lines)
+
+                pml_file = f'{job_id}_{struc_name}.pml'
+
+                files_to_zip = [
+                    assembly_file, 
+                ]
+
+                pml_file_in_memory = io.BytesIO()
+                pml_file_in_memory.write(pml_string.encode('utf-8'))
+                
+                for file_path in files_to_zip:
+                    if os.path.exists(file_path):  # Check if the file exists
+                        zf.write(file_path, os.path.join(folder_name, os.path.basename(file_path)))
+
+                pml_file_in_memory.seek(0)
+                zf.writestr(os.path.join(folder_name, pml_file), pml_file_in_memory.read())
+            
+            except:
+                print(f"No Arpeggio contacts found for {pdb_id}")
+
+                load_line = [f'load {os.path.basename(assembly_file)}']
+
+                pml_lines = pymol_looks + load_line + basic_pymol_format +  ["deselect",]
+                pml_string = "\n".join(pml_lines)
+
+                pml_file = f'{job_id}_{struc_name}.pml'
+
+                files_to_zip = [
+                    assembly_file, 
+                ]
+
+                pml_file_in_memory = io.BytesIO()
+                pml_file_in_memory.write(pml_string.encode('utf-8'))
+                
+                for file_path in files_to_zip:
+                    if os.path.exists(file_path):  # Check if the file exists
+                        zf.write(file_path, os.path.join(folder_name, os.path.basename(file_path)))
+
+                pml_file_in_memory.seek(0)
+                zf.writestr(os.path.join(folder_name, pml_file), pml_file_in_memory.read())
+
+
+        info_file_in_memory = io.BytesIO()
+        info_file_in_memory.write(contacts_info.encode('utf-8'))
+
+        info_file_in_memory.seek(0)
+        zf.writestr(info_file, info_file_in_memory.read())
+    
+    # Seek to the beginning of the in-memory zip file before sending it
+    memory_file.seek(0)
+    
+    # Send the zip file to the client as a downloadable file
+    return send_file(
+        memory_file,
+        mimetype='application/zip',
+        as_attachment=True,
+        download_name=f'{job_id}_all_structures_PyMol.zip'
+    )
 
 ### LAUNCHING SERVER ###
 
