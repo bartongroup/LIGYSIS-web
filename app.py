@@ -353,8 +353,7 @@ basic_pymol_format = [
 
 info_file = "README.txt" # info file about contacts visualisation
 
-### INTERACTIONS README ###
-contacts_info = """
+contacts_info = """ 
 Arpeggio protein-ligand contacts visualisation
 
 The Arpeggio colour scheme is used to visually represent different types of interactions. Below are the hex codes, their corresponding color names and the interactions they represent.
@@ -371,20 +370,20 @@ The Arpeggio colour scheme is used to visually represent different types of inte
 - #ff007f: Bright Pink - Used for 'carbonyl' interactions.
 
 The width of the pseudobonds represents the distance between the interacting atoms. Width of 0.125 if the atoms are within VdW Clash distance, otherwise 0.0625.
-"""
+""" #  Interactions README 
 
 ### READING INPUT DATA ###
-
-#prot_ids = load_pickle(os.path.join(DATA_FOLDER, "biolip_up_ids_15000_accs.pkl")) # protein ids list
 
 LIGYSIS_prots_data = load_pickle(f'{DATA_FOLDER}/LIGYSIS_protein_names_dict.pkl')
 
 prot_ids = sorted(list(LIGYSIS_prots_data.keys()))
 
-#### FLASK APP ###
+######################## FLASK APPLICATION ########################
 
 app = Flask(__name__)
-    
+
+################### ROUTES FOR LIGYSIS RESULTS ####################
+
 @app.route('/', methods=['POST', 'GET'])
 def index(): # route for index main site
     if request.method == 'POST':
@@ -1284,6 +1283,9 @@ def user_results(job_id): # route for user results site. Takes Job ID
     job_simple_pdbs_dir = os.path.join(job_output_dir, "simple_pdbs")
 
     results_df = pd.read_pickle(os.path.join(job_results_dir, f"{job_id}_results_table.pkl")) # results df contains all residues
+
+    uniprot_info = pd.read_pickle(os.path.join(job_results_dir, f"{job_id}_uniprot_info.pkl")) # uniprot data
+
     results_df["job_id"] = job_id
     bss_ress, bss_data = get_bss_table(results_df, job_id)
 
@@ -1352,7 +1354,8 @@ def user_results(job_id): # route for user results site. Takes Job ID
         seg_ress_dict = seg_ress_dict, job_id = job_id, #seg_id = seg_id, segment_reps = segment_reps,
         first_site_data = first_site_data, bs_table_tooltips = bs_table_tooltips, bs_ress_table_tooltips = bs_ress_table_tooltips,
         pdb2up_dict = pdb2up_dict, up2pdb_dict = up2pdb_dict, seg_stats = seg_stats, entry_name = entry_name, upid_name = upid_name, prot_long_name = prot_long_name,
-        simple_pdbs = simple_pdbs_full_path, assembly_pdb_ids = assembly_pdb_ids, prot_atoms_struc = prot_atoms_struc
+        simple_pdbs = simple_pdbs_full_path, assembly_pdb_ids = assembly_pdb_ids, prot_atoms_struc = prot_atoms_struc,
+        prot_acc = uniprot_info["up_id"], prot_entry = uniprot_info["up_entry"], prot_name = uniprot_info["prot_name"]
     )
 
 @app.route('/user-process-model-order', methods=['POST'])
@@ -2225,7 +2228,7 @@ def user_download_all_structures_PyMol(): # route to download PyMol scripts to v
         download_name=f'{job_id}_all_structures_PyMol.zip'
     )
 
-### LAUNCHING SERVER ###
+######################## LAUNCHING SERVER #########################
 
 if __name__ == "__main__":
     app.run(port = 9000, debug = True) # run Flask LIGYSIS app on port 9000
