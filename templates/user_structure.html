@@ -22,7 +22,9 @@
     const cc = {{ cc_new | tojson }}
     const seg_ress_dict = {{ seg_ress_dict | tojson }}
     const jobId = {{ job_id | tojson }}
-    
+    const protAcc = {{ prot_acc | tojson }}
+    const protEntry = {{ prot_entry | tojson }}
+    const protName = {{ prot_name | tojson }}
     let newChartData = {{ first_site_data | tojson }}
     let headings = {{ headings | tojson }}
     let segStats = {{ seg_stats | tojson  }}
@@ -116,11 +118,17 @@
 <div class="container-fluid">
     <div class="row justify-content-around">
         <div id="3DMolAppletHolder" class="col-lg-4 col-sm-12 d-flex flex-column align-items-stretch justify-content-center align-self-start column order-2">
+            <!-- <div class="row my-2 custom-padding align-self-stretch justify-content-center">
+                <div class="col-xl-auto d-flex flex-column align-items-center align-self-center justify-content-center" style="padding-left: 0px; padding-right:0px;">
+                    <h3 style="margin-bottom:0px;">
+                        Job ID:&nbsp;&nbsp;{{ job_id }}
+                    </h3>
+                </div>
+            </div> -->
             <div class="row my-2 custom-padding align-self-stretch justify-content-center">
                 <div class="col-xl-auto d-flex flex-column align-items-center align-self-center justify-content-center" style="padding-left: 0px; padding-right:0px;">
                     <h3 style="margin-bottom:0px;">
-                        {{ prot_long_name }}
-                        <!-- cAMP-dependent protein kinase catalytic subunit alpha -->
+                        {{ prot_name}}
                     </h3>
                 </div>
             </div>
@@ -132,6 +140,11 @@
                                 <img src="/static/images/info.svg" alt="Info Icon" style="width: 1.5rem; height: 1.5rem;">
                             </a>
                     </h5>
+                </div>
+                <div class="col-auto d-flex align-items-center justify-content-start" style="padding-left:0px; padding-right: 0px;">
+                    <h4 style="margin-bottom:0px;">
+                        Job ID:&nbsp;&nbsp;{{ job_id }}
+                    </h4>
                 </div>
                 <div class="col-xl-auto d-flex align-items-center justify-content-end" style="padding-left: 0px; padding-right:0px;">
                     <div class="dropup">
@@ -252,15 +265,15 @@
         <div class="col-lg-3 col-sm-12 mb-3 d-flex flex-column column order-1">
             <div class="row my-2 align-self-stretch justify-content-around custom-padding">
                 <div class="col-xl-auto d-flex flex-column align-items-center align-items-md-start align-self-center justify-content-xl-end" style="padding-left: 0px; padding-right:0px;">
-                    <a href="https://www.uniprot.org/uniprotkb/{{ prot_id }}/entry">
+                    <a href="https://www.uniprot.org/uniprotkb/{{ prot_acc }}/entry">
                         <h2>
-                            {{ upid_name }}&nbsp;
+                            {{ prot_acc }}&nbsp;
                         </h2>
                     </a>
                 </div>
                 <div class="col-xl-auto d-flex flex-column align-items-center align-items-md-start align-self-center justify-content-xl-end">
                     <h2>
-                        &nbsp;{{ entry_name }}
+                        &nbsp;{{ prot_entry}}
                     </h2>
                 </div>
             </div>
@@ -330,7 +343,7 @@
                         src="/static/images/download.svg"
                         alt="Download Icon"
                         style="width: 1.5rem; height: 1.5rem; cursor: pointer;"
-                        onclick="downloadCSV(`/static/data/USER_JOBS/OUT/${jobId}/results/${proteinId}_bss.pkl`)"
+                        onclick="downloadCSV(`/static/data/USER_JOBS/OUT/${jobId}/results/${jobId}_bss_table.pkl`)"
                     />
                     &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Download Table
                 </div>
