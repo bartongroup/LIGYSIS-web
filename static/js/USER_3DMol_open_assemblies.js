@@ -35,9 +35,6 @@ function selectOption(option) {
 
             viewer.addStyle({resn: "HOH"}, {sphere: {hidden: true, color: waterColor, radius: sphereRadius}}); // hide all water molecules from superposition
 
-            // waterButton.value = 'Waters OFF'; // turn waterButton off
-            // waterButton.style = "font-weight: bold; color: #674ea7;";
-
             document.getElementById("waterButton").textContent = "WATERS ✘";
             waterButton.style.borderColor = "#ffa500";
             waterButton.style.fontWeight = "normal";
@@ -338,8 +335,8 @@ function openStructure(pdbId) {
                                         color: defaultColor,
                                         opacity: surfHiddenOpacity,
                                     },
-                                    {model: activeModel, not:{or: surfAssemblyPDBResNums}},
-                                    {model: activeModel, not:{or: surfAssemblyPDBResNums}},
+                                    {...protAtoms, model: activeModel, not:{or: surfAssemblyPDBResNums}},
+                                    {...protAtoms, model: activeModel, not:{or: surfAssemblyPDBResNums}},
                                 );
                             }
                             else {
@@ -350,8 +347,8 @@ function openStructure(pdbId) {
                                         color: siteColor,
                                         opacity: surfHiddenOpacity,
                                     },
-                                    {model: activeModel, or: surfAssemblyPDBResNums},
-                                    {model: activeModel, or: surfAssemblyPDBResNums},
+                                    {...protAtoms, model: activeModel, or: surfAssemblyPDBResNums},
+                                    {...protAtoms, model: activeModel, or: surfAssemblyPDBResNums},
                                 );
                             }
                         }

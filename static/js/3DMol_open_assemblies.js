@@ -372,8 +372,8 @@ function openStructure(pdbId) {
                                             color: defaultColor,
                                             opacity: surfHiddenOpacity,
                                         },
-                                        {model: activeModel, not:{resi: surfAssemblyPDBResNums}, chain: element},
-                                        {model: activeModel, not:{resi: surfAssemblyPDBResNums}, chain: element},
+                                        {...protAtoms, model: activeModel, not:{resi: surfAssemblyPDBResNums}, chain: element},
+                                        {...protAtoms, model: activeModel, not:{resi: surfAssemblyPDBResNums}, chain: element},
                                     );
                                 }
                                 else {
@@ -384,8 +384,8 @@ function openStructure(pdbId) {
                                             color: siteColor,
                                             opacity: surfHiddenOpacity,
                                         },
-                                        {model: activeModel, resi: surfAssemblyPDBResNums, chain: element},
-                                        {model: activeModel, resi: surfAssemblyPDBResNums, chain: element},
+                                        {...protAtoms, model: activeModel, resi: surfAssemblyPDBResNums, chain: element},
+                                        {...protAtoms, model: activeModel, resi: surfAssemblyPDBResNums, chain: element},
                                     );
                                 }
                             });
