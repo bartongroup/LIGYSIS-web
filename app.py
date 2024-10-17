@@ -215,41 +215,49 @@ def chimeraX2PyMol(cxc_in, attr_in, fmt = 'cif'): # converts ChimeraX command an
 
 #### USER JOB FUNCTIONS ####
 
-def get_bss_table(results_df, job_id):
+# def get_bss_table(results_df, job_id):
+#     all_bs_ress = results_df.query('binding_sites == binding_sites').reset_index(drop=True)
+#     all_bs_ress = all_bs_ress.explode("binding_sites")
+#     all_bs_ress["bs_id"] = all_bs_ress.job_id + "." + all_bs_ress.binding_sites.astype(str)
+#     all_bs_ress.UniProt_ResNum = all_bs_ress.UniProt_ResNum.astype(int)
+#     all_bs_ress["RSA"].values[all_bs_ress["RSA"].values > 100] = 100
+
+    
+#     site_ids, site_rsas, site_shenks, site_mess, site_sizes = [[], [], [], [], []]
+#     for bs_id, bs_rows in all_bs_ress.groupby("bs_id"):            
+#         no_rsa = len(bs_rows.query('RSA != RSA'))
+#         no_shenk = len(bs_rows.query('abs_norm_shenkin != abs_norm_shenkin'))
+#         no_mes = len(bs_rows.query('oddsratio != oddsratio'))
+
+#         bs_rows = bs_rows.drop_duplicates(["binding_sites", "UniProt_ResNum"]) # drop duplicate residues within the binding site
+#         site_rsa = round(bs_rows.query('RSA == RSA').RSA.mean(),1)
+#         site_shenk = round(bs_rows.query('abs_norm_shenkin == abs_norm_shenkin').abs_norm_shenkin.mean(),1)
+#         site_mes = round(bs_rows.query('oddsratio == oddsratio').oddsratio.mean(),2)
+#         site_size = len(bs_rows)
+
+#         site_ids.append(bs_id.split(".")[-1])
+#         site_rsas.append(site_rsa)
+#         site_shenks.append(site_shenk)
+#         site_mess.append(site_mes)
+#         site_sizes.append(site_size)
+
+#     bss_data = pd.DataFrame(
+#         list(zip(site_ids, site_rsas, site_shenks, site_mess, site_sizes)),
+#         columns = ["lab", "RSA", "an_shenk", "MES", "n_ress"]
+#     )
+
+#     bss_data["Cluster"] = -1 # placeholder for cluster label (need to replace)
+#     bss_data["FS"] = -1 # placeholder for functional score (need to replace)
+
+#     return all_bs_ress, bss_data
+
+def get_all_bs_ress(results_df, job_id):
     all_bs_ress = results_df.query('binding_sites == binding_sites').reset_index(drop=True)
     all_bs_ress = all_bs_ress.explode("binding_sites")
     all_bs_ress["bs_id"] = all_bs_ress.job_id + "." + all_bs_ress.binding_sites.astype(str)
     all_bs_ress.UniProt_ResNum = all_bs_ress.UniProt_ResNum.astype(int)
     all_bs_ress["RSA"].values[all_bs_ress["RSA"].values > 100] = 100
-
-    
-    site_ids, site_rsas, site_shenks, site_mess, site_sizes = [[], [], [], [], []]
-    for bs_id, bs_rows in all_bs_ress.groupby("bs_id"):            
-        no_rsa = len(bs_rows.query('RSA != RSA'))
-        no_shenk = len(bs_rows.query('abs_norm_shenkin != abs_norm_shenkin'))
-        no_mes = len(bs_rows.query('oddsratio != oddsratio'))
-
-        bs_rows = bs_rows.drop_duplicates(["binding_sites", "UniProt_ResNum"]) # drop duplicate residues within the binding site
-        site_rsa = round(bs_rows.query('RSA == RSA').RSA.mean(),1)
-        site_shenk = round(bs_rows.query('abs_norm_shenkin == abs_norm_shenkin').abs_norm_shenkin.mean(),1)
-        site_mes = round(bs_rows.query('oddsratio == oddsratio').oddsratio.mean(),2)
-        site_size = len(bs_rows)
-
-        site_ids.append(bs_id.split(".")[-1])
-        site_rsas.append(site_rsa)
-        site_shenks.append(site_shenk)
-        site_mess.append(site_mes)
-        site_sizes.append(site_size)
-
-    bss_data = pd.DataFrame(
-        list(zip(site_ids, site_rsas, site_shenks, site_mess, site_sizes)),
-        columns = ["lab", "RSA", "an_shenk", "MES", "n_ress"]
-    )
-
-    bss_data["Cluster"] = -1 # placeholder for cluster label (need to replace)
-    bss_data["FS"] = -1 # placeholder for functional score (need to replace)
-
-    return all_bs_ress, bss_data
+    return all_bs_ress
 
 ### SOME FIXED VARIABLES ###
 
@@ -1287,12 +1295,14 @@ def user_results(job_id): # route for user results site. Takes Job ID
     uniprot_info = pd.read_pickle(os.path.join(job_results_dir, f"{job_id}_uniprot_info.pkl")) # uniprot data
 
     results_df["job_id"] = job_id
-    bss_ress, bss_data = get_bss_table(results_df, job_id)
+    # bss_ress, bss_data = get_bss_table(results_df, job_id)
+    bss_ress = get_all_bs_ress(results_df, job_id)
 
-    bss_data = bss_data.fillna("NaN") # pre-processing could also be done before saving the pickle
+    # bss_data = bss_data.fillna("NaN") # pre-processing could also be done before saving the pickle
     
-    bss_data.columns = headings # changing table column names
-    bss_data["ID"] = bss_data["ID"].astype(int) # converting ID to int
+    # bss_data.columns = headings # changing table column names
+    # bss_data["ID"] = bss_data["ID"].astype(int) # converting ID to int
+    bss_data = pd.read_pickle(os.path.join(job_results_dir, f"{job_id}_bss_RSA_table.pkl")) # binding sites data
 
     first_site = int(bss_data.ID.unique().tolist()[0]) # first binding site ID
 
