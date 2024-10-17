@@ -1916,6 +1916,174 @@ def user_download_structure_contact_data(): # route to download contacts data fo
             download_name=f'{job_id}_{struc_name}_contacts.csv'
         )
 
+@app.route('/user-download-all-structures-ChimeraX', methods=['POST'])
+def user_download_all_structures_ChimeraX(): # route to download ChimeraX scripts to visualise all structures
+    data = request.get_json() # Get JSON data from the POST request
+    
+    job_id = data.get('jobId')
+    assembly_pdb_ids = data.get('assemblyPdbIds')  # This is your array
+
+    job_output_dir = os.path.join(USER_JOBS_OUT_FOLDER, job_id)
+    job_supp_cifs_dir = os.path.join(job_output_dir, "supp_cifs")
+    job_arpeggio_dir = os.path.join(job_output_dir, "arpeggio")
+    job_results_dir = os.path.join(job_output_dir, "results")
+
+    bs_membership = pd.read_pickle(f'{job_results_dir}/{job_id}_bss_membership.pkl')
+
+    bs_membership_rev = {v: k for k, vs in bs_membership.items() for v in vs}
+
+    if not job_id or not assembly_pdb_ids: # Validate the received data
+        return jsonify({'error': 'Missing data'}), 400
+    
+    memory_file = io.BytesIO() # Create an in-memory zip file for sending to the client
+    with zipfile.ZipFile(memory_file, 'w') as zf:
+        for pdb_id in assembly_pdb_ids: # Loop through each assembly PDB ID to create corresponding folders in the zip
+
+            struc_name, _ = os.path.splitext(pdb_id)
+
+            folder_name = f'{struc_name}'
+
+            assembly_file = f'{job_supp_cifs_dir}/{struc_name}.cif' # structure cif file
+
+            try:
+
+                arpeggio_cons = pd.read_pickle(f'{job_arpeggio_dir}/{struc_name}_proc.pkl')
+
+                arpeggio_cons_filt = arpeggio_cons[
+                    (arpeggio_cons['contact'].apply(lambda x: x != ["proximal"])) &
+                    (arpeggio_cons['interacting_entities'] == "INTER") &
+                    (arpeggio_cons['type'] == "atom-atom")
+                ].copy()
+
+                pseudobond_lines = "\n".join(generate_pseudobond_lines_ChimeraX(arpeggio_cons_filt))
+                pseudobond_file = f'{job_id}_{struc_name}.pb'
+
+                struc_ligs = {k: v for k, v in bs_membership_rev.items() if k.startswith(struc_name)}
+
+                arpeggio_cons_filt["LIGAND_ID"] = arpeggio_cons_filt.label_comp_id_bgn + "_" + arpeggio_cons_filt.auth_asym_id_bgn + "_" + arpeggio_cons_filt.auth_seq_id_bgn.astype(str)
+
+                struc_prot_data = {}
+                for k, v in struc_ligs.items():
+                    ligand_id = k.replace(f'{struc_name}_', "")
+                    ligand_site = v
+                    ligand_rows = arpeggio_cons_filt[arpeggio_cons_filt.LIGAND_ID == ligand_id]
+                    struc_prot_data[ligand_id] = [
+                        list(ligand_rows[["label_comp_id_end", "auth_asym_id_end", "auth_seq_id_end"]].drop_duplicates().itertuples(index=False, name=None)),
+                        ligand_site
+                    ]
+
+                aas_str = []
+                ligs_str = []
+
+                for k, v in struc_prot_data.items():
+                    lig_resn, lig_chain, lig_resi = k.split("_")
+                    ress = v[0]
+                    col_key = v[1]
+                    if ress != []:
+                        prot_sel_str = 'sel ' + ' '.join([f'/{el[1]}:{el[2]}' for el in ress]) + ';'
+                        prot_col_str = f'col sel {colors[col_key]}'
+                        prot_disp_str = 'disp sel'
+                        aas_str.extend([prot_sel_str, prot_col_str, prot_disp_str])
+
+                    lig_sel_str = 'sel ' + f'/{lig_chain}:{lig_resi};'
+                    lig_col_str = f'col sel {colors[col_key]}'
+                    lig_disp_str = 'disp sel'
+
+                    ligs_str.extend([lig_sel_str, lig_col_str, lig_disp_str])
+
+                cxc_lines = "\n".join(
+                    [
+                        f'open {struc_name}.cif',
+                        'color white', 
+                        f'open {pseudobond_file}',
+                        'set bgColor white',
+                        'set silhouette ON',
+                        'set silhouettewidth 2',
+                        '~disp',
+                        'surf',
+                        'transparency 30',
+                    ]  + aas_str + ligs_str + ['~sel', '~surf', ]
+                )
+
+                cxc_file = f'{job_id}_{struc_name}.cxc'
+
+                files_to_zip = [
+                    assembly_file, 
+                ]
+
+                # Create and add in-memory files directly to the zip
+                pb_file_in_memory = io.BytesIO()
+                pb_file_in_memory.write(pseudobond_lines.encode('utf-8'))
+
+                cxc_file_in_memory = io.BytesIO()
+                cxc_file_in_memory.write(cxc_lines.encode('utf-8'))
+                
+                for file_path in files_to_zip:
+                    if os.path.exists(file_path):  # Check if the file exists
+                        zf.write(file_path, os.path.join(folder_name, os.path.basename(file_path)))
+
+                # Add the in-memory files directly to the in-memory zip
+                pb_file_in_memory.seek(0)
+                zf.writestr(os.path.join(folder_name, pseudobond_file), pb_file_in_memory.read())
+
+                cxc_file_in_memory.seek(0)
+                zf.writestr(os.path.join(folder_name, cxc_file), cxc_file_in_memory.read())
+            except:
+                print(f"No Arpeggio contacts found for {pdb_id}")
+                # need to do everyting except .pb file and arpeggio bit
+
+                cxc_lines = "\n".join(
+                    [
+                        f'open {struc_name}.cif',
+                        'color white', 
+                        # f'open {pseudobond_file}',
+                        'set bgColor white',
+                        'set silhouette ON',
+                        'set silhouettewidth 2',
+                        '~disp',
+                        'surf',
+                        'transparency 30',
+                        '~surf',
+                    ]
+                )
+
+                cxc_file = f'{job_id}_{struc_name}.cxc'
+
+                files_to_zip = [
+                    assembly_file, 
+                ]
+
+                cxc_file_in_memory = io.BytesIO()
+                cxc_file_in_memory.write(cxc_lines.encode('utf-8'))
+                
+                for file_path in files_to_zip:
+                    if os.path.exists(file_path):  # Check if the file exists
+                        zf.write(file_path, os.path.join(folder_name, os.path.basename(file_path)))
+
+                # Add the in-memory files directly to the in-memory zip
+
+                cxc_file_in_memory.seek(0)
+                zf.writestr(os.path.join(folder_name, cxc_file), cxc_file_in_memory.read())
+
+
+        info_file_in_memory = io.BytesIO()
+        info_file_in_memory.write(contacts_info.encode('utf-8'))
+
+        info_file_in_memory.seek(0)
+        zf.writestr(info_file, info_file_in_memory.read())
+    
+    # Seek to the beginning of the in-memory zip file before sending it
+    memory_file.seek(0)
+    
+    # Send the zip file to the client as a downloadable file
+    return send_file(
+        memory_file,
+        mimetype='application/zip',
+        as_attachment=True,
+        download_name=f'{job_id}_all_structures_ChimeraX.zip'
+    )
+
+
 ### LAUNCHING SERVER ###
 
 if __name__ == "__main__":
