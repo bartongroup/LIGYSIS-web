@@ -49,7 +49,7 @@ function loadModel(simplePdb) { // Load a structure for each one of the simple p
     return new Promise((resolve, reject) => {
         jQuery.ajax(simplePdb, {
             success: function(data) {
-                let model = viewer.addModel(data, "pdb"); // Add the model to the viewer
+                let model = viewer.addModel(data, "cif"); // Add the model to the viewer
                 let modelID = model.getID(); // Get the model ID. Used throughout to refere to a specific model
                 let baseName = simplePdb.split("/").pop(); // Get the base name of the file (without the path)
                 let pdbID = baseName; // Get the PDB ID
@@ -81,7 +81,7 @@ function loadAllModels(simplePdbs) { // Load all structures
 
         suppModels = Array.from({length: models.length}, (_, i) => 0 + i); // Create an array of model IDs from 0 to N-1 where N is the number of superposition models
 
-        protAtomsModel = modelOrder[`${protAtomsStruc}.pdb`] // ### FIX FORMAT
+        protAtomsModel = modelOrder[`${protAtomsStruc}.cif`] 
 
         suppModelsNoProt = suppModels.filter(model => model !== protAtomsModel); // Create an array of model IDs without the protein atoms model
 

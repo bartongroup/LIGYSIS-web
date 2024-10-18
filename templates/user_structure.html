@@ -561,7 +561,7 @@
             pdbId: pdbId
         };
 
-        let strucName = pdbId.substring(0, pdbId.lastIndexOf('.'));
+        let strucName = pdbId.split('.')[0];
     
         // Send a POST request to the Flask route
         fetch('/user-download-structure-ChimeraX', {
@@ -601,7 +601,7 @@
             pdbId: pdbId
         };
         // strucName is pdbId without extension, but there could be other "." on the filename
-        let strucName = pdbId.substring(0, pdbId.lastIndexOf('.'));
+        let strucName = pdbId.split('.')[0];
     
         // Send a POST request to the Flask route
         fetch('/user-download-structure-PyMol', {
@@ -715,7 +715,7 @@
             pdbId: pdbId
         };
 
-        let strucName = pdbId.substring(0, pdbId.lastIndexOf('.'));
+        let strucName = pdbId.split('.')[0];
     
         // Send a POST request to the Flask route
         fetch('/user-download-structure-contact-data', {

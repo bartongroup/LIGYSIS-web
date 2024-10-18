@@ -1288,7 +1288,7 @@ def user_results(job_id): # route for user results site. Takes Job ID
     job_results_dir = os.path.join(job_output_dir, "results")
     job_supp_cifs_dir = os.path.join(job_output_dir, "supp_cifs")
     job_mappings_dir = os.path.join(job_output_dir, "mappings")
-    job_simple_pdbs_dir = os.path.join(job_output_dir, "simple_pdbs")
+    job_simple_cifs_dir = os.path.join(job_output_dir, "simple_cifs")
 
     results_df = pd.read_pickle(os.path.join(job_results_dir, f"{job_id}_results_table.pkl")) # results df contains all residues
 
@@ -1333,10 +1333,12 @@ def user_results(job_id): # route for user results site. Takes Job ID
     seg_ress_dict = {str(key): value for key, value in seg_ress_dict.items()}
     seg_ress_dict["ALL_BINDING"] = sorted(list(set([el2 for el in seg_ress_dict.values() for el2 in el]))) # add key: "ALL_BINDING" and value a sorted set of all binding residues
 
-    prot_atoms_struc, ext = os.path.splitext(sorted([f for f in os.listdir(job_supp_cifs_dir) if f.endswith(".cif")])[0])
+    prot_atoms_struc, ext = os.path.splitext(sorted([f for f in os.listdir(job_simple_cifs_dir) if f.endswith(".cif")])[0])
 
-    pdb2up_dict = load_pickle(f'{job_mappings_dir}/{prot_atoms_struc}_pdb2up.pkl')
-    up2pdb_dict = load_pickle(f'{job_mappings_dir}/{prot_atoms_struc}_up2pdb.pkl')
+    prot_atoms_struc_name = prot_atoms_struc.split(".")[0]
+
+    pdb2up_dict = load_pickle(f'{job_mappings_dir}/{prot_atoms_struc_name}_pdb2up.pkl')
+    up2pdb_dict = load_pickle(f'{job_mappings_dir}/{prot_atoms_struc_name}_up2pdb.pkl')
     
     entry_name = "UNIPROT_ENTRY_NAME"#LIGYSIS_prots_data[prot_id]["entry"]
 
@@ -1349,10 +1351,10 @@ def user_results(job_id): # route for user results site. Takes Job ID
 
     assembly_pdb_ids = sorted(list(set([el for el in assembly_pdbs])),) # sorted unique PDB IDs
 
-    simple_pdbs = os.listdir(job_simple_pdbs_dir) # simple PDB file names (single chain)
-    simple_pdbs = [el for el in simple_pdbs if el.endswith(".pdb")] # TODO NEED TO FIGURE THIS OUT
+    simple_cifs = os.listdir(job_simple_cifs_dir) # simple PDB file names (single chain)
+    simple_cifs = [el for el in simple_cifs if el.endswith(".cif")] # TODO NEED TO FIGURE THIS OUT
 
-    simple_pdbs_full_path = [f'/static/data/USER_JOBS/OUT/{job_id}/simple_pdbs/{el}' for el in simple_pdbs]
+    simple_cifs_full_path = [f'/static/data/USER_JOBS/OUT/{job_id}/simple_cifs/{el}' for el in simple_cifs]
 
     n_strucs = len([el for el in os.listdir(job_supp_cifs_dir) if el.endswith(".cif")]) # number of structures
     n_ligs = len(load_pickle(os.path.join(job_results_dir, f"{job_id}_ligs_fingerprints.pkl"))) # number of ligands
@@ -1364,7 +1366,7 @@ def user_results(job_id): # route for user results site. Takes Job ID
         seg_ress_dict = seg_ress_dict, job_id = job_id, #seg_id = seg_id, segment_reps = segment_reps,
         first_site_data = first_site_data, bs_table_tooltips = bs_table_tooltips, bs_ress_table_tooltips = bs_ress_table_tooltips,
         pdb2up_dict = pdb2up_dict, up2pdb_dict = up2pdb_dict, seg_stats = seg_stats, entry_name = entry_name, upid_name = upid_name, prot_long_name = prot_long_name,
-        simple_pdbs = simple_pdbs_full_path, assembly_pdb_ids = assembly_pdb_ids, prot_atoms_struc = prot_atoms_struc,
+        simple_pdbs = simple_cifs_full_path, assembly_pdb_ids = assembly_pdb_ids, prot_atoms_struc = prot_atoms_struc,
         prot_acc = uniprot_info["up_id"], prot_entry = uniprot_info["up_entry"], prot_name = uniprot_info["prot_name"]
     )
 
@@ -1374,10 +1376,12 @@ def user_process_model_order(): # route to process model order data from Chimera
     loaded_order = data['modelOrder'] # this is the order in which files have been loaded by 3DMol.js
     job_id = data['jobId'] # name of the segment
     
-    cxc_in =f'{USER_JOBS_OUT_FOLDER}/{job_id}/simple_pdbs/{job_id}_average_0.5.cxc' # ChimeraX command file
-    attr_in =  f'{USER_JOBS_OUT_FOLDER}/{job_id}/simple_pdbs/{job_id}_average_0.5.defattr' # ChimeraX attribute file
+    cxc_in =f'{USER_JOBS_OUT_FOLDER}/{job_id}/simple_cifs/{job_id}_average_0.5.cxc' # ChimeraX command file
+    attr_in =  f'{USER_JOBS_OUT_FOLDER}/{job_id}/simple_cifs/{job_id}_average_0.5.defattr' # ChimeraX attribute file
 
-    model_order = extract_open_files(cxc_in, fmt = "pdb") ## fix this format issue
+    model_order = extract_open_files(cxc_in, fmt = "cif") ## fix this format issue
+
+    print(model_order, loaded_order)
 
     result_tuples, bs_ids = transform_lines_3DMol(attr_in, model_order, loaded_order) # binding site attribute data list of tuples
 
@@ -1436,8 +1440,10 @@ def user_get_uniprot_mapping(): # route to get UniProt residue and chain mapping
     job_output_dir = os.path.join(USER_JOBS_OUT_FOLDER, job_id)
     job_mappings_dir = os.path.join(job_output_dir, "mappings")
 
-    pdb2up_map = load_pickle(f'{job_mappings_dir}/{pdb_id}_pdb2up.pkl')
-    up2pdb_map = load_pickle(f'{job_mappings_dir}/{pdb_id}_up2pdb.pkl')
+    struc_name = pdb_id.split(".")[0]
+
+    pdb2up_map = load_pickle(f'{job_mappings_dir}/{struc_name}_pdb2up.pkl')
+    up2pdb_map = load_pickle(f'{job_mappings_dir}/{struc_name}_up2pdb.pkl')
     
     response_data = {
         'pdb2up': pdb2up_map, # convert_mapping_dict(pdb2up_map),
@@ -1452,7 +1458,7 @@ def user_get_contacts(): # route to get contacts data from Arpeggio table for a 
     data = request.json
     job_id = data['jobId']
     struc_file = data['strucFile']
-    struc_name, _ = os.path.splitext(struc_file)
+    struc_name = os.path.splitext(struc_file)[0].split(".")[0]
 
     job_output_dir = os.path.join(USER_JOBS_OUT_FOLDER, job_id)
     job_arpeggio_dir = os.path.join(job_output_dir, "arpeggio")
@@ -1480,7 +1486,6 @@ def user_get_contacts(): # route to get contacts data from Arpeggio table for a 
     struc_prot_data = {}
     for k, v in struc_ligs.items():
         ligand_id = k.replace(f'{struc_name}_', "")
-        print(ligand_id)
         ligand_site = v
         ligand_rows = arpeggio_cons_filt[arpeggio_cons_filt.LIGAND_ID == ligand_id]
         struc_prot_data[ligand_id] = [
@@ -1509,7 +1514,7 @@ def user_download_all_structures_contact_data(): # route to download contacts da
 
     with zipfile.ZipFile(memory_file, 'w') as zf:
         for pdb_id in assembly_pdb_ids:
-            struc_name, _ = os.path.splitext(pdb_id)
+            struc_name = os.path.splitext(pdb_id)[0].split(".")[0]
             try:
                 arpeggio_df = pd.read_pickle(f'{job_arpeggio_dir}/{struc_name}_proc.pkl')
 
@@ -1543,13 +1548,11 @@ def user_download_superposition_ChimeraX(): # route to download ChimeraX script 
         return jsonify({'error': 'Missing data'}), 400
 
     job_output_dir = os.path.join(USER_JOBS_OUT_FOLDER, job_id)
-    job_simple_dir = os.path.join(job_output_dir, "simple_pdbs")
+    job_simple_dir = os.path.join(job_output_dir, "simple_cifs")
     job_results_dir = os.path.join(job_output_dir, "results")
     
-
-    # simple_dir = os.path.join(DATA_FOLDER, prot_id, str(seg_id), "simple")
     simple_pdbs = os.listdir(job_simple_dir)
-    simple_pdbs = [f'{job_simple_dir}/{el}' for el in simple_pdbs if el.endswith(".cif") or el.endswith(".pdb")]
+    simple_pdbs = [f'{job_simple_dir}/{el}' for el in simple_pdbs if el.endswith(".cif")]
 
     # seg_name = f'{prot_id}_{seg_id}'
     cxc_in =f'{job_simple_dir}/{job_id}_average_0.5.cxc' # ChimeraX command file
@@ -1620,19 +1623,16 @@ def user_download_superposition_PyMol(): # route to download PyMol script to vis
         return jsonify({'error': 'Missing data'}), 400
 
     job_output_dir = os.path.join(USER_JOBS_OUT_FOLDER, job_id)
-    job_simple_dir = os.path.join(job_output_dir, "simple_pdbs")
+    job_simple_dir = os.path.join(job_output_dir, "simple_cifs")
     job_results_dir = os.path.join(job_output_dir, "results")
-    
 
-    # simple_dir = os.path.join(DATA_FOLDER, prot_id, str(seg_id), "simple")
-    simple_pdbs = os.listdir(job_simple_dir)
-    simple_pdbs = [f'{job_simple_dir}/{el}' for el in simple_pdbs if el.endswith(".cif") or el.endswith(".pdb")]
+    simple_cifs = os.listdir(job_simple_dir)
+    simple_cifs = [f'{job_simple_dir}/{el}' for el in simple_cifs if el.endswith(".cif")]
 
-    # seg_name = f'{prot_id}_{seg_id}'
     cxc_in =f'{job_simple_dir}/{job_id}_average_0.5.cxc' # ChimeraX command file
     attr_in =  f'{job_simple_dir}/{job_id}_average_0.5.defattr' # ChimeraX attribute file
 
-    pymol_lines = chimeraX2PyMol(cxc_in, attr_in, fmt = "pdb") ## TODO FIX ME: what about formats? BE CONSISTENT!!!
+    pymol_lines = chimeraX2PyMol(cxc_in, attr_in, fmt = "cif")
     pymol_lines_string = "\n".join(pymol_lines)
 
     # Create and add in-memory files directly to the zip
@@ -1643,7 +1643,7 @@ def user_download_superposition_PyMol(): # route to download PyMol script to vis
     memory_file = io.BytesIO() # Create a BytesIO object to hold the in-memory zip file
 
     with zipfile.ZipFile(memory_file, 'w') as zf: # Create a ZipFile object for in-memory use
-        for file_path in simple_pdbs:
+        for file_path in simple_cifs:
             if os.path.exists(file_path):  # Check if the file exists
                 zf.write(file_path, os.path.basename(file_path))
             else:
@@ -1672,14 +1672,14 @@ def user_download_structure_ChimeraX(): # route to download ChimeraX script to v
     if not job_id or not pdb_id: # Validate the received data
         return jsonify({'error': 'Missing data'}), 400
 
-    struc_name, _ = os.path.splitext(pdb_id)
+    struc_name = os.path.splitext(pdb_id)[0].split(".")[0]
 
     job_output_dir = os.path.join(USER_JOBS_OUT_FOLDER, job_id)
     job_supp_cifs_dir = os.path.join(job_output_dir, "supp_cifs")
     job_arpeggio_dir = os.path.join(job_output_dir, "arpeggio")
     job_results_dir = os.path.join(job_output_dir, "results")
 
-    assembly_file = f'{job_supp_cifs_dir}/{struc_name}.cif' # structure cif file
+    assembly_file = f'{job_supp_cifs_dir}/{struc_name}.supp.cif' # structure cif file
 
     arpeggio_cons = pd.read_pickle(f'{job_arpeggio_dir}/{struc_name}_proc.pkl')
 
@@ -1733,7 +1733,7 @@ def user_download_structure_ChimeraX(): # route to download ChimeraX script to v
 
     cxc_lines = "\n".join(
         [
-            f'open {struc_name}.cif',
+            f'open {struc_name}.supp.cif',
             'color white', 
             f'open {pseudobond_file}',
             'set bgColor white',
@@ -1800,14 +1800,14 @@ def user_download_structure_PyMol(): # route to download PyMol script to visuali
     if not job_id or not pdb_id: # Validate the received data
         return jsonify({'error': 'Missing data'}), 400
 
-    struc_name, _ = os.path.splitext(pdb_id)
+    struc_name = os.path.splitext(pdb_id)[0].split(".")[0]
 
     job_output_dir = os.path.join(USER_JOBS_OUT_FOLDER, job_id)
     job_supp_cifs_dir = os.path.join(job_output_dir, "supp_cifs")
     job_arpeggio_dir = os.path.join(job_output_dir, "arpeggio")
     job_results_dir = os.path.join(job_output_dir, "results")
 
-    assembly_file = f'{job_supp_cifs_dir}/{struc_name}.cif' # structure cif file
+    assembly_file = f'{job_supp_cifs_dir}/{struc_name}.supp.cif' # structure cif file
 
     arpeggio_cons = pd.read_pickle(f'{job_arpeggio_dir}/{struc_name}_proc.pkl')
 
@@ -1827,6 +1827,7 @@ def user_download_structure_PyMol(): # route to download PyMol script to visuali
 
     arpeggio_cons_filt["LIGAND_ID"] = arpeggio_cons_filt.label_comp_id_bgn + "_" + arpeggio_cons_filt.auth_asym_id_bgn + "_" + arpeggio_cons_filt.auth_seq_id_bgn.astype(str)
 
+    print(struc_ligs)
     struc_prot_data = {}
     for k, v in struc_ligs.items():
         ligand_id = k.replace(f'{struc_name}_', "")
@@ -1909,7 +1910,7 @@ def user_download_structure_contact_data(): # route to download contacts data fo
     if not job_id or not pdb_id: # Validate the received data
         return jsonify({'error': 'Missing data'}), 400
 
-    struc_name, _ = os.path.splitext(pdb_id)
+    struc_name  = os.path.splitext(pdb_id)[0].split(".")[0]
 
     job_output_dir = os.path.join(USER_JOBS_OUT_FOLDER, job_id)
     job_arpeggio_dir = os.path.join(job_output_dir, "arpeggio")
@@ -1952,11 +1953,11 @@ def user_download_all_structures_ChimeraX(): # route to download ChimeraX script
     with zipfile.ZipFile(memory_file, 'w') as zf:
         for pdb_id in assembly_pdb_ids: # Loop through each assembly PDB ID to create corresponding folders in the zip
 
-            struc_name, _ = os.path.splitext(pdb_id)
+            struc_name = os.path.splitext(pdb_id)[0].split(".")[0]
 
             folder_name = f'{struc_name}'
 
-            assembly_file = f'{job_supp_cifs_dir}/{struc_name}.cif' # structure cif file
+            assembly_file = f'{job_supp_cifs_dir}/{struc_name}.supp.cif' # structure cif file
 
             try:
 
@@ -2006,7 +2007,7 @@ def user_download_all_structures_ChimeraX(): # route to download ChimeraX script
 
                 cxc_lines = "\n".join(
                     [
-                        f'open {struc_name}.cif',
+                        f'open {struc_name}.supp.cif',
                         'color white', 
                         f'open {pseudobond_file}',
                         'set bgColor white',
@@ -2047,7 +2048,7 @@ def user_download_all_structures_ChimeraX(): # route to download ChimeraX script
 
                 cxc_lines = "\n".join(
                     [
-                        f'open {struc_name}.cif',
+                        f'open {struc_name}.supp.cif',
                         'color white', 
                         # f'open {pseudobond_file}',
                         'set bgColor white',
@@ -2119,11 +2120,11 @@ def user_download_all_structures_PyMol(): # route to download PyMol scripts to v
     with zipfile.ZipFile(memory_file, 'w') as zf:
         for pdb_id in assembly_pdb_ids: # Loop through each assembly PDB ID to create corresponding folders in the zip
 
-            struc_name, _ = os.path.splitext(pdb_id)
+            struc_name = os.path.splitext(pdb_id)[0].split(".")[0]
 
             folder_name = f'{struc_name}'
 
-            assembly_file = f'{job_supp_cifs_dir}/{struc_name}.cif' # structure cif file
+            assembly_file = f'{job_supp_cifs_dir}/{struc_name}.supp.cif' # structure cif file
 
             try:
 
