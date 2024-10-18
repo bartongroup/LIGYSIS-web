@@ -16,7 +16,7 @@ $3Dmol.setSyncSurface(true); // all surfaces appear at once
 function showHoverLabel(atom, viewer) { // show label of hovered atom
     if(!atom.label) {
         atom.label = viewer.addLabel(
-            modelOrderRev[atom.model] + " " + atom.chain + " " + atom.resn + " " + atom.resi + " " + atom.atom,
+            modelOrderRev[atom.model].split(".")[0] + " " + atom.chain + " " + atom.resn + " " + atom.resi + " " + atom.atom,
             {position: atom, backgroundColor: 'mintcream', fontColor:'black', borderColor: 'black', borderThickness: 2}
         );
     }

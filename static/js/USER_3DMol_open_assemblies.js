@@ -12,7 +12,7 @@ function populateMenu() {
     assemblyPdbIds.forEach(id => {
         const option = document.createElement('a');
         option.href = "#";
-        option.textContent = id;
+        option.textContent = id.split(".")[0];
         option.onclick = () => selectOption(id);
         menu.appendChild(option);
     });
@@ -21,7 +21,7 @@ function populateMenu() {
 function selectOption(option) {
     if (option !== previousSelection) { // if the option is changed, otherwise do nothing
         const button = document.querySelector('.dropup-button');
-        button.textContent = option;
+        button.textContent = option.split(".")[0]; // Update the button text
 
         let clickedElements = document.getElementsByClassName("clicked-row");
         if (clickedElements.length > 0) {

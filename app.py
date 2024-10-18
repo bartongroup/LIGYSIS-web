@@ -1381,8 +1381,6 @@ def user_process_model_order(): # route to process model order data from Chimera
 
     model_order = extract_open_files(cxc_in, fmt = "cif") ## fix this format issue
 
-    print(model_order, loaded_order)
-
     result_tuples, bs_ids = transform_lines_3DMol(attr_in, model_order, loaded_order) # binding site attribute data list of tuples
 
     max_id = max(bs_ids) # maximum binding site ID
