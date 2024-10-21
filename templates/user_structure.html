@@ -383,8 +383,8 @@
                 <div class="col-sm-4 col-lg-8 col-xl-4 mb-2 d-flex justify-content-center align-items-center" style="padding-left:0px; padding-right:0px">
                     <span style="font-weight: 500; font-size: 1.25rem;">Y</span>:&nbsp;&nbsp;&nbsp;
                     <select id="yAxisTitle2" class="axis-dropdown2 y-axis-dropdown2">
-                        <option selected hidden>MES</option>
-                        {% for header in cc_new[1:] %}
+                        <!-- <option selected hidden>RSA</option> -->
+                        {% for header in cc_new_sel %}
                         <option value="{{ header }}">{{ header }}</option>
                         {% endfor %}
                     </select>
@@ -392,8 +392,8 @@
                 <div class="col-sm-4 col-lg-8 col-xl-4 mb-2 d-flex justify-content-center align-items-center" style="padding-left:0px; padding-right:0px">
                     <span style="font-weight: 500; font-size: 1.25rem;">X</span>:&nbsp;&nbsp;&nbsp;
                     <select id="xAxisTitle2" class="axis-dropdown2 x-axis-dropdown2">
-                        <option selected hidden>DS</option>
-                        {% for header in cc_new[1:] %}
+                        <!-- <option selected hidden>DS</option> -->
+                        {% for header in cc_new_sel %}
                         <option value="{{ header }}">{{ header }}</option>
                         {% endfor %}
                     </select>
