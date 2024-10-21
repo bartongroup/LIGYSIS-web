@@ -20,6 +20,7 @@ function populateMenu() {
 
 function selectOption(option) {
     if (option !== previousSelection) { // if the option is changed, otherwise do nothing
+        const strucName = option.split(".")[0]; // Name of the structure
         const button = document.querySelector('.dropup-button');
         button.textContent = option.split(".")[0]; // Update the button text
 
@@ -117,22 +118,42 @@ function selectOption(option) {
                 removeHoverLabel,
             );
 
-            contactsButton.disabled = false;
-            contactsButton.style.borderColor = "#ffa500";
-            contactsButton.style.fontWeight = "normal";
-            contactsButton.style.color = "#ffa500";
-            contactsButton.style.borderWidth = "1px";
+            if (strucName in strucCount) {
 
-            saveStructureButton.disabled = false;
-            saveStructureButton.style.color = 'black';  // Active font color
-            saveStructureButton.style.borderColor = 'black';  // Active font color
-            saveStructureDownloadIcon.setAttribute('src', '/static/images/download.svg');
+                contactsButton.disabled = false;
+                contactsButton.style.borderColor = "#ffa500";
+                contactsButton.style.fontWeight = "normal";
+                contactsButton.style.color = "#ffa500";
+                contactsButton.style.borderWidth = "1px";
 
+                saveStructureButton.disabled = false;
+                saveStructureButton.style.color = 'black';  // Active font color
+                saveStructureButton.style.borderColor = 'black';  // Active font color
+                saveStructureDownloadIcon.setAttribute('src', '/static/images/download.svg');
 
-            saveArpeggioDataButton.disabled = false;
-            saveArpeggioDataButton.style.color = 'black';  // Active font color
-            saveArpeggioDataButton.style.borderColor = 'black';  // Active font color
-            saveStructureContactsDownloadIcon.setAttribute('src', '/static/images/download.svg');
+                saveArpeggioDataButton.disabled = false;
+                saveArpeggioDataButton.style.color = 'black';  // Active font color
+                saveArpeggioDataButton.style.borderColor = 'black';  // Active font color
+                saveStructureContactsDownloadIcon.setAttribute('src', '/static/images/download.svg');
+            } else {
+                contactsButton.disabled = true;
+                contactsButton.style.borderColor = "darkgray";
+                contactsButton.style.fontWeight = "normal";
+                contactsButton.style.color = "darkgray";
+                contactsButton.style.borderWidth = "1px";
+
+                saveStructureButton.disabled = true;
+                saveStructureButton.style.color = 'darkgray';  // Active font color
+                saveStructureButton.style.borderColor = 'darkgray';  // Active font color
+                saveStructureDownloadIcon.setAttribute('src', '/static/images/download_gray.svg');
+
+                saveArpeggioDataButton.disabled = true;
+                saveArpeggioDataButton.style.color = 'darkgray';  // Active font color
+                saveArpeggioDataButton.style.borderColor = 'darkgray';  // Active font color
+                saveStructureContactsDownloadIcon.setAttribute('src', '/static/images/download_gray.svg');
+            }
+
+            
 
             
             for (const model of suppModels) { // hide ligand superposition models using suppModels array
@@ -203,22 +224,43 @@ function selectOption(option) {
 
                 openStructure(option); // act heere if model is not already open
 
-                contactsButton.disabled = false;
-                contactsButton.style.borderColor = "#ffa500";
-                contactsButton.style.fontWeight = "normal";
-                contactsButton.style.color = "#ffa500";
-                contactsButton.style.borderWidth = "1px";
+                if (strucName in strucCount) {
+
+                    contactsButton.disabled = false;
+                    contactsButton.style.borderColor = "#ffa500";
+                    contactsButton.style.fontWeight = "normal";
+                    contactsButton.style.color = "#ffa500";
+                    contactsButton.style.borderWidth = "1px";
+
+                    saveStructureButton.disabled = false;
+                    saveStructureButton.style.color = 'black';  // Active font color
+                    saveStructureButton.style.borderColor = 'black';  // Active font color
+                    saveStructureDownloadIcon.setAttribute('src', '/static/images/download.svg');
+
+                    saveArpeggioDataButton.disabled = false;
+                    saveArpeggioDataButton.style.color = 'black';  // Active font color
+                    saveArpeggioDataButton.style.borderColor = 'black';  // Active font color
+                    saveStructureContactsDownloadIcon.setAttribute('src', '/static/images/download.svg');
+                } else {
+                    contactsButton.disabled = true;
+                    contactsButton.style.borderColor = "darkgray";
+                    contactsButton.style.fontWeight = "normal";
+                    contactsButton.style.color = "darkgray";
+                    contactsButton.style.borderWidth = "1px";
+
+                    saveStructureButton.disabled = true;
+                    saveStructureButton.style.color = 'darkgray';  // Active font color
+                    saveStructureButton.style.borderColor = 'darkgray';  // Active font color
+                    saveStructureDownloadIcon.setAttribute('src', '/static/images/download_gray.svg');
+
+                    saveArpeggioDataButton.disabled = true;
+                    saveArpeggioDataButton.style.color = 'darkgray';  // Active font color
+                    saveArpeggioDataButton.style.borderColor = 'darkgray';  // Active font color
+                    saveStructureContactsDownloadIcon.setAttribute('src', '/static/images/download_gray.svg');
+                }
 
 
-                saveStructureButton.disabled = false;
-                saveStructureButton.style.color = 'black';  // Active font color
-                saveStructureButton.style.borderColor = 'black';  // Active font color
-                saveStructureDownloadIcon.setAttribute('src', '/static/images/download.svg');
-
-                saveArpeggioDataButton.disabled = false;
-                saveArpeggioDataButton.style.color = 'black';  // Active font color
-                saveArpeggioDataButton.style.borderColor = 'black';  // Active font color
-                saveStructureContactsDownloadIcon.setAttribute('src', '/static/images/download.svg');
+                
             }
             else {
 

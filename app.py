@@ -1361,13 +1361,17 @@ def user_results(job_id): # route for user results site. Takes Job ID
     n_sites = len(bss_data) # number of binding sites
     seg_stats = {'strucs': n_strucs, 'ligs': n_ligs, 'bss': n_sites}
 
+    lig_data = pd.read_pickle(f'{job_results_dir}/{job_id}_lig_data.pkl')
+    #load_pickle(os.path.join(job_results_dir, f"{job_id}_lig_data.pkl")) # ligand data
+    struc_count = lig_data.groupby(lig_data['struc_name'].str.split('.').str[0]).size().to_dict()
+
     return render_template(
         'USER_structure.html', data = data1, headings = headings, data2 = data2, cc_new = cc_new, colors = colors,
         seg_ress_dict = seg_ress_dict, job_id = job_id, #seg_id = seg_id, segment_reps = segment_reps,
         first_site_data = first_site_data, bs_table_tooltips = bs_table_tooltips, bs_ress_table_tooltips = bs_ress_table_tooltips,
         pdb2up_dict = pdb2up_dict, up2pdb_dict = up2pdb_dict, seg_stats = seg_stats, entry_name = entry_name, upid_name = upid_name, prot_long_name = prot_long_name,
         simple_pdbs = simple_cifs_full_path, assembly_pdb_ids = assembly_pdb_ids, prot_atoms_struc = prot_atoms_struc,
-        prot_acc = uniprot_info["up_id"], prot_entry = uniprot_info["up_entry"], prot_name = uniprot_info["prot_name"]
+        prot_acc = uniprot_info["up_id"], prot_entry = uniprot_info["up_entry"], prot_name = uniprot_info["prot_name"], struc_count = struc_count
     )
 
 @app.route('/user-process-model-order', methods=['POST'])
