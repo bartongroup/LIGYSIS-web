@@ -142,8 +142,6 @@ function toggleSurfaceVisibility() {
 
 function toggleLabelsVisibility() {
     if (labelsVisible) {
-        // labelButton.value = 'Labels OFF'; // Change the button text
-        // labelButton.style = "font-weight: bold; color: #674ea7;";
 
         document.getElementById("labelButton").textContent = "LABELS ✘";
         labelButton.style.borderColor = "#ffa500";
@@ -173,8 +171,6 @@ function toggleLabelsVisibility() {
         viewer.render();
     }
     else { // add labels if any site is clicked already
-        // labelButton.value = "LABELS ✓"; // Change the button text
-        // labelButton.style = "font-weight: bold; color: #B22222;";
 
         document.getElementById("labelButton").textContent = "LABELS ✓";
         labelButton.style.fontWeight = "bold";
@@ -195,14 +191,16 @@ function toggleLabelsVisibility() {
                     }
                 }
                 else {
-                    console.log(`Site ${clickedElementId} not clicked yet. Creating labels...`);
+                    // console.log(`Site ${clickedElementId} not clicked yet. Creating labels...`);
                     labelsHash[activeModel]["clickedSite"][clickedElementId] = [];
                     if (activeModel == "superposition") {
                         let siteSuppPDBResNums = seg_ress_dict[clickedElementId]
                             .filter(el => Up2PdbDict[repPdbId][repPdbChainId].hasOwnProperty(el)) // this accounts not for missing residues in the structure (unresolved)
                             .map(el => Up2PdbDict[repPdbId][repPdbChainId][el]);
+
+                        console.log(`Site ${clickedElementId} residues: ${siteSuppPDBResNums}`);
                         for (siteSuppPDBResNum of siteSuppPDBResNums) {
-                            let resSel = {resi: siteSuppPDBResNum}
+                            let resSel = {model: protAtomsModel, chain: repPdbChainId, resi: siteSuppPDBResNum}
                             let resName = viewer.selectedAtoms(resSel)[0].resn
                             let label = viewer.addLabel(
                                 resName + String(Pdb2UpDict[repPdbId][repPdbChainId][siteSuppPDBResNum]),
@@ -216,6 +214,7 @@ function toggleLabelsVisibility() {
                                 true,
                             );
                             labelsHash[activeModel]["clickedSite"][clickedElementId].push(label);
+                            // console.log(siteSuppPDBResNum, resSel, resName, resName + String(Pdb2UpDict[repPdbId][repPdbChainId][siteSuppPDBResNum]))
                         }
                         viewer.render();
                     }

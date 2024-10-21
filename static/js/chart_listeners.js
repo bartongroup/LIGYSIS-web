@@ -684,7 +684,7 @@ document.getElementById('chartCanvas').addEventListener('click', function(e) { /
                     labelsHash[activeModel]["clickedSite"][index] = [];
                     if (activeModel == "superposition") {
                         for (siteSuppPDBResNum of siteSuppPDBResNums) {
-                            let resSel = {model: suppModels, resi: siteSuppPDBResNum}
+                            let resSel = {model: protAtomsModel, chain: repPdbChainId, resi: siteSuppPDBResNum}
                             let resName = viewer.selectedAtoms(resSel)[0].resn
                             let label = viewer.addLabel(
                                 resName + String(Pdb2UpDict[repPdbId][repPdbChainId][siteSuppPDBResNum]),
