@@ -1310,7 +1310,11 @@ def user_results(job_id): # route for user results site. Takes Job ID
     # bss_data["ID"] = bss_data["ID"].astype(int) # converting ID to int
     bss_data = pd.read_pickle(os.path.join(job_results_dir, f"{job_id}_bss_RSA_table.pkl")) # binding sites data
 
-    first_site = int(bss_data.ID.unique().tolist()[0]) # first binding site ID
+    bss_data["ID"] = bss_data["ID"].astype(int) # converting ID to int
+
+    bss_data = bss_data.sort_values(by="ID") # sorting by ID
+
+    first_site = bss_data.ID.unique().tolist()[0] # first binding site ID
 
     bss_ress = bss_ress.fillna("NaN") # pre-processing could also be done before saving the pickle
 
