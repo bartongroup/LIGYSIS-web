@@ -1727,7 +1727,7 @@ def user_download_structure_ChimeraX(): # route to download ChimeraX script to v
     ligs_str = []
 
     for k, v in struc_prot_data.items():
-        print(k)
+        # print(k)
         lig_resn, lig_chain, lig_resi = k.split("_")
         ress = v[0]
         col_key = v[1]
@@ -1839,7 +1839,7 @@ def user_download_structure_PyMol(): # route to download PyMol script to visuali
 
     arpeggio_cons_filt["LIGAND_ID"] = arpeggio_cons_filt.label_comp_id_bgn + "_" + arpeggio_cons_filt.auth_asym_id_bgn + "_" + arpeggio_cons_filt.auth_seq_id_bgn.astype(str)
 
-    print(struc_ligs)
+    # print(struc_ligs)
     struc_prot_data = {}
     for k, v in struc_ligs.items():
         ligand_id = k.replace(f'{struc_name}_', "")
