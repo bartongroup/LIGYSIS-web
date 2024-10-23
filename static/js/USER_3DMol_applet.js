@@ -49,8 +49,8 @@ function loadModel(simplePdb) { // Load a structure for each one of the simple p
     return new Promise((resolve, reject) => {
         jQuery.ajax(simplePdb, {
             success: function(data) {
-                console.log(data);
-                console.log("Gonna load PDB " + simplePdb);
+                // console.log(data);
+                // console.log("Gonna load PDB " + simplePdb);
                 let model = viewer.addModel(data, "cif"); // Add the model to the viewer
                 let modelID = model.getID(); // Get the model ID. Used throughout to refere to a specific model
                 let baseName = simplePdb.split("/").pop(); // Get the base name of the file (without the path)
