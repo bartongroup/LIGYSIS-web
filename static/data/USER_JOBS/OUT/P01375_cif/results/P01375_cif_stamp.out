@@ -1,0 +1,81 @@
+
+STAMP Structural Alignment of Multiple Proteins
+
+Version 4.5 (10 September 2020)
+ by Robert B. Russell & Geoffrey J. Barton 
+ Please cite PROTEINS, v14, 309-323, 1992. PMID:1409577
+Running roughfit.
+
+    Sc = STAMP score, RMS = RMS deviation, Align = alignment length
+    Len1, Len2 = length of domain, Nfit = residues fitted
+    Secs = no. equivalent sec. strucs. Eq = no. equivalent residues
+    %I = seq. identity, %S = sec. str. identity
+    P(m)  = P value (p=1/10) calculated after Murzin (1993), JMB, 230, 689-694
+            (NC = P value not calculated - potential FP overflow)
+
+     No.  Domain1         Domain2         Sc     RMS    Len1 Len2  Align NFit Eq. Secs.   %I   %S   P(m)
+Pair   1  6x85-assembly1.supp 6x81-assembly1.supp 8.17   0.92    421  435   446  390 389    0  99.74 100.00 0.00e+00 
+Pair   2  6x85-assembly1.supp 7jra-assembly1.supp 0.59   2.58    421  441   564   44  27    0  14.81 100.00 1.00e+00  LOW SCORE
+Pair   3  6x85-assembly1.supp 6x86-assembly1.supp 9.33   0.56    421  423   425  412 412    0 100.00 100.00 0.00e+00 
+Pair   4  6x85-assembly1.supp 6x83-assembly1.supp 8.48   0.53    421  414   434  381 378    0 100.00 100.00 0.00e+00 
+Pair   5  6x85-assembly1.supp 6ooy-assembly1.supp 3.97   0.81    421  414   427  266 263    0  98.86 100.00 0.00e+00 
+Pair   6  6x85-assembly1.supp 6op0-assembly1.supp 4.29   0.79    421  407   427  275 270    0 100.00 100.00 0.00e+00 
+Pair   7  6x85-assembly1.supp 7kpa-assembly1.supp 4.17   0.89    421  426   429  279 273    0 100.00 100.00 0.00e+00 
+Pair   8  6x85-assembly1.supp 6x82-assembly1.supp 8.31   0.93    421  425   437  389 387    0  99.74 100.00 0.00e+00 
+Pair   9  6x85-assembly1.supp 6ooz-assembly1.supp 4.21   0.86    421  415   427  276 270    0 100.00 100.00 0.00e+00 
+Pair  10  6x81-assembly1.supp 7jra-assembly1.supp 0.53   2.40    435  441   588   36  28    0   3.57 100.00 1.00e+00  LOW SCORE
+Pair  11  6x81-assembly1.supp 6x86-assembly1.supp 8.38   0.78    435  423   444  394 394    0 100.00 100.00 0.00e+00 
+Pair  12  6x81-assembly1.supp 6x83-assembly1.supp 8.48   0.92    435  414   436  392 392    0 100.00 100.00 0.00e+00 
+Pair  13  6x81-assembly1.supp 6ooy-assembly1.supp 3.80   1.01    435  414   437  267 266    0 100.00 100.00 0.00e+00 
+Pair  14  6x81-assembly1.supp 6op0-assembly1.supp 4.11   0.96    435  407   437  273 272    0 100.00 100.00 0.00e+00 
+Pair  15  6x81-assembly1.supp 7kpa-assembly1.supp 3.93   1.07    435  426   439  273 272    0 100.00 100.00 0.00e+00 
+Pair  16  6x81-assembly1.supp 6x82-assembly1.supp 9.36   0.40    435  425   435  420 420    0 100.00 100.00 0.00e+00 
+Pair  17  6x81-assembly1.supp 6ooz-assembly1.supp 4.06   0.90    435  415   437  273 272    0 100.00 100.00 0.00e+00 
+Pair  18  7jra-assembly1.supp 6x86-assembly1.supp 0.57   2.30    441  423   541   41  37    0   8.11 100.00 1.00e+00  LOW SCORE
+Pair  19  7jra-assembly1.supp 6x83-assembly1.supp 0.54   2.33    441  414   579   38  30    0   6.67 100.00 1.00e+00  LOW SCORE
+Pair  20  7jra-assembly1.supp 6ooy-assembly1.supp 0.38   2.52    441  414   676   24   9    0  11.11 100.00 1.00e+00  LOW SCORE
+Pair  21  7jra-assembly1.supp 6op0-assembly1.supp 0.19  15.82    441  407   530  251 104    0   8.65 100.00 1.00e+00  LOW SCORE
+Pair  22  7jra-assembly1.supp 7kpa-assembly1.supp 0.20  15.70    441  426   543  257 101    0  11.88 100.00 1.00e+00  LOW SCORE
+Pair  23  7jra-assembly1.supp 6x82-assembly1.supp 0.52   2.47    441  425   557   38  25    0  12.00 100.00 1.00e+00  LOW SCORE
+Pair  24  7jra-assembly1.supp 6ooz-assembly1.supp 0.19  15.15    441  415   540  253  89    0   8.99 100.00 1.00e+00  LOW SCORE
+Pair  25  6x86-assembly1.supp 6x83-assembly1.supp 8.54   0.64    423  414   434  387 385    0 100.00 100.00 0.00e+00 
+Pair  26  6x86-assembly1.supp 6ooy-assembly1.supp 3.97   0.78    423  414   428  267 266    0  99.25 100.00 0.00e+00 
+Pair  27  6x86-assembly1.supp 6op0-assembly1.supp 4.28   0.73    423  407   429  274 271    0 100.00 100.00 0.00e+00 
+Pair  28  6x86-assembly1.supp 7kpa-assembly1.supp 4.17   0.89    423  426   429  280 277    0 100.00 100.00 0.00e+00 
+Pair  29  6x86-assembly1.supp 6x82-assembly1.supp 8.51   0.83    423  425   435  394 393    0  99.75 100.00 0.00e+00 
+Pair  30  6x86-assembly1.supp 6ooz-assembly1.supp 4.25   0.62    423  415   428  272 269    0 100.00 100.00 0.00e+00 
+Pair  31  6x83-assembly1.supp 6ooy-assembly1.supp 4.00   0.74    414  414   421  264 262    0  99.62 100.00 0.00e+00 
+Pair  32  6x83-assembly1.supp 6op0-assembly1.supp 4.17   0.67    414  407   425  264 263    0 100.00 100.00 0.00e+00 
+Pair  33  6x83-assembly1.supp 7kpa-assembly1.supp 3.99   0.66    414  426   428  262 262    0 100.00 100.00 0.00e+00 
+Pair  34  6x83-assembly1.supp 6x82-assembly1.supp 8.67   0.95    414  425   428  393 393    0  99.75 100.00 0.00e+00 
+Pair  35  6x83-assembly1.supp 6ooz-assembly1.supp 4.11   0.70    414  415   424  264 261    0 100.00 100.00 0.00e+00 
+Pair  36  6ooy-assembly1.supp 6op0-assembly1.supp 8.73   0.40    414  407   426  384 383    0 100.00 100.00 0.00e+00 
+Pair  37  6ooy-assembly1.supp 7kpa-assembly1.supp 8.77   0.34    414  426   433  391 391    0 100.00 100.00 0.00e+00 
+Pair  38  6ooy-assembly1.supp 6x82-assembly1.supp 3.91   1.04    414  425   426  269 268    0  99.63 100.00 0.00e+00 
+Pair  39  6ooy-assembly1.supp 6ooz-assembly1.supp 8.61   0.56    414  415   432  387 385    0  99.48 100.00 0.00e+00 
+Pair  40  6op0-assembly1.supp 7kpa-assembly1.supp 8.88   0.40    407  426   428  393 392    0  99.74 100.00 0.00e+00 
+Pair  41  6op0-assembly1.supp 6x82-assembly1.supp 4.16   0.94    407  425   430  271 270    0 100.00 100.00 0.00e+00 
+Pair  42  6op0-assembly1.supp 6ooz-assembly1.supp 9.21   0.46    407  415   417  396 396    0  99.75 100.00 0.00e+00 
+Pair  43  7kpa-assembly1.supp 6x82-assembly1.supp 4.02   1.05    426  425   430  273 272    0 100.00 100.00 0.00e+00 
+Pair  44  7kpa-assembly1.supp 6ooz-assembly1.supp 8.74   0.55    426  415   432  390 390    0  99.74 100.00 0.00e+00 
+Pair  45  6x82-assembly1.supp 6ooz-assembly1.supp 4.10   0.91    425  415   430  273 272    0 100.00 100.00 0.00e+00 
+Reading in matrix file P01375_cif_stamp.mat...
+Doing cluster analysis...
+Cluster:  1 (6x81-assembly1.supp  & 6x82-assembly1.supp ) Sc  9.35 RMS   0.40 Len 435 nfit 420 
+ See file P01375_cif_stamp.1 for the alignment and transformations
+Cluster:  2 (6x85-assembly1.supp  & 6x86-assembly1.supp ) Sc  9.33 RMS   0.56 Len 425 nfit 412 
+ See file P01375_cif_stamp.2 for the alignment and transformations
+Cluster:  3 (6op0-assembly1.supp  & 6ooz-assembly1.supp ) Sc  9.20 RMS   0.46 Len 417 nfit 396 
+ See file P01375_cif_stamp.3 for the alignment and transformations
+Cluster:  4 (7kpa-assembly1.supp  & 6op0-assembly1.supp 6ooz-assembly1.supp ) Sc  9.60 RMS   0.47 Len 433 nfit 391 
+ See file P01375_cif_stamp.4 for the alignment and transformations
+Cluster:  5 (6ooy-assembly1.supp  & 7kpa-assembly1.supp 6op0-assembly1.supp 6ooz-assembly1.supp ) Sc  9.52 RMS   0.41 Len 438 nfit 384 
+ See file P01375_cif_stamp.5 for the alignment and transformations
+Cluster:  6 (6x83-assembly1.supp  & 6x81-assembly1.supp 6x82-assembly1.supp ) Sc  9.50 RMS   0.97 Len 436 nfit 394 
+ See file P01375_cif_stamp.6 for the alignment and transformations
+Cluster:  7 (6x83-assembly1.supp 6x81-assembly1.supp 6x82-assembly1.supp  & 6x85-assembly1.supp 6x86-assembly1.supp ) Sc  9.40 RMS   0.67 Len 443 nfit 385 
+ See file P01375_cif_stamp.7 for the alignment and transformations
+Cluster:  8 (6x83-assembly1.supp 6x81-assembly1.supp 6x82-assembly1.supp 6x85-assembly1.supp 6x86-assembly1.supp  & 6ooy-assembly1.supp 7kpa-assembly1.supp 6op0-assembly1.supp 6ooz-assembly1.supp ) Sc  5.09 RMS   0.66 Len 448 nfit 260 
+ See file P01375_cif_stamp.8 for the alignment and transformations
+Cluster:  9 (7jra-assembly1.supp  & 6x83-assembly1.supp 6x81-assembly1.supp 6x82-assembly1.supp 6x85-assembly1.supp 6x86-assembly1.supp 6ooy-assembly1.supp 7kpa-assembly1.supp 6op0-assembly1.supp 6ooz-assembly1.supp ) Sc  1.12 RMS   4.21 Len 845 nfit  58  LOW SCORE 
+ See file P01375_cif_stamp.9 for the alignment and transformations

@@ -1,0 +1,47 @@
+data_mmCIF_generated_by_ProIntVar
+loop_
+_atom_site.group_PDB
+_atom_site.id
+_atom_site.type_symbol
+_atom_site.label_atom_id
+_atom_site.label_alt_id
+_atom_site.label_comp_id
+_atom_site.label_asym_id
+_atom_site.label_seq_id
+_atom_site.pdbx_PDB_ins_code
+_atom_site.Cartn_x
+_atom_site.Cartn_y
+_atom_site.Cartn_z
+_atom_site.occupancy
+_atom_site.B_iso_or_equiv
+_atom_site.pdbx_formal_charge
+_atom_site.auth_seq_id
+_atom_site.auth_comp_id
+_atom_site.auth_asym_id
+_atom_site.auth_atom_id
+_atom_site.pdbx_PDB_model_num
+_atom_site.label_seq_id_full
+_atom_site.auth_seq_id_full
+HETATM 3306 C C4 . UTV G 901 ? 22.972 12.758 -7.12 1.0 62.06 ? 901 UTV G C4 1 901 901
+HETATM 3307 C C5 . UTV G 901 ? 23.605 12.015 -8.12 1.0 56.09 ? 901 UTV G C5 1 901 901
+HETATM 3308 C C6 . UTV G 901 ? 24.037 12.621 -9.288 1.0 53.45 ? 901 UTV G C6 1 901 901
+HETATM 3309 C C7 . UTV G 901 ? 23.815 13.97 -9.497 1.0 56.62 ? 901 UTV G C7 1 901 901
+HETATM 3310 C C8 . UTV G 901 ? 23.169 14.732 -8.53 1.0 59.27 ? 901 UTV G C8 1 901 901
+HETATM 3311 C C10 . UTV G 901 ? 21.366 15.691 -6.297 1.0 61.34 ? 901 UTV G C10 1 901 901
+HETATM 3312 C C13 . UTV G 901 ? 26.417 13.31 -3.933 1.0 62.77 ? 901 UTV G C13 1 901 901
+HETATM 3313 C C15 . UTV G 901 ? 26.629 10.997 -3.278 1.0 61.97 ? 901 UTV G C15 1 901 901
+HETATM 3314 C C17 . UTV G 901 ? 24.667 9.491 -4.066 1.0 62.45 ? 901 UTV G C17 1 901 901
+HETATM 3315 O O1 . UTV G 901 ? 24.981 8.377 -3.708 1.0 63.66 ? 901 UTV G O1 1 901 901
+HETATM 3316 C C1 . UTV G 901 ? 23.297 9.852 -4.786 1.0 60.58 ? 901 UTV G C1 1 901 901
+HETATM 3317 C C2 . UTV G 901 ? 22.143 9.79 -3.79 1.0 59.15 ? 901 UTV G C2 1 901 901
+HETATM 3318 C C . UTV G 901 ? 23.034 8.946 -5.986 1.0 58.35 ? 901 UTV G C 1 901 901
+HETATM 3319 C C16 . UTV G 901 ? 25.437 10.72 -3.941 1.0 61.2 ? 901 UTV G C16 1 901 901
+HETATM 3320 C C14 . UTV G 901 ? 27.114 12.298 -3.286 1.0 63.23 ? 901 UTV G C14 1 901 901
+HETATM 3321 C C12 . UTV G 901 ? 25.233 13.04 -4.606 1.0 62.62 ? 901 UTV G C12 1 901 901
+HETATM 3322 C C11 . UTV G 901 ? 24.744 11.735 -4.607 1.0 61.6 ? 901 UTV G C11 1 901 901
+HETATM 3323 N N . UTV G 901 ? 23.57 11.25 -5.208 1.0 61.71 ? 901 UTV G N 1 901 901
+HETATM 3324 C C3 . UTV G 901 ? 22.562 12.125 -5.808 1.0 62.91 ? 901 UTV G C3 1 901 901
+HETATM 3325 C C9 . UTV G 901 ? 22.784 14.129 -7.333 1.0 62.85 ? 901 UTV G C9 1 901 901
+HETATM 3326 O O . UTV G 901 ? 22.402 14.842 -6.216 1.0 63.35 ? 901 UTV G O 1 901 901
+HETATM 3327 F F1 . UTV G 901 ? 21.738 16.961 -6.571 1.0 56.85 ? 901 UTV G F1 1 901 901
+HETATM 3328 F F . UTV G 901 ? 20.966 15.713 -5.018 1.0 60.59 ? 901 UTV G F 1 901 901

@@ -1,0 +1,414 @@
+# STOCKHOLM 1.0
+#=GF SQ 103
+query/1-205 TPSDKPVAHV-VAN-----------PQA-----EG--QLQWLNR--RA--NALLANGVELRD--NQLVVPSEGLYLIYSQVLFK--G-QGC-------------P-SH--VLLTHTISRIAVSY--QTKVNLLSA--IK-SPC------------KPW-YEPIYLGGVFQLEKGDRLSAE-I-NRPD-YLDFAESGQVYFGIIAL
+#=GS query/1-205 AC QUERYSEQ
+#=GS query/1-205 DE query
+sp|Q8HZD9|TNFA_PANTR/83-232 -PSDKPVAHV-VAN-----------PQA-----EG--QLQWLNR--RA--NALLANGVELRD--NQLVVPSEGLYLIYSQVLFK--G-QGC-------------P-ST-HVLLTHTISRIAVSY--QTKVNLLSA--IK-SPCQRETP--EGAEAKPW-YEPIYLGGVFQLEKGDRLSAE-I-NRPD-YLDFAESGQVYFGIIAL
+#=GS sp|Q8HZD9|TNFA_PANTR/83-232 AC Q8HZD9
+#=GS sp|Q8HZD9|TNFA_PANTR/83-232 DE [subseq from] Tumor necrosis factor OS=Pan troglodytes OX=9598 GN=TNF PE=3 SV=2
+#=GR sp|Q8HZD9|TNFA_PANTR/83-232 PP .689******.***...........***.....**..*******..**..************..********************..*.***.............9.98.7999***********..*********..**.********..********.*********************.*.****.***************97
+sp|P01375|TNFA_HUMAN/84-233 -PSDKPVAHV-VAN-----------PQA-----EG--QLQWLNR--RA--NALLANGVELRD--NQLVVPSEGLYLIYSQVLFK--G-QGC-------------P-ST-HVLLTHTISRIAVSY--QTKVNLLSA--IK-SPCQRETP--EGAEAKPW-YEPIYLGGVFQLEKGDRLSAE-I-NRPD-YLDFAESGQVYFGIIAL
+#=GS sp|P01375|TNFA_HUMAN/84-233 AC P01375
+#=GS sp|P01375|TNFA_HUMAN/84-233 DE [subseq from] Tumor necrosis factor OS=Homo sapiens OX=9606 GN=TNF PE=1 SV=1
+#=GR sp|P01375|TNFA_HUMAN/84-233 PP .689******.***...........***.....**..*******..**..************..********************..*.***.............9.98.7999***********..*********..**.********..********.*********************.*.****.***************97
+sp|P33620|TNFA_PAPSP/84-233 -PSDKPVAHV-VAN-----------PQA-----EG--QLQWLNR--RA--NALLANGVELRD--NQLVVPSEGLYLIYSQVLFK--G-QGC-------------P-ST-HVLLTHTISRIAVSY--QTKVNLLSA--IK-SPCQRETP--EGAEAKPW-YEPIYLGGVFQLEKGDRLSAE-I-NLPD-YLDFAESGQVYFGIIAL
+#=GS sp|P33620|TNFA_PAPSP/84-233 AC P33620
+#=GS sp|P33620|TNFA_PAPSP/84-233 DE [subseq from] Tumor necrosis factor OS=Papio sp. OX=61183 GN=TNF PE=3 SV=1
+#=GR sp|P33620|TNFA_PAPSP/84-233 PP .689******.***...........***.....**..*******..**..************..********************..*.***.............9.98.7999***********..*********..**.********..********.*********************.*.****.***************97
+sp|P48094|TNFA_MACMU/84-233 -PSDKPVAHV-VAN-----------PQA-----EG--QLQWLNR--RA--NALLANGVELTD--NQLVVPSEGLYLIYSQVLFK--G-QGC-------------P-SN-HVLLTHTISRIAVSY--QTKVNLLSA--IK-SPCQRETP--EGAEAKPW-YEPIYLGGVFQLEKGDRLSAE-I-NLPD-YLDFAESGQVYFGIIAL
+#=GS sp|P48094|TNFA_MACMU/84-233 AC P48094
+#=GS sp|P48094|TNFA_MACMU/84-233 DE [subseq from] Tumor necrosis factor OS=Macaca mulatta OX=9544 GN=TNF PE=2 SV=1
+#=GR sp|P48094|TNFA_MACMU/84-233 PP .689******.***...........***.....**..*******..**..************..********************..*.***.............8.88.7999***********..*********..**.********..********.*********************.*.****.***************97
+sp|P79337|TNFA_MACFA/84-233 -PSDKPVAHV-VAN-----------PQA-----EG--QLQWLNR--RA--NALVANGVELTD--NQLVVPSEGLYLIYSQVLFK--G-QGC-------------P-SN-HVLLTHTISRIAVSY--QTKVNLLSA--IK-SPCQRETP--EGAEAKPW-YEPIYLGGVFQLEKGDRLSAE-I-NLPD-YLDFAESGQVYFGIIAL
+#=GS sp|P79337|TNFA_MACFA/84-233 AC P79337
+#=GS sp|P79337|TNFA_MACFA/84-233 DE [subseq from] Tumor necrosis factor OS=Macaca fascicularis OX=9541 GN=TNF PE=2 SV=1
+#=GR sp|P79337|TNFA_MACFA/84-233 PP .689******.***...........***.....**..*******..**..************..********************..*.***.............8.88.7999***********..*********..**.********..********.*********************.*.****.***************97
+sp|P51742|TNFA_CANLF/84-233 -PSDKPVAHV-VAN-----------PEA-----EG--QLQWLSR--RA--NALLANGVELTD--NQLIVPSDGLYLIYSQVLFK--G-QGC-------------P-ST-HVLLTHTISRFAVSY--QTKVNLLSA--IK-SPCQRETP--EGTEAKPW-YEPIYLGGVFQLEKGDRLSAE-I-NLPN-YLDFAESGQVYFGIIAL
+#=GS sp|P51742|TNFA_CANLF/84-233 AC P51742
+#=GS sp|P51742|TNFA_CANLF/84-233 DE [subseq from] Tumor necrosis factor OS=Canis lupus familiaris OX=9615 GN=TNF PE=2 SV=1
+#=GR sp|P51742|TNFA_CANLF/84-233 PP .689******.***...........***.....**..*******..**..************..********************..*.***.............9.98.7999***********..*********..**.********..********.*********************.*.****.***************97
+sp|O77510|TNFA_PAPHU/84-233 -PSDKPVVHV-VAN-----------PQA-----EG--QLQWLNR--RA--NALLANGVELTD--NQLVVPSEGLYLIYSQVLFK--G-QGC-------------P-SN-HVLLTHTISRIAVSY--QTKVNLLSA--IK-SPCQRETP--EGAEAKPW-YEPIYLGGVFQLEKGDRLSAE-I-NLPD-YLDFAESGQVYFGIIAL
+#=GS sp|O77510|TNFA_PAPHU/84-233 AC O77510
+#=GS sp|O77510|TNFA_PAPHU/84-233 DE [subseq from] Tumor necrosis factor OS=Papio hamadryas ursinus OX=36229 GN=TNF PE=2 SV=1
+#=GR sp|O77510|TNFA_PAPHU/84-233 PP .689******.***...........***.....**..*******..**..************..********************..*.***.............8.88.7999***********..*********..**.********..********.*********************.*.****.***************97
+sp|P19101|TNFA_FELCA/84-233 -PSDKPVAHV-VAN-----------PEA-----EG--QLQWLSR--RA--NALLANGVELTD--NQLKVPSDGLYLIYSQVLFT--G-QGC-------------P-ST-HVLLTHTISRFAVSY--QTKVNLLSA--IK-SPCQRETP--EGAEAKPW-YEPIYLGGVFQLEKGDRLSTE-I-NLPA-YLDFAESGQVYFGIIAL
+#=GS sp|P19101|TNFA_FELCA/84-233 AC P19101
+#=GS sp|P19101|TNFA_FELCA/84-233 DE [subseq from] Tumor necrosis factor OS=Felis catus OX=9685 GN=TNF PE=2 SV=2
+#=GR sp|P19101|TNFA_FELCA/84-233 PP .689******.***...........***.....**..*******..**..************..********************..*.***.............9.98.7999***********..*********..**.********..********.*********************.*.****.***************97
+sp|P59695|TNFA_PAPAN/84-233 -PSDKPVAHV-VAN-----------PQA-----EG--QLQWLNR--RA--NALLANGVEPTD--NQLVVPSEGLYLIYSQVLFK--G-QGC-------------P-SN-HVLLTHTISRIAVSY--QTKVNLLSA--IK-SPCQRETP--EGAEAKPW-YEPIYLGGVFQLEKGDRLSAE-I-NLPD-YLDFAESGQVYFGIIAL
+#=GS sp|P59695|TNFA_PAPAN/84-233 AC P59695
+#=GS sp|P59695|TNFA_PAPAN/84-233 DE [subseq from] Tumor necrosis factor OS=Papio anubis OX=9555 GN=TNF PE=2 SV=1
+#=GR sp|P59695|TNFA_PAPAN/84-233 PP .689******.***...........***.....**..*******..**..************..********************..*.***.............8.88.7999***********..*********..**.********..********.*********************.*.****.***************97
+sp|P29553|TNFA_HORSE/85-234 -PSDKPVAHV-VAN-----------PQA-----EG--QLQWLSG--RA--NALLANGVKLTD--NQLVVPLDGLYLIYSQVLFK--G-QGC-------------P-ST-HVLLTHTISRLAVSY--PSKVNLLSA--IK-SPCHTESP--EQAEAKPW-YEPIYLGGVFQLEKGDQLSAE-I-NQPN-YLDFAESGQVYFGIIAL
+#=GS sp|P29553|TNFA_HORSE/85-234 AC P29553
+#=GS sp|P29553|TNFA_HORSE/85-234 DE [subseq from] Tumor necrosis factor OS=Equus caballus OX=9796 GN=TNF PE=2 SV=1
+#=GR sp|P29553|TNFA_HORSE/85-234 PP .689******.***...........***.....**..*******..**..************..********************..*.***.............9.98.7999***********..*********..**.********..********.*********************.*.****.***************97
+sp|P06804|TNFA_MOUSE/87-235 -SSDKPVAHV-VAN-----------HQV-----EE--QLEWLSQ--RA--NALLANGMDLKD--NQLVVPADGLYLVYSQVLFK--G-QGC-------------P-DY--VLLTHTVSRFAISY--QEKVNLLSA--VK-SPCPKDTP--EGAELKPW-YEPIYLGGVFQLEKGDQLSAE-V-NLPK-YLDFAESGQVYFGVIAL
+#=GS sp|P06804|TNFA_MOUSE/87-235 AC P06804
+#=GS sp|P06804|TNFA_MOUSE/87-235 DE [subseq from] Tumor necrosis factor OS=Mus musculus OX=10090 GN=Tnf PE=1 SV=2
+#=GR sp|P06804|TNFA_MOUSE/87-235 PP .689******.***...........***.....**..*******..**..************..********************..*.***.............*.**..**************..*********..**.********..********.*********************.*.****.***************97
+sp|P23563|TNFA_PIG/84-232 --SDKPVAHV-VAN-----------VKA-----EG--QLQWQSG--YA--NALLANGVKLKD--NQLVVPTDGLYLIYSQVLFR--G-QGC-------------P-ST-NVFLTHTISRIAVSY--QTKVNLLSA--IK-SPCQRETP--EGAEAKPW-YEPIYLGGVFQLEKDDRLSAE-I-NLPD-YLDFAESGQVYFGIIAL
+#=GS sp|P23563|TNFA_PIG/84-232 AC P23563
+#=GS sp|P23563|TNFA_PIG/84-232 DE [subseq from] Tumor necrosis factor OS=Sus scrofa OX=9823 GN=TNF PE=2 SV=1
+#=GR sp|P23563|TNFA_PIG/84-232 PP ..89******.***...........***.....**..*******..**..************..********************..*.***.............9.98.89*************..*********..**.********..********.*********************.*.****.***************97
+sp|Q8WNR1|TNFA_DELLE/84-233 -SSNKPVAHV-VAN-----------LSA-----QG--QLRWLNT--YA--NTLLANSVKLED--NQLVVPTDGLYLIYSQVLFR--G-QGC-------------P-ST-HLFLTHTISRIAVSY--QTKVNLLSA--IK-SPCQRETP--EGAEAKPW-YEPIYQGGVFQLEKGDRLSAE-I-NLPD-YLDFAESGQVYFGIIAL
+#=GS sp|Q8WNR1|TNFA_DELLE/84-233 AC Q8WNR1
+#=GS sp|Q8WNR1|TNFA_DELLE/84-233 DE [subseq from] Tumor necrosis factor OS=Delphinapterus leucas OX=9749 GN=TNF PE=2 SV=1
+#=GR sp|Q8WNR1|TNFA_DELLE/84-233 PP .689******.***...........***.....**..*******..**..************..********************..*.***.............9.98.799************..*********..**.********..********.*********************.*.****.***************97
+sp|P36939|TNFA_PERLE/87-235 -SSDKPVAHV-VAN-----------HQV-----DE--QLEWLSR--GA--NALLANGMDLKD--NQLVIPADGLYLVYSQVLFK--G-QGC-------------S-SY--VLLTHTVSRFAVSY--EDKVNLLSA--IK-SPCPKETP--EGSELKPW-YEPIYLGGVFQLEKGDRLSAE-V-NLPK-YLDFAESGQVYFGVIAL
+#=GS sp|P36939|TNFA_PERLE/87-235 AC P36939
+#=GS sp|P36939|TNFA_PERLE/87-235 DE [subseq from] Tumor necrosis factor OS=Peromyscus leucopus OX=10041 GN=TNF PE=3 SV=1
+#=GR sp|P36939|TNFA_PERLE/87-235 PP .689******.***...........***.....**..*******..**..************..********************..*.***.............*.**..**************..*********..**.********..********.*********************.*.****.***************97
+sp|Q9BEA1|TNFA_TURTR/84-233 -SSNKPVAHV-VAN-----------LST-----QG--QLRWLNT--YA--NTLLANSVKLED--NQLVVPTDGLYLIYSQVLFR--G-QGC-------------P-ST-HLFLTHTISRIAVSY--PSKVNLLSA--IK-SPCQRETP--EGAEAKPW-YEPIYQGGVFQLEKGDRLSAE-I-NLPD-YLDFAKSGQVYFGIIAL
+#=GS sp|Q9BEA1|TNFA_TURTR/84-233 AC Q9BEA1
+#=GS sp|Q9BEA1|TNFA_TURTR/84-233 DE [subseq from] Tumor necrosis factor OS=Tursiops truncatus OX=9739 GN=TNF PE=2 SV=1
+#=GR sp|Q9BEA1|TNFA_TURTR/84-233 PP .689******.***...........***.....**..*******..**..************..********************..*.***.............9.98.799************..*********..**.********..********.*********************.*.****.***************97
+sp|P51435|TNFA_CAVPO/87-234 --NDKPVAHV-VAN-----------QQA-----EE--ELQWLSK--RA--NALLANGMGLSD--NQLVVPSDGLYLIYSQVLFK--G-QGC-------------P-SY--LLLTHTVSRLAVSY--PEKVNLLSA--IK-SPCQKETP--EGAERKPW-YEPIYLGGVFQLQKGDRLSAE-V-NLPQ-YLDFADSGQIYFGVIAL
+#=GS sp|P51435|TNFA_CAVPO/87-234 AC P51435
+#=GS sp|P51435|TNFA_CAVPO/87-234 DE [subseq from] Tumor necrosis factor OS=Cavia porcellus OX=10141 GN=TNF PE=2 SV=1
+#=GR sp|P51435|TNFA_CAVPO/87-234 PP ..79******.***...........***.....**..*******..**..************..********************..*.***.............*.**..**************..*********..**.********..********.*********************.*.****.***************97
+sp|Q8MKG8|TNFA_SAISC/84-233 -PSDKPVAHV-VAN-----------PQA-----EG--QLQWLNR--RA--NALLANGVELRD--NQLVVPSDGLYLVYSQVLFK--G-QGC-------------P-ST-FTLLTHSISRIAVSY--QAKVNLLSA--IK-SPCQRETP--RGAKTHPW-YEPIYLGGVFQLEKGDRLSAE-I-SPPD-SLDLAESGQVYFGIIAL
+#=GS sp|Q8MKG8|TNFA_SAISC/84-233 AC Q8MKG8
+#=GS sp|Q8MKG8|TNFA_SAISC/84-233 DE [subseq from] Tumor necrosis factor OS=Saimiri sciureus OX=9521 GN=TNF PE=2 SV=1
+#=GR sp|Q8MKG8|TNFA_SAISC/84-233 PP .689******.***...........***.....**..*******..**..************..********************..*.***.............*.**.9999***********..*********..**.********..********.*********************.*.****.***************97
+sp|P04924|TNFA_RABIT/88-235 --SDKPLAHV-VAN-----------PQV-----EG--QLQWLSQ--RA--NALLANGMKLTD--NQLVVPADGLYLIYSQVLFS--G-QGC-------------R-SY--VLLTHTVSRFAVSY--PNKVNLLSA--IK-SPCHRETP--EEAEPMAW-YEPIYLGGVFQLEKGDRLSTE-V-NQPE-YLDLAESGQVYFGIIAL
+#=GS sp|P04924|TNFA_RABIT/88-235 AC P04924
+#=GS sp|P04924|TNFA_RABIT/88-235 DE [subseq from] Tumor necrosis factor OS=Oryctolagus cuniculus OX=9986 GN=TNF PE=2 SV=1
+#=GR sp|P04924|TNFA_RABIT/88-235 PP ..79******.***...........***.....**..*******..**..************..********************..*.***.............*.**..**************..*********..**.********..***9999*.*********************.*.****.***************97
+sp|Q19LH4|TNFA_CALJA/83-231 -PSDKPVAHV-VAN-----------PQA-----EG--QLQWLNR--RA--NALLANGVELRD--NQLVVPSEGLYLVYSQVLFK--G-QGC-------------P-SN-FMLLTHSISRIAVSY--QAKVNLLSA--IK-SPCQRETP--QGAKTNPW-YEPIYLGGVFQLEKGDRLSAE-I-NLPD-YLDLAESGQVYFGIIG-
+#=GS sp|Q19LH4|TNFA_CALJA/83-231 AC Q19LH4
+#=GS sp|Q19LH4|TNFA_CALJA/83-231 DE [subseq from] Tumor necrosis factor OS=Callithrix jacchus OX=9483 GN=TNF PE=2 SV=1
+#=GR sp|Q19LH4|TNFA_CALJA/83-231 PP .689******.***...........***.....**..*******..**..************..********************..*.***.............*.*9.9999***********..*********..**.********..********.*********************.*.****.**************95.
+sp|P59693|TNFA_BUBBU/84-233 -SSNKPVAHV-VAD-----------INS-----PG--QLRWWDS--YA--NALMANGVKLED--NQLVVPADGLYLIYSQVLFR--G-QGC-------------P-ST-PLFLTHTISRIAVSY--QTKVNILSA--IK-SPCHRETP--EWAEAKPW-YEPIYQGGVFQLEKGDRLSAE-I-NLPD-YLDYAESGQVYFGIIAL
+#=GS sp|P59693|TNFA_BUBBU/84-233 AC P59693
+#=GS sp|P59693|TNFA_BUBBU/84-233 DE [subseq from] Tumor necrosis factor OS=Bubalus bubalis OX=89462 GN=TNF PE=2 SV=1
+#=GR sp|P59693|TNFA_BUBBU/84-233 PP .689******.***...........***.....**..*******..**..************..********************..*.***.............9.99.8**************..*********..**.********..********.*********************.*.****.***************97
+sp|P59684|TNFA_BOSIN/85-234 -SSNKPVAHV-VAD-----------INS-----PG--QLRWWDS--YA--NALMANGVKLED--NQLVVPADGLYLIYSQVLFR--G-QGC-------------P-ST-PLFLTHTISRIAVSY--QTKVNILSA--IK-SPCHRETP--EWAEAKPW-YEPIYQGGVFQLEKGDRLSAE-I-NLPD-YLDYAESGQVYFGIIAL
+#=GS sp|P59684|TNFA_BOSIN/85-234 AC P59684
+#=GS sp|P59684|TNFA_BOSIN/85-234 DE [subseq from] Tumor necrosis factor OS=Bos indicus OX=9915 GN=TNF PE=2 SV=1
+#=GR sp|P59684|TNFA_BOSIN/85-234 PP .689******.***...........***.....**..*******..**..************..********************..*.***.............9.99.8**************..*********..**.********..********.*********************.*.****.***************97
+sp|Q06599|TNFA_BOVIN/85-234 -SSNKPVAHV-VAD-----------INS-----PG--QLRWWDS--YA--NALMANGVKLED--NQLVVPADGLYLIYSQVLFR--G-QGC-------------P-ST-PLFLTHTISRIAVSY--QTKVNILSA--IK-SPCHRETP--EWAEAKPW-YEPIYQGGVFQLEKGDRLSAE-I-NLPD-YLDYAESGQVYFGIIAL
+#=GS sp|Q06599|TNFA_BOVIN/85-234 AC Q06599
+#=GS sp|Q06599|TNFA_BOVIN/85-234 DE [subseq from] Tumor necrosis factor OS=Bos taurus OX=9913 GN=TNF PE=2 SV=2
+#=GR sp|Q06599|TNFA_BOVIN/85-234 PP .689******.***...........***.....**..*******..**..************..********************..*.***.............9.99.8**************..*********..**.********..********.*********************.*.****.***************97
+sp|Q2MH05|TNFA_BUBCA/85-234 -SSNKPVAHV-VAD-----------INS-----PG--QLRWWDS--YA--NALMANGVKLED--NQLVVPADGLYLIYSQVLFR--G-QGC-------------P-ST-PLFLTHTISRIAVSY--QTKVNILSA--IK-SPCHRETP--EWAEAKPW-YEPIYQGGVFQLEKGDRLSAE-I-NLPD-YLDYAESGQVYFGIIAL
+#=GS sp|Q2MH05|TNFA_BUBCA/85-234 AC Q2MH05
+#=GS sp|Q2MH05|TNFA_BUBCA/85-234 DE [subseq from] Tumor necrosis factor OS=Bubalus carabanensis OX=346063 GN=TNF PE=2 SV=1
+#=GR sp|Q2MH05|TNFA_BUBCA/85-234 PP .689******.***...........***.....**..*******..**..************..********************..*.***.............9.99.8**************..*********..**.********..********.*********************.*.****.***************97
+sp|P16599|TNFA_RAT/87-235 -SSDKPVAHV-VAN-----------HQA-----EE--QLEWLSQ--RA--NALLANGMDLKD--NQLVVPADGLYLIYSQVLFK--G-QGC-------------P-DY--VLLTHTVSRFAISY--QEKVSLLSA--IK-SPCPKDTP--EGAELKPW-YEPMYLGGVFQLEKGDLLSAE-V-NLPK-YLDITESGQVYFGVIAL
+#=GS sp|P16599|TNFA_RAT/87-235 AC P16599
+#=GS sp|P16599|TNFA_RAT/87-235 DE [subseq from] Tumor necrosis factor OS=Rattus norvegicus OX=10116 GN=Tnf PE=2 SV=1
+#=GR sp|P16599|TNFA_RAT/87-235 PP .689******.***...........***.....**..*******..**..************..********************..*.***.............*.**..**************..*********..**.********..********.*********************.*.****.***************97
+sp|Q1G1A2|TNFA_BOSTR/85-234 -SSNKPVAHV-VAD-----------INS-----PG--QLRWWDS--YA--NALMANGVKLKD--NQLVVPADGLYLIYSQVLFR--D-QGC-------------P-ST-PLFLTHTISRIAVSY--QTKVNILSA--IK-SPCHRETP--EWAEAKPW-YEPIYQGGVFQLEKGDRLSAE-I-NLPD-YLDYAESGQVYFGIIAL
+#=GS sp|Q1G1A2|TNFA_BOSTR/85-234 AC Q1G1A2
+#=GS sp|Q1G1A2|TNFA_BOSTR/85-234 DE [subseq from] Tumor necrosis factor OS=Boselaphus tragocamelus OX=9917 GN=TNF PE=2 SV=1
+#=GR sp|Q1G1A2|TNFA_BOSTR/85-234 PP .689******.***...........***.....**..*******..**..************..********************..*.***.............9.99.8**************..*********..**.********..********.*********************.*.****.***************97
+sp|P59694|TNFA_LAMGL/85-233 --RDKPVAHV-VAD-----------PAA-----QG--QLQWEKR--FA--NTLLANGVKLED--NQLVVPTDGLYLIYSQVLFS--G-QRC-------------P-ST-PVFLTHTISRLAVSY--PNKANLLSA--IK-SPCQGGTS--EEAEAKPW-YEPIYLGGVFQLEKDDRLSAE-I-NMPN-YLDFAESGQVYFGIIAL
+#=GS sp|P59694|TNFA_LAMGL/85-233 AC P59694
+#=GS sp|P59694|TNFA_LAMGL/85-233 DE [subseq from] Tumor necrosis factor OS=Lama glama OX=9844 GN=TNF PE=2 SV=1
+#=GR sp|P59694|TNFA_LAMGL/85-233 PP ..79******.***...........***.....**..*******..**..************..********************..*.***.............9.99.9**************..*********..**.********..********.*********************.*.****.***************97
+sp|Q75N23|TNFA_CAMBA/85-233 --RDKPVAHV-VAD-----------PAA-----QG--QLQWEKR--FA--NTLLANGVKLED--NQLVVPTDGLYLIYSQVLFS--G-QRC-------------P-ST-PVFLTHTISRLAVSY--PNKANLLSA--IK-SPCQGGTS--EEAEAKPW-YEPIYLGGVFQLEKDDRLSAE-I-NMPN-YLDFAESGQVYFGIIAL
+#=GS sp|Q75N23|TNFA_CAMBA/85-233 AC Q75N23
+#=GS sp|Q75N23|TNFA_CAMBA/85-233 DE [subseq from] Tumor necrosis factor OS=Camelus bactrianus OX=9837 GN=TNF PE=2 SV=1
+#=GR sp|Q75N23|TNFA_CAMBA/85-233 PP ..79******.***...........***.....**..*******..**..************..********************..*.***.............9.99.9**************..*********..**.********..********.*********************.*.****.***************97
+sp|O35734|TNFA_MARMO/86-233 --NDKPVAHV-VAK-----------NED-----KE--QLVWLSR--RA--NALLANGMELID--NQLVVPANGLYLVYSQVLFK--G-QGC-------------P-SY--VLLTHTVSRFAVSY--QDKVNLLSA--IK-SPCPKESL--EGAEFKPW-YEPIYLGGVFELQKGDRLSAE-V-NLPS-YLDFAESGQVYFGVIAL
+#=GS sp|O35734|TNFA_MARMO/86-233 AC O35734
+#=GS sp|O35734|TNFA_MARMO/86-233 DE [subseq from] Tumor necrosis factor OS=Marmota monax OX=9995 GN=TNF PE=2 SV=1
+#=GR sp|O35734|TNFA_MARMO/86-233 PP ..69******.***...........***.....**..*******..**..************..********************..*.***.............*.**..**************..*********..**.********..********.*********************.*.****.***************97
+sp|P51743|TNFA_CEREL/82-229 ---NKPVAHV-VAN-----------INA-----QG--QLLWLDS--CA--NALMANGVKLED--NQLVVPTDGLYLIYSQVLFR--G-QSC-------------P-ST-PLFLTHTISRIAVSY--QTKVNILSA--IK-SPCHRETP--EWAEAKPW-YEPIYQGGVFQLEKGDRLSAE-I-NLPD-YLDYAESGQVYFGIIAL
+#=GS sp|P51743|TNFA_CEREL/82-229 AC P51743
+#=GS sp|P51743|TNFA_CEREL/82-229 DE [subseq from] Tumor necrosis factor (Fragment) OS=Cervus elaphus OX=9860 GN=TNF PE=2 SV=1
+#=GR sp|P51743|TNFA_CEREL/82-229 PP ...79*****.***...........***.....**..*******..**..************..********************..*.***.............9.99.8**************..*********..**.********..********.*********************.*.****.***************97
+sp|P13296|TNFA_CAPHI/85-234 -SSNKPVAHV-VAN-----------ISA-----PG--QLRWGDS--YA--NALKANGVELKD--NQLVVPTDGLYLIYSQVLFR--G-HGC-------------P-ST-PLFLTHTISRIAVSY--QTKVNILSA--IK-SPCHRETP--EGAEAKPW-YEPIYQGGVFQLEKGDRLSAE-I-NQPE-YLDYAESGQVYFGIIAL
+#=GS sp|P13296|TNFA_CAPHI/85-234 AC P13296
+#=GS sp|P13296|TNFA_CAPHI/85-234 DE [subseq from] Tumor necrosis factor OS=Capra hircus OX=9925 GN=TNF PE=2 SV=2
+#=GR sp|P13296|TNFA_CAPHI/85-234 PP .689******.***...........***.....**..*******..**..************..********************..*.***.............9.99.8**************..*********..**.********..********.*********************.*.****.***************97
+sp|P23383|TNFA_SHEEP/86-234 --NNKPVAHV-VAN-----------ISA-----PG--QLRWGDS--YA--NALMANGVELKD--NQLVVPTDGLYLIYSQVLFR--G-HGC-------------P-ST-PLFLTHTISRIAVSY--QTKVNILSA--IK-SPCHRETL--EGAEAKPW-YEPIYQGGVFQLEKGDRLSAE-I-NLPE-YLDYAESGQVYFGIIAL
+#=GS sp|P23383|TNFA_SHEEP/86-234 AC P23383
+#=GS sp|P23383|TNFA_SHEEP/86-234 DE [subseq from] Tumor necrosis factor OS=Ovis aries OX=9940 GN=TNF PE=2 SV=2
+#=GR sp|P23383|TNFA_SHEEP/86-234 PP ..79******.***...........***.....**..*******..**..************..********************..*.***.............9.99.8**************..*********..**.********..********.*********************.*.****.***************97
+sp|Q539C2|TNFA_TUPTA/85-234 -PSDKPAAHV-IAN-----------PQN-----KG--ELQWLNR--RA--NTLLTNGMQLVD--NQLVVPSDGLYLIYSQVLFT--G-LGC-------------P-ST-PVLFTHTVSCVAVSY--NNKVNLLSA--IK-SPCQKETA--EGAEAKPW-YEPIYQGGVFQLQKGDRLSAE-V-NLPR-YLDFAESGQVYFGVIAL
+#=GS sp|Q539C2|TNFA_TUPTA/85-234 AC Q539C2
+#=GS sp|Q539C2|TNFA_TUPTA/85-234 DE [subseq from] Tumor necrosis factor OS=Tupaia tana OX=70687 GN=TNF PE=2 SV=1
+#=GR sp|Q539C2|TNFA_TUPTA/85-234 PP .689******.***...........***.....**..*******..**..************..********************..*.***.............9.99.89*************..*********..**.********..********.*********************.*.****.***************97
+sp|O77764|TNFA_NOTEU/84-233 -ESNKPVAHV-IAD-----------PLA-----EG--KLQWLKR--RA--NVLLSNGMDLVD--NQLVVPSTGLYLVYSQLLFK--G-EDC-------------A-NE-PLLLTHTVSRVALSY--QSKVNLLSA--IK-SPCQKTVK--GAREASPW-YEPIYLGGVFQLEKGDKLSAD-T-NYPN-YLDFAESGQVYFGVIAL
+#=GS sp|O77764|TNFA_NOTEU/84-233 AC O77764
+#=GS sp|O77764|TNFA_NOTEU/84-233 DE [subseq from] Tumor necrosis factor OS=Notamacropus eugenii OX=9315 GN=TNF PE=2 SV=1
+#=GR sp|O77764|TNFA_NOTEU/84-233 PP .589******.***...........***.....**..*******..**..************..********************..*.***.............8.88.79*************..*********..**.********..********.*********************.*.****.***************97
+sp|Q1WM27|TNFA_DASNO/84-233 -PSDKPVAHV-VAD-----------PEA-----EG--RLRWLSR--RT--NTLLAYGAALTD--NQLVVPADGLYLVYSQLLFT--G-QGC------------AP-AQ--PLLTHTVSRFAASY--QTKVNLLSA--IK-SPCPRETP--EGAEAKPW-YEPIYLGGVFQLDKGDRFSAE-T-NLPA-YLDFAEPGQVYFGLIAL
+#=GS sp|Q1WM27|TNFA_DASNO/84-233 AC Q1WM27
+#=GS sp|Q1WM27|TNFA_DASNO/84-233 DE [subseq from] Tumor necrosis factor OS=Dasypus novemcinctus OX=9361 GN=TNF PE=2 SV=1
+#=GR sp|Q1WM27|TNFA_DASNO/84-233 PP .689******.***...........***.....**..*******..**..************..********************..*.***............66.66..899***********..*********..**.********..********.*********************.*.****.***************97
+sp|Q9JM09|TNFB_MARMO/62-205 ----KPAAHL-VGD-----------PSM-----QN--SLRWRAN--TD--RAFLRHGFSLSN--NSLLVPTSGLYFVYSQVVFS--G-EGCSS--------KAVS-TP--LYLAHEVQLFSSQY--PFHVPLLSA--QK-SVCPG--------PQGPW-VRSVYQGAVFLLTRGDQLSTH-T-DGIS-HLLFSPS-SVFFGAFAL
+#=GS sp|Q9JM09|TNFB_MARMO/62-205 AC Q9JM09
+#=GS sp|Q9JM09|TNFB_MARMO/62-205 DE [subseq from] Lymphotoxin-alpha OS=Marmota monax OX=9995 GN=LTA PE=2 SV=1
+#=GR sp|Q9JM09|TNFB_MARMO/62-205 PP ....8*****.***...........***.....**..*******..**..************..********************..*.***77........7755.55..89************..*********..**.*****........*****.*********************.*.****.*****88.*******97
+sp|Q06600|TNFB_BOVIN/61-204 ----KPAAHL-VGD-----------PST-----QD--SLRWRAN--TD--RAFLRHGFSLSN--NSLLVPTSGLYFVYSQVVFS--G-RGCFP--------RATP-TP--LYLAHEVQLFSPQY--PFHVPLLSA--QK-SVCPG--------PQGPW-VRSVYQGAVFLLTRGDQLSTH-T-DGIS-HLLLSPS-SVFFGAFAL
+#=GS sp|Q06600|TNFB_BOVIN/61-204 AC Q06600
+#=GS sp|Q06600|TNFB_BOVIN/61-204 DE [subseq from] Lymphotoxin-alpha OS=Bos taurus OX=9913 GN=LTA PE=2 SV=1
+#=GR sp|Q06600|TNFB_BOVIN/61-204 PP ....8*****.***...........***.....**..*******..**..************..********************..*.*****........9988.88..**************..*********..**.*****........*****.*********************.*.****.*****88.*******97
+sp|Q5WR07|TNFB_CANLF/61-204 ----KPAAHL-IGD-----------PSI-----QN--SLRWRAN--TD--RAFLRHGFSLSN--NSLLVPTSGLYFVYSQVVFS--G-EGCFP--------KATP-TP--LYLAHEVQLFSSQY--PFHVPLLSA--QK-SVCPG--------PQGPW-VRSVYQGAVFLLTQGDQLSTH-T-DGIS-HLLLSPS-SVFFGAFAL
+#=GS sp|Q5WR07|TNFB_CANLF/61-204 AC Q5WR07
+#=GS sp|Q5WR07|TNFB_CANLF/61-204 DE [subseq from] Lymphotoxin-alpha OS=Canis lupus familiaris OX=9615 GN=LTA PE=3 SV=1
+#=GR sp|Q5WR07|TNFB_CANLF/61-204 PP ....8*****.***...........***.....**..*******..**..************..********************..*.****9........9988.88..9*************..*********..**.*****........*****.*********************.*.****.*****88.*******97
+sp|P79374|TNFA_TRIVU/85-233 --SAKPVAHL-IAD-----------QLA-----EG--QLLWVGD--VA--NTLLMNGMELVD--NQLVLPSTGLYLVYSQLLYK--G-SQC-------------G-KE-SLVLTHKISRFTLSY--QKKVTLLAN--IR-SSCRKAAE--DDGEPSAW-YEPVYLAGVFQLTEGDKLVVD-T-NYPE-NLDFAEPGQLYFGAIAL
+#=GS sp|P79374|TNFA_TRIVU/85-233 AC P79374
+#=GS sp|P79374|TNFA_TRIVU/85-233 DE [subseq from] Tumor necrosis factor OS=Trichosurus vulpecula OX=9337 GN=TNF PE=2 SV=1
+#=GR sp|P79374|TNFA_TRIVU/85-233 PP ..78******.***...........***.....**..*******..**..************..********************..*.***.............6.66.5**************..*********..**.********..********.*********************.*.****.***************97
+sp|P10154|TNFB_RABIT/54-197 ----KPAAHL-VGD-----------PSA-----QD--SLRWRAN--TD--RAFLRHGFSLSN--NSLLVPSSGLYFVYSQVVFS--G-EGCSP--------KAVP-TP--LYLAHEVQLFSSQY--SFHVPLLSA--QK-SVCPG--------PQGPW-VRSVYQGAVFLLTQGDQLSTH-T-DGIA-HLLLSPS-SVFFGAFAL
+#=GS sp|P10154|TNFB_RABIT/54-197 AC P10154
+#=GS sp|P10154|TNFB_RABIT/54-197 DE [subseq from] Lymphotoxin-alpha OS=Oryctolagus cuniculus OX=9986 GN=LTA PE=3 SV=2
+#=GR sp|P10154|TNFB_RABIT/54-197 PP ....9*****.***...........***.....**..*******..**..************..********************..*.***99........9988.88..9*************..*********..**.*****........*****.*********************.*.****.*****88.*******97
+sp|P63306|TNFL6_MACNE/141-280 --EQRKVAHL-TGK-----------PNS-----RS-MPLEWEDT--YG--IVLL-SGVKYKK--GGLVINETGLYFVYSKVYFR--G-QSC-------------T-N---LPLSHKVYMRNSKY--PQDLVMMEG-KMM-SYCT---------TGQMW-AHSSYLGAVFNLTSADHLYVN-V-SELS-LVNFEES-QTFFGLYKL
+#=GS sp|P63306|TNFL6_MACNE/141-280 AC P63306
+#=GS sp|P63306|TNFL6_MACNE/141-280 DE [subseq from] Tumor necrosis factor ligand superfamily member 6 OS=Macaca nemestrina OX=9545 GN=FASLG PE=2 SV=1
+#=GR sp|P63306|TNFL6_MACNE/141-280 PP ..6899****.***...........***.....99.8*******..**..8888.99*****..********************..*.***.............*.*...**************..*******99.899.999*.........*****.*********************.*.****.*****87.******986
+sp|P63307|TNFL6_MACMU/141-280 --EQRKVAHL-TGK-----------PNS-----RS-MPLEWEDT--YG--IVLL-SGVKYKK--GGLVINETGLYFVYSKVYFR--G-QSC-------------T-N---LPLSHKVYMRNSKY--PQDLVMMEG-KMM-SYCT---------TGQMW-AHSSYLGAVFNLTSADHLYVN-V-SELS-LVNFEES-QTFFGLYKL
+#=GS sp|P63307|TNFL6_MACMU/141-280 AC P63307
+#=GS sp|P63307|TNFL6_MACMU/141-280 DE [subseq from] Tumor necrosis factor ligand superfamily member 6 OS=Macaca mulatta OX=9544 GN=FASLG PE=2 SV=1
+#=GR sp|P63307|TNFL6_MACMU/141-280 PP ..6899****.***...........***.....99.8*******..**..8888.99*****..********************..*.***.............*.*...**************..*******99.899.999*.........*****.*********************.*.****.*****87.******986
+sp|P63308|TNFL6_MACFA/141-280 --EQRKVAHL-TGK-----------PNS-----RS-MPLEWEDT--YG--IVLL-SGVKYKK--GGLVINETGLYFVYSKVYFR--G-QSC-------------T-N---LPLSHKVYMRNSKY--PQDLVMMEG-KMM-SYCT---------TGQMW-AHSSYLGAVFNLTSADHLYVN-V-SELS-LVNFEES-QTFFGLYKL
+#=GS sp|P63308|TNFL6_MACFA/141-280 AC P63308
+#=GS sp|P63308|TNFL6_MACFA/141-280 DE [subseq from] Tumor necrosis factor ligand superfamily member 6 OS=Macaca fascicularis OX=9541 GN=FASLG PE=2 SV=1
+#=GR sp|P63308|TNFL6_MACFA/141-280 PP ..6899****.***...........***.....99.8*******..**..8888.99*****..********************..*.***.............*.*...**************..*******99.899.999*.........*****.*********************.*.****.*****87.******986
+sp|Q9BDN1|TNFL6_CERAT/141-280 --EQRKVAHL-TGK-----------PNS-----RS-MPLEWEDT--YG--IVLL-SGVKYKK--GGLVINETGLYFVYSKVYFR--G-QSC-------------T-N---LPLSHKVYMRNSKY--PQDLVMMEG-KMM-SYCT---------TGQMW-AHSSYLGAVFNLTSTDHLYVN-V-SELS-LVNFEES-QTFFGLYKL
+#=GS sp|Q9BDN1|TNFL6_CERAT/141-280 AC Q9BDN1
+#=GS sp|Q9BDN1|TNFL6_CERAT/141-280 DE [subseq from] Tumor necrosis factor ligand superfamily member 6 OS=Cercocebus atys OX=9531 GN=FASLG PE=2 SV=1
+#=GR sp|Q9BDN1|TNFL6_CERAT/141-280 PP ..6899****.***...........***.....99.8*******..**..8888.99*****..********************..*.***.............*.*...**************..*******99.899.999*.........*****.*********************.*.****.*****87.******986
+sp|Q06332|TNFB_RAT/59-202 ----KPAAHL-VGY-----------PSK-----QN--SLLWRAN--TD--RAFLRHGFSLNN--NSLLIPTSGLYFVYSQVVFS--G-ESCSP--------RAIP-TP--IYLAHEVQLFSSQY--PFHVPLLSA--QK-SVYPG--------LQGPW-VRSMYQGAVFLLSKGDQLSTH-T-DGIS-HLHFSPS-TVFFGAFAL
+#=GS sp|Q06332|TNFB_RAT/59-202 AC Q06332
+#=GS sp|Q06332|TNFB_RAT/59-202 DE [subseq from] Lymphotoxin-alpha OS=Rattus norvegicus OX=10116 GN=Lta PE=3 SV=1
+#=GR sp|Q06332|TNFB_RAT/59-202 PP ....89****.***...........***.....**..*******..**..************..********************..*.***99........9998.99..9*************..*********..**.*999*........*****.*********************.*.****.*****88.*******97
+sp|P09225|TNFB_MOUSE/59-202 ----KPAAHL-VGY-----------PSK-----QN--SLLWRAS--TD--RAFLRHGFSLSN--NSLLIPTSGLYFVYSQVVFS--G-ESCSP--------RAIP-TP--IYLAHEVQLFSSQY--PFHVPLLSA--QK-SVYPG--------LQGPW-VRSMYQGAVFLLSKGDQLSTH-T-DGIS-HLHFSPS-SVFFGAFAL
+#=GS sp|P09225|TNFB_MOUSE/59-202 AC P09225
+#=GS sp|P09225|TNFB_MOUSE/59-202 DE [subseq from] Lymphotoxin-alpha OS=Mus musculus OX=10090 GN=Lta PE=2 SV=1
+#=GR sp|P09225|TNFB_MOUSE/59-202 PP ....89****.***...........***.....**..*******..**..************..********************..*.***99........9998.99..9*************..*********..**.*999*........*****.*********************.*.****.*****88.*******97
+sp|P26445|TNFB_PIG/61-204 ----KPAAHL-VGD-----------PST-----PD--SLRWRAN--TD--RAFLRHGFLLSN--NSLLVPTSGLYFVYSQVVFS--G-EGCFP--------KATP-TP--LYLAHEVQLFSSQY--PFHVPLLSA--QK-SVCPG--------PQGPW-VRSVYQGAVFLLTQGDQLSTH-T-DGTP-HLLLSPS-SVFFGAFAL
+#=GS sp|P26445|TNFB_PIG/61-204 AC P26445
+#=GS sp|P26445|TNFB_PIG/61-204 DE [subseq from] Lymphotoxin-alpha OS=Sus scrofa OX=9823 GN=LTA PE=3 SV=1
+#=GR sp|P26445|TNFB_PIG/61-204 PP ....8*****.***...........***.....**..*******..**..************..********************..*.****9........9988.88..9*************..*********..**.*****........*****.*********************.*.****.*****88.*******97
+sp|P48023|TNFL6_HUMAN/144-281 ----RKVAHL-TGK-----------SNS-----RS-MPLEWEDT--YG--IVLL-SGVKYKK--GGLVINETGLYFVYSKVYFR--G-QSC-------------N-N---LPLSHKVYMRNSKY--PQDLVMMEG-KMM-SYCT---------TGQMW-ARSSYLGAVFNLTSADHLYVN-V-SELS-LVNFEES-QTFFGLYKL
+#=GS sp|P48023|TNFL6_HUMAN/144-281 AC P48023
+#=GS sp|P48023|TNFL6_HUMAN/144-281 DE [subseq from] Tumor necrosis factor ligand superfamily member 6 OS=Homo sapiens OX=9606 GN=FASLG PE=1 SV=1
+#=GR sp|P48023|TNFL6_HUMAN/144-281 PP ....78****.***...........999.....99.8*******..**..8888.99*****..********************..*.***.............*.*...**************..*******99.899.999*.........*****.*********************.*.****.*****87.******986
+sp|Q9XT48|TNFB_NOTEU/59-201 ----KPAAHL-VGD-----------PSV-----QD--SIHWRAN--TD--HAFLRHGFSLSN--NSLLVPTSGLYFVYSQVVFS--G-ASCSE---------ITP-TL--LYLSHEVLLFSSKY--QVHVPLLSA--QK-SVCSG--------TQGPW-MRSVYQGAVFLLTQGDRLSTY-T-DGVS-HLLQSPS-SVFFGAFAL
+#=GS sp|Q9XT48|TNFB_NOTEU/59-201 AC Q9XT48
+#=GS sp|Q9XT48|TNFB_NOTEU/59-201 DE [subseq from] Lymphotoxin-alpha OS=Notamacropus eugenii OX=9315 GN=LTA PE=2 SV=1
+#=GR sp|Q9XT48|TNFB_NOTEU/59-201 PP ....8*****.***...........***.....**..*******..**..************..********************..*.***88.........866.66..9*************..*********..**.*****........*****.*********************.*.****.*****88.*******97
+sp|P41047|TNFL6_MOUSE/141-279 ---PRSVAHL-TGN-----------PHS-----RS-IPLEWEDT--YG--TALI-SGVKYKK--GGLVINETGLYFVYSKVYFR--G-QSC-------------N-N---QPLNHKVYMRNSKY--PEDLVLMEE--KRLNYCT---------TGQIW-AHSSYLGAVFNLTSADHLYVN-I-SQLS-LINFEES-KTFFGLYKL
+#=GS sp|P41047|TNFL6_MOUSE/141-279 AC P41047
+#=GS sp|P41047|TNFL6_MOUSE/141-279 DE [subseq from] Tumor necrosis factor ligand superfamily member 6 OS=Mus musculus OX=10090 GN=Faslg PE=1 SV=1
+#=GR sp|P41047|TNFL6_MOUSE/141-279 PP ...579****.***...........***.....99.9*******..**..9999.99*****..********************..*.***.............*.*...9*************..********9..7725779.........*****.*********************.*.****.*****87.******986
+sp|Q861W5|TNFL6_FELCA/143-280 ----RKVAHL-TGK-----------PNS-----RS-IPLEWEDT--YG--IALV-SGVKYKK--GGLVINDTGMYFVYSKVNFR--G-QSC-------------N-N---QPLNHKVYMRNSKY--PQDLVLMEG-KMM-NYCT---------TGQMW-ARSSYLGAVFNLTSADHLYVN-V-SELS-LVSFEES-KTFFGLYKL
+#=GS sp|Q861W5|TNFL6_FELCA/143-280 AC Q861W5
+#=GS sp|Q861W5|TNFL6_FELCA/143-280 DE [subseq from] Tumor necrosis factor ligand superfamily member 6 OS=Felis catus OX=9685 GN=FASLG PE=2 SV=1
+#=GR sp|Q861W5|TNFL6_FELCA/143-280 PP ....789***.***...........***.....99.9*******..**..*999.99*****..********************..*.***.............*.*...9*************..********9.788.899*.........*****.*********************.*.****.*****87.******986
+sp|Q9BEA8|TNFL6_PIG/145-282 ----RKVAHL-TGK-----------PNS-----RS-IPLEWEDT--YG--IALV-SGVKYMK--GSLVINDTGLYFVYSKVYFR--G-QYC-------------N-N---QPLSHKVYTRNSRY--PQDLVLMEG-KMM-NYCT---------TGQMW-ARSSYLGAVFNLTSADHLYVN-V-SELS-LVNFEES-KTFFGLYKL
+#=GS sp|Q9BEA8|TNFL6_PIG/145-282 AC Q9BEA8
+#=GS sp|Q9BEA8|TNFL6_PIG/145-282 DE [subseq from] Tumor necrosis factor ligand superfamily member 6 OS=Sus scrofa OX=9823 GN=FASLG PE=2 SV=1
+#=GR sp|Q9BEA8|TNFL6_PIG/145-282 PP ....78****.***...........***.....99.9*******..**..*999.99*****..********************..*.***.............*.*...9*************..********9.788.899*.........*****.*********************.*.****.*****87.******986
+sp|P01374|TNFB_HUMAN/62-205 ----KPAAHL-IGD-----------PSK-----QN--SLLWRAN--TD--RAFLQDGFSLSN--NSLLVPTSGIYFVYSQVVFS--G-KAYSP--------KATS-SP--LYLAHEVQLFSSQY--PFHVPLLSS--QK-MVYPG--------LQEPW-LHSMYHGAAFQLTQGDQLSTH-T-DGIP-HLVLSPS-TVFFGAFAL
+#=GS sp|P01374|TNFB_HUMAN/62-205 AC P01374
+#=GS sp|P01374|TNFB_HUMAN/62-205 DE [subseq from] Lymphotoxin-alpha OS=Homo sapiens OX=9606 GN=LTA PE=1 SV=2
+#=GR sp|P01374|TNFB_HUMAN/62-205 PP ....9*****.***...........***.....**..*******..**..************..********************..*.99888........8856.66..9*************..*********..**.*999*........*****.*********************.*.****.*****88.*******97
+sp|P61125|TNFB_PANTR/62-205 ----KPAAHL-IGD-----------PSK-----QN--SLLWRAN--TD--RAFLQDGFSLSN--NSLLVPTSGIYFVYSQVVFS--G-KAYSP--------KATS-SP--LYLAHEVQLFSSQY--PFHVPLLSS--QK-MVYPG--------LQEPW-LHSMYHGAAFQLTQGDQLSTH-T-DGIP-HLVLSPS-TVFFGAFAL
+#=GS sp|P61125|TNFB_PANTR/62-205 AC P61125
+#=GS sp|P61125|TNFB_PANTR/62-205 DE [subseq from] Lymphotoxin-alpha OS=Pan troglodytes OX=9598 GN=LTA PE=3 SV=1
+#=GR sp|P61125|TNFB_PANTR/62-205 PP ....9*****.***...........***.....**..*******..**..************..********************..*.99888........8856.66..9*************..*********..**.*999*........*****.*********************.*.****.*****88.*******97
+sp|Q5TM20|TNFB_MACMU/62-205 ----KPAAHL-IGD-----------PSK-----QN--SLLWRAN--TD--RAFLQDGFSLSN--NSLLVPTSGIYFVYSQVVFS--G-KAYSP--------KATP-TP--LYLAHEVQLFSSQY--PFHVPLLSS--QK-MVYPG--------LQEPW-LHSMYHGAAFQLTQGDQLSTH-T-DGIP-HLVLSPS-TVFFGAFAL
+#=GS sp|Q5TM20|TNFB_MACMU/62-205 AC Q5TM20
+#=GS sp|Q5TM20|TNFB_MACMU/62-205 DE [subseq from] Lymphotoxin-alpha OS=Macaca mulatta OX=9544 GN=LTA PE=3 SV=1
+#=GR sp|Q5TM20|TNFB_MACMU/62-205 PP ....9*****.***...........***.....**..*******..**..************..********************..*.99888........8777.88..9*************..*********..**.*999*........*****.*********************.*.****.*****88.*******97
+sp|P36940|TNFL6_RAT/141-278 ----RSVAHL-TGN-----------PRS-----RS-IPLEWEDT--YG--TALI-SGVKYKK--GGLVINEAGLYFVYSKVYFR--G-QSC-------------N-S---QPLSHKVYMRNFKY--PGDLVLMEE--KKLNYCT---------TGQIW-AHSSYLGAVFNLTVADHLYVN-I-SQLS-LINFEES-KTFFGLYKL
+#=GS sp|P36940|TNFL6_RAT/141-278 AC P36940
+#=GS sp|P36940|TNFL6_RAT/141-278 DE [subseq from] Tumor necrosis factor ligand superfamily member 6 OS=Rattus norvegicus OX=10116 GN=Faslg PE=2 SV=1
+#=GR sp|P36940|TNFL6_RAT/141-278 PP ....78****.***...........***.....99.9*******..**..9999.99*****..********************..*.***.............*.*...9*************..*********..772577*.........*****.*********************.*.****.*****87.******986
+sp|Q5UBV8|TNF15_MOUSE/94-250 ---GKPRAHL-TIKKQTP---APHLKNQ-----LS--ALHWEHD--LG--MAFTKNGMKYIN--KSLVIPESGDYFIYSQITFR--G-TTSVCGDI--SRGRRPN-KP--DSITVVITKVADSY--PEPARLLTG--SK-SVCE---------ISNNW-FQSLYLGAMFSLEEGDRLMVN-V-SDIS-LVDYTKEDKTFFGAF--
+#=GS sp|Q5UBV8|TNF15_MOUSE/94-250 AC Q5UBV8
+#=GS sp|Q5UBV8|TNF15_MOUSE/94-250 DE [subseq from] Tumor necrosis factor ligand superfamily member 15 OS=Mus musculus OX=10090 GN=Tnfsf15 PE=2 SV=2
+#=GR sp|Q5UBV8|TNF15_MOUSE/94-250 PP ...5899***.*996777...7655555.....67..9******..**..************..********************..*.88778999..9**9955.56..**************..*********..**.****.........*****.*********************.*.****.**************9..
+sp|Q8K3Y7|TNF15_RAT/93-250 --RDKPKAHL-TIMRQTP---VPHLKNE-----LA--ALHWENN--LG--MAFTKNRMNYTN--KFLVIPESGDYFIYSQITFR--G-TTSECGDI--SRVRRPK-KP--DSITVVITKVADSY--PEPAHLLTG--TK-SVCE---------ISSNW-FQPIYLGAMFSLEEGDRLMVN-V-SDIS-LVDYTKEDKTFFGAF--
+#=GS sp|Q8K3Y7|TNF15_RAT/93-250 AC Q8K3Y7
+#=GS sp|Q8K3Y7|TNF15_RAT/93-250 DE [subseq from] Tumor necrosis factor ligand superfamily member 15 OS=Rattus norvegicus OX=10116 GN=Tnfsf15 PE=2 SV=1
+#=GR sp|Q8K3Y7|TNF15_RAT/93-250 PP ..689*****.9997777...7754555.....66..9******..**..************..********************..9.76666***..****966.66..9*************..*********..**.****.........*****.*********************.*.****.**************9..
+sp|O95150|TNF15_HUMAN/93-249 ---DKPRAHL-TVVRQT-----PTQHFK-----NQFPALHWEHE--LG--LAFTKNRMNYTN--KFLLIPESGDYFIYSQVTFR--G-MTSECSEI--RQAGRPN-KP--DSITVVITKVTDSY--PEPTQLLMG--TK-SVCE---------VGSNW-FQPIYLGAMFSLQEGDKLMVN-V-SDIS-LVDYTKEDKTFFGAF--
+#=GS sp|O95150|TNF15_HUMAN/93-249 AC O95150
+#=GS sp|O95150|TNF15_HUMAN/93-249 DE [subseq from] Tumor necrosis factor ligand superfamily member 15 OS=Homo sapiens OX=9606 GN=TNFSF15 PE=1 SV=2
+#=GR sp|O95150|TNF15_HUMAN/93-249 PP ...899****.866455.....554333.....44569******..**..************..********************..9.5544599*..****955.55..**************..*********..**.****.........*****.*********************.*.****.**************9..
+sp|P29965|CD40L_HUMAN/120-261 ---PQIAAHV-ISEA---------SSKT-----TS--VLQWAEK--GY--YTMSNNLVTLEN-GKQLTVKRQGLYYIYAQVTFC--SNREA-------------S-SQ--APFIASLCLKSPGR--FERILLRAA-NTH-SSA------------KPCGQQSIHLGGVFELQPGASVFVN-V-TDPS-QVSHG-TGFTSFGLLKL
+#=GS sp|P29965|CD40L_HUMAN/120-261 AC P29965
+#=GS sp|P29965|CD40L_HUMAN/120-261 DE [subseq from] CD40 ligand OS=Homo sapiens OX=9606 GN=CD40LG PE=1 SV=1
+#=GR sp|P29965|CD40L_HUMAN/120-261 PP ...589****.*994.........3444.....66..*******..**..************.99*******************..94556.............7.77..**************..******999.899.999............9998*********************.*.****.*****.89******986
+sp|P63304|CD40L_MACMU/120-261 ---PQIAAHV-ISEA---------SSKT-----TS--VLQWAEK--GY--YTMSNNLVTLEN-GKQLTVKRQGLYYIYAQVTFC--SNREA-------------S-SQ--APFIASLCLKSPGR--FERILLRAA-NTH-SSA------------KPCGQQSIHLGGVFELQPGASVFVN-V-TDPS-QVSHG-TGFTSFGLLKL
+#=GS sp|P63304|CD40L_MACMU/120-261 AC P63304
+#=GS sp|P63304|CD40L_MACMU/120-261 DE [subseq from] CD40 ligand OS=Macaca mulatta OX=9544 GN=CD40LG PE=2 SV=1
+#=GR sp|P63304|CD40L_MACMU/120-261 PP ...589****.*994.........3444.....66..*******..**..************.99*******************..94556.............7.77..**************..******999.899.999............9998*********************.*.****.*****.89******986
+sp|P63305|CD40L_CERAT/120-261 ---PQIAAHV-ISEA---------SSKT-----TS--VLQWAEK--GY--YTMSNNLVTLEN-GKQLTVKRQGLYYIYAQVTFC--SNREA-------------S-SQ--APFIASLCLKSPGR--FERILLRAA-NTH-SSA------------KPCGQQSIHLGGVFELQPGASVFVN-V-TDPS-QVSHG-TGFTSFGLLKL
+#=GS sp|P63305|CD40L_CERAT/120-261 AC P63305
+#=GS sp|P63305|CD40L_CERAT/120-261 DE [subseq from] CD40 ligand OS=Cercocebus atys OX=9531 GN=CD40LG PE=2 SV=1
+#=GR sp|P63305|CD40L_CERAT/120-261 PP ...589****.*994.........3444.....66..*******..**..************.99*******************..94556.............7.77..**************..******999.899.999............9998*********************.*.****.*****.89******986
+sp|Q9BDM3|CD40L_AOTTR/120-261 ---PQIAAHV-ISEA---------SSKT-----TS--VLQWAEK--GY--YTMSNNLVTLEN-GKQLTVKRQGLYYIYAQVTFC--SNREA-------------S-SQ--APFIASLCLKPPNR--FERILLRAA-NTH-SSA------------KPCGQQSIHLGGIFELQPGASVFVN-V-TDPS-QVSHG-TGFTSFGLLKL
+#=GS sp|Q9BDM3|CD40L_AOTTR/120-261 AC Q9BDM3
+#=GS sp|Q9BDM3|CD40L_AOTTR/120-261 DE [subseq from] CD40 ligand OS=Aotus trivirgatus OX=9505 GN=CD40LG PE=2 SV=1
+#=GR sp|Q9BDM3|CD40L_AOTTR/120-261 PP ...589****.*994.........3444.....66..*******..**..************.99*******************..94556.............7.77..**************..******999.899.999............9998*********************.*.****.*****.89******986
+sp|Q9BDN3|CD40L_CALJA/120-261 ---PQIAAHV-ISEA---------SSKT-----TS--VLQWAEK--GY--YTMSNNLVTLEN-GKQLTVKRQGLYYIYAQVTFC--SNREA-------------S-SQ--APFIASLCLKPPNR--FERILLRAA-NTH-SSA------------KPCGQQSIHLGGIFELQPGASVFVN-V-TDPS-QVSHG-TGFTSFGLLKL
+#=GS sp|Q9BDN3|CD40L_CALJA/120-261 AC Q9BDN3
+#=GS sp|Q9BDN3|CD40L_CALJA/120-261 DE [subseq from] CD40 ligand OS=Callithrix jacchus OX=9483 GN=CD40LG PE=2 SV=1
+#=GR sp|Q9BDN3|CD40L_CALJA/120-261 PP ...589****.*994.........3444.....66..*******..**..************.99*******************..94556.............7.77..**************..******999.899.999............9998*********************.*.****.*****.89******986
+sp|O97605|CD40L_FELCA/120-260 ----RVAAHV-ISEA---------SSST-----AS--VLQWAPK--GY--YTISSNLVTLEN-GKQLAVKRQGLYYIYAQVTFC--SNREA-------------S-SQ--APFIASLCLHSPSG--SERVLLRAA-NAR-SSS------------KPCGQQSIHLGGVFELHPGASVFVN-V-TDPS-QVSHG-TGFTSFGLLKL
+#=GS sp|O97605|CD40L_FELCA/120-260 AC O97605
+#=GS sp|O97605|CD40L_FELCA/120-260 DE [subseq from] CD40 ligand OS=Felis catus OX=9685 GN=CD40LG PE=2 SV=1
+#=GR sp|O97605|CD40L_FELCA/120-260 PP ....789***.*994.........4455.....67..*******..**..************.99*******************..94556.............7.77..**************..******999.899.999............9988*********************.*.****.*****.89******986
+sp|P51749|CD40L_BOVIN/120-261 ---PQIAAHV-ISEA---------SSKT-----TS--VLQWAPK--GY--YTLSNNLVTLEN-GKQLAVKRQGFYYIYTQVTFC--S-NRE------------TL-SQ--APFIASLCLKSPSG--SERILLRAA-NTH-SSS------------KPCGQQSIHLGGVFELQSGASVFVN-V-TDPS-QVSHG-TGFTSFGLLKL
+#=GS sp|P51749|CD40L_BOVIN/120-261 AC P51749
+#=GS sp|P51749|CD40L_BOVIN/120-261 DE [subseq from] CD40 ligand OS=Bos taurus OX=9913 GN=CD40LG PE=2 SV=1
+#=GR sp|P51749|CD40L_BOVIN/120-261 PP ...589****.*994.........3444.....66..*******..**..************.99*******************..9.655............16.77..**************..******999.999.999............9998*********************.*.****.*****.89******986
+sp|Q95MQ5|CD40L_PIG/121-261 ----QIAAHV-ISEA---------SSKT-----AS--VLQWAPK--GY--YTLSTNLVTLEN-GRQLAVKRQGIYYIYAQVTFC--S-NRD------------AA-GQ--APFIASLCLRSPSG--SERILLRAA-NTH-SSS------------KPCGQQSIHLGGVFELQPGASVFVN-V-TDPS-QVSHG-TGFTSFGLLKL
+#=GS sp|Q95MQ5|CD40L_PIG/121-261 AC Q95MQ5
+#=GS sp|Q95MQ5|CD40L_PIG/121-261 DE [subseq from] CD40 ligand OS=Sus scrofa OX=9823 GN=CD40LG PE=2 SV=2
+#=GR sp|Q95MQ5|CD40L_PIG/121-261 PP ....789***.*994.........3444.....56..*******..**..************.99*******************..9.666............15.66..**************..******999.999.999............9998*********************.*.****.*****.89******986
+sp|O97626|CD40L_CANLF/120-260 ----RIAAHV-ISE-----------ASSN---PAS--VLRWAPK--GY--YTISSNLVSLEN-GKQLAVKRQGLYYVYAQVTFC--S-NRA------------AS-SQ--APFVASLCLHSPSG--TERVLLRAA-SSR-GSS------------KPCGQQSIHLGGVFELHPGASVFVN-V-TDPS-QVSHG-TGFTSFGLLKL
+#=GS sp|O97626|CD40L_CANLF/120-260 AC O97626
+#=GS sp|O97626|CD40L_CANLF/120-260 DE [subseq from] CD40 ligand OS=Canis lupus familiaris OX=9615 GN=CD40LG PE=2 SV=1
+#=GR sp|O97626|CD40L_CANLF/120-260 PP ....789***.*99...........6653...377..*******..**..************.99*******************..*.777............25.66..**************..**9999888.544.466............7777*********************.*.****.*****.89******986
+sp|Q8JFG3|TNFA_SPAAU/93-253 --KAKAAIHL-EGS-----------YDEDE-GLKD--QVEWKNG--QG--QAFAQGGFRLVD--NKIVIPHTGLYFVYSQASFR--V-SCSDGD------EEGAG-RH-LTPLSHRISRYSESM--GSDVSLMSA--VR-SACQNTAQEDSYSDGRGW-YNTIYLGAVFQLNRGDKLETE-T-NQLS-ELETD-EGKTFFGVFAL
+#=GS sp|Q8JFG3|TNFA_SPAAU/93-253 AC Q8JFG3
+#=GS sp|Q8JFG3|TNFA_SPAAU/93-253 DE [subseq from] Tumor necrosis factor OS=Sparus aurata OX=8175 GN=tnf PE=3 SV=1
+#=GR sp|Q8JFG3|TNFA_SPAAU/93-253 PP ..578999**.*99...........66644.5577..9******..**..************..********************..8.887788......88875.55.59*************..*********..**.******************.*********************.*.****.*****.68*******97
+sp|Q9BDM7|CD40L_MACNE/113-240 ---------------------------M-----QK--VLQWAEK--GY--YTMSNNLVTLEN-GKQLTVKRQGLYYIYAQVTFC--SNREA-------------S-SQ--APFIASLCLKSPGR--FERILLRAA-NTH-SST------------KPCGQQSIHLGGVFELQPGASVFVN-V-TDPS-QVSHG-TGFTSFGLLKL
+#=GS sp|Q9BDM7|CD40L_MACNE/113-240 AC Q9BDM7
+#=GS sp|Q9BDM7|CD40L_MACNE/113-240 DE [subseq from] CD40 ligand OS=Macaca nemestrina OX=9545 GN=CD40LG PE=2 SV=1
+#=GR sp|Q9BDM7|CD40L_MACNE/113-240 PP ...........................5.....78..9******..**..************.99*******************..94556.............7.77..**************..******999.999.999............9998*********************.*.****.*****.89******986
+sp|P27548|CD40L_MOUSE/120-260 ----QIAAHV-VSEA---------NSNA-----AS--VLQWAKK--GY--YTMKSNLVMLEN-GKQLTVKREGLYYVYTQVTFC--S-NRE-------------P-SS-QRPFIVGLWLKPSSG--SERILLKAA-NTH-SSS------------QLCEQQSVHLGGVFELQAGASVFVN-V-TEAS-QVIHR-VGFSSFGLLKL
+#=GS sp|P27548|CD40L_MOUSE/120-260 AC P27548
+#=GS sp|P27548|CD40L_MOUSE/120-260 DE [subseq from] CD40 ligand OS=Mus musculus OX=10090 GN=Cd40lg PE=1 SV=2
+#=GR sp|P27548|CD40L_MOUSE/120-260 PP ....789***.*884.........3566.....78..*******..**..************.99*******************..9.766.............5.54.49*************..****99999.899.998............8777*********************.*.****.*****.89******986
+sp|Q9JM10|TNFC_MARMO/135-291 --SRLPAAHL-IGA-----------WMK-----GQ--GLSWEAK--KE--EAFLRSGTQFSG-AEGLALPQDGLYYLYCNVGYR--G-RAPPSG------AGPQD-RS--VTLRSSLYRAGGAYGRGAPELLLEG--AE-TVTPVLDRAGRPQYRPLW-YTSVGFGGLVQLRRGERVYVN-I-SHPD-MVDYR-RGKTFFGAV--
+#=GS sp|Q9JM10|TNFC_MARMO/135-291 AC Q9JM10
+#=GS sp|Q9JM10|TNFC_MARMO/135-291 DE [subseq from] Lymphotoxin-beta OS=Marmota monax OX=9995 GN=LTB PE=2 SV=1
+#=GR sp|Q9JM10|TNFC_MARMO/135-291 PP ..6789****.***...........***.....**..*******..**..***********9.99*******************..*.*99899......99866.66..9*********999965677889***..**.*999**************.*********************.*.****.*****.89*****98..
+sp|Q862Z7|TNFC_PANTR/88-241 -----PAAHL-IGA-----------PLK-----GQ--GLGWETT--KE--QAFLTSGTQFSD-AEGLALPQDGLYYLYCLVGYR--G-RTPPGG------GDPQG-RS--VTLRSSLYRAGGAYGPGTPELLLEG--AE-TVTPVLDPARRQGYGPLW-YTSVGFGGLVQLRRGERVYVN-I-SHPD-MVDFA-RGKTFFGAV--
+#=GS sp|Q862Z7|TNFC_PANTR/88-241 AC Q862Z7
+#=GS sp|Q862Z7|TNFC_PANTR/88-241 DE [subseq from] Lymphotoxin-beta OS=Pan troglodytes OX=9598 GN=LTB PE=3 SV=1
+#=GR sp|Q862Z7|TNFC_PANTR/88-241 PP .....89***.***...........***.....**..*******..**..************.99*******************..*.**9999......99876.67..9************98779999****..**.*999**************.*********************.*.****.*****.89*****98..
+sp|Q06643|TNFC_HUMAN/88-241 -----PAAHL-IGA-----------PLK-----GQ--GLGWETT--KE--QAFLTSGTQFSD-AEGLALPQDGLYYLYCLVGYR--G-RAPPGG------GDPQG-RS--VTLRSSLYRAGGAYGPGTPELLLEG--AE-TVTPVLDPARRQGYGPLW-YTSVGFGGLVQLRRGERVYVN-I-SHPD-MVDFA-RGKTFFGAV--
+#=GS sp|Q06643|TNFC_HUMAN/88-241 AC Q06643
+#=GS sp|Q06643|TNFC_HUMAN/88-241 DE [subseq from] Lymphotoxin-beta OS=Homo sapiens OX=9606 GN=LTB PE=1 SV=1
+#=GR sp|Q06643|TNFC_HUMAN/88-241 PP .....89***.***...........***.....**..*******..**..************.99*******************..*.**9999......99876.67..9************98779999****..**.*999**************.*********************.*.****.*****.89*****98..
+sp|Q5TM22|TNFC_MACMU/88-241 -----PAAHL-IGA-----------PLK-----GQ--GLGWEAT--KE--QAFLTSGTQFSD-ADGLALPQDGLYYLYCLVGYR--G-RAPPGG------AEPRG-RS--VTLRSSLYRAGGAYGPGTPELLLEG--AE-TVTPVLDPAGRQGYGPLW-YTSVGFGGLVQLRRGERVYVN-I-SHPD-MVDFA-RGKTFFGAV--
+#=GS sp|Q5TM22|TNFC_MACMU/88-241 AC Q5TM22
+#=GS sp|Q5TM22|TNFC_MACMU/88-241 DE [subseq from] Lymphotoxin-beta OS=Macaca mulatta OX=9544 GN=LTB PE=3 SV=1
+#=GR sp|Q5TM22|TNFC_MACMU/88-241 PP .....89***.***...........***.....**..*******..**..************.99*******************..*.*99999......99876.77..9************98779999****..**.*999**************.*********************.*.****.*****.89*****98..
+sp|O43557|TNF14_HUMAN/93-238 ----NPAAHL-TGA-----------NSSLT-GSGG--PLLWETQ--LG--LAFL-RGLSYHD--GALVVTKAGYYYIYSKVQLG--G-VGC-------------P-LGLASTITHGLYKRTPRY--PEELELLVS--QQ-SPCGRA-----TSSSRVW-WDSSFLGGVVHLEAGEKVVVR-V-LDER-LVRLRDGTRSYFGAF--
+#=GS sp|O43557|TNF14_HUMAN/93-238 AC O43557
+#=GS sp|O43557|TNF14_HUMAN/93-238 DE [subseq from] Tumor necrosis factor ligand superfamily member 14 OS=Homo sapiens OX=9606 GN=TNFSF14 PE=1 SV=2
+#=GR sp|O43557|TNF14_HUMAN/93-238 PP ....79****.**9...........77755.5466..*******..**..****.99*****..********************..*.***.............7.765579************..*********..**.******.....*******.*********************.*.****.**************9..
+sp|P41155|TNFC_MOUSE/153-303 ----LPAAHL-IGA-----------WMS-----GQ--GLSWEAS--QE--EAFLRSGAQFSP-THGLALPQDGVYYLYCHVGYR--G-RTPPAG-------RSRA-RS--LTLRSALYRAGGAYGRGSPELLLEG--AE-TVTPVVD---PIGYGSLW-YTSVGFGGLAQLRSGERVYVN-I-SHPD-MVDYR-RGKTFFGAV--
+#=GS sp|P41155|TNFC_MOUSE/153-303 AC P41155
+#=GS sp|P41155|TNFC_MOUSE/153-303 DE [subseq from] Lymphotoxin-beta OS=Mus musculus OX=10090 GN=Ltb PE=2 SV=1
+#=GR sp|P41155|TNFC_MOUSE/153-303 PP ....69****.***...........***.....**..*******..**..***********9.99*******************..*.999889.......8877.78..9*********99996678999****..**.*9999**...********.*********************.*.****.*****.89*****98..
+sp|Q9ESE2|TNF11_RAT/162-313 --EAQPFAHL-TINAAD----IPSGSHK-----VS--LSSWYHD--RG--WAKISN-MTLSN--GKLRVNQDGFYYLYANICFR--H-HETSG--------SVPA-DY--LQLMVYVVKTSIKI--PSSHNLMKGGSTK-NWSG---------NSEFH-FYSINVGGFFKLRAGEEISVQ-V-SNPS-LLDPD-QDATYFGAFK-
+#=GS sp|Q9ESE2|TNF11_RAT/162-313 AC Q9ESE2
+#=GS sp|Q9ESE2|TNF11_RAT/162-313 DE [subseq from] Tumor necrosis factor ligand superfamily member 11 OS=Rattus norvegicus OX=10116 GN=Tnfsf11 PE=2 SV=1
+#=GR sp|Q9ESE2|TNF11_RAT/162-313 PP ..679*****.*99888....8776667.....77..889****..**..****65.*****..********************..*.99988........8867.77..9*************..********96677.7779.........99***.*********************.*.****.*****.78*******8.
+sp|O35235|TNF11_MOUSE/160-311 --EAQPFAHL-TINAAS----IPSGSHK-----VT--LSSWYHD--RG--WAKISN-MTLSN--GKLRVNQDGFYYLYANICFR--H-HETSG--------SVPT-DY--LQLMVYVVKTSIKI--PSSHNLMKGGSTK-NWSG---------NSEFH-FYSINVGGFFKLRAGEEISIQ-V-SNPS-LLDPD-QDATYFGAFK-
+#=GS sp|O35235|TNF11_MOUSE/160-311 AC O35235
+#=GS sp|O35235|TNF11_MOUSE/160-311 DE [subseq from] Tumor necrosis factor ligand superfamily member 11 OS=Mus musculus OX=10090 GN=Tnfsf11 PE=1 SV=2
+#=GR sp|O35235|TNF11_MOUSE/160-311 PP ..679*****.*99778....8766666.....77..889****..**..****65.*****..********************..*.99989........8877.77..9*************..********96677.7779.........99***.*********************.*.****.*****.78*******8.
+sp|Q9Z2V2|CD40L_RAT/120-260 ----QIAAHV-VSEA---------NSNA-----AS--VLQWAKK--GY--YTMKSNLVVLEN-GRQLTVKREGLYYVYTQVTFC--S-NRE-------------PLSQ--RPFIVSLWLKPSSG--SERILLRAA-NTH-SSS------------KLCEQQSIHLGGVFELQAGASVFVN-V-TEAS-QVIHG-IGFSSIGLLKL
+#=GS sp|Q9Z2V2|CD40L_RAT/120-260 AC Q9Z2V2
+#=GS sp|Q9Z2V2|CD40L_RAT/120-260 DE [subseq from] CD40 ligand OS=Rattus norvegicus OX=10116 GN=Cd40lg PE=2 SV=2
+#=GR sp|Q9Z2V2|CD40L_RAT/120-260 PP ....789***.*884.........3566.....78..*******..**..************.99*******************..9.776.............5166..9*************..*****9999.899.999............8887*********************.*.****.****9.78999999986
+sp|O14788|TNF11_HUMAN/162-312 ---AQPFAHL-TINATD----IPSGSHK-----VS--LSSWYHD--RG--WAKISN-MTFSN--GKLIVNQDGFYYLYANICFR--H-HETSG--------DLAT-EY--LQLMVYVTKTSIKI--PSSHTLMKG--GS-TKYWS-------GNSEFH-FYSINVGGFFKLRSGEEISIE-V-SNPS-LLDPD-QDATYFGAFK-
+#=GS sp|O14788|TNF11_HUMAN/162-312 AC O14788
+#=GS sp|O14788|TNF11_HUMAN/162-312 DE [subseq from] Tumor necrosis factor ligand superfamily member 11 OS=Homo sapiens OX=9606 GN=TNFSF11 PE=1 SV=1
+#=GR sp|O14788|TNF11_HUMAN/162-312 PP ...689****.*99888....8776667.....77..889****..**..****65.*****..********************..*.99988........8877.77..9*************..********9..55.54456.......999***.*********************.*.****.*****.78*******8.
+sp|Q9I8D8|CD40L_CHICK/136-272 -----IATHL-AGV-----------KSN-----TTVRVLKWMTT--SY---APTSSLISYHE--GKLKVEKAGLYYIYSQVSFC--T-KAA-------------A-S---APFTLYIYLYLPME--EDRLLMKGL-DTH-STST----------ALCE-LQSIREGGVFELRQGDMVFVN-V-TDST-AVNVN-PGNTYFGMFKL
+#=GS sp|Q9I8D8|CD40L_CHICK/136-272 AC Q9I8D8
+#=GS sp|Q9I8D8|CD40L_CHICK/136-272 DE [subseq from] CD40 ligand OS=Gallus gallus OX=9031 GN=CD40LG PE=2 SV=2
+#=GR sp|Q9I8D8|CD40L_CHICK/136-272 PP .....578**.999...........888.....77669****99..98...8899*******..********************..*.***.............9.9...9********99988..777755554.666.6556..........5666.*********************.*.****.*****.58*******97
+sp|P50591|TNF10_HUMAN/123-278 ------AAHI-TGTRGRSNTLSSPNSKNEKALGRK--INSWESS--RS--GHSFLSNLHLRN--GELVIHEKGFYYIYSQTYFR--F-QEEIK--------ENTK-ND--KQMVQYIYKY-TSY--PDPILLMKS--AR-NSCWS-------KDAEYG-LYSIYQGGIFELKENDRIFVS-V-TNEH-LIDMD-HEASFFGAF--
+#=GS sp|P50591|TNF10_HUMAN/123-278 AC P50591
+#=GS sp|P50591|TNF10_HUMAN/123-278 DE [subseq from] Tumor necrosis factor ligand superfamily member 10 OS=Homo sapiens OX=9606 GN=TNFSF10 PE=1 SV=1
+#=GR sp|P50591|TNF10_HUMAN/123-278 PP ......6666.655555555555432222222233..449****..**..99999*******..********************..9.98888........8766.66..99******87.68*..*********..**.*****.......*99999.*********************.*.****.*****.56******9..
+sp|Q9QYH9|TNF14_MOUSE/90-237 ---ANPAAHL-TGA-----------NASLI-GIGG--PLLWETR--LG--LAFL-RGLTYHD--GALVTMEPGYYYVYSKVQLS--G-VGCPQ---------GLA-NG--LPITHGLYKRTSRY--PKELELLVS--RR-SPCGRA------NSSRVW-WDSSFLGGVVHLEAGEEVVVR-V-PGNR-LVRPRDGTRSYFGAF--
+#=GS sp|Q9QYH9|TNF14_MOUSE/90-237 AC Q9QYH9
+#=GS sp|Q9QYH9|TNF14_MOUSE/90-237 DE [subseq from] Tumor necrosis factor ligand superfamily member 14 OS=Mus musculus OX=10090 GN=Tnfsf14 PE=2 SV=1
+#=GR sp|Q9QYH9|TNF14_MOUSE/90-237 PP ...689****.***...........88878.7788..*******..**..****.99*****..********************..*.***88.........777.88..9*************..*********..**.******......******.*********************.*.****.**************9..
+sp|P50592|TNF10_MOUSE/153-288 ---------------------------------QK--IESWESS--RK--GHSFLNHVLFRN--GELVIEQEGLYYIYSQTYFR--F-QEAEDASK--MVSKDKV-RT--KQLVQYIYKY-TSY--PDPIVLMKS--AR-NSCWS-------RDAEYG-LYSIYQGGLFELKKNDRIFVS-V-TNEH-LMDLDQ-EASFFGAF--
+#=GS sp|P50592|TNF10_MOUSE/153-288 AC P50592
+#=GS sp|P50592|TNF10_MOUSE/153-288 DE [subseq from] Tumor necrosis factor ligand superfamily member 10 OS=Mus musculus OX=10090 GN=Tnfsf10 PE=2 SV=1
+#=GR sp|P50592|TNF10_MOUSE/153-288 PP .................................44..458****..**..************..********************..*.*9999999..9998865.66..89******87.68*..*********..**.*****.......*99999.*********************.*.****.*****5.6******9..
+sp|Q9TSV8|TNFC_PIG/6-147 ----------------------------------Q--GLGWEAK--KE--EAFLRSGTQFSG-AEGLALPQDGLYYLYCHVGYR--G-RAPPPG------GDPLD-RS--VTLLSRLYRAGGAYGPGTPELLLEG--AE-TVTPVLDPSRRHEYGPLW-YTSVGFGGLVQLRRGERVYVN-I-SHPD-MVDYR-RGKTFFGAV--
+#=GS sp|Q9TSV8|TNFC_PIG/6-147 AC Q9TSV8
+#=GS sp|Q9TSV8|TNFC_PIG/6-147 DE [subseq from] Lymphotoxin-beta (Fragment) OS=Sus scrofa OX=9823 GN=LTB PE=3 SV=1
+#=GR sp|Q9TSV8|TNFC_PIG/6-147 PP ..................................6..89*****..**..***********9.99*******************..*.**9999......99887.88..9999999*9999998779999****..**.*999**************.*********************.*.****.*****.89*****98..
+sp|Q9XT47|TNFC_NOTEU/87-247 -----PAAHL-IGI-----------AKS-----SH--GLRWVSG--YE--EAFLKSGTQFLGDEGLLALPQDGIYFLYCHIGYR--G-RAPSGGEQFRSQAGDPG-VP--VTLSSQLFRARGASGSGEPELLLQG--FE-TVTPPVQHARGVGQGPLW-YATVGFGGLVQLRGGEKIYVN-V-SHLE-LVDFR-RGKTFFGAV--
+#=GS sp|Q9XT47|TNFC_NOTEU/87-247 AC Q9XT47
+#=GS sp|Q9XT47|TNFC_NOTEU/87-247 DE [subseq from] Lymphotoxin-beta OS=Notamacropus eugenii OX=9315 GN=LTB PE=2 SV=1
+#=GR sp|Q9XT47|TNFC_NOTEU/87-247 PP .....89***.***...........***.....**..*******..**..*********96545899*****************..*.99999999999998755.55..899999999866554488999****..**.*9999*************.*********************.*.****.*****.89*****98..
+sp|P32971|TNFL8_HUMAN/96-217 ---KKSWAYLQVAK-----------HLN-----KT--KLSWNKD--GI------LHGVRYQD--GNLVIQFPGLYFIICQLQFL--V-QCP-------------N-NS--VDLKLELLINKHIK--KQALVTVCE--SG-MQT------------KHV-YQNLSQFLLDYLQVNTTISVN-V-DTFQ-YIDTS------------
+#=GS sp|P32971|TNFL8_HUMAN/96-217 AC P32971
+#=GS sp|P32971|TNFL8_HUMAN/96-217 DE [subseq from] Tumor necrosis factor ligand superfamily member 8 OS=Homo sapiens OX=9606 GN=TNFSF8 PE=1 SV=1
+#=GR sp|P32971|TNFL8_HUMAN/96-217 PP ...6999***9999...........***.....**..*******..99......69******..********************..*.***.............*.**..********999988..888888888..88.899............***.*********************.*.****.**997............
+sp|Q9WU72|TN13B_MOUSE/200-308 -------------------------------------------------------NALEEKE--NKIVVRQTGYFFIYSQVLYT--D-PIF-------------A-MG--HVIQRKKVHVFGDE--LSLVTLFRC--IQ-NMP-----------KTLP-NNSCYSAGIARLEEGDEIQLA-I-PREN-AQISRNGDDTFFGALKL
+#=GS sp|Q9WU72|TN13B_MOUSE/200-308 AC Q9WU72
+#=GS sp|Q9WU72|TN13B_MOUSE/200-308 DE [subseq from] Tumor necrosis factor ligand superfamily member 13B OS=Mus musculus OX=10090 GN=Tnfsf13b PE=1 SV=1
+#=GR sp|Q9WU72|TN13B_MOUSE/200-308 PP .......................................................5678899..********************..*.***.............*.**..***99999999***..*********..99.866...........3777.*********************.*.**99.66666699******996
+sp|P32972|TNFL8_MOUSE/99-222 -PSKKSWAYLQVSK-----------HLN-----NT--KLSWNED--GT------IHGLIYQD--GNLIVQFPGLYFIVCQLQFL--V-QCS-------------N-HS--VDLTLQLLINSKIK--KQTLVTVCE--SG-VQS------------KNI-YQNLSQFLLHYLQVNSTISVR-V-DNFQ-YVDTN------------
+#=GS sp|P32972|TNFL8_MOUSE/99-222 AC P32972
+#=GS sp|P32972|TNFL8_MOUSE/99-222 DE [subseq from] Tumor necrosis factor ligand superfamily member 8 OS=Mus musculus OX=10090 GN=Tnfsf8 PE=2 SV=1
+#=GR sp|P32972|TNFL8_MOUSE/99-222 PP .689******9999...........***.....**..*******..*9......6999****..********************..*.***.............*.**..********987665..555555555..55.577............***.*********************.*.****.***97............
+sp|Q9Y275|TN13B_HUMAN/178-284 ---------------------------------------------------------LEEKE--NKILVKETGYFFIYGQVLYT--D-KTY-------------A-MG--HLIQRKKVHVFGDE--LSLVTLFRC--IQ-NMP-----------ETLP-NNSCYSAGIAKLEEGDELQLA-I-PRENAQISLD-GDVTFFGALKL
+#=GS sp|Q9Y275|TN13B_HUMAN/178-284 AC Q9Y275
+#=GS sp|Q9Y275|TN13B_HUMAN/178-284 DE [subseq from] Tumor necrosis factor ligand superfamily member 13B OS=Homo sapiens OX=9606 GN=TNFSF13B PE=1 SV=1
+#=GR sp|Q9Y275|TN13B_HUMAN/178-284 PP .........................................................67788..********************..*.***.............*.**..***99999999***..*********..88.855...........3888.*********************.*.9998689999.88******996
+sp|O75888|TNF13_HUMAN/135-250 -------------------------------------EVMWQPA--LR-----RGRGLQAQG--YGVRIQDAGVYLLYSQVLFQ--D-VTF-------------T-MG--QVVSREGQGR---Q--ETLFRCIRS--MP-SHP------------DRA-YNSCYSAGVFHLHQGDILSVI-I-PRARAKLNLSPH-GTFLGFVKL
+#=GS sp|O75888|TNF13_HUMAN/135-250 AC O75888
+#=GS sp|O75888|TNF13_HUMAN/135-250 DE [subseq from] Tumor necrosis factor ligand superfamily member 13 OS=Homo sapiens OX=9606 GN=TNFSF13 PE=1 SV=1
+#=GR sp|O75888|TNF13_HUMAN/135-250 PP .....................................5666665..55.....347899999..********************..*.***.............*.**..*****99966...5..788999999..99.999............***.*********************.*.999779****75.9****9986
+sp|Q9D777|TNF13_MOUSE/137-241 -------------------------------------------------------RGLEAQG--DIVRVWDTGIYLLYSQVLFH--D-VTF-------------T-MG--QVVSREGQGR---R--ETLFRCIRS--MP-SDP------------DRA-YNSCYSAGVFHLHQGDIITVK-I-PRANAKLSLSPH-GTFLGFVKL
+#=GS sp|Q9D777|TNF13_MOUSE/137-241 AC Q9D777
+#=GS sp|Q9D777|TNF13_MOUSE/137-241 DE [subseq from] Tumor necrosis factor ligand superfamily member 13 OS=Mus musculus OX=10090 GN=Tnfsf13 PE=1 SV=1
+#=GR sp|Q9D777|TNF13_MOUSE/137-241 PP .......................................................5777888..8899****************..*.***.............*.**..****999965...6..788999999..99.999............***.*********************.*.*99889****75.9****9986
+sp|O43508|TNF12_HUMAN/130-247 -------------------------------------VSGWEEA--RI--NSSSPLRYNRQI--GEFIVTRAGLYYLYCQVHFD--E-GKA------------VY-LK-LDLLVDGVLALRCL------EEFSAT--AA-SSL------------GPQ-LRLCQVSGLLALRPGSSLRIR-T-LPWA-HLKAAPF-LTYFGLFQ-
+#=GS sp|O43508|TNF12_HUMAN/130-247 AC O43508
+#=GS sp|O43508|TNF12_HUMAN/130-247 DE [subseq from] Tumor necrosis factor ligand superfamily member 12 OS=Homo sapiens OX=9606 GN=TNFSF12 PE=1 SV=1
+#=GR sp|O43508|TNF12_HUMAN/130-247 PP .....................................567****..**..************..********************..9.666............45.66.58889999988764......467888..99.999............***.*********************.*.****.*****88.******95.
+sp|Q9BEG5|EDA_BOVIN/285-385 --------------------------------------------------------KLHPRS--GELEVLVDGTYFIYSQVEVY--Y-INF-------------T-D----FASYEVV--------VDEKPFLQC--TR-SIET----------GKTN-YNTCYTAGVCLLKARQKIAVK-M-VHADISINMSK-HTTFFGAIRL
+#=GS sp|Q9BEG5|EDA_BOVIN/285-385 AC Q9BEG5
+#=GS sp|Q9BEG5|EDA_BOVIN/285-385 DE [subseq from] Ectodysplasin-A OS=Bos taurus OX=9913 GN=EDA PE=3 SV=2
+#=GR sp|Q9BEG5|EDA_BOVIN/285-385 PP ........................................................455677..9*******************..*.***.............9.9....8888888........467799***..**.*998..........9***.*********************.*.***999****5.6******975
+sp|Q92838|EDA_HUMAN/285-385 --------------------------------------------------------KLHPRS--GELEVLVDGTYFIYSQVEVY--Y-INF-------------T-D----FASYEVV--------VDEKPFLQC--TR-SIET----------GKTN-YNTCYTAGVCLLKARQKIAVK-M-VHADISINMSK-HTTFFGAIRL
+#=GS sp|Q92838|EDA_HUMAN/285-385 AC Q92838
+#=GS sp|Q92838|EDA_HUMAN/285-385 DE [subseq from] Ectodysplasin-A OS=Homo sapiens OX=9606 GN=EDA PE=1 SV=2
+#=GR sp|Q92838|EDA_HUMAN/285-385 PP ........................................................455677..9*******************..*.***.............9.9....8888888........467799***..**.*998..........9***.*********************.*.***999****5.6******975
+sp|O54693|EDA_MOUSE/285-385 --------------------------------------------------------KLHPRS--GELEVLVDGTYFIYSQVEVY--Y-INF-------------T-D----FASYEVV--------VDEKPFLQC--TR-SIET----------GKTN-YNTCYTAGVCLLKARQKIAVK-M-VHADISINMSK-HTTFFGAIRL
+#=GS sp|O54693|EDA_MOUSE/285-385 AC O54693
+#=GS sp|O54693|EDA_MOUSE/285-385 DE [subseq from] Ectodysplasin-A OS=Mus musculus OX=10090 GN=Eda PE=1 SV=2
+#=GR sp|O54693|EDA_MOUSE/285-385 PP ........................................................455677..9*******************..*.***.............9.9....8888888........467799***..**.*998..........9***.*********************.*.***999****5.6******975
+sp|O54907|TNF12_MOUSE/130-247 -------------------------------------VSGWEET--KI--NSSSPLRYDRQI--GEFTVIRAGLYYLYCQVHFD--E-GKA------------VY-LK-LDLLVNGVLALRCL------EEFSAT--AA-SSP------------GPQ-LRLCQVSGLLPLRPGSSLRIR-T-LPWA-HLKAAPF-LTYFGLFQ-
+#=GS sp|O54907|TNF12_MOUSE/130-247 AC O54907
+#=GS sp|O54907|TNF12_MOUSE/130-247 DE [subseq from] Tumor necrosis factor ligand superfamily member 12 OS=Mus musculus OX=10090 GN=Tnfsf12 PE=2 SV=2
+#=GR sp|O54907|TNF12_MOUSE/130-247 PP .....................................567****..**..************..********************..9.666............45.55.58888888887764......467888..99.999............***.*********************.*.****.*****88.******95.
+sp|Q8MUJ1|EIGER_DROME/304-414 ------------------------------------------ND--NE--RNSYQGHFQTRD--GVLTVTNTGLYYVYAQICYN--N-SHD-------------Q-N--------GFIVFQGDT--PF-LQCLNT--VP-TNM------------PHK-VHTCHTSGLIHLERNERIHLKDIHNDRN-AVLREGNNRSYFGIFK-
+#=GS sp|Q8MUJ1|EIGER_DROME/304-414 AC Q8MUJ1
+#=GS sp|Q8MUJ1|EIGER_DROME/304-414 DE [subseq from] Protein eiger OS=Drosophila melanogaster OX=7227 GN=egr PE=1 SV=1
+#=GR sp|Q8MUJ1|EIGER_DROME/304-414 PP ..........................................67..78..89999*******..********************..*.*99.............9.9........445678888..87.6699**..**.***............***.********************97547778.9999999********8.
+sp|Q7TS55|TNF18_MOUSE/75-164 ----------------------------------------------------------TTSD--GKLKILQSGTYLIYGQVIPV--D-KKY------------IK-DN--APFVVQIYKKNDVL--QT---LM-----------------------ND-FQILPIGGVYELHAGDNIYLK-F-NSKD-HIQKT---NTYWGII--
+#=GS sp|Q7TS55|TNF18_MOUSE/75-164 AC Q7TS55
+#=GS sp|Q7TS55|TNF18_MOUSE/75-164 DE [subseq from] Tumor necrosis factor ligand superfamily member 18 OS=Mus musculus OX=10090 GN=Tnfsf18 PE=1 SV=1
+#=GR sp|Q7TS55|TNF18_MOUSE/75-164 PP ..........................................................6789..******************99..9.888............57.77..********876543..33...22.......................45.788999***************.*.****.***99...79****8..
+sp|Q9UNG2|TNF18_HUMAN/81-168 ----------------------------------------------------------KVSD--WKLEILQNGLYLIYGQVAPN--A-NY--------------N-DV--APFEVRLYKNKD---------MIQT--LT-NKS------------KI-----QNVGGTYELHVGDTIDLI-F-NSEH-QVLKN---NTYWGII--
+#=GS sp|Q9UNG2|TNF18_HUMAN/81-168 AC Q9UNG2
+#=GS sp|Q9UNG2|TNF18_HUMAN/81-168 DE [subseq from] Tumor necrosis factor ligand superfamily member 18 OS=Homo sapiens OX=9606 GN=TNFSF18 PE=1 SV=3
+#=GR sp|Q9UNG2|TNF18_HUMAN/81-168 PP ..........................................................6789..9****************987..6.65..............5.55..999999997654.........3444..44.444............33.....368***************.*.****.**999...79****9..
+sp|Q3ZDR4|CD70_PIG/64-185 --------------------------RQ-----DP--RLRWQGS--PALGRSFV-HGPELDN--GQLRIQRTGIYRLHIQVTLT--N-CSSSTW-------TVMP-RQ--ATLTLGICS--PT---THSISLLRL-NFH-HTC------------RVA-SQR-----LTPLAKGDVLCTN-L-TLPL-LPSRN-ADETFFGV---
+#=GS sp|Q3ZDR4|CD70_PIG/64-185 AC Q3ZDR4
+#=GS sp|Q3ZDR4|CD70_PIG/64-185 DE [subseq from] CD70 antigen OS=Sus scrofa OX=9823 GN=CD70 PE=2 SV=1
+#=GR sp|Q3ZDR4|CD70_PIG/64-185 PP ..........................33.....44..8999876..54214555.9******..*******************9..8.665567.......7777.77..788877774..33...344555554.477.777............766.554.....689**********.*.9997.77666.88*****8...
+sp|P32970|CD70_HUMAN/72-188 -------------------------------------RLYWQGGPALG--RSFL-HGPELDK--GQLRIHRDGIYMVHIQVTLAICS-STT------------AS-RH--HPTTLAVGICSPAS--RSISLLRLS--FH-QGC------------TIA------SQRLTPLARGDTLCTN-L-TGTL-LPSRN-TDETFFGV---
+#=GS sp|P32970|CD70_HUMAN/72-188 AC P32970
+#=GS sp|P32970|CD70_HUMAN/72-188 DE [subseq from] CD70 antigen OS=Homo sapiens OX=9606 GN=CD70 PE=1 SV=2
+#=GR sp|P32970|CD70_HUMAN/72-188 PP .....................................66666531144..5566.99*****..*****************986223.333............25.55..77777777667665..555555555..88.777............655......455789**********.9.9876.55555.89*****7...
+//

@@ -1,0 +1,53 @@
+# opening files
+
+open 6op0-assembly1.simp.cif
+
+open 6x81-assembly1.simp.cif
+
+open 6ooz-assembly1.simp.cif
+
+open 6ooy-assembly1.simp.cif
+
+open 6x82-assembly1.simp.cif
+
+open 7jra-assembly1.simp.cif
+
+open 6x83-assembly1.simp.cif
+
+open 6x86-assembly1.simp.cif
+
+open 6x85-assembly1.simp.cif
+
+open 7kpa-assembly1.simp.cif
+
+# opening attribute file
+
+open P01375_cif_average_0.5.defattr
+
+# colouring and formatting for visualisation
+
+color white; set bgColor white
+
+set silhouette ON; set silhouetteWidth 2; set silhouetteColor black
+
+~disp; select ~protein; ~select : HOH; ~select ::binding_site==-1; disp sel; ~sel
+
+surf; surface color white; transparency 70 s;
+
+col ::binding_site==0 #cc5151;
+col ::binding_site==0 #cc5151;
+col ::binding_site==0 #cc5151;
+col ::binding_site==0 #cc5151;
+col ::binding_site==0 #cc5151;
+col ::binding_site==1 #7f3333;
+col ::binding_site==0 #cc5151;
+col ::binding_site==0 #cc5151;
+col ::binding_site==0 #cc5151;
+col ::binding_site==0 #cc5151;
+col ::binding_site==2 #51cccc;
+col ::binding_site==0 #cc5151;
+col ::binding_site==0 #cc5151;
+col ::binding_site==0 #cc5151;
+col ::binding_site==0 #cc5151;
+save P01375_cif_average_0.5.cxs
+
