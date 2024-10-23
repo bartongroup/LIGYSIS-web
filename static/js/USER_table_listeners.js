@@ -651,15 +651,6 @@ $('table#bs_ress_table tbody').on('mouseover', 'tr', function () { // event list
 
     if (clickedElements.length == 0) {
 
-        if (labelsVisible) {
-            for (const label of labelsHash[activeModel]["hoveredRes"]) {
-                viewer.removeLabel(label);
-            }
-            labelsHash[activeModel]["hoveredRes"] = [];
-        }
-
-        //let PDBResNum = Up2PdbDict[rowId];
-
         if (activeModel == "superposition") {
             viewer.setStyle(
                 {...protAtoms, model: protAtomsModel},
@@ -692,6 +683,13 @@ $('table#bs_ress_table tbody').on('mouseover', 'tr', function () { // event list
             }
         }
         viewer.render();
+    }
+
+    if (labelsVisible) {
+        for (const label of labelsHash[activeModel]["hoveredRes"]) {
+            viewer.removeLabel(label);
+        }
+        labelsHash[activeModel]["hoveredRes"] = [];
     }
 });
 

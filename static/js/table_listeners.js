@@ -612,8 +612,6 @@ $('table#bs_ress_table tbody').on('mouseover', 'tr', function () { // event list
 
     if (clickedElements.length == 0) {
 
-        
-
         let PDBResNum = Up2PdbDict[repPdbId][repPdbChainId][rowId];
 
         if (activeModel == "superposition") {

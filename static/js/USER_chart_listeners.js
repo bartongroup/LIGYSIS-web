@@ -861,19 +861,6 @@ document.getElementById('newChartCanvas').addEventListener('mousemove', function
                             }
                         );
                     }
-                    // proteinChains.forEach((element) => { // in case of multiple copies of protein of interest
-                    //     let AssemblyPDBResNum = Up2PdbMapAssembly[chainsMapAssembly[element]][newPointLabel]
-                    //     if (AssemblyPDBResNum  != undefined) {
-                    //         AssemblyPDBResNums.push([element, AssemblyPDBResNum]);
-                    //         viewer.setStyle(
-                    //             {model: activeModel, resi: AssemblyPDBResNum, chain: element, not: {atom: bboneAtoms}},
-                    //             {
-                    //                 cartoon:{style: cartoonStyle, color: pointColor, arrows: cartoonArrows, tubes: cartoonTubes, opacity: cartoonOpacity, thickness: cartoonThickness,},
-                    //                 stick:{color: pointColor},
-                    //             }
-                    //         );
-                    //     }
-                    // });
                 }
 
                 if (labelsVisible) {
