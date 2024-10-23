@@ -1,0 +1,53 @@
+% Output from STAMP ROUGH FIT routine
+%  The sequences from the file /cluster/home/2394007/fragsys_custom/OUT/P12499_cif/results/P12499_cif_stamp.domains have been aligned from their
+%  N-terminal ends, andthe resulting equivalences were be used 
+% to generate the superpositions given below.
+% Domains 4k4q_updated.supp onto 1vij_updated.supp RMS of 0.665553 on 198 atoms
+% Domains 4k4q_updated.supp onto 4k4p_updated.supp RMS of 0.311184 on 198 atoms
+% Domains 4k4q_updated.supp onto 2wkz_updated.supp RMS of 0.661773 on 198 atoms
+% Domains 4k4q_updated.supp onto 4ej8_updated.supp RMS of 1.473534 on 198 atoms
+% Domains 4k4q_updated.supp onto 3kf0_updated.supp RMS of 0.600837 on 198 atoms
+% Domains 4k4q_updated.supp onto 3kfn_updated.supp RMS of 0.620971 on 198 atoms
+% Domains 4k4q_updated.supp onto 4ejd_updated.supp RMS of 0.938463 on 198 atoms
+% Domains 4k4q_updated.supp onto 4k4r_updated.supp RMS of 0.230848 on 198 atoms
+% Domains 4k4q_updated.supp onto 1hxw_updated.supp RMS of 0.685075 on 198 atoms
+/cluster/home/2394007/fragsys_custom/OUT/P12499_cif/clean_pdbs/4k4q_updated.clean.pdb 4k4q_updated.supp { ALL 
+    1.0000     0.0000     0.0000       0.0000 
+    0.0000     1.0000     0.0000       0.0000 
+    0.0000     0.0000     1.0000       0.0000  } 
+/cluster/home/2394007/fragsys_custom/OUT/P12499_cif/clean_pdbs/1vij_updated.clean.pdb 1vij_updated.supp { ALL 
+   -0.2004     0.5617    -0.8027       7.6571 
+   -0.9160    -0.3982    -0.0500     -18.3038 
+   -0.3477     0.7253     0.5942      -8.9093  } 
+/cluster/home/2394007/fragsys_custom/OUT/P12499_cif/clean_pdbs/4k4p_updated.clean.pdb 4k4p_updated.supp { ALL 
+   -0.0105     0.9999    -0.0012      -0.1128 
+    0.9999     0.0104    -0.0136      -0.3761 
+   -0.0136    -0.0013    -0.9999       0.5234  } 
+/cluster/home/2394007/fragsys_custom/OUT/P12499_cif/clean_pdbs/2wkz_updated.clean.pdb 2wkz_updated.supp { ALL 
+    0.8468    -0.1213    -0.5178      -8.7006 
+   -0.5080     0.1039    -0.8551      -8.6415 
+    0.1575     0.9872     0.0263      -1.7977  } 
+/cluster/home/2394007/fragsys_custom/OUT/P12499_cif/clean_pdbs/4ej8_updated.clean.pdb 4ej8_updated.supp { ALL 
+   -0.3317    -0.7058    -0.6260      11.2978 
+    0.9399    -0.1900    -0.2838     -26.9987 
+    0.0813    -0.6825     0.7264      22.3149  } 
+/cluster/home/2394007/fragsys_custom/OUT/P12499_cif/clean_pdbs/3kf0_updated.clean.pdb 3kf0_updated.supp { ALL 
+   -0.8501    -0.1139     0.5141       4.1529 
+    0.5058     0.0946     0.8574     -43.1580 
+   -0.1463     0.9890    -0.0228       3.4734  } 
+/cluster/home/2394007/fragsys_custom/OUT/P12499_cif/clean_pdbs/3kfn_updated.clean.pdb 3kfn_updated.supp { ALL 
+    0.8494     0.1071     0.5168     -25.8627 
+   -0.5087    -0.0943     0.8557     -24.0569 
+    0.1404    -0.9898    -0.0256      41.7414  } 
+/cluster/home/2394007/fragsys_custom/OUT/P12499_cif/clean_pdbs/4ejd_updated.clean.pdb 4ejd_updated.supp { ALL 
+   -0.3073    -0.6486    -0.6963      11.8166 
+    0.9466    -0.1332    -0.2936     -26.5073 
+    0.0977    -0.7494     0.6549      22.0128  } 
+/cluster/home/2394007/fragsys_custom/OUT/P12499_cif/clean_pdbs/4k4r_updated.clean.pdb 4k4r_updated.supp { ALL 
+    0.9999     0.0050     0.0088      -0.1659 
+   -0.0051     0.9999     0.0118      -0.1751 
+   -0.0087    -0.0118     0.9999       0.4088  } 
+/cluster/home/2394007/fragsys_custom/OUT/P12499_cif/clean_pdbs/1hxw_updated.clean.pdb 1hxw_updated.supp { ALL 
+    0.8580    -0.1436    -0.4932      -8.9293 
+   -0.4819     0.1075    -0.8696      -9.0838 
+    0.1779     0.9838     0.0231      -1.5777  } 

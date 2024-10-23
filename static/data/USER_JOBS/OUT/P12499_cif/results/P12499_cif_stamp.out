@@ -1,0 +1,81 @@
+
+STAMP Structural Alignment of Multiple Proteins
+
+Version 4.5 (10 September 2020)
+ by Robert B. Russell & Geoffrey J. Barton 
+ Please cite PROTEINS, v14, 309-323, 1992. PMID:1409577
+Running roughfit.
+
+    Sc = STAMP score, RMS = RMS deviation, Align = alignment length
+    Len1, Len2 = length of domain, Nfit = residues fitted
+    Secs = no. equivalent sec. strucs. Eq = no. equivalent residues
+    %I = seq. identity, %S = sec. str. identity
+    P(m)  = P value (p=1/10) calculated after Murzin (1993), JMB, 230, 689-694
+            (NC = P value not calculated - potential FP overflow)
+
+     No.  Domain1         Domain2         Sc     RMS    Len1 Len2  Align NFit Eq. Secs.   %I   %S   P(m)
+Pair   1  4k4q_updated.supp 1vij_updated.supp 9.51   0.67    198  198   198  198 198    0  97.98 100.00 0.00e+00 
+Pair   2  4k4q_updated.supp 4k4p_updated.supp 9.74   0.31    198  198   198  198 198    0 100.00 100.00 0.00e+00 
+Pair   3  4k4q_updated.supp 2wkz_updated.supp 9.54   0.66    198  198   198  198 198    0  96.97 100.00 0.00e+00 
+Pair   4  4k4q_updated.supp 4ej8_updated.supp 8.98   1.26    198  198   198  193 192    0  94.79 100.00 0.00e+00 
+Pair   5  4k4q_updated.supp 3kf0_updated.supp 9.59   0.60    198  198   198  198 198    0  98.99 100.00 0.00e+00 
+Pair   6  4k4q_updated.supp 3kfn_updated.supp 9.58   0.62    198  198   198  198 198    0  98.99 100.00 0.00e+00 
+Pair   7  4k4q_updated.supp 4ejd_updated.supp 9.01   0.85    198  204   199  197 197    0  97.46 100.00 0.00e+00 
+Pair   8  4k4q_updated.supp 4k4r_updated.supp 9.77   0.23    198  198   198  198 198    0 100.00 100.00 0.00e+00 
+Pair   9  4k4q_updated.supp 1hxw_updated.supp 9.53   0.68    198  198   198  198 198    0  97.98 100.00 0.00e+00 
+Pair  10  1vij_updated.supp 4k4p_updated.supp 9.55   0.62    198  198   198  198 198    0  97.98 100.00 0.00e+00 
+Pair  11  1vij_updated.supp 2wkz_updated.supp 9.48   0.73    198  198   198  198 198    0  98.99 100.00 0.00e+00 
+Pair  12  1vij_updated.supp 4ej8_updated.supp 9.07   1.07    198  198   198  192 192    0  94.79 100.00 0.00e+00 
+Pair  13  1vij_updated.supp 3kf0_updated.supp 9.49   0.71    198  198   198  198 198    0  98.99 100.00 0.00e+00 
+Pair  14  1vij_updated.supp 3kfn_updated.supp 9.48   0.73    198  198   198  198 198    0  98.99 100.00 0.00e+00 
+Pair  15  1vij_updated.supp 4ejd_updated.supp 9.00   0.93    198  204   198  197 197    0  98.98 100.00 0.00e+00 
+Pair  16  1vij_updated.supp 4k4r_updated.supp 9.53   0.64    198  198   198  198 198    0  97.98 100.00 0.00e+00 
+Pair  17  1vij_updated.supp 1hxw_updated.supp 9.49   0.72    198  198   198  198 198    0 100.00 100.00 0.00e+00 
+Pair  18  4k4p_updated.supp 2wkz_updated.supp 9.57   0.62    198  198   198  198 198    0  96.97 100.00 0.00e+00 
+Pair  19  4k4p_updated.supp 4ej8_updated.supp 9.06   1.17    198  198   198  193 192    0  94.79 100.00 0.00e+00 
+Pair  20  4k4p_updated.supp 3kf0_updated.supp 9.62   0.55    198  198   198  198 198    0  98.99 100.00 0.00e+00 
+Pair  21  4k4p_updated.supp 3kfn_updated.supp 9.60   0.59    198  198   198  198 198    0  98.99 100.00 0.00e+00 
+Pair  22  4k4p_updated.supp 4ejd_updated.supp 9.09   0.83    198  204   198  196 196    0  98.98 100.00 0.00e+00 
+Pair  23  4k4p_updated.supp 4k4r_updated.supp 9.74   0.32    198  198   198  198 198    0 100.00 100.00 0.00e+00 
+Pair  24  4k4p_updated.supp 1hxw_updated.supp 9.56   0.66    198  198   198  198 198    0  97.98 100.00 0.00e+00 
+Pair  25  2wkz_updated.supp 4ej8_updated.supp 9.02   1.16    198  198   198  192 192    0  93.75 100.00 0.00e+00 
+Pair  26  2wkz_updated.supp 3kf0_updated.supp 9.75   0.27    198  198   198  198 198    0  97.98 100.00 0.00e+00 
+Pair  27  2wkz_updated.supp 3kfn_updated.supp 9.73   0.30    198  198   198  198 198    0  97.98 100.00 0.00e+00 
+Pair  28  2wkz_updated.supp 4ejd_updated.supp 9.14   0.69    198  204   199  197 197    0  96.95 100.00 0.00e+00 
+Pair  29  2wkz_updated.supp 4k4r_updated.supp 9.58   0.59    198  198   198  198 198    0  96.97 100.00 0.00e+00 
+Pair  30  2wkz_updated.supp 1hxw_updated.supp 9.68   0.44    198  198   198  198 198    0  98.99 100.00 0.00e+00 
+Pair  31  4ej8_updated.supp 3kf0_updated.supp 9.06   1.12    198  198   198  192 192    0  95.83 100.00 0.00e+00 
+Pair  32  4ej8_updated.supp 3kfn_updated.supp 9.06   1.12    198  198   198  192 192    0  95.83 100.00 0.00e+00 
+Pair  33  4ej8_updated.supp 4ejd_updated.supp 8.61   1.11    198  204   199  189 187    0  95.72 100.00 0.00e+00 
+Pair  34  4ej8_updated.supp 4k4r_updated.supp 9.02   1.19    198  198   198  193 192    0  94.79 100.00 0.00e+00 
+Pair  35  4ej8_updated.supp 1hxw_updated.supp 9.06   1.15    198  198   198  193 193    0  94.82 100.00 0.00e+00 
+Pair  36  3kf0_updated.supp 3kfn_updated.supp 9.78   0.14    198  198   198  198 198    0 100.00 100.00 0.00e+00 
+Pair  37  3kf0_updated.supp 4ejd_updated.supp 9.17   0.66    198  204   199  197 197    0  98.48 100.00 0.00e+00 
+Pair  38  3kf0_updated.supp 4k4r_updated.supp 9.62   0.54    198  198   198  198 198    0  98.99 100.00 0.00e+00 
+Pair  39  3kf0_updated.supp 1hxw_updated.supp 9.71   0.38    198  198   198  198 198    0  98.99 100.00 0.00e+00 
+Pair  40  3kfn_updated.supp 4ejd_updated.supp 9.17   0.65    198  204   199  197 197    0  98.48 100.00 0.00e+00 
+Pair  41  3kfn_updated.supp 4k4r_updated.supp 9.61   0.56    198  198   198  198 198    0  98.99 100.00 0.00e+00 
+Pair  42  3kfn_updated.supp 1hxw_updated.supp 9.70   0.40    198  198   198  198 198    0  98.99 100.00 0.00e+00 
+Pair  43  4ejd_updated.supp 4k4r_updated.supp 9.05   0.77    204  198   199  196 196    0  97.45 100.00 0.00e+00 
+Pair  44  4ejd_updated.supp 1hxw_updated.supp 9.06   0.76    204  198   199  196 194    0  98.97 100.00 0.00e+00 
+Pair  45  4k4r_updated.supp 1hxw_updated.supp 9.57   0.61    198  198   198  198 198    0  97.98 100.00 0.00e+00 
+Reading in matrix file P12499_cif_stamp.mat...
+Doing cluster analysis...
+Cluster:  1 (3kf0_updated.supp  & 3kfn_updated.supp ) Sc  9.78 RMS   0.14 Len 198 nfit 198 
+ See file P12499_cif_stamp.1 for the alignment and transformations
+Cluster:  2 (4k4q_updated.supp  & 4k4r_updated.supp ) Sc  9.76 RMS   0.23 Len 198 nfit 198 
+ See file P12499_cif_stamp.2 for the alignment and transformations
+Cluster:  3 (2wkz_updated.supp  & 3kf0_updated.supp 3kfn_updated.supp ) Sc  9.73 RMS   0.27 Len 198 nfit 198 
+ See file P12499_cif_stamp.3 for the alignment and transformations
+Cluster:  4 (4k4p_updated.supp  & 4k4q_updated.supp 4k4r_updated.supp ) Sc  9.72 RMS   0.29 Len 198 nfit 198 
+ See file P12499_cif_stamp.4 for the alignment and transformations
+Cluster:  5 (1hxw_updated.supp  & 2wkz_updated.supp 3kf0_updated.supp 3kfn_updated.supp ) Sc  9.72 RMS   0.38 Len 198 nfit 198 
+ See file P12499_cif_stamp.5 for the alignment and transformations
+Cluster:  6 (1hxw_updated.supp 2wkz_updated.supp 3kf0_updated.supp 3kfn_updated.supp  & 4k4p_updated.supp 4k4q_updated.supp 4k4r_updated.supp ) Sc  9.68 RMS   0.55 Len 198 nfit 198 
+ See file P12499_cif_stamp.6 for the alignment and transformations
+Cluster:  7 (1vij_updated.supp  & 1hxw_updated.supp 2wkz_updated.supp 3kf0_updated.supp 3kfn_updated.supp 4k4p_updated.supp 4k4q_updated.supp 4k4r_updated.supp ) Sc  9.69 RMS   0.60 Len 198 nfit 198 
+ See file P12499_cif_stamp.7 for the alignment and transformations
+Cluster:  8 (4ejd_updated.supp  & 1vij_updated.supp 1hxw_updated.supp 2wkz_updated.supp 3kf0_updated.supp 3kfn_updated.supp 4k4p_updated.supp 4k4q_updated.supp 4k4r_updated.supp ) Sc  9.43 RMS   0.68 Len 199 nfit 197 
+ See file P12499_cif_stamp.8 for the alignment and transformations
+Cluster:  9 (4ej8_updated.supp  & 4ejd_updated.supp 1vij_updated.supp 1hxw_updated.supp 2wkz_updated.supp 3kf0_updated.supp 3kfn_updated.supp 4k4p_updated.supp 4k4q_updated.supp 4k4r_updated.supp ) Sc  9.35 RMS   1.11 Len 199 nfit 192 
+ See file P12499_cif_stamp.9 for the alignment and transformations
