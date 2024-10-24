@@ -23,11 +23,12 @@ const chartCtx = document.getElementById("chartCanvas").getContext("2d");
 const newChartCtx = document.getElementById("newChartCanvas").getContext("2d");
 
 const myChartLims = { 
-    DS: {sugMin: 0, sugMax: 50, min: 0, max: 100},
-    FS: {sugMin: 0, sugMax: 0.6, min: 0, max: 0.6},
-    MES: {sugMin: 0.05, sugMax: 2, min: 0, max: 5},
     RSA: {sugMin: 0, sugMax: 50, min: 0, max: 100},
-    Size: {sugMin: 1, sugMax: 25, min: 1, max: 70}
+    DS: {sugMin: 0, sugMax: 50, min: 0, max: 100},
+    MES: {sugMin: 0.05, sugMax: 2, min: 0, max: 5},
+    Size: {sugMin: 1, sugMax: 25, min: 1, max: 70},
+    Cluster: {sugMin: 0, sugMax: 5, min: 0, max: 5},
+    FS: {sugMin: 0, sugMax: 0.6, min: 0, max: 0.6},
 };
 
 const newChartLims = {

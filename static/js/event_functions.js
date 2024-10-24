@@ -12,11 +12,13 @@ function updateChart(axes, dropdownElem, myChart, chartData, myChartLims) { // u
 
     if (selectedTitle === "MES") {
         myChart.options.scales[axes].type = "logarithmic";
-        myChart.options.scales[axes].ticks.autoSkip = false;
+        myChart.options.scales[axes].ticks.autoSkip = true;
+        myChart.options.scales[axes].ticks.callback = Chart.Ticks.formatters.logarithmic;
         myChart.options.plugins.annotation.annotations.line1.display = true;
     } else {
         myChart.options.scales[axes].type = "linear";
-        myChart.options.scales[axes].ticks.autoSkip = true;
+        myChart.options.scales[axes].ticks.autoSkip = false;
+        myChart.options.scales[axes].ticks.callback = Chart.Ticks.formatters.numeric;
         myChart.options.plugins.annotation.annotations.line1.display = false;
     }
 

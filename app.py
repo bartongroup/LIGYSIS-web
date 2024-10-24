@@ -397,6 +397,7 @@ def results(prot_id, seg_id): # route for results site. Takes Prot ID and Seg ID
     bss_prot.ID = bss_prot.ID.str.split("_").str[2] # extracting binding site ID from binding site name, which is UniProt ID _ Segment ID _ Binding Site ID
 
     bss_prot.ID = bss_prot.ID.astype(int) # changing binding site ID to integer data type
+    bss_prot.Cluster = bss_prot.Cluster.astype(int) # changing binding site ID to integer data type
 
     bss_prot = bss_prot.sort_values(by = "ID") # sorting binding site table rows by ID
 
