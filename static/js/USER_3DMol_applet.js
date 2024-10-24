@@ -13,10 +13,31 @@ $3Dmol.setSyncSurface(true); // all surfaces appear at once
 
 // SOME FUNCTIONS
 
+function spliText(fileName) {
+    const parts = fileName.replace(".simp", "").split(".");
+    if (parts.length === 1) {
+        return [fileName, ''];  // No extension found
+    }
+    const ext = parts.pop();  // Get the last part as extension
+    const name = parts.join('.');  // Join the remaining parts for the name
+    return [name, ext];
+}
+
 function showHoverLabel(atom, viewer) { // show label of hovered atom
     if(!atom.label) {
+        let strucData = spliText(modelOrderRev[atom.model]) // strucName might contain "."
+        let strucName = strucData[0]
         atom.label = viewer.addLabel(
-            modelOrderRev[atom.model].split(".")[0] + " " + atom.chain + " " + atom.resn + " " + atom.resi + " " + atom.atom,
+            strucName + " " + atom.chain + " " + atom.resn + " " + atom.resi + " " + atom.atom,
+            {position: atom, backgroundColor: 'mintcream', fontColor:'black', borderColor: 'black', borderThickness: 2}
+        );
+    }
+}
+
+function showHoverLabelNoModel(atom, viewer) { // show label of hovered atom
+    if(!atom.label) {
+        atom.label = viewer.addLabel(
+            atom.chain + " " + atom.resn + " " + atom.resi + " " + atom.atom,
             {position: atom, backgroundColor: 'mintcream', fontColor:'black', borderColor: 'black', borderThickness: 2}
         );
     }

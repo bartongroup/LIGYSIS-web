@@ -114,7 +114,7 @@ function selectOption(option) {
             }
 
             viewer.setHoverable({model: suppModels}, false, // Hovering disabled for ligand superposition models (otherwise get wrong labels)
-                showHoverLabel,
+                showHoverLabelNoModel,
                 removeHoverLabel,
             );
 
@@ -213,12 +213,14 @@ function selectOption(option) {
                 ligandsVisible = false;
             }
 
-            viewer.setHoverable({model: activeModel}, false, // Hovering disabled for previous assembly
-                showHoverLabel,
-                removeHoverLabel,
-            );
+            
 
             if (option !== 'Superposition') {
+
+                viewer.setHoverable({model: activeModel}, false, // Hovering disabled for previous assembly
+                    showHoverLabelNoModel,
+                    removeHoverLabel,
+                );
 
                 viewer.getModel(activeModel).hide(); // Hide the active assembly
 
@@ -258,11 +260,14 @@ function selectOption(option) {
                     saveArpeggioDataButton.style.borderColor = 'darkgray';  // Active font color
                     saveStructureContactsDownloadIcon.setAttribute('src', '/static/images/download_gray.svg');
                 }
-
-
                 
             }
             else {
+
+                // viewer.setHoverable({model: activeModel}, false, // Hovering disabled for previous assembly
+                //     showHoverLabel,
+                //     removeHoverLabel,
+                // );
 
                 contactsButton.disabled = true;
 
@@ -411,7 +416,7 @@ function openStructure(pdbId) {
                     viewer.zoomTo({model: modelID})
         
                     viewer.setHoverable({model: modelID}, true,  // Hovering enabled for new assembly
-                        showHoverLabel,
+                        showHoverLabelNoModel,
                         removeHoverLabel,
                     );
                     viewer.render();
