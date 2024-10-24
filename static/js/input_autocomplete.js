@@ -1,16 +1,16 @@
-$( function() {
+$(function() {
     $( "#autocomplete" ).autocomplete({
         minLength: 1,
         source: proteinIds,
     });
-    // Overrides the default autocomplete filter function to search only from the beginning of the string
-    $.ui.autocomplete.filter = function (array, term) {
-        var matcher = new RegExp("^" + $.ui.autocomplete.escapeRegex(term), "i");
-        return $.grep(array, function (value) {
+    // Custom filter to search the string regardless of position (anywhere in the string) and case-insensitive
+    $.ui.autocomplete.filter = function(array, term) {
+        var matcher = new RegExp($.ui.autocomplete.escapeRegex(term), "i");
+        return $.grep(array, function(value) {
             return matcher.test(value.label || value.value || value);
         });
     };
-} );
+});
 
 // submits example UniProt ID in case no ID is introduced by the user
 
