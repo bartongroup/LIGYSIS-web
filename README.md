@@ -6,8 +6,8 @@ This is the repository for out ligand binding site analysis, **LIGYSIS**, [web s
 
 Third party dependencies include:
 
-- 3Dmol.js
-- Chart.js
+- [3Dmol.js](https://3dmol.csb.pitt.edu/doc/index.html) [(BSD 3-Clause License)](https://github.com/3dmol/3Dmol.js/blob/master/LICENSE)
+- [Chart.js](https://www.chartjs.org/) [(MIT License)](https://github.com/chartjs/Chart.js/blob/master/LICENSE.md)
 
 Other dependencies constitute standard Python libraries:
 
@@ -41,5 +41,13 @@ We do not offer full LIGYSIS dataset download, so a local installation of the LI
 
 
 ## Citation
+
+If you use the **LIGYSIS** web application, please cite:
+
+**Utgés JS**, MacGowan SA, Ives CM, Barton GJ. Classification of likely functional class for ligand binding sites identified from fragment screening. Commun Biol. 2024 Mar 13;7(1):320. doi: [10.1038/s42003-024-05970-8](https://www.nature.com/articles/s42003-024-05970-8). PMID: 38480979; PMCID: PMC10937669.
+
+**Utgés JS** & Barton GJ. Comparative evaluation of methods for the prediction of protein-ligand binding sites, 08 August 2024, PREPRINT (Version 1) available at Research Square [https://doi.org/10.21203/rs.3.rs-4849153/v1](https://doi.org/10.21203/rs.3.rs-4849153/v1)
+
+**Utgés JS**, MacGowan SA, Barton GJ. LIGYSIS-web: a resource for the analysis of protein-ligand binding sites. 2025. <i>Work in progress...</i>.
 
 ## References
