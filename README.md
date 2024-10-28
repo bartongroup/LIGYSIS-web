@@ -45,9 +45,15 @@ conda activate LIGYSIS_WEB
 python app.py
 ```
 
-We do not offer full LIGYSIS dataset download, so a local installation of the LIGYSIS web app would only make sense if the customised **LIGYSIS** [pipeline](https://github.com/JavierSanchez-Utges/ligysis_custom/tree/revamped) was installed and a user wanted to explore their results locally without relying on [our public server](https://www.compbio.dundee.ac.uk/ligysis/).
+We do not offer full **LIGYSIS dataset** download, so a local installation of the **LIGYSIS web app** would only make sense if the customised **LIGYSIS** [pipeline](https://github.com/JavierSanchez-Utges/ligysis_custom/tree/revamped) was installed and a user wanted to explore their results locally without relying on [our public server](https://www.compbio.dundee.ac.uk/ligysis/).
 
-## User job submission
+## Exploring LIGYSIS results
+
+There are two modes in which **LIGYSIS Web** can be employed:
+
+1. Exploring the pre-computed results of the **LIGYSIS** dataset, comprised of 65,000 ligand binding sites across 25,000 different proteins with >100,000 structures deposited on the [PDBe](https://www.ebi.ac.uk/pdbe/). Protein UniProt accession, as well as protein names are supported to access results.
+  
+2. Submitting your own set of structures (<i>.cif</i>, <i>.ent</i> or <i>.pdb</i> formats) for analysis and subsequent results exploration. This can be done through the **LIGYSIS** or the [slivka-bio server](https://www.compbio.dundee.ac.uk/slivka/index). See [here](https://github.com/bartongroup/slivka-bio) for slivka-bio source code.
 
 ## Results page
 
