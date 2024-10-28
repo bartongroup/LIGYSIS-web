@@ -1,0 +1,9 @@
+name: LIGYSIS_WEB2
+channels:
+  - bioconda
+  - conda-forge
+dependencies:
+  - flask=3.0.3
+  - numpy=1.26.4
+  - pandas=2.2.2
+  - python=3.12.7
