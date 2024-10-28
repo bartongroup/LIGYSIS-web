@@ -2,6 +2,8 @@
 
 This is the repository for out ligand binding site analysis, **LIGYSIS**, [web server](https://www.compbio.dundee.ac.uk/ligysis/). LIGYSIS is a Python Flask Web application.
 
+<img src="./static/images/LIGYSIS_LOGO_REVAMP6_w_name.png" alt="This is the LIGYSIS WEB logo" width="400">
+
 ## Dependencies
 
 Third party dependencies include:
@@ -25,6 +27,12 @@ conda create -n LIGYSIS_WEB python numpy pandas flask
 
 This will install the necessary libraries to locally run the LIGYSIS web app.
 
+Alternatively, one can install the environment from the <i>.yml</i> file:
+
+```sh
+conda env create -f LIGYSIS_WEB.yml
+```
+
 ## Run the app
 
 After installation, this is how you can run the LIGYSIS app locally:
@@ -47,9 +55,11 @@ The results page of the application is divided in three panels: Binding Sites Pa
 
 ![This is the LIGYSIS WEB main resutls page](./static/images/LIGYSIS_RESULTS_NEW.png)
 
+General information about the protein and the available structure data can be found at the top of the results page, above the three main results panels. From left to right, we can find the protein's [UniProt](https://www.uniprot.org/) accession ID, entry, protein names as well as the number of individual protein chains, relevant ligands and defined binding sites for the protein segment of interest.
+
 ### Binding Sites Panel
 
-This panel is formed by the protein's [UniProt](https://www.uniprot.org/) accession ID and entry name, an interactive Chart.js graph and a table which display the binding site features, averaged from the residues forming them. These features include average [Relative Solvent Accessibility](https://en.wikipedia.org/wiki/Relative_accessible_surface_area) (RSA)[[1](https://journals.plos.org/plosone/article?id=10.1371/journal.pone.0080635)], Normalised Shenkin Divergence Score (DS) [[2](https://doi.org/10.1002/prot.340110408), [3](https://journals.plos.org/ploscompbiol/article?id=10.1371/journal.pcbi.1009335)], Missense Enrichment Score (MES) [[4](https://www.biorxiv.org/content/10.1101/127050v2), [5](https://onlinelibrary.wiley.com/doi/full/10.1002/pro.3783), [6](https://www.nature.com/articles/s42003-024-06117-5)], binding site size, i.e., number of binding site residues (Size), RSA-derived Cluster (Cluster) [[7](https://www.nature.com/articles/s42003-024-05970-8)] and RSA-derived Functional Score (FS).
+This panel is formed by an interactive Chart.js graph and a table which display the binding site features, averaged from the residues forming them. These features include average [Relative Solvent Accessibility](https://en.wikipedia.org/wiki/Relative_accessible_surface_area) (RSA)[[1](https://journals.plos.org/plosone/article?id=10.1371/journal.pone.0080635)], Normalised Shenkin Divergence Score (DS) [[2](https://doi.org/10.1002/prot.340110408), [3](https://journals.plos.org/ploscompbiol/article?id=10.1371/journal.pcbi.1009335)], Missense Enrichment Score (MES) [[4](https://www.biorxiv.org/content/10.1101/127050v2), [5](https://onlinelibrary.wiley.com/doi/full/10.1002/pro.3783), [6](https://www.nature.com/articles/s42003-024-06117-5)], binding site size, i.e., number of binding site residues (Size), RSA-derived Cluster (Cluster) [[7](https://www.nature.com/articles/s42003-024-05970-8)] and RSA-derived Functional Score (FS).
 
 Variables on each axis can be changed, to explore the relationship between the different features and a screenshot of the graph can be saved. Columns of the table can be sorted by value and the data saved to a <i>.csv</i> file. Both the graph and the table react to hover and click events displaying the sites on the structure panel. Hover events will have a temporary effect, whilst clicking on a data point or row will fix the corresponding binding site on the structure panel, until another site is clicked or the same site clicked again (unclicked). These events can be easily tracked by a **yellow** highlight on points and rows when hovered on or **green** when clicked.
 
@@ -57,7 +67,15 @@ Variables on each axis can be changed, to explore the relationship between the d
 
 This is the central panel of the **LIGYSIS web** results page. At the very top, we find the name of the protein of interest, and below, the structural segment selector, as defined by the [PDBe-KB](https://www.ebi.ac.uk/pdbe/pdbe-kb/) [[8](https://pubs.aip.org/aca/sdy/article/11/3/034701/3294234)] as well as the structure selector. By default, the ligand superposition view is shown, which has a single protein scaffold and the heteroatoms (non-protein atoms) of all other structures for a given protein segment. A user can click on this drop-up and explore the biological assembly of any of the chains in the superposition. Transformation matrices for the superposition were obtained from the [PDBe FTP site](https://ftp.ebi.ac.uk/pub/databases/pdbe-kb/superposition/P/P00517/).
 
-At the very centre of the panel, we find the [3DMol.js](https://3dmol.csb.pitt.edu/doc/index.html) [[9](https://academic.oup.com/bioinformatics/article/31/8/1322/213186), [10](https://pubs.acs.org/doi/10.1021/acs.jchemed.0c00579)] structure viewer with a white protein chain cartoon representation. Buttons are implemented to show/hide surfaces, residue labels, ligand, water molecules and protein-ligand contacts as calculated by [pdbe-arpeggio](https://github.com/PDBeurope/arpeggio) [[11](https://www.sciencedirect.com/science/article/pii/S0022283616305332?via%3Dihub)]. These contacts can be downloaded as a <i>.csv</i> for the currently visualised assembly (not the Superposition), or for all assemblies at once as a zipped folder of <i>.csv</i> files. The Superposition with coloured ligands, as well as individual assemblies with their protein-ligand interactions can be downloaded for external visualisation. Currently, [ChimeraX](https://www.cgl.ucsf.edu/chimerax/) (<i>.cxc</i>) [[12](https://onlinelibrary.wiley.com/doi/10.1002/pro.3943)] and [PyMol](https://pymol.org/) (<i>.pml</i>) [13] are supported.
+At the very centre of the panel, we find the [3DMol.js](https://3dmol.csb.pitt.edu/doc/index.html) [[9](https://academic.oup.com/bioinformatics/article/31/8/1322/213186), [10](https://pubs.acs.org/doi/10.1021/acs.jchemed.0c00579)] structure viewer with a white protein chain cartoon representation. Buttons are implemented to show/hide surfaces, residue labels, ligand, water molecules and protein-ligand contacts as calculated by [pdbe-arpeggio](https://github.com/PDBeurope/arpeggio) [[11](https://www.sciencedirect.com/science/article/pii/S0022283616305332?via%3Dihub)]. These contacts can be downloaded as a <i>.csv</i> for the currently visualised assembly (not the Superposition), or for all assemblies at once as a zipped folder of <i>.csv</i> files. Apart from showing the residue labels upon clicking on a site, or displaying protein-ligand contacts, atom labels are shown upon hovering (one must hover on a residue for at least 1 second, otherwise, labels would be shown for every single  atom whilst the user navigates through the structure).
+
+The Superposition with coloured ligands, as well as individual assemblies with their protein-ligand interactions can be downloaded for external visualisation. Currently, [ChimeraX](https://www.cgl.ucsf.edu/chimerax/) (<i>.cxc</i>) [[12](https://onlinelibrary.wiley.com/doi/10.1002/pro.3943)] and [PyMol](https://pymol.org/) (<i>.pml</i>) [13] are supported. Additionally, a screenshot of the current view can also be saved to <i>.png</i> format.
+
+![Superopsition viewers support](./static/images/supp_support.png)
+
+### Binding Residues Panel
+
+This panel is very similar to the Binding Sites Panel in structure. It is also formed by an interactive chart and table. However, each data point and row correspond now to the individual amino acid residues forming the binding sites, the average of which result on the data displayed on the Binding Sites Panel. The data for this panel includes UniProt Residue Number (UPResNum), the multiple sequence alignment (MSA) column to which this residue aligns (MSACol), residue Divergence Score (DS), Missense Enrichment Score (MES), its associated p-value (p), the amino acid one-letter code (AA), Relative Solvent Accessibility (RSA) and Secondary Structure (SS) element as calculated by [DSSP](https://swift.cmbi.umcn.nl/gv/dssp/) [[14](https://onlinelibrary.wiley.com/doi/10.1002/bip.360221211)]. This panel is linked to the structure viewer through hover, but not click events.
 
 ## Citation
 
@@ -98,4 +116,6 @@ PMID: 1758884.
 12. Pettersen EF, Goddard TD, Huang CC, Meng EC, Couch GS, Croll TI, Morris JH, Ferrin TE. UCSF ChimeraX: Structure visualization for researchers, educators, and developers. Protein Sci. 2021 Jan;30(1):70-82. doi: [10.1002/pro.3943](https://onlinelibrary.wiley.com/doi/10.1002/pro.3943). Epub 2020 Oct 22. PMID: 32881101; PMCID: PMC7737788.
 
 13. Schrödinger, LLC. The PyMOL Molecular Graphics System, Version 2.0, Schrödinger, LLC.
+
+14. Kabsch W, Sander C. Dictionary of protein secondary structure: pattern recognition of hydrogen-bonded and geometrical features. Biopolymers. 1983 Dec;22(12):2577-637. doi: [10.1002/bip.360221211](https://onlinelibrary.wiley.com/doi/10.1002/bip.360221211). PMID: 6667333.
 
