@@ -1,4 +1,4 @@
-name: LIGYSIS_WEB2
+name: LIGYSIS_WEB
 channels:
   - bioconda
   - conda-forge
