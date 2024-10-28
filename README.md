@@ -1,6 +1,6 @@
 # LIGYSIS web
 
-This is the repository for out ligand binding site analysis, **LIGYSIS**, [web server](https://www.compbio.dundee.ac.uk/ligysis/). LIGYSIS is a Python Flask Web application.
+This is the repository for out ligand binding site analysis, **LIGYSIS**, [web server](https://www.compbio.dundee.ac.uk/ligysis/). LIGYSIS is a Python [Flask](https://flask.palletsprojects.com/en/stable/) Web application.
 
 <img src="./static/images/LIGYSIS_LOGO_REVAMP6_w_name.png" alt="This is the LIGYSIS WEB logo" width="400">
 
@@ -45,7 +45,7 @@ conda activate LIGYSIS_WEB
 python app.py
 ```
 
-We do not offer full LIGYSIS dataset download, so a local installation of the LIGYSIS web app would only make sense if the customised **LIGYSIS** [pipeline](https://github.com/JavierSanchez-Utges/ligysis_custom/tree/revamped) was installed and a user wanted to explore their results locally without relying on our public server.
+We do not offer full LIGYSIS dataset download, so a local installation of the LIGYSIS web app would only make sense if the customised **LIGYSIS** [pipeline](https://github.com/JavierSanchez-Utges/ligysis_custom/tree/revamped) was installed and a user wanted to explore their results locally without relying on [our public server](https://www.compbio.dundee.ac.uk/ligysis/).
 
 ## User job submission
 
@@ -65,17 +65,17 @@ Variables on each axis can be changed, to explore the relationship between the d
 
 ### Structure Panel
 
-This is the central panel of the **LIGYSIS web** results page. At the very top, we find the name of the protein of interest, and below, the structural segment selector, as defined by the [PDBe-KB](https://www.ebi.ac.uk/pdbe/pdbe-kb/) [[8](https://pubs.aip.org/aca/sdy/article/11/3/034701/3294234)] as well as the structure selector. By default, the ligand superposition view is shown, which has a single protein scaffold and the heteroatoms (non-protein atoms) of all other structures for a given protein segment. A user can click on this drop-up and explore the biological assembly of any of the chains in the superposition. Transformation matrices for the superposition were obtained from the [PDBe FTP site](https://ftp.ebi.ac.uk/pub/databases/pdbe-kb/superposition/P/P00517/).
+This is the central panel of the **LIGYSIS web** results page. At the very top, we find the name of the protein of interest, and below, the structural segment selector, as defined by the [PDBe-KB](https://www.ebi.ac.uk/pdbe/pdbe-kb/) [[8](https://pubs.aip.org/aca/sdy/article/11/3/034701/3294234)] as well as the structure selector. By default, the ligand superposition view is shown, which has a single protein scaffold and the heteroatoms (non-protein atoms) of all other structures for a given protein segment. A user can click on this drop-up and explore the PISA-defined [biological assembly](https://pdb101.rcsb.org/learn/guide-to-understanding-pdb-data/biological-assemblies) [[9](https://www.sciencedirect.com/science/article/pii/S0022283607006420)] of any of the chains in the superposition. Transformation matrices for the superposition were obtained from the [PDBe FTP site](https://ftp.ebi.ac.uk/pub/databases/pdbe-kb/superposition/P/P00517/).
 
-At the very centre of the panel, we find the [3DMol.js](https://3dmol.csb.pitt.edu/doc/index.html) [[9](https://academic.oup.com/bioinformatics/article/31/8/1322/213186), [10](https://pubs.acs.org/doi/10.1021/acs.jchemed.0c00579)] structure viewer with a white protein chain cartoon representation. Buttons are implemented to show/hide surfaces, residue labels, ligand, water molecules and protein-ligand contacts as calculated by [pdbe-arpeggio](https://github.com/PDBeurope/arpeggio) [[11](https://www.sciencedirect.com/science/article/pii/S0022283616305332?via%3Dihub)]. These contacts can be downloaded as a <i>.csv</i> for the currently visualised assembly (not the Superposition), or for all assemblies at once as a zipped folder of <i>.csv</i> files. Apart from showing the residue labels upon clicking on a site, or displaying protein-ligand contacts, atom labels are shown upon hovering (one must hover on a residue for at least 1 second, otherwise, labels would be shown for every single  atom whilst the user navigates through the structure).
+At the very centre of the panel, we find the [3DMol.js](https://3dmol.csb.pitt.edu/doc/index.html) [[10](https://academic.oup.com/bioinformatics/article/31/8/1322/213186), [11](https://pubs.acs.org/doi/10.1021/acs.jchemed.0c00579)] structure viewer with a white protein chain cartoon representation. Buttons are implemented to show/hide surfaces, residue labels, ligand, water molecules and protein-ligand contacts as calculated by [pdbe-arpeggio](https://github.com/PDBeurope/arpeggio) [[12](https://www.sciencedirect.com/science/article/pii/S0022283616305332?via%3Dihub)]. These contacts can be downloaded as a <i>.csv</i> for the currently visualised assembly (not the Superposition), or for all assemblies at once as a zipped folder of <i>.csv</i> files. Apart from showing the residue labels upon clicking on a site, or displaying protein-ligand contacts, atom labels are shown upon hovering (one must hover on a residue for at least 1 second, otherwise, labels would be shown for every single  atom whilst the user navigates through the structure).
 
-The Superposition with coloured ligands, as well as individual assemblies with their protein-ligand interactions can be downloaded for external visualisation. Currently, [ChimeraX](https://www.cgl.ucsf.edu/chimerax/) (<i>.cxc</i>) [[12](https://onlinelibrary.wiley.com/doi/10.1002/pro.3943)] and [PyMol](https://pymol.org/) (<i>.pml</i>) [13] are supported. Additionally, a screenshot of the current view can also be saved to <i>.png</i> format.
+The Superposition with coloured ligands, as well as individual assemblies with their protein-ligand interactions can be downloaded for external visualisation. Currently, [ChimeraX](https://www.cgl.ucsf.edu/chimerax/) (<i>.cxc</i>) [[13](https://onlinelibrary.wiley.com/doi/10.1002/pro.3943)] and [PyMol](https://pymol.org/) (<i>.pml</i>) [14] are supported. Additionally, a screenshot of the current view can also be saved to <i>.png</i> format.
 
 ![Superopsition viewers support](./static/images/supp_support.png)
 
 ### Binding Residues Panel
 
-This panel is very similar to the Binding Sites Panel in structure. It is also formed by an interactive chart and table. However, each data point and row correspond now to the individual amino acid residues forming the binding sites, the average of which result on the data displayed on the Binding Sites Panel. The data for this panel includes UniProt Residue Number (UPResNum), the multiple sequence alignment (MSA) column to which this residue aligns (MSACol), residue Divergence Score (DS), Missense Enrichment Score (MES), its associated p-value (p), the amino acid one-letter code (AA), Relative Solvent Accessibility (RSA) and Secondary Structure (SS) element as calculated by [DSSP](https://swift.cmbi.umcn.nl/gv/dssp/) [[14](https://onlinelibrary.wiley.com/doi/10.1002/bip.360221211)]. This panel is linked to the structure viewer through hover, but not click events.
+This panel is very similar to the Binding Sites Panel in structure. It is also formed by an interactive chart and table. However, each data point and row correspond now to the individual amino acid residues forming the binding sites, the average of which result on the data displayed on the Binding Sites Panel. The data for this panel includes UniProt Residue Number (UPResNum), the multiple sequence alignment (MSA) column to which this residue aligns (MSACol), residue Divergence Score (DS), Missense Enrichment Score (MES), its associated p-value (p), the amino acid one-letter code (AA), Relative Solvent Accessibility (RSA) and Secondary Structure (SS) element as calculated by [DSSP](https://swift.cmbi.umcn.nl/gv/dssp/) [[15](https://onlinelibrary.wiley.com/doi/10.1002/bip.360221211)]. This panel is linked to the structure viewer through hover, but not click events.
 
 ## Citation
 
@@ -107,15 +107,17 @@ PMID: 1758884.
 
 8. Ellaway JIJ, Anyango S, Nair S, Zaki HA, Nadzirin N, Powell HR, Gutmanas A, Varadi M, Velankar S. Identifying protein conformational states in the Protein Data Bank: Toward unlocking the potential of integrative dynamics studies. Struct Dyn. 2024 May 17;11(3):034701. doi: [10.1063/4.0000251](https://pubs.aip.org/aca/sdy/article/11/3/034701/3294234). PMID: 38774441; PMCID: PMC11106648.
 
-9. Rego N, Koes D. 3Dmol.js: molecular visualization with WebGL. Bioinformatics. 2015 Apr 15;31(8):1322-4. doi: [10.1093/bioinformatics/btu829](https://academic.oup.com/bioinformatics/article/31/8/1322/213186). Epub 2014 Dec 12. PMID: 25505090; PMCID: PMC4393526.
+9. Krissinel E, Henrick K. Inference of macromolecular assemblies from crystalline state. J Mol Biol. 2007 Sep 21;372(3):774-97. doi: [10.1016/j.jmb.2007.05.022](https://www.sciencedirect.com/science/article/pii/S0022283607006420). Epub 2007 May 13. PMID: 17681537.
+    
+10. Rego N, Koes D. 3Dmol.js: molecular visualization with WebGL. Bioinformatics. 2015 Apr 15;31(8):1322-4. doi: [10.1093/bioinformatics/btu829](https://academic.oup.com/bioinformatics/article/31/8/1322/213186). Epub 2014 Dec 12. PMID: 25505090; PMCID: PMC4393526.
 
-10. Seshadri K, Liu P, Koes DR. The 3Dmol.js learning environment: a classroom response system for 3D chemical structures. J Chem Educ. 2020 Oct 13;97(10):3872-3876. doi: [10.1021/acs.jchemed.0c00579](https://pubs.acs.org/doi/10.1021/acs.jchemed.0c00579). Epub 2020 Aug 25. PMID: 36035779; PMCID: PMC9416521.
+11. Seshadri K, Liu P, Koes DR. The 3Dmol.js learning environment: a classroom response system for 3D chemical structures. J Chem Educ. 2020 Oct 13;97(10):3872-3876. doi: [10.1021/acs.jchemed.0c00579](https://pubs.acs.org/doi/10.1021/acs.jchemed.0c00579). Epub 2020 Aug 25. PMID: 36035779; PMCID: PMC9416521.
 
-11. Jubb HC, Higueruelo AP, Ochoa-Montaño B, Pitt WR, Ascher DB, Blundell TL. Arpeggio: A Web Server for Calculating and Visualising Interatomic Interactions in Protein Structures. J Mol Biol. 2017 Feb 3;429(3):365-371. doi: [10.1016/j.jmb.2016.12.004](https://www.sciencedirect.com/science/article/pii/S0022283616305332?via%3Dihub). Epub 2016 Dec 10. PMID: 27964945; PMCID: PMC5282402.
+12. Jubb HC, Higueruelo AP, Ochoa-Montaño B, Pitt WR, Ascher DB, Blundell TL. Arpeggio: A Web Server for Calculating and Visualising Interatomic Interactions in Protein Structures. J Mol Biol. 2017 Feb 3;429(3):365-371. doi: [10.1016/j.jmb.2016.12.004](https://www.sciencedirect.com/science/article/pii/S0022283616305332?via%3Dihub). Epub 2016 Dec 10. PMID: 27964945; PMCID: PMC5282402.
 
-12. Pettersen EF, Goddard TD, Huang CC, Meng EC, Couch GS, Croll TI, Morris JH, Ferrin TE. UCSF ChimeraX: Structure visualization for researchers, educators, and developers. Protein Sci. 2021 Jan;30(1):70-82. doi: [10.1002/pro.3943](https://onlinelibrary.wiley.com/doi/10.1002/pro.3943). Epub 2020 Oct 22. PMID: 32881101; PMCID: PMC7737788.
+13. Pettersen EF, Goddard TD, Huang CC, Meng EC, Couch GS, Croll TI, Morris JH, Ferrin TE. UCSF ChimeraX: Structure visualization for researchers, educators, and developers. Protein Sci. 2021 Jan;30(1):70-82. doi: [10.1002/pro.3943](https://onlinelibrary.wiley.com/doi/10.1002/pro.3943). Epub 2020 Oct 22. PMID: 32881101; PMCID: PMC7737788.
 
-13. Schrödinger, LLC. The PyMOL Molecular Graphics System, Version 2.0, Schrödinger, LLC.
+14. Schrödinger, LLC. The PyMOL Molecular Graphics System, Version 2.0, Schrödinger, LLC.
 
-14. Kabsch W, Sander C. Dictionary of protein secondary structure: pattern recognition of hydrogen-bonded and geometrical features. Biopolymers. 1983 Dec;22(12):2577-637. doi: [10.1002/bip.360221211](https://onlinelibrary.wiley.com/doi/10.1002/bip.360221211). PMID: 6667333.
+15. Kabsch W, Sander C. Dictionary of protein secondary structure: pattern recognition of hydrogen-bonded and geometrical features. Biopolymers. 1983 Dec;22(12):2577-637. doi: [10.1002/bip.360221211](https://onlinelibrary.wiley.com/doi/10.1002/bip.360221211). PMID: 6667333.
 
