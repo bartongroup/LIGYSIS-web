@@ -197,7 +197,7 @@ document.getElementById('chartCanvas').addEventListener('mousemove', function(e)
             }
             viewer.render();       
             
-            clearHighlightedRow();
+            // clearHighlightedRow();
 
             lastHoveredPoint1 = firstPoint.index;
         }
