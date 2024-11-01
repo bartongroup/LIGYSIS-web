@@ -99,3 +99,34 @@ $(document).ready(function(){ // enables tooltips
 function downloadCSV(filepath) { // downloads the file in CSV format by redirecting to the download-csv route
     window.location.href = '/download-csv?filepath=' + filepath;
 }
+
+// Function to update the slab clipping planes
+function updateSlab() {
+    // Ensure nearPlane is less than farPlane
+    // if (nearPlane >= farPlane) {
+    //     // Optionally handle invalid input
+    //     nearValueDisplay.style.color = 'red';
+    //     farValueDisplay.style.color = 'red';
+    //     return;
+    // } else {
+    //     nearValueDisplay.style.color = '';
+    //     farValueDisplay.style.color = '';
+    // }
+
+    viewer.setSlab(nearPlane, farPlane);
+    viewer.render();
+}
+
+function spinViewer() {
+    console.log(spinning);
+    console.log(spinning === false);
+    if (spinning === false) {
+        console.log("Spinning");
+        viewer.spin("y", 1);
+        spinning = true;
+    } else {
+        console.log("Not spinning");
+        viewer.spin(false);
+        spinning = false;
+    }
+}

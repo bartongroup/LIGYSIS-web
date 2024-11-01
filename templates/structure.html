@@ -107,6 +107,10 @@
     const surfLowOpacity = 0.75;
     const surfHiddenOpacity = 0.0;
 
+    let nearPlane;
+    let farPlane;
+    let spinning = false; // Global variable to track spinning state
+
     let suppLigsSels = {};
     const canAas = ['CYS', 'MET', 'HIS', 'GLU', 'ASP', 'LYS', 'ARG', 'SER', 'THR', 'ASN', 'GLN', 'TRP', 'TYR', 'PHE', 'ILE', 'LEU', 'VAL', 'ALA', 'PRO', 'GLY'];
     const modAas = ['TPO', 'SEP', 'PTR', 'PYL', 'MLY', 'MSE', 'CSO', 'CME', 'CSD', 'CSW', 'CSX', 'CSS', 'CSH', 'CSL', 'CSZ', 'CSK', 'CSM', 'CSR', 'CSS', 'CSU'];
@@ -157,6 +161,16 @@
                         </div>
                     </div>
                 </div>
+            </div>
+            <div id="controls"class="row mb-2 custom-padding justify-content-around">
+                    <div class="slider-container d-flex col-auto align-items-center">
+                        <label for="near">Near:&nbsp&nbsp&nbsp</label>
+                        <input type="range" id="near" min="-100" max="100" value="-100" step="0.1">
+                    </div>
+                    <div class="slider-container d-flex col-auto align-items-center">
+                        <label for="far">Far:&nbsp&nbsp&nbsp</label>
+                        <input type="range" id="far" min="-100" max="100" value="100" step="0.1">
+                    </div>
             </div>
             <div class="row mb-2 custom-padding">
                 <div style="border: 2px solid black;" class="d-flex px-0">
@@ -211,6 +225,10 @@
                 <div class="col-auto justify-content-center" style="padding-left:0px; padding-right:0px;">
                     <img src="/static/images/camera.svg" alt="Save Image" style="width: 2rem; height: 2rem; cursor: pointer;" 
                     onclick="saveImage('3DmolCanvas', `${segmentName}_struc`)">
+                </div>
+                <div class="col-auto justify-content-center" style="padding-left:0px; padding-right:0px;">
+                    <img src="/static/images/spin.svg" alt="Spin Viewer" style="width: 2rem; height: 2rem; cursor: pointer;" 
+                    onclick="spinViewer()">
                 </div>
                 <div class="col-auto justify-content-end" style="padding-left:0px; padding-right:0px;">
                     <button id="saveAllArpeggioDataButton" 
@@ -804,6 +822,22 @@
     let waterButton = document.getElementById('waterButton');
     let labelButton = document.getElementById('labelButton');
     let surfButton = document.getElementById('surfButton');
+
+    // Get references to the sliders and value displays
+    let nearSlider = document.getElementById('near');
+    let farSlider = document.getElementById('far');
+
+    // Update near plane value
+    nearSlider.addEventListener('input', function() {
+        nearPlane = Math.trunc(parseFloat(this.value));
+        updateSlab();
+    });
+
+    // Update far plane value
+    farSlider.addEventListener('input', function() {
+        farPlane = Math.trunc(parseFloat(this.value));
+        updateSlab();
+});
 
 </script>
 

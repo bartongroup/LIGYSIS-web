@@ -9,6 +9,9 @@ let config = { // viewer configuration
 
 let viewer = $3Dmol.createViewer(element, config ); // create viewer object
 
+// viewer.setDefaultCartoonQuality(10);
+// viewer.setProjection("orthographic");
+
 $3Dmol.setSyncSurface(true); // all surfaces appear at once
 
 // SOME FUNCTIONS
@@ -183,9 +186,22 @@ function loadAllModels(simplePdbs) { // Load all structures
 
         labelsHash['superposition'] = {"clickedSite": {}, "hoveredRes": [], };
 
+        let slab = viewer.getSlab();
+        let initialNearSlab = slab['near'];
+        let initialFarSlab = slab['far'];
+        nearPlane = Math.trunc(initialNearSlab);
+        farPlane = Math.trunc(initialFarSlab);
+
+        nearSlider.min = initialNearSlab;
+        nearSlider.max = initialFarSlab;
+
+        farSlider.min = initialNearSlab;
+        farSlider.max = initialFarSlab;
+
     }).catch(error => {
         console.error('Error loading one or more models:', error);
     });
 }
 
 loadAllModels(simplePdbs); // Load all structures
+
