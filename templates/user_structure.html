@@ -102,6 +102,10 @@
     const surfLowOpacity = 0.75;
     const surfHiddenOpacity = 0.0;
 
+    let nearPlane;
+    let farPlane;
+    let spinning = false; // Global variable to track spinning state
+
     let suppLigsSels = {};
     const canAas = ['CYS', 'MET', 'HIS', 'GLU', 'ASP', 'LYS', 'ARG', 'SER', 'THR', 'ASN', 'GLN', 'TRP', 'TYR', 'PHE', 'ILE', 'LEU', 'VAL', 'ALA', 'PRO', 'GLY'];
     const modAas = ['TPO', 'SEP', 'PTR', 'PYL', 'MLY', 'MSE', 'CSO', 'CME', 'CSD', 'CSW', 'CSX', 'CSS', 'CSH', 'CSL', 'CSZ', 'CSK', 'CSM', 'CSR', 'CSS', 'CSU'];
@@ -195,20 +199,24 @@
                             style="border: 1px solid darkgray; color: darkgray; display: flex; align-items: center; border-radius: 5px; padding: 5px 10px;" 
                             onclick="saveStructureContactData()" 
                             disabled>
-                            &nbsp;<img id="saveStructureContactsDownloadIcon" src="/static/images/download_gray.svg" alt="Download Icon" style="width: 1.5rem; height: 1.5rem; margin-right: 8px;">
-                            &nbsp;Current Structure Contacts&nbsp;
+                            <img id="saveStructureContactsDownloadIcon" src="/static/images/download_gray.svg" alt="Download Icon" style="width: 1.5rem; height: 1.5rem; margin-right: 8px;">
+                            &nbsp;Current Structure Contacts
                     </button>
                 </div>                
                 <div class="col-auto justify-content-center" style="padding-left:0px; padding-right:0px;">
                     <img src="/static/images/camera.svg" alt="Save Image" style="width: 2rem; height: 2rem; cursor: pointer;" 
                     onclick="saveImage('3DmolCanvas', `${jobId}_struc`)">
                 </div>
+                <div class="col-auto justify-content-center" style="padding-left:0px; padding-right:0px;">
+                    <img src="/static/images/spin.svg" alt="Spin Viewer" style="width: 2rem; height: 2rem; cursor: pointer;" 
+                    onclick="spinViewer()">
+                </div>
                 <div class="col-auto justify-content-end" style="padding-left:0px; padding-right:0px;">
                     <button id="saveAllArpeggioDataButton" 
                             style="border: 1px solid black; color: black; display: flex; align-items: center; border-radius: 5px; padding: 5px 10px;" 
                             onclick="saveAllStructuresContactData()">
-                            &nbsp;<img src="/static/images/download.svg" alt="Download Icon" style="width: 1.5rem; height: 1.5rem; margin-right: 8px;">
-                        &nbsp;<b>ALL</b>&nbsp;Structures Contacts&nbsp;
+                            <img src="/static/images/download.svg" alt="Download Icon" style="width: 1.5rem; height: 1.5rem; margin-right: 8px;">
+                        &nbsp;<b>ALL</b>&nbsp;Structures Contacts
                     </button>
                 </div>
             </div>
