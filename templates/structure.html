@@ -47,6 +47,7 @@
     const simplePdbs = {{ simple_pdbs | tojson }}
     const assemblyPdbIds = {{ assembly_pdb_ids | tojson }}
 
+    let sliceVisible = false;
     let surfaceVisible = false;
     let labelsVisible = false;
     let watersVisible = false;
@@ -162,16 +163,6 @@
                     </div>
                 </div>
             </div>
-            <div id="controls"class="row mb-2 custom-padding justify-content-around">
-                    <div class="slider-container d-flex col-auto align-items-center">
-                        <label for="near">Near:&nbsp&nbsp&nbsp</label>
-                        <input type="range" id="near" min="-100" max="100" value="-100" step="0.1">
-                    </div>
-                    <div class="slider-container d-flex col-auto align-items-center">
-                        <label for="far">Far:&nbsp&nbsp&nbsp</label>
-                        <input type="range" id="far" min="-100" max="100" value="100" step="0.1">
-                    </div>
-            </div>
             <div class="row mb-2 custom-padding">
                 <div style="border: 2px solid black;" class="d-flex px-0">
                     <div id="container-01" style="height: 598px; width: 598px;" class="applet-border d-flex">
@@ -180,34 +171,50 @@
                     </div>
                 </div>
             </div>
+            <div id="controls"class="row mb-2 custom-padding justify-content-around" style="display: none;">
+                <div class="slider-container d-flex col-auto align-items-center">
+                    <label for="near">Near:&nbsp&nbsp&nbsp</label>
+                    <input type="range" id="near" min="-100" max="100" value="-100" step="0.1">
+                </div>
+                <div class="slider-container d-flex col-auto align-items-center">
+                    <label for="far">Far:&nbsp&nbsp&nbsp</label>
+                    <input type="range" id="far" min="-100" max="100" value="100" step="0.1">
+                </div>
+            </div>
             <div class="row mb-2 justify-content-between align-items-stretch custom-padding">
+                <div class="col-auto justify-content-center" style="padding-left:0px; padding-right:0px;">
+                    <button id="sliceButton" style="border: 1px solid black; border-width: 1; border-color: #ffa500; color: #ffa500; font-weight: normal; display: flex; align-items: center; border-radius: 5px; padding: 5px 10px;" onclick="toggleSliceVisibility()">
+                        SLICE ✘
+                    </button>
+                </div>
+
                 <div class="col-auto justify-content-start" style="padding-left:0px; padding-right:0px;">
                     <button id="surfButton" style="border: 1px solid black; border-width: 1; border-color: #ffa500; color: #ffa500; font-weight: normal; display: flex; align-items: center; border-radius: 5px; padding: 5px 10px;" onclick="toggleSurfaceVisibility()">
-                        SURFACE ✘
+                        SURF ✘
                     </button>
                 </div>
                 
                 <div class="col-auto justify-content-center" style="padding-left:0px; padding-right:0px;">
                     <button id="labelButton" style="border: 1px solid black; border-width: 1; border-color: #ffa500; color: #ffa500; font-weight: normal; display: flex; align-items: center; border-radius: 5px; padding: 5px 10px;" onclick="toggleLabelsVisibility()">
-                        LABELS ✘
+                        LABEL ✘
                     </button>
                 </div>
                 
                 <div class="col-auto justify-content-center" style="padding-left:0px; padding-right:0px;">
                     <button id="ligandButton" style="border: 1px solid black; border-width: 1; border-color: #ffa500; color: #ffa500; font-weight: normal; display: flex; align-items: center; border-radius: 5px; padding: 5px 10px;" onclick="toggleLigandsVisibility()">
-                        LIGANDS ✘
+                        LIGAND ✘
                     </button>
                 </div>
                 
                 <div class="col-auto justify-content-center" style="padding-left:0px; padding-right:0px;">
                     <button id="waterButton" style="border: 1px solid black; border-width: 1; border-color: #ffa500; color: #ffa500; font-weight: normal; display: flex; align-items: center; border-radius: 5px; padding: 5px 10px;" onclick="toggleWatersVisibility()">
-                        WATERS ✘
+                        HOH ✘
                     </button>
                 </div>
                 
                 <div class="col-auto justify-content-end" style="padding-left:0px; padding-right:0px;">
                     <button id="contactsButton" style="border: 1px solid darkgray; border-width: 1; color: darkgray; font-weight: normal; display: flex; align-items: center; border-radius: 5px; padding: 5px 10px;" onclick="toggleContactsVisibility()" disabled>
-                        CONTACTS ✘
+                        CONTACT ✘
                     </button>
                 </div>
                 

@@ -38,7 +38,7 @@ function selectOption(option) {
             // waterButton.value = 'Waters OFF'; // turn waterButton off
             // waterButton.style = "font-weight: bold; color: #674ea7;";
 
-            document.getElementById("waterButton").textContent = "WATERS ✘";
+            document.getElementById("waterButton").textContent = "WAT ✘";
             waterButton.style.borderColor = "#ffa500";
             waterButton.style.fontWeight = "normal";
             waterButton.style.color = "#ffa500";
@@ -72,7 +72,7 @@ function selectOption(option) {
             // labelButton.value = 'Labels OFF';  // turn labelButton off
             // labelButton.style = "font-weight: bold; color: #674ea7;";
 
-            document.getElementById("labelButton").textContent = "LABELS ✘";
+            document.getElementById("labelButton").textContent = "LABEL ✘";
             labelButton.style.borderColor = "#ffa500";
             labelButton.style.fontWeight = "normal";
             labelButton.style.color = "#ffa500";
@@ -98,7 +98,7 @@ function selectOption(option) {
                 // surfButton.value = 'Surface OFF'; // turn surfButton off
                 // surfButton.style = "font-weight: bold; color: #674ea7;";
 
-                document.getElementById("surfButton").textContent = "SURFACE ✘";
+                document.getElementById("surfButton").textContent = "SURF ✘";
                 surfButton.style.borderColor = "#ffa500";
                 surfButton.style.fontWeight = "normal";
                 surfButton.style.color = "#ffa500";
@@ -115,7 +115,7 @@ function selectOption(option) {
                 // ligandButton.value = 'Ligands OFF'; // turn ligandButton off
                 // ligandButton.style = "font-weight: bold; color: #674ea7;";
 
-                document.getElementById("ligandButton").textContent = "LIGANDS ✘";
+                document.getElementById("ligandButton").textContent = "LIGAND ✘";
                 ligandButton.style.borderColor = "#ffa500";
                 ligandButton.style.fontWeight = "normal";
                 ligandButton.style.color = "#ffa500";
@@ -191,7 +191,7 @@ function selectOption(option) {
                 // surfButton.value = 'Surface OFF';
                 // surfButton.style = "font-weight: bold; color: #674ea7;";
 
-                document.getElementById("surfButton").textContent = "SURFACE ✘";
+                document.getElementById("surfButton").textContent = "SURF ✘";
                 surfButton.style.borderColor = "#ffa500";
                 surfButton.style.fontWeight = "normal";
                 surfButton.style.color = "#ffa500";
@@ -210,7 +210,7 @@ function selectOption(option) {
                 // ligandButton.value = 'Ligands OFF'; // turn ligandButton off
                 // ligandButton.style = "font-weight: bold; color: #674ea7;";
 
-                document.getElementById("ligandButton").textContent = "LIGANDS ✘";
+                document.getElementById("ligandButton").textContent = "LIGAND ✘";
                 ligandButton.style.borderColor = "#ffa500";
                 ligandButton.style.fontWeight = "normal";
                 ligandButton.style.color = "#ffa500";
@@ -257,7 +257,7 @@ function selectOption(option) {
                 // contactsButton.style.color = 'darkgray';
                 // contactsButton.style.fontWeight = 'normal'; // Bold font when active
 
-                document.getElementById("ligandButton").textContent = "LIGANDS ✘";
+                document.getElementById("ligandButton").textContent = "LIGAND ✘";
                 contactsButton.style.borderColor = "darkgray";
                 contactsButton.style.fontWeight = "normal";
                 contactsButton.style.color = "darkgray";
