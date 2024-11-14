@@ -301,6 +301,8 @@ $('table#bss_table tbody').on('mouseover', 'tr', function () { // event listener
         else {
             viewer.zoomTo({model: activeModel});
         }
+        viewer.setSlab(nearPlane, farPlane);
+        viewer.render();
     }
     else {
         let fullPointLabel = jobId + "_" + rowId;

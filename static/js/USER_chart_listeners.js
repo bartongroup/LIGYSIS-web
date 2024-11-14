@@ -485,6 +485,8 @@ document.getElementById('chartCanvas').addEventListener('click', function(e) { /
                 else {
                     viewer.zoomTo({model: activeModel});
                 }
+                viewer.setSlab(nearPlane, farPlane);
+                viewer.render();
 
                 SuppClickedSiteResidues = null; // reset clicked site residues
                 AssemblyClickedSiteResidues = [];  // reset clicked site residues
