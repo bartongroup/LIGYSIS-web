@@ -159,12 +159,21 @@
                 </div>
             </div>
             <div class="row mb-2 custom-padding">
-                <div style="border: 2px solid black;" class="d-flex px-0">
-                    <div id="container-01" style="height: 598px; width: 598px;" class="applet-border d-flex">
+                <div style="position: relative; border: 2px solid black; width: 598px; height: 598px;" class="d-flex justify-content-center align-items-center px-0">
+                    <div id="container-01" class="applet-border d-flex">
                         <script src="/static/js/USER_3DMol_applet.js"></script>
                     </div>
+            
+                    <!-- Spinner overlay -->
+                    <div class="justify-content-center align-items-center spinner-overlay" style="display: none">
+                        <div class="spinner-border custom-spinner" style="width: 8rem; height: 8rem; border-width: 0.75rem; border-color: #3084c5 #3084c5 #3084c5 transparent;" role="status">
+                            <span class="visually-hidden">Loading...</span>
+                        </div>
+                    </div>
                 </div>
+
             </div>
+            
             <div id="controls"class="row mb-2 custom-padding justify-content-around" style="display: none;">
                 <div class="slider-container d-flex col-auto align-items-center">
                     <label for="near">Near:&nbsp&nbsp&nbsp</label>
@@ -826,6 +835,8 @@
     // Get references to the sliders and value displays
     let nearSlider = document.getElementById('near');
     let farSlider = document.getElementById('far');
+
+    const spinnerOverlay = document.querySelector('.spinner-overlay');
 
     // Update near plane value
     nearSlider.addEventListener('input', function() {

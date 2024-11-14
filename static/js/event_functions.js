@@ -130,3 +130,7 @@ function spinViewer() {
         spinning = false;
     }
 }
+
+function toggleSpinner() {
+    spinnerOverlay.style.display = spinnerOverlay.style.display === 'none' ? 'flex' : 'none';
+}

@@ -18,7 +18,8 @@ function populateMenu() {
     });
 }
 
-function selectOption(option) {
+async function selectOption(option) {
+    toggleSpinner();
     if (option !== previousSelection) { // if the option is changed, otherwise do nothing
         const strucName = option.split(".")[0]; // Name of the structure
         const button = document.querySelector('.dropup-button');
@@ -160,7 +161,7 @@ function selectOption(option) {
                 viewer.getModel(model).hide();
             }
 
-            openStructure(option); // act here if model is already open
+            await openStructure(option); // act here if model is already open
         }
 
         if (previousSelection !== 'Superposition') {
@@ -213,8 +214,6 @@ function selectOption(option) {
                 ligandsVisible = false;
             }
 
-            
-
             if (option !== 'Superposition') {
 
                 viewer.setHoverable({model: activeModel}, false, // Hovering disabled for previous assembly
@@ -224,7 +223,7 @@ function selectOption(option) {
 
                 viewer.getModel(activeModel).hide(); // Hide the active assembly
 
-                openStructure(option); // act heere if model is not already open
+                await openStructure(option); // act heere if model is not already open
 
                 if (strucName in strucCount) {
 
@@ -324,143 +323,150 @@ function selectOption(option) {
 
         previousSelection = option; // Update the previous selection
     }
+    toggleSpinner();
     toggleMenu(); // Optionally hide the menu after selection
 }
 
 let modelID;
 
 function openStructure(pdbId) {
-    // Example function call to 3DMol.js to load a structure
-    console.log("Opening structure:", pdbId);
+    return new Promise((resolve, reject) => {
+        // Example function call to 3DMol.js to load a structure
+        console.log("Opening structure:", pdbId);
 
-    let pdbUri = `/static/data/USER_JOBS/OUT/${jobId}/supp_cifs/${pdbId}`; //path to assembly cif. TODO FIXME: THE PATH NEEDS TO CHANGE TO WHEREVER USER RESULTS GET STORED
-    
-    $.ajax({ // get UniProt residue mappings when loading a new assembly
-        type: 'POST', 
-        url: '/user-get-uniprot-mapping', // server route
-        contentType: 'application/json;charset=UTF-8',
-        data: JSON.stringify({'jobId': jobId, 'pdbFile': pdbId}), // sending PDB, Protein and Segment IDs
-        success: function(response) {
+        let pdbUri = `/static/data/USER_JOBS/OUT/${jobId}/supp_cifs/${pdbId}`; //path to assembly cif. TODO FIXME: THE PATH NEEDS TO CHANGE TO WHEREVER USER RESULTS GET STORED
+        
+        $.ajax({ // get UniProt residue mappings when loading a new assembly
+            type: 'POST', 
+            url: '/user-get-uniprot-mapping', // server route
+            contentType: 'application/json;charset=UTF-8',
+            data: JSON.stringify({'jobId': jobId, 'pdbFile': pdbId}), // sending PDB, Protein and Segment IDs
+            // beforeSend: function() {
+            //     toggleSpinner();
+            // },
+            success: function(response) {
 
-            let allMappings = response; // extract the different mapping dictionaries
-            console.log(`Reading SIFTS mapping for ${pdbId}`)
-            Pdb2UpMapAssembly = allMappings['pdb2up'];
-            Up2PdbMapAssembly = allMappings['up2pdb'];
+                let allMappings = response; // extract the different mapping dictionaries
+                console.log(`Reading SIFTS mapping for ${pdbId}`)
+                Pdb2UpMapAssembly = allMappings['pdb2up'];
+                Up2PdbMapAssembly = allMappings['up2pdb'];
 
-            console.log('UniProt mappings received!');
+                console.log('UniProt mappings received!');
 
-            jQuery.ajax( pdbUri, { 
-                success: function(data) {
+                jQuery.ajax( pdbUri, { 
+                    success: function(data) {
 
 
-                    if (pdbId in modelOrder) { // if the model is already loaded, just show it
-                        console.log(`Model has already been loaded with modelID = ${modelOrder[pdbId]}!`);
-                        modelID = modelOrder[pdbId];
-                        activeModel = modelID;
-                        viewer.getModel(modelID).show(); // Show the model
-                    }
-                    else {
-                        let model = viewer.addModel(data, "cif",); // Load data
-                        modelID = model.getID(); // Gets the ID of the GLModel
-                        activeModel = modelID;
-                        surfsDict[activeModel] = {"non_binding": {}, "lig_inters": {},}; // Initialize dictionary for the new assembly
-                        labelsHash[activeModel] =  {"clickedSite": {}, "hoveredRes": [], "contactSites": []};
-
-                        // implement surface addition for binding sites
-            
-                        for (const [key, value] of Object.entries(seg_ress_dict)) { 
-
-                            if (key !== "ALL_BINDING") {
-                                surfsDict[activeModel][key] = {}; // Initialize dictionary for each binding site
-                            }
-
-                            let surfAssemblyPDBResNums = seg_ress_dict[key]
-                                .filter(el => Up2PdbMapAssembly.hasOwnProperty(el))
-                                .flatMap(el => {
-                                    let dataArray = Up2PdbMapAssembly[el]; // Get the array of tuples
-                                    return dataArray.map(data => {
-                                        return { chain: data[0], resi: data[1] }; // Extract chain and resi for each element
-                                    });
-                                });
-                                
-                            if (key == "ALL_BINDING") {
-                        
-                                surfsDict[activeModel]["non_binding"][element] = viewer.addSurface(
-                                    $3Dmol.SurfaceType.ISO,
-                                    {
-                                        color: defaultColor,
-                                        opacity: surfHiddenOpacity,
-                                    },
-                                    {...protAtoms, model: activeModel, not:{or: surfAssemblyPDBResNums}},
-                                    {...protAtoms, model: activeModel, not:{or: surfAssemblyPDBResNums}},
-                                );
-                            }
-                            else {
-                                let siteColor = chartColors[Number(key.split("_").pop())];
-                                surfsDict[activeModel][key][element] = viewer.addSurface(
-                                    $3Dmol.SurfaceType.ISO,
-                                    {
-                                        color: siteColor,
-                                        opacity: surfHiddenOpacity,
-                                    },
-                                    {...protAtoms, model: activeModel, or: surfAssemblyPDBResNums},
-                                    {...protAtoms, model: activeModel, or: surfAssemblyPDBResNums},
-                                );
-                            }
+                        if (pdbId in modelOrder) { // if the model is already loaded, just show it
+                            console.log(`Model has already been loaded with modelID = ${modelOrder[pdbId]}!`);
+                            modelID = modelOrder[pdbId];
+                            activeModel = modelID;
+                            viewer.getModel(modelID).show(); // Show the model
                         }
+                        else {
+                            let model = viewer.addModel(data, "cif",); // Load data
+                            modelID = model.getID(); // Gets the ID of the GLModel
+                            activeModel = modelID;
+                            surfsDict[activeModel] = {"non_binding": {}, "lig_inters": {},}; // Initialize dictionary for the new assembly
+                            labelsHash[activeModel] =  {"clickedSite": {}, "hoveredRes": [], "contactSites": []};
 
-                        let baseName = pdbUri.split("/").pop() // Name of the structure (.cif) file
-                        let pdbID = baseName// .split("_")[0]; // PDB ID from file name
-                        ligandSitesHash[activeModel] = {};
-                        modelOrder[baseName] = modelID; // populate dictionary
-                        modelOrderRev[modelID] = pdbID; // populate dictionary
-                        models.push(model); // add model at the end of list
-                        loadedCount++; // Increment counter
+                            // implement surface addition for binding sites
+                
+                            for (const [key, value] of Object.entries(seg_ress_dict)) { 
 
-                        contactCylinders[activeModel] = []; // Initialize contactCylinders for the new assembly (previous ones are untouched and keep their cylinders)
-                    }
-        
-                    viewer.setStyle({model: modelID}, {cartoon: {hidden: false, style: cartoonStyle, color: defaultColor, arrows: cartoonArrows, tubes: cartoonTubes, thickness: cartoonThickness, opacity: cartoonOpacity}});
-                    viewer.center({model: modelID});
-                    viewer.zoomTo({model: modelID})
-        
-                    viewer.setHoverable({model: modelID}, true,  // Hovering enabled for new assembly
-                        showHoverLabelNoModel,
-                        removeHoverLabel,
-                    );
+                                if (key !== "ALL_BINDING") {
+                                    surfsDict[activeModel][key] = {}; // Initialize dictionary for each binding site
+                                }
 
-                    slab = viewer.getSlab();
-                    initialNearSlab = slab['near'];
-                    initialFarSlab = slab['far'];
-                    nearPlane = Math.trunc(initialNearSlab);
-                    farPlane = Math.trunc(initialFarSlab);
+                                let surfAssemblyPDBResNums = seg_ress_dict[key]
+                                    .filter(el => Up2PdbMapAssembly.hasOwnProperty(el))
+                                    .flatMap(el => {
+                                        let dataArray = Up2PdbMapAssembly[el]; // Get the array of tuples
+                                        return dataArray.map(data => {
+                                            return { chain: data[0], resi: data[1] }; // Extract chain and resi for each element
+                                        });
+                                    });
+                                    
+                                if (key == "ALL_BINDING") {
+                            
+                                    surfsDict[activeModel]["non_binding"][element] = viewer.addSurface(
+                                        $3Dmol.SurfaceType.ISO,
+                                        {
+                                            color: defaultColor,
+                                            opacity: surfHiddenOpacity,
+                                        },
+                                        {...protAtoms, model: activeModel, not:{or: surfAssemblyPDBResNums}},
+                                        {...protAtoms, model: activeModel, not:{or: surfAssemblyPDBResNums}},
+                                    );
+                                }
+                                else {
+                                    let siteColor = chartColors[Number(key.split("_").pop())];
+                                    surfsDict[activeModel][key][element] = viewer.addSurface(
+                                        $3Dmol.SurfaceType.ISO,
+                                        {
+                                            color: siteColor,
+                                            opacity: surfHiddenOpacity,
+                                        },
+                                        {...protAtoms, model: activeModel, or: surfAssemblyPDBResNums},
+                                        {...protAtoms, model: activeModel, or: surfAssemblyPDBResNums},
+                                    );
+                                }
+                            }
 
-                    nearSlider.min = initialNearSlab;
-                    nearSlider.max = initialFarSlab;
-                    nearSlider.value = initialNearSlab;
-                    
-                    farSlider.min = initialNearSlab;
-                    farSlider.max = initialFarSlab;
-                    farSlider.value = initialFarSlab;
+                            let baseName = pdbUri.split("/").pop() // Name of the structure (.cif) file
+                            let pdbID = baseName// .split("_")[0]; // PDB ID from file name
+                            ligandSitesHash[activeModel] = {};
+                            modelOrder[baseName] = modelID; // populate dictionary
+                            modelOrderRev[modelID] = pdbID; // populate dictionary
+                            models.push(model); // add model at the end of list
+                            loadedCount++; // Increment counter
 
-                    viewer.render();
-                },
-                error: function(hdr, status, err) {
-                    console.error( "Failed to load PDB " + pdbUri + ": " + err );
-                },
-            });
+                            contactCylinders[activeModel] = []; // Initialize contactCylinders for the new assembly (previous ones are untouched and keep their cylinders)
+                        }
+            
+                        viewer.setStyle({model: modelID}, {cartoon: {hidden: false, style: cartoonStyle, color: defaultColor, arrows: cartoonArrows, tubes: cartoonTubes, thickness: cartoonThickness, opacity: cartoonOpacity}});
+                        viewer.center({model: modelID});
+                        viewer.zoomTo({model: modelID})
+            
+                        viewer.setHoverable({model: modelID}, true,  // Hovering enabled for new assembly
+                            showHoverLabelNoModel,
+                            removeHoverLabel,
+                        );
 
+                        slab = viewer.getSlab();
+                        initialNearSlab = slab['near'];
+                        initialFarSlab = slab['far'];
+                        nearPlane = Math.trunc(initialNearSlab);
+                        farPlane = Math.trunc(initialFarSlab);
 
-        },
-        error: function(jqXHR, textStatus, errorThrown) {
-            console.error('Request failed:');
-            console.error('Status:', textStatus);
-            console.error('Error:', errorThrown);
-            console.error('Response:', jqXHR.responseText);
-        },
+                        nearSlider.min = initialNearSlab;
+                        nearSlider.max = initialFarSlab;
+                        nearSlider.value = initialNearSlab;
+                        
+                        farSlider.min = initialNearSlab;
+                        farSlider.max = initialFarSlab;
+                        farSlider.value = initialFarSlab;
+
+                        viewer.render();
+
+                        resolve();
+                    },
+                    error: function(hdr, status, err) {
+                        console.error( "Failed to load PDB " + pdbUri + ": " + err );
+                    },
+                });
+            },
+            error: function(jqXHR, textStatus, errorThrown) {
+                console.error('Request failed:');
+                console.error('Status:', textStatus);
+                console.error('Error:', errorThrown);
+                console.error('Response:', jqXHR.responseText);
+            },
+            // complete: function() {
+            //     toggleSpinner();
+            // }
+        });
     });
-    
-    
 }
 
 // Function to toggle the visibility of the dropup content
