@@ -19,7 +19,7 @@ function populateMenu() {
 }
 
 async function selectOption(option) {
-    toggleSpinner();
+    toggleSpinner1();
     if (option !== previousSelection) { // if the option is changed, otherwise do nothing
         const strucName = option.split(".")[0]; // Name of the structure
         const button = document.querySelector('.dropup-button');
@@ -323,7 +323,7 @@ async function selectOption(option) {
 
         previousSelection = option; // Update the previous selection
     }
-    toggleSpinner();
+    toggleSpinner1();
     toggleMenu(); // Optionally hide the menu after selection
 }
 

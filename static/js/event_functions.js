@@ -131,6 +131,13 @@ function spinViewer() {
     }
 }
 
-function toggleSpinner() {
-    spinnerOverlay.style.display = spinnerOverlay.style.display === 'none' ? 'flex' : 'none';
+function toggleSpinner1() {
+    spinner1.style.display = spinner1.style.display === 'none' ? 'flex' : 'none';
+    spinnerImage1.style.display = spinnerImage1.style.display === 'none' ? 'flex' : 'none';
+}
+
+function toggleSpinner2() {
+    spinner2.style.display = spinner2.style.display === 'none' ? 'flex' : 'none';
+    spinnerImage2.style.display = spinnerImage2.style.display === 'none' ? 'flex' : 'none';
+    overlay2.style.display = overlay2.style.display === 'none' ? 'flex' : 'none';    
 }

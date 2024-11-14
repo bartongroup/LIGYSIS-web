@@ -461,7 +461,7 @@ function toggleLigandsVisibility() {
 }
 
 async function toggleContactsVisibility() {
-    toggleSpinner();
+    toggleSpinner1();
     try {
         if (contactsVisible) {
 
@@ -860,6 +860,6 @@ async function toggleContactsVisibility() {
             contactsVisible = true;
         }
     } finally {
-        toggleSpinner();
+        toggleSpinner1();
     }
 }

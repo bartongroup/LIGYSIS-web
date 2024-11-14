@@ -163,17 +163,17 @@
                     <div id="container-01" class="applet-border d-flex">
                         <script src="/static/js/USER_3DMol_applet.js"></script>
                     </div>
-            
                     <!-- Spinner overlay -->
-                    <div class="justify-content-center align-items-center spinner-overlay" style="display: none">
-                        <div class="spinner-border custom-spinner" style="width: 8rem; height: 8rem; border-width: 0.75rem; border-color: #3084c5 #3084c5 #3084c5 transparent;" role="status">
+                    <div id="spinner1" class="justify-content-center align-items-center spinner-overlay" style="display: flex">
+                        <div class="spinner-border custom-spinner" style="width: 8rem; height: 8rem; border-width: 0.75rem; border-color: #3084c5 transparent #3084c5 transparent;" role="status">
                             <span class="visually-hidden">Loading...</span>
                         </div>
                     </div>
+                    <div id="spinnerImage1" class="justify-content-center align-items-center spinner-image" style="display: flex">
+                        <img src="/static/images/LIGYSIS_LOGO_REVAMP6.png" style="width: 6.5rem; height: 6.5rem;" alt="Custom Spinner Image">
+                    </div>
                 </div>
-
             </div>
-            
             <div id="controls"class="row mb-2 custom-padding justify-content-around" style="display: none;">
                 <div class="slider-container d-flex col-auto align-items-center">
                     <label for="near">Near:&nbsp&nbsp&nbsp</label>
@@ -318,8 +318,17 @@
                     </h5>
                 </div>
             </div>
-            <div class="row mb-0 justify-content-center custom-padding">
+            <div class="row mb-0 justify-content-center custom-padding position-relative">
+                <div class="overlay" style="background: rgba(255, 255, 255, 0.8);"></div>
                 <canvas id="chartCanvas" width="275" height="275"></canvas>
+                <div id="spinner2" class="justify-content-center align-items-center" style="display: flex; position: absolute; top: 46%; left: 55%; transform: translate(-50%, -50%); z-index: 6;">
+                    <div class="spinner-border custom-spinner" style="width: 8rem; height: 8rem; border-width: 0.75rem; border-color: #3084c5 transparent #3084c5 transparent;" role="status">
+                        <span class="visually-hidden">Loading...</span>
+                    </div>
+                </div>
+                <div id="spinnerImage2" class="justify-content-center align-items-center" style="display: flex; position: absolute; top: 46%; left: 55%; transform: translate(-50%, -50%); z-index: 6;">
+                    <img src="/static/images/LIGYSIS_LOGO_REVAMP6.png" style="width: 6.5rem; height: 6.5rem;" alt="Custom Spinner Image">
+                </div>
             </div>
             <div class="row mb-3 justify-content-around custom-padding">
                 <div class="col-6 col-sm-4 col-lg-8 col-xl-4 d-flex justify-content-center align-items-center" style="padding-left:0px; padding-right:0px">
@@ -498,6 +507,17 @@
 <script type="text/javascript">
 
     let currentFunction = '';
+
+    let contactsButton;
+    let ligandButton;
+    let waterButton;
+    let labelButton;
+    let surfButton;
+
+    // Get references to the sliders and value displays
+    let nearSlider;
+    let farSlider;
+
 
     function downloadCSV(filepath) { // Download a CSV file from the server
         window.location.href = '/download-csv?filepath=' + filepath;
@@ -825,30 +845,6 @@
             console.error('Error:', error);
         });
     }
-
-    let contactsButton = document.getElementById('contactsButton');
-    let ligandButton = document.getElementById('ligandButton');
-    let waterButton = document.getElementById('waterButton');
-    let labelButton = document.getElementById('labelButton');
-    let surfButton = document.getElementById('surfButton');
-
-    // Get references to the sliders and value displays
-    let nearSlider = document.getElementById('near');
-    let farSlider = document.getElementById('far');
-
-    const spinnerOverlay = document.querySelector('.spinner-overlay');
-
-    // Update near plane value
-    nearSlider.addEventListener('input', function() {
-        nearPlane = Math.trunc(parseFloat(this.value));
-        updateSlab();
-    });
-
-    // Update far plane value
-    farSlider.addEventListener('input', function() {
-        farPlane = Math.trunc(parseFloat(this.value));
-        updateSlab();
-    });
 
 </script>
 

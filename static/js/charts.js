@@ -1,14 +1,16 @@
+let isInitialRender = true;
+
 let chartX = "DS";
 let chartY = "MES";
-
-if (chartData[chartY].includes("NaN")) {
-    chartY = "RSA";
-}
 
 const chartLab = "ID";
 
 let newChartX = "DS";
 let newChartY = "MES";
+
+if (chartData[chartY].includes("NaN")) {
+    chartY = "RSA";
+}
 
 if (newChartData[newChartY].includes("NaN")) {
     newChartY = "RSA";
@@ -192,7 +194,16 @@ let chartConfig = {
             // },
         },
     },
-    plugins: [chartAreaBorder, ],
+    plugins: [chartAreaBorder, {
+        id: 'afterRenderPlugin',
+        afterRender: function(chart, args, options) {
+            // Call toggleSpinner2 only on the initial render
+            if (isInitialRender) {
+                toggleSpinner2();
+                isInitialRender = false; // Set flag to false after first render
+            }
+        }
+    }],
 };
 
 let newChartConfig = { // configuration for the new chart
@@ -331,3 +342,5 @@ xAxisTitleDropdown.addEventListener("change", function () {
 yAxisTitleDropdown.addEventListener("change", function () {
     updateChart("y", yAxisTitleDropdown, newChart, newChartData, newChartLims); // event listener for change in y axis title
 });
+
+// toggleSpinner2(); // hide the spinner
