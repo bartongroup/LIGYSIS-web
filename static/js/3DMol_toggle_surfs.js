@@ -297,8 +297,6 @@ function toggleLabelsVisibility() {
 
 function toggleWatersVisibility() {
     if (watersVisible) {
-            // waterButton.value = 'Waters OFF'; // Change the button text
-            // waterButton.style = "font-weight: bold; color: #674ea7;";
 
         document.getElementById("waterButton").textContent = "HOH ✘";
         waterButton.style.borderColor = "#ffa500";
@@ -317,8 +315,6 @@ function toggleWatersVisibility() {
         }
     }
     else {
-        // waterButton.value = 'Waters ON'; // Change the button text
-        // waterButton.style = "font-weight: bold; color:#B22222;";
 
         document.getElementById("waterButton").textContent = "HOH ✓";
         waterButton.style.fontWeight = "bold";

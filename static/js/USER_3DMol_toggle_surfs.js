@@ -24,6 +24,28 @@ function findMiddlePoint(bgnCoords, endCoords) { // returns the middle point bet
     return middlePoint;
 }
 
+function toggleSliceVisibility() {
+    if (sliceVisible) {
+        document.getElementById("sliceButton").textContent = "SLICE ✘";
+        sliceButton.style.borderColor = "#ffa500";
+        sliceButton.style.fontWeight = "normal";
+        sliceButton.style.color = "#ffa500";
+        sliceButton.style.borderWidth = "1px";
+
+        controls.style.display = "none";
+    }
+    else {
+        document.getElementById("sliceButton").textContent = "SLICE ✓";
+        sliceButton.style.fontWeight = "bold";
+        sliceButton.style.color = "#007bff";
+        sliceButton.style.borderColor = "#007bff";
+        sliceButton.style.borderWidth = "2.5px";
+
+        controls.style.display = "flex";
+    }
+    sliceVisible = !sliceVisible; // Toggle the visibility state
+}
+
 function toggleSurfaceVisibility() {
     if (surfaceVisible) { // hide all surfaces
         if (activeModel == "superposition") {
@@ -61,7 +83,7 @@ function toggleSurfaceVisibility() {
                 }
             }
         }
-        document.getElementById("surfButton").textContent = "SURFACE ✘";
+        document.getElementById("surfButton").textContent = "SURF ✘";
         surfButton.style.borderColor = "#ffa500";
         surfButton.style.fontWeight = "normal";
         surfButton.style.color = "#ffa500";
@@ -130,7 +152,7 @@ function toggleSurfaceVisibility() {
                 }
             }
         }
-        document.getElementById("surfButton").textContent = "SURFACE ✓";
+        document.getElementById("surfButton").textContent = "SURF ✓";
         surfButton.style.fontWeight = "bold";
         surfButton.style.color = "#007bff";
         surfButton.style.borderColor = "#007bff";
@@ -142,10 +164,7 @@ function toggleSurfaceVisibility() {
 
 function toggleLabelsVisibility() {
     if (labelsVisible) {
-        // labelButton.value = 'Labels OFF'; // Change the button text
-        // labelButton.style = "font-weight: bold; color: #674ea7;";
-
-        document.getElementById("labelButton").textContent = "LABELS ✘";
+        document.getElementById("labelButton").textContent = "LABEL ✘";
         labelButton.style.borderColor = "#ffa500";
         labelButton.style.fontWeight = "normal";
         labelButton.style.color = "#ffa500";
@@ -174,7 +193,7 @@ function toggleLabelsVisibility() {
     }
     else { // add labels if any site is clicked already
 
-        document.getElementById("labelButton").textContent = "LABELS ✓";
+        document.getElementById("labelButton").textContent = "LABEL ✓";
         labelButton.style.fontWeight = "bold";
         labelButton.style.color = "#007bff";
         labelButton.style.borderColor = "#007bff";
@@ -196,10 +215,6 @@ function toggleLabelsVisibility() {
                     console.log(`Site ${clickedElementId} not clicked yet. Creating labels...`);
                     labelsHash[activeModel]["clickedSite"][clickedElementId] = [];
                     if (activeModel == "superposition") {
-                        // let siteSuppPDBResNums = seg_ress_dict[clickedElementId]
-                        //     .filter(el => Up2PdbDict[repPdbId][repPdbChainId].hasOwnProperty(el)) // this accounts not for missing residues in the structure (unresolved)
-                        //     .map(el => Up2PdbDict[repPdbId][repPdbChainId][el]);
-
                         let siteSuppPDBResNums = seg_ress_dict[clickedElementId]
                             .filter(el => Up2PdbDict.hasOwnProperty(el))
                             .flatMap(el => {
@@ -292,7 +307,7 @@ function toggleLabelsVisibility() {
 function toggleWatersVisibility() {
     if (watersVisible) {
 
-        document.getElementById("waterButton").textContent = "WATERS ✘";
+        document.getElementById("waterButton").textContent = "HOH ✘";
         waterButton.style.borderColor = "#ffa500";
         waterButton.style.fontWeight = "normal";
         waterButton.style.color = "#ffa500";
@@ -310,7 +325,7 @@ function toggleWatersVisibility() {
     }
     else {
 
-        document.getElementById("waterButton").textContent = "WATERS ✓";
+        document.getElementById("waterButton").textContent = "HOH ✓";
         waterButton.style.fontWeight = "bold";
         waterButton.style.color = "#007bff";
         waterButton.style.borderColor = "#007bff";
@@ -334,7 +349,7 @@ function toggleWatersVisibility() {
 function toggleLigandsVisibility() {
     if (ligandsVisible) {
 
-        document.getElementById("ligandButton").textContent = "LIGANDS ✘";
+        document.getElementById("ligandButton").textContent = "LIGAND ✘";
         ligandButton.style.borderColor = "#ffa500";
         ligandButton.style.fontWeight = "normal";
         ligandButton.style.color = "#ffa500";
@@ -354,7 +369,7 @@ function toggleLigandsVisibility() {
 
         if (contactsVisible) {
 
-            document.getElementById("contactsButton").textContent = "CONTACTS ✘";
+            document.getElementById("contactsButton").textContent = "CONTACT ✘";
             contactsButton.style.borderColor = "#ffa500";
             contactsButton.style.fontWeight = "normal";
             contactsButton.style.color = "#ffa500";
@@ -423,7 +438,7 @@ function toggleLigandsVisibility() {
     }
     else {
 
-        document.getElementById("ligandButton").textContent = "LIGANDS ✓";
+        document.getElementById("ligandButton").textContent = "LIGAND ✓";
         ligandButton.style.fontWeight = "bold";
         ligandButton.style.color = "#007bff";
         ligandButton.style.borderColor = "#007bff";
@@ -448,7 +463,7 @@ function toggleLigandsVisibility() {
 function toggleContactsVisibility() {
     if (contactsVisible) {
 
-        document.getElementById("contactsButton").textContent = "CONTACTS ✘";
+        document.getElementById("contactsButton").textContent = "CONTACT ✘";
         contactsButton.style.borderColor = "#ffa500";
         contactsButton.style.fontWeight = "normal";
         contactsButton.style.color = "#ffa500";
@@ -519,7 +534,7 @@ function toggleContactsVisibility() {
             {stick: {hidden: true}}
         );
 
-        document.getElementById("ligandButton").textContent = "LIGANDS ✘";
+        document.getElementById("ligandButton").textContent = "LIGAND ✘";
         ligandButton.style.borderColor = "#ffa500";
         ligandButton.style.fontWeight = "normal";
         ligandButton.style.color = "#ffa500";
@@ -834,7 +849,7 @@ function toggleContactsVisibility() {
             viewer.render();
         }
 
-        document.getElementById("contactsButton").textContent = "CONTACTS ✓";
+        document.getElementById("contactsButton").textContent = "CONTACT ✓";
         contactsButton.style.fontWeight = "bold";
         contactsButton.style.color = "#007bff";
         contactsButton.style.borderColor = "#007bff";

@@ -108,6 +108,9 @@
     const surfLowOpacity = 0.75;
     const surfHiddenOpacity = 0.0;
 
+    let slab;
+    let initialNearSlab;
+    let initialFarSlab;
     let nearPlane;
     let farPlane;
     let spinning = false; // Global variable to track spinning state
@@ -388,7 +391,7 @@
                     <h3 style="margin-top: 8px;">
                         N<sub>Chains</sub>&nbsp;=&nbsp;{{ seg_stats[prot_id][seg_id]["strucs"]}};&nbsp;&nbsp;
                         N<sub>Ligands</sub>&nbsp;=&nbsp;{{ seg_stats[prot_id][seg_id]["ligs"]}};&nbsp;&nbsp;
-                        N<sub>Binding Sites</sub>&nbsp;=&nbsp;{{ seg_stats[prot_id][seg_id]["bss"]}}&nbsp;
+                        N<sub>Sites</sub>&nbsp;=&nbsp;{{ seg_stats[prot_id][seg_id]["bss"]}}&nbsp;
                     </h3>
                 </div>
             </div>
@@ -833,7 +836,7 @@
     // Get references to the sliders and value displays
     let nearSlider = document.getElementById('near');
     let farSlider = document.getElementById('far');
-
+    
     // Update near plane value
     nearSlider.addEventListener('input', function() {
         nearPlane = Math.trunc(parseFloat(this.value));
@@ -844,7 +847,7 @@
     farSlider.addEventListener('input', function() {
         farPlane = Math.trunc(parseFloat(this.value));
         updateSlab();
-});
+    });
 
 </script>
 

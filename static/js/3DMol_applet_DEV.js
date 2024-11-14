@@ -186,17 +186,19 @@ function loadAllModels(simplePdbs) { // Load all structures
 
         labelsHash['superposition'] = {"clickedSite": {}, "hoveredRes": [], };
 
-        let slab = viewer.getSlab();
-        let initialNearSlab = slab['near'];
-        let initialFarSlab = slab['far'];
+        slab = viewer.getSlab();
+        initialNearSlab = slab['near'];
+        initialFarSlab = slab['far'];
         nearPlane = Math.trunc(initialNearSlab);
         farPlane = Math.trunc(initialFarSlab);
 
         nearSlider.min = initialNearSlab;
         nearSlider.max = initialFarSlab;
-
+        nearSlider.value = initialNearSlab;
+        
         farSlider.min = initialNearSlab;
         farSlider.max = initialFarSlab;
+        farSlider.value = initialFarSlab;
 
     }).catch(error => {
         console.error('Error loading one or more models:', error);

@@ -35,9 +35,6 @@ function selectOption(option) {
 
             viewer.addStyle({resn: "HOH"}, {sphere: {hidden: true, color: waterColor, radius: sphereRadius}}); // hide all water molecules from superposition
 
-            // waterButton.value = 'Waters OFF'; // turn waterButton off
-            // waterButton.style = "font-weight: bold; color: #674ea7;";
-
             document.getElementById("waterButton").textContent = "WAT ✘";
             waterButton.style.borderColor = "#ffa500";
             waterButton.style.fontWeight = "normal";
@@ -69,9 +66,6 @@ function selectOption(option) {
                 }
             }
 
-            // labelButton.value = 'Labels OFF';  // turn labelButton off
-            // labelButton.style = "font-weight: bold; color: #674ea7;";
-
             document.getElementById("labelButton").textContent = "LABEL ✘";
             labelButton.style.borderColor = "#ffa500";
             labelButton.style.fontWeight = "normal";
@@ -94,9 +88,6 @@ function selectOption(option) {
                         viewer.setSurfaceMaterialStyle(surfsDict["superposition"][key].surfid, {color: siteColor, opacity: surfHiddenOpacity});
                     }
                 }
-                
-                // surfButton.value = 'Surface OFF'; // turn surfButton off
-                // surfButton.style = "font-weight: bold; color: #674ea7;";
 
                 document.getElementById("surfButton").textContent = "SURF ✘";
                 surfButton.style.borderColor = "#ffa500";
@@ -111,9 +102,6 @@ function selectOption(option) {
 
                 viewer.addStyle(suppLigsSels["not_clust"], {stick: {hidden: true, colorscheme: myScheme, radius: stickRadius}});
                 viewer.addStyle(suppLigsSels["clust"], {stick: {hidden: true, colorscheme: myScheme, radius: stickRadius}});
-
-                // ligandButton.value = 'Ligands OFF'; // turn ligandButton off
-                // ligandButton.style = "font-weight: bold; color: #674ea7;";
 
                 document.getElementById("ligandButton").textContent = "LIGAND ✘";
                 ligandButton.style.borderColor = "#ffa500";
@@ -131,15 +119,10 @@ function selectOption(option) {
 
             contactsButton.disabled = false;
 
-            // document.getElementById("contactsButton").textContent = "CONTACTS ✘";
             contactsButton.style.borderColor = "#ffa500";
             contactsButton.style.fontWeight = "normal";
             contactsButton.style.color = "#ffa500";
             contactsButton.style.borderWidth = "1px";
-
-
-            // contactsButton.style.color = '#674ea7';  // Active font color
-            // contactsButton.style.fontWeight = 'bold'; // Bold font when active
 
             saveAssemblyButton.disabled = false;
             saveAssemblyButton.style.color = 'black';  // Active font color
@@ -169,9 +152,6 @@ function selectOption(option) {
                     cylinder.updateStyle({hidden: true})
                 }
 
-                // contactsButton.value = 'Contacts OFF';
-                // contactsButton.style = "font-weight: bold; color: #674ea7;";
-
                 document.getElementById("contactsButton").textContent = "CONTACTS ✘";
                 contactsButton.style.borderColor = "#ffa500";
                 contactsButton.style.fontWeight = "normal";
@@ -188,9 +168,6 @@ function selectOption(option) {
                     }
                 }
 
-                // surfButton.value = 'Surface OFF';
-                // surfButton.style = "font-weight: bold; color: #674ea7;";
-
                 document.getElementById("surfButton").textContent = "SURF ✘";
                 surfButton.style.borderColor = "#ffa500";
                 surfButton.style.fontWeight = "normal";
@@ -206,9 +183,6 @@ function selectOption(option) {
                     {...hetAtomsNotHoh, model: activeModel},
                     {stick: {hidden: true, colorscheme: myScheme, radius: stickRadius}}
                 );
-
-                // ligandButton.value = 'Ligands OFF'; // turn ligandButton off
-                // ligandButton.style = "font-weight: bold; color: #674ea7;";
 
                 document.getElementById("ligandButton").textContent = "LIGAND ✘";
                 ligandButton.style.borderColor = "#ffa500";
@@ -231,10 +205,7 @@ function selectOption(option) {
                 openStructure(option); // act heere if model is not already open
 
                 contactsButton.disabled = false;
-                // contactsButton.style.color = '#674ea7';  // Active font color
-                // contactsButton.style.fontWeight = 'bold'; // Bold font when active
 
-                // document.getElementById("contactsButton").textContent = "CONTACTS ✘";
                 contactsButton.style.borderColor = "#ffa500";
                 contactsButton.style.fontWeight = "normal";
                 contactsButton.style.color = "#ffa500";
@@ -254,8 +225,6 @@ function selectOption(option) {
             else {
 
                 contactsButton.disabled = true;
-                // contactsButton.style.color = 'darkgray';
-                // contactsButton.style.fontWeight = 'normal'; // Bold font when active
 
                 document.getElementById("ligandButton").textContent = "LIGAND ✘";
                 contactsButton.style.borderColor = "darkgray";
@@ -294,6 +263,20 @@ function selectOption(option) {
                 );
 
                 viewer.center({model: protAtomsModel}); // center on suppModels again
+
+                slab = viewer.getSlab();
+                initialNearSlab = slab['near'];
+                initialFarSlab = slab['far'];
+                nearPlane = Math.trunc(initialNearSlab);
+                farPlane = Math.trunc(initialFarSlab);
+
+                nearSlider.min = initialNearSlab;
+                nearSlider.max = initialFarSlab;
+                nearSlider.value = initialNearSlab;
+                
+                farSlider.min = initialNearSlab;
+                farSlider.max = initialFarSlab;
+                farSlider.value = initialFarSlab;
 
                 viewer.render();
             }
@@ -410,6 +393,21 @@ function openStructure(pdbId) {
                         showHoverLabel,
                         removeHoverLabel,
                     );
+
+                    slab = viewer.getSlab();
+                    initialNearSlab = slab['near'];
+                    initialFarSlab = slab['far'];
+                    nearPlane = Math.trunc(initialNearSlab);
+                    farPlane = Math.trunc(initialFarSlab);
+
+                    nearSlider.min = initialNearSlab;
+                    nearSlider.max = initialFarSlab;
+                    nearSlider.value = initialNearSlab;
+                    
+                    farSlider.min = initialNearSlab;
+                    farSlider.max = initialFarSlab;
+                    farSlider.value = initialFarSlab;
+
                     viewer.render();
                 },
                 error: function(hdr, status, err) {
