@@ -1,4 +1,5 @@
-let isInitialRender = true;
+let isInitialRender2 = true;
+let isInitialRender3 = true;
 
 let chartX = "DS";
 let chartY = "MES";
@@ -198,9 +199,9 @@ let chartConfig = {
         id: 'afterRenderPlugin',
         afterRender: function(chart, args, options) {
             // Call toggleSpinner2 only on the initial render
-            if (isInitialRender) {
+            if (isInitialRender2) {
                 toggleSpinner2();
-                isInitialRender = false; // Set flag to false after first render
+                isInitialRender2 = false; // Set flag to false after first render
             }
         }
     }],
@@ -322,7 +323,16 @@ let newChartConfig = { // configuration for the new chart
             },
         }
     },
-    plugins: [chartAreaBorder],
+    plugins: [chartAreaBorder, {
+        id: 'afterRenderPlugin',
+        afterRender: function(chart, args, options) {
+            // Call toggleSpinner2 only on the initial render
+            if (isInitialRender3) {
+                toggleSpinner3();
+                isInitialRender3 = false; // Set flag to false after first render
+            }
+        }
+    }],
 };
 
 myChart = new Chart(chartCtx, chartConfig);

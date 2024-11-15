@@ -257,7 +257,11 @@ document.addEventListener("DOMContentLoaded", () => {
 
     spinner2 = document.querySelector('#spinner2');
     spinner2Image = document.querySelector('#spinnerImage2');
-    overlay2 = document.querySelector('.overlay');
+    overlay2 = document.querySelector('#overlay2');
+
+    spinner3 = document.querySelector('#spinner3');
+    spinner3Image = document.querySelector('#spinnerImage3');
+    overlay3 = document.querySelector('#overlay3');
 
     element = document.querySelector('#container-01'); // get structure viewer container element
 
