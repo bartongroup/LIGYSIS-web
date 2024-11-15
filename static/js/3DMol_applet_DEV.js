@@ -1,19 +1,3 @@
-// VIEWER CONFIG
-
-let element = document.querySelector('#container-01'); // get structure viewer container element
-
-let config = { // viewer configuration
-    backgroundColor: bgColor,
-    id: "3DmolCanvas",
-}
-
-let viewer = $3Dmol.createViewer(element, config ); // create viewer object
-
-// viewer.setDefaultCartoonQuality(10);
-// viewer.setProjection("orthographic");
-
-$3Dmol.setSyncSurface(true); // all surfaces appear at once
-
 // SOME FUNCTIONS
 
 function showHoverLabel(atom, viewer) { // show label of hovered atom
@@ -31,22 +15,6 @@ function removeHoverLabel(atom, viewer) { // remove label of hovered atom
         delete atom.label;
     }
 }
-
-// VIEWER
-
-let myMap = {}; // Dictionary for color mapping
-let myScheme = {}; // Scheme object for ligand colouring: takes binding site (bs) property and myMap
-let loadedCount = 0; // Counter for loaded structures
-let models = []; // List of GLModels
-let suppModels; // List of superposition models IDs (will be an array [0, N-1] where N is the number of models)
-let modelOrder = {}; // Dictionary: pdb ID --> model ID
-let modelOrderRev = {}; // Dictionary: model ID --> pdb ID
-let protAtomsModel; // Model ID for the structure with protein atoms
-let suppModelsNoProt; // List of superposition models IDs without the protein atoms model
-
-let protAtomsProtModelSel; // Selection object for protein atoms in the protein atoms model
-let hetAtomsNotHohSuppModelSel; // Selection object for ligands (not water) in the superposition models
-let protAtomsSuppModelsSel; // Selection object for protein atoms in the superposition models
 
 function loadModel(simplePdb) { // Load a structure for each one of the simple pdbs (only one has protein atoms, the other just ligands)
     return new Promise((resolve, reject) => {
@@ -202,8 +170,80 @@ function loadAllModels(simplePdbs) { // Load all structures
 
     }).catch(error => {
         console.error('Error loading one or more models:', error);
+    }).finally(() => {
+        // Hide spinner after all models are loaded or if an error occurs
+        toggleSpinner1();
     });
 }
 
-loadAllModels(simplePdbs); // Load all structures
+// VIEWER
+
+let myMap = {}; // Dictionary for color mapping
+let myScheme = {}; // Scheme object for ligand colouring: takes binding site (bs) property and myMap
+let loadedCount = 0; // Counter for loaded structures
+let models = []; // List of GLModels
+let suppModels; // List of superposition models IDs (will be an array [0, N-1] where N is the number of models)
+let modelOrder = {}; // Dictionary: pdb ID --> model ID
+let modelOrderRev = {}; // Dictionary: model ID --> pdb ID
+let protAtomsModel; // Model ID for the structure with protein atoms
+let suppModelsNoProt; // List of superposition models IDs without the protein atoms model
+
+let protAtomsProtModelSel; // Selection object for protein atoms in the protein atoms model
+let hetAtomsNotHohSuppModelSel; // Selection object for ligands (not water) in the superposition models
+let protAtomsSuppModelsSel; // Selection object for protein atoms in the superposition models
+
+let element; // Structure viewer container element
+let viewer; // Viewer object
+let config; // Viewer configuration
+
+document.addEventListener("DOMContentLoaded", () => {
+    contactsButton = document.getElementById('contactsButton');
+    ligandButton = document.getElementById('ligandButton');
+    waterButton = document.getElementById('waterButton');
+    labelButton = document.getElementById('labelButton');
+    surfButton = document.getElementById('surfButton');
+
+    // Get references to the sliders and value displays
+    nearSlider = document.getElementById('near');
+    farSlider = document.getElementById('far');
+
+    // Update near plane value
+    nearSlider.addEventListener('input', function() {
+        nearPlane = Math.trunc(parseFloat(this.value));
+        updateSlab();
+    });
+
+    // Update far plane value
+    farSlider.addEventListener('input', function() {
+        farPlane = Math.trunc(parseFloat(this.value));
+        updateSlab();
+    });
+
+    spinner1 = document.querySelector('#spinner1');
+    spinner1Image = document.querySelector('#spinnerImage1');
+
+    spinner2 = document.querySelector('#spinner2');
+    spinner2Image = document.querySelector('#spinnerImage2');
+    overlay2 = document.querySelector('#overlay2');
+
+    spinner3 = document.querySelector('#spinner3');
+    spinner3Image = document.querySelector('#spinnerImage3');
+    overlay3 = document.querySelector('#overlay3');
+
+    element = document.querySelector('#container-01'); // get structure viewer container element
+
+    config = { // viewer configuration
+        backgroundColor: bgColor,
+        id: "3DmolCanvas",
+    }
+
+    viewer = $3Dmol.createViewer(element, config ); // create viewer object
+
+    $3Dmol.setSyncSurface(true); // all surfaces appear at once
+
+    loadAllModels(simplePdbs); // Load all structures
+
+});
+
+
 

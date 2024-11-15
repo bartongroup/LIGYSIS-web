@@ -30,22 +30,17 @@
     let segStats = {{ seg_stats | tojson  }}
     let protAtomsRep = {{ prot_atoms_rep | tojson }}
     let [repPdbId, repPdbChainId] = protAtomsRep.split("_");
-    // let repStruc = segmentReps[segmentId]["rep"]
-    // let [repPdbId, repPdbChainId] = repStruc.split("_");
-
-    console.log(`Reading SIFTS mapping for ${repPdbId} chain ${repPdbChainId}`);
 
     const Pdb2UpDict = {{ pdb2up_dict | tojson   }}
     const Up2PdbDict = {{ up2pdb_dict  | tojson  }}
+    const simplePdbs = {{ simple_pdbs | tojson }}
+    const assemblyPdbIds = {{ assembly_pdb_ids | tojson }}
 
     let Pdb2UpMapAssembly; // this gets populated by the PDB --> UniProt mapping for the active assembly model
     let Up2PdbMapAssembly; // this gets populated by the UniProt --> PDB mapping for the active assembly model
     let Chain2AccMapAssembly; // this gets populated by the Chain ID --> UniProt ID mapping for the active assembly model
     let chainsMapAssembly; // this gets populated by chain remapping data (BIO --> ASYM unit) for the active assembly model
     let proteinChains; // chain IDs corresponding to the protein of interest
-    
-    const simplePdbs = {{ simple_pdbs | tojson }}
-    const assemblyPdbIds = {{ assembly_pdb_ids | tojson }}
 
     let sliceVisible = false;
     let surfaceVisible = false;
@@ -108,9 +103,18 @@
     const surfLowOpacity = 0.75;
     const surfHiddenOpacity = 0.0;
 
+    let currentFunction = '';
+    let contactsButton;
+    let ligandButton;
+    let waterButton;
+    let labelButton;
+    let surfButton;
+
     let slab;
     let initialNearSlab;
     let initialFarSlab;
+    let nearSlider;
+    let farSlider;
     let nearPlane;
     let farPlane;
     let spinning = false; // Global variable to track spinning state
@@ -167,10 +171,18 @@
                 </div>
             </div>
             <div class="row mb-2 custom-padding">
-                <div style="border: 2px solid black;" class="d-flex px-0">
-                    <div id="container-01" style="height: 598px; width: 598px;" class="applet-border d-flex">
-                        <!-- 3DMol.js Viewer Script -->
+                <div style="position: relative; border: 2px solid black; width: 598px; height: 598px;" class="d-flex justify-content-center align-items-center px-0">
+                    <div id="container-01" class="applet-border d-flex">
                         <script src="/static/js/3DMol_applet_DEV.js"></script>
+                    </div>
+                    <!-- Spinner overlay -->
+                    <div id="spinner1" class="justify-content-center align-items-center spinner-overlay" style="display: flex">
+                        <div class="spinner-border custom-spinner" style="width: 8rem; height: 8rem; border-width: 0.75rem; border-color: #3084c5 transparent #3084c5 transparent;" role="status">
+                            <span class="visually-hidden">Loading...</span>
+                        </div>
+                    </div>
+                    <div id="spinnerImage1" class="justify-content-center align-items-center spinner-image" style="display: flex">
+                        <img src="/static/images/LIGYSIS_LOGO_REVAMP6.png" style="width: 6.5rem; height: 6.5rem;" alt="Custom Spinner Image">
                     </div>
                 </div>
             </div>
@@ -318,8 +330,17 @@
                     </h5>
                 </div>
             </div>
-            <div class="row mb-0 justify-content-center custom-padding">
+            <div class="row mb-0 justify-content-center custom-padding position-relative">
+                <div id="overlay2" class="overlay" style="background: rgba(255, 255, 255, 0.8);"></div>
                 <canvas id="chartCanvas" width="275" height="275"></canvas>
+                <div id="spinner2" class="justify-content-center align-items-center" style="display: flex; position: absolute; top: 46%; left: 55%; transform: translate(-50%, -50%); z-index: 6;">
+                    <div class="spinner-border custom-spinner" style="width: 8rem; height: 8rem; border-width: 0.75rem; border-color: #3084c5 transparent #3084c5 transparent;" role="status">
+                        <span class="visually-hidden">Loading...</span>
+                    </div>
+                </div>
+                <div id="spinnerImage2" class="justify-content-center align-items-center" style="display: flex; position: absolute; top: 46%; left: 55%; transform: translate(-50%, -50%); z-index: 6;">
+                    <img src="/static/images/LIGYSIS_LOGO_REVAMP6.png" style="width: 6.5rem; height: 6.5rem;" alt="Custom Spinner Image">
+                </div>
             </div>
             <div class="row mb-3 justify-content-around custom-padding">
                 <div class="col-6 col-sm-4 col-lg-8 col-xl-4 d-flex justify-content-center align-items-center" style="padding-left:0px; padding-right:0px">
@@ -405,8 +426,17 @@
                     </h5>
                 </div>
             </div>
-            <div class="row mb-0 justify-content-center custom-padding">
+            <div class="row mb-0 justify-content-center custom-padding position-relative">
+                <div id="overlay3" class="overlay" style="background: rgba(255, 255, 255, 0.8);"></div>
                 <canvas id="newChartCanvas" width="650" height="420"></canvas>
+                <div id="spinner3" class="justify-content-center align-items-center" style="display: flex; position: absolute; top: 46%; left: 52.65%; transform: translate(-50%, -50%); z-index: 6;">
+                    <div class="spinner-border custom-spinner" style="width: 8rem; height: 8rem; border-width: 0.75rem; border-color: #3084c5 transparent #3084c5 transparent;" role="status">
+                        <span class="visually-hidden">Loading...</span>
+                    </div>
+                </div>
+                <div id="spinnerImage3" class="justify-content-center align-items-center" style="display: flex; position: absolute; top: 46%; left: 52.65%; transform: translate(-50%, -50%); z-index: 6;">
+                    <img src="/static/images/LIGYSIS_LOGO_REVAMP6.png" style="width: 6.5rem; height: 6.5rem;" alt="Custom Spinner Image">
+                </div>
             </div>
             <div class="row mb-0 justify-content-around custom-padding">
                 <div class="col-sm-4 col-lg-8 col-xl-4 mb-2 d-flex justify-content-center align-items-center" style="padding-left:0px; padding-right:0px">
@@ -495,8 +525,6 @@
 <script src="/static/js/3DMol_open_assemblies.js"></script>
 
 <script type="text/javascript">
-
-    let currentFunction = '';
 
     function downloadCSV(filepath) { // Download a CSV file from the server
         window.location.href = '/download-csv?filepath=' + filepath;
@@ -826,28 +854,6 @@
             console.error('Error:', error);
         });
     }
-
-    let contactsButton = document.getElementById('contactsButton');
-    let ligandButton = document.getElementById('ligandButton');
-    let waterButton = document.getElementById('waterButton');
-    let labelButton = document.getElementById('labelButton');
-    let surfButton = document.getElementById('surfButton');
-
-    // Get references to the sliders and value displays
-    let nearSlider = document.getElementById('near');
-    let farSlider = document.getElementById('far');
-    
-    // Update near plane value
-    nearSlider.addEventListener('input', function() {
-        nearPlane = Math.trunc(parseFloat(this.value));
-        updateSlab();
-    });
-
-    // Update far plane value
-    farSlider.addEventListener('input', function() {
-        farPlane = Math.trunc(parseFloat(this.value));
-        updateSlab();
-    });
 
 </script>
 
