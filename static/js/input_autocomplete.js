@@ -1,6 +1,6 @@
 $(function() {
     $( "#autocomplete" ).autocomplete({
-        minLength: 1,
+        minLength: 4,
         source: proteinIds,
     });
     // Custom filter to search the string regardless of position (anywhere in the string) and case-insensitive
