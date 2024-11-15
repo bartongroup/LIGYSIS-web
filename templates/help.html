@@ -34,60 +34,140 @@
                 <div class="col">
                     <div class="row mb-2">
                         <h2>
-                            Results page
+                            Exploring the LIGYSIS dataset
+                        </h2>
+                    </div>
+                    <div class="row">
+                        <p>
+                            XXX.
+                        </p>
+                    </div>
+                </div>
+            </div>
+            <div class="row mb-3">
+                <div class="col">
+                    <div class="row mb-2">
+                        <h2>
+                            Submitting a job to the LIGYSIS web server
+                        </h2>
+                    </div>
+                    <div class="row">
+                        <p>
+                            
+                            <p class="mb-2">
+                                Additionally, users can submit their own set of structure for analysis to the LIGYSIS Web server. The input to do so is the following:
+                            </p>
+                            <div class="col">
+                                <ul class="mb-0">
+                                    <li class="mb-2">
+                                        <b>UniProt Accession</b>: the UniProt Accession Identifier of the protein the structures map to.
+                                    </li>
+                                    <li class="mb-2">
+                                        <b>Structure files</b>: the set of structure files to be analysed. LIGYSIS is compatible with either be in <i>mmCIF (.cif)</i> or <i>PDB (.ent, .pdb)</i> format. 
+                                        However, all files within the set of structures must present the same format. These structures must represent the same protein unit, i.e., a dimer, or monomer,
+                                        bound to the ligands of interest. This is required for the correct superposition of the structures. There is no limit in the number of structures that can be submitted.
+                                        <b>LIGYSIS</b> only supports single protein-ligand complexes, i.e., homomultimers are accepted, but not heteromultimers.
+
+                                    </li>
+                                </ul>
+                            </div>
+                        </p>
+                    </div>
+                </div>
+            </div>
+            <div class="row mb-3">
+                <div class="col">
+                    <div class="row mb-2">
+                        <h2>
+                            Results Page
                         </h2>
                     </div>
                     <div class="row mb-3">
                         <p class="mb-2">
-                            This is how the main <b>LIGYSIS</b> results page looks like. It is composed by 3 main panels.
+                            This is the <b>LIGYSIS</b> results page. At the very top, the UniProt accession, entry and protein names can be found,
+                            as well as the number of chains, ligands and sites for this <b>LIGYSIS</b> entry. Below, the three main panels: <b>Binding Sites</b> (left),
+                            <b>Structure</b> (centre), and <b>Binding Site Residues</b> (right).
                         </p>
-
-                        <img src="/static/images/ligysis_web_results_panels4.png" alt="LIGYSIS results">
+                        <img src="/static/images/LIGYSIS_WEB_RESULTS2.png" alt="LIGYSIS results">
                     </div>
                     <div class="row">
                         <h3 id="structurePanelHelp" class="mb-3">
-                            The Structure panel
+                            The Structure Panel <i>(centre)</i>
                         </h3>
                         <p class="mb-2">
-                            This is the main panel. It includes a <a href="https://3dmol.csb.pitt.edu/">3DMol.js</a> structure viewer and a few utilities
-                            below it in the form of buttons. There are four buttons:
+                            This is the main panel. It includes a <a href="https://3dmol.csb.pitt.edu/">3Dmol.js</a> structure viewer and the structure control buttons. There are 
+                            13 buttons.
                         </p>
                         <div class="col">
                             <ol class="mb-0">
                                 <li class="mb-2">
-                                    <b>Surface ON/OFF</b>: clicking on this button switches the visibility of the protein surfaces.
+                                    <b>SLICE</b>: clicking on this button displays/hides the controls (near and far) to take slices of the current view between the two planes.
                                 </li>
                                 <li class="mb-2">
-                                    <b>Labels ON/OFF</b>: clicking on this button switches the visibility of the labels of the residues forming
-                                    the binding site that is clicked on.
+                                    <b>SURF</b>: clicking on this button switches the visibility of the protein surfaces.
+                                </li>
+                                <li class="mb-2">
+                                    <b>LABEL</b>: clicking on this button switches the visibility of residue labels of a clicked binding site,
+                                    displayed protein-ligand contacts or hovered residue.
+                                </li>
+                                <li class="mb-2">
+                                    <b>LIGAND</b>: clicking on this button switches the visibility of ligands (small molecule).
+                                </li>
+                                <li class="mb-2">
+                                    <b>HOH</b>: clicking on this button switches the visibility of water molecules.
+                                </li>
+                                <li class="mb-2">
+                                    <b>CONTACT</b>: clicking on this button switches the visibility of protein-ligand interactions. Ligands and interacting sidechains will be
+                                    displayed as sticks, and dashed cylinders will connect them. The cylinders have hover-over information.
+                                </li>
+                                <li class="mb-2">
+                                    <b>Download Current Assembly Contacts</b>: clicking on this button will download a <em>.csv</em> file with the contacts of the current assembly
+                                    as calculated by pdbe-arpeggio. This option is unavailable when viewing the superposition.
                                 </li>
                                 <li class="mb-2">
                                     <b>Save Image</b>: click here to save the current state of the viewer to a <em>.png</em> image.
                                 </li>
                                 <li class="mb-2">
-                                    <b>Save Structure</b>: click here to save the structure that is being visualised to a file in <em>.cif</em> format.
+                                    <b>Spin</b>: click here to save to start/stop a spin animation on the <b>Y</b> axis.
+                                </li>
+                                <li class="mb-2">
+                                    <b>Download ALL Assemblies Contacts</b>: clicking on this button will download a <i>.zip</i> file containing a 
+                                    <em>.csv</em> file with the contacts of each independent assembly as calculated by pdbe-arpeggio.
+                                </li>
+                                <li class="mb-2">
+                                    <b>Download Current Assembly</b>: clicking on this button will download a <em>.zip</em> file containing the necessary files to visualise 
+                                    the currently visualised assembly in <a href="https://www.cgl.ucsf.edu/chimerax/">ChimeraX</a> (<i>.cxc</i>) or <a href="https://pymol.org/#page-top"
+                                    >PyMol</a> (<i>.pml</i>).
+                                </li>
+                                <li class="mb-2">
+                                    <b>Download Superposition</b>: clicking on this button will download a <em>.zip</em> file containing the necessary files to visualise 
+                                    the ligand superposition in either ChimeraX or PyMol.
+                                </li>
+                                <li class="mb-2">
+                                    <b>Download ALL Assemblies</b>: clicking on this button will download a <em>.zip</em> file containing a subdirectory for each assembly on this entry
+                                    with the necessary files to visualise each assembly in ChimeraX or PyMol.
                                 </li>
                             </ol>
                         </div>
                     </div>
                     <div class="row">
                         <h3 id="sitePanelHelp" class="mb-3">
-                            The Binding Site panel
+                            The Binding Site Panel <i>(left)</i>
                         </h3>
                         <p class="mb-2">
                             This panel includes an interactive scatter plot generated with <a href="https://www.chartjs.org/">Chart.js</a>, in which
-                            each data point represents a defined ligand binding site on the protein. Below this, three utilities can be found:
+                            each data point represents a defined ligand binding site on the protein. Three utilities can be found below:
                         </p>
                         <div class="col">
                             <ol class="mb-0">
                                 <li class="mb-2">
-                                    <b>X-axis</b>: this dropdown menu allows the user to select the variable to be plotted on the x-axis.
+                                    <b>X-axis</b>: this dropdown menu selects the variable to be plotted on the X-axis.
                                 </li>
                                 <li class="mb-2">
-                                    <b>Y-axis</b>: this dropdown menu allows the user to select the variable to be plotted on the y-axis.
+                                    <b>Y-axis</b>: this dropdown menu selects the variable to be plotted on the Y-axis.
                                 </li>
                                 <li class="mb-2">
-                                    <b>Save Image</b>: click here to save the current graph to a <em>.png</em> image.
+                                    <b>Save Image</b>: clicking here saves the current graph to a <em>.png</em> image.
                                 </li>
                             </ol>
                         </div>
@@ -102,7 +182,7 @@
                                     i.e., lower/higher numbers do not have any meaning.
                                 </li>
                                 <li class="mb-2">
-                                    <b>RSA</b>: the relative solvent accessibility of the binding site. This is a measure of how exposed the binding
+                                    <b>RSA</b>: the <a href="https://en.wikipedia.org/wiki/Relative_accessible_surface_area">relative solvent accessibility</a> of the binding site. This is a measure of how exposed the binding
                                     site is to the solvent. It is calculated as the <em>average</em> of the relative solvent accessibility of the residues
                                     forming the binding site.
                                 </li>
@@ -112,7 +192,7 @@
                                     the binding site. This is a normalised version of the <a href="https://doi.org/10.1002/prot.340110408">Shenkin divergence score</a>.
                                 </li>
                                 <li class="mb-2">
-                                    <b>MES</b>: the missense enrichment score of the binding site. This is a measure of how constrained the binding site is.
+                                    <b>MES</b>: the missense enrichment score of the binding site. This is a measure of how constrained the binding site is across human homologues.
                                     It is calculated as the <em>average</em> of the missense enrichment score of the residues forming the binding site.
                                     This is an <a href="https://en.wikipedia.org/wiki/Odds_ratio">odds ratio</a> (OR) calculated using the
                                     <a href="https://gnomad.broadinstitute.org/">gnomAD</a> database.
@@ -129,7 +209,8 @@
                                     artificial neural network</a> (ANN), specifically a <a href="https://en.wikipedia.org/wiki/Feedforward_neural_network#Multilayer_perceptron">
                                     multilayer perceptron</a> (MLP).
                                     The label is predicted from the solvent accessibility profile of the site and is indicative of the likely functional state of the binding site
-                                    (see <a href="https://www.nature.com/articles/s42003-024-05970-8">Utgés <em>et al.</em>, 2024</a>).
+                                    (see <a href="https://www.nature.com/articles/s42003-024-05970-8">Utgés <em>et al.</em>, 2024</a>). Cluster 1 is the most likely to be functional, while
+                                    Cluster 4 is the least likely.
                                 </li>
                                 <li class="mb-2">
                                     <b>FS</b>: the functional score of the binding site. The score ranges from 0.04-0.58. The higher the score, the more likely 
@@ -147,7 +228,7 @@
                                     <div class="cmath">
                                         Where `p_(i_(C_(1)))` is the probability of binding site `i` to belong to cluster `C_1`, and so on.<br><br>
                                         Finally, `f_(j)` is the functional score of cluster `j`.The functional score of each cluster is calculated as the
-                                        <em>proportion</em> of known functional sites, as annotated in UniProt, within that cluster.<br><br>
+                                        <em>proportion</em> of known functional sites, as annotated in <a href="https://www.uniprot.org/">UniProt</a>, within that cluster.<br><br>
                                     </div>
                                     
                                     <div class="cmath">
@@ -162,7 +243,7 @@
                     </div>
                     <div class="row">
                         <h3 id="siteResiduesPanelHelp" class="mb-3">
-                            The Binding Site Residues panel
+                            The Binding Site Residues Panel <i>(right)</i>
                         </h3>
                         <p class="mb-2">
                             This panel also includes an interactive scatter plot generated with <a href="https://www.chartjs.org/">Chart.js</a>, but now
@@ -221,7 +302,7 @@
                             </ul>
                         </div>
                     </div>
-            <div class="row mb-3">
+            <!-- <div class="row mb-3">
                 <div class="col">
                     <div class="row mb-2">
                         <h2>
@@ -244,7 +325,7 @@
                         </p>
                     </div>
                 </div>
-            </div>
+            </div> -->
             <div class="row mb-3">
                 <div class="col">
                     <div class="row mb-2">
