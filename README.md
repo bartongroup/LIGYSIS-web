@@ -57,11 +57,13 @@ There are two modes in which **LIGYSIS Web** can be employed:
   
 2. Submitting your own set of structures (<i>.cif</i>, <i>.ent</i> or <i>.pdb</i> formats) for analysis and subsequent results exploration. This can be done through the **LIGYSIS** or the [slivka-bio server](https://www.compbio.dundee.ac.uk/slivka/index). See [here](https://github.com/bartongroup/slivka-bio) for slivka-bio source code.
 
+![This is the LIGYSIS pipeline graphical abstract](./static/images/GRAPHICAL_ABSTRACT.png)
+
 ## Results page
 
 The results page of the application is divided in three panels: Binding Sites Panel (**left**), Structure Panel (**centre**) and Binding Site Residues panel (**right**). These panels are interactive and connected thhrough hover and click events.
 
-![This is the LIGYSIS WEB main resutls page](./static/images/LIGYSIS_RESULTS_NEW.png)
+![This is the LIGYSIS WEB main resutls page](./static/images/LIGYSIS_RESULTS_NEWEST.png)
 
 General information about the protein and the available structure data can be found at the top of the results page, above the three main results panels. From left to right, we can find the protein's [UniProt](https://www.uniprot.org/) accession ID, entry, protein names as well as the number of individual protein chains, relevant ligands and defined binding sites for the protein segment of interest.
 
