@@ -213,7 +213,7 @@
                                     Cluster 4 is the least likely.
                                 </li>
                                 <li class="mb-2">
-                                    <b>FS</b>: the functional score of the binding site. The score ranges from 0.04-0.58. The higher the score, the more likely 
+                                    <b>FS</b>: the functional score of the binding site. The score ranges from 0.04-0.52. The higher the score, the more likely 
                                     the binding site is to be functional. It is calculated based on the following formula:<br>
                                     <div class="cmath text-center">
                                         `FS_(i) = sum_(j=1)^4 p_(i_j) f_(j)`
@@ -232,7 +232,9 @@
                                     </div>
                                     
                                     <div class="cmath">
-                                        The functional scores of the clusters are given by `F = [0.58, 0.18, 0.05, 0.04]` for `C_1`, `C_2`, `C_3`, and `C_4`, respectively.
+                                        The functional scores of the clusters are given by `F = [0.52, 0.18, 0.05, 0.04]` for `C_1`, `C_2`, `C_3`, and `C_4`, respectively. 13,000 human
+                                        protein-ligand binding sites were used to calculate these proportions of functional sites within each cluster.
+
                                         <br><br>
                                         At the moment, this score is purely based on the RSA Cluster label. Future versions will also include evolutionary
                                         divergence, as well as missense variation information.
