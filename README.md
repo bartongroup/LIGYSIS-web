@@ -2,6 +2,8 @@
 
 This is the repository for our ligand binding site analysis, **LIGYSIS**, [web server](https://www.compbio.dundee.ac.uk/ligysis/). LIGYSIS is a Python [Flask](https://flask.palletsprojects.com/en/stable/) Web application.
 
+[![DOI](https://zenodo.org/badge/684660405.svg)](https://doi.org/10.5281/zenodo.14178404)
+
 This is a web resource for the analysis of ligand binding sites defined from biologically relevant protein-ligand interactions deposited on the PDBe. **LIGYSIS** web allows the user to explore these interactions in a 3DMol.js structure viewer and contextualise the atomic interactions with features such as evolutionary divergence, enrichment in human variation and solvent accessibility.
 
 <img src="./static/images/LIGYSIS_LOGO_REVAMP6_w_name.png" alt="This is the LIGYSIS WEB logo" width="400">
