@@ -1,0 +1,178 @@
+# opening files
+
+open 3qd0_A_trans.cif
+
+open 3orz_D_trans.cif
+
+open 3nun_A_trans.cif
+
+open 3qcq_A_trans.cif
+
+open 3rcj_A_trans.cif
+
+open 1oky_A_trans.cif
+
+open 2biy_A_trans.cif
+
+open 2xck_A_trans.cif
+
+open 1uu3_A_trans.cif
+
+open 4aw1_A_trans.cif
+
+open 3otu_A_trans.cif
+
+open 4a06_A_trans.cif
+
+open 3orx_C_trans.cif
+
+open 3qcy_A_trans.cif
+
+open 5lvp_A_trans.cif
+
+open 3ion_A_trans.cif
+
+open 4ct2_A_trans.cif
+
+open 5lvm_A_trans.cif
+
+open 4rqv_A_trans.cif
+
+open 3rwq_A_trans.cif
+
+open 3nuu_A_trans.cif
+
+open 3orx_G_trans.cif
+
+open 3hrc_A_trans.cif
+
+open 1uu9_A_trans.cif
+
+open 5ho7_A_trans.cif
+
+open 2pe1_A_trans.cif
+
+open 2pe2_A_trans.cif
+
+open 2xch_A_trans.cif
+
+open 5ho8_A_trans.cif
+
+open 3orx_H_trans.cif
+
+open 5ack_A_trans.cif
+
+open 3qd4_A_trans.cif
+
+open 1okz_A_trans.cif
+
+open 5hkm_A_trans.cif
+
+open 3qc4_A_trans.cif
+
+open 4ct1_A_trans.cif
+
+open 3orz_A_trans.cif
+
+open 3nax_A_trans.cif
+
+open 3nay_A_trans.cif
+
+open 3orx_A_trans.cif
+
+open 3qcx_A_trans.cif
+
+open 3sc1_A_trans.cif
+
+open 3qd3_A_trans.cif
+
+open 5lvo_A_trans.cif
+
+open 3orx_E_trans.cif
+
+open 3iop_A_trans.cif
+
+open 3nay_B_trans.cif
+
+open 4aw0_A_trans.cif
+
+open 4a07_A_trans.cif
+
+open 1h1w_A_trans.cif
+
+open 5mrd_A_trans.cif
+
+open 4xx9_A_trans.cif
+
+open 4rqk_A_trans.cif
+
+open 8dqt_A_trans.cif
+
+open 1uu7_A_trans.cif
+
+open 3orx_B_trans.cif
+
+open 2r7b_A_trans.cif
+
+open 1uvr_A_trans.cif
+
+open 5lvn_A_trans.cif
+
+open 5lvp_B_trans.cif
+
+open 3nuy_A_trans.cif
+
+open 5lvl_A_trans.cif
+
+open 5lvp_C_trans.cif
+
+open 2pe0_A_trans.cif
+
+open 3h9o_A_trans.cif
+
+open 3orx_D_trans.cif
+
+open 5lvp_D_trans.cif
+
+open 1uu8_A_trans.cif
+
+open 3pwy_A_trans.cif
+
+open 5hng_A_trans.cif
+
+open 3qcs_A_trans.cif
+
+open 3orz_B_trans.cif
+
+open 3rwp_A_trans.cif
+
+open 3nus_A_trans.cif
+
+open 4rrv_A_trans.cif
+
+open 3hrf_A_trans.cif
+
+open 1z5m_A_trans.cif
+
+open 3orx_F_trans.cif
+
+open 3orz_C_trans.cif
+
+# opening attribute file
+
+open O15530_1_ALL_inf_average_0.5.defattr
+
+# colouring and formatting for visualisation
+
+color white; set bgColor white
+
+set silhouette ON; set silhouetteWidth 3; set silhouetteColor black
+
+color byattribute binding_site palette paired-12; col ::binding_site==-1 grey
+
+~disp; select ~protein; ~select : HOH; ~select ::binding_site==-1; disp sel; ~sel
+
+surf; surface color white; transparency 0 s;
+
+save O15530_1_ALL_inf_average_0.5.cxs
+

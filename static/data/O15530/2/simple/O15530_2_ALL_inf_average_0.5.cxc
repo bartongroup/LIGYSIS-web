@@ -1,0 +1,24 @@
+# opening files
+
+open 1w1d_A_trans.cif
+
+open 1w1g_A_trans.cif
+
+# opening attribute file
+
+open O15530_2_ALL_inf_average_0.5.defattr
+
+# colouring and formatting for visualisation
+
+color white; set bgColor white
+
+set silhouette ON; set silhouetteWidth 3; set silhouetteColor black
+
+color byattribute binding_site palette paired-12; col ::binding_site==-1 grey
+
+~disp; select ~protein; ~select : HOH; ~select ::binding_site==-1; disp sel; ~sel
+
+surf; surface color white; transparency 0 s;
+
+save O15530_2_ALL_inf_average_0.5.cxs
+

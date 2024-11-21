@@ -1,0 +1,40 @@
+data_mmCIF_generated_by_ProIntVar
+loop_
+_atom_site.group_PDB
+_atom_site.id
+_atom_site.type_symbol
+_atom_site.label_atom_id
+_atom_site.label_alt_id
+_atom_site.label_comp_id
+_atom_site.label_asym_id
+_atom_site.label_entity_id
+_atom_site.label_seq_id
+_atom_site.pdbx_PDB_ins_code
+_atom_site.Cartn_x
+_atom_site.Cartn_y
+_atom_site.Cartn_z
+_atom_site.occupancy
+_atom_site.B_iso_or_equiv
+_atom_site.auth_seq_id
+_atom_site.auth_asym_id
+_atom_site.pdbx_PDB_model_num
+_atom_site.label_seq_id_full
+_atom_site.auth_seq_id_full
+HETATM 2266 C C1 . SYP B ? . ? 19.229 -25.228 -15.862 1.0 19.96 1 A 1 . 1
+HETATM 2267 C C2 . SYP B ? . ? 19.029 -26.482 -15.304 0.5 19.96 1 A 1 . 1
+HETATM 2268 N N3 . SYP B ? . ? 17.776 -26.884 -15.003 1.0 19.96 1 A 1 . 1
+HETATM 2269 C C4 . SYP B ? . ? 16.729 -26.083 -15.239 1.0 19.96 1 A 1 . 1
+HETATM 2270 N N5 . SYP B ? . ? 16.893 -24.867 -15.776 1.0 19.96 1 A 1 . 1
+HETATM 2271 C C6 . SYP B ? . ? 18.125 -24.418 -16.094 0.5 19.96 1 A 1 . 1
+HETATM 2272 N N7 . SYP B ? . ? 18.282 -23.187 -16.638 1.0 19.96 1 A 1 . 1
+HETATM 2273 C C8 . SYP B ? . ? 19.613 -22.709 -16.979 1.0 19.96 1 A 1 . 1
+HETATM 2274 C C9 . SYP B ? . ? 19.626 -21.244 -16.556 1.0 19.96 1 A 1 . 1
+HETATM 2275 S S10 . SYP B ? . ? 21.338 -20.69 -16.36 1.0 19.96 1 A 1 . 1
+HETATM 2276 N N11 . SYP B ? . ? 20.083 -27.299 -15.062 1.0 19.96 1 A 1 . 1
+HETATM 2277 C C12 . SYP B ? . ? 21.432 -26.861 -15.388 1.0 19.96 1 A 1 . 1
+HETATM 2278 C C13 . SYP B ? . ? 22.133 -26.708 -14.045 1.0 45.51 1 A 1 . 1
+HETATM 2279 N N14 . SYP B ? . ? 23.554 -26.768 -14.352 1.0 46.1 1 A 1 . 1
+HETATM 2280 C C15 . SYP B ? . ? 24.304 -27.862 -14.456 1.0 45.82 1 A 1 . 1
+HETATM 2281 C C16 . SYP B ? . ? 25.728 -27.653 -14.779 1.0 45.87 1 A 1 . 1
+HETATM 2282 O O17 . SYP B ? . ? 23.865 -28.988 -14.298 1.0 45.64 1 A 1 . 1
+HETATM 2283 C C18 . SYP B ? . ? 26.285 -28.164 -16.076 1.0 46.42 1 A 1 . 1

@@ -1,0 +1,14 @@
+attribute: binding_site
+
+match mode: 1-to-1
+
+recipient: residues
+
+	#1/A:1550	-1
+
+	#1/A:1551	-1
+
+	#1/A:1552	0
+
+	#2/A:1550	0
+
