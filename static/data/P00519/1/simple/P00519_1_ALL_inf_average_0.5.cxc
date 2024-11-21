@@ -1,0 +1,182 @@
+# opening files
+
+open 2hyy_A_trans.cif
+
+open 3cs9_A_trans.cif
+
+open 2g2i_A_trans.cif
+
+open 6bl8_A_trans.cif
+
+open 2hyy_C_trans.cif
+
+open 7w7y_A_trans.cif
+
+open 8h7f_B_trans.cif
+
+open 2hzi_A_trans.cif
+
+open 2hz4_A_trans.cif
+
+open 6npv_B_trans.cif
+
+open 2gqg_B_trans.cif
+
+open 4zog_B_trans.cif
+
+open 2hyy_D_trans.cif
+
+open 2g1t_A_trans.cif
+
+open 2gqg_A_trans.cif
+
+open 7w7y_B_trans.cif
+
+open 3pyy_A_trans.cif
+
+open 4twp_B_trans.cif
+
+open 3pyy_B_trans.cif
+
+open 8ssn_A_trans.cif
+
+open 7w7x_B_trans.cif
+
+open 2g2h_A_trans.cif
+
+open 4wa9_B_trans.cif
+
+open 8h7f_A_trans.cif
+
+open 3qri_A_trans.cif
+
+open 6bl8_B_trans.cif
+
+open 2g2f_B_trans.cif
+
+open 2hiw_A_trans.cif
+
+open 2v7a_B_trans.cif
+
+open 7n9g_A_trans.cif
+
+open 4wa9_A_trans.cif
+
+open 6npu_B_trans.cif
+
+open 7dt2_A_trans.cif
+
+open 2hzi_B_trans.cif
+
+open 6npe_A_trans.cif
+
+open 4xey_B_trans.cif
+
+open 7w7x_A_trans.cif
+
+open 4yc8_A_trans.cif
+
+open 2g2f_A_trans.cif
+
+open 2fo0_A_trans.cif
+
+open 7dt2_B_trans.cif
+
+open 4yc8_B_trans.cif
+
+open 2e2b_B_trans.cif
+
+open 3cs9_D_trans.cif
+
+open 2g2h_B_trans.cif
+
+open 2g2i_B_trans.cif
+
+open 3qrj_A_trans.cif
+
+open 1opl_A_trans.cif
+
+open 3cs9_C_trans.cif
+
+open 6npv_A_trans.cif
+
+open 2hiw_B_trans.cif
+
+open 2f4j_A_trans.cif
+
+open 3qrk_A_trans.cif
+
+open 2hz4_C_trans.cif
+
+open 7cc2_A_trans.cif
+
+open 2g1t_D_trans.cif
+
+open 7n9g_B_trans.cif
+
+open 7cc2_B_trans.cif
+
+open 2g1t_C_trans.cif
+
+open 2v7a_A_trans.cif
+
+open 3qrj_B_trans.cif
+
+open 6npe_B_trans.cif
+
+open 8h7h_A_trans.cif
+
+open 2hz0_A_trans.cif
+
+open 3qri_B_trans.cif
+
+open 3ue4_B_trans.cif
+
+open 4xey_A_trans.cif
+
+open 1opl_B_trans.cif
+
+open 2hz0_B_trans.cif
+
+open 5mo4_A_trans.cif
+
+open 8h7h_B_trans.cif
+
+open 4zog_A_trans.cif
+
+open 2hyy_B_trans.cif
+
+open 3ue4_A_trans.cif
+
+open 5hu9_A_trans.cif
+
+open 3cs9_B_trans.cif
+
+open 6npu_A_trans.cif
+
+open 4twp_A_trans.cif
+
+open 2e2b_A_trans.cif
+
+open 2hz4_B_trans.cif
+
+open 2g1t_B_trans.cif
+
+# opening attribute file
+
+open P00519_1_ALL_inf_average_0.5.defattr
+
+# colouring and formatting for visualisation
+
+color white; set bgColor white
+
+set silhouette ON; set silhouetteWidth 3; set silhouetteColor black
+
+color byattribute binding_site palette paired-12; col ::binding_site==-1 grey
+
+~disp; select ~protein; ~select : HOH; ~select ::binding_site==-1; disp sel; ~sel
+
+surf; surface color white; transparency 0 s;
+
+save P00519_1_ALL_inf_average_0.5.cxs
+

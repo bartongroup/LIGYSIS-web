@@ -1,0 +1,51 @@
+data_mmCIF_generated_by_ProIntVar
+loop_
+_atom_site.group_PDB
+_atom_site.id
+_atom_site.type_symbol
+_atom_site.label_atom_id
+_atom_site.label_alt_id
+_atom_site.label_comp_id
+_atom_site.label_asym_id
+_atom_site.label_entity_id
+_atom_site.label_seq_id
+_atom_site.pdbx_PDB_ins_code
+_atom_site.Cartn_x
+_atom_site.Cartn_y
+_atom_site.Cartn_z
+_atom_site.occupancy
+_atom_site.B_iso_or_equiv
+_atom_site.auth_seq_id
+_atom_site.auth_asym_id
+_atom_site.pdbx_PDB_model_num
+_atom_site.label_seq_id_full
+_atom_site.auth_seq_id_full
+HETATM 2955 O O1 . P16 B ? . ? 28.788 123.866 8.57 1.0 152.41 538 B 1 . 538
+HETATM 2956 C C2 . P16 B ? . ? 27.57 123.2 8.757 1.0 152.41 538 B 1 . 538
+HETATM 2957 C C3 . P16 B ? . ? 26.762 123.755 9.917 1.0 152.41 538 B 1 . 538
+HETATM 2958 C C4 . P16 B ? . ? 25.65 124.636 9.673 1.0 152.41 538 B 1 . 538
+HETATM 2959 C C5 . P16 B ? . ? 24.905 125.156 10.75 1.0 152.41 538 B 1 . 538
+HETATM 2960 C C6 . P16 B ? . ? 25.241 124.82 12.095 1.0 152.41 538 B 1 . 538
+HETATM 2961 C C7 . P16 B ? . ? 26.345 123.941 12.352 1.0 152.41 538 B 1 . 538
+HETATM 2962 N N9 . P16 B ? . ? 26.788 123.56 13.645 1.0 152.41 538 B 1 . 538
+HETATM 2963 C C10 . P16 B ? . ? 26.539 124.188 14.837 1.0 152.41 538 B 1 . 538
+HETATM 2964 N N11 . P16 B ? . ? 27.154 123.614 15.937 1.0 152.41 538 B 1 . 538
+HETATM 2965 C C12 . P16 B ? . ? 26.962 124.211 17.126 1.0 152.41 538 B 1 . 538
+HETATM 2966 C C13 . P16 B ? . ? 26.184 125.392 17.286 1.0 152.41 538 B 1 . 538
+HETATM 2967 C C16 . P16 B ? . ? 25.975 126.043 18.546 1.0 152.41 538 B 1 . 538
+HETATM 2968 C C17 . P16 B ? . ? 25.211 127.17 18.63 1.0 152.41 538 B 1 . 538
+HETATM 2969 C C18 . P16 B ? . ? 24.536 127.739 17.405 1.0 152.41 538 B 1 . 538
+HETATM 2970 O O21 . P16 B ? . ? 23.826 128.745 17.381 1.0 152.41 538 B 1 . 538
+HETATM 2971 N N19 . P16 B ? . ? 24.774 127.059 16.158 1.0 152.41 538 B 1 . 538
+HETATM 2972 C C14 . P16 B ? . ? 25.556 125.903 16.087 1.0 152.41 538 B 1 . 538
+HETATM 2973 N N15 . P16 B ? . ? 25.765 125.306 14.887 1.0 152.41 538 B 1 . 538
+HETATM 2974 C C20 . P16 B ? . ? 24.145 127.56 14.913 1.0 152.41 538 B 1 . 538
+HETATM 2975 C C22 . P16 B ? . ? 24.989 127.885 19.905 1.0 152.41 538 B 1 . 538
+HETATM 2976 C C27 . P16 B ? . ? 23.818 127.681 20.687 1.0 152.41 538 B 1 . 538
+HETATM 2977 CL CL28 . P16 B ? . ? 22.615 126.517 20.173 1.0 152.41 538 B 1 . 538
+HETATM 2978 C C26 . P16 B ? . ? 23.617 128.399 21.912 1.0 152.41 538 B 1 . 538
+HETATM 2979 C C25 . P16 B ? . ? 24.585 129.349 22.35 1.0 152.41 538 B 1 . 538
+HETATM 2980 C C24 . P16 B ? . ? 25.771 129.572 21.591 1.0 152.41 538 B 1 . 538
+HETATM 2981 C C23 . P16 B ? . ? 25.949 128.846 20.373 1.0 152.41 538 B 1 . 538
+HETATM 2982 CL CL29 . P16 B ? . ? 27.404 129.127 19.461 1.0 152.41 538 B 1 . 538
+HETATM 2983 C C8 . P16 B ? . ? 27.101 123.415 11.249 1.0 152.41 538 B 1 . 538

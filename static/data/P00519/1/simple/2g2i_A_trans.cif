@@ -1,0 +1,49 @@
+data_mmCIF_generated_by_ProIntVar
+loop_
+_atom_site.group_PDB
+_atom_site.id
+_atom_site.type_symbol
+_atom_site.label_atom_id
+_atom_site.label_alt_id
+_atom_site.label_comp_id
+_atom_site.label_asym_id
+_atom_site.label_entity_id
+_atom_site.label_seq_id
+_atom_site.pdbx_PDB_ins_code
+_atom_site.Cartn_x
+_atom_site.Cartn_y
+_atom_site.Cartn_z
+_atom_site.occupancy
+_atom_site.B_iso_or_equiv
+_atom_site.auth_seq_id
+_atom_site.auth_asym_id
+_atom_site.pdbx_PDB_model_num
+_atom_site.label_seq_id_full
+_atom_site.auth_seq_id_full
+HETATM 2204 P PB . ADP B ? . ? 19.112 130.615 11.272 1.0 95.66 820 A 1 . 820
+HETATM 2205 O O1B . ADP B ? . ? 19.368 129.415 12.128 1.0 89.58 820 A 1 . 820
+HETATM 2206 O O2B . ADP B ? . ? 17.513 130.748 11.038 1.0 91.14 820 A 1 . 820
+HETATM 2207 O O3B . ADP B ? . ? 19.846 130.441 9.848 1.0 89.0 820 A 1 . 820
+HETATM 2208 P PA . ADP B ? . ? 21.269 131.978 12.286 1.0 94.17 820 A 1 . 820
+HETATM 2209 O O1A . ADP B ? . ? 21.89 133.078 11.502 1.0 92.14 820 A 1 . 820
+HETATM 2210 O O2A . ADP B ? . ? 21.576 132.206 13.87 1.0 91.4 820 A 1 . 820
+HETATM 2211 O O3A . ADP B ? . ? 19.65 131.983 12.004 1.0 90.51 820 A 1 . 820
+HETATM 2212 O 'O5'' . ADP B ? . ? 21.92 130.588 11.787 1.0 87.47 820 A 1 . 820
+HETATM 2213 C 'C5'' . ADP B ? . ? 23.135 130.336 12.527 1.0 79.61 820 A 1 . 820
+HETATM 2214 C 'C4'' . ADP B ? . ? 23.85 129.061 12.005 1.0 75.92 820 A 1 . 820
+HETATM 2215 O 'O4'' . ADP B ? . ? 24.832 128.659 12.974 1.0 77.3 820 A 1 . 820
+HETATM 2216 C 'C3'' . ADP B ? . ? 22.889 127.861 11.831 1.0 75.93 820 A 1 . 820
+HETATM 2217 O 'O3'' . ADP B ? . ? 22.612 127.632 10.449 1.0 74.52 820 A 1 . 820
+HETATM 2218 C 'C2'' . ADP B ? . ? 23.595 126.666 12.461 1.0 75.59 820 A 1 . 820
+HETATM 2219 O 'O2'' . ADP B ? . ? 23.778 125.615 11.5 1.0 81.5 820 A 1 . 820
+HETATM 2220 C 'C1'' . ADP B ? . ? 24.931 127.219 12.951 1.0 75.49 820 A 1 . 820
+HETATM 2221 N N9 . ADP B ? . ? 25.251 126.716 14.289 1.0 75.83 820 A 1 . 820
+HETATM 2222 C C8 . ADP B ? . ? 24.843 127.239 15.487 1.0 74.96 820 A 1 . 820
+HETATM 2223 N N7 . ADP B ? . ? 25.325 126.539 16.47 1.0 76.49 820 A 1 . 820
+HETATM 2224 C C5 . ADP B ? . ? 26.066 125.527 15.973 1.0 75.74 820 A 1 . 820
+HETATM 2225 C C6 . ADP B ? . ? 26.822 124.465 16.535 1.0 76.23 820 A 1 . 820
+HETATM 2226 N N6 . ADP B ? . ? 26.895 124.311 17.916 1.0 75.33 820 A 1 . 820
+HETATM 2227 N N1 . ADP B ? . ? 27.46 123.608 15.7 1.0 76.75 820 A 1 . 820
+HETATM 2228 C C2 . ADP B ? . ? 27.395 123.744 14.367 1.0 77.38 820 A 1 . 820
+HETATM 2229 N N3 . ADP B ? . ? 26.696 124.728 13.806 1.0 76.32 820 A 1 . 820
+HETATM 2230 C C4 . ADP B ? . ? 26.029 125.631 14.561 1.0 75.86 820 A 1 . 820

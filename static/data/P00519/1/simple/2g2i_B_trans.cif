@@ -1,0 +1,49 @@
+data_mmCIF_generated_by_ProIntVar
+loop_
+_atom_site.group_PDB
+_atom_site.id
+_atom_site.type_symbol
+_atom_site.label_atom_id
+_atom_site.label_alt_id
+_atom_site.label_comp_id
+_atom_site.label_asym_id
+_atom_site.label_entity_id
+_atom_site.label_seq_id
+_atom_site.pdbx_PDB_ins_code
+_atom_site.Cartn_x
+_atom_site.Cartn_y
+_atom_site.Cartn_z
+_atom_site.occupancy
+_atom_site.B_iso_or_equiv
+_atom_site.auth_seq_id
+_atom_site.auth_asym_id
+_atom_site.pdbx_PDB_model_num
+_atom_site.label_seq_id_full
+_atom_site.auth_seq_id_full
+HETATM 2165 P PB . ADP B ? . ? 19.16 131.08 11.642 1.0 100.94 821 B 1 . 821
+HETATM 2166 O O1B . ADP B ? . ? 19.274 129.617 11.902 1.0 92.29 821 B 1 . 821
+HETATM 2167 O O2B . ADP B ? . ? 17.585 131.451 11.65 1.0 97.15 821 B 1 . 821
+HETATM 2168 O O3B . ADP B ? . ? 19.831 131.436 10.208 1.0 96.81 821 B 1 . 821
+HETATM 2169 P PA . ADP B ? . ? 21.489 131.714 12.919 1.0 96.24 821 B 1 . 821
+HETATM 2170 O O1A . ADP B ? . ? 22.171 132.994 12.629 1.0 92.95 821 B 1 . 821
+HETATM 2171 O O2A . ADP B ? . ? 21.901 131.265 14.43 1.0 92.04 821 B 1 . 821
+HETATM 2172 O O3A . ADP B ? . ? 19.876 131.952 12.815 1.0 93.87 821 B 1 . 821
+HETATM 2173 O 'O5'' . ADP B ? . ? 21.986 130.637 11.825 1.0 91.83 821 B 1 . 821
+HETATM 2174 C 'C5'' . ADP B ? . ? 22.25 129.412 12.519 1.0 86.18 821 B 1 . 821
+HETATM 2175 C 'C4'' . ADP B ? . ? 23.089 128.471 11.668 1.0 81.15 821 B 1 . 821
+HETATM 2176 O 'O4'' . ADP B ? . ? 24.372 128.3 12.329 1.0 80.03 821 B 1 . 821
+HETATM 2177 C 'C3'' . ADP B ? . ? 22.397 127.103 11.572 1.0 80.51 821 B 1 . 821
+HETATM 2178 O 'O3'' . ADP B ? . ? 22.041 126.795 10.233 1.0 81.78 821 B 1 . 821
+HETATM 2179 C 'C2'' . ADP B ? . ? 23.377 126.088 12.155 1.0 80.23 821 B 1 . 821
+HETATM 2180 O 'O2'' . ADP B ? . ? 23.705 125.055 11.219 1.0 82.59 821 B 1 . 821
+HETATM 2181 C 'C1'' . ADP B ? . ? 24.618 126.884 12.571 1.0 80.11 821 B 1 . 821
+HETATM 2182 N N9 . ADP B ? . ? 24.912 126.591 13.99 1.0 79.53 821 B 1 . 821
+HETATM 2183 C C8 . ADP B ? . ? 24.382 127.195 15.097 1.0 77.85 821 B 1 . 821
+HETATM 2184 N N7 . ADP B ? . ? 24.876 126.664 16.177 1.0 78.7 821 B 1 . 821
+HETATM 2185 C C5 . ADP B ? . ? 25.757 125.698 15.847 1.0 78.89 821 B 1 . 821
+HETATM 2186 C C6 . ADP B ? . ? 26.583 124.785 16.575 1.0 78.07 821 B 1 . 821
+HETATM 2187 N N6 . ADP B ? . ? 26.596 124.789 17.958 1.0 77.0 821 B 1 . 821
+HETATM 2188 N N1 . ADP B ? . ? 27.362 123.923 15.887 1.0 79.24 821 B 1 . 821
+HETATM 2189 C C2 . ADP B ? . ? 27.369 123.896 14.547 1.0 79.84 821 B 1 . 821
+HETATM 2190 N N3 . ADP B ? . ? 26.605 124.73 13.831 1.0 79.23 821 B 1 . 821
+HETATM 2191 C C4 . ADP B ? . ? 25.794 125.632 14.436 1.0 78.95 821 B 1 . 821
