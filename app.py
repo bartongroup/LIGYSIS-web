@@ -9,10 +9,10 @@ import zipfile
 import numpy as np
 import pandas as pd
 
-from flask import Flask, render_template, url_for, request, redirect, jsonify, Response, send_file
+from flask import Flask, render_template, url_for, request, redirect, jsonify, Response, send_file, send_from_directory, abort
 
-from config import BASE_DIR, DATA_FOLDER, SITE_TABLES_FOLDER, RES_TABLES_FOLDER, REP_STRUCS_FOLDER, BS_RESS_FOLDER, MAPPINGS_FOLDER, STATS_FOLDER, ENTRY_NAMES_FOLDER, USER_JOBS_OUT_FOLDER
-
+# from config import BASE_DIR, DATA_FOLDER, SITE_TABLES_FOLDER, RES_TABLES_FOLDER, REP_STRUCS_FOLDER, BS_RESS_FOLDER, MAPPINGS_FOLDER, STATS_FOLDER, ENTRY_NAMES_FOLDER, USER_JOBS_OUT_FOLDER
+from config import BASE_DIR, DATA_FOLDER, SITE_TABLES_FOLDER, RES_TABLES_FOLDER, REP_STRUCS_FOLDER, PROTS_FOLDER, ASSEMBLY_FOLDER, CIF_SIFTS_DIR, CHAIN_MAPPING_DIR, USER_JOBS_OUT_FOLDER
 ### FUNCTIONS ###
 
 def load_pickle(f_in): # loads pickle and returns data
@@ -377,7 +377,8 @@ def index(): # route for index main site
 
                 if ACC in ACCS:
 
-                    prot_seg_rep_strucs = load_pickle(os.path.join(REP_STRUCS_FOLDER, "{}_segs_rep_strucs.pkl".format(ACC))) # representative structures dict (only successfully run segments)
+                    # prot_seg_rep_strucs = load_pickle(os.path.join(REP_STRUCS_FOLDER, "{}_segs_rep_strucs.pkl".format(ACC))) # representative structures dict (only successfully run segments)
+                    prot_seg_rep_strucs = load_pickle(os.path.join(REP_STRUCS_FOLDER, "{}_coords.pkl".format(ACC))) # representative structures dict (only successfully run segments)
 
                     first_seg = sorted(list(prot_seg_rep_strucs[ACC].keys()))[0]
 
@@ -429,13 +430,15 @@ def results(prot_id, seg_id): # route for results site. Takes Prot ID and Seg ID
 
     prot_ress = bss_ress.query('up_acc == @prot_id')[cc_new]
 
-    prot_seg_rep_strucs = load_pickle(os.path.join(REP_STRUCS_FOLDER, "{}_segs_rep_strucs.pkl".format(prot_id))) # representative structures dict (only successfully run segments)
+    # prot_seg_rep_strucs = load_pickle(os.path.join(REP_STRUCS_FOLDER, "{}_segs_rep_strucs.pkl".format(prot_id))) # representative structures dict (only successfully run segments)
+    prot_seg_rep_strucs = load_pickle(os.path.join(REP_STRUCS_FOLDER, "{}_coords.pkl".format(prot_id))) # representative structures dict (only successfully run segments)
 
     segment_reps = prot_seg_rep_strucs[prot_id]
 
     data2 = prot_ress.to_dict(orient="list")
 
-    bs_ress_dict = load_pickle(os.path.join(DATA_FOLDER, "example", "other", f'{prot_id}_{seg_id}_ALL_inf_bss_ress.pkl'))
+    # bs_ress_dict = load_pickle(os.path.join(DATA_FOLDER, "example", "other", f'{prot_id}_{seg_id}_ALL_inf_bss_ress.pkl'))
+    bs_ress_dict = load_pickle(os.path.join(PROTS_FOLDER, prot_id, seg_id, "results", f'{prot_id}_{seg_id}_ALL_inf_bss_ress.pkl'))
 
     seg_ress_dict = bs_ress_dict#[prot_id][seg_id]
     seg_ress_dict = {str(key): value for key, value in seg_ress_dict.items()}
@@ -448,10 +451,17 @@ def results(prot_id, seg_id): # route for results site. Takes Prot ID and Seg ID
 
     prot_pdb_id, prot_pdb_chain = prot_atoms_rep.split("_")
 
-    pdb2up_dict = load_pickle(f'{DATA_FOLDER}/{prot_id}/{seg_id}/mapping/{prot_pdb_id}_pdb2up.pkl')
-    up2pdb_dict = load_pickle(f'{DATA_FOLDER}/{prot_id}/{seg_id}/mapping/{prot_pdb_id}_up2pdb.pkl')
+    # pdb2up_dict = load_pickle(f'{DATA_FOLDER}/{prot_id}/{seg_id}/mapping/{prot_pdb_id}_pdb2up.pkl')
+    pdb2up_dict = load_pickle(f'{CIF_SIFTS_DIR}/{prot_pdb_id}_pdb2up.pkl')
+
+    # up2pdb_dict = load_pickle(f'{DATA_FOLDER}/{prot_id}/{seg_id}/mapping/{prot_pdb_id}_up2pdb.pkl')
+    up2pdb_dict = load_pickle(f'{CIF_SIFTS_DIR}/{prot_pdb_id}_up2pdb.pkl')
 
     #entry_name = load_pickle(os.path.join(ENTRY_NAMES_FOLDER, "{}_name.pkl".format(prot_id)))[prot_id]
+
+    # print(prot_seg_rep_strucs, protein_atoms_dict[prot_id])
+
+    # print(len(protein_atoms_dict))
     
     entry_name = LIGYSIS_prots_data[prot_id]["entry"]
 
@@ -463,18 +473,30 @@ def results(prot_id, seg_id): # route for results site. Takes Prot ID and Seg ID
 
     pdb2up_dict_converted = {k: {k2:{int(k3):int(v3) for k3, v3 in v2.items()} for k2, v2 in v.items()} for k, v in pdb2up_dict.items()}
 
-    assembly_pdbs = os.listdir(os.path.join(DATA_FOLDER, prot_id, str(seg_id), "assemblies")) # CIF bio assembly file names
-    assembly_pdbs = [el for el in assembly_pdbs if el.endswith(".cif")]
+    arpeggio_dir = os.path.join(PROTS_FOLDER, prot_id, str(seg_id), "arpeggio")
+    arpeggio_files = os.listdir(arpeggio_dir)
+    arpeggio_proc_files = [f for f in arpeggio_files if f.endswith(".pkl")]
+    arpeggio_proc_pdbs = [el.split("_")[0] for el in arpeggio_proc_files]
 
-    assembly_pdb_ids = sorted(list(set([el.split("_")[0] for el in assembly_pdbs])),) # sorted unique PDB IDs
+    # assembly_pdbs = os.listdir(os.path.join(DATA_FOLDER, prot_id, str(seg_id), "assemblies")) # CIF bio assembly file names
+    # assembly_pdbs = os.listdir(os.path.join(PROTS_FOLDER, prot_id, str(seg_id), "assemblies")) # CIF bio assembly file names
+    # assembly_pdbs = [el for el in assembly_pdbs if el.endswith(".cif")]
+    assembly_pdbs = [os.path.join(ASSEMBLY_FOLDER, f'{el}_bio.cif') for el in arpeggio_proc_pdbs]
 
-    simple_pdbs = os.listdir(os.path.join(DATA_FOLDER, prot_id, str(seg_id), "simple")) # simple PDB file names (single chain)
+    # assembly_pdb_ids = sorted(list(set([el.split("_")[0] for el in assembly_pdbs])),) # sorted unique PDB IDs
+    assembly_pdb_ids = sorted(arpeggio_proc_pdbs) # sorted unique PDB IDs
+
+    # simple_pdbs = os.listdir(os.path.join(DATA_FOLDER, prot_id, str(seg_id), "simple")) # simple PDB file names (single chain)
+    simple_pdbs = os.listdir(os.path.join(PROTS_FOLDER, prot_id, str(seg_id), "simple")) # simple PDB file names (single chain)
     simple_pdbs = [el for el in simple_pdbs if el.endswith(".cif")]
 
-    simple_pdbs_full_path = [f'/static/data/{prot_id}/{seg_id}/simple/{el}' for el in simple_pdbs]
+    # simple_pdbs_full_path = [f'/static/data/{prot_id}/{seg_id}/simple/{el}' for el in simple_pdbs]
+    # simple_pdbs_full_path = [f'{PROTS_FOLDER}/{prot_id}/{seg_id}/simple/{el}' for el in simple_pdbs]
+    simple_pdbs_full_path = [f'http://127.0.0.1:9000/files/{prot_id}/{seg_id}/simple/{el}' for el in simple_pdbs]
 
     n_strucs = len(assembly_pdbs) # number of structures
-    n_ligs = len(load_pickle(os.path.join(DATA_FOLDER, "example", "other", f'{prot_id}_{seg_id}_ALL_inf_ligs_fingerprints.pkl'))) # number of ligands
+    # n_ligs = len(load_pickle(os.path.join(DATA_FOLDER, "example", "other", f'{prot_id}_{seg_id}_ALL_inf_ligs_fingerprints.pkl'))) # number of ligands
+    n_ligs = len(load_pickle(os.path.join(PROTS_FOLDER, prot_id, seg_id, "results", f'{prot_id}_{seg_id}_ALL_inf_ligs_fingerprints.pkl')))
     n_sites = len(bss_prot) # number of binding sites
     seg_stats = {prot_id: {seg_id: {'strucs': n_strucs, 'ligs': n_ligs, 'bss': n_sites}}}
     
@@ -498,6 +520,13 @@ def help(): # route for help site
 def contact(): # route for contact site
     return render_template('contact.html')
 
+@app.route('/files/<path:filename>')
+def serve_file(filename):
+    try:
+        return send_from_directory(PROTS_FOLDER, filename)
+    except FileNotFoundError:
+        abort(404)
+        
 @app.route('/get-table', methods=['POST'])
 def get_table(): # route to get binding site residues for a given binding site
 
@@ -549,8 +578,10 @@ def process_model_order(): # route to process model order data from ChimeraX fil
     loaded_order = data['modelOrder'] # this is the order in which files have been loaded by 3DMol.js
     segment_name = data['segmentName'] # name of the segment
     prot_id, seg_id = segment_name.split("_") # extracting protein ID and segment ID
-    cxc_in =f'{DATA_FOLDER}/{prot_id}/{seg_id}/simple/{segment_name}_ALL_inf_average_0.5.cxc' # ChimeraX command file
-    attr_in =  f'{DATA_FOLDER}/{prot_id}/{seg_id}/simple/{segment_name}_ALL_inf_average_0.5.defattr' # ChimeraX attribute file
+    # cxc_in =f'{DATA_FOLDER}/{prot_id}/{seg_id}/simple/{segment_name}_ALL_inf_average_0.5.cxc' # ChimeraX command file
+    # attr_in =  f'{DATA_FOLDER}/{prot_id}/{seg_id}/simple/{segment_name}_ALL_inf_average_0.5.defattr' # ChimeraX attribute file
+    cxc_in = os.path.join(PROTS_FOLDER, prot_id, seg_id, "results", f'{segment_name}_ALL_inf_average_0.5.cxc') # ChimeraX command file
+    attr_in =  os.path.join(PROTS_FOLDER, prot_id, seg_id, "results", f'{segment_name}_ALL_inf_average_0.5.defattr') # ChimeraX attribute file
 
     model_order = extract_open_files(cxc_in) # order in which ChimeraX opens files (important for binding site attribute assignment)
 
