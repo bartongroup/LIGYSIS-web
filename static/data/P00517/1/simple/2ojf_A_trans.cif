@@ -1,0 +1,51 @@
+data_mmCIF_generated_by_ProIntVar
+loop_
+_atom_site.group_PDB
+_atom_site.id
+_atom_site.type_symbol
+_atom_site.label_atom_id
+_atom_site.label_alt_id
+_atom_site.label_comp_id
+_atom_site.label_asym_id
+_atom_site.label_entity_id
+_atom_site.label_seq_id
+_atom_site.pdbx_PDB_ins_code
+_atom_site.Cartn_x
+_atom_site.Cartn_y
+_atom_site.Cartn_z
+_atom_site.occupancy
+_atom_site.B_iso_or_equiv
+_atom_site.auth_seq_id
+_atom_site.auth_asym_id
+_atom_site.pdbx_PDB_model_num
+_atom_site.label_seq_id_full
+_atom_site.auth_seq_id_full
+HETATM 2771 C C4 . 4PY B ? . ? 13.264 13.031 1.438 1.0 34.26 1000 E 1 . 1000
+HETATM 2772 C C5 . 4PY B ? . ? 15.447 10.061 1.342 1.0 34.3 1000 E 1 . 1000
+HETATM 2773 C C6 . 4PY B ? . ? 14.256 10.711 3.601 1.0 32.4 1000 E 1 . 1000
+HETATM 2774 C C8 . 4PY B ? . ? 14.412 12.543 -1.119 1.0 32.31 1000 E 1 . 1000
+HETATM 2775 C C10 . 4PY B ? . ? 13.264 9.523 3.89 1.0 32.32 1000 E 1 . 1000
+HETATM 2776 C C15 . 4PY B ? . ? 10.708 9.946 1.161 1.0 29.47 1000 E 1 . 1000
+HETATM 2777 C C17 . 4PY B ? . ? 10.827 10.128 -0.238 1.0 28.99 1000 E 1 . 1000
+HETATM 2778 C C20 . 4PY B ? . ? 6.833 10.05 1.411 1.0 24.92 1000 E 1 . 1000
+HETATM 2779 C C21 . 4PY B ? . ? 8.482 10.251 -0.5 1.0 26.47 1000 E 1 . 1000
+HETATM 2780 C C22 . 4PY B ? . ? 6.504 10.139 2.795 1.0 24.44 1000 E 1 . 1000
+HETATM 2781 C C24 . 4PY B ? . ? 5.166 10.101 3.195 1.0 23.77 1000 E 1 . 1000
+HETATM 2782 C C26 . 4PY B ? . ? 4.114 9.971 2.197 1.0 24.29 1000 E 1 . 1000
+HETATM 2783 C C1 . 4PY B ? . ? 14.123 11.931 1.243 1.0 31.64 1000 E 1 . 1000
+HETATM 2784 C C2 . 4PY B ? . ? 14.6 10.893 2.12 1.0 33.91 1000 E 1 . 1000
+HETATM 2785 C C3 . 4PY B ? . ? 14.703 11.684 -0.053 1.0 33.11 1000 E 1 . 1000
+HETATM 2786 N N7 . 4PY B ? . ? 15.503 10.534 0.062 1.0 33.75 1000 E 1 . 1000
+HETATM 2787 C C9 . 4PY B ? . ? 12.969 13.907 0.351 1.0 32.89 1000 E 1 . 1000
+HETATM 2788 C C11 . 4PY B ? . ? 13.545 13.659 -0.929 1.0 31.69 1000 E 1 . 1000
+HETATM 2789 C C12 . 4PY B ? . ? 11.806 9.63 3.355 1.0 31.12 1000 E 1 . 1000
+HETATM 2790 N N13 . 4PY B ? . ? 13.85 8.279 3.378 1.0 31.52 1000 E 1 . 1000
+HETATM 2791 O O14 . 4PY B ? . ? 11.875 9.805 1.933 1.0 32.55 1000 E 1 . 1000
+HETATM 2792 C C16 . 4PY B ? . ? 9.39 9.919 1.716 1.0 28.21 1000 E 1 . 1000
+HETATM 2793 C C18 . 4PY B ? . ? 8.242 10.075 0.881 1.0 25.91 1000 E 1 . 1000
+HETATM 2794 N N19 . 4PY B ? . ? 9.739 10.277 -1.044 1.0 27.78 1000 E 1 . 1000
+HETATM 2795 N N23 . 4PY B ? . ? 5.77 9.929 0.494 1.0 23.38 1000 E 1 . 1000
+HETATM 2796 C C25 . 4PY B ? . ? 4.455 9.889 0.86 1.0 24.57 1000 E 1 . 1000
+HETATM 2797 C C27 . 4PY B ? . ? 4.522 10.166 4.507 1.0 24.37 1000 E 1 . 1000
+HETATM 2798 N N28 . 4PY B ? . ? 2.962 9.967 2.949 1.0 26.09 1000 E 1 . 1000
+HETATM 2799 N N29 . 4PY B ? . ? 3.215 10.08 4.27 1.0 24.35 1000 E 1 . 1000

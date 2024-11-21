@@ -1,0 +1,51 @@
+data_mmCIF_generated_by_ProIntVar
+loop_
+_atom_site.group_PDB
+_atom_site.id
+_atom_site.type_symbol
+_atom_site.label_atom_id
+_atom_site.label_alt_id
+_atom_site.label_comp_id
+_atom_site.label_asym_id
+_atom_site.label_entity_id
+_atom_site.label_seq_id
+_atom_site.pdbx_PDB_ins_code
+_atom_site.Cartn_x
+_atom_site.Cartn_y
+_atom_site.Cartn_z
+_atom_site.occupancy
+_atom_site.B_iso_or_equiv
+_atom_site.auth_seq_id
+_atom_site.auth_asym_id
+_atom_site.pdbx_PDB_model_num
+_atom_site.label_seq_id_full
+_atom_site.auth_seq_id_full
+HETATM 2771 N N1 . 2PY B ? . ? 3.124 10.295 4.812 1.0 31.61 351 E 1 . 351
+HETATM 2772 N N3 . 2PY B ? . ? 9.359 10.551 -0.897 1.0 32.0 351 E 1 . 351
+HETATM 2773 C C4 . 2PY B ? . ? 3.844 10.145 2.684 1.0 27.91 351 E 1 . 351
+HETATM 2774 C C5 . 2PY B ? . ? 4.039 10.044 1.314 1.0 29.05 351 E 1 . 351
+HETATM 2775 C C6 . 2PY B ? . ? 5.359 10.02 0.785 1.0 28.69 351 E 1 . 351
+HETATM 2776 C C8 . 2PY B ? . ? 4.465 10.322 4.934 1.0 29.63 351 E 1 . 351
+HETATM 2777 C C10 . 2PY B ? . ? 13.316 13.539 0.311 1.0 45.21 351 E 1 . 351
+HETATM 2778 C C13 . 2PY B ? . ? 13.938 11.039 1.537 1.0 43.89 351 E 1 . 351
+HETATM 2779 C C15 . 2PY B ? . ? 12.672 13.183 1.536 1.0 44.17 351 E 1 . 351
+HETATM 2780 C C17 . 2PY B ? . ? 14.474 9.74 1.859 1.0 43.58 351 E 1 . 351
+HETATM 2781 C C20 . 2PY B ? . ? 7.905 10.048 1.004 1.0 31.14 351 E 1 . 351
+HETATM 2782 C C21 . 2PY B ? . ? 9.019 9.458 1.654 1.0 32.9 351 E 1 . 351
+HETATM 2783 C C22 . 2PY B ? . ? 10.3 9.419 1.019 1.0 35.43 351 E 1 . 351
+HETATM 2784 C C24 . 2PY B ? . ? 11.606 8.237 2.761 1.0 39.25 351 E 1 . 351
+HETATM 2785 C C1 . 2PY B ? . ? 6.522 10.098 1.624 1.0 31.38 351 E 1 . 351
+HETATM 2786 C C2 . 2PY B ? . ? 6.301 10.203 3.042 1.0 29.97 351 E 1 . 351
+HETATM 2787 C C3 . 2PY B ? . ? 4.99 10.228 3.577 1.0 29.76 351 E 1 . 351
+HETATM 2788 N N5 . 2PY B ? . ? 2.768 10.194 3.527 0.0 29.69 351 E 1 . 351
+HETATM 2789 C C11 . 2PY B ? . ? 14.265 12.653 -0.296 1.0 45.28 351 E 1 . 351
+HETATM 2790 C C12 . 2PY B ? . ? 14.554 11.433 0.324 1.0 44.3 351 E 1 . 351
+HETATM 2791 C C14 . 2PY B ? . ? 12.966 11.941 2.166 1.0 43.78 351 E 1 . 351
+HETATM 2792 N N2 . 2PY B ? . ? 15.426 10.424 -0.07 1.0 43.74 351 E 1 . 351
+HETATM 2793 C C16 . 2PY B ? . ? 15.372 9.412 0.855 1.0 43.07 351 E 1 . 351
+HETATM 2794 C C18 . 2PY B ? . ? 10.408 9.986 -0.266 1.0 33.26 351 E 1 . 351
+HETATM 2795 C C19 . 2PY B ? . ? 8.14 10.582 -0.283 1.0 31.82 351 E 1 . 351
+HETATM 2796 O O1 . 2PY B ? . ? 11.494 8.868 1.498 1.0 38.79 351 E 1 . 351
+HETATM 2797 C C23 . 2PY B ? . ? 13.075 7.749 2.851 1.0 40.85 351 E 1 . 351
+HETATM 2798 C C25 . 2PY B ? . ? 14.11 8.887 3.08 1.0 41.26 351 E 1 . 351
+HETATM 2799 N N4 . 2PY B ? . ? 13.384 7.007 1.603 1.0 38.01 351 E 1 . 351

@@ -1,0 +1,49 @@
+data_mmCIF_generated_by_ProIntVar
+loop_
+_atom_site.group_PDB
+_atom_site.id
+_atom_site.type_symbol
+_atom_site.label_atom_id
+_atom_site.label_alt_id
+_atom_site.label_comp_id
+_atom_site.label_asym_id
+_atom_site.label_entity_id
+_atom_site.label_seq_id
+_atom_site.pdbx_PDB_ins_code
+_atom_site.Cartn_x
+_atom_site.Cartn_y
+_atom_site.Cartn_z
+_atom_site.occupancy
+_atom_site.B_iso_or_equiv
+_atom_site.auth_seq_id
+_atom_site.auth_asym_id
+_atom_site.pdbx_PDB_model_num
+_atom_site.label_seq_id_full
+_atom_site.auth_seq_id_full
+HETATM 2771 N N1 . SS3 B ? . ? 2.659 9.795 3.895 1.0 17.83 1351 A 1 . 1351
+HETATM 2772 N N3 . SS3 B ? . ? 9.452 10.496 -1.057 1.0 17.88 1351 A 1 . 1351
+HETATM 2773 C C4 . SS3 B ? . ? 3.542 9.756 1.812 1.0 17.31 1351 A 1 . 1351
+HETATM 2774 C C5 . SS3 B ? . ? 3.854 9.724 0.456 1.0 17.18 1351 A 1 . 1351
+HETATM 2775 C C6 . SS3 B ? . ? 5.222 9.747 0.043 1.0 17.13 1351 A 1 . 1351
+HETATM 2776 C C8 . SS3 B ? . ? 3.979 9.835 4.122 1.0 18.47 1351 A 1 . 1351
+HETATM 2777 C C13 . SS3 B ? . ? 9.945 10.239 4.629 1.0 16.67 1351 A 1 . 1351
+HETATM 2778 C C15 . SS3 B ? . ? 8.553 9.988 6.627 1.0 15.82 1351 A 1 . 1351
+HETATM 2779 C C9 . SS3 B ? . ? 4.617 9.886 5.491 1.0 18.55 1351 A 1 . 1351
+HETATM 2780 C C17 . SS3 B ? . ? 10.939 9.384 5.193 1.0 18.08 1351 A 1 . 1351
+HETATM 2781 C C20 . SS3 B ? . ? 7.741 9.829 0.544 1.0 16.53 1351 A 1 . 1351
+HETATM 2782 C C21 . SS3 B ? . ? 8.763 9.221 1.318 1.0 16.66 1351 A 1 . 1351
+HETATM 2783 C C22 . SS3 B ? . ? 10.14 9.246 0.915 1.0 16.9 1351 A 1 . 1351
+HETATM 2784 C C24 . SS3 B ? . ? 11.036 7.644 2.567 1.0 16.57 1351 A 1 . 1351
+HETATM 2785 C C1 . SS3 B ? . ? 6.292 9.802 0.985 1.0 17.23 1351 A 1 . 1351
+HETATM 2786 C C2 . SS3 B ? . ? 5.945 9.837 2.373 1.0 17.17 1351 A 1 . 1351
+HETATM 2787 C C3 . SS3 B ? . ? 4.61 9.814 2.8 1.0 18.13 1351 A 1 . 1351
+HETATM 2788 N N5 . SS3 B ? . ? 2.395 9.75 2.576 1.0 16.85 1351 A 1 . 1351
+HETATM 2789 C C14 . SS3 B ? . ? 8.761 10.538 5.341 1.0 16.8 1351 A 1 . 1351
+HETATM 2790 C C16 . SS3 B ? . ? 10.721 8.84 6.487 1.0 15.84 1351 A 1 . 1351
+HETATM 2791 C C18 . SS3 B ? . ? 10.425 9.907 -0.297 1.0 17.36 1351 A 1 . 1351
+HETATM 2792 C C19 . SS3 B ? . ? 8.147 10.463 -0.654 1.0 16.23 1351 A 1 . 1351
+HETATM 2793 C C26 . SS3 B ? . ? 9.532 9.143 7.2 1.0 17.64 1351 A 1 . 1351
+HETATM 2794 O O1 . SS3 B ? . ? 11.239 8.683 1.604 1.0 17.82 1351 A 1 . 1351
+HETATM 2795 C C23 . SS3 B ? . ? 12.163 7.718 3.636 1.0 17.48 1351 A 1 . 1351
+HETATM 2796 C C25 . SS3 B ? . ? 12.21 9.059 4.429 1.0 17.78 1351 A 1 . 1351
+HETATM 2797 N N4 . SS3 B ? . ? 13.444 7.51 2.964 1.0 16.51 1351 A 1 . 1351

@@ -1,0 +1,52 @@
+data_mmCIF_generated_by_ProIntVar
+loop_
+_atom_site.group_PDB
+_atom_site.id
+_atom_site.type_symbol
+_atom_site.label_atom_id
+_atom_site.label_alt_id
+_atom_site.label_comp_id
+_atom_site.label_asym_id
+_atom_site.label_entity_id
+_atom_site.label_seq_id
+_atom_site.pdbx_PDB_ins_code
+_atom_site.Cartn_x
+_atom_site.Cartn_y
+_atom_site.Cartn_z
+_atom_site.occupancy
+_atom_site.B_iso_or_equiv
+_atom_site.auth_seq_id
+_atom_site.auth_asym_id
+_atom_site.pdbx_PDB_model_num
+_atom_site.label_seq_id_full
+_atom_site.auth_seq_id_full
+HETATM 2771 C C1 . L20 B ? . ? 5.086 10.276 5.77 1.0 24.09 1351 E 1 . 1351
+HETATM 2772 C C2 . L20 B ? . ? 4.513 10.195 4.381 1.0 24.3 1351 E 1 . 1351
+HETATM 2773 N N3 . L20 B ? . ? 3.221 10.202 4.095 1.0 24.16 1351 E 1 . 1351
+HETATM 2774 N N4 . L20 B ? . ? 3.025 10.121 2.765 1.0 24.87 1351 E 1 . 1351
+HETATM 2775 C C6 . L20 B ? . ? 4.199 10.053 2.07 1.0 23.37 1351 E 1 . 1351
+HETATM 2776 C C7 . L20 B ? . ? 4.581 9.966 0.738 1.0 23.7 1351 E 1 . 1351
+HETATM 2777 C C8 . L20 B ? . ? 5.972 9.916 0.407 1.0 24.86 1351 E 1 . 1351
+HETATM 2778 C C9 . L20 B ? . ? 6.999 9.947 1.417 1.0 26.9 1351 E 1 . 1351
+HETATM 2779 C C10 . L20 B ? . ? 6.551 10.042 2.773 1.0 25.52 1351 E 1 . 1351
+HETATM 2780 C C11 . L20 B ? . ? 5.205 10.096 3.113 1.0 24.42 1351 E 1 . 1351
+HETATM 2781 C C12 . L20 B ? . ? 8.477 9.873 1.088 1.0 27.32 1351 E 1 . 1351
+HETATM 2782 C C13 . L20 B ? . ? 8.957 9.785 -0.239 1.0 27.69 1351 E 1 . 1351
+HETATM 2783 N N14 . L20 B ? . ? 10.285 9.709 -0.533 1.0 30.9 1351 E 1 . 1351
+HETATM 2784 C C15 . L20 B ? . ? 11.225 9.711 0.469 1.0 30.32 1351 E 1 . 1351
+HETATM 2785 C C16 . L20 B ? . ? 10.879 9.797 1.829 1.0 31.71 1351 E 1 . 1351
+HETATM 2786 O O17 . L20 B ? . ? 11.782 9.814 2.959 1.0 35.17 1351 E 1 . 1351
+HETATM 2787 C C18 . L20 B ? . ? 13.247 9.738 2.843 1.0 40.32 1351 E 1 . 1351
+HETATM 2788 C C19 . L20 B ? . ? 14.106 10.969 2.305 1.0 41.62 1351 E 1 . 1351
+HETATM 2789 N N21 . L20 B ? . ? 14.937 10.446 1.205 1.0 41.69 1351 E 1 . 1351
+HETATM 2790 C C25 . L20 B ? . ? 13.288 12.234 1.911 1.0 43.15 1351 E 1 . 1351
+HETATM 2791 C C26 . L20 B ? . ? 13.34 12.833 0.505 1.0 45.13 1351 E 1 . 1351
+HETATM 2792 C C27 . L20 B ? . ? 13.181 14.2 0.354 1.0 45.33 1351 E 1 . 1351
+HETATM 2793 N N28 . L20 B ? . ? 13.247 14.558 -0.948 1.0 47.14 1351 E 1 . 1351
+HETATM 2794 C C30 . L20 B ? . ? 13.451 13.443 -1.74 1.0 47.63 1351 E 1 . 1351
+HETATM 2795 C C31 . L20 B ? . ? 13.58 13.297 -3.13 1.0 49.0 1351 E 1 . 1351
+HETATM 2796 C C32 . L20 B ? . ? 13.786 12.008 -3.724 1.0 48.38 1351 E 1 . 1351
+HETATM 2797 C C33 . L20 B ? . ? 13.86 10.879 -2.892 1.0 48.56 1351 E 1 . 1351
+HETATM 2798 C C34 . L20 B ? . ? 13.726 11.037 -1.468 1.0 48.33 1351 E 1 . 1351
+HETATM 2799 C C35 . L20 B ? . ? 13.522 12.301 -0.869 1.0 46.74 1351 E 1 . 1351
+HETATM 2800 C C36 . L20 B ? . ? 9.482 9.879 2.105 1.0 30.8 1351 E 1 . 1351
