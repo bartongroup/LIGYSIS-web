@@ -1,0 +1,67 @@
+# STOCKHOLM 1.0
+#=GF SQ 16
+sp|P01375|TNFA_HUMAN/84-233 -PSDKPVAHV-VAN-----------PQA-----EG--QLQWLNR--RA--NALLANGVELRD--NQLVVPSEGLYLIYSQVLFK--G-QGC-------------P-ST-HVLLTHTISRIAVSY--QTKVNLLSA--IK-SPCQRETP--EGAEAKPW-YEPIYLGGVFQLEKGDRLSAE-I-NRPD-YLDFAESGQVYFGIIAL
+#=GS sp|P01375|TNFA_HUMAN/84-233 AC P01375
+#=GS sp|P01375|TNFA_HUMAN/84-233 DE [subseq from] Tumor necrosis factor OS=Homo sapiens OX=9606 GN=TNF PE=1 SV=1
+#=GR sp|P01375|TNFA_HUMAN/84-233 PP .689******.***...........***.....**..*******..**..************..********************..*.***.............9.98.7999***********..*********..**.********..********.*********************.*.****.***************97
+sp|P48023|TNFL6_HUMAN/144-281 ----RKVAHL-TGK-----------SNS-----RS-MPLEWEDT--YG--IVLL-SGVKYKK--GGLVINETGLYFVYSKVYFR--G-QSC-------------N-N---LPLSHKVYMRNSKY--PQDLVMMEG-KMM-SYCT---------TGQMW-ARSSYLGAVFNLTSADHLYVN-V-SELS-LVNFEES-QTFFGLYKL
+#=GS sp|P48023|TNFL6_HUMAN/144-281 AC P48023
+#=GS sp|P48023|TNFL6_HUMAN/144-281 DE [subseq from] Tumor necrosis factor ligand superfamily member 6 OS=Homo sapiens OX=9606 GN=FASLG PE=1 SV=1
+#=GR sp|P48023|TNFL6_HUMAN/144-281 PP ....78****.***...........999.....99.8*******..**..8888.99*****..********************..*.***.............*.*...**************..*******99.899.999*.........*****.*********************.*.****.*****87.******986
+sp|P01374|TNFB_HUMAN/62-205 ----KPAAHL-IGD-----------PSK-----QN--SLLWRAN--TD--RAFLQDGFSLSN--NSLLVPTSGIYFVYSQVVFS--G-KAYSP--------KATS-SP--LYLAHEVQLFSSQY--PFHVPLLSS--QK-MVYPG--------LQEPW-LHSMYHGAAFQLTQGDQLSTH-T-DGIP-HLVLSPS-TVFFGAFAL
+#=GS sp|P01374|TNFB_HUMAN/62-205 AC P01374
+#=GS sp|P01374|TNFB_HUMAN/62-205 DE [subseq from] Lymphotoxin-alpha OS=Homo sapiens OX=9606 GN=LTA PE=1 SV=2
+#=GR sp|P01374|TNFB_HUMAN/62-205 PP ....9*****.***...........***.....**..*******..**..************..********************..*.99888........8856.66..9*************..*********..**.*999*........*****.*********************.*.****.*****88.*******97
+sp|O95150|TNF15_HUMAN/93-249 ---DKPRAHL-TVVRQT-----PTQHFK-----NQFPALHWEHE--LG--LAFTKNRMNYTN--KFLLIPESGDYFIYSQVTFR--G-MTSECSEI--RQAGRPN-KP--DSITVVITKVTDSY--PEPTQLLMG--TK-SVCE---------VGSNW-FQPIYLGAMFSLQEGDKLMVN-V-SDIS-LVDYTKEDKTFFGAF--
+#=GS sp|O95150|TNF15_HUMAN/93-249 AC O95150
+#=GS sp|O95150|TNF15_HUMAN/93-249 DE [subseq from] Tumor necrosis factor ligand superfamily member 15 OS=Homo sapiens OX=9606 GN=TNFSF15 PE=1 SV=2
+#=GR sp|O95150|TNF15_HUMAN/93-249 PP ...899****.866455.....554333.....44569******..**..************..********************..9.5544599*..****955.55..**************..*********..**.****.........*****.*********************.*.****.**************9..
+sp|P29965|CD40L_HUMAN/120-261 ---PQIAAHV-ISEA---------SSKT-----TS--VLQWAEK--GY--YTMSNNLVTLEN-GKQLTVKRQGLYYIYAQVTFC--SNREA-------------S-SQ--APFIASLCLKSPGR--FERILLRAA-NTH-SSA------------KPCGQQSIHLGGVFELQPGASVFVN-V-TDPS-QVSHG-TGFTSFGLLKL
+#=GS sp|P29965|CD40L_HUMAN/120-261 AC P29965
+#=GS sp|P29965|CD40L_HUMAN/120-261 DE [subseq from] CD40 ligand OS=Homo sapiens OX=9606 GN=CD40LG PE=1 SV=1
+#=GR sp|P29965|CD40L_HUMAN/120-261 PP ...589****.*994.........3444.....66..*******..**..************.99*******************..94556.............7.77..**************..******999.899.999............9998*********************.*.****.*****.89******986
+sp|Q06643|TNFC_HUMAN/88-241 -----PAAHL-IGA-----------PLK-----GQ--GLGWETT--KE--QAFLTSGTQFSD-AEGLALPQDGLYYLYCLVGYR--G-RAPPGG------GDPQG-RS--VTLRSSLYRAGGAYGPGTPELLLEG--AE-TVTPVLDPARRQGYGPLW-YTSVGFGGLVQLRRGERVYVN-I-SHPD-MVDFA-RGKTFFGAV--
+#=GS sp|Q06643|TNFC_HUMAN/88-241 AC Q06643
+#=GS sp|Q06643|TNFC_HUMAN/88-241 DE [subseq from] Lymphotoxin-beta OS=Homo sapiens OX=9606 GN=LTB PE=1 SV=1
+#=GR sp|Q06643|TNFC_HUMAN/88-241 PP .....89***.***...........***.....**..*******..**..************.99*******************..*.**9999......99876.67..9************98779999****..**.*999**************.*********************.*.****.*****.89*****98..
+sp|O43557|TNF14_HUMAN/93-238 ----NPAAHL-TGA-----------NSSLT-GSGG--PLLWETQ--LG--LAFL-RGLSYHD--GALVVTKAGYYYIYSKVQLG--G-VGC-------------P-LGLASTITHGLYKRTPRY--PEELELLVS--QQ-SPCGRA-----TSSSRVW-WDSSFLGGVVHLEAGEKVVVR-V-LDER-LVRLRDGTRSYFGAF--
+#=GS sp|O43557|TNF14_HUMAN/93-238 AC O43557
+#=GS sp|O43557|TNF14_HUMAN/93-238 DE [subseq from] Tumor necrosis factor ligand superfamily member 14 OS=Homo sapiens OX=9606 GN=TNFSF14 PE=1 SV=2
+#=GR sp|O43557|TNF14_HUMAN/93-238 PP ....79****.**9...........77755.5466..*******..**..****.99*****..********************..*.***.............7.765579************..*********..**.******.....*******.*********************.*.****.**************9..
+sp|O14788|TNF11_HUMAN/162-312 ---AQPFAHL-TINATD----IPSGSHK-----VS--LSSWYHD--RG--WAKISN-MTFSN--GKLIVNQDGFYYLYANICFR--H-HETSG--------DLAT-EY--LQLMVYVTKTSIKI--PSSHTLMKG--GS-TKYWS-------GNSEFH-FYSINVGGFFKLRSGEEISIE-V-SNPS-LLDPD-QDATYFGAFK-
+#=GS sp|O14788|TNF11_HUMAN/162-312 AC O14788
+#=GS sp|O14788|TNF11_HUMAN/162-312 DE [subseq from] Tumor necrosis factor ligand superfamily member 11 OS=Homo sapiens OX=9606 GN=TNFSF11 PE=1 SV=1
+#=GR sp|O14788|TNF11_HUMAN/162-312 PP ...689****.*99888....8776667.....77..889****..**..****65.*****..********************..*.99988........8877.77..9*************..********9..55.54456.......999***.*********************.*.****.*****.78*******8.
+sp|P50591|TNF10_HUMAN/123-278 ------AAHI-TGTRGRSNTLSSPNSKNEKALGRK--INSWESS--RS--GHSFLSNLHLRN--GELVIHEKGFYYIYSQTYFR--F-QEEIK--------ENTK-ND--KQMVQYIYKY-TSY--PDPILLMKS--AR-NSCWS-------KDAEYG-LYSIYQGGIFELKENDRIFVS-V-TNEH-LIDMD-HEASFFGAF--
+#=GS sp|P50591|TNF10_HUMAN/123-278 AC P50591
+#=GS sp|P50591|TNF10_HUMAN/123-278 DE [subseq from] Tumor necrosis factor ligand superfamily member 10 OS=Homo sapiens OX=9606 GN=TNFSF10 PE=1 SV=1
+#=GR sp|P50591|TNF10_HUMAN/123-278 PP ......6666.655555555555432222222233..449****..**..99999*******..********************..9.98888........8766.66..99******87.68*..*********..**.*****.......*99999.*********************.*.****.*****.56******9..
+sp|P32971|TNFL8_HUMAN/96-217 ---KKSWAYLQVAK-----------HLN-----KT--KLSWNKD--GI------LHGVRYQD--GNLVIQFPGLYFIICQLQFL--V-QCP-------------N-NS--VDLKLELLINKHIK--KQALVTVCE--SG-MQT------------KHV-YQNLSQFLLDYLQVNTTISVN-V-DTFQ-YIDTS------------
+#=GS sp|P32971|TNFL8_HUMAN/96-217 AC P32971
+#=GS sp|P32971|TNFL8_HUMAN/96-217 DE [subseq from] Tumor necrosis factor ligand superfamily member 8 OS=Homo sapiens OX=9606 GN=TNFSF8 PE=1 SV=1
+#=GR sp|P32971|TNFL8_HUMAN/96-217 PP ...6999***9999...........***.....**..*******..99......69******..********************..*.***.............*.**..********999988..888888888..88.899............***.*********************.*.****.**997............
+sp|Q9Y275|TN13B_HUMAN/178-284 ---------------------------------------------------------LEEKE--NKILVKETGYFFIYGQVLYT--D-KTY-------------A-MG--HLIQRKKVHVFGDE--LSLVTLFRC--IQ-NMP-----------ETLP-NNSCYSAGIAKLEEGDELQLA-I-PRENAQISLD-GDVTFFGALKL
+#=GS sp|Q9Y275|TN13B_HUMAN/178-284 AC Q9Y275
+#=GS sp|Q9Y275|TN13B_HUMAN/178-284 DE [subseq from] Tumor necrosis factor ligand superfamily member 13B OS=Homo sapiens OX=9606 GN=TNFSF13B PE=1 SV=1
+#=GR sp|Q9Y275|TN13B_HUMAN/178-284 PP .........................................................67788..********************..*.***.............*.**..***99999999***..*********..88.855...........3888.*********************.*.9998689999.88******996
+sp|O75888|TNF13_HUMAN/135-250 -------------------------------------EVMWQPA--LR-----RGRGLQAQG--YGVRIQDAGVYLLYSQVLFQ--D-VTF-------------T-MG--QVVSREGQGR---Q--ETLFRCIRS--MP-SHP------------DRA-YNSCYSAGVFHLHQGDILSVI-I-PRARAKLNLSPH-GTFLGFVKL
+#=GS sp|O75888|TNF13_HUMAN/135-250 AC O75888
+#=GS sp|O75888|TNF13_HUMAN/135-250 DE [subseq from] Tumor necrosis factor ligand superfamily member 13 OS=Homo sapiens OX=9606 GN=TNFSF13 PE=1 SV=1
+#=GR sp|O75888|TNF13_HUMAN/135-250 PP .....................................5666665..55.....347899999..********************..*.***.............*.**..*****99966...5..788999999..99.999............***.*********************.*.999779****75.9****9986
+sp|O43508|TNF12_HUMAN/130-247 -------------------------------------VSGWEEA--RI--NSSSPLRYNRQI--GEFIVTRAGLYYLYCQVHFD--E-GKA------------VY-LK-LDLLVDGVLALRCL------EEFSAT--AA-SSL------------GPQ-LRLCQVSGLLALRPGSSLRIR-T-LPWA-HLKAAPF-LTYFGLFQ-
+#=GS sp|O43508|TNF12_HUMAN/130-247 AC O43508
+#=GS sp|O43508|TNF12_HUMAN/130-247 DE [subseq from] Tumor necrosis factor ligand superfamily member 12 OS=Homo sapiens OX=9606 GN=TNFSF12 PE=1 SV=1
+#=GR sp|O43508|TNF12_HUMAN/130-247 PP .....................................567****..**..************..********************..9.666............45.66.58889999988764......467888..99.999............***.*********************.*.****.*****88.******95.
+sp|Q92838|EDA_HUMAN/285-385 --------------------------------------------------------KLHPRS--GELEVLVDGTYFIYSQVEVY--Y-INF-------------T-D----FASYEVV--------VDEKPFLQC--TR-SIET----------GKTN-YNTCYTAGVCLLKARQKIAVK-M-VHADISINMSK-HTTFFGAIRL
+#=GS sp|Q92838|EDA_HUMAN/285-385 AC Q92838
+#=GS sp|Q92838|EDA_HUMAN/285-385 DE [subseq from] Ectodysplasin-A OS=Homo sapiens OX=9606 GN=EDA PE=1 SV=2
+#=GR sp|Q92838|EDA_HUMAN/285-385 PP ........................................................455677..9*******************..*.***.............9.9....8888888........467799***..**.*998..........9***.*********************.*.***999****5.6******975
+sp|Q9UNG2|TNF18_HUMAN/81-168 ----------------------------------------------------------KVSD--WKLEILQNGLYLIYGQVAPN--A-NY--------------N-DV--APFEVRLYKNKD---------MIQT--LT-NKS------------KI-----QNVGGTYELHVGDTIDLI-F-NSEH-QVLKN---NTYWGII--
+#=GS sp|Q9UNG2|TNF18_HUMAN/81-168 AC Q9UNG2
+#=GS sp|Q9UNG2|TNF18_HUMAN/81-168 DE [subseq from] Tumor necrosis factor ligand superfamily member 18 OS=Homo sapiens OX=9606 GN=TNFSF18 PE=1 SV=3
+#=GR sp|Q9UNG2|TNF18_HUMAN/81-168 PP ..........................................................6789..9****************987..6.65..............5.55..999999997654.........3444..44.444............33.....368***************.*.****.**999...79****9..
+sp|P32970|CD70_HUMAN/72-188 -------------------------------------RLYWQGGPALG--RSFL-HGPELDK--GQLRIHRDGIYMVHIQVTLAICS-STT------------AS-RH--HPTTLAVGICSPAS--RSISLLRLS--FH-QGC------------TIA------SQRLTPLARGDTLCTN-L-TGTL-LPSRN-TDETFFGV---
+#=GS sp|P32970|CD70_HUMAN/72-188 AC P32970
+#=GS sp|P32970|CD70_HUMAN/72-188 DE [subseq from] CD70 antigen OS=Homo sapiens OX=9606 GN=CD70 PE=1 SV=2
+#=GR sp|P32970|CD70_HUMAN/72-188 PP .....................................66666531144..5566.99*****..*****************986223.333............25.55..77777777667665..555555555..88.777............655......455789**********.9.9876.55555.89*****7...
+//
