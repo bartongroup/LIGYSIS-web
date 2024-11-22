@@ -1,0 +1,63 @@
+# STOCKHOLM 1.0
+#=GF SQ 15
+sp|P63120|VPK19_HUMAN/7-104 -----ENRPVCKAII--QGK----------QFEGLVDTGADVSIIAL-NQ--------W----PKNW----PKQKA---------VTG-----LVGIGTASEVY-QSTE----ILH--CLG----PDNQESTVQ----PMI-TS--IPL---N-----L-WGRDLLQQWGAEI--
+#=GS sp|P63120|VPK19_HUMAN/7-104 AC P63120
+#=GS sp|P63120|VPK19_HUMAN/7-104 DE [subseq from] Endogenous retrovirus group K member 19 Pro protein OS=Homo sapiens OX=9606 GN=ERVK-19 PE=3 SV=1
+#=GR sp|P63120|VPK19_HUMAN/7-104 PP .....68********..***..........*****************.**........*....****....66666.........655.....55*********.****....***..***....999988888....8**.**..***...*.....*.**********998..
+sp|P63119|VPK21_HUMAN/7-104 -----ENRPVCKAII--QGK----------QFEGLVDTGADVSIIAL-NQ--------W----PKNW----PKQKA---------VTG-----LVGIGTASEVY-QSTE----ILH--CLG----PDNQESTVQ----PMI-TS--IPL---N-----L-WGRDLLQQWGAEI--
+#=GS sp|P63119|VPK21_HUMAN/7-104 AC P63119
+#=GS sp|P63119|VPK21_HUMAN/7-104 DE [subseq from] Endogenous retrovirus group K member 21 Pro protein OS=Homo sapiens OX=9606 GN=ERVK-21 PE=3 SV=1
+#=GR sp|P63119|VPK21_HUMAN/7-104 PP .....68********..***..........*****************.**........*....****....66666.........655.....55*********.****....***..***....999988888....8**.**..***...*.....*.**********998..
+sp|Q9Y6I0|VPK6_HUMAN/7-104 -----ENRPVCKAII--QGK----------QFEGLVDTGADVSIIAL-NQ--------W----PKNW----PKQKA---------VTG-----LVGIGTASEVY-QSTE----ILH--CLG----PDNQESTVQ----PMI-TS--IPL---N-----L-WGRDLLQQWGAEI--
+#=GS sp|Q9Y6I0|VPK6_HUMAN/7-104 AC Q9Y6I0
+#=GS sp|Q9Y6I0|VPK6_HUMAN/7-104 DE [subseq from] Endogenous retrovirus group K member 6 Pro protein OS=Homo sapiens OX=9606 GN=ERVK-6 PE=3 SV=2
+#=GR sp|Q9Y6I0|VPK6_HUMAN/7-104 PP .....68********..***..........*****************.**........*....****....66666.........655.....55*********.****....***..***....999988888....8**.**..***...*.....*.**********998..
+sp|P63131|VPK7_HUMAN/7-104 -----ENRPVCKAII--QGK----------QFEGLVDTGADVSIIAL-NQ--------W----PKNW----PKQKA---------VTG-----LVGIGTASEVY-QSTE----ILH--CLG----PDNQESTVQ----PMI-TS--IPL---N-----L-WGRDLLQQWGAEI--
+#=GS sp|P63131|VPK7_HUMAN/7-104 AC P63131
+#=GS sp|P63131|VPK7_HUMAN/7-104 DE [subseq from] Endogenous retrovirus group K member 7 Pro protein OS=Homo sapiens OX=9606 GN=ERVK-7 PE=3 SV=1
+#=GR sp|P63131|VPK7_HUMAN/7-104 PP .....68********..***..........*****************.**........*....****....66666.........655.....55*********.****....***..***....999988888....8**.**..***...*.....*.**********998..
+sp|P63129|VPK24_HUMAN/7-104 -----ENRPVCKAII--QGK----------QFEGLVDTGADVSIIAL-NQ--------W----PKNW----PKQKA---------VTG-----LVGIGTASEVY-QSTE----ILH--CLG----PDNQESTVQ----PMI-TS--IPL---N-----L-WGRDLLQQWGAEI--
+#=GS sp|P63129|VPK24_HUMAN/7-104 AC P63129
+#=GS sp|P63129|VPK24_HUMAN/7-104 DE [subseq from] Endogenous retrovirus group K member 24 Pro protein OS=Homo sapiens OX=9606 GN=ERVK-24 PE=3 SV=1
+#=GR sp|P63129|VPK24_HUMAN/7-104 PP .....68********..***..........*****************.**........*....****....66666.........655.....55*********.****....***..***....999988888....8**.**..***...*.....*.**********998..
+sp|P63125|VPK25_HUMAN/7-104 -----ENRPVCKAII--QGK----------QFEGLVDTGADVSIIAL-NQ--------W----PKNW----PKQKA---------VTG-----LVGVGTASEVY-QSTE----ILH--CLG----PDNQESTVQ----PMI-TS--IPL---N-----L-WGRDLLQQWGAEI--
+#=GS sp|P63125|VPK25_HUMAN/7-104 AC P63125
+#=GS sp|P63125|VPK25_HUMAN/7-104 DE [subseq from] Endogenous retrovirus group K member 25 Pro protein OS=Homo sapiens OX=9606 GN=ERVK-25 PE=3 SV=1
+#=GR sp|P63125|VPK25_HUMAN/7-104 PP .....68********..***..........*****************.**........*....****....66667.........655.....559********.****....***..***....999988888....8**.**..***...*.....*.**********998..
+sp|P10265|VPK10_HUMAN/7-104 -----ENRPVCKAII--QGK----------QFEGLVDTGADVSIIAL-NQ--------W----PKNW----PKQKA---------VTG-----LVGIGTASEVY-QSME----ILH--CLG----PDNQESTVQ----PMI-TS--IPL---N-----L-WGRDLLQQWGAEI--
+#=GS sp|P10265|VPK10_HUMAN/7-104 AC P10265
+#=GS sp|P10265|VPK10_HUMAN/7-104 DE [subseq from] Endogenous retrovirus group K member 10 Pro protein OS=Homo sapiens OX=9606 GN=ERVK-10 PE=1 SV=2
+#=GR sp|P10265|VPK10_HUMAN/7-104 PP .....68********..***..........*****************.**........*....****....66666.........655.....55*********.****....***..***....999888888....8**.**..***...*.....*.**********998..
+sp|P63127|VPK9_HUMAN/7-104 -----ENRPVCKAII--QGK----------QFEGLVDTGADVSIIAL-NQ--------W----PKNW----PKQKA---------VTG-----LVGIGTASEVY-QSME----ILH--CLG----PDNQESTVQ----PMI-TS--IPL---N-----L-WGRDLLQQWGAEI--
+#=GS sp|P63127|VPK9_HUMAN/7-104 AC P63127
+#=GS sp|P63127|VPK9_HUMAN/7-104 DE [subseq from] Endogenous retrovirus group K member 9 Pro protein OS=Homo sapiens OX=9606 GN=ERVK-9 PE=3 SV=1
+#=GR sp|P63127|VPK9_HUMAN/7-104 PP .....68********..***..........*****************.**........*....****....66666.........655.....55*********.****....***..***....999888888....8**.**..***...*.....*.**********998..
+sp|P63122|VPK8_HUMAN/7-104 -----ENRPVCKAII--QGK----------QFEGLVDTGADVSIIAL-NQ--------W----PKNW----PKQKA--------VIGL------VGIGTASEVY-QSME----ILH--CLG----PDNQESTVQ----PMI-TS--IPL---N-----L-WGRDLLQQWGAEI--
+#=GS sp|P63122|VPK8_HUMAN/7-104 AC P63122
+#=GS sp|P63122|VPK8_HUMAN/7-104 DE [subseq from] Endogenous retrovirus group K member 8 Pro protein OS=Homo sapiens OX=9606 GN=ERVK-8 PE=3 SV=1
+#=GR sp|P63122|VPK8_HUMAN/7-104 PP .....68********..***..........*****************.**........*....****....65555........5335......5*********.****....***..***....999888888....8**.**..***...*.....*.**********998..
+sp|P63121|VP113_HUMAN/7-104 -----ENRPVCKAII--QGK----------QFEGLVDTGADVSIIAL-NQ--------W----PKNW----PKQKA---------VTG-----LVGISTASEVY-QSTE----ILH--CLG----PDNQESTVQ----PMI-TS--IPL---N-----L-WGRDLLQQWGVEI--
+#=GS sp|P63121|VP113_HUMAN/7-104 AC P63121
+#=GS sp|P63121|VP113_HUMAN/7-104 DE [subseq from] Endogenous retrovirus group K member 113 Pro protein OS=Homo sapiens OX=9606 GN=HERVK_113 PE=3 SV=1
+#=GR sp|P63121|VP113_HUMAN/7-104 PP .....68********..***..........*****************.**........*....****....66667.........655.....5599*******.****....***..***....999888888....8**.**..***...*.....*.**********998..
+sp|P63123|VPK18_HUMAN/7-104 -----ENRPVCKAVI--QGK----------QLEGLVDTGADVSIIAL-NQ--------W----PKNW----PKQKT---------VTG-----LVGIVTASEVY-QSTE----ILH--CLG----PHNQESTVQ----PMI-TS--IPL---N-----L-WGRDLLQQWGAEI--
+#=GS sp|P63123|VPK18_HUMAN/7-104 AC P63123
+#=GS sp|P63123|VPK18_HUMAN/7-104 DE [subseq from] Endogenous retrovirus group K member 18 Pro protein OS=Homo sapiens OX=9606 GN=ERVK-18 PE=3 SV=1
+#=GR sp|P63123|VPK18_HUMAN/7-104 PP .....68********..***..........*****************.**........*....****....76777.........664.....55999999***.****....***..***....999999999....8**.**..***...*.....*.**********998..
+sp|P63128|POK9_HUMAN/786-883 -----ENRPVCKAII--QGK----------QFEGLVDTGADVSIIAL-NQ--------W----PKNW----PKQKA---------VTG-----LVGIGTASEVY-QSME----ILH--CLG----PDNQESTVQ----PMI-TS--IPL---N-----L-WGRDLLQQWGAEI--
+#=GS sp|P63128|POK9_HUMAN/786-883 AC P63128
+#=GS sp|P63128|POK9_HUMAN/786-883 DE [subseq from] Endogenous retrovirus group K member 9 Pol protein OS=Homo sapiens OX=9606 GN=ERVK-9 PE=1 SV=3
+#=GR sp|P63128|POK9_HUMAN/786-883 PP .....68********..***..........*****************.**........*....****....66666.........655.....55*********.****....***..***....999888888....8**.**..***...*.....*.**********998..
+sp|P63124|VPK04_HUMAN/7-104 -----ENRPVCKAII--QGK----------QFEGLVDTEADVSIIAL-NQ--------W----PKNW----PKQKA---------VTG-----LVGIGTASEVY-QSTE----ILH--CLG----PDNQESTVQ----PMI-TS--IPL---N-----L-WGQDLLQQWGAEI--
+#=GS sp|P63124|VPK04_HUMAN/7-104 AC P63124
+#=GS sp|P63124|VPK04_HUMAN/7-104 DE [subseq from] Endogenous retrovirus group K member 104 Pro protein OS=Homo sapiens OX=9606 GN=HERV-K104 PE=3 SV=1
+#=GR sp|P63124|VPK04_HUMAN/7-104 PP .....68********..***..........*****************.**........*....****....66666.........655.....55*********.****....***..***....999988888....8**.**..***...*.....*.**********998..
+sp|Q5TDH0|DDI2_HUMAN/238-334 ----------INCKV--NGH----------PVKAFVDSGAQMTIMSQ-AC--------A----ERCN-----IMRLVDRR-WAGIAK--------GVGTQKIIG-RVHL----AQV--QIE----GDFLPCSF------SI-LE-EQPM---D----ML-LGLDMLKRHQCSI--
+#=GS sp|Q5TDH0|DDI2_HUMAN/238-334 AC Q5TDH0
+#=GS sp|Q5TDH0|DDI2_HUMAN/238-334 DE [subseq from] Protein DDI1 homolog 2 OS=Homo sapiens OX=9606 GN=DDI2 PE=1 SV=1
+#=GR sp|Q5TDH0|DDI2_HUMAN/238-334 PP ..........6899*..***..........*****************.99........7....6665.....44442233.344245........*********.****....***..***....*******9......87.65.5999...7....47.9*******99988..
+sp|Q8WTU0|DDI1_HUMAN/246-342 ----------INCKV--NGH----------PLKAFVDSGAQMTIMSQ-AC--------A----ERCN-----IMRL---------VDRRWAGVAKGVGTQRIIG-RVHL----AQI--QIE----GDFLQCSF------SI-LE-DQPM---D----ML-LGLDMLRRHQCSI--
+#=GS sp|Q8WTU0|DDI1_HUMAN/246-342 AC Q8WTU0
+#=GS sp|Q8WTU0|DDI1_HUMAN/246-342 DE [subseq from] Protein DDI1 homolog 1 OS=Homo sapiens OX=9606 GN=DDI1 PE=1 SV=1
+#=GR sp|Q8WTU0|DDI1_HUMAN/246-342 PP ..........6899*..***..........*****************.99........7....6665.....5444.........3333333445*********.****....***..***....******99......77.55.4999...7....47.9*******99988..
+//

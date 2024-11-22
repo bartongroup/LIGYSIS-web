@@ -1,0 +1,98 @@
+# opening files
+
+open 4ejd_updated.simp.cif
+
+open 1vij_updated.simp.cif
+
+open 4k4q_updated.simp.cif
+
+open 2wkz_updated.simp.cif
+
+open 3kf0_updated.simp.cif
+
+open 4k4p_updated.simp.cif
+
+open 3kfn_updated.simp.cif
+
+open 4ej8_updated.simp.cif
+
+open 1hxw_updated.simp.cif
+
+open 4k4r_updated.simp.cif
+
+# opening attribute file
+
+open P12499_cif_average_0.5.defattr
+
+# colouring and formatting for visualisation
+
+color white; set bgColor white
+
+set silhouette ON; set silhouetteWidth 2; set silhouetteColor black
+
+~disp; select ~protein; ~select : HOH; ~select ::binding_site==-1; disp sel; ~sel
+
+surf; surface color white; transparency 70 s;
+
+col ::binding_site==0 #cc5151;
+col ::binding_site==0 #cc5151;
+col ::binding_site==0 #cc5151;
+col ::binding_site==1 #7f3333;
+col ::binding_site==1 #7f3333;
+col ::binding_site==2 #51cccc;
+col ::binding_site==3 #337f7f;
+col ::binding_site==4 #8ecc51;
+col ::binding_site==5 #597f33;
+col ::binding_site==6 #8e51cc;
+col ::binding_site==3 #337f7f;
+col ::binding_site==7 #59337f;
+col ::binding_site==7 #59337f;
+col ::binding_site==8 #ccad51;
+col ::binding_site==2 #51cccc;
+col ::binding_site==3 #337f7f;
+col ::binding_site==2 #51cccc;
+col ::binding_site==6 #8e51cc;
+col ::binding_site==2 #51cccc;
+col ::binding_site==9 #7f6c33;
+col ::binding_site==10 #51cc70;
+col ::binding_site==5 #597f33;
+col ::binding_site==11 #337f46;
+col ::binding_site==12 #5170cc;
+col ::binding_site==1 #7f3333;
+col ::binding_site==13 #33467f;
+col ::binding_site==14 #cc51ad;
+col ::binding_site==11 #337f46;
+col ::binding_site==8 #ccad51;
+col ::binding_site==8 #ccad51;
+col ::binding_site==15 #7f336c;
+col ::binding_site==0 #cc5151;
+col ::binding_site==14 #cc51ad;
+col ::binding_site==0 #cc5151;
+col ::binding_site==2 #51cccc;
+col ::binding_site==1 #7f3333;
+col ::binding_site==2 #51cccc;
+col ::binding_site==2 #51cccc;
+col ::binding_site==2 #51cccc;
+col ::binding_site==2 #51cccc;
+col ::binding_site==3 #337f7f;
+col ::binding_site==8 #ccad51;
+col ::binding_site==5 #597f33;
+col ::binding_site==6 #8e51cc;
+col ::binding_site==7 #59337f;
+col ::binding_site==7 #59337f;
+col ::binding_site==8 #ccad51;
+col ::binding_site==8 #ccad51;
+col ::binding_site==3 #337f7f;
+col ::binding_site==8 #ccad51;
+col ::binding_site==16 #cc7f51;
+col ::binding_site==14 #cc51ad;
+col ::binding_site==14 #cc51ad;
+col ::binding_site==8 #ccad51;
+col ::binding_site==15 #7f336c;
+col ::binding_site==2 #51cccc;
+col ::binding_site==1 #7f3333;
+col ::binding_site==8 #ccad51;
+col ::binding_site==2 #51cccc;
+col ::binding_site==2 #51cccc;
+save P12499_cif_average_0.5.cxs
+
