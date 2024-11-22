@@ -338,8 +338,6 @@ function toggleWatersVisibility() {
 
 function toggleLigandsVisibility() {
     if (ligandsVisible) {
-        // ligandButton.value = 'Ligands OFF'; // Change the button text
-        // ligandButton.style = "font-weight: bold; color: #674ea7;";
 
         document.getElementById("ligandButton").textContent = "LIGAND ✘";
         ligandButton.style.borderColor = "#ffa500";
@@ -360,10 +358,8 @@ function toggleLigandsVisibility() {
         }
 
         if (contactsVisible) {
-            // contactsButton.value = 'Contacts OFF'; // Change the button text
-            // contactsButton.style = "font-weight: bold; color: #674ea7;";
 
-            document.getElementById("contactsButton").textContent = "CONTACTS ✘";
+            document.getElementById("contactsButton").textContent = "CONTACT ✘";
             contactsButton.style.borderColor = "#ffa500";
             contactsButton.style.fontWeight = "normal";
             contactsButton.style.color = "#ffa500";
@@ -429,10 +425,6 @@ function toggleLigandsVisibility() {
                 // for (const [key, value] of Object.entries(surfsDict[activeModel]['lig_inters'])) { // hide surfaces of ligand-interacting residues
                 //     viewer.setSurfaceMaterialStyle(value.surfid, {opacity:0.0});
                 // }
-
-                // surfButton.value = 'Surface OFF'; // Change the button text
-                // surfButton.style = "font-weight: bold; color: #674ea7;";
-
                 
                 // surfaceVisible = !surfaceVisible; // Toggle the visibility state
             }
@@ -440,8 +432,6 @@ function toggleLigandsVisibility() {
         }
     }
     else {
-        // ligandButton.value = 'Ligands ON'; // Change the button text
-        // ligandButton.style = "font-weight: bold; color:#B22222;";
 
         document.getElementById("ligandButton").textContent = "LIGAND ✓";
         ligandButton.style.fontWeight = "bold";
@@ -449,10 +439,10 @@ function toggleLigandsVisibility() {
         ligandButton.style.borderColor = "#007bff";
         ligandButton.style.borderWidth = "2.5px";
 
-
-
         if (activeModel == "superposition") {
-            viewer.addStyle(suppLigsSels["clust"], {stick: {hidden: false, colorscheme: myScheme, radius: stickRadius}});
+            viewer.addStyle(suppLigsSels["clust"], {
+                stick: {hidden: false, colorscheme: myScheme, radius: stickRadius},
+            });
             // console.log(`Ligands shown for ${activeModel} models!`);
         }
         else {
