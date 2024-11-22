@@ -526,6 +526,13 @@ def serve_file(filename):
         return send_from_directory(PROTS_FOLDER, filename)
     except FileNotFoundError:
         abort(404)
+
+@app.route('/assemblies/<path:filename>')
+def serve_assembly(filename):
+    try:
+        return send_from_directory(ASSEMBLY_FOLDER, filename)
+    except FileNotFoundError:
+        abort(404)
         
 @app.route('/get-table', methods=['POST'])
 def get_table(): # route to get binding site residues for a given binding site
@@ -604,7 +611,7 @@ def get_contacts(): # route to get contacts data from Arpeggio table for a given
     prot_id = data['proteinId']
     seg_id = data['segmentId']
     
-    arpeggio_cons = pd.read_pickle(f'{DATA_FOLDER}/{prot_id}/{seg_id}/arpeggio/{active_model}_bio_proc.pkl')
+    arpeggio_cons = pd.read_pickle(f'{PROTS_FOLDER}/{prot_id}/{seg_id}/arpeggio/{active_model}_bio_proc.pkl')
 
     arpeggio_cons_filt = arpeggio_cons[
         (arpeggio_cons['contact'].apply(lambda x: x != ["proximal"])) &
@@ -615,7 +622,8 @@ def get_contacts(): # route to get contacts data from Arpeggio table for a given
 
     json_cons = arpeggio_cons_filt[arpeggio_cols].to_json(orient='records')
 
-    bs_membership = pd.read_pickle(f'{DATA_FOLDER}/example/other/{prot_id}_{seg_id}_ALL_inf_bss_membership.pkl')
+    # bs_membership = pd.read_pickle(f'{DATA_FOLDER}/example/other/{prot_id}_{seg_id}_ALL_inf_bss_membership.pkl')
+    bs_membership = pd.read_pickle(f'{PROTS_FOLDER}/{prot_id}/{seg_id}/results/{prot_id}_{seg_id}_ALL_inf_bss_membership.pkl')
 
     bs_membership_rev = {v: k for k, vs in bs_membership.items() for v in vs}
 
@@ -649,10 +657,14 @@ def get_uniprot_mapping(): # route to get UniProt residue and chain mapping for 
     prot_id = data['proteinId']
     seg_id = data['segmentId']
 
-    pdb2up_map = load_pickle(f'{DATA_FOLDER}/{prot_id}/{seg_id}/mapping/{pdb_id}_pdb2up.pkl')
-    up2pdb_map = load_pickle(f'{DATA_FOLDER}/{prot_id}/{seg_id}/mapping/{pdb_id}_up2pdb.pkl')
-    chain2acc_map = load_pickle(f'{DATA_FOLDER}/{prot_id}/{seg_id}/mapping/{pdb_id}_chain2acc.pkl')
-    chains_map_df = pd.read_pickle(f'{DATA_FOLDER}/{prot_id}/{seg_id}/mapping/{pdb_id}_bio_chain_remapping.pkl')
+    # pdb2up_map = load_pickle(f'{DATA_FOLDER}/{prot_id}/{seg_id}/mapping/{pdb_id}_pdb2up.pkl')
+    # up2pdb_map = load_pickle(f'{DATA_FOLDER}/{prot_id}/{seg_id}/mapping/{pdb_id}_up2pdb.pkl')
+    # chain2acc_map = load_pickle(f'{DATA_FOLDER}/{prot_id}/{seg_id}/mapping/{pdb_id}_chain2acc.pkl')
+    # chains_map_df = pd.read_pickle(f'{DATA_FOLDER}/{prot_id}/{seg_id}/mapping/{pdb_id}_bio_chain_remapping.pkl')
+    pdb2up_map = load_pickle(f'{CIF_SIFTS_DIR}/{pdb_id}_pdb2up.pkl')
+    up2pdb_map = load_pickle(f'{CIF_SIFTS_DIR}/{pdb_id}_up2pdb.pkl')
+    chain2acc_map = load_pickle(f'{CIF_SIFTS_DIR}/{pdb_id}_chain2acc.pkl')
+    chains_map_df = pd.read_pickle(f'{CHAIN_MAPPING_DIR}/{pdb_id}_bio_chain_remapping.pkl')
     chains_map = dict(zip(chains_map_df["new_auth_asym_id"], chains_map_df["orig_label_asym_id"]))
     
     response_data = {
@@ -675,15 +687,19 @@ def download_superposition_ChimeraX(): # route to download ChimeraX script to vi
     if not prot_id or not seg_id: # Validate the received data
         return jsonify({'error': 'Missing data'}), 400
 
-    simple_dir = os.path.join(DATA_FOLDER, prot_id, str(seg_id), "simple")
+    # simple_dir = os.path.join(DATA_FOLDER, prot_id, str(seg_id), "simple")
+    simple_dir = os.path.join(PROTS_FOLDER, prot_id, str(seg_id), "simple")
     simple_pdbs = os.listdir(simple_dir)
     simple_pdbs = [f'{simple_dir}/{el}' for el in simple_pdbs if el.endswith(".cif")]
 
     seg_name = f'{prot_id}_{seg_id}'
-    cxc_in =f'{DATA_FOLDER}/{prot_id}/{seg_id}/simple/{seg_name}_ALL_inf_average_0.5.cxc' # ChimeraX command file
-    attr_in =  f'{DATA_FOLDER}/{prot_id}/{seg_id}/simple/{seg_name}_ALL_inf_average_0.5.defattr' # ChimeraX attribute file
+    # cxc_in =f'{DATA_FOLDER}/{prot_id}/{seg_id}/simple/{seg_name}_ALL_inf_average_0.5.cxc' # ChimeraX command file
+    # attr_in =  f'{DATA_FOLDER}/{prot_id}/{seg_id}/simple/{seg_name}_ALL_inf_average_0.5.defattr' # ChimeraX attribute file
+    cxc_in = os.path.join(PROTS_FOLDER, prot_id, seg_id, "results", f'{seg_name}_ALL_inf_average_0.5.cxc') # ChimeraX command file
+    attr_in =  os.path.join(PROTS_FOLDER, prot_id, seg_id, "results", f'{seg_name}_ALL_inf_average_0.5.defattr') # ChimeraX attribute file
 
-    bs_membership = pd.read_pickle(f'{DATA_FOLDER}/example/other/{prot_id}_{seg_id}_ALL_inf_bss_membership.pkl')
+    # bs_membership = pd.read_pickle(f'{DATA_FOLDER}/example/other/{prot_id}_{seg_id}_ALL_inf_bss_membership.pkl')
+    bs_membership = pd.read_pickle(f'{PROTS_FOLDER}/{prot_id}/{seg_id}/results/{prot_id}_{seg_id}_ALL_inf_bss_membership.pkl')
 
     bs_ids = list(bs_membership.keys())
 
@@ -748,13 +764,16 @@ def download_superposition_PyMol(): # route to download PyMol script to visualis
     if not prot_id or not seg_id: # Validate the received data
         return jsonify({'error': 'Missing data'}), 400
 
-    simple_dir = os.path.join(DATA_FOLDER, prot_id, str(seg_id), "simple")
+    # simple_dir = os.path.join(DATA_FOLDER, prot_id, str(seg_id), "simple")
+    simple_dir = os.path.join(PROTS_FOLDER, prot_id, str(seg_id), "simple")
     simple_pdbs = os.listdir(simple_dir)
     simple_pdbs = [f'{simple_dir}/{el}' for el in simple_pdbs if el.endswith(".cif")]
 
     seg_name = f'{prot_id}_{seg_id}'
-    cxc_in =f'{DATA_FOLDER}/{prot_id}/{seg_id}/simple/{seg_name}_ALL_inf_average_0.5.cxc' # ChimeraX command file
-    attr_in =  f'{DATA_FOLDER}/{prot_id}/{seg_id}/simple/{seg_name}_ALL_inf_average_0.5.defattr' # ChimeraX attribute file
+    # cxc_in =f'{DATA_FOLDER}/{prot_id}/{seg_id}/simple/{seg_name}_ALL_inf_average_0.5.cxc' # ChimeraX command file
+    # attr_in =  f'{DATA_FOLDER}/{prot_id}/{seg_id}/simple/{seg_name}_ALL_inf_average_0.5.defattr' # ChimeraX attribute file
+    cxc_in = os.path.join(PROTS_FOLDER, prot_id, seg_id, "results", f'{seg_name}_ALL_inf_average_0.5.cxc') # ChimeraX command file
+    attr_in =  os.path.join(PROTS_FOLDER, prot_id, seg_id, "results", f'{seg_name}_ALL_inf_average_0.5.defattr') # ChimeraX attribute file
 
     pymol_lines = chimeraX2PyMol(cxc_in, attr_in)
     pymol_lines_string = "\n".join(pymol_lines)
@@ -797,9 +816,11 @@ def download_assembly_ChimeraX(): # route to download ChimeraX script to visuali
     if not prot_id or not seg_id or not pdb_id: # Validate the received data
         return jsonify({'error': 'Missing data'}), 400
 
-    assembly_file = f'{DATA_FOLDER}/{prot_id}/{seg_id}/assemblies/{pdb_id}_bio.cif' # assembly cif file
+    # assembly_file = f'{DATA_FOLDER}/{prot_id}/{seg_id}/assemblies/{pdb_id}_bio.cif' # assembly cif file
+    assembly_file = f'{ASSEMBLY_FOLDER}/{pdb_id}_bio.cif' # assembly cif file
 
-    arpeggio_cons = pd.read_pickle(f'{DATA_FOLDER}/{prot_id}/{seg_id}/arpeggio/{pdb_id}_bio_proc.pkl')
+    # arpeggio_cons = pd.read_pickle(f'{DATA_FOLDER}/{prot_id}/{seg_id}/arpeggio/{pdb_id}_bio_proc.pkl')
+    arpeggio_cons = pd.read_pickle(f'{PROTS_FOLDER}/{prot_id}/{seg_id}/arpeggio/{pdb_id}_bio_proc.pkl')
 
     arpeggio_cons_filt = arpeggio_cons[
         (arpeggio_cons['contact'].apply(lambda x: x != ["proximal"])) &
@@ -810,7 +831,8 @@ def download_assembly_ChimeraX(): # route to download ChimeraX script to visuali
     pseudobond_lines = "\n".join(generate_pseudobond_lines_ChimeraX(arpeggio_cons_filt))
     pseudobond_file = f'{prot_id}_{seg_id}_{pdb_id}.pb'
 
-    bs_membership = pd.read_pickle(f'{DATA_FOLDER}/example/other/{prot_id}_{seg_id}_ALL_inf_bss_membership.pkl')
+    # bs_membership = pd.read_pickle(f'{DATA_FOLDER}/example/other/{prot_id}_{seg_id}_ALL_inf_bss_membership.pkl')
+    bs_membership = pd.read_pickle(f'{PROTS_FOLDER}/{prot_id}/{seg_id}/results/{prot_id}_{seg_id}_ALL_inf_bss_membership.pkl')
 
     bs_membership_rev = {v: k for k, vs in bs_membership.items() for v in vs}
 
@@ -918,9 +940,11 @@ def download_assembly_PyMol(): # route to download PyMol script to visualise ass
     if not prot_id or not seg_id or not pdb_id: # Validate the received data
         return jsonify({'error': 'Missing data'}), 400
 
-    assembly_file = f'{DATA_FOLDER}/{prot_id}/{seg_id}/assemblies/{pdb_id}_bio.cif' # assembly cif file
+    # assembly_file = f'{DATA_FOLDER}/{prot_id}/{seg_id}/assemblies/{pdb_id}_bio.cif' # assembly cif file
+    assembly_file = f'{ASSEMBLY_FOLDER}/{pdb_id}_bio.cif' # assembly cif file
 
-    arpeggio_cons = pd.read_pickle(f'{DATA_FOLDER}/{prot_id}/{seg_id}/arpeggio/{pdb_id}_bio_proc.pkl')
+    # arpeggio_cons = pd.read_pickle(f'{DATA_FOLDER}/{prot_id}/{seg_id}/arpeggio/{pdb_id}_bio_proc.pkl')
+    arpeggio_cons = pd.read_pickle(f'{PROTS_FOLDER}/{prot_id}/{seg_id}/arpeggio/{pdb_id}_bio_proc.pkl')
 
     arpeggio_cons_filt = arpeggio_cons[
         (arpeggio_cons['contact'].apply(lambda x: x != ["proximal"])) &
@@ -930,7 +954,8 @@ def download_assembly_PyMol(): # route to download PyMol script to visualise ass
 
     distance_lines = generate_distance_lines_PyMol(arpeggio_cons_filt, mult = 1) #1.5 is too thick
 
-    bs_membership = pd.read_pickle(f'{DATA_FOLDER}/example/other/{prot_id}_{seg_id}_ALL_inf_bss_membership.pkl')
+    # bs_membership = pd.read_pickle(f'{DATA_FOLDER}/example/other/{prot_id}_{seg_id}_ALL_inf_bss_membership.pkl')
+    bs_membership = pd.read_pickle(f'{PROTS_FOLDER}/{prot_id}/{seg_id}/results/{prot_id}_{seg_id}_ALL_inf_bss_membership.pkl')
 
     bs_membership_rev = {v: k for k, vs in bs_membership.items() for v in vs}
 
@@ -1018,7 +1043,8 @@ def download_all_assemblies_ChimeraX(): # route to download ChimeraX scripts to 
     seg_id = data.get('segmentId')
     assembly_pdb_ids = data.get('assemblyPdbIds')  # This is your array
 
-    bs_membership = pd.read_pickle(f'{DATA_FOLDER}/example/other/{prot_id}_{seg_id}_ALL_inf_bss_membership.pkl')
+    # bs_membership = pd.read_pickle(f'{DATA_FOLDER}/example/other/{prot_id}_{seg_id}_ALL_inf_bss_membership.pkl')
+    bs_membership = pd.read_pickle(f'{PROTS_FOLDER}/{prot_id}/{seg_id}/results/{prot_id}_{seg_id}_ALL_inf_bss_membership.pkl')
 
     bs_membership_rev = {v: k for k, vs in bs_membership.items() for v in vs}
 
@@ -1030,9 +1056,11 @@ def download_all_assemblies_ChimeraX(): # route to download ChimeraX scripts to 
         for pdb_id in assembly_pdb_ids: # Loop through each assembly PDB ID to create corresponding folders in the zip
             folder_name = f'{pdb_id}'
 
-            assembly_file = f'{DATA_FOLDER}/{prot_id}/{seg_id}/assemblies/{pdb_id}_bio.cif' # assembly cif file
+            # assembly_file = f'{DATA_FOLDER}/{prot_id}/{seg_id}/assemblies/{pdb_id}_bio.cif' # assembly cif file
+            assembly_file = f'{ASSEMBLY_FOLDER}/{pdb_id}_bio.cif' # assembly cif file
 
-            arpeggio_cons = pd.read_pickle(f'{DATA_FOLDER}/{prot_id}/{seg_id}/arpeggio/{pdb_id}_bio_proc.pkl')
+            # arpeggio_cons = pd.read_pickle(f'{DATA_FOLDER}/{prot_id}/{seg_id}/arpeggio/{pdb_id}_bio_proc.pkl')
+            arpeggio_cons = pd.read_pickle(f'{PROTS_FOLDER}/{prot_id}/{seg_id}/arpeggio/{pdb_id}_bio_proc.pkl')
 
             arpeggio_cons_filt = arpeggio_cons[
                 (arpeggio_cons['contact'].apply(lambda x: x != ["proximal"])) &
@@ -1139,7 +1167,8 @@ def download_all_assemblies_PyMol(): # route to download PyMol scripts to visual
     seg_id = data.get('segmentId')
     assembly_pdb_ids = data.get('assemblyPdbIds')  # This is your array
 
-    bs_membership = pd.read_pickle(f'{DATA_FOLDER}/example/other/{prot_id}_{seg_id}_ALL_inf_bss_membership.pkl')
+    # bs_membership = pd.read_pickle(f'{DATA_FOLDER}/example/other/{prot_id}_{seg_id}_ALL_inf_bss_membership.pkl')
+    bs_membership = pd.read_pickle(f'{PROTS_FOLDER}/{prot_id}/{seg_id}/results/{prot_id}_{seg_id}_ALL_inf_bss_membership.pkl')
 
     bs_membership_rev = {v: k for k, vs in bs_membership.items() for v in vs}
 
@@ -1151,9 +1180,11 @@ def download_all_assemblies_PyMol(): # route to download PyMol scripts to visual
         for pdb_id in assembly_pdb_ids: # Loop through each assembly PDB ID to create corresponding folders in the zip
             folder_name = f'{pdb_id}'
 
-            assembly_file = f'{DATA_FOLDER}/{prot_id}/{seg_id}/assemblies/{pdb_id}_bio.cif' # assembly cif file
+            # assembly_file = f'{DATA_FOLDER}/{prot_id}/{seg_id}/assemblies/{pdb_id}_bio.cif' # assembly cif file
+            assembly_file = f'{ASSEMBLY_FOLDER}/{pdb_id}_bio.cif' # assembly cif file
 
-            arpeggio_cons = pd.read_pickle(f'{DATA_FOLDER}/{prot_id}/{seg_id}/arpeggio/{pdb_id}_bio_proc.pkl')
+            # arpeggio_cons = pd.read_pickle(f'{DATA_FOLDER}/{prot_id}/{seg_id}/arpeggio/{pdb_id}_bio_proc.pkl')
+            arpeggio_cons = pd.read_pickle(f'{PROTS_FOLDER}/{prot_id}/{seg_id}/arpeggio/{pdb_id}_bio_proc.pkl')
 
             arpeggio_cons_filt = arpeggio_cons[
                 (arpeggio_cons['contact'].apply(lambda x: x != ["proximal"])) &
@@ -1247,7 +1278,8 @@ def download_assembly_contact_data(): # route to download contacts data for a gi
     seg_id = data.get('segmentId')
     pdb_id = data.get('pdbId')
 
-    arpeggio_df = pd.read_pickle(f'{DATA_FOLDER}/{prot_id}/{seg_id}/arpeggio/{pdb_id}_bio_proc.pkl')
+    # arpeggio_df = pd.read_pickle(f'{DATA_FOLDER}/{prot_id}/{seg_id}/arpeggio/{pdb_id}_bio_proc.pkl')
+    arpeggio_df = pd.read_pickle(f'{PROTS_FOLDER}/{prot_id}/{seg_id}/arpeggio/{pdb_id}_bio_proc.pkl')
 
     # Convert the DataFrame to CSV
     csv_data = io.StringIO()
@@ -1274,7 +1306,8 @@ def download_all_assemblies_contact_data(): # route to download contacts data fo
 
     with zipfile.ZipFile(memory_file, 'w') as zf:
         for pdb_id in assembly_pdb_ids:
-            arpeggio_df = pd.read_pickle(f'{DATA_FOLDER}/{prot_id}/{seg_id}/arpeggio/{pdb_id}_bio_proc.pkl')
+            # arpeggio_df = pd.read_pickle(f'{DATA_FOLDER}/{prot_id}/{seg_id}/arpeggio/{pdb_id}_bio_proc.pkl')
+            arpeggio_df = pd.read_pickle(f'{PROTS_FOLDER}/{prot_id}/{seg_id}/arpeggio/{pdb_id}_bio_proc.pkl')
 
             # Convert the DataFrame to CSV
             csv_data = io.StringIO()

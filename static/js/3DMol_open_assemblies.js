@@ -296,7 +296,8 @@ function openStructure(pdbId) {
         // Example function call to 3DMol.js to load a structure
         console.log("Opening structure:", pdbId);
         //let path = '/static/data/' + proteinId + '/' + segmentId + '/assemblies/' + pdbId + '_bio.cif';
-        let pdbUri = `/static/data/${proteinId}/${segmentId}/assemblies/${pdbId}_bio.cif`; //path to assembly cif
+        // let pdbUri = `/static/data/${proteinId}/${segmentId}/assemblies/${pdbId}_bio.cif`; //path to assembly cif
+        let pdbUri = `/assemblies/${pdbId}_bio.cif`; //path to assembly cif
         
         let cifName = `${pdbId}_bio.cif`;
         
