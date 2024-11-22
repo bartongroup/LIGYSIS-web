@@ -1,0 +1,81 @@
+
+STAMP Structural Alignment of Multiple Proteins
+
+Version 4.5 (10 September 2020)
+ by Robert B. Russell & Geoffrey J. Barton 
+ Please cite PROTEINS, v14, 309-323, 1992. PMID:1409577
+Running roughfit.
+
+    Sc = STAMP score, RMS = RMS deviation, Align = alignment length
+    Len1, Len2 = length of domain, Nfit = residues fitted
+    Secs = no. equivalent sec. strucs. Eq = no. equivalent residues
+    %I = seq. identity, %S = sec. str. identity
+    P(m)  = P value (p=1/10) calculated after Murzin (1993), JMB, 230, 689-694
+            (NC = P value not calculated - potential FP overflow)
+
+     No.  Domain1         Domain2         Sc     RMS    Len1 Len2  Align NFit Eq. Secs.   %I   %S   P(m)
+Pair   1  5fz8_updated.supp 6ej1_updated.supp 9.60   0.44    453  453   454  451 449    0 100.00 100.00 0.00e+00 
+Pair   2  5fz8_updated.supp 5fze_updated.supp 9.58   0.39    453  457   457  450 450    0 100.00 100.00 0.00e+00 
+Pair   3  5fz8_updated.supp 5fz9_updated.supp 9.66   0.41    453  454   454  452 450    0 100.00 100.00 0.00e+00 
+Pair   4  5fz8_updated.supp 5fz4_updated.supp 9.65   0.28    453  452   453  450 450    0 100.00 100.00 0.00e+00 
+Pair   5  5fz8_updated.supp 5lw9_updated.supp 9.40   0.41    453  456   458  445 445    0  99.33 100.00 0.00e+00 
+Pair   6  5fz8_updated.supp 5fyu_updated.supp 9.53   0.41    453  457   457  450 449    0 100.00 100.00 0.00e+00 
+Pair   7  5fz8_updated.supp 6h4z_updated.supp 9.35   0.54    453  458   459  447 446    0  99.10 100.00 0.00e+00 
+Pair   8  5fz8_updated.supp 5fyy_updated.supp 9.65   0.40    453  454   454  452 450    0 100.00 100.00 0.00e+00 
+Pair   9  5fz8_updated.supp 5fy9_updated.supp 9.49   0.30    453  460   461  450 450    0 100.00 100.00 0.00e+00 
+Pair  10  6ej1_updated.supp 5fze_updated.supp 9.55   0.42    453  457   457  451 451    0 100.00 100.00 0.00e+00 
+Pair  11  6ej1_updated.supp 5fz9_updated.supp 9.59   0.24    453  454   454  448 448    0 100.00 100.00 0.00e+00 
+Pair  12  6ej1_updated.supp 5fz4_updated.supp 9.48   0.42    453  452   454  446 446    0 100.00 100.00 0.00e+00 
+Pair  13  6ej1_updated.supp 5lw9_updated.supp 9.49   0.48    453  456   457  448 448    0  99.33 100.00 0.00e+00 
+Pair  14  6ej1_updated.supp 5fyu_updated.supp 9.47   0.47    453  457   457  450 449    0 100.00 100.00 0.00e+00 
+Pair  15  6ej1_updated.supp 6h4z_updated.supp 9.49   0.39    453  458   457  449 449    0  99.11 100.00 0.00e+00 
+Pair  16  6ej1_updated.supp 5fyy_updated.supp 9.56   0.36    453  454   454  448 448    0 100.00 100.00 0.00e+00 
+Pair  17  6ej1_updated.supp 5fy9_updated.supp 9.35   0.45    453  460   462  449 449    0 100.00 100.00 0.00e+00 
+Pair  18  5fze_updated.supp 5fz9_updated.supp 9.59   0.47    457  454   456  452 452    0 100.00 100.00 0.00e+00 
+Pair  19  5fze_updated.supp 5fz4_updated.supp 9.55   0.39    457  452   456  449 449    0 100.00 100.00 0.00e+00 
+Pair  20  5fze_updated.supp 5lw9_updated.supp 9.41   0.58    457  456   458  450 450    0  99.33 100.00 0.00e+00 
+Pair  21  5fze_updated.supp 5fyu_updated.supp 9.57   0.42    457  457   458  453 452    0  99.78 100.00 0.00e+00 
+Pair  22  5fze_updated.supp 6h4z_updated.supp 9.37   0.66    457  458   459  451 450    0  99.33 100.00 0.00e+00 
+Pair  23  5fze_updated.supp 5fyy_updated.supp 9.64   0.31    457  454   456  452 452    0  99.78 100.00 0.00e+00 
+Pair  24  5fze_updated.supp 5fy9_updated.supp 9.44   0.45    457  460   462  450 450    0 100.00 100.00 0.00e+00 
+Pair  25  5fz9_updated.supp 5fz4_updated.supp 9.64   0.41    454  452   454  451 451    0 100.00 100.00 0.00e+00 
+Pair  26  5fz9_updated.supp 5lw9_updated.supp 9.42   0.48    454  456   456  446 446    0  99.33 100.00 0.00e+00 
+Pair  27  5fz9_updated.supp 5fyu_updated.supp 9.61   0.44    454  457   456  453 453    0 100.00 100.00 0.00e+00 
+Pair  28  5fz9_updated.supp 6h4z_updated.supp 9.45   0.34    454  458   457  446 446    0  99.33 100.00 0.00e+00 
+Pair  29  5fz9_updated.supp 5fyy_updated.supp 9.72   0.38    454  454   454  454 454    0  99.78 100.00 0.00e+00 
+Pair  30  5fz9_updated.supp 5fy9_updated.supp 9.55   0.40    454  460   460  452 452    0 100.00 100.00 0.00e+00 
+Pair  31  5fz4_updated.supp 5lw9_updated.supp 9.36   0.48    452  456   456  444 444    0  99.32 100.00 0.00e+00 
+Pair  32  5fz4_updated.supp 5fyu_updated.supp 9.54   0.39    452  457   456  450 450    0 100.00 100.00 0.00e+00 
+Pair  33  5fz4_updated.supp 6h4z_updated.supp 9.28   0.63    452  458   457  446 445    0  99.10 100.00 0.00e+00 
+Pair  34  5fz4_updated.supp 5fyy_updated.supp 9.65   0.33    452  454   454  451 451    0 100.00 100.00 0.00e+00 
+Pair  35  5fz4_updated.supp 5fy9_updated.supp 9.49   0.38    452  460   460  450 450    0 100.00 100.00 0.00e+00 
+Pair  36  5lw9_updated.supp 5fyu_updated.supp 9.33   0.52    456  457   459  446 446    0  99.33 100.00 0.00e+00 
+Pair  37  5lw9_updated.supp 6h4z_updated.supp 9.62   0.48    456  458   456  455 455    0 100.00 100.00 0.00e+00 
+Pair  38  5lw9_updated.supp 5fyy_updated.supp 9.41   0.51    456  454   456  446 446    0  99.33 100.00 0.00e+00 
+Pair  39  5lw9_updated.supp 5fy9_updated.supp 9.30   0.49    456  460   461  446 446    0  99.33 100.00 0.00e+00 
+Pair  40  5fyu_updated.supp 6h4z_updated.supp 9.32   0.61    457  458   459  447 446    0  99.33 100.00 0.00e+00 
+Pair  41  5fyu_updated.supp 5fyy_updated.supp 9.65   0.29    457  454   456  453 453    0  99.78 100.00 0.00e+00 
+Pair  42  5fyu_updated.supp 5fy9_updated.supp 9.50   0.36    457  460   462  453 453    0  99.78 100.00 0.00e+00 
+Pair  43  6h4z_updated.supp 5fyy_updated.supp 9.37   0.58    458  454   457  446 446    0  99.33 100.00 0.00e+00 
+Pair  44  6h4z_updated.supp 5fy9_updated.supp 9.25   0.57    458  460   462  446 446    0  99.33 100.00 0.00e+00 
+Pair  45  5fyy_updated.supp 5fy9_updated.supp 9.55   0.36    454  460   460  452 452    0 100.00 100.00 0.00e+00 
+Reading in matrix file Q9UGL1_cif_stamp.mat...
+Doing cluster analysis...
+Cluster:  1 (5fz9_updated.supp  & 5fyy_updated.supp ) Sc  9.72 RMS   0.38 Len 454 nfit 454 
+ See file Q9UGL1_cif_stamp.1 for the alignment and transformations
+Cluster:  2 (5fz8_updated.supp  & 5fz9_updated.supp 5fyy_updated.supp ) Sc  9.90 RMS   0.36 Len 454 nfit 452 
+ See file Q9UGL1_cif_stamp.2 for the alignment and transformations
+Cluster:  3 (5fz4_updated.supp  & 5fz8_updated.supp 5fz9_updated.supp 5fyy_updated.supp ) Sc  9.89 RMS   0.31 Len 454 nfit 451 
+ See file Q9UGL1_cif_stamp.3 for the alignment and transformations
+Cluster:  4 (5fyu_updated.supp  & 5fz4_updated.supp 5fz8_updated.supp 5fz9_updated.supp 5fyy_updated.supp ) Sc  9.86 RMS   0.32 Len 456 nfit 450 
+ See file Q9UGL1_cif_stamp.4 for the alignment and transformations
+Cluster:  5 (5fze_updated.supp  & 5fyu_updated.supp 5fz4_updated.supp 5fz8_updated.supp 5fz9_updated.supp 5fyy_updated.supp ) Sc  9.90 RMS   0.31 Len 458 nfit 450 
+ See file Q9UGL1_cif_stamp.5 for the alignment and transformations
+Cluster:  6 (5lw9_updated.supp  & 6h4z_updated.supp ) Sc  9.62 RMS   0.47 Len 456 nfit 455 
+ See file Q9UGL1_cif_stamp.6 for the alignment and transformations
+Cluster:  7 (6ej1_updated.supp  & 5fze_updated.supp 5fyu_updated.supp 5fz4_updated.supp 5fz8_updated.supp 5fz9_updated.supp 5fyy_updated.supp ) Sc  9.88 RMS   0.29 Len 457 nfit 447 
+ See file Q9UGL1_cif_stamp.7 for the alignment and transformations
+Cluster:  8 (5fy9_updated.supp  & 6ej1_updated.supp 5fze_updated.supp 5fyu_updated.supp 5fz4_updated.supp 5fz8_updated.supp 5fz9_updated.supp 5fyy_updated.supp ) Sc  9.87 RMS   0.30 Len 462 nfit 447 
+ See file Q9UGL1_cif_stamp.8 for the alignment and transformations
+Cluster:  9 (5fy9_updated.supp 6ej1_updated.supp 5fze_updated.supp 5fyu_updated.supp 5fz4_updated.supp 5fz8_updated.supp 5fz9_updated.supp 5fyy_updated.supp  & 5lw9_updated.supp 6h4z_updated.supp ) Sc  9.82 RMS   0.38 Len 464 nfit 444 
+ See file Q9UGL1_cif_stamp.9 for the alignment and transformations

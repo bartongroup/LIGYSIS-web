@@ -1,0 +1,218 @@
+# opening files
+
+open 5fz9_updated.simp.cif
+
+open 5fze_updated.simp.cif
+
+open 5lw9_updated.simp.cif
+
+open 6h4z_updated.simp.cif
+
+open 5fyy_updated.simp.cif
+
+open 5fy9_updated.simp.cif
+
+open 5fz8_updated.simp.cif
+
+open 5fz4_updated.simp.cif
+
+open 5fyu_updated.simp.cif
+
+open 6ej1_updated.simp.cif
+
+# opening attribute file
+
+open Q9UGL1_cif_average_0.5.defattr
+
+# colouring and formatting for visualisation
+
+color white; set bgColor white
+
+set silhouette ON; set silhouetteWidth 2; set silhouetteColor black
+
+~disp; select ~protein; ~select : HOH; ~select ::binding_site==-1; disp sel; ~sel
+
+surf; surface color white; transparency 70 s;
+
+col ::binding_site==0 #cc5151;
+col ::binding_site==1 #7f3333;
+col ::binding_site==2 #51cccc;
+col ::binding_site==3 #337f7f;
+col ::binding_site==4 #8ecc51;
+col ::binding_site==5 #597f33;
+col ::binding_site==6 #8e51cc;
+col ::binding_site==7 #59337f;
+col ::binding_site==8 #ccad51;
+col ::binding_site==9 #7f6c33;
+col ::binding_site==10 #51cc70;
+col ::binding_site==11 #337f46;
+col ::binding_site==7 #59337f;
+col ::binding_site==12 #5170cc;
+col ::binding_site==13 #33467f;
+col ::binding_site==14 #cc51ad;
+col ::binding_site==15 #7f336c;
+col ::binding_site==16 #cc7f51;
+col ::binding_site==0 #cc5151;
+col ::binding_site==4 #8ecc51;
+col ::binding_site==3 #337f7f;
+col ::binding_site==0 #cc5151;
+col ::binding_site==0 #cc5151;
+col ::binding_site==1 #7f3333;
+col ::binding_site==16 #cc7f51;
+col ::binding_site==6 #8e51cc;
+col ::binding_site==7 #59337f;
+col ::binding_site==9 #7f6c33;
+col ::binding_site==10 #51cc70;
+col ::binding_site==11 #337f46;
+col ::binding_site==7 #59337f;
+col ::binding_site==12 #5170cc;
+col ::binding_site==15 #7f336c;
+col ::binding_site==14 #cc51ad;
+col ::binding_site==14 #cc51ad;
+col ::binding_site==0 #cc5151;
+col ::binding_site==4 #8ecc51;
+col ::binding_site==3 #337f7f;
+col ::binding_site==5 #597f33;
+col ::binding_site==11 #337f46;
+col ::binding_site==16 #cc7f51;
+col ::binding_site==15 #7f336c;
+col ::binding_site==13 #33467f;
+col ::binding_site==14 #cc51ad;
+col ::binding_site==0 #cc5151;
+col ::binding_site==1 #7f3333;
+col ::binding_site==15 #7f336c;
+col ::binding_site==13 #33467f;
+col ::binding_site==17 #7f4f33;
+col ::binding_site==3 #337f7f;
+col ::binding_site==16 #cc7f51;
+col ::binding_site==6 #8e51cc;
+col ::binding_site==7 #59337f;
+col ::binding_site==8 #ccad51;
+col ::binding_site==11 #337f46;
+col ::binding_site==7 #59337f;
+col ::binding_site==4 #8ecc51;
+col ::binding_site==2 #51cccc;
+col ::binding_site==14 #cc51ad;
+col ::binding_site==18 #bccc51;
+col ::binding_site==0 #cc5151;
+col ::binding_site==0 #cc5151;
+col ::binding_site==1 #7f3333;
+col ::binding_site==14 #cc51ad;
+col ::binding_site==3 #337f7f;
+col ::binding_site==19 #757f33;
+col ::binding_site==4 #8ecc51;
+col ::binding_site==5 #597f33;
+col ::binding_site==6 #8e51cc;
+col ::binding_site==7 #59337f;
+col ::binding_site==8 #ccad51;
+col ::binding_site==9 #7f6c33;
+col ::binding_site==10 #51cc70;
+col ::binding_site==11 #337f46;
+col ::binding_site==7 #59337f;
+col ::binding_site==16 #cc7f51;
+col ::binding_site==20 #60cc51;
+col ::binding_site==19 #757f33;
+col ::binding_site==17 #7f4f33;
+col ::binding_site==21 #3c7f33;
+col ::binding_site==13 #33467f;
+col ::binding_site==15 #7f336c;
+col ::binding_site==0 #cc5151;
+col ::binding_site==0 #cc5151;
+col ::binding_site==1 #7f3333;
+col ::binding_site==3 #337f7f;
+col ::binding_site==4 #8ecc51;
+col ::binding_site==8 #ccad51;
+col ::binding_site==14 #cc51ad;
+col ::binding_site==22 #51cc9e;
+col ::binding_site==15 #7f336c;
+col ::binding_site==16 #cc7f51;
+col ::binding_site==17 #7f4f33;
+col ::binding_site==20 #60cc51;
+col ::binding_site==13 #33467f;
+col ::binding_site==13 #33467f;
+col ::binding_site==7 #59337f;
+col ::binding_site==23 #337f62;
+col ::binding_site==24 #519ecc;
+col ::binding_site==5 #597f33;
+col ::binding_site==11 #337f46;
+col ::binding_site==0 #cc5151;
+col ::binding_site==10 #51cc70;
+col ::binding_site==25 #33627f;
+col ::binding_site==26 #6051cc;
+col ::binding_site==0 #cc5151;
+col ::binding_site==3 #337f7f;
+col ::binding_site==24 #519ecc;
+col ::binding_site==0 #cc5151;
+col ::binding_site==5 #597f33;
+col ::binding_site==6 #8e51cc;
+col ::binding_site==7 #59337f;
+col ::binding_site==8 #ccad51;
+col ::binding_site==9 #7f6c33;
+col ::binding_site==10 #51cc70;
+col ::binding_site==11 #337f46;
+col ::binding_site==7 #59337f;
+col ::binding_site==12 #5170cc;
+col ::binding_site==13 #33467f;
+col ::binding_site==13 #33467f;
+col ::binding_site==27 #3c337f;
+col ::binding_site==20 #60cc51;
+col ::binding_site==15 #7f336c;
+col ::binding_site==17 #7f4f33;
+col ::binding_site==16 #cc7f51;
+col ::binding_site==14 #cc51ad;
+col ::binding_site==4 #8ecc51;
+col ::binding_site==0 #cc5151;
+col ::binding_site==4 #8ecc51;
+col ::binding_site==3 #337f7f;
+col ::binding_site==15 #7f336c;
+col ::binding_site==16 #cc7f51;
+col ::binding_site==17 #7f4f33;
+col ::binding_site==14 #cc51ad;
+col ::binding_site==13 #33467f;
+col ::binding_site==6 #8e51cc;
+col ::binding_site==0 #cc5151;
+col ::binding_site==1 #7f3333;
+col ::binding_site==14 #cc51ad;
+col ::binding_site==3 #337f7f;
+col ::binding_site==16 #cc7f51;
+col ::binding_site==6 #8e51cc;
+col ::binding_site==7 #59337f;
+col ::binding_site==8 #ccad51;
+col ::binding_site==9 #7f6c33;
+col ::binding_site==10 #51cc70;
+col ::binding_site==11 #337f46;
+col ::binding_site==7 #59337f;
+col ::binding_site==12 #5170cc;
+col ::binding_site==14 #cc51ad;
+col ::binding_site==4 #8ecc51;
+col ::binding_site==0 #cc5151;
+col ::binding_site==17 #7f4f33;
+col ::binding_site==15 #7f336c;
+col ::binding_site==13 #33467f;
+col ::binding_site==16 #cc7f51;
+col ::binding_site==0 #cc5151;
+col ::binding_site==1 #7f3333;
+col ::binding_site==0 #cc5151;
+col ::binding_site==20 #60cc51;
+col ::binding_site==5 #597f33;
+col ::binding_site==6 #8e51cc;
+col ::binding_site==7 #59337f;
+col ::binding_site==8 #ccad51;
+col ::binding_site==9 #7f6c33;
+col ::binding_site==10 #51cc70;
+col ::binding_site==11 #337f46;
+col ::binding_site==7 #59337f;
+col ::binding_site==12 #5170cc;
+col ::binding_site==28 #bc51cc;
+col ::binding_site==24 #519ecc;
+col ::binding_site==13 #33467f;
+col ::binding_site==14 #cc51ad;
+col ::binding_site==13 #33467f;
+col ::binding_site==29 #75337f;
+col ::binding_site==30 #cc517f;
+col ::binding_site==31 #7f334f;
+col ::binding_site==4 #8ecc51;
+col ::binding_site==3 #337f7f;
+col ::binding_site==14 #cc51ad;
+save Q9UGL1_cif_average_0.5.cxs
+
