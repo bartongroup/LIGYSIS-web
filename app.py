@@ -492,7 +492,7 @@ def results(prot_id, seg_id): # route for results site. Takes Prot ID and Seg ID
 
     # simple_pdbs_full_path = [f'/static/data/{prot_id}/{seg_id}/simple/{el}' for el in simple_pdbs]
     # simple_pdbs_full_path = [f'{PROTS_FOLDER}/{prot_id}/{seg_id}/simple/{el}' for el in simple_pdbs]
-    simple_pdbs_full_path = [f'http://127.0.0.1:9000/files/{prot_id}/{seg_id}/simple/{el}' for el in simple_pdbs]
+    simple_pdbs_full_path = [f'/files/{prot_id}/{seg_id}/simple/{el}' for el in simple_pdbs]
 
     n_strucs = len(assembly_pdbs) # number of structures
     # n_ligs = len(load_pickle(os.path.join(DATA_FOLDER, "example", "other", f'{prot_id}_{seg_id}_ALL_inf_ligs_fingerprints.pkl'))) # number of ligands
