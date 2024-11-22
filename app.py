@@ -527,6 +527,13 @@ def serve_file(filename):
     except FileNotFoundError:
         abort(404)
 
+@app.route('/user-files/<path:filename>')
+def user_serve_file(filename):
+    try:
+        return send_from_directory(USER_JOBS_OUT_FOLDER, filename)
+    except FileNotFoundError:
+        abort(404)
+
 @app.route('/assemblies/<path:filename>')
 def serve_assembly(filename):
     try:
@@ -1337,6 +1344,7 @@ def user_results(job_id): # route for user results site. Takes Job ID
     job_results_dir = os.path.join(job_output_dir, "results")
     job_supp_cifs_dir = os.path.join(job_output_dir, "supp_cifs")
     job_mappings_dir = os.path.join(job_output_dir, "mappings")
+    job_variants_dir = os.path.join(job_output_dir, "varalign")
     job_simple_cifs_dir = os.path.join(job_output_dir, "simple_cifs")
 
     results_df = pd.read_pickle(os.path.join(job_results_dir, f"{job_id}_results_table.pkl")) # results df contains all residues
@@ -1407,8 +1415,8 @@ def user_results(job_id): # route for user results site. Takes Job ID
     simple_cifs = os.listdir(job_simple_cifs_dir) # simple PDB file names (single chain)
     simple_cifs = [el for el in simple_cifs if el.endswith(".cif")] # TODO NEED TO FIGURE THIS OUT
 
-    simple_cifs_full_path = [f'/static/data/USER_JOBS/OUT/{job_id}/simple_cifs/{el}' for el in simple_cifs]
-
+    # simple_cifs_full_path = [f'/static/data/USER_JOBS/OUT/{job_id}/simple_cifs/{el}' for el in simple_cifs] 
+    simple_cifs_full_path = [f'/user-files/{job_id}/simple_cifs/{el}' for el in simple_cifs] 
     n_strucs = len([el for el in os.listdir(job_supp_cifs_dir) if el.endswith(".cif")]) # number of structures
     n_ligs = len(load_pickle(os.path.join(job_results_dir, f"{job_id}_ligs_fingerprints.pkl"))) # number of ligands
     n_sites = len(bss_data) # number of binding sites
@@ -1424,7 +1432,8 @@ def user_results(job_id): # route for user results site. Takes Job ID
         first_site_data = first_site_data, bs_table_tooltips = bs_table_tooltips, bs_ress_table_tooltips = bs_ress_table_tooltips,
         pdb2up_dict = pdb2up_dict, up2pdb_dict = up2pdb_dict, seg_stats = seg_stats, entry_name = entry_name, upid_name = upid_name, prot_long_name = prot_long_name,
         simple_pdbs = simple_cifs_full_path, assembly_pdb_ids = assembly_pdb_ids, prot_atoms_struc = prot_atoms_struc,
-        prot_acc = uniprot_info["up_id"], prot_entry = uniprot_info["up_entry"], prot_name = uniprot_info["prot_name"], struc_count = struc_count
+        prot_acc = uniprot_info["up_id"], prot_entry = uniprot_info["up_entry"], prot_name = uniprot_info["prot_name"], struc_count = struc_count,
+        job_results_dir = job_results_dir, job_variants_dir = job_variants_dir
     )
 
 @app.route('/user-process-model-order', methods=['POST'])
