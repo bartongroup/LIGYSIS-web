@@ -417,7 +417,7 @@ def index(): # route for index main site
             # raise
             job_id = request.form['jobId']
             if os.path.isdir(os.path.join(USER_JOBS_OUT_FOLDER, job_id)):
-                return redirect(url_for('user_results', job_id = job_id)) # renders user results page
+                return redirect(url_for('user_results', session_id=job_id, submission_time='none')) # renders user results page
             else:
                 return render_template('USER_error.html', job_id = job_id)
 
@@ -1346,11 +1346,47 @@ def status(session_id):
     results = fetch_results(session_id)
     return render_template('results.html', results=results, session_id=session_id,
                            current_time=datetime.now(), timedelta_24h=timedelta(days=1))
-    
-@app.route('/user-results/<job_id>', methods = ['POST', 'GET'])
-def user_results(job_id): # route for user results site. Takes Job ID
 
+# Route used to serve structures from the user jobs for 3Dmol.js   
+@app.route('/files/<session_id>/<submission_time>/<path:filename>')
+def serve_file(session_id, submission_time, filename):
+    # Validate session_id and submission_time
+    if not is_valid_session_id(session_id) or not is_valid_submission_time(submission_time):
+        return "Invalid input", 400
+    
+    # Sanitize filename
+    sanitized_filename = secure_filename(filename)
+
+    directory = os.path.join(SESSIONS_FOLDER, session_id, submission_time, "OUT", "input_structures", "simple_cifs")
+    file_path = os.path.join(directory, sanitized_filename)
+    
+    try:
+        # return send_from_directory(PROTS_FOLDER, filename)
+        return send_from_directory(directory, filename)
+    except FileNotFoundError:
+        abort(404)
+
+@app.route('/user-results/<session_id>/<submission_time>', methods = ['POST', 'GET'])
+def user_results(session_id, submission_time): # route for user results site. Takes Job ID
+
+    job_id = session_id  # trying to maintain compatibility with demo version
     job_output_dir = os.path.join(USER_JOBS_OUT_FOLDER, job_id)
+    if not os.path.exists(job_output_dir):
+    
+        job_id = "input_structures" # job ID is fixed
+        
+        # Validate session_id and submission_time
+        if not is_valid_session_id(session_id) or not is_valid_submission_time(submission_time):
+            return "Invalid input", 400
+        
+        # Construct the path
+        job_output_dir = os.path.join(SESSIONS_FOLDER, session_id, submission_time, "OUT", "input_structures")
+
+        # Check if the test file exists before trying to load the app
+        check_file_path = os.path.join(job_output_dir, "results", "input_structures_results_table.pkl")
+        if not os.path.exists(check_file_path):
+            return "File not found", 404
+                
     job_results_dir = os.path.join(job_output_dir, "results")
     job_supp_cifs_dir = os.path.join(job_output_dir, "supp_cifs")
     job_mappings_dir = os.path.join(job_output_dir, "mappings")
@@ -1424,7 +1460,10 @@ def user_results(job_id): # route for user results site. Takes Job ID
     simple_cifs = os.listdir(job_simple_cifs_dir) # simple PDB file names (single chain)
     simple_cifs = [el for el in simple_cifs if el.endswith(".cif")] # TODO NEED TO FIGURE THIS OUT
 
-    simple_cifs_full_path = [f'/static/data/USER_JOBS/OUT/{job_id}/simple_cifs/{el}' for el in simple_cifs]
+    simple_cifs_full_path = [f'/files/{session_id}/{submission_time}/{el}' for el in simple_cifs]
+    if job_simple_cifs_dir.startswith(USER_JOBS_OUT_FOLDER):
+        # TODO: This temporary to handle the different paths for user jobs and demo jobs
+        simple_cifs_full_path = [f'/static/data/USER_JOBS/OUT/{job_id}/simple_cifs/{el}' for el in simple_cifs]
 
     n_strucs = len([el for el in os.listdir(job_supp_cifs_dir) if el.endswith(".cif")]) # number of structures
     n_ligs = len(load_pickle(os.path.join(job_results_dir, f"{job_id}_ligs_fingerprints.pkl"))) # number of ligands
