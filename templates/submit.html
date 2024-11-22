@@ -1,0 +1,90 @@
+{% extends "base.html" %}
+
+{% block head %}<title>Ligysis Analysis Submission</title>{% endblock %}
+
+{% block main %}
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-header bg-primary text-white">
+                    Ligysis Analysis Submission
+                </div>
+                <div class="card-body">
+                    <form action="/submit" method="post" enctype="multipart/form-data" id="ligysisForm">
+                        {{ form.hidden_tag() }}
+                        <div class="mb-3">
+                            {{ form.uniprot_id.label(class="form-label") }}
+                            {{ form.uniprot_id(class="form-control", rows=5, **{'data-drag-drop': 'true'}) }}
+                        </div>
+                        <div class="mb-3">
+                            {{ form.files.label(class="form-label") }}
+                            {{ form.files(class="form-control", id="files", multiple=True) }}
+                        </div>
+                        <div class="mb-3">
+                            <div id="dropArea" class="drop-area">
+                                Drag & Drop files here
+                            </div>
+                        </div>
+                        <div class="mb-3">
+                            <button type="submit" class="btn btn-primary" id="submitButton">Submit</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- JavaScript for button feedback -->
+<script>
+    $(document).ready(function () {
+        $("#ligysisForm").submit(function (event) {
+            $("#submitButton").text("Processing...").prop("disabled", true);
+        });
+    });
+</script>
+<!-- JavaScript for drag and drop -->
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        var dropArea = document.getElementById('dropArea');
+        var input = document.getElementById('files');
+
+        dropArea.addEventListener('dragover', function (event) {
+            event.preventDefault();
+            event.stopPropagation();
+            dropArea.classList.add('dragging');
+        });
+
+        dropArea.addEventListener('dragleave', function (event) {
+            event.preventDefault();
+            event.stopPropagation();
+            dropArea.classList.remove('dragging');
+        });
+
+        dropArea.addEventListener('drop', function (event) {
+            event.preventDefault();
+            event.stopPropagation();
+            dropArea.classList.remove('dragging');
+
+            var files = event.dataTransfer.files;
+            input.files = files;
+        });
+    });
+</script>
+
+<style>
+    .drop-area {
+        border: 2px dashed #ccc;
+        border-radius: 10px;
+        padding: 20px;
+        text-align: center;
+        color: #999;
+        background-color: #f9f9f9;
+    }
+    .drop-area.dragging {
+        border-color: #000;
+        background-color: #e9e9e9;
+    }
+</style>
+{% endblock %}

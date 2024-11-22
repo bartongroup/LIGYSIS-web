@@ -1,17 +1,32 @@
 ### PACKAGE IMPORTS ###
+from gevent import monkey
+monkey.patch_all()
+
+import gevent
+from gevent.pywsgi import WSGIServer
 
 import os
 import re
 import io
 import csv
 import pickle
+import uuid
 import zipfile
 import numpy as np
 import pandas as pd
 
+from datetime import datetime, timedelta
+
+from flask import Flask, render_template, url_for, request, redirect, jsonify, Response, send_file, send_from_directory, session
+from werkzeug.utils import secure_filename
+
 from config import BASE_DIR, DATA_FOLDER, SITE_TABLES_FOLDER, RES_TABLES_FOLDER, REP_STRUCS_FOLDER, BS_RESS_FOLDER, MAPPINGS_FOLDER, STATS_FOLDER, ENTRY_NAMES_FOLDER, USER_JOBS_OUT_FOLDER, SESSIONS_FOLDER
+from filters import datetime_parse, datetime_format
+from forms import LigysisForm
 from logger_config import setup_logging
 from session_db import initialize_db, fetch_results
+from submission import SubmissionHandler
+from utils.validation import is_valid_session_id, is_valid_submission_time
 
 ### FUNCTIONS ###
 
@@ -368,6 +383,9 @@ initialize_db()
 
 custom_logger = setup_logging(name='app')
 
+# Register the filters used in job status table
+app.jinja_env.filters['datetime_parse'] = datetime_parse
+app.jinja_env.filters['datetime_format'] = datetime_format
 
 ################### ROUTES FOR LIGYSIS RESULTS ####################
 
@@ -1272,6 +1290,63 @@ def download_all_assemblies_contact_data(): # route to download contacts data fo
 
 ####################### ROUTES FOR USER JOBS #######################
 
+@app.route('/submit', methods=['GET', 'POST'])
+def submit():
+    if 'session_id' not in session:
+        session['session_id'] = str(uuid.uuid4())
+    
+    session_id = session['session_id']
+    form = LigysisForm()
+
+    if form.validate_on_submit():
+        config = {
+            'uniprot_id': request.form.get('uniprot_id', 'Q9UGL1'),
+            'format': request.form.get('format', 'mmcif'),
+            'variants': request.form.get('variants', True),
+            'override': request.form.get('override', True),
+            'clust_method': request.form.get('clust_method', 'average'),
+            'clust_dist': request.form.get('clust_dist', 0.5),
+            'hmm_iters': request.form.get('hmm_iters', 3),
+            'file_key_override': 'input_dir'  # Custom file key for ligysis service
+        }
+        
+        submission_handler = SubmissionHandler(session_id, form, service_type='ligysis', config=config, tar_upload=True)
+        gevent.spawn(submission_handler.handle_submission)
+        submission_handler.metadata_available.wait()
+        return redirect(url_for('status', session_id=session_id))
+    
+    return render_template('submit.html', form=form)
+
+# Route used to download submission tar on status page
+@app.route('/download/<session_id>/<submission_time>/<filename>')
+def download(session_id, submission_time, filename):
+    # Validate session_id and submission_time
+    if not is_valid_session_id(session_id) or not is_valid_submission_time(submission_time):
+        return "Invalid input", 400
+
+    # Sanitize filename
+    sanitized_filename = secure_filename(filename)
+
+    directory = os.path.join(SESSIONS_FOLDER, session_id, submission_time)
+    file_path = os.path.join(directory, sanitized_filename)
+
+    # Check if the file exists before sending it
+    if os.path.exists(file_path):
+        return send_from_directory(directory=directory, path=sanitized_filename, as_attachment=True)
+    else:
+        return "File not found", 404
+
+@app.route('/status/<session_id>', methods=['GET'])
+def status(session_id):
+    # Validate session_id
+    if not is_valid_session_id(session_id):
+        return "Invalid input", 400
+    
+    # Fetch results based on the session ID
+    results = fetch_results(session_id)
+    return render_template('results.html', results=results, session_id=session_id,
+                           current_time=datetime.now(), timedelta_24h=timedelta(days=1))
+    
 @app.route('/user-results/<job_id>', methods = ['POST', 'GET'])
 def user_results(job_id): # route for user results site. Takes Job ID
 
