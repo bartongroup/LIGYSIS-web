@@ -1,0 +1,53 @@
+% Output from STAMP ROUGH FIT routine
+%  The sequences from the file /cluster/home/2394007/fragsys_custom/OUT/P14618_cif/results/P14618_cif_stamp.domains have been aligned from their
+%  N-terminal ends, andthe resulting equivalences were be used 
+% to generate the superpositions given below.
+% Domains 8hmr-assembly1.supp onto 6ttq-assembly1.supp RMS of 15.105761 on 2034 atoms
+% Domains 8hmr-assembly1.supp onto 3gr4-assembly1.supp RMS of 12.761531 on 2034 atoms
+% Domains 8hmr-assembly1.supp onto 6v75-assembly1.supp RMS of 32.764244 on 1970 atoms
+% Domains 8hmr-assembly1.supp onto 4fxf-assembly1.supp RMS of 37.679897 on 2009 atoms
+% Domains 8hmr-assembly1.supp onto 4g1n-assembly1.supp RMS of 18.781950 on 2034 atoms
+% Domains 8hmr-assembly1.supp onto 4jpg-assembly1.supp RMS of 15.847898 on 2034 atoms
+% Domains 8hmr-assembly1.supp onto 6ttf-assembly1.supp RMS of 11.920538 on 2034 atoms
+% Domains 8hmr-assembly1.supp onto 4wj8-assembly1.supp RMS of 48.724865 on 2034 atoms
+% Domains 8hmr-assembly1.supp onto 6gg6-assembly1.supp RMS of 36.474106 on 2034 atoms
+/cluster/home/2394007/fragsys_custom/OUT/P14618_cif/clean_pdbs/8hmr-assembly1.clean.pdb 8hmr-assembly1.supp { ALL 
+    1.0000     0.0000     0.0000       0.0000 
+    0.0000     1.0000     0.0000       0.0000 
+    0.0000     0.0000     1.0000       0.0000  } 
+/cluster/home/2394007/fragsys_custom/OUT/P14618_cif/clean_pdbs/6ttq-assembly1.clean.pdb 6ttq-assembly1.supp { ALL 
+   -0.5357     0.7659    -0.3556      19.2294 
+    0.4964     0.6263     0.6012    -100.7314 
+    0.6831     0.1455    -0.7157      29.7223  } 
+/cluster/home/2394007/fragsys_custom/OUT/P14618_cif/clean_pdbs/3gr4-assembly1.clean.pdb 3gr4-assembly1.supp { ALL 
+    0.9984     0.0209     0.0517       0.3213 
+   -0.0228     0.9991     0.0363      -0.2051 
+   -0.0508    -0.0375     0.9980      -0.7317  } 
+/cluster/home/2394007/fragsys_custom/OUT/P14618_cif/clean_pdbs/6v75-assembly1.clean.pdb 6v75-assembly1.supp { ALL 
+   -0.9906     0.1307    -0.0402     -43.5400 
+    0.1322     0.9905    -0.0383      -9.5246 
+    0.0348    -0.0433    -0.9985       2.9836  } 
+/cluster/home/2394007/fragsys_custom/OUT/P14618_cif/clean_pdbs/4fxf-assembly1.clean.pdb 4fxf-assembly1.supp { ALL 
+    0.3645    -0.8093    -0.4605      54.2880 
+   -0.8280    -0.5080     0.2373     -17.8999 
+   -0.4260     0.2948    -0.8553     108.6580  } 
+/cluster/home/2394007/fragsys_custom/OUT/P14618_cif/clean_pdbs/4g1n-assembly1.clean.pdb 4g1n-assembly1.supp { ALL 
+   -0.5582     0.8265     0.0734      18.7758 
+    0.8270     0.5613    -0.0311      10.1534 
+   -0.0669     0.0434    -0.9968      56.7742  } 
+/cluster/home/2394007/fragsys_custom/OUT/P14618_cif/clean_pdbs/4jpg-assembly1.clean.pdb 4jpg-assembly1.supp { ALL 
+    0.9993    -0.0032     0.0377       1.1102 
+    0.0023     0.9997     0.0233      -0.1726 
+   -0.0378    -0.0232     0.9990      -0.9124  } 
+/cluster/home/2394007/fragsys_custom/OUT/P14618_cif/clean_pdbs/6ttf-assembly1.clean.pdb 6ttf-assembly1.supp { ALL 
+    0.5522    -0.7531    -0.3577      55.7246 
+   -0.4903    -0.6404     0.5912      14.6846 
+   -0.6743    -0.1511    -0.7228     109.0135  } 
+/cluster/home/2394007/fragsys_custom/OUT/P14618_cif/clean_pdbs/4wj8-assembly1.clean.pdb 4wj8-assembly1.supp { ALL 
+    0.5107    -0.5075    -0.6940      29.1743 
+   -0.6764     0.2612    -0.6887      19.5589 
+    0.5307     0.8211    -0.2099      21.3975  } 
+/cluster/home/2394007/fragsys_custom/OUT/P14618_cif/clean_pdbs/6gg6-assembly1.clean.pdb 6gg6-assembly1.supp { ALL 
+    0.0969     0.1048     0.9898      74.2166 
+    0.1294    -0.9873     0.0919     -21.1027 
+    0.9868     0.1192    -0.1093      95.6283  } 

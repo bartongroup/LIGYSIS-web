@@ -1,0 +1,81 @@
+
+STAMP Structural Alignment of Multiple Proteins
+
+Version 4.5 (10 September 2020)
+ by Robert B. Russell & Geoffrey J. Barton 
+ Please cite PROTEINS, v14, 309-323, 1992. PMID:1409577
+Running roughfit.
+
+    Sc = STAMP score, RMS = RMS deviation, Align = alignment length
+    Len1, Len2 = length of domain, Nfit = residues fitted
+    Secs = no. equivalent sec. strucs. Eq = no. equivalent residues
+    %I = seq. identity, %S = sec. str. identity
+    P(m)  = P value (p=1/10) calculated after Murzin (1993), JMB, 230, 689-694
+            (NC = P value not calculated - potential FP overflow)
+
+     No.  Domain1         Domain2         Sc     RMS    Len1 Len2  Align NFit Eq. Secs.   %I   %S   P(m)
+Pair   1  8hmr-assembly1.supp 6ttq-assembly1.supp 6.14   2.52   2034 2040  2164 1627 1595    0  99.31 100.00 0.00e+00 
+Pair   2  8hmr-assembly1.supp 3gr4-assembly1.supp 8.90   0.98   2034 2048  2072 1934 1930    0  99.84 100.00 0.00e+00 
+Pair   3  8hmr-assembly1.supp 6v75-assembly1.supp 5.29   1.24   2034 1970  1980 1510 1507    0  99.80 100.00 0.00e+00 
+Pair   4  8hmr-assembly1.supp 4fxf-assembly1.supp 4.69   0.96   2034 2009  2070 1362 1355    0  99.41 100.00 0.00e+00 
+Pair   5  8hmr-assembly1.supp 4g1n-assembly1.supp 8.47   1.56   2034 2072  2078 1940 1932    0  99.64 100.00 0.00e+00 
+Pair   6  8hmr-assembly1.supp 4jpg-assembly1.supp 8.83   0.95   2034 2059  2083 1924 1916    0  99.74 100.00 0.00e+00 
+Pair   7  8hmr-assembly1.supp 6ttf-assembly1.supp 7.41   1.41   2034 2056  2151 1715 1699    0  99.23 100.00 0.00e+00 
+Pair   8  8hmr-assembly1.supp 4wj8-assembly1.supp 0.11  18.88   2034 2068  3142  894 182    0   7.69 100.00 1.00e+00  LOW SCORE
+Pair   9  8hmr-assembly1.supp 6gg6-assembly1.supp 5.19   0.87   2034 2044  2057 1501 1501    0  99.80 100.00 0.00e+00 
+Pair  10  6ttq-assembly1.supp 3gr4-assembly1.supp 6.27   2.53   2040 2048  2166 1662 1640    0 100.00 100.00 0.00e+00 
+Pair  11  6ttq-assembly1.supp 6v75-assembly1.supp 4.16   1.94   2040 1970  2031 1284 1261    0  99.52 100.00 0.00e+00 
+Pair  12  6ttq-assembly1.supp 4fxf-assembly1.supp 3.47   2.13   2040 2009  2180 1192 1174    0  99.49 100.00 0.00e+00 
+Pair  13  6ttq-assembly1.supp 4g1n-assembly1.supp 6.08   2.57   2040 2072  2188 1651 1631    0  99.82 100.00 0.00e+00 
+Pair  14  6ttq-assembly1.supp 4jpg-assembly1.supp 6.19   2.59   2040 2059  2163 1641 1604    0  99.81 100.00 0.00e+00 
+Pair  15  6ttq-assembly1.supp 6ttf-assembly1.supp 6.83   2.49   2040 2056  2101 1717 1694    0  98.64 100.00 0.00e+00 
+Pair  16  6ttq-assembly1.supp 4wj8-assembly1.supp 0.10  19.54   2040 2068  3181  872 163    0   6.13 100.00 1.00e+00  LOW SCORE
+Pair  17  6ttq-assembly1.supp 6gg6-assembly1.supp 3.65   2.40   2040 2044  2124 1240 1211    0 100.00 100.00 0.00e+00 
+Pair  18  3gr4-assembly1.supp 6v75-assembly1.supp 5.12   1.38   2048 1970  1982 1482 1478    0  99.93 100.00 0.00e+00 
+Pair  19  3gr4-assembly1.supp 4fxf-assembly1.supp 4.55   1.02   2048 2009  2097 1350 1341    0  99.40 100.00 0.00e+00 
+Pair  20  3gr4-assembly1.supp 4g1n-assembly1.supp 8.26   1.34   2048 2072  2102 1858 1845    0  99.95 100.00 0.00e+00 
+Pair  21  3gr4-assembly1.supp 4jpg-assembly1.supp 9.61   0.51   2048 2059  2059 2042 2041    0  99.95 100.00 0.00e+00 
+Pair  22  3gr4-assembly1.supp 6ttf-assembly1.supp 8.01   0.98   2048 2056  2156 1819 1809    0  99.56 100.00 0.00e+00 
+Pair  23  3gr4-assembly1.supp 4wj8-assembly1.supp 0.11  18.71   2048 2068  3196  855 180    0   9.44 100.00 1.00e+00  LOW SCORE
+Pair  24  3gr4-assembly1.supp 6gg6-assembly1.supp 4.87   1.20   2048 2044  2065 1446 1442    0 100.00 100.00 0.00e+00 
+Pair  25  6v75-assembly1.supp 4fxf-assembly1.supp 7.88   0.99   1970 2009  2091 1759 1750    0  99.43 100.00 0.00e+00 
+Pair  26  6v75-assembly1.supp 4g1n-assembly1.supp 4.86   1.80   1970 2072  1990 1468 1455    0  99.73 100.00 0.00e+00 
+Pair  27  6v75-assembly1.supp 4jpg-assembly1.supp 5.11   1.39   1970 2059  1984 1475 1468    0 100.00 100.00 0.00e+00 
+Pair  28  6v75-assembly1.supp 6ttf-assembly1.supp 4.53   1.43   1970 2056  2003 1299 1285    0  99.77 100.00 0.00e+00 
+Pair  29  6v75-assembly1.supp 4wj8-assembly1.supp 0.09  19.04   1970 2068  3068  734 208    0   9.62 100.00 1.00e+00  LOW SCORE
+Pair  30  6v75-assembly1.supp 6gg6-assembly1.supp 8.44   1.32   1970 2044  2060 1922 1922    0  99.79 100.00 0.00e+00 
+Pair  31  4fxf-assembly1.supp 4g1n-assembly1.supp 4.53   1.60   2009 2072  2049 1364 1358    0  99.78 100.00 0.00e+00 
+Pair  32  4fxf-assembly1.supp 4jpg-assembly1.supp 4.57   1.01   2009 2059  2098 1357 1347    0  99.41 100.00 0.00e+00 
+Pair  33  4fxf-assembly1.supp 6ttf-assembly1.supp 3.91   1.29   2009 2056  2177 1228 1215    0  99.59 100.00 0.00e+00 
+Pair  34  4fxf-assembly1.supp 4wj8-assembly1.supp 0.10  19.65   2009 2068  3203  770 193    0  15.03 100.00 7.38e-03  LOW SCORE
+Pair  35  4fxf-assembly1.supp 6gg6-assembly1.supp 8.51   0.96   2009 2044  2055 1854 1847    0  99.78 100.00 0.00e+00 
+Pair  36  4g1n-assembly1.supp 4jpg-assembly1.supp 8.32   1.32   2072 2059  2109 1882 1868    0  99.95 100.00 0.00e+00 
+Pair  37  4g1n-assembly1.supp 6ttf-assembly1.supp 7.56   1.17   2072 2056  2179 1734 1710    0  99.36 100.00 0.00e+00 
+Pair  38  4g1n-assembly1.supp 4wj8-assembly1.supp 0.10  18.94   2072 2068  3266  801 213    0  10.33 100.00 1.00e+00  LOW SCORE
+Pair  39  4g1n-assembly1.supp 6gg6-assembly1.supp 4.83   1.61   2072 2044  2070 1507 1504    0 100.00 100.00 0.00e+00 
+Pair  40  4jpg-assembly1.supp 6ttf-assembly1.supp 8.13   0.97   2059 2056  2151 1839 1835    0  99.40 100.00 0.00e+00 
+Pair  41  4jpg-assembly1.supp 4wj8-assembly1.supp 0.11  18.91   2059 2068  3248  808 221    0   9.95 100.00 1.00e+00  LOW SCORE
+Pair  42  4jpg-assembly1.supp 6gg6-assembly1.supp 4.88   1.12   2059 2044  2069 1441 1433    0 100.00 100.00 0.00e+00 
+Pair  43  6ttf-assembly1.supp 4wj8-assembly1.supp 0.10  18.73   2056 2068  3258  794 197    0  12.18 100.00 5.30e-02  LOW SCORE
+Pair  44  6ttf-assembly1.supp 6gg6-assembly1.supp 4.40   1.35   2056 2044  2113 1337 1327    0  99.17 100.00 0.00e+00 
+Pair  45  4wj8-assembly1.supp 6gg6-assembly1.supp 0.10  18.97   2068 2044  3061  803 185    0   5.95 100.00 1.00e+00  LOW SCORE
+Reading in matrix file P14618_cif_stamp.mat...
+Doing cluster analysis...
+Cluster:  1 (3gr4-assembly1.supp  & 4jpg-assembly1.supp ) Sc  9.60 RMS   0.51 Len 2059 nfit 2042 
+ See file P14618_cif_stamp.1 for the alignment and transformations
+Cluster:  2 (8hmr-assembly1.supp  & 3gr4-assembly1.supp 4jpg-assembly1.supp ) Sc  9.82 RMS   0.99 Len 2082 nfit 1936 
+ See file P14618_cif_stamp.2 for the alignment and transformations
+Cluster:  3 (4fxf-assembly1.supp  & 6gg6-assembly1.supp ) Sc  8.50 RMS   0.96 Len 2055 nfit 1853 
+ See file P14618_cif_stamp.3 for the alignment and transformations
+Cluster:  4 (4g1n-assembly1.supp  & 8hmr-assembly1.supp 3gr4-assembly1.supp 4jpg-assembly1.supp ) Sc  9.62 RMS   1.53 Len 2107 nfit 1918 
+ See file P14618_cif_stamp.4 for the alignment and transformations
+Cluster:  5 (6v75-assembly1.supp  & 4fxf-assembly1.supp 6gg6-assembly1.supp ) Sc  9.56 RMS   1.36 Len 2084 nfit 1867 
+ See file P14618_cif_stamp.5 for the alignment and transformations
+Cluster:  6 (6ttf-assembly1.supp  & 4g1n-assembly1.supp 8hmr-assembly1.supp 3gr4-assembly1.supp 4jpg-assembly1.supp ) Sc  9.14 RMS   1.28 Len 2187 nfit 1803 
+ See file P14618_cif_stamp.6 for the alignment and transformations
+Cluster:  7 (6ttq-assembly1.supp  & 6ttf-assembly1.supp 4g1n-assembly1.supp 8hmr-assembly1.supp 3gr4-assembly1.supp 4jpg-assembly1.supp ) Sc  8.56 RMS   2.60 Len 2224 nfit 1734 
+ See file P14618_cif_stamp.7 for the alignment and transformations
+Cluster:  8 (6ttq-assembly1.supp 6ttf-assembly1.supp 4g1n-assembly1.supp 8hmr-assembly1.supp 3gr4-assembly1.supp 4jpg-assembly1.supp  & 6v75-assembly1.supp 4fxf-assembly1.supp 6gg6-assembly1.supp ) Sc  6.12 RMS   1.05 Len 2217 nfit 1342 
+ See file P14618_cif_stamp.8 for the alignment and transformations
+Cluster:  9 (4wj8-assembly1.supp  & 6ttq-assembly1.supp 6ttf-assembly1.supp 4g1n-assembly1.supp 8hmr-assembly1.supp 3gr4-assembly1.supp 4jpg-assembly1.supp 6v75-assembly1.supp 4fxf-assembly1.supp 6gg6-assembly1.supp ) Sc  0.88 RMS   4.14 Len 4380 nfit 171  LOW SCORE 
+ See file P14618_cif_stamp.9 for the alignment and transformations
