@@ -9,9 +9,9 @@ import zipfile
 import numpy as np
 import pandas as pd
 
-from flask import Flask, render_template, url_for, request, redirect, jsonify, Response, send_file
-
-from config import BASE_DIR, DATA_FOLDER, SITE_TABLES_FOLDER, RES_TABLES_FOLDER, REP_STRUCS_FOLDER, BS_RESS_FOLDER, MAPPINGS_FOLDER, STATS_FOLDER, ENTRY_NAMES_FOLDER, USER_JOBS_OUT_FOLDER
+from config import BASE_DIR, DATA_FOLDER, SITE_TABLES_FOLDER, RES_TABLES_FOLDER, REP_STRUCS_FOLDER, BS_RESS_FOLDER, MAPPINGS_FOLDER, STATS_FOLDER, ENTRY_NAMES_FOLDER, USER_JOBS_OUT_FOLDER, SESSIONS_FOLDER
+from logger_config import setup_logging
+from session_db import initialize_db, fetch_results
 
 ### FUNCTIONS ###
 
@@ -360,6 +360,14 @@ ACCS = sorted(list(set(list(LIGYSIS_prots_dat_EXT.values()))))
 ######################## FLASK APPLICATION ########################
 
 app = Flask(__name__)
+app.config['SECRET_KEY'] = os.environ.get('SECRET_KEY', 'default_secret_key')
+
+os.makedirs(SESSIONS_FOLDER, exist_ok=True)
+
+initialize_db()
+
+custom_logger = setup_logging(name='app')
+
 
 ################### ROUTES FOR LIGYSIS RESULTS ####################
 
