@@ -1,0 +1,11 @@
+# STOCKHOLM 1.0
+#=GF SQ 2
+sp|Q5TDH0|DDI2_HUMAN/238-334 ----------INCKV--NGH----------PVKAFVDSGAQMTIMSQ-AC--------A----ERCN-----IMRLVDRR-WAGIAK--------GVGTQKIIG-RVHL----AQV--QIE----GDFLPCSF------SI-LE-EQPM---D----ML-LGLDMLKRHQCSI--
+#=GS sp|Q5TDH0|DDI2_HUMAN/238-334 AC Q5TDH0
+#=GS sp|Q5TDH0|DDI2_HUMAN/238-334 DE [subseq from] Protein DDI1 homolog 2 OS=Homo sapiens OX=9606 GN=DDI2 PE=1 SV=1
+#=GR sp|Q5TDH0|DDI2_HUMAN/238-334 PP ..........6899*..***..........*****************.99........7....6665.....44442233.344245........*********.****....***..***....*******9......87.65.5999...7....47.9*******99988..
+sp|Q8WTU0|DDI1_HUMAN/246-342 ----------INCKV--NGH----------PLKAFVDSGAQMTIMSQ-AC--------A----ERCN-----IMRL---------VDRRWAGVAKGVGTQRIIG-RVHL----AQI--QIE----GDFLQCSF------SI-LE-DQPM---D----ML-LGLDMLRRHQCSI--
+#=GS sp|Q8WTU0|DDI1_HUMAN/246-342 AC Q8WTU0
+#=GS sp|Q8WTU0|DDI1_HUMAN/246-342 DE [subseq from] Protein DDI1 homolog 1 OS=Homo sapiens OX=9606 GN=DDI1 PE=1 SV=1
+#=GR sp|Q8WTU0|DDI1_HUMAN/246-342 PP ..........6899*..***..........*****************.99........7....6665.....5444.........3333333445*********.****....***..***....******99......77.55.4999...7....47.9*******99988..
+//

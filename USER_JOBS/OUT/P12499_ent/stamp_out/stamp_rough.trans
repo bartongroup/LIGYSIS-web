@@ -1,0 +1,53 @@
+% Output from STAMP ROUGH FIT routine
+%  The sequences from the file /cluster/home/2394007/fragsys_custom/OUT/P12499_ent/results/P12499_ent_stamp.domains have been aligned from their
+%  N-terminal ends, andthe resulting equivalences were be used 
+% to generate the superpositions given below.
+% Domains pdb1hxw.supp onto pdb4k4q.supp RMS of 0.685075 on 198 atoms
+% Domains pdb1hxw.supp onto pdb3kfn.supp RMS of 0.398169 on 198 atoms
+% Domains pdb1hxw.supp onto pdb4ejd.supp RMS of 0.947626 on 198 atoms
+% Domains pdb1hxw.supp onto pdb4ej8.supp RMS of 1.399202 on 198 atoms
+% Domains pdb1hxw.supp onto pdb4k4p.supp RMS of 0.655631 on 198 atoms
+% Domains pdb1hxw.supp onto pdb4k4r.supp RMS of 0.614356 on 198 atoms
+% Domains pdb1hxw.supp onto pdb3kf0.supp RMS of 0.382750 on 198 atoms
+% Domains pdb1hxw.supp onto pdb1vij.supp RMS of 0.720080 on 198 atoms
+% Domains pdb1hxw.supp onto pdb2wkz.supp RMS of 0.437494 on 198 atoms
+/cluster/home/2394007/fragsys_custom/OUT/P12499_ent/clean_pdbs/pdb1hxw.clean.ent pdb1hxw.supp { ALL 
+    1.0000     0.0000     0.0000       0.0000 
+    0.0000     1.0000     0.0000       0.0000 
+    0.0000     0.0000     1.0000       0.0000  } 
+/cluster/home/2394007/fragsys_custom/OUT/P12499_ent/clean_pdbs/pdb4k4q.clean.ent pdb4k4q.supp { ALL 
+    0.8580    -0.4819     0.1779       3.5649 
+   -0.1436     0.1075     0.9838       1.2470 
+   -0.4932    -0.8696     0.0231     -12.2667  } 
+/cluster/home/2394007/fragsys_custom/OUT/P12499_ent/clean_pdbs/pdb3kfn.clean.ent pdb3kfn.supp { ALL 
+    0.9989    -0.0390     0.0267       0.3902 
+   -0.0388    -0.9992    -0.0073      43.4401 
+    0.0270     0.0063    -0.9996      22.3694  } 
+/cluster/home/2394007/fragsys_custom/OUT/P12499_ent/clean_pdbs/pdb4ejd.clean.ent pdb4ejd.supp { ALL 
+   -0.7021    -0.6261    -0.3392      30.3862 
+    0.2425    -0.6581     0.7128      18.3470 
+   -0.6695     0.4182     0.6139       5.4680  } 
+/cluster/home/2394007/fragsys_custom/OUT/P12499_ent/clean_pdbs/pdb4ej8.clean.ent pdb4ej8.supp { ALL 
+   -0.7223    -0.6360    -0.2714      30.2318 
+    0.2289    -0.5903     0.7741      18.6704 
+   -0.6526     0.4970     0.5720       6.1693  } 
+/cluster/home/2394007/fragsys_custom/OUT/P12499_ent/clean_pdbs/pdb4k4p.clean.ent pdb4k4p.supp { ALL 
+   -0.4930     0.8527    -0.1726       3.7376 
+    0.0959    -0.1439    -0.9849       1.7433 
+   -0.8647    -0.5021    -0.0108     -11.8770  } 
+/cluster/home/2394007/fragsys_custom/OUT/P12499_ent/clean_pdbs/pdb4k4r.clean.ent pdb4k4r.supp { ALL 
+    0.8589    -0.4796     0.1797       3.5793 
+   -0.1527     0.0952     0.9837       1.6546 
+   -0.4889    -0.8723     0.0085     -12.0236  } 
+/cluster/home/2394007/fragsys_custom/OUT/P12499_ent/clean_pdbs/pdb3kf0.clean.ent pdb3kf0.supp { ALL 
+   -0.9992     0.0328     0.0242      28.5291 
+    0.0327     0.9995    -0.0039      -0.5782 
+   -0.0243    -0.0031    -0.9997      23.2970  } 
+/cluster/home/2394007/fragsys_custom/OUT/P12499_ent/clean_pdbs/pdb1vij.clean.ent pdb1vij.supp { ALL 
+    0.2074     0.8028    -0.5590      17.3662 
+   -0.4118     0.5900     0.6945     -10.5851 
+    0.8873     0.0861     0.4530      -0.3321  } 
+/cluster/home/2394007/fragsys_custom/OUT/P12499_ent/clean_pdbs/pdb2wkz.clean.ent pdb2wkz.supp { ALL 
+    0.9994     0.0218    -0.0280      -0.0639 
+   -0.0216     0.9997     0.0082      -0.1953 
+    0.0281    -0.0076     0.9996      -0.5126  } 

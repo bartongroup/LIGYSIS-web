@@ -1,0 +1,81 @@
+
+STAMP Structural Alignment of Multiple Proteins
+
+Version 4.5 (10 September 2020)
+ by Robert B. Russell & Geoffrey J. Barton 
+ Please cite PROTEINS, v14, 309-323, 1992. PMID:1409577
+Running roughfit.
+
+    Sc = STAMP score, RMS = RMS deviation, Align = alignment length
+    Len1, Len2 = length of domain, Nfit = residues fitted
+    Secs = no. equivalent sec. strucs. Eq = no. equivalent residues
+    %I = seq. identity, %S = sec. str. identity
+    P(m)  = P value (p=1/10) calculated after Murzin (1993), JMB, 230, 689-694
+            (NC = P value not calculated - potential FP overflow)
+
+     No.  Domain1         Domain2         Sc     RMS    Len1 Len2  Align NFit Eq. Secs.   %I   %S   P(m)
+Pair   1  pdb6ej1.supp    pdb5fz9.supp    9.59   0.24    453  454   454  448 448    0 100.00 100.00 0.00e+00 
+Pair   2  pdb6ej1.supp    pdb5fz4.supp    9.48   0.42    453  452   454  446 446    0 100.00 100.00 0.00e+00 
+Pair   3  pdb6ej1.supp    pdb5fy9.supp    9.35   0.45    453  460   462  449 449    0 100.00 100.00 0.00e+00 
+Pair   4  pdb6ej1.supp    pdb6h4z.supp    9.49   0.39    453  458   457  449 449    0  99.11 100.00 0.00e+00 
+Pair   5  pdb6ej1.supp    pdb5lw9.supp    9.49   0.48    453  456   457  448 448    0  99.33 100.00 0.00e+00 
+Pair   6  pdb6ej1.supp    pdb5fze.supp    9.55   0.42    453  457   457  451 451    0 100.00 100.00 0.00e+00 
+Pair   7  pdb6ej1.supp    pdb5fyu.supp    9.47   0.47    453  457   457  450 449    0 100.00 100.00 0.00e+00 
+Pair   8  pdb6ej1.supp    pdb5fyy.supp    9.56   0.36    453  454   454  448 448    0 100.00 100.00 0.00e+00 
+Pair   9  pdb6ej1.supp    pdb5fz8.supp    9.60   0.44    453  453   454  451 449    0 100.00 100.00 0.00e+00 
+Pair  10  pdb5fz9.supp    pdb5fz4.supp    9.64   0.41    454  452   454  451 451    0 100.00 100.00 0.00e+00 
+Pair  11  pdb5fz9.supp    pdb5fy9.supp    9.55   0.40    454  460   460  452 452    0 100.00 100.00 0.00e+00 
+Pair  12  pdb5fz9.supp    pdb6h4z.supp    9.45   0.34    454  458   457  446 446    0  99.33 100.00 0.00e+00 
+Pair  13  pdb5fz9.supp    pdb5lw9.supp    9.42   0.48    454  456   456  446 446    0  99.33 100.00 0.00e+00 
+Pair  14  pdb5fz9.supp    pdb5fze.supp    9.59   0.50    454  457   456  453 452    0 100.00 100.00 0.00e+00 
+Pair  15  pdb5fz9.supp    pdb5fyu.supp    9.61   0.44    454  457   456  453 453    0 100.00 100.00 0.00e+00 
+Pair  16  pdb5fz9.supp    pdb5fyy.supp    9.72   0.38    454  454   454  454 454    0  99.78 100.00 0.00e+00 
+Pair  17  pdb5fz9.supp    pdb5fz8.supp    9.66   0.41    454  453   454  452 450    0 100.00 100.00 0.00e+00 
+Pair  18  pdb5fz4.supp    pdb5fy9.supp    9.49   0.38    452  460   460  450 450    0 100.00 100.00 0.00e+00 
+Pair  19  pdb5fz4.supp    pdb6h4z.supp    9.28   0.63    452  458   457  446 445    0  99.10 100.00 0.00e+00 
+Pair  20  pdb5fz4.supp    pdb5lw9.supp    9.36   0.48    452  456   456  444 444    0  99.32 100.00 0.00e+00 
+Pair  21  pdb5fz4.supp    pdb5fze.supp    9.55   0.39    452  457   456  449 449    0 100.00 100.00 0.00e+00 
+Pair  22  pdb5fz4.supp    pdb5fyu.supp    9.54   0.39    452  457   456  450 450    0 100.00 100.00 0.00e+00 
+Pair  23  pdb5fz4.supp    pdb5fyy.supp    9.65   0.33    452  454   454  451 451    0 100.00 100.00 0.00e+00 
+Pair  24  pdb5fz4.supp    pdb5fz8.supp    9.65   0.28    452  453   453  450 450    0 100.00 100.00 0.00e+00 
+Pair  25  pdb5fy9.supp    pdb6h4z.supp    9.25   0.59    460  458   462  447 446    0  99.33 100.00 0.00e+00 
+Pair  26  pdb5fy9.supp    pdb5lw9.supp    9.28   0.49    460  456   462  446 446    0  99.33 100.00 0.00e+00 
+Pair  27  pdb5fy9.supp    pdb5fze.supp    9.43   0.45    460  457   462  450 450    0 100.00 100.00 0.00e+00 
+Pair  28  pdb5fy9.supp    pdb5fyu.supp    9.53   0.36    460  457   461  453 453    0  99.78 100.00 0.00e+00 
+Pair  29  pdb5fy9.supp    pdb5fyy.supp    9.55   0.36    460  454   460  452 452    0 100.00 100.00 0.00e+00 
+Pair  30  pdb5fy9.supp    pdb5fz8.supp    9.49   0.30    460  453   461  450 450    0 100.00 100.00 0.00e+00 
+Pair  31  pdb6h4z.supp    pdb5lw9.supp    9.62   0.48    458  456   456  455 455    0 100.00 100.00 0.00e+00 
+Pair  32  pdb6h4z.supp    pdb5fze.supp    9.37   0.66    458  457   459  451 450    0  99.33 100.00 0.00e+00 
+Pair  33  pdb6h4z.supp    pdb5fyu.supp    9.32   0.61    458  457   459  447 446    0  99.33 100.00 0.00e+00 
+Pair  34  pdb6h4z.supp    pdb5fyy.supp    9.37   0.58    458  454   457  446 446    0  99.33 100.00 0.00e+00 
+Pair  35  pdb6h4z.supp    pdb5fz8.supp    9.35   0.54    458  453   459  447 446    0  99.10 100.00 0.00e+00 
+Pair  36  pdb5lw9.supp    pdb5fze.supp    9.41   0.58    456  457   458  450 450    0  99.33 100.00 0.00e+00 
+Pair  37  pdb5lw9.supp    pdb5fyu.supp    9.33   0.52    456  457   459  446 446    0  99.33 100.00 0.00e+00 
+Pair  38  pdb5lw9.supp    pdb5fyy.supp    9.41   0.51    456  454   456  446 446    0  99.33 100.00 0.00e+00 
+Pair  39  pdb5lw9.supp    pdb5fz8.supp    9.40   0.41    456  453   458  445 445    0  99.33 100.00 0.00e+00 
+Pair  40  pdb5fze.supp    pdb5fyu.supp    9.57   0.42    457  457   458  453 452    0  99.78 100.00 0.00e+00 
+Pair  41  pdb5fze.supp    pdb5fyy.supp    9.64   0.31    457  454   456  452 452    0  99.78 100.00 0.00e+00 
+Pair  42  pdb5fze.supp    pdb5fz8.supp    9.58   0.39    457  453   457  450 450    0 100.00 100.00 0.00e+00 
+Pair  43  pdb5fyu.supp    pdb5fyy.supp    9.65   0.29    457  454   456  453 453    0  99.78 100.00 0.00e+00 
+Pair  44  pdb5fyu.supp    pdb5fz8.supp    9.53   0.41    457  453   457  450 449    0 100.00 100.00 0.00e+00 
+Pair  45  pdb5fyy.supp    pdb5fz8.supp    9.65   0.40    454  453   454  452 450    0 100.00 100.00 0.00e+00 
+Reading in matrix file Q9UGL1_ent_stamp.mat...
+Doing cluster analysis...
+Cluster:  1 (pdb5fz9.supp  & pdb5fyy.supp ) Sc  9.72 RMS   0.39 Len 454 nfit 454 
+ See file Q9UGL1_ent_stamp.1 for the alignment and transformations
+Cluster:  2 (pdb5fz8.supp  & pdb5fz9.supp pdb5fyy.supp ) Sc  9.90 RMS   0.36 Len 454 nfit 452 
+ See file Q9UGL1_ent_stamp.2 for the alignment and transformations
+Cluster:  3 (pdb5fz4.supp  & pdb5fz8.supp pdb5fz9.supp pdb5fyy.supp ) Sc  9.89 RMS   0.31 Len 454 nfit 451 
+ See file Q9UGL1_ent_stamp.3 for the alignment and transformations
+Cluster:  4 (pdb5fyu.supp  & pdb5fz4.supp pdb5fz8.supp pdb5fz9.supp pdb5fyy.supp ) Sc  9.86 RMS   0.32 Len 456 nfit 450 
+ See file Q9UGL1_ent_stamp.4 for the alignment and transformations
+Cluster:  5 (pdb5fze.supp  & pdb5fyu.supp pdb5fz4.supp pdb5fz8.supp pdb5fz9.supp pdb5fyy.supp ) Sc  9.90 RMS   0.31 Len 458 nfit 450 
+ See file Q9UGL1_ent_stamp.5 for the alignment and transformations
+Cluster:  6 (pdb6h4z.supp  & pdb5lw9.supp ) Sc  9.62 RMS   0.48 Len 456 nfit 455 
+ See file Q9UGL1_ent_stamp.6 for the alignment and transformations
+Cluster:  7 (pdb6ej1.supp  & pdb5fze.supp pdb5fyu.supp pdb5fz4.supp pdb5fz8.supp pdb5fz9.supp pdb5fyy.supp ) Sc  9.88 RMS   0.29 Len 457 nfit 447 
+ See file Q9UGL1_ent_stamp.7 for the alignment and transformations
+Cluster:  8 (pdb5fy9.supp  & pdb6ej1.supp pdb5fze.supp pdb5fyu.supp pdb5fz4.supp pdb5fz8.supp pdb5fz9.supp pdb5fyy.supp ) Sc  9.87 RMS   0.30 Len 462 nfit 447 
+ See file Q9UGL1_ent_stamp.8 for the alignment and transformations
+Cluster:  9 (pdb5fy9.supp pdb6ej1.supp pdb5fze.supp pdb5fyu.supp pdb5fz4.supp pdb5fz8.supp pdb5fz9.supp pdb5fyy.supp  & pdb6h4z.supp pdb5lw9.supp ) Sc  9.82 RMS   0.39 Len 464 nfit 444 
+ See file Q9UGL1_ent_stamp.9 for the alignment and transformations
