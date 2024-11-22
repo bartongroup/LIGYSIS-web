@@ -178,8 +178,6 @@ def chimeraX2PyMol(cxc_in, attr_in, fmt = 'cif'): # converts ChimeraX command an
     model_order = extract_open_files(cxc_in, fmt = fmt) # extract model order from ChimeraX command file
     
     pymol_attrs, bs_ids = transform_lines_PyMol(attr_in, model_order)
-
-    print(model_order)
     
     pymol_lines = []
     pymol_lines.append('# styling')
@@ -394,6 +392,7 @@ def index(): # route for index main site
             if os.path.isdir(os.path.join(USER_JOBS_OUT_FOLDER, job_id)):
                 return redirect(url_for('user_results', job_id = job_id)) # renders user results page
             else:
+                print(f'{os.path.join(USER_JOBS_OUT_FOLDER, job_id)} does not exist')
                 return render_template('USER_error.html', job_id = job_id)
 
     else:
@@ -535,20 +534,6 @@ def serve_assembly(filename):
     except FileNotFoundError:
         abort(404)
 
-# @app.route('/bss_tables/<path:filename>')
-# def serve_bss_table(filename):
-#     try:
-#         return send_from_directory(SITE_TABLES_FOLDER, filename)
-#     except FileNotFoundError:
-#         abort(404)
-
-# @app.route('/bs_ress_tables/<path:filename>')
-# def serve_bs_ress_table(filename):
-#     try:
-#         return send_from_directory(RES_TABLES_FOLDER, filename)
-#     except FileNotFoundError:
-#         abort(404)
-        
 @app.route('/get-table', methods=['POST'])
 def get_table(): # route to get binding site residues for a given binding site
 

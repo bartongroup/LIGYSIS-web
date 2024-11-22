@@ -390,6 +390,7 @@ function openStructure(pdbId) {
                         }
             
                         viewer.setStyle({model: modelID}, {cartoon: {hidden: false, style: cartoonStyle, color: defaultColor, arrows: cartoonArrows, tubes: cartoonTubes, thickness: cartoonThickness, opacity: cartoonOpacity}});
+                        // viewer.addStyle({model: modelID, elem:"H"},{stick:{hidden:true},sphere:{hidden:true}}); // Hide hydrogens
                         viewer.center({model: modelID});
                         viewer.zoomTo({model: modelID})
             
