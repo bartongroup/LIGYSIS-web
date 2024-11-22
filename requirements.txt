@@ -1,0 +1,7 @@
+Flask
+Flask-WTF
+gevent
+numpy
+pandas
+slivka-client
+WTForms
