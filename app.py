@@ -445,6 +445,7 @@ def results(prot_id, seg_id): # route for results site. Takes Prot ID and Seg ID
     
     seg_ress_dict["ALL_BINDING"] = sorted(list(set([el2 for el in seg_ress_dict.values() for el2 in el]))) # add key: "ALL_BINDING" and value a sorted set of all binding residues
     
+    print(os.path.join(DATA_FOLDER, "segment_prot_struc_dict_DEF.pkl"))
     protein_atoms_dict = load_pickle(os.path.join(DATA_FOLDER, "segment_prot_struc_dict_DEF.pkl"))
 
     prot_atoms_rep = list(protein_atoms_dict[prot_id][seg_id].keys())[0]
@@ -505,7 +506,7 @@ def results(prot_id, seg_id): # route for results site. Takes Prot ID and Seg ID
         seg_ress_dict = seg_ress_dict, prot_id = prot_id, seg_id = seg_id, segment_reps = segment_reps,
         first_site_data = first_site_data, bs_table_tooltips = bs_table_tooltips, bs_ress_table_tooltips = bs_ress_table_tooltips,
         pdb2up_dict = pdb2up_dict_converted, up2pdb_dict = up2pdb_dict_converted, seg_stats = seg_stats, entry_name = entry_name, upid_name = upid_name, prot_long_name = prot_long_name,
-        simple_pdbs = simple_pdbs_full_path, assembly_pdb_ids = assembly_pdb_ids, prot_atoms_rep = prot_atoms_rep
+        simple_pdbs = simple_pdbs_full_path, assembly_pdb_ids = assembly_pdb_ids, prot_atoms_rep = prot_atoms_rep, SITE_TABLES_FOLDER = SITE_TABLES_FOLDER, RES_TABLES_FOLDER = RES_TABLES_FOLDER,
     )
 
 @app.route('/about')
@@ -533,6 +534,20 @@ def serve_assembly(filename):
         return send_from_directory(ASSEMBLY_FOLDER, filename)
     except FileNotFoundError:
         abort(404)
+
+# @app.route('/bss_tables/<path:filename>')
+# def serve_bss_table(filename):
+#     try:
+#         return send_from_directory(SITE_TABLES_FOLDER, filename)
+#     except FileNotFoundError:
+#         abort(404)
+
+# @app.route('/bs_ress_tables/<path:filename>')
+# def serve_bs_ress_table(filename):
+#     try:
+#         return send_from_directory(RES_TABLES_FOLDER, filename)
+#     except FileNotFoundError:
+#         abort(404)
         
 @app.route('/get-table', methods=['POST'])
 def get_table(): # route to get binding site residues for a given binding site
@@ -558,16 +573,18 @@ def download_csv(): # route to download .csv tables
 
     filepath = request.args.get('filepath', default=None, type=str)
 
-    filepath = filepath.lstrip('/')
+    # filepath = filepath.lstrip('/')
 
     if filepath is None:
         return "Filepath not provided", 400
     
     else:
     
-        full_path = os.path.join(BASE_DIR, filepath)
+        # full_path = os.path.join(BASE_DIR, filepath)
 
-        df = pd.read_pickle(full_path)
+        # print(filepath)
+
+        df = pd.read_pickle(filepath)
 
         output = df.to_csv(index=False)
 

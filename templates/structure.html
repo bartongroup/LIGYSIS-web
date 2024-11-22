@@ -36,6 +36,9 @@
     const simplePdbs = {{ simple_pdbs | tojson }}
     const assemblyPdbIds = {{ assembly_pdb_ids | tojson }}
 
+    const bsTablesFolder = {{ SITE_TABLES_FOLDER | tojson }}
+    const bsRessTablesFolder = {{ RES_TABLES_FOLDER | tojson }}
+
     let Pdb2UpMapAssembly; // this gets populated by the PDB --> UniProt mapping for the active assembly model
     let Up2PdbMapAssembly; // this gets populated by the UniProt --> PDB mapping for the active assembly model
     let Chain2AccMapAssembly; // this gets populated by the Chain ID --> UniProt ID mapping for the active assembly model
@@ -390,11 +393,17 @@
             </div>
             <div class="row mb-3 justify-content-center custom-padding">
                 <div class="col-3 col-md-1 col-lg-3 col-xl-6 d-flex justify-content-center align-items-center" style="padding-left:0px; padding-right:0px">
-                    <img
+                    <!-- <img
                         src="/static/images/download.svg"
                         alt="Download Icon"
                         style="width: 1.5rem; height: 1.5rem; cursor: pointer;"
                         onclick="downloadCSV(`/static/data/biolip/split/site_tables/${proteinId}_bss.pkl`)"
+                    /> -->
+                    <img
+                        src="/static/images/download.svg"
+                        alt="Download Icon"
+                        style="width: 1.5rem; height: 1.5rem; cursor: pointer;"
+                        onclick="downloadCSV(`${bsTablesFolder}/${proteinId}_bss.pkl`)"
                     />
                     &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Download Table
                 </div>
@@ -488,11 +497,17 @@
             </div>
             <div class="row mb-0 justify-content-around custom-padding">
                 <div class="col-3 col-md-1 col-lg-3 col-xl-auto d-flex justify-content-center align-items-center" style="padding-left:0px; padding-right:0px">
-                    <img
+                    <!-- <img
                         src="/static/images/download.svg"
                         alt="Download Icon"
                         style="width: 1.5rem; height: 1.5rem; cursor: pointer;"
                         onclick="downloadCSV(`/static/data/biolip/split/res_tables/${segmentName}_ress.pkl`)"
+                    /> -->
+                    <img
+                        src="/static/images/download.svg"
+                        alt="Download Icon"
+                        style="width: 1.5rem; height: 1.5rem; cursor: pointer;"
+                        onclick="downloadCSV(`${bsRessTablesFolder}/${segmentName}_ress.pkl`)"
                     />
                     &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Download Table
                 </div>
