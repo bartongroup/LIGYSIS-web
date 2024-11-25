@@ -738,8 +738,13 @@ async function toggleContactsVisibility() {
                                 stick: {hidden: false, color: ligColor, radius: stickRadius}
                             }
                         );
-
-                        viewer.addStyle({model: activeModel, resi: ligResi, chain: ligChain, resn: ligMol}, {stick: {hidden: false, color: ligColor, radius: stickRadius}});
+                        if (ionLigs.includes(ligMol)) {
+                            viewer.addStyle({model: activeModel, resi: ligResi, chain: ligChain, resn: ligMol}, {sphere: {hidden: false, color: ligColor, radius: ionSphereRadius}});
+                        }
+                        else {
+                            viewer.addStyle({model: activeModel, resi: ligResi, chain: ligChain, resn: ligMol}, {stick: {hidden: false, color: ligColor, radius: stickRadius}});
+                        }
+                        
                         // add ligand-interacting residues surfaces
                         surfsDict[activeModel]["lig_inters"][ligNam] = viewer.addSurface(
                             $3Dmol.SurfaceType.ISO,
