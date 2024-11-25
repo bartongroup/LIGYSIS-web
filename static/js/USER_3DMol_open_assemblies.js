@@ -365,6 +365,8 @@ function openStructure(pdbId) {
                         }
                         else {
                             let model = viewer.addModel(data, "cif",); // Load data
+                            let hydrogenAtoms = model.selectedAtoms({elem: "H"}); // Get hydrogen atoms
+                            model.removeAtoms(hydrogenAtoms); // Remove hydrogen atoms
                             modelID = model.getID(); // Gets the ID of the GLModel
                             activeModel = modelID;
                             surfsDict[activeModel] = {"non_binding": {}, "lig_inters": {},}; // Initialize dictionary for the new assembly

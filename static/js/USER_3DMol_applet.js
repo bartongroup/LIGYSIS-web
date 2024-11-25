@@ -44,6 +44,8 @@ function loadModel(simplePdb) { // Load a structure for each one of the simple p
                 // console.log(data);
                 // console.log("Gonna load PDB " + simplePdb);
                 let model = viewer.addModel(data, "cif"); // Add the model to the viewer
+                let hydrogenAtoms = model.selectedAtoms({elem: "H"}); // Get hydrogen atoms
+                model.removeAtoms(hydrogenAtoms); // Remove hydrogen atoms
                 let modelID = model.getID(); // Get the model ID. Used throughout to refere to a specific model
                 let baseName = simplePdb.split("/").pop(); // Get the base name of the file (without the path)
                 let pdbID = baseName; // Get the PDB ID
