@@ -1,4 +1,7 @@
-# LIGYSIS web
+# LIGYSIS-web
+
+# ![LIGYSIS_prot_alph](./static/images/LIGYSIS_web_prot_alph.png)
+Details on how to generate these protein alphabet figures [here](https://davidhoksza.github.io/BioAlphabet/).
 
 This is the repository for our ligand binding site analysis, **LIGYSIS**, [web server](https://www.compbio.dundee.ac.uk/ligysis/). LIGYSIS is a Python [Flask](https://flask.palletsprojects.com/en/stable/) Web application.
 
