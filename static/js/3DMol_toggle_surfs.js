@@ -347,6 +347,7 @@ function toggleLigandsVisibility() {
 
         if (activeModel == "superposition") {
             viewer.addStyle(suppLigsSels["clust"], {stick: {hidden: true, colorscheme: myScheme, radius: stickRadius}});
+            viewer.addStyle(suppLigsSels["clust_ions"], {sphere: {hidden: true, colorscheme: myScheme, radius: ionSphereRadius}});
             // console.log(`Ligands hidden for ${activeModel} model!`);
         }
         else {
@@ -354,6 +355,10 @@ function toggleLigandsVisibility() {
                 {...hetAtomsNotHoh, model: activeModel},
                 {stick: {hidden: true, radius: stickRadius}}
             )
+            viewer.addStyle(
+                {...ionAtoms, model: activeModel},
+                {sphere: {hidden: true, radius: ionSphereRadius}}
+            );
             // console.log(`Ligands hidden for model ${activeModel}!`);
         }
 
@@ -422,11 +427,6 @@ function toggleLigandsVisibility() {
                         
                     }
                 }
-                // for (const [key, value] of Object.entries(surfsDict[activeModel]['lig_inters'])) { // hide surfaces of ligand-interacting residues
-                //     viewer.setSurfaceMaterialStyle(value.surfid, {opacity:0.0});
-                // }
-                
-                // surfaceVisible = !surfaceVisible; // Toggle the visibility state
             }
             contactsVisible = false;
         }
@@ -443,13 +443,20 @@ function toggleLigandsVisibility() {
             viewer.addStyle(suppLigsSels["clust"], {
                 stick: {hidden: false, colorscheme: myScheme, radius: stickRadius},
             });
+            viewer.addStyle(suppLigsSels["clust_ions"],
+                {sphere: {hidden: false, colorscheme: myScheme, radius: ionSphereRadius}
+            });
             // console.log(`Ligands shown for ${activeModel} models!`);
         }
         else {
             viewer.addStyle(
                 {...hetAtomsNotHoh, model: activeModel},
                 {stick: {hidden: false, radius: stickRadius}}
-                );
+            );
+            viewer.addStyle(
+                {...ionAtoms, model: activeModel},
+                {sphere: {hidden: false, radius: ionSphereRadius}}
+            );
             //console.log(`Ligands shown for model ${activeModel}!`);
         }
     }
@@ -530,6 +537,10 @@ async function toggleContactsVisibility() {
             viewer.addStyle(
                 {...hetAtomsNotHoh, model: activeModel},
                 {stick: {hidden: true}}
+            );
+            viewer.addStyle(
+                {...ionAtoms, model: activeModel},
+                {sphere: {hidden: true}}
             );
 
             // turn ligandButton off
@@ -800,7 +811,12 @@ async function toggleContactsVisibility() {
                             stick: {hidden: false, color: ligCol, radius: stickRadius}
                         }
                     );
-                    viewer.addStyle(ligSel, {stick: {hidden: false, color: ligCol, radius: stickRadius}});
+                    if (ionLigs.includes(ligSel.resn)) {
+                        viewer.addStyle(ligSel, {sphere: {hidden: false, color: ligCol, radius: ionSphereRadius}});
+                    }
+                    else {
+                        viewer.addStyle(ligSel, {stick: {hidden: false, color: ligCol, radius: stickRadius}});
+                    }
                 }
 
                 if (labelsVisible) {
