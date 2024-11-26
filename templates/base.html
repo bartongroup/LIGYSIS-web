@@ -51,11 +51,9 @@
                                     <li>
                                         <a class="dropdown-item purple-link" href="/submit">Submit</a>
                                     </li>
-                                    {% if session.get('session_id') %}
                                     <li>
-                                        <a class="dropdown-item purple-link {% if request.endpoint == 'status' %}active{% endif %}" href="{{ url_for('status', session_id=session['session_id']) }}">Results</a>
+                                        <a class="dropdown-item purple-link {% if not session.get('session_id') %}disabled{% endif %} {% if request.endpoint == 'status' %}active{% endif %}" href="{% if session.get('session_id') %}{{ url_for('status', session_id=session['session_id']) }}{% else %}#{% endif %}">Results</a>
                                     </li>
-                                    {% endif %}
                                 </ul>
                             </li>
                             <li class="nav-item">
