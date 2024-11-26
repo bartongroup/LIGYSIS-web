@@ -40,25 +40,31 @@
                     </button>
                     <div class="collapse navbar-collapse" id="navbarCollapse">
                         <ul class="navbar-nav ms-auto align-items-center">
-                            <li>
+                            <li class="nav-item">
                                 <a class="nav-link purple-link" href="/">Home</a>
                             </li>
-                            <li>
-                                <a class="nav-link purple-link" href="/submit">Submit</a>
+                            <li class="nav-item dropdown">
+                                <a class="nav-link dropdown-toggle purple-link" href="#" id="jobsDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                    Jobs
+                                </a>
+                                <ul class="dropdown-menu" aria-labelledby="jobsDropdown">
+                                    <li>
+                                        <a class="dropdown-item purple-link" href="/submit">Submit</a>
+                                    </li>
+                                    {% if session.get('session_id') %}
+                                    <li>
+                                        <a class="dropdown-item purple-link {% if request.endpoint == 'status' %}active{% endif %}" href="{{ url_for('status', session_id=session['session_id']) }}">Results</a>
+                                    </li>
+                                    {% endif %}
+                                </ul>
                             </li>
-                            {% if session.get('session_id') %}
                             <li class="nav-item">
-                                <a class="nav-link purple-link {% if request.endpoint == 'status' %}active{% endif %}"
-                                    href="{{ url_for('status', session_id=session['session_id']) }}">Results</a>
-                            </li>
-                            {% endif %}
-                            <li>
                                 <a class="nav-link purple-link" href="/about">About</a>
                             </li>
-                            <li>
+                            <li class="nav-item">
                                 <a class="nav-link purple-link" href="/help">Help</a>
                             </li>
-                            <li>
+                            <li class="nav-item">
                                 <a class="nav-link purple-link" href="/contact">Contact</a>
                             </li>
                         </ul>
