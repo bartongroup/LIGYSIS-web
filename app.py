@@ -444,7 +444,6 @@ def results(prot_id, seg_id): # route for results site. Takes Prot ID and Seg ID
     
     seg_ress_dict["ALL_BINDING"] = sorted(list(set([el2 for el in seg_ress_dict.values() for el2 in el]))) # add key: "ALL_BINDING" and value a sorted set of all binding residues
     
-    print(os.path.join(DATA_FOLDER, "segment_prot_struc_dict_DEF.pkl"))
     protein_atoms_dict = load_pickle(os.path.join(DATA_FOLDER, "segment_prot_struc_dict_DEF.pkl"))
 
     prot_atoms_rep = list(protein_atoms_dict[prot_id][seg_id].keys())[0]
@@ -456,12 +455,6 @@ def results(prot_id, seg_id): # route for results site. Takes Prot ID and Seg ID
 
     # up2pdb_dict = load_pickle(f'{DATA_FOLDER}/{prot_id}/{seg_id}/mapping/{prot_pdb_id}_up2pdb.pkl')
     up2pdb_dict = load_pickle(f'{CIF_SIFTS_DIR}/{prot_pdb_id}_up2pdb.pkl')
-
-    #entry_name = load_pickle(os.path.join(ENTRY_NAMES_FOLDER, "{}_name.pkl".format(prot_id)))[prot_id]
-
-    # print(prot_seg_rep_strucs, protein_atoms_dict[prot_id])
-
-    # print(len(protein_atoms_dict))
     
     entry_name = LIGYSIS_prots_data[prot_id]["entry"]
 
