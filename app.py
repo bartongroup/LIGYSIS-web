@@ -376,6 +376,8 @@ ACCS = sorted(list(set(list(LIGYSIS_prots_dat_EXT.values()))))
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = os.environ.get('SECRET_KEY', 'default_secret_key')
+app.config['PERMANENT_SESSION_LIFETIME'] = timedelta(days=60)  # Long expiry
+app.config['SESSION_COOKIE_NAME'] = 'ligysis_session'
 
 os.makedirs(SESSIONS_FOLDER, exist_ok=True)
 
@@ -1293,6 +1295,7 @@ def download_all_assemblies_contact_data(): # route to download contacts data fo
 @app.route('/submit', methods=['GET', 'POST'])
 def submit():
     if 'session_id' not in session:
+        session.permanent = True
         session['session_id'] = str(uuid.uuid4())
     
     session_id = session['session_id']
