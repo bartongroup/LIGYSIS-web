@@ -1387,8 +1387,9 @@ def user_results(session_id, submission_time): # route for user results site. Ta
 
         # Check if the test file exists before trying to load the app
         check_file_path = os.path.join(job_output_dir, "results", "input_structures_results_table.pkl")
+
         if not os.path.exists(check_file_path):
-            return "File not found", 404
+            return render_template('errors/404.html', error_message="File not found", file_path=check_file_path), 404
                 
     job_results_dir = os.path.join(job_output_dir, "results")
     job_supp_cifs_dir = os.path.join(job_output_dir, "supp_cifs")
