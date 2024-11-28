@@ -43,6 +43,15 @@ def update_status(session_id, filename, status):
         WHERE session_id = ? AND filename = ?
         ''', (status, session_id, filename))
 
+def update_slivka_id(session_id, filename, slivka_id):
+    with sqlite3.connect(DATABASE_PATH) as conn:
+        cursor = conn.cursor()
+        cursor.execute('''
+        UPDATE file_metadata 
+        SET slivka_id = ? 
+        WHERE session_id = ? AND filename = ?
+        ''', (slivka_id, session_id, filename))
+
 def fetch_results(session_id):
     with sqlite3.connect(DATABASE_PATH) as conn:
         cursor = conn.cursor()
