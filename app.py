@@ -1452,6 +1452,9 @@ def user_results(job_id): # route for user results site. Takes Job ID
     #load_pickle(os.path.join(job_results_dir, f"{job_id}_lig_data.pkl")) # ligand data
     struc_count = lig_data.groupby(lig_data['struc_name'].str.split('.').str[0]).size().to_dict()
 
+    bss_MES_axis_lim = compute_symmetrical_log_limits(bss_data)
+    bs_ress_MES_axis_lim = compute_symmetrical_log_limits(prot_ress)
+
     return render_template(
         'USER_structure.html', data = data1, headings = headings, data2 = data2, cc_new = cc_new, cc_new_sel = cc_new_sel, colors = colors,
         seg_ress_dict = seg_ress_dict, job_id = job_id, #seg_id = seg_id, segment_reps = segment_reps,
@@ -1459,7 +1462,8 @@ def user_results(job_id): # route for user results site. Takes Job ID
         pdb2up_dict = pdb2up_dict, up2pdb_dict = up2pdb_dict, seg_stats = seg_stats, entry_name = entry_name, upid_name = upid_name, prot_long_name = prot_long_name,
         simple_pdbs = simple_cifs_full_path, assembly_pdb_ids = assembly_pdb_ids, prot_atoms_struc = prot_atoms_struc,
         prot_acc = uniprot_info["up_id"], prot_entry = uniprot_info["up_entry"], prot_name = uniprot_info["prot_name"], struc_count = struc_count,
-        job_results_dir = job_results_dir, job_variants_dir = job_variants_dir
+        job_results_dir = job_results_dir, job_variants_dir = job_variants_dir,
+        bss_MES_axis_lim = bss_MES_axis_lim, bs_ress_MES_axis_lim = bs_ress_MES_axis_lim
     )
 
 @app.route('/user-process-model-order', methods=['POST'])
