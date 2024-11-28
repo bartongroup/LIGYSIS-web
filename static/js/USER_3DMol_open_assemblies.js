@@ -364,7 +364,7 @@ function openStructure(pdbId) {
                             viewer.getModel(modelID).show(); // Show the model
                         }
                         else {
-                            let model = viewer.addModel(data, "cif",); // Load data
+                            let model = viewer.addModel(data, "cif", {unboundCations: true}); // Load data
                             let hydrogenAtoms = model.selectedAtoms({elem: "H"}); // Get hydrogen atoms
                             model.removeAtoms(hydrogenAtoms); // Remove hydrogen atoms
                             modelID = model.getID(); // Gets the ID of the GLModel

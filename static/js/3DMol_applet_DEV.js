@@ -20,7 +20,7 @@ function loadModel(simplePdb) { // Load a structure for each one of the simple p
     return new Promise((resolve, reject) => {
         jQuery.ajax(simplePdb, {
             success: function(data) {
-                let model = viewer.addModel(data, "cif"); // Add the model to the viewer
+                let model = viewer.addModel(data, "cif", {unboundCations: true}); // Add the model to the viewer
                 let hydrogenAtoms = model.selectedAtoms({elem: "H"}); // Get hydrogen atoms
                 model.removeAtoms(hydrogenAtoms); // Remove hydrogen atoms
                 let modelID = model.getID(); // Get the model ID. Used throughout to refere to a specific model
