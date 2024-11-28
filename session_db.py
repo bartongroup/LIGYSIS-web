@@ -33,6 +33,7 @@ def insert_metadata(session_id, filename, results, submission_time, status, expi
         INSERT INTO file_metadata (session_id, filename, results, submission_time, status, expiration_time, slivka_id) 
         VALUES (?, ?, ?, ?, ?, ?, ?)
         ''', (session_id, filename, results, submission_time, status, expiration_time, slivka_id))
+        return cursor.lastrowid
 
 def update_status(session_id, filename, status):
     with sqlite3.connect(DATABASE_PATH) as conn:
