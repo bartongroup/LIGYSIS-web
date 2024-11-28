@@ -8,6 +8,8 @@ from werkzeug.utils import secure_filename
 
 from gevent.event import Event
 from slivka_client import SlivkaClient
+from tenacity import retry, retry_if_exception_type, stop_after_attempt, wait_exponential
+from requests.exceptions import RequestException, HTTPError, ConnectionError, Timeout
 
 from config import SESSIONS_FOLDER, SLIVKA_URL, EXPIRATION_DAYS
 from logger_config import setup_logging
@@ -155,6 +157,7 @@ class SubmissionHandler:
 class SlivkaProcessor:
     """Handles the processing of FASTA files using Slivka."""
 
+    @retry(stop=stop_after_attempt(5), wait=wait_exponential(min=1, max=10), retry=retry_if_exception_type((RequestException, HTTPError, ConnectionError, Timeout)))
     def __init__(self, slivka_url, service, session_id, filename, entry_id, config=None):
         self.client = SlivkaClient(slivka_url)
         self.service = self.client[service]
@@ -199,8 +202,9 @@ class SlivkaProcessor:
             custom_logger.error(f"An error occurred while processing the FASTA file: {str(e)}")
             return False
 
+    @retry(stop=stop_after_attempt(5), wait=wait_exponential(min=1, max=10), retry=retry_if_exception_type((RequestException, HTTPError, ConnectionError, Timeout)))
     def submit_job_to_slivka(self, file_object, media_type):
-        """Submit the given file to Slivka for processing.
+        """Submit the given file to Slivka for processing with retries on failure.
 
         Args:
             file_object (file): The file object to submit.
@@ -225,7 +229,7 @@ class SlivkaProcessor:
         update_slivka_id(self.entry_id, job.id)
 
         return job
-    
+
     def wait_for_job_completion(self, job):
         """Wait for the given job to complete.
 

@@ -5,3 +5,4 @@ numpy
 pandas
 slivka-client
 WTForms
+tenacity
