@@ -18,14 +18,21 @@ def initialize_db():
             expiration_time DATETIME
         )
         ''')
+        add_slivka_id_column(cursor)
 
-def insert_metadata(session_id, filename, results, submission_time, status, expiration_time):
+def add_slivka_id_column(cursor):
+    cursor.execute("PRAGMA table_info(file_metadata)")
+    columns = [column[1] for column in cursor.fetchall()]
+    if 'slivka_id' not in columns:
+        cursor.execute('ALTER TABLE file_metadata ADD COLUMN slivka_id TEXT')
+
+def insert_metadata(session_id, filename, results, submission_time, status, expiration_time, slivka_id=None):
     with sqlite3.connect(DATABASE_PATH) as conn:
         cursor = conn.cursor()
         cursor.execute('''
-        INSERT INTO file_metadata (session_id, filename, results, submission_time, status, expiration_time) 
-        VALUES (?, ?, ?, ?, ?, ?)
-        ''', (session_id, filename, results, submission_time, status, expiration_time))
+        INSERT INTO file_metadata (session_id, filename, results, submission_time, status, expiration_time, slivka_id) 
+        VALUES (?, ?, ?, ?, ?, ?, ?)
+        ''', (session_id, filename, results, submission_time, status, expiration_time, slivka_id))
 
 def update_status(session_id, filename, status):
     with sqlite3.connect(DATABASE_PATH) as conn:
@@ -40,7 +47,7 @@ def fetch_results(session_id):
     with sqlite3.connect(DATABASE_PATH) as conn:
         cursor = conn.cursor()
         cursor.execute('''
-        SELECT filename, results, submission_time, status, expiration_time 
+        SELECT filename, results, submission_time, status, expiration_time, slivka_id 
         FROM file_metadata 
         WHERE session_id = ?
         ''', (session_id,))
