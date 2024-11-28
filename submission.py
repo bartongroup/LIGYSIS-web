@@ -11,7 +11,7 @@ from slivka_client import SlivkaClient
 
 from config import SESSIONS_FOLDER, SLIVKA_URL, EXPIRATION_DAYS
 from logger_config import setup_logging
-from session_db import insert_metadata, update_status
+from session_db import insert_metadata, update_status, update_slivka_id
 
 custom_logger = setup_logging(name='submission')
 
@@ -115,7 +115,7 @@ class SubmissionHandler:
 
     def process_and_save_results(self, fasta_content):
         """Process the FASTA file content and save the results."""
-        processor = SlivkaProcessor(SLIVKA_URL, service=self.service_type, config=self.config)
+        processor = SlivkaProcessor(SLIVKA_URL, service=self.service_type, session_id=self.session_id, filename=self.filename, config=self.config)
         output_file_path = os.path.join(self.submission_directory, 'output.fasta')
         success = processor.process_file(self.file_path, output_file_path, self.submission_directory)
 
@@ -155,9 +155,11 @@ class SubmissionHandler:
 class SlivkaProcessor:
     """Handles the processing of FASTA files using Slivka."""
 
-    def __init__(self, slivka_url, service, config=None):
+    def __init__(self, slivka_url, service, session_id, filename, config=None):
         self.client = SlivkaClient(slivka_url)
         self.service = self.client[service]
+        self.session_id = session_id
+        self.filename = filename
         self.config = config or {}
 
     def process_file(self, input_file_path, output_file_path, submission_directory):
@@ -217,6 +219,9 @@ class SlivkaProcessor:
         # Submit the job to Slivka
         job = self.service.submit_job(data=data, files=files)
         custom_logger.info(f"Job submitted: {job.id}")
+
+        # Update the slivka_id in the database
+        update_slivka_id(self.session_id, self.filename, job.id)
 
         return job
     
