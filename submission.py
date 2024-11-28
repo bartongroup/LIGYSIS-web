@@ -236,10 +236,16 @@ class SlivkaProcessor:
         Args:
             job (SlivkaJob): The job object representing the submitted job.
         """
+        last_status = None
         # Wait for the job to complete
         while job.status not in ('COMPLETED', 'FAILED'):
             current_time = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
             custom_logger.info(f"Polling job status at {current_time}... (Status: {job.status})")
+            
+            if job.status != last_status:
+                update_status(self.entry_id, job.status)
+                last_status = job.status
+            
             sleep(3)  # Polling interval
 
         custom_logger.info(f"Completion Time: {job.completion_time}")
