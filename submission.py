@@ -95,7 +95,7 @@ class SubmissionHandler:
         """Insert metadata related to the submission into the database."""
         expiration_time = (self.submission_time + timedelta(days=EXPIRATION_DAYS)).strftime('%Y-%m-%d %H:%M:%S')
         # TODO: output.fasta should be replaced with an actual output file name or some other meaningful result or ID
-        insert_metadata(self.session_id, self.filename, 'output.fasta', self.submission_time.strftime('%Y-%m-%d %H:%M:%S'), 'uploaded', expiration_time)
+        self.entry_id = insert_metadata(self.session_id, self.filename, 'output.fasta', self.submission_time.strftime('%Y-%m-%d %H:%M:%S'), 'uploaded', expiration_time)
         self.metadata_available.set()  # Signal that metadata is available
         custom_logger.info(f"Metadata inserted into database for session {self.session_id}.")
 
