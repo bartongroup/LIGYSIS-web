@@ -30,6 +30,8 @@
     let segStats = {{ seg_stats | tojson  }}
     let protAtomsRep = {{ prot_atoms_rep | tojson }}
     let [repPdbId, repPdbChainId] = protAtomsRep.split("_");
+    const bssMESAxisLim = {{ bss_MES_axis_lim | tojson }}
+    const bsRessMESAxisLim = {{ bs_ress_MES_axis_lim | tojson }}
 
     const Pdb2UpDict = {{ pdb2up_dict | tojson   }}
     const Up2PdbDict = {{ up2pdb_dict  | tojson  }}

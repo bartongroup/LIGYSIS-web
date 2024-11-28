@@ -4,6 +4,7 @@ import os
 import re
 import io
 import csv
+import math
 import pickle
 import zipfile
 import numpy as np
@@ -211,6 +212,34 @@ def chimeraX2PyMol(cxc_in, attr_in, fmt = 'cif'): # converts ChimeraX command an
 
     return pymol_lines
 
+def compute_symmetrical_log_limits(df, col_name = "MES"):
+    """
+    Computes symmetrical log scale limits for a specified column in a table.
+    """
+    values = df[col_name]
+    
+    # Compute min and max values
+    min_value = values.min()
+    max_value = values.max()
+
+    # Calculate the reciprocal of the minimum value
+    try:
+        reciprocal_of_min = 1 / min_value
+    except:
+        reciprocal_of_min = 1 # if min_value is 0 or nan. Means limit will be set by
+
+    # Determine the maximum absolute value
+    new_max = max(abs(max_value), abs(reciprocal_of_min))
+
+    # Round up to the nearest 0.5
+    rounded_max = math.ceil(new_max * 2) / 2
+
+    # Calculate symmetrical limits
+    min_limit = 1 / rounded_max
+    max_limit = rounded_max
+
+    return rounded_max
+
 #### USER JOB FUNCTIONS ####
 
 def get_all_bs_ress(results_df, job_id):
@@ -348,7 +377,7 @@ The width of the pseudobonds represents the distance between the interacting ato
 
 LIGYSIS_prots_data = load_pickle(f'{DATA_FOLDER}/LIGYSIS_protein_names_dict.pkl')
 
-LIGYSIS_prots_dat_EXT = load_pickle(f'{DATA_FOLDER}/LIGYSIS_protein_names_dict_RF2.pkl')
+LIGYSIS_prots_dat_EXT = load_pickle(f'{DATA_FOLDER}/LIGYSIS_protein_names_dict_RF3.pkl')
 
 # prot_ids = sorted(list(LIGYSIS_prots_data.keys()))
 prot_ids = sorted(list(set(list(LIGYSIS_prots_dat_EXT.keys()))))
@@ -492,6 +521,9 @@ def results(prot_id, seg_id): # route for results site. Takes Prot ID and Seg ID
     n_ligs = len(load_pickle(os.path.join(PROTS_FOLDER, prot_id, seg_id, "results", f'{prot_id}_{seg_id}_ALL_inf_ligs_fingerprints.pkl')))
     n_sites = len(bss_prot) # number of binding sites
     seg_stats = {prot_id: {seg_id: {'strucs': n_strucs, 'ligs': n_ligs, 'bss': n_sites}}}
+
+    bss_MES_axis_lim = compute_symmetrical_log_limits(bss_data)
+    bs_ress_MES_axis_lim = compute_symmetrical_log_limits(bss_ress)
     
     return render_template(
         'structure.html', data = data1, headings = headings, data2 = data2, cc_new = cc_new, cc_new_sel = cc_new_sel, colors = colors,
@@ -499,6 +531,7 @@ def results(prot_id, seg_id): # route for results site. Takes Prot ID and Seg ID
         first_site_data = first_site_data, bs_table_tooltips = bs_table_tooltips, bs_ress_table_tooltips = bs_ress_table_tooltips,
         pdb2up_dict = pdb2up_dict_converted, up2pdb_dict = up2pdb_dict_converted, seg_stats = seg_stats, entry_name = entry_name, upid_name = upid_name, prot_long_name = prot_long_name,
         simple_pdbs = simple_pdbs_full_path, assembly_pdb_ids = assembly_pdb_ids, prot_atoms_rep = prot_atoms_rep, SITE_TABLES_FOLDER = SITE_TABLES_FOLDER, RES_TABLES_FOLDER = RES_TABLES_FOLDER,
+        bss_MES_axis_lim = bss_MES_axis_lim, bs_ress_MES_axis_lim = bs_ress_MES_axis_lim,
     )
 
 @app.route('/about')
