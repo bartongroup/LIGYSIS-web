@@ -35,14 +35,14 @@ def insert_metadata(session_id, filename, results, submission_time, status, expi
         ''', (session_id, filename, results, submission_time, status, expiration_time, slivka_id))
         return cursor.lastrowid
 
-def update_status(session_id, filename, status):
+def update_status(entry_id, status):
     with sqlite3.connect(DATABASE_PATH) as conn:
         cursor = conn.cursor()
         cursor.execute('''
         UPDATE file_metadata 
         SET status = ? 
-        WHERE session_id = ? AND filename = ?
-        ''', (status, session_id, filename))
+        WHERE id = ?
+        ''', (status, entry_id))
 
 def update_slivka_id(session_id, filename, slivka_id):
     with sqlite3.connect(DATABASE_PATH) as conn:
