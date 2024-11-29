@@ -271,7 +271,7 @@ let newChartConfig = { // configuration for the new chart
                 },
             },
             y: {
-                type: chartY === "MES" ? "logarithmic" : "linear",
+                type: newChartY === "MES" ? "logarithmic" : "linear",
                 title: {
                     display: true,
                     align: "center",

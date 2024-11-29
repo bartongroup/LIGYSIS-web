@@ -551,7 +551,9 @@ def results(prot_id, seg_id): # route for results site. Takes Prot ID and Seg ID
     rep_auth_asym_id = LIGYSIS_rep_chain_mappings[prot_id][seg_id][prot_atoms_rep_pdb][prot_atoms_rep_chain]["auth_asym_id"]
     rep_label_asym_id = LIGYSIS_rep_chain_mappings[prot_id][seg_id][prot_atoms_rep_pdb][prot_atoms_rep_chain]["label_asym_id"]
 
-    # print([prot_atoms_rep_pdb, prot_atoms_rep_chain, rep_auth_asym_id, rep_label_asym_id])
+    headings_with_data = [heading for heading in headings if "NaN" not in data1[heading]]
+
+    cc_new_sel_with_data = [heading for heading in cc_new_sel if "NaN" not in data2[heading]]
 
     return render_template(
         'structure.html', data = data1, headings = headings, data2 = data2, cc_new = cc_new, cc_new_sel = cc_new_sel, colors = colors,
@@ -560,6 +562,7 @@ def results(prot_id, seg_id): # route for results site. Takes Prot ID and Seg ID
         pdb2up_dict = pdb2up_dict_converted, up2pdb_dict = up2pdb_dict_converted, seg_stats = seg_stats, entry_name = entry_name, upid_name = upid_name, prot_long_name = prot_long_name,
         simple_pdbs = simple_pdbs_full_path, assembly_pdb_ids = assembly_pdb_ids, prot_atoms_rep = prot_atoms_rep, SITE_TABLES_FOLDER = SITE_TABLES_FOLDER, RES_TABLES_FOLDER = RES_TABLES_FOLDER,
         bss_MES_axis_lim = bss_MES_axis_lim, bs_ress_MES_axis_lim = bs_ress_MES_axis_lim, rep_auth_asym_id = rep_auth_asym_id, rep_label_asym_id = rep_label_asym_id,
+        headings_with_data = headings_with_data, cc_new_sel_with_data = cc_new_sel_with_data,
     )
 
 @app.route('/about')
@@ -1425,7 +1428,7 @@ def user_results(job_id): # route for user results site. Takes Job ID
 
     first_site = bss_data.ID.unique().tolist()[0] # first binding site ID
 
-    bs_ress_MES_axis_lim = compute_symmetrical_log_limits(bss_ress)
+    bs_ress_MES_axis_lim = compute_symmetrical_log_limits(bss_ress, col_name="oddsratio")
 
     bss_ress = bss_ress.fillna("NaN") # pre-processing could also be done before saving the pickle
 
@@ -1487,6 +1490,7 @@ def user_results(job_id): # route for user results site. Takes Job ID
     struc_count = lig_data.groupby(lig_data['struc_name'].str.split('.').str[0]).size().to_dict()
 
     
+
     
 
     return render_template(
