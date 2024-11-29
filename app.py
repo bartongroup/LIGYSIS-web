@@ -20,7 +20,7 @@ from datetime import datetime, timedelta
 from flask import Flask, render_template, url_for, request, redirect, jsonify, Response, send_file, send_from_directory, session
 from werkzeug.utils import secure_filename
 
-from config import BASE_DIR, DATA_FOLDER, SITE_TABLES_FOLDER, RES_TABLES_FOLDER, REP_STRUCS_FOLDER, BS_RESS_FOLDER, MAPPINGS_FOLDER, STATS_FOLDER, ENTRY_NAMES_FOLDER, USER_JOBS_OUT_FOLDER, SESSIONS_FOLDER
+from config import BASE_DIR, DATA_FOLDER, SITE_TABLES_FOLDER, RES_TABLES_FOLDER, REP_STRUCS_FOLDER, BS_RESS_FOLDER, MAPPINGS_FOLDER, STATS_FOLDER, ENTRY_NAMES_FOLDER, USER_JOBS_OUT_FOLDER, SESSIONS_FOLDER, SLIVKA_URL
 from filters import datetime_parse, datetime_format
 from forms import LigysisForm
 from logger_config import setup_logging
@@ -1348,7 +1348,8 @@ def status(session_id):
     # Fetch results based on the session ID
     results = fetch_results(session_id)
     return render_template('results.html', results=results, session_id=session_id,
-                           current_time=datetime.now(), timedelta_24h=timedelta(days=1))
+                           current_time=datetime.now(), timedelta_24h=timedelta(days=1),
+                           slivka_url=SLIVKA_URL)
 
 # Route used to serve structures from the user jobs for 3Dmol.js   
 @app.route('/files/<session_id>/<submission_time>/<path:filename>')

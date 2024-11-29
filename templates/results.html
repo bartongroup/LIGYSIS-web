@@ -49,7 +49,7 @@
                                             {% endif %}
                                         </td>
                                         <td>{{ result.submission_time }}</td>
-                                        <td>{{ result.slivka_id }}</td>
+                                        <td><a href="{{ slivka_url }}/tryit/{{ result.slivka_id }}/status">{{ result.slivka_id }}</a></td>
                                         <td>{{ result.status }}</td>
                                         <td>{{ result.expiration_time }}</td>
                                         <!-- Add other fields as necessary -->
