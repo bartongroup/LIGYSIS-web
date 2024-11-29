@@ -401,6 +401,21 @@ function openStructure(pdbId) {
                             removeHoverLabel,
                         );
 
+                        viewer.setClickable(
+                            {model: activeModel}, // Select all atoms or define specific criteria
+                            true,      // Enable clicking
+                            function(atom) { 
+                                if (atom && atom.resn) {
+                                    // Construct the URL using the residue name (resn) of the clicked atom
+                                    const url = `${pdbeChemUrlRoot}${atom.resn}`;
+                                    // Open the URL in a new tab or window
+                                    window.open(url, '_blank');
+                                } else {
+                                    console.log("Clicked an atom without a residue name");
+                                }
+                            }
+                        );
+
                         slab = viewer.getSlab();
                         initialNearSlab = slab['near'];
                         initialFarSlab = slab['far'];

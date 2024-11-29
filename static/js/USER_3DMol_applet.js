@@ -187,6 +187,21 @@ function loadAllModels(simplePdbs) { // Load all structures
                 );
             }
         }
+
+        viewer.setClickable(
+            {model: suppModels}, // Select all atoms or define specific criteria
+            true,      // Enable clicking
+            function(atom) { 
+                if (atom && atom.resn) {
+                    // Construct the URL using the residue name (resn) of the clicked atom
+                    const url = `${pdbeChemUrlRoot}${atom.resn}`;
+                    // Open the URL in a new tab or window
+                    window.open(url, '_blank');
+                } else {
+                    console.log("Clicked an atom without a residue name");
+                }
+            }
+        );
         
         console.log("Surfaces added");
 

@@ -122,6 +122,7 @@ function executeFunction() { // Execute the download function based on the selec
     document.getElementById('menuRow').style.display = 'none';  // Hide menu after selection
 }
 
+const pdbeChemUrlRoot = "https://www.ebi.ac.uk/pdbe-srv/pdbechem/chemicalCompound/show/";
 // Function to update the slab clipping planes
 
 function updateSlab() {
