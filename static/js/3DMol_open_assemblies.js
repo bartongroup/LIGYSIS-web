@@ -36,7 +36,7 @@ async function selectOption(option) {
 
             viewer.addStyle({resn: "HOH"}, {sphere: {hidden: true, color: waterColor, radius: sphereRadius}}); // hide all water molecules from superposition
 
-            document.getElementById("waterButton").textContent = "WAT ✘";
+            document.getElementById("waterButton").textContent = "HOH ✘";
             waterButton.style.borderColor = "#ffa500";
             waterButton.style.fontWeight = "normal";
             waterButton.style.color = "#ffa500";
@@ -243,7 +243,7 @@ async function selectOption(option) {
                 saveArpeggioDataButton.style.borderColor = 'darkgray';  // Active font color
                 saveAssemblyContactsDownloadIcon.setAttribute('src', '/static/images/download_gray.svg');
 
-                console.log(`Reading SIFTS mapping for ${repPdbId} chain ${repPdbChainId}`);
+                // console.log(`Reading SIFTS mapping for ${repPdbId} chain ${repPdbChainId}`);
 
                 for (let i = 0; i <= simplePdbs.length-1; i++) {
                     viewer.getModel(i).show(); // Show all ligand superposition models
@@ -318,14 +318,14 @@ function openStructure(pdbId) {
                 proteinChains = Object.keys(chainsMapAssembly) // the BIO UNIT chain IDs
                     .filter(key => Chain2AccMapAssembly[chainsMapAssembly[key]] === proteinId); // which ASYM UNIT chain equivalents belong to protein of interest
 
-                console.log('UniProt mappings received!');
+                // console.log('UniProt mappings received!');
 
                 jQuery.ajax( pdbUri, { 
                     success: function(data) {
 
 
                         if (cifName in modelOrder) { // if the model is already loaded, just show it
-                            console.log(`Model has already been loaded with modelID = ${modelOrder[cifName]}!`);
+                            // console.log(`Model has already been loaded with modelID = ${modelOrder[cifName]}!`);
                             modelID = modelOrder[cifName];
                             activeModel = modelID;
                             viewer.getModel(modelID).show(); // Show the model

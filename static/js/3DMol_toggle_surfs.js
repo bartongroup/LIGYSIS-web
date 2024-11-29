@@ -217,15 +217,15 @@ function toggleLabelsVisibility() {
                     labelsHash[activeModel]["clickedSite"][clickedElementId] = [];
                     if (activeModel == "superposition") {
                         let siteSuppPDBResNums = seg_ress_dict[clickedElementId]
-                            .filter(el => Up2PdbDict[repPdbId][repPdbChainId].hasOwnProperty(el)) // this accounts not for missing residues in the structure (unresolved)
-                            .map(el => Up2PdbDict[repPdbId][repPdbChainId][el]);
+                            .filter(el => Up2PdbDict[repPdbId][labelAsymId].hasOwnProperty(el)) // this accounts not for missing residues in the structure (unresolved)
+                            .map(el => Up2PdbDict[repPdbId][labelAsymId][el]);
 
                         console.log(`Site ${clickedElementId} residues: ${siteSuppPDBResNums}`);
                         for (siteSuppPDBResNum of siteSuppPDBResNums) {
-                            let resSel = {model: protAtomsModel, chain: repPdbChainId, resi: siteSuppPDBResNum}
+                            let resSel = {model: protAtomsModel, chain: authAsymId, resi: siteSuppPDBResNum}
                             let resName = viewer.selectedAtoms(resSel)[0].resn
                             let label = viewer.addLabel(
-                                resName + String(Pdb2UpDict[repPdbId][repPdbChainId][siteSuppPDBResNum]),
+                                resName + String(Pdb2UpDict[repPdbId][labelAsymId][siteSuppPDBResNum]),
                                 {
                                     alignment: 'center', backgroundColor: 'white', backgroundOpacity: 1,
                                     borderColor: 'black', borderOpacity: 1, borderThickness: 2,
@@ -236,7 +236,6 @@ function toggleLabelsVisibility() {
                                 true,
                             );
                             labelsHash[activeModel]["clickedSite"][clickedElementId].push(label);
-                            // console.log(siteSuppPDBResNum, resSel, resName, resName + String(Pdb2UpDict[repPdbId][repPdbChainId][siteSuppPDBResNum]))
                         }
                         viewer.render();
                     }

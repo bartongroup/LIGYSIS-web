@@ -127,11 +127,11 @@ function loadAllModels(simplePdbs) { // Load all structures
 
         for (const [key, value] of Object.entries(seg_ress_dict)) { 
             let PDBResNums = seg_ress_dict[key]
-                .filter(el => Up2PdbDict[repPdbId][repPdbChainId].hasOwnProperty(el))
-                .map(el => Up2PdbDict[repPdbId][repPdbChainId][el]);
+                .filter(el => Up2PdbDict[repPdbId][labelAsymId].hasOwnProperty(el))
+                .map(el => Up2PdbDict[repPdbId][labelAsymId][el]);
             if (key == "ALL_BINDING") {
 
-                let surfSel = {...protAtoms, model: protAtomsModel, not: {resi: PDBResNums}, chain: repPdbChainId}
+                let surfSel = {...protAtoms, model: protAtomsModel, not: {resi: PDBResNums}, chain: authAsymId}
         
                 surfsDict["superposition"]["non_binding"] = viewer.addSurface(
                     $3Dmol.SurfaceType.ISO,
@@ -144,7 +144,7 @@ function loadAllModels(simplePdbs) { // Load all structures
                 );
             }
             else {
-                let surfSel = {...protAtoms, model: protAtomsModel, resi: PDBResNums, chain: repPdbChainId}
+                let surfSel = {...protAtoms, model: protAtomsModel, resi: PDBResNums, chain: authAsymId}
 
                 let siteColor = chartColors[Number(key.split("_").pop())];
                 surfsDict["superposition"][key] = viewer.addSurface(

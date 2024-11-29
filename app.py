@@ -236,7 +236,7 @@ def compute_symmetrical_log_limits(df, col_name = "MES"):
         reciprocal_of_min = 1 # if min_value is 0 or nan. Means limit will be set by
 
     # Determine the maximum absolute value
-    print(max_value, reciprocal_of_min)
+    # print(max_value, reciprocal_of_min)
     new_max = max(abs(max_value), abs(reciprocal_of_min))
 
     # Round up to the nearest 0.5
@@ -387,6 +387,8 @@ LIGYSIS_prots_data = load_pickle(f'{DATA_FOLDER}/LIGYSIS_protein_names_dict.pkl'
 
 LIGYSIS_prots_dat_EXT = load_pickle(f'{DATA_FOLDER}/LIGYSIS_protein_names_dict_RF3.pkl')
 
+LIGYSIS_rep_chain_mappings = load_pickle(f'{DATA_FOLDER}/LIGYSIS_rep_chain_mappings.pkl')
+
 # prot_ids = sorted(list(LIGYSIS_prots_data.keys()))
 prot_ids = sorted(list(set(list(LIGYSIS_prots_dat_EXT.keys()))))
 
@@ -456,6 +458,8 @@ def results(prot_id, seg_id): # route for results site. Takes Prot ID and Seg ID
 
     bss_prot = bss_prot.sort_values(by = "ID") # sorting binding site table rows by ID
 
+    # print(bss_prot)
+
     first_site = bss_prot.ID.unique().tolist()[0] # first binding site ID
 
     first_site_name = seg_name + "_" + str(first_site) # name of first binding site (data shown by default when oppening page)
@@ -464,7 +468,7 @@ def results(prot_id, seg_id): # route for results site. Takes Prot ID and Seg ID
 
     bs_ress_MES_axis_lim = compute_symmetrical_log_limits(bss_ress)
     
-    print(bss_MES_axis_lim, bs_ress_MES_axis_lim)
+    # print(bss_MES_axis_lim, bs_ress_MES_axis_lim)
 
     bss_ress = bss_ress.fillna("NaN") # pre-processing could also be done before saving the pickle
 
@@ -543,7 +547,11 @@ def results(prot_id, seg_id): # route for results site. Takes Prot ID and Seg ID
     n_sites = len(bss_prot) # number of binding sites
     seg_stats = {prot_id: {seg_id: {'strucs': n_strucs, 'ligs': n_ligs, 'bss': n_sites}}}
 
+    prot_atoms_rep_pdb, prot_atoms_rep_chain = prot_atoms_rep.split("_")
+    rep_auth_asym_id = LIGYSIS_rep_chain_mappings[prot_id][seg_id][prot_atoms_rep_pdb][prot_atoms_rep_chain]["auth_asym_id"]
+    rep_label_asym_id = LIGYSIS_rep_chain_mappings[prot_id][seg_id][prot_atoms_rep_pdb][prot_atoms_rep_chain]["label_asym_id"]
 
+    # print([prot_atoms_rep_pdb, prot_atoms_rep_chain, rep_auth_asym_id, rep_label_asym_id])
 
     return render_template(
         'structure.html', data = data1, headings = headings, data2 = data2, cc_new = cc_new, cc_new_sel = cc_new_sel, colors = colors,
@@ -551,7 +559,7 @@ def results(prot_id, seg_id): # route for results site. Takes Prot ID and Seg ID
         first_site_data = first_site_data, bs_table_tooltips = bs_table_tooltips, bs_ress_table_tooltips = bs_ress_table_tooltips,
         pdb2up_dict = pdb2up_dict_converted, up2pdb_dict = up2pdb_dict_converted, seg_stats = seg_stats, entry_name = entry_name, upid_name = upid_name, prot_long_name = prot_long_name,
         simple_pdbs = simple_pdbs_full_path, assembly_pdb_ids = assembly_pdb_ids, prot_atoms_rep = prot_atoms_rep, SITE_TABLES_FOLDER = SITE_TABLES_FOLDER, RES_TABLES_FOLDER = RES_TABLES_FOLDER,
-        bss_MES_axis_lim = bss_MES_axis_lim, bs_ress_MES_axis_lim = bs_ress_MES_axis_lim,
+        bss_MES_axis_lim = bss_MES_axis_lim, bs_ress_MES_axis_lim = bs_ress_MES_axis_lim, rep_auth_asym_id = rep_auth_asym_id, rep_label_asym_id = rep_label_asym_id,
     )
 
 @app.route('/about')
@@ -648,6 +656,8 @@ def process_model_order(): # route to process model order data from ChimeraX fil
     model_order = extract_open_files(cxc_in) # order in which ChimeraX opens files (important for binding site attribute assignment)
 
     result_tuples, bs_ids = transform_lines_3DMol(attr_in, model_order, loaded_order) # binding site attribute data list of tuples
+
+    # print(result_tuples, bs_ids)
 
     max_id = max(bs_ids) # maximum binding site ID
 

@@ -43,10 +43,10 @@ $('table#bss_table tbody').on('mouseover', 'tr', function () { // event listener
     if (activeModel == "superposition") {
 
         siteSuppPDBResNums = seg_ress_dict[rowId]
-            .filter(el => Up2PdbDict[repPdbId][repPdbChainId].hasOwnProperty(el)) // this accounts not for missing residues in the structure (unresolved)
-            .map(el => Up2PdbDict[repPdbId][repPdbChainId][el]);
+            .filter(el => Up2PdbDict[repPdbId][labelAsymId].hasOwnProperty(el)) // this accounts not for missing residues in the structure (unresolved)
+            .map(el => Up2PdbDict[repPdbId][labelAsymId][el]);
 
-        SuppHoveredSiteResidues = {model: protAtomsModel, resi: siteSuppPDBResNums, chain: repPdbChainId, not: {atom: bboneAtoms}}
+        SuppHoveredSiteResidues = {model: protAtomsModel, resi: siteSuppPDBResNums, chain: authAsymId, not: {atom: bboneAtoms}}
 
         viewer.setStyle(
             SuppHoveredSiteResidues,
@@ -371,10 +371,10 @@ $('table#bss_table tbody').on('mouseover', 'tr', function () { // event listener
 
         if (activeModel == "superposition") {
             let siteSuppPDBResNums = seg_ress_dict[rowId]
-                .filter(el => Up2PdbDict[repPdbId][repPdbChainId].hasOwnProperty(el)) // this accounts not for missing residues in the structure (unresolved)
-                .map(el => Up2PdbDict[repPdbId][repPdbChainId][el]);
+                .filter(el => Up2PdbDict[repPdbId][labelAsymId].hasOwnProperty(el)) // this accounts not for missing residues in the structure (unresolved)
+                .map(el => Up2PdbDict[repPdbId][labelAsymId][el]);
 
-            SuppClickedSiteResidues = {model: protAtomsModel, resi: siteSuppPDBResNums, chain: repPdbChainId, not: {atom: bboneAtoms}}
+            SuppClickedSiteResidues = {model: protAtomsModel, resi: siteSuppPDBResNums, chain: authAsymId, not: {atom: bboneAtoms}}
             // update selection so that it ignores backbone atoms
 
             // need to colour the clicked site residues here. Before we were not as it was already hovered. However, when overlap between sites, we need to colour the clicked site.
@@ -436,10 +436,10 @@ $('table#bss_table tbody').on('mouseover', 'tr', function () { // event listener
                 labelsHash[activeModel]["clickedSite"][rowId] = [];
                 if (activeModel == "superposition") {
                     for (siteSuppPDBResNum of siteSuppPDBResNums) {
-                        let resSel = {model: protAtomsModel, resi: siteSuppPDBResNum, chain: repPdbChainId}
+                        let resSel = {model: protAtomsModel, resi: siteSuppPDBResNum, chain: authAsymId}
                         let resName = viewer.selectedAtoms(resSel)[0].resn
                         let label = viewer.addLabel(
-                            resName + String(Pdb2UpDict[repPdbId][repPdbChainId][siteSuppPDBResNum]),
+                            resName + String(Pdb2UpDict[repPdbId][labelAsymId][siteSuppPDBResNum]),
                             {
                                 alignment: 'center', backgroundColor: 'white', backgroundOpacity: 1,
                                 borderColor: 'black', borderOpacity: 1, borderThickness: 2,
@@ -520,10 +520,10 @@ $('table#bs_ress_table tbody').on('mouseover', 'tr', function () { // event list
         resetChartStyles(newChart, index, "#ffff99", 10, 16); // changes chart styles to highlight the binding site
 
         if (activeModel == "superposition") { // in this case, only one residue as this is a supperposition of single chains
-            SuppPDBResNum = Up2PdbDict[repPdbId][repPdbChainId][rowId];
+            SuppPDBResNum = Up2PdbDict[repPdbId][labelAsymId][rowId];
             if (SuppPDBResNum !== undefined) {
                 viewer.setStyle(
-                    {model: protAtomsModel, chain: repPdbChainId, resi: SuppPDBResNum, not: {atom: bboneAtoms}},
+                    {model: protAtomsModel, chain: authAsymId, resi: SuppPDBResNum, not: {atom: bboneAtoms}},
                     {
                         cartoon:{style: cartoonStyle, color: rowColorHex, arrows: cartoonArrows, tubes: cartoonTubes, opacity: cartoonOpacity, thickness: cartoonThickness,},
                         stick:{color: rowColorHex},
@@ -562,10 +562,10 @@ $('table#bs_ress_table tbody').on('mouseover', 'tr', function () { // event list
             if (activeModel == "superposition") {
                 if (SuppPDBResNum !== undefined) {
                     labelsHash[activeModel]["hoveredRes"] = [];
-                    let resSel = {model: protAtomsModel, resi: SuppPDBResNum, chain: repPdbChainId}
+                    let resSel = {model: protAtomsModel, resi: SuppPDBResNum, chain: authAsymId}
                     let resName = viewer.selectedAtoms(resSel)[0].resn
                     let label = viewer.addLabel(
-                        resName + String(Pdb2UpDict[repPdbId][repPdbChainId][SuppPDBResNum]),
+                        resName + String(Pdb2UpDict[repPdbId][labelAsymId][SuppPDBResNum]),
                         {
                             alignment: 'center', backgroundColor: 'white', backgroundOpacity: 1,
                             borderColor: 'black', borderOpacity: 1, borderThickness: 2,
@@ -614,7 +614,7 @@ $('table#bs_ress_table tbody').on('mouseover', 'tr', function () { // event list
 
     if (clickedElements.length == 0) {
 
-        let PDBResNum = Up2PdbDict[repPdbId][repPdbChainId][rowId];
+        let PDBResNum = Up2PdbDict[repPdbId][labelAsymId][rowId];
 
         if (activeModel == "superposition") {
             viewer.setStyle(
