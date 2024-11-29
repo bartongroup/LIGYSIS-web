@@ -217,10 +217,17 @@ def compute_symmetrical_log_limits(df, col_name = "MES"):
     Computes symmetrical log scale limits for a specified column in a table.
     """
     values = df[col_name]
-    
-    # Compute min and max values
-    min_value = values.min()
-    max_value = values.max()
+
+    # deal with np.nan values
+    values = values[~np.isnan(values)]
+
+    if len(values) == 0:
+        min_value = 1
+        max_value = 1
+    else:
+        # Compute min and max values
+        min_value = values.min()
+        max_value = values.max()
 
     # Calculate the reciprocal of the minimum value
     try:
@@ -229,6 +236,7 @@ def compute_symmetrical_log_limits(df, col_name = "MES"):
         reciprocal_of_min = 1 # if min_value is 0 or nan. Means limit will be set by
 
     # Determine the maximum absolute value
+    print(max_value, reciprocal_of_min)
     new_max = max(abs(max_value), abs(reciprocal_of_min))
 
     # Round up to the nearest 0.5
@@ -433,6 +441,9 @@ def results(prot_id, seg_id): # route for results site. Takes Prot ID and Seg ID
     seg_name = prot_id + "_" + seg_id # combining UniProt ID and Segment ID into SEGMENT NAME
 
     bss_data = pd.read_pickle(os.path.join(SITE_TABLES_FOLDER, "{}_bss.pkl".format(prot_id))) # site data
+
+    bss_MES_axis_lim = compute_symmetrical_log_limits(bss_data)
+
     bss_data = bss_data.fillna("NaN") # pre-processing could also be done before saving the pickle
     bss_data.columns = headings # changing table column names
 
@@ -450,6 +461,11 @@ def results(prot_id, seg_id): # route for results site. Takes Prot ID and Seg ID
     first_site_name = seg_name + "_" + str(first_site) # name of first binding site (data shown by default when oppening page)
 
     bss_ress = pd.read_pickle(os.path.join(RES_TABLES_FOLDER, "{}_ress.pkl".format(seg_name))) # residue data
+
+    bs_ress_MES_axis_lim = compute_symmetrical_log_limits(bss_ress)
+    
+    print(bss_MES_axis_lim, bs_ress_MES_axis_lim)
+
     bss_ress = bss_ress.fillna("NaN") # pre-processing could also be done before saving the pickle
 
     first_site_data = bss_ress.query('bs_id == @first_site_name')[cc_new].to_dict(orient="list") # data of first binding site residues
@@ -516,15 +532,19 @@ def results(prot_id, seg_id): # route for results site. Takes Prot ID and Seg ID
     # simple_pdbs_full_path = [f'{PROTS_FOLDER}/{prot_id}/{seg_id}/simple/{el}' for el in simple_pdbs]
     simple_pdbs_full_path = [f'/files/{prot_id}/{seg_id}/simple/{el}' for el in simple_pdbs]
 
+    # prot_atoms_rep_path = f'/files/{prot_id}/{seg_id}/simple/{prot_atoms_rep}.cif'
+    # rep_df = PDBXreader(inputfile = prot_atoms_rep_path).atoms(format_type = "mmcif", excluded=())
+    # un_chain_pairs = rep_df[["auth_asym_id", "label_asym_id"]].drop_duplicates().values.tolist()
+    # print(un_chain_pairs)
+
     n_strucs = len(assembly_pdbs) # number of structures
     # n_ligs = len(load_pickle(os.path.join(DATA_FOLDER, "example", "other", f'{prot_id}_{seg_id}_ALL_inf_ligs_fingerprints.pkl'))) # number of ligands
     n_ligs = len(load_pickle(os.path.join(PROTS_FOLDER, prot_id, seg_id, "results", f'{prot_id}_{seg_id}_ALL_inf_ligs_fingerprints.pkl')))
     n_sites = len(bss_prot) # number of binding sites
     seg_stats = {prot_id: {seg_id: {'strucs': n_strucs, 'ligs': n_ligs, 'bss': n_sites}}}
 
-    bss_MES_axis_lim = compute_symmetrical_log_limits(bss_data)
-    bs_ress_MES_axis_lim = compute_symmetrical_log_limits(bss_ress)
-    
+
+
     return render_template(
         'structure.html', data = data1, headings = headings, data2 = data2, cc_new = cc_new, cc_new_sel = cc_new_sel, colors = colors,
         seg_ress_dict = seg_ress_dict, prot_id = prot_id, seg_id = seg_id, segment_reps = segment_reps,
@@ -1389,9 +1409,13 @@ def user_results(job_id): # route for user results site. Takes Job ID
 
     bss_data = bss_data.sort_values(by="ID") # sorting by ID
 
+    bss_MES_axis_lim = compute_symmetrical_log_limits(bss_data)
+
     bss_data = bss_data.fillna("NaN")
 
     first_site = bss_data.ID.unique().tolist()[0] # first binding site ID
+
+    bs_ress_MES_axis_lim = compute_symmetrical_log_limits(bss_ress)
 
     bss_ress = bss_ress.fillna("NaN") # pre-processing could also be done before saving the pickle
 
@@ -1452,8 +1476,8 @@ def user_results(job_id): # route for user results site. Takes Job ID
     #load_pickle(os.path.join(job_results_dir, f"{job_id}_lig_data.pkl")) # ligand data
     struc_count = lig_data.groupby(lig_data['struc_name'].str.split('.').str[0]).size().to_dict()
 
-    bss_MES_axis_lim = compute_symmetrical_log_limits(bss_data)
-    bs_ress_MES_axis_lim = compute_symmetrical_log_limits(prot_ress)
+    
+    
 
     return render_template(
         'USER_structure.html', data = data1, headings = headings, data2 = data2, cc_new = cc_new, cc_new_sel = cc_new_sel, colors = colors,
