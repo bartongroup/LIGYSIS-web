@@ -129,7 +129,7 @@ let chartConfig = {
                 },
             },
             y: {
-                type: 'logarithmic',
+                type: chartY === "MES" ? "logarithmic" : "linear",
                 title: {
                     display: true,
                     align: "center",
@@ -181,7 +181,16 @@ let chartConfig = {
                         borderColor: 'black',
                         borderWidth: 1,
                         borderDash: [10, 5],
-                        display: true,
+                        display: chartY === "MES" // Display based on whether chartY is MES
+                    },
+                    line2: {
+                        type: 'line',
+                        xMin: 1,
+                        xMax: 1,
+                        borderColor: 'black',
+                        borderWidth: 1,
+                        borderDash: [10, 5],
+                        display: chartX === "MES" // Display based on whether chartY is MES
                     }
                 }
             },
@@ -262,7 +271,7 @@ let newChartConfig = { // configuration for the new chart
                 },
             },
             y: {
-                type: 'logarithmic',
+                type: chartY === "MES" ? "logarithmic" : "linear",
                 title: {
                     display: true,
                     align: "center",
@@ -313,7 +322,16 @@ let newChartConfig = { // configuration for the new chart
                         borderColor: 'black',
                         borderWidth: 1,
                         borderDash: [10, 5],
-                        display: true,
+                        display: newChartY === "MES" // Display based on whether chartY is MES
+                    },
+                    line2: {
+                        type: 'line',
+                        xMin: 1,
+                        xMax: 1,
+                        borderColor: 'black',
+                        borderWidth: 1,
+                        borderDash: [10, 5],
+                        display: newChartX === "MES" // Display based on whether chartY is MES
                     }
                 }
             },
