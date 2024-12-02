@@ -33,12 +33,11 @@
     const bssMESAxisLim = {{ bss_MES_axis_lim | tojson }}
     const bsRessMESAxisLim = {{ bs_ress_MES_axis_lim | tojson }}
 
-
     const authAsymId = {{ rep_auth_asym_id | tojson }}
     const labelAsymId = repPdbChainId //{{ rep_label_asym_id | tojson }}
-    console.log(`STRUCT ASYM ID is ${repPdbChainId}`)
-    console.log(`AUTH ASYM ID is ${authAsymId}`)
-    console.log(`LABEL ASYM ID is ${labelAsymId}`)
+    //console.log(`STRUCT ASYM ID is ${repPdbChainId}`)
+    //console.log(`AUTH ASYM ID is ${authAsymId}`)
+    //console.log(`LABEL ASYM ID is ${labelAsymId}`)
 
     const Pdb2UpDict = {{ pdb2up_dict | tojson   }}
     const Up2PdbDict = {{ up2pdb_dict  | tojson  }}

@@ -67,6 +67,7 @@ def transform_lines_3DMol(defattr_in, opened_chimX, loaded_3dmol): # gets bindin
     model ID, chain, residue number and binding site ID to be used by
     3DMol.js for binding site attribute assignment.
     """
+    # print(defattr_in, opened_chimX, loaded_3dmol)
     bs_ids = []
     data = []
     with open(defattr_in, 'r') as file:
@@ -406,7 +407,7 @@ def index(): # route for index main site
 
         try: # this is to visualise pre-computed LIGYSIS results
 
-            prot_id = request.form['proteinId']
+            prot_id = request.form['proteinId'].strip() # get protein ID from form and strip any whitespace
 
             try: 
 
@@ -415,9 +416,14 @@ def index(): # route for index main site
                 if ACC in ACCS:
 
                     # prot_seg_rep_strucs = load_pickle(os.path.join(REP_STRUCS_FOLDER, "{}_segs_rep_strucs.pkl".format(ACC))) # representative structures dict (only successfully run segments)
-                    prot_seg_rep_strucs = load_pickle(os.path.join(REP_STRUCS_FOLDER, "{}_coords.pkl".format(ACC))) # representative structures dict (only successfully run segments)
+                    # prot_seg_rep_strucs = load_pickle(os.path.join(REP_STRUCS_FOLDER, "{}_coords.pkl".format(ACC))) # representative structures dict (only successfully run segments)
 
-                    first_seg = sorted(list(prot_seg_rep_strucs[ACC].keys()))[0]
+                    # first_seg = sorted(list(prot_seg_rep_strucs[ACC].keys()))[0]
+
+                    bss_data = pd.read_pickle(os.path.join(SITE_TABLES_FOLDER, "{}_bss.pkl".format(ACC))) # site data
+                    labs = bss_data.lab.tolist()
+                    segs = sorted(list(set([el.split("_")[1] for el in labs])))
+                    first_seg = segs[0]
 
                     return redirect(url_for('results', prot_id = ACC, seg_id = first_seg)) # renders results page
                 else:
@@ -443,6 +449,8 @@ def results(prot_id, seg_id): # route for results site. Takes Prot ID and Seg ID
     seg_name = prot_id + "_" + seg_id # combining UniProt ID and Segment ID into SEGMENT NAME
 
     bss_data = pd.read_pickle(os.path.join(SITE_TABLES_FOLDER, "{}_bss.pkl".format(prot_id))) # site data
+    labs = bss_data.lab.tolist()
+    segs = sorted(list(set([int(el.split("_")[1]) for el in labs])))
 
     bss_MES_axis_lim = compute_symmetrical_log_limits(bss_data)
 
@@ -481,7 +489,9 @@ def results(prot_id, seg_id): # route for results site. Takes Prot ID and Seg ID
     # prot_seg_rep_strucs = load_pickle(os.path.join(REP_STRUCS_FOLDER, "{}_segs_rep_strucs.pkl".format(prot_id))) # representative structures dict (only successfully run segments)
     prot_seg_rep_strucs = load_pickle(os.path.join(REP_STRUCS_FOLDER, "{}_coords.pkl".format(prot_id))) # representative structures dict (only successfully run segments)
 
-    segment_reps = prot_seg_rep_strucs[prot_id]
+    segment_reps = {k: v for k, v in prot_seg_rep_strucs[prot_id].items() if k in segs}
+
+    # print(segment_reps, segs)
 
     data2 = prot_ress.to_dict(orient="list")
 
@@ -1489,13 +1499,9 @@ def user_results(job_id): # route for user results site. Takes Job ID
     #load_pickle(os.path.join(job_results_dir, f"{job_id}_lig_data.pkl")) # ligand data
     struc_count = lig_data.groupby(lig_data['struc_name'].str.split('.').str[0]).size().to_dict()
 
-    
-
-    
-
     return render_template(
         'USER_structure.html', data = data1, headings = headings, data2 = data2, cc_new = cc_new, cc_new_sel = cc_new_sel, colors = colors,
-        seg_ress_dict = seg_ress_dict, job_id = job_id, #seg_id = seg_id, segment_reps = segment_reps,
+        seg_ress_dict = seg_ress_dict, job_id = job_id,
         first_site_data = first_site_data, bs_table_tooltips = bs_table_tooltips, bs_ress_table_tooltips = bs_ress_table_tooltips,
         pdb2up_dict = pdb2up_dict, up2pdb_dict = up2pdb_dict, seg_stats = seg_stats, entry_name = entry_name, upid_name = upid_name, prot_long_name = prot_long_name,
         simple_pdbs = simple_cifs_full_path, assembly_pdb_ids = assembly_pdb_ids, prot_atoms_struc = prot_atoms_struc,
