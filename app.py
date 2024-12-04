@@ -507,7 +507,7 @@ def results(prot_id, seg_id): # route for results site. Takes Prot ID and Seg ID
     simple_pdbs = os.listdir(os.path.join(DATA_FOLDER, prot_id, str(seg_id), "simple")) # simple PDB file names (single chain)
     simple_pdbs = [el for el in simple_pdbs if el.endswith(".cif")]
 
-    simple_pdbs_full_path = [f'/static/data/{prot_id}/{seg_id}/simple/{el}' for el in simple_pdbs]
+    simple_pdbs_full_path = [url_for('static', filename=f'data/{prot_id}/{seg_id}/simple/{el}') for el in simple_pdbs]
 
     n_strucs = len(assembly_pdbs) # number of structures
     n_ligs = len(load_pickle(os.path.join(DATA_FOLDER, "example", "other", f'{prot_id}_{seg_id}_ALL_inf_ligs_fingerprints.pkl'))) # number of ligands
@@ -1476,7 +1476,7 @@ def user_results(session_id, submission_time): # route for user results site. Ta
     simple_cifs_full_path = [f'/files/{session_id}/{submission_time}/{el}' for el in simple_cifs]
     if job_simple_cifs_dir.startswith(USER_JOBS_OUT_FOLDER):
         # TODO: This temporary to handle the different paths for user jobs and demo jobs
-        simple_cifs_full_path = [f'/static/data/USER_JOBS/OUT/{job_id}/simple_cifs/{el}' for el in simple_cifs]
+        simple_cifs_full_path = [url_for('static', filename=f'data/USER_JOBS/OUT/{job_id}/simple_cifs/{el}') for el in simple_cifs]
 
     n_strucs = len([el for el in os.listdir(job_supp_cifs_dir) if el.endswith(".cif")]) # number of structures
     n_ligs = len(load_pickle(os.path.join(job_results_dir, f"{job_id}_ligs_fingerprints.pkl"))) # number of ligands
