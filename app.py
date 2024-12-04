@@ -375,7 +375,7 @@ ACCS = sorted(list(set(list(LIGYSIS_prots_dat_EXT.values()))))
 
 ######################## FLASK APPLICATION ########################
 
-app = Flask(__name__)
+app = Flask(__name__, static_folder='static', static_url_path='/ligysis/static')
 app.config['SECRET_KEY'] = os.environ.get('SECRET_KEY', 'default_secret_key')
 app.config['PERMANENT_SESSION_LIFETIME'] = timedelta(days=60)  # Long expiry
 app.config['SESSION_COOKIE_NAME'] = 'ligysis_session'
