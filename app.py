@@ -17,7 +17,8 @@ import pandas as pd
 
 from datetime import datetime, timedelta
 
-from flask import Flask, render_template, url_for, request, redirect, jsonify, Response, send_file, send_from_directory, session
+from flask import Blueprint, Flask, render_template, url_for, request, redirect, jsonify, Response, send_file, send_from_directory, session
+from flask_cors import CORS
 from werkzeug.utils import secure_filename
 
 from config import BASE_DIR, DATA_FOLDER, SITE_TABLES_FOLDER, RES_TABLES_FOLDER, REP_STRUCS_FOLDER, BS_RESS_FOLDER, MAPPINGS_FOLDER, STATS_FOLDER, ENTRY_NAMES_FOLDER, USER_JOBS_OUT_FOLDER, SESSIONS_FOLDER, SLIVKA_URL
@@ -378,6 +379,13 @@ app = Flask(__name__)
 app.config['SECRET_KEY'] = os.environ.get('SECRET_KEY', 'default_secret_key')
 app.config['PERMANENT_SESSION_LIFETIME'] = timedelta(days=60)  # Long expiry
 app.config['SESSION_COOKIE_NAME'] = 'ligysis_session'
+
+CORS(app, resources={r"/ligysis/*": {"origins": ["http://www-dev.compbio.dundee.ac.uk",
+                                                 "http://www.compbio.dundee.ac.uk",
+                                                 "https://www.compbio.dundee.ac.uk"]}})
+
+# Use Blueprint to add URL prefix to serve site from a sub-directory
+main = Blueprint('main', __name__, url_prefix='/ligysis', static_folder='static')
 
 os.makedirs(SESSIONS_FOLDER, exist_ok=True)
 
@@ -2355,6 +2363,9 @@ def user_download_all_structures_PyMol(): # route to download PyMol scripts to v
         as_attachment=True,
         download_name=f'{job_id}_all_structures_PyMol.zip'
     )
+    
+# Register blueprint
+app.register_blueprint(main)
 
 ######################## LAUNCHING SERVER #########################
 

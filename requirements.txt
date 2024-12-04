@@ -1,4 +1,5 @@
 Flask
+Flask-CORS
 Flask-WTF
 gevent
 numpy
