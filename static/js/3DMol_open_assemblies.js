@@ -103,6 +103,8 @@ async function selectOption(option) {
 
                 viewer.addStyle(suppLigsSels["not_clust"], {stick: {hidden: true, colorscheme: myScheme, radius: stickRadius}});
                 viewer.addStyle(suppLigsSels["clust"], {stick: {hidden: true, colorscheme: myScheme, radius: stickRadius}});
+                viewer.addStyle(suppLigsSels["clust_ions"], {sphere: {hidden: true, colorscheme: myScheme, radius: ionSphereRadius}});
+                viewer.addStyle(suppLigsSels["not_clust_ions"], {sphere: {hidden: true, colorscheme: myScheme, radius: ionSphereRadius}});
 
                 document.getElementById("ligandButton").textContent = "LIGAND ✘";
                 ligandButton.style.borderColor = "#ffa500";
