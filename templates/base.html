@@ -15,8 +15,11 @@
         {% block head %}
         {% endblock%}
         <script type="text/javascript">
-            window.appBaseUrl = "{{ url_for('main.index', _external=True).rstrip('/') }}";
-            window.staticBaseUrl = "{{ url_for('main.static', filename='').rstrip('/') }}";
+            const protocol = window.location.protocol;
+            const host = window.location.host;
+            const basePath = "{{ url_for('main.index', _external=False).strip('/') }}";
+            window.appBaseUrl = `${protocol}//${host}/${basePath}`.replace(/\/$/, '');
+            window.staticBaseUrl = `${protocol}//${host}/${basePath}/static`.replace(/\/$/, '');
         </script>
     </head>
     <body>
