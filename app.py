@@ -399,7 +399,7 @@ app.jinja_env.filters['datetime_format'] = datetime_format
 
 ################### ROUTES FOR LIGYSIS RESULTS ####################
 
-@app.route('/', methods=['POST', 'GET'])
+@main.route('/', methods=['POST', 'GET'])
 def index(): # route for index main site
     if request.method == 'POST':
 
@@ -417,7 +417,7 @@ def index(): # route for index main site
 
                     first_seg = sorted(list(prot_seg_rep_strucs[ACC].keys()))[0]
 
-                    return redirect(url_for('results', prot_id = ACC, seg_id = first_seg)) # renders results page
+                    return redirect(url_for('main.results', prot_id = ACC, seg_id = first_seg)) # renders results page
                 else:
                     return render_template('error.html', prot_id = ACC)
             except:
@@ -427,14 +427,14 @@ def index(): # route for index main site
             # raise
             job_id = request.form['jobId']
             if os.path.isdir(os.path.join(USER_JOBS_OUT_FOLDER, job_id)):
-                return redirect(url_for('user_results', session_id=job_id, submission_time='none')) # renders user results page
+                return redirect(url_for('main.user_results', session_id=job_id, submission_time='none')) # renders user results page
             else:
                 return render_template('USER_error.html', job_id = job_id)
 
     else:
         return render_template('index.html', prot_ids = prot_ids) # renders home page with all tasks
 
-@app.route('/results/<prot_id>/<seg_id>', methods = ['POST', 'GET'])
+@main.route('/results/<prot_id>/<seg_id>', methods = ['POST', 'GET'])
 def results(prot_id, seg_id): # route for results site. Takes Prot ID and Seg ID
 
     seg_name = prot_id + "_" + seg_id # combining UniProt ID and Segment ID into SEGMENT NAME
@@ -522,19 +522,19 @@ def results(prot_id, seg_id): # route for results site. Takes Prot ID and Seg ID
         simple_pdbs = simple_pdbs_full_path, assembly_pdb_ids = assembly_pdb_ids, prot_atoms_rep = prot_atoms_rep
     )
 
-@app.route('/about')
+@main.route('/about')
 def about(): # route for about site
     return render_template('about.html')
 
-@app.route('/help')
+@main.route('/help')
 def help(): # route for help site
     return render_template('help.html')
 
-@app.route('/contact')
+@main.route('/contact')
 def contact(): # route for contact site
     return render_template('contact.html')
 
-@app.route('/get-table', methods=['POST'])
+@main.route('/get-table', methods=['POST'])
 def get_table(): # route to get binding site residues for a given binding site
 
     lab = request.json.get('label', None)
@@ -553,7 +553,7 @@ def get_table(): # route to get binding site residues for a given binding site
 
     return jsonify(site_data)
 
-@app.route('/download-csv')
+@main.route('/download-csv')
 def download_csv(): # route to download .csv tables
 
     filepath = request.args.get('filepath', default=None, type=str)
@@ -579,7 +579,7 @@ def download_csv(): # route to download .csv tables
             headers={"Content-disposition": "attachment; filename={}".format(filenameout)},
         )
 
-@app.route('/process-model-order', methods=['POST'])
+@main.route('/process-model-order', methods=['POST'])
 def process_model_order(): # route to process model order data from ChimeraX files
     data = request.json
     loaded_order = data['modelOrder'] # this is the order in which files have been loaded by 3DMol.js
@@ -601,7 +601,7 @@ def process_model_order(): # route to process model order data from ChimeraX fil
 
     return jsonify(response_data) # send jasonified data back to client
 
-@app.route('/get-contacts', methods=['POST'])
+@main.route('/get-contacts', methods=['POST'])
 def get_contacts(): # route to get contacts data from Arpeggio table for a given assembly
 
     data = request.json
@@ -647,7 +647,7 @@ def get_contacts(): # route to get contacts data from Arpeggio table for a given
 
     return jsonify(response_data) # send jasonified data back to client
 
-@app.route('/get-uniprot-mapping', methods=['POST'])
+@main.route('/get-uniprot-mapping', methods=['POST'])
 def get_uniprot_mapping(): # route to get UniProt residue and chain mapping for a given pdb
     data = request.json
     pdb_id = data['pdbId']
@@ -669,7 +669,7 @@ def get_uniprot_mapping(): # route to get UniProt residue and chain mapping for 
 
     return jsonify(response_data)
 
-@app.route('/download-superposition-ChimeraX', methods=['POST'])
+@main.route('/download-superposition-ChimeraX', methods=['POST'])
 def download_superposition_ChimeraX(): # route to download ChimeraX script to visualise ligand superposition
 
     data = request.get_json() # Get JSON data from the POST request
@@ -742,7 +742,7 @@ def download_superposition_ChimeraX(): # route to download ChimeraX script to vi
         download_name=f'{prot_id}_{seg_id}_superposition_ChimeraX.zip'
     )
 
-@app.route('/download-superposition-PyMol', methods=['POST'])
+@main.route('/download-superposition-PyMol', methods=['POST'])
 def download_superposition_PyMol(): # route to download PyMol script to visualise ligand superposition
     
     data = request.get_json() # Get JSON data from the POST request
@@ -791,7 +791,7 @@ def download_superposition_PyMol(): # route to download PyMol script to visualis
         download_name=f'{prot_id}_{seg_id}_superposition_PyMol.zip'
     )
 
-@app.route('/download-assembly-ChimeraX', methods=['POST'])
+@main.route('/download-assembly-ChimeraX', methods=['POST'])
 def download_assembly_ChimeraX(): # route to download ChimeraX script to visualise assembly
     data = request.get_json() # Get JSON data from the POST request
     
@@ -912,7 +912,7 @@ def download_assembly_ChimeraX(): # route to download ChimeraX script to visuali
         download_name=f'{prot_id}_{seg_id}_{pdb_id}_assembly_ChimeraX.zip'
     )
 
-@app.route('/download-assembly-PyMol', methods=['POST'])
+@main.route('/download-assembly-PyMol', methods=['POST'])
 def download_assembly_PyMol(): # route to download PyMol script to visualise assembly
     data = request.get_json() # Get JSON data from the POST request
     
@@ -1015,7 +1015,7 @@ def download_assembly_PyMol(): # route to download PyMol script to visualise ass
         download_name=f'{prot_id}_{seg_id}_{pdb_id}_assembly_PyMol.zip'
     )
 
-@app.route('/download-all-assemblies-ChimeraX', methods=['POST'])
+@main.route('/download-all-assemblies-ChimeraX', methods=['POST'])
 def download_all_assemblies_ChimeraX(): # route to download ChimeraX scripts to visualise all assemblies
     data = request.get_json() # Get JSON data from the POST request
     
@@ -1136,7 +1136,7 @@ def download_all_assemblies_ChimeraX(): # route to download ChimeraX scripts to 
         download_name=f'{prot_id}_{seg_id}_all_assemblies_ChimeraX.zip'
     )
 
-@app.route('/download-all-assemblies-PyMol', methods=['POST'])
+@main.route('/download-all-assemblies-PyMol', methods=['POST'])
 def download_all_assemblies_PyMol(): # route to download PyMol scripts to visualise all assemblies
     data = request.get_json() # Get JSON data from the POST request
     
@@ -1244,7 +1244,7 @@ def download_all_assemblies_PyMol(): # route to download PyMol scripts to visual
         download_name=f'{prot_id}_{seg_id}_all_assemblies_PyMol.zip'
     )
 
-@app.route('/download-assembly-contact-data', methods=['POST'])
+@main.route('/download-assembly-contact-data', methods=['POST'])
 def download_assembly_contact_data(): # route to download contacts data for a given assembly
     data = request.get_json()
 
@@ -1267,7 +1267,7 @@ def download_assembly_contact_data(): # route to download contacts data for a gi
             download_name=f'{prot_id}_{seg_id}_{pdb_id}_contacts.csv'
         )
     
-@app.route('/download-all-assemblies-contact-data', methods=['POST'])
+@main.route('/download-all-assemblies-contact-data', methods=['POST'])
 def download_all_assemblies_contact_data(): # route to download contacts data for all assemblies
     data = request.get_json()
 
@@ -1300,7 +1300,7 @@ def download_all_assemblies_contact_data(): # route to download contacts data fo
 
 ####################### ROUTES FOR USER JOBS #######################
 
-@app.route('/submit', methods=['GET', 'POST'])
+@main.route('/submit', methods=['GET', 'POST'])
 def submit():
     if 'session_id' not in session:
         session.permanent = True
@@ -1324,12 +1324,12 @@ def submit():
         submission_handler = SubmissionHandler(session_id, form, service_type='ligysis', config=config, tar_upload=True)
         gevent.spawn(submission_handler.handle_submission)
         submission_handler.metadata_available.wait()
-        return redirect(url_for('status', session_id=session_id))
+        return redirect(url_for('main.status', session_id=session_id))
     
     return render_template('submit.html', form=form)
 
 # Route used to download submission tar on status page
-@app.route('/download/<session_id>/<submission_time>/<filename>')
+@main.route('/download/<session_id>/<submission_time>/<filename>')
 def download(session_id, submission_time, filename):
     # Validate session_id and submission_time
     if not is_valid_session_id(session_id) or not is_valid_submission_time(submission_time):
@@ -1347,7 +1347,7 @@ def download(session_id, submission_time, filename):
     else:
         return "File not found", 404
 
-@app.route('/status/<session_id>', methods=['GET'])
+@main.route('/status/<session_id>', methods=['GET'])
 def status(session_id):
     # Validate session_id
     if not is_valid_session_id(session_id):
@@ -1360,7 +1360,7 @@ def status(session_id):
                            slivka_url=SLIVKA_URL)
 
 # Route used to serve structures from the user jobs for 3Dmol.js   
-@app.route('/files/<session_id>/<submission_time>/<path:filename>')
+@main.route('/files/<session_id>/<submission_time>/<path:filename>')
 def serve_file(session_id, submission_time, filename):
     # Validate session_id and submission_time
     if not is_valid_session_id(session_id) or not is_valid_submission_time(submission_time):
@@ -1378,7 +1378,7 @@ def serve_file(session_id, submission_time, filename):
     except FileNotFoundError:
         abort(404)
 
-@app.route('/user-results/<session_id>/<submission_time>', methods = ['POST', 'GET'])
+@main.route('/user-results/<session_id>/<submission_time>', methods = ['POST', 'GET'])
 def user_results(session_id, submission_time): # route for user results site. Takes Job ID
 
     job_id = session_id  # trying to maintain compatibility with demo version
@@ -1496,7 +1496,7 @@ def user_results(session_id, submission_time): # route for user results site. Ta
         prot_acc = uniprot_info["up_id"], prot_entry = uniprot_info["up_entry"], prot_name = uniprot_info["prot_name"], struc_count = struc_count
     )
 
-@app.route('/user-process-model-order', methods=['POST'])
+@main.route('/user-process-model-order', methods=['POST'])
 def user_process_model_order(): # route to process model order data from ChimeraX files
     data = request.json
     loaded_order = data['modelOrder'] # this is the order in which files have been loaded by 3DMol.js
@@ -1518,7 +1518,7 @@ def user_process_model_order(): # route to process model order data from Chimera
 
     return jsonify(response_data) # send jasonified data back to client
 
-@app.route('/user-get-table', methods=['POST'])
+@main.route('/user-get-table', methods=['POST'])
 def user_get_table(): # route to get binding site residues for a given binding site
 
     lab = request.json.get('label', None)
@@ -1554,7 +1554,7 @@ def user_get_table(): # route to get binding site residues for a given binding s
 
     return jsonify(site_data)
 
-@app.route('/user-get-uniprot-mapping', methods=['POST'])
+@main.route('/user-get-uniprot-mapping', methods=['POST'])
 def user_get_uniprot_mapping(): # route to get UniProt residue and chain mapping for a given pdb
     data = request.json
     job_id = data['jobId']
@@ -1577,7 +1577,7 @@ def user_get_uniprot_mapping(): # route to get UniProt residue and chain mapping
 
     return jsonify(response_data)
 
-@app.route('/user-get-contacts', methods=['POST'])
+@main.route('/user-get-contacts', methods=['POST'])
 def user_get_contacts(): # route to get contacts data from Arpeggio table for a given assembly
 
     data = request.json
@@ -1625,7 +1625,7 @@ def user_get_contacts(): # route to get contacts data from Arpeggio table for a 
 
     return jsonify(response_data) # send jasonified data back to client
 
-@app.route('/user-download-all-structures-contact-data', methods=['POST'])
+@main.route('/user-download-all-structures-contact-data', methods=['POST'])
 def user_download_all_structures_contact_data(): # route to download contacts data for all structures
     data = request.get_json()
 
@@ -1662,7 +1662,7 @@ def user_download_all_structures_contact_data(): # route to download contacts da
         download_name=f'{job_id}_all_structures_contacts.zip'
     )
 
-@app.route('/user-download-superposition-ChimeraX', methods=['POST'])
+@main.route('/user-download-superposition-ChimeraX', methods=['POST'])
 def user_download_superposition_ChimeraX(): # route to download ChimeraX script to visualise ligand superposition
 
     data = request.get_json() # Get JSON data from the POST request
@@ -1737,7 +1737,7 @@ def user_download_superposition_ChimeraX(): # route to download ChimeraX script 
         download_name=f'{job_id}_superposition_ChimeraX.zip'
     )
 
-@app.route('/user-download-superposition-PyMol', methods=['POST'])
+@main.route('/user-download-superposition-PyMol', methods=['POST'])
 def user_download_superposition_PyMol(): # route to download PyMol script to visualise ligand superposition
     
     data = request.get_json() # Get JSON data from the POST request
@@ -1787,7 +1787,7 @@ def user_download_superposition_PyMol(): # route to download PyMol script to vis
         download_name=f'{job_id}_superposition_PyMol.zip'
     )
 
-@app.route('/user-download-structure-ChimeraX', methods=['POST'])
+@main.route('/user-download-structure-ChimeraX', methods=['POST'])
 def user_download_structure_ChimeraX(): # route to download ChimeraX script to visualise structure
     data = request.get_json() # Get JSON data from the POST request
     
@@ -1915,7 +1915,7 @@ def user_download_structure_ChimeraX(): # route to download ChimeraX script to v
         download_name=f'{job_id}_{struc_name}_structure_ChimeraX.zip'
     )
 
-@app.route('/user-download-structure-PyMol', methods=['POST'])
+@main.route('/user-download-structure-PyMol', methods=['POST'])
 def user_download_structure_PyMol(): # route to download PyMol script to visualise structure
     data = request.get_json() # Get JSON data from the POST request
     
@@ -2025,7 +2025,7 @@ def user_download_structure_PyMol(): # route to download PyMol script to visuali
         download_name=f'{job_id}_{struc_name}_structure_PyMol.zip'
     )
 
-@app.route('/user-download-structure-contact-data', methods=['POST'])
+@main.route('/user-download-structure-contact-data', methods=['POST'])
 def user_download_structure_contact_data(): # route to download contacts data for a given structure
     data = request.get_json()
 
@@ -2055,7 +2055,7 @@ def user_download_structure_contact_data(): # route to download contacts data fo
             download_name=f'{job_id}_{struc_name}_contacts.csv'
         )
 
-@app.route('/user-download-all-structures-ChimeraX', methods=['POST'])
+@main.route('/user-download-all-structures-ChimeraX', methods=['POST'])
 def user_download_all_structures_ChimeraX(): # route to download ChimeraX scripts to visualise all structures
     data = request.get_json() # Get JSON data from the POST request
     
@@ -2222,7 +2222,7 @@ def user_download_all_structures_ChimeraX(): # route to download ChimeraX script
         download_name=f'{job_id}_all_structures_ChimeraX.zip'
     )
 
-@app.route('/user-download-all-structures-PyMol', methods=['POST'])
+@main.route('/user-download-all-structures-PyMol', methods=['POST'])
 def user_download_all_structures_PyMol(): # route to download PyMol scripts to visualise all structures
     data = request.get_json() # Get JSON data from the POST request
     
