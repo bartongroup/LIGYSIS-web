@@ -230,6 +230,7 @@ class SlivkaProcessor:
 
         return job
 
+    @retry(stop=stop_after_attempt(5), wait=wait_exponential(min=1, max=10), retry=retry_if_exception_type((RequestException, HTTPError, ConnectionError, Timeout)))
     def wait_for_job_completion(self, job):
         """Wait for the given job to complete.
 
