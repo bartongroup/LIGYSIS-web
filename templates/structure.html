@@ -10,7 +10,7 @@
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/chartjs-plugin-annotation/1.4.0/chartjs-plugin-annotation.js"></script>
 
-<script src="/static/js/event_functions.js"></script>
+<script src="{{ url_for('static', filename='js/event_functions.js') }}"></script>
 
 <script src="https://3Dmol.org/build/3Dmol-min.js"></script>     
 <script src="https://3Dmol.org/build/3Dmol.ui-min.js"></script> 
@@ -148,7 +148,7 @@
                     <h5 class="d-flex align-items-center" style="white-space: nowrap; margin-bottom: 0px;">
                         <span>Structure Panel&nbsp;&nbsp;&nbsp;</span>
                             <a href="{{ url_for('main.help') }}#structurePanelHelp" class="d-flex align-items-center" style="margin-left: 8px;">
-                                <img src="/static/images/info.svg" alt="Info Icon" style="width: 1.5rem; height: 1.5rem;">
+                                <img src="{{ url_for('static', filename='images/info.svg') }}" alt="Info Icon" style="width: 1.5rem; height: 1.5rem;">
                             </a>
                     </h5>
                 </div>
@@ -173,7 +173,7 @@
             <div class="row mb-2 custom-padding">
                 <div style="position: relative; border: 2px solid black; width: 598px; height: 598px;" class="d-flex justify-content-center align-items-center px-0">
                     <div id="container-01" class="applet-border d-flex">
-                        <script src="/static/js/3DMol_applet_DEV.js"></script>
+                        <script src="{{ url_for('static', filename='js/3DMol_applet_DEV.js') }}"></script>
                     </div>
                     <!-- Spinner overlay -->
                     <div id="spinner1" class="justify-content-center align-items-center spinner-overlay" style="display: flex">
@@ -182,7 +182,7 @@
                         </div>
                     </div>
                     <div id="spinnerImage1" class="justify-content-center align-items-center spinner-image" style="display: flex">
-                        <img src="/static/images/LIGYSIS_LOGO_REVAMP6.png" style="width: 6.5rem; height: 6.5rem;" alt="Custom Spinner Image">
+                        <img src="{{ url_for('static', filename='images/LIGYSIS_LOGO_REVAMP6.png') }}" style="width: 6.5rem; height: 6.5rem;" alt="Custom Spinner Image">
                     </div>
                 </div>
             </div>
@@ -240,23 +240,23 @@
                             style="border: 1px solid darkgray; color: darkgray; display: flex; align-items: center; border-radius: 5px; padding: 5px 10px;" 
                             onclick="saveAssemblyContactData()" 
                             disabled>
-                            <img id="saveAssemblyContactsDownloadIcon" src="/static/images/download_gray.svg" alt="Download Icon" style="width: 1.5rem; height: 1.5rem; margin-right: 8px;">
+                            <img id="saveAssemblyContactsDownloadIcon" src="{{ url_for('static', filename='images/download_gray.svg') }}" alt="Download Icon" style="width: 1.5rem; height: 1.5rem; margin-right: 8px;">
                             &nbsp;Current Assembly Contacts
                     </button>
                 </div>                
                 <div class="col-auto justify-content-center" style="padding-left:0px; padding-right:0px;">
-                    <img src="/static/images/camera.svg" alt="Save Image" style="width: 2rem; height: 2rem; cursor: pointer;" 
+                    <img src="{{ url_for('static', filename='images/camera.svg') }}" alt="Save Image" style="width: 2rem; height: 2rem; cursor: pointer;" 
                     onclick="saveImage('3DmolCanvas', `${segmentName}_struc`)">
                 </div>
                 <div class="col-auto justify-content-center" style="padding-left:0px; padding-right:0px;">
-                    <img src="/static/images/spin.svg" alt="Spin Viewer" style="width: 2rem; height: 2rem; cursor: pointer;" 
+                    <img src="{{ url_for('static', filename='images/spin.svg') }}" alt="Spin Viewer" style="width: 2rem; height: 2rem; cursor: pointer;" 
                     onclick="spinViewer()">
                 </div>
                 <div class="col-auto justify-content-end" style="padding-left:0px; padding-right:0px;">
                     <button id="saveAllArpeggioDataButton" 
                             style="border: 1px solid black; color: black; display: flex; align-items: center; border-radius: 5px; padding: 5px 10px;" 
                             onclick="saveAllAssembliesContactData()">
-                            <img src="/static/images/download.svg" alt="Download Icon" style="width: 1.5rem; height: 1.5rem; margin-right: 8px;">
+                            <img src="{{ url_for('static', filename='images/download.svg') }}" alt="Download Icon" style="width: 1.5rem; height: 1.5rem; margin-right: 8px;">
                         &nbsp;<b>ALL</b>&nbsp;Assemblies Contacts
                     </button>
                 </div>
@@ -267,19 +267,19 @@
                             style="border: 1px solid darkgray; color: darkgray; display: flex; align-items: center; border-radius: 5px; padding: 5px 10px;" 
                             onclick="showMenu('saveAssembly')" 
                             disabled>
-                            &nbsp;<img id="saveAssemblyDownloadIcon" src="/static/images/download_gray.svg" alt="Download Icon" style="width: 1.5rem; height: 1.5rem; margin-right: 8px;">
+                            &nbsp;<img id="saveAssemblyDownloadIcon" src="{{ url_for('static', filename='images/download_gray.svg') }}" alt="Download Icon" style="width: 1.5rem; height: 1.5rem; margin-right: 8px;">
                             &nbsp;Current Assembly&nbsp;
                     </button>
                 </div>
                 <div class="col-auto justify-content-center" style="padding-left:0px; padding-right:0px;">
                     <button id="saveSuppButton" style="border: 1px solid black; color: black; display: flex; align-items: center; border-radius: 5px; padding: 5px 10px;" onclick="showMenu('saveSuperposition')">
-                        &nbsp;<img src="/static/images/download.svg" alt="Download Icon" style="width: 1.5rem; height: 1.5rem; margin-right: 8px;">
+                        &nbsp;<img src="{{ url_for('static', filename='images/download.svg') }}" alt="Download Icon" style="width: 1.5rem; height: 1.5rem; margin-right: 8px;">
                         &nbsp;Superposition&nbsp;
                     </button>
                 </div>
                 <div class="col-auto justify-content-end" style="padding-left:0px; padding-right:0px;">
                     <button id="saveAssembliesButton" style="border: 1px solid black; color: black; display: flex; align-items: center; border-radius: 5px;  padding: 5px 10px;" onclick="showMenu('saveAllAssemblies')">
-                        &nbsp;<img src="/static/images/download.svg" alt="Download Icon" style="width: 1.5rem; height: 1.5rem; margin-right: 8px;">
+                        &nbsp;<img src="{{ url_for('static', filename='images/download.svg') }}" alt="Download Icon" style="width: 1.5rem; height: 1.5rem; margin-right: 8px;">
                         &nbsp;<b>ALL</b>&nbsp;Assemblies&nbsp;
                     </button>
                 </div>
@@ -298,7 +298,7 @@
                         <!-- Second Column with Button -->
                         <div class="col-auto d-flex justify-content-center">
                             <button style="border: 1px solid black; color: black; display: flex; align-items: center; border-radius: 5px;  padding: 5px 10px;"  onclick="executeFunction()">
-                                &nbsp;&nbsp;<img src="/static/images/download.svg" alt="Download Icon" style="width: 1.5rem; height: 1.5rem; margin-right: 8px;">&nbsp;
+                                &nbsp;&nbsp;<img src="{{ url_for('static', filename='images/download.svg') }}" alt="Download Icon" style="width: 1.5rem; height: 1.5rem; margin-right: 8px;">&nbsp;
                             </button>
                         </div>
                     </div>
@@ -325,7 +325,7 @@
                     <h5 style="margin-bottom:0px;">
                         Binding Sites Panel&nbsp;&nbsp;&nbsp;
                         <a href="{{ url_for('main.help') }}#sitePanelHelp">
-                            <img src="/static/images/info.svg" alt="Info Icon" style="width: 1.5rem; height: 1.5rem;">
+                            <img src="{{ url_for('static', filename='images/info.svg') }}" alt="Info Icon" style="width: 1.5rem; height: 1.5rem;">
                         </a>
                     </h5>
                 </div>
@@ -339,7 +339,7 @@
                     </div>
                 </div>
                 <div id="spinnerImage2" class="justify-content-center align-items-center" style="display: flex; position: absolute; top: 46%; left: 55%; transform: translate(-50%, -50%); z-index: 6;">
-                    <img src="/static/images/LIGYSIS_LOGO_REVAMP6.png" style="width: 6.5rem; height: 6.5rem;" alt="Custom Spinner Image">
+                    <img src="{{ url_for('static', filename='images/LIGYSIS_LOGO_REVAMP6.png') }}" style="width: 6.5rem; height: 6.5rem;" alt="Custom Spinner Image">
                 </div>
             </div>
             <div class="row mb-3 justify-content-around custom-padding">
@@ -360,7 +360,7 @@
                     </select>
                 </div>
                 <div class="col-6 col-sm-4 col-lg-8 col-xl-4 d-flex justify-content-center" style="padding-left:0px; padding-right:0px">
-                    <img src="/static/images/camera.svg" alt="Save Image" style="width: 2rem; height: 2rem; cursor: pointer;" 
+                    <img src="{{ url_for('static', filename='images/camera.svg') }}" alt="Save Image" style="width: 2rem; height: 2rem; cursor: pointer;" 
                     onclick="saveImage('chartCanvas', `${segmentName}_sites_graph`)">
                 </div>
             </div>
@@ -391,16 +391,16 @@
             <div class="row mb-3 justify-content-center custom-padding">
                 <div class="col-3 col-md-1 col-lg-3 col-xl-6 d-flex justify-content-center align-items-center" style="padding-left:0px; padding-right:0px">
                     <img
-                        src="/static/images/download.svg"
+                        src="{{ url_for('static', filename='images/download.svg') }}"
                         alt="Download Icon"
                         style="width: 1.5rem; height: 1.5rem; cursor: pointer;"
-                        onclick="downloadCSV(`/static/data/biolip/split/site_tables/${proteinId}_bss.pkl`)"
+                        onclick="downloadCSV(`{{ url_for('static', filename='data/biolip/split/site_tables/${proteinId}_bss.pkl') }}`)"
                     />
                     &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Download Table
                 </div>
                 <div class="col-3 col-md-1 col-lg-3 col-xl-6 d-flex justify-content-center align-items-center" style="padding-left:0px; padding-right:0px;">
                     <a href="{{ url_for('main.help') }}#sitePanelHelp">
-                        <img src="/static/images/info.svg" alt="Info Icon" style="width: 1.5rem; height: 1.5rem;">
+                        <img src="{{ url_for('static', filename='images/info.svg') }}" alt="Info Icon" style="width: 1.5rem; height: 1.5rem;">
                     </a>
                     &nbsp;&nbsp;&nbsp;&nbsp;Column Information
                 </div>
@@ -421,7 +421,7 @@
                     <h5 class="d-flex align-items-center" style="white-space: nowrap; margin-bottom: 0px;">
                         Binding Residues Panel&nbsp;&nbsp;&nbsp;
                         <a href="{{ url_for('main.help') }}#siteResiduesPanelHelp" class="d-flex align-items-center" style="margin-left: 8px;">
-                            <img src="/static/images/info.svg" alt="Info Icon" style="width: 1.5rem; height: 1.5rem;">
+                            <img src="{{ url_for('static', filename='images/info.svg') }}" alt="Info Icon" style="width: 1.5rem; height: 1.5rem;">
                         </a>
                     </h5>
                 </div>
@@ -435,7 +435,7 @@
                     </div>
                 </div>
                 <div id="spinnerImage3" class="justify-content-center align-items-center" style="display: flex; position: absolute; top: 46%; left: 52.65%; transform: translate(-50%, -50%); z-index: 6;">
-                    <img src="/static/images/LIGYSIS_LOGO_REVAMP6.png" style="width: 6.5rem; height: 6.5rem;" alt="Custom Spinner Image">
+                    <img src="{{ url_for('static', filename='images/LIGYSIS_LOGO_REVAMP6.png') }}" style="width: 6.5rem; height: 6.5rem;" alt="Custom Spinner Image">
                 </div>
             </div>
             <div class="row mb-0 justify-content-around custom-padding">
@@ -458,7 +458,7 @@
                     </select>
                 </div>
                 <div class="col-sm-4 col-lg-8 col-xl-4 mb-2 d-flex justify-content-center align-items-center" style="padding-left:0px; padding-right:0px">
-                    <img src="/static/images/camera.svg" alt="Save Image" style="width: 2rem; height: 2rem; cursor: pointer;" 
+                    <img src="{{ url_for('static', filename='images/camera.svg') }}" alt="Save Image" style="width: 2rem; height: 2rem; cursor: pointer;" 
                     onclick="saveImage('newChartCanvas', `${segmentName}_residues_graph`)">
                 </div>
             </div>
@@ -489,23 +489,23 @@
             <div class="row mb-0 justify-content-around custom-padding">
                 <div class="col-3 col-md-1 col-lg-3 col-xl-auto d-flex justify-content-center align-items-center" style="padding-left:0px; padding-right:0px">
                     <img
-                        src="/static/images/download.svg"
+                        src="{{ url_for('static', filename='images/download.svg') }}"
                         alt="Download Icon"
                         style="width: 1.5rem; height: 1.5rem; cursor: pointer;"
-                        onclick="downloadCSV(`/static/data/biolip/split/res_tables/${segmentName}_ress.pkl`)"
+                        onclick="downloadCSV(`{{ url_for('static', filename='data/biolip/split/res_tables/${segmentName}_ress.pkl') }}`)"
                     />
                     &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Download Table
                 </div>
                 <div class="col-3 col-md-1 col-lg-3 col-xl-auto d-flex justify-content-center align-items-center" style="padding-left:0px; padding-right:0px">
                     <a href="{{ url_for('main.help') }}#{{ header }}siteResiduesPanelHelp">
-                        <img src="/static/images/info.svg" alt="Info Icon" style="width: 1.5rem; height: 1.5rem;">
+                        <img src="{{ url_for('static', filename='images/info.svg') }}" alt="Info Icon" style="width: 1.5rem; height: 1.5rem;">
                     </a>
                     &nbsp;&nbsp;&nbsp;&nbsp;Column Information
                 </div>
                 <div class="col-3 col-md-1 col-lg-3 col-xl-auto d-flex justify-content-center align-items-center" style="padding-left:0px; padding-right:0px;">
-                    <button class="d-flex align-items-center" style="border: none; background: none; padding: 0; cursor: pointer;" onclick="downloadFile(`/static/data/example/other/${segmentName}_rf.sto`)">
+                    <button class="d-flex align-items-center" style="border: none; background: none; padding: 0; cursor: pointer;" onclick="downloadFile(`{{ url_for('static', filename='data/example/other/${segmentName}_rf.sto') }}`)">
                         <img
-                            src="/static/images/download.svg"
+                            src="{{ url_for('static', filename='images/download.svg') }}"
                             alt="Download Icon"
                             style="width: 1.5rem; height: 1.5rem;"
                         />
@@ -516,13 +516,13 @@
         </div>
     </div>
 </div>
-<script src="/static/js/charts.js"></script>
-<script src="/static/js/table_listeners.js"></script>
-<script src="/static/js/chart_listeners.js"></script>
-<script src="/static/js/change_segment.js"></script>
-<script src="/static/js/3DMol_resize.js"></script>
-<script src="/static/js/3DMol_toggle_surfs.js"></script>
-<script src="/static/js/3DMol_open_assemblies.js"></script>
+<script src="{{ url_for('static', filename='js/charts.js') }}"></script>
+<script src="{{ url_for('static', filename='js/table_listeners.js') }}"></script>
+<script src="{{ url_for('static', filename='js/chart_listeners.js') }}"></script>
+<script src="{{ url_for('static', filename='js/change_segment.js') }}"></script>
+<script src="{{ url_for('static', filename='js/3DMol_resize.js') }}"></script>
+<script src="{{ url_for('static', filename='js/3DMol_toggle_surfs.js') }}"></script>
+<script src="{{ url_for('static', filename='js/3DMol_open_assemblies.js') }}"></script>
 
 <script type="text/javascript">
 

@@ -133,7 +133,7 @@
   let config = { backgroundColor: 'white', keepH: false };
   let viewer = $3Dmol.createViewer(element, config);
   let pdbUris = [
-    '/static/data/P00517/1/assemblies/3e8e_bio.cif',
+    "{{ url_for('static', filename='data/P00517/1/assemblies/3e8e_bio.cif') }}",
   ];
   let loadedCount = 0; // Counter for loaded structures
   let models = [];
