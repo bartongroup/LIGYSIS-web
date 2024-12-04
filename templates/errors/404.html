@@ -45,6 +45,6 @@
             <p class="error-message">The requested file path was: {{ file_path }}</p>
         {% endif %}
         <a href="{{ url_for('main.index') }}" class="home-link">Go to Home</a>
-        <a href="/contact" class="contact-link">Contact Support</a>
+        <a href="{{ url_for('main.contact') }}" class="contact-link">Contact Support</a>
     </div>
 {% endblock %}
