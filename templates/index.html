@@ -33,7 +33,7 @@
 <div class="container">
     <div class="row">
         <div class="col">
-            <form action="/" method="POST" class="text-center" id="UniProtIdForm">
+            <form action="{{ url_for('main.index') }}" method="POST" class="text-center" id="UniProtIdForm">
                 <div class="row justify-content-center">
                     <div class="col">
                         <div class="mb-3">
@@ -51,7 +51,7 @@
             </form>
         </div>
         <div class="col">
-            <form action="/" method="POST" class="text-center" id="JobIdForm">
+            <form action="{{ url_for('main.index') }}" method="POST" class="text-center" id="JobIdForm">
                 <div class="row justify-content-center">
                     <div class="col">
                         <div class="mb-3">

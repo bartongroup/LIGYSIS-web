@@ -11,7 +11,7 @@
                     Ligysis Analysis Submission
                 </div>
                 <div class="card-body">
-                    <form action="/submit" method="post" enctype="multipart/form-data" id="ligysisForm">
+                    <form action="{{ url_for('main.submit') }}" method="post" enctype="multipart/form-data" id="ligysisForm">
                         {{ form.hidden_tag() }}
                         <div class="mb-3">
                             {{ form.uniprot_id.label(class="form-label") }}
