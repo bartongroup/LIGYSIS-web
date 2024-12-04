@@ -385,7 +385,7 @@ CORS(app, resources={r"/ligysis/*": {"origins": ["http://www-dev.compbio.dundee.
                                                  "https://www.compbio.dundee.ac.uk"]}})
 
 # Use Blueprint to add URL prefix to serve site from a sub-directory
-main = Blueprint('main', __name__, url_prefix='/ligysis', static_folder='static')
+main = Blueprint('main', __name__, url_prefix='/ligysis', static_url_path='/ligysis/static', static_folder='static')
 
 os.makedirs(SESSIONS_FOLDER, exist_ok=True)
 
