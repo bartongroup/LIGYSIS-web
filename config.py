@@ -46,6 +46,8 @@ USER_JOBS_OUT_FOLDER = os.path.join(USER_JOBS_FOLDER, "OUT") # IN EXAMPLE
 SESSIONS_FOLDER = os.path.join(BASE_DIR, 'sessions')
 SESSIONS_FOLDER = os.environ.get('APP_SESSIONS_PATH', SESSIONS_FOLDER)
 
+# Add logging level and path configuration
+LOG_LEVEL = os.environ.get('APP_LOG_LEVEL', 'INFO').upper()
 LOG_PATH = os.path.join(BASE_DIR, 'logs')
 LOG_PATH = os.environ.get('APP_LOG_PATH', LOG_PATH)
 
