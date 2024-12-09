@@ -177,6 +177,11 @@ class SlivkaProcessor:
             bool: True if processing was successful, False otherwise.
         """
         try:
+            custom_logger.info(f"Starting file processing for session {self.session_id}.")
+            custom_logger.debug(f"Input file path: {input_file_path}")
+            custom_logger.debug(f"Output file path: {output_file_path}")
+            custom_logger.debug(f"Submission directory: {submission_directory}")
+
             # Open the FASTA file and set the media type
             with open(input_file_path, 'rb') as file_object:
                 media_type = 'application/fasta'
@@ -197,9 +202,14 @@ class SlivkaProcessor:
                 with open(output_file_path, 'w') as outfile:
                     outfile.write(result)
 
+                custom_logger.info(f"File processing completed successfully for session {self.session_id}.")
                 return True
-        except Exception as e:
+        except FileNotFoundError as e:
+            custom_logger.error(f"File not found: {e.filename}")
             custom_logger.error(f"An error occurred while processing the FASTA file: {str(e)}")
+            return False
+        except Exception as e:
+            custom_logger.error(f"An unexpected error occurred while processing the results file: {str(e)}")
             return False
 
     @retry(stop=stop_after_attempt(5), wait=wait_exponential(min=1, max=10), retry=retry_if_exception_type((RequestException, HTTPError, ConnectionError, Timeout)))
