@@ -1488,7 +1488,7 @@ def user_results(session_id, submission_time): # route for user results site. Ta
     struc_count = lig_data.groupby(lig_data['struc_name'].str.split('.').str[0]).size().to_dict()
 
     return render_template(
-        'USER_structure.html', data = data1, headings = headings, data2 = data2, cc_new = cc_new, cc_new_sel = cc_new_sel, colors = colors,
+        'user_structure.html', data = data1, headings = headings, data2 = data2, cc_new = cc_new, cc_new_sel = cc_new_sel, colors = colors,
         seg_ress_dict = seg_ress_dict, job_id = job_id, #seg_id = seg_id, segment_reps = segment_reps,
         first_site_data = first_site_data, bs_table_tooltips = bs_table_tooltips, bs_ress_table_tooltips = bs_ress_table_tooltips,
         pdb2up_dict = pdb2up_dict, up2pdb_dict = up2pdb_dict, seg_stats = seg_stats, entry_name = entry_name, upid_name = upid_name, prot_long_name = prot_long_name,
