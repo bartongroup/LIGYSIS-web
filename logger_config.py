@@ -4,7 +4,7 @@ import logging
 from logging.handlers import RotatingFileHandler
 import os
 
-from config import LOG_PATH
+from config import LOG_PATH, LOG_LEVEL
 
 def setup_logging(name='custom'):
     # Ensure the logs directory exists
@@ -22,7 +22,7 @@ def setup_logging(name='custom'):
 
     # Custom logger
     custom_logger = logging.getLogger(name)
-    custom_logger.setLevel(logging.INFO)
+    custom_logger.setLevel(getattr(logging, LOG_LEVEL, logging.INFO))
     custom_logger.addHandler(custom_handler)
     
     # Set up log rotation for werkzeug logger if the name is 'app'
@@ -31,7 +31,7 @@ def setup_logging(name='custom'):
         werkzeug_handler.setFormatter(formatter)
 
         werkzeug_logger = logging.getLogger('werkzeug')
-        werkzeug_logger.setLevel(logging.INFO)
+        werkzeug_logger.setLevel(getattr(logging, LOG_LEVEL, logging.INFO))
         werkzeug_logger.addHandler(werkzeug_handler)
 
     return custom_logger
