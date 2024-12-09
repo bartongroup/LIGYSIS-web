@@ -192,12 +192,17 @@ class SlivkaProcessor:
                 # Wait for the job to complete
                 self.wait_for_job_completion(job)
 
+                # Construct the local path for the result file
+                # TODO: Explore optimizing the local path
+                local_path = os.path.join(submission_directory, job.files[0].id.split('/')[-1])
+                custom_logger.debug(f"Local path for result file: {local_path}")
+                
                 # Download the job results
-                self.download_job_results(job, submission_directory)
+                self.download_job_results(job, local_path)
 
                 # TODO: may not need this step if the output file is already saved
                 # Copy Clustal Omega results (job.files[0].id) to the output file
-                with open(os.path.join(submission_directory, job.files[0].id)) as result_file:
+                with open(local_path) as result_file:
                     result = result_file.read()
                 with open(output_file_path, 'w') as outfile:
                     outfile.write(result)
@@ -262,7 +267,7 @@ class SlivkaProcessor:
         custom_logger.info(f"Completion Time: {job.completion_time}")
 
     @retry(stop=stop_after_attempt(5), wait=wait_exponential(min=1, max=10), retry=retry_if_exception_type((RequestException, HTTPError, ConnectionError, Timeout)))
-    def download_job_results(self, job, submission_directory):
+    def download_job_results(self, job, local_path):
         """Download the results of the given job to the specified directory.
 
         Args:
@@ -271,9 +276,10 @@ class SlivkaProcessor:
         """
         # Download each file in the job results
         for file in job.files:
-            # You can specify the local path where you want to save the file
-            # TODO: Explore optimizing the local path
-            local_path = os.path.join(*([submission_directory] + file.id.split('/')[1:]))  # remove slivka id prefix
-            os.makedirs(os.path.dirname(local_path), exist_ok=True)
-            file.dump(local_path)
-            custom_logger.info(f"File {file.id} downloaded to {local_path}")
+            try:
+                os.makedirs(os.path.dirname(local_path), exist_ok=True)
+                file.dump(local_path)
+                custom_logger.info(f"File {file.id} downloaded to {local_path}")
+            except Exception as e:
+                custom_logger.error(f"An error occurred while downloading file {file.id}: {str(e)}")
+                raise
