@@ -192,21 +192,10 @@ class SlivkaProcessor:
                 # Wait for the job to complete
                 self.wait_for_job_completion(job)
 
-                # Construct the local path for the result file
-                # TODO: Explore optimizing the local path
-                local_path = os.path.join(submission_directory, job.files[0].id.split('/')[-1])
-                custom_logger.debug(f"Local path for result file: {local_path}")
-                
+                # TODO: Handle job failure
+                # TODO: Download could be done on demand when the user requests the results...
                 # Download the job results
-                self.download_job_results(job, local_path)
-
-                # TODO: may not need this step if the output file is already saved
-                # Copy Clustal Omega results (job.files[0].id) to the output file
-                with open(local_path) as result_file:
-                    result = result_file.read()
-                with open(output_file_path, 'w') as outfile:
-                    outfile.write(result)
-
+                self.download_job_results(job, submission_directory)
                 custom_logger.info(f"File processing completed successfully for session {self.session_id}.")
                 return True
         except FileNotFoundError as e:
@@ -267,16 +256,19 @@ class SlivkaProcessor:
         custom_logger.info(f"Completion Time: {job.completion_time}")
 
     @retry(stop=stop_after_attempt(5), wait=wait_exponential(min=1, max=10), retry=retry_if_exception_type((RequestException, HTTPError, ConnectionError, Timeout)))
-    def download_job_results(self, job, local_path):
+    def download_job_results(self, job, subbmission_directory):
         """Download the results of the given job to the specified directory.
 
         Args:
             job (SlivkaJob): The job object representing the completed job.
             submission_directory (str): The directory where the results should be saved.
         """
+        # TODO: Ensure retires are handled at correct level (ie. per file?) or ensure downloads are idempotent
         # Download each file in the job results
         for file in job.files:
             try:
+                # TODO: Explore optimizing the local path
+                local_path = os.path.join(subbmission_directory, *(file.id.split('/')[1:]))
                 os.makedirs(os.path.dirname(local_path), exist_ok=True)
                 file.dump(local_path)
                 custom_logger.info(f"File {file.id} downloaded to {local_path}")
