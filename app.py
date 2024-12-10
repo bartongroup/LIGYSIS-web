@@ -1473,7 +1473,7 @@ def user_results(session_id, submission_time): # route for user results site. Ta
     simple_cifs = os.listdir(job_simple_cifs_dir) # simple PDB file names (single chain)
     simple_cifs = [el for el in simple_cifs if el.endswith(".cif")] # TODO NEED TO FIGURE THIS OUT
 
-    simple_cifs_full_path = [f'/files/{session_id}/{submission_time}/{el}' for el in simple_cifs]
+    simple_cifs_full_path = [url_for('main.serve_file', session_id=session_id, submission_time=submission_time, filename=el) for el in simple_cifs]
     if job_simple_cifs_dir.startswith(USER_JOBS_OUT_FOLDER):
         # TODO: This temporary to handle the different paths for user jobs and demo jobs
         simple_cifs_full_path = [url_for('static', filename=f'data/USER_JOBS/OUT/{job_id}/simple_cifs/{el}') for el in simple_cifs]
