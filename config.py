@@ -1,5 +1,9 @@
 import os
 
+# Configure the app URL prefix
+URL_PREFIX = os.environ.get('URL_PREFIX', '/ligysis')
+STATIC_URL_PATH = f"{URL_PREFIX}/static"
+
 BASE_DIR = os.path.dirname(os.path.abspath(__file__)) # VALID FOR ALL (UNUSED IN CLUSTER)
 
 DATA_FOLDER = os.path.join(BASE_DIR, "static", "data") # IN LOCAL & EXAMPLE

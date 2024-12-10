@@ -21,7 +21,7 @@ from flask import Blueprint, Flask, render_template, url_for, request, redirect,
 from flask_cors import CORS
 from werkzeug.utils import secure_filename
 
-from config import BASE_DIR, DATA_FOLDER, SITE_TABLES_FOLDER, RES_TABLES_FOLDER, REP_STRUCS_FOLDER, BS_RESS_FOLDER, MAPPINGS_FOLDER, STATS_FOLDER, ENTRY_NAMES_FOLDER, USER_JOBS_OUT_FOLDER, SESSIONS_FOLDER, SLIVKA_URL
+from config import BASE_DIR, DATA_FOLDER, SITE_TABLES_FOLDER, RES_TABLES_FOLDER, REP_STRUCS_FOLDER, BS_RESS_FOLDER, MAPPINGS_FOLDER, STATS_FOLDER, ENTRY_NAMES_FOLDER, USER_JOBS_OUT_FOLDER, SESSIONS_FOLDER, SLIVKA_URL, STATIC_URL_PATH, URL_PREFIX
 from filters import datetime_parse, datetime_format
 from forms import LigysisForm
 from logger_config import setup_logging
@@ -375,17 +375,17 @@ ACCS = sorted(list(set(list(LIGYSIS_prots_dat_EXT.values()))))
 
 ######################## FLASK APPLICATION ########################
 
-app = Flask(__name__, static_folder='static', static_url_path='/ligysis/static')
+app = Flask(__name__, static_folder='static', static_url_path=STATIC_URL_PATH)
 app.config['SECRET_KEY'] = os.environ.get('SECRET_KEY', 'default_secret_key')
 app.config['PERMANENT_SESSION_LIFETIME'] = timedelta(days=60)  # Long expiry
 app.config['SESSION_COOKIE_NAME'] = 'ligysis_session'
 
-CORS(app, resources={r"/ligysis/*": {"origins": ["http://www-dev.compbio.dundee.ac.uk",
-                                                 "http://www.compbio.dundee.ac.uk",
-                                                 "https://www.compbio.dundee.ac.uk"]}})
+CORS(app, resources={rf"{URL_PREFIX}/*": {"origins": ["http://www-dev.compbio.dundee.ac.uk",
+                                                      "http://www.compbio.dundee.ac.uk",
+                                                      "https://www.compbio.dundee.ac.uk"]}})
 
 # Use Blueprint to add URL prefix to serve site from a sub-directory
-main = Blueprint('main', __name__, url_prefix='/ligysis', static_url_path='/ligysis/static', static_folder='static')
+main = Blueprint('main', __name__, url_prefix=URL_PREFIX, static_url_path=STATIC_URL_PATH, static_folder='static')
 
 os.makedirs(SESSIONS_FOLDER, exist_ok=True)
 
