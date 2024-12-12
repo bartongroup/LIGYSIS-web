@@ -338,7 +338,7 @@ function openStructure(pdbId) {
         
         $.ajax({ // get UniProt residue mappings when loading a new assembly
             type: 'POST', 
-            url: '/user-get-uniprot-mapping', // server route
+            url: `${window.appBaseUrl}/user-get-uniprot-mapping`, // server route
             contentType: 'application/json;charset=UTF-8',
             data: JSON.stringify({'jobId': jobId, 'pdbFile': pdbId}), // sending PDB, Protein and Segment IDs
             // beforeSend: function() {
