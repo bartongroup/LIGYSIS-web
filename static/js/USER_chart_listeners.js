@@ -382,7 +382,12 @@ document.getElementById('chartCanvas').addEventListener('click', function(e) { /
             type: 'POST', // POST request
             url: `${window.appBaseUrl}/user-get-table`, // URL to send the request to
             contentType: 'application/json;charset=UTF-8', // content type
-            data: JSON.stringify({'label': fullPointLabel}), // data to send
+            // data to send in the body of the request
+            data: JSON.stringify({
+                'label': fullPointLabel,
+                'session_id': session_id,
+                'submission_time': submission_time,
+            }),
             success: function(response) { // function to execute when the request is successful
                 const keyOrder = cc; // order of the keys in the response object
                 let tableBody = $('#bs_ress_table tbody'); // tbody of the table

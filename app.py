@@ -1531,12 +1531,30 @@ def user_process_model_order(): # route to process model order data from Chimera
 def user_get_table(): # route to get binding site residues for a given binding site
 
     lab = request.json.get('label', None)
+    session_id = request.json.get('session_id', None)
+    submission_time = request.json.get('submission_time', None)
 
     lab_data = lab.split("_")
     bs_id = int(lab_data[-1])
     job_id = "_".join(lab_data[:-1])
 
-    job_output_dir = os.path.join(USER_JOBS_OUT_FOLDER, job_id)
+    job_output_dir = os.path.join(USER_JOBS_OUT_FOLDER, job_id)  # demo jobs, remove once demo is removed
+    if not os.path.exists(job_output_dir):
+        job_id = "input_structures"  # job ID is fixed
+
+        # Validate session_id and submission_time
+        if not is_valid_session_id(session_id) or not is_valid_submission_time(submission_time):
+            return "Invalid input", 400
+
+        # Construct the path
+        job_output_dir = os.path.join(SESSIONS_FOLDER, session_id, submission_time, "OUT", "input_structures")
+
+        # Check if the test file exists before trying to load the app
+        check_file_path = os.path.join(job_output_dir, "results", "input_structures_results_table.pkl")
+
+        if not os.path.exists(check_file_path):
+            return render_template('errors/404.html', error_message="File not found", file_path=check_file_path), 404
+        
     job_results_dir = os.path.join(job_output_dir, "results")
     results_df = pd.read_pickle(os.path.join(job_results_dir, f"{job_id}_results_table.pkl")) # results df contains all residues
 
