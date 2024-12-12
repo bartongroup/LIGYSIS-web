@@ -308,7 +308,7 @@ $('table#bss_table tbody').on('mouseover', 'tr', function () { // event listener
         let fullPointLabel = jobId + "_" + rowId;
         $.ajax({ // AJAX request to get the table data from the server
             type: 'POST', // POST request
-            url: '/user-get-table', // URL to send the request to
+            url: `${window.appBaseUrl}/user-get-table`, // URL to send the request to
             contentType: 'application/json;charset=UTF-8', // content type
             data: JSON.stringify({'label': fullPointLabel}), // data to send
             success: function(response) { // function to execute when the request is successful
