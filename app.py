@@ -1586,10 +1586,22 @@ def user_get_uniprot_mapping(): # route to get UniProt residue and chain mapping
     data = request.json
     job_id = data['jobId']
     pdb_file = data['pdbFile']
+    session_id = data['session_id']
+    submission_time = data['submission_time']
 
     pdb_id, _ = os.path.splitext(pdb_file)
 
     job_output_dir = os.path.join(USER_JOBS_OUT_FOLDER, job_id)
+    if not os.path.exists(job_output_dir):
+        job_id = "input_structures"
+        
+        # Validate session_id and submission_time
+        if not is_valid_session_id(session_id) or not is_valid_submission_time(submission_time):
+            return "Invalid input", 400
+        
+        # Construct the path
+        job_output_dir = os.path.join(SESSIONS_FOLDER, session_id, submission_time, "OUT", job_id)
+        
     job_mappings_dir = os.path.join(job_output_dir, "mappings")
 
     struc_name = pdb_id.split(".")[0]

@@ -340,7 +340,13 @@ function openStructure(pdbId) {
             type: 'POST', 
             url: `${window.appBaseUrl}/user-get-uniprot-mapping`, // server route
             contentType: 'application/json;charset=UTF-8',
-            data: JSON.stringify({'jobId': jobId, 'pdbFile': pdbId}), // sending PDB, Protein and Segment IDs
+            // data sent to the server
+            data: JSON.stringify({
+                'jobId': jobId,
+                'pdbFile': pdbId,
+                'session_id': session_id,
+                'submission_time': submission_time,
+            }),
             // beforeSend: function() {
             //     toggleSpinner();
             // },
