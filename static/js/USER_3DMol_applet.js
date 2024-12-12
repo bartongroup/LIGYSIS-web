@@ -97,7 +97,12 @@ function loadAllModels(simplePdbs) { // Load all structures
             headers: {
                 'Content-Type': 'application/json',
             },
-            body: JSON.stringify({modelOrder: modelOrder, jobId: jobId}),
+            body: JSON.stringify({
+                modelOrder: modelOrder,
+                jobId: jobId,
+                session_id: session_id,
+                submission_time: submission_time
+            }),
         })
         .then(response => response.json())
         .then(data => {

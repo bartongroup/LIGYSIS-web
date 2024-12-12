@@ -1493,7 +1493,8 @@ def user_results(session_id, submission_time): # route for user results site. Ta
         first_site_data = first_site_data, bs_table_tooltips = bs_table_tooltips, bs_ress_table_tooltips = bs_ress_table_tooltips,
         pdb2up_dict = pdb2up_dict, up2pdb_dict = up2pdb_dict, seg_stats = seg_stats, entry_name = entry_name, upid_name = upid_name, prot_long_name = prot_long_name,
         simple_pdbs = simple_cifs_full_path, assembly_pdb_ids = assembly_pdb_ids, prot_atoms_struc = prot_atoms_struc,
-        prot_acc = uniprot_info["up_id"], prot_entry = uniprot_info["up_entry"], prot_name = uniprot_info["prot_name"], struc_count = struc_count
+        prot_acc = uniprot_info["up_id"], prot_entry = uniprot_info["up_entry"], prot_name = uniprot_info["prot_name"], struc_count = struc_count,
+        session_id = session_id, submission_time = submission_time
     )
 
 @main.route('/user-process-model-order', methods=['POST'])
@@ -1501,9 +1502,17 @@ def user_process_model_order(): # route to process model order data from Chimera
     data = request.json
     loaded_order = data['modelOrder'] # this is the order in which files have been loaded by 3DMol.js
     job_id = data['jobId'] # name of the segment
+    session_id = data['session_id']
+    submission_time = data['submission_time']
     
-    cxc_in =f'{USER_JOBS_OUT_FOLDER}/{job_id}/simple_cifs/{job_id}_average_0.5.cxc' # ChimeraX command file
-    attr_in =  f'{USER_JOBS_OUT_FOLDER}/{job_id}/simple_cifs/{job_id}_average_0.5.defattr' # ChimeraX attribute file
+    if is_valid_session_id(session_id):
+        # TODO: job_id = "input_structures", it's fixed for user submissions. Review if this is ideal configuration.
+        cxc_in = os.path.join(SESSIONS_FOLDER, session_id, submission_time, "OUT", "input_structures", "simple_cifs", f'{job_id}_average_0.5.cxc')  # ChimeraX command file
+        attr_in = os.path.join(SESSIONS_FOLDER, session_id, submission_time, "OUT", "input_structures", "simple_cifs", f'{job_id}_average_0.5.defattr')  # ChimeraX attribute file
+    else:
+        # TODO: for demo user results, remove once demo is removed
+        cxc_in =f'{USER_JOBS_OUT_FOLDER}/{job_id}/simple_cifs/{job_id}_average_0.5.cxc' # ChimeraX command file
+        attr_in =  f'{USER_JOBS_OUT_FOLDER}/{job_id}/simple_cifs/{job_id}_average_0.5.defattr' # ChimeraX attribute file
 
     model_order = extract_open_files(cxc_in, fmt = "cif") ## fix this format issue
 
