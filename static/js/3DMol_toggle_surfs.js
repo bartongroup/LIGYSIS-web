@@ -217,15 +217,15 @@ function toggleLabelsVisibility() {
                     labelsHash[activeModel]["clickedSite"][clickedElementId] = [];
                     if (activeModel == "superposition") {
                         let siteSuppPDBResNums = seg_ress_dict[clickedElementId]
-                            .filter(el => Up2PdbDict[repPdbId][repPdbChainId].hasOwnProperty(el)) // this accounts not for missing residues in the structure (unresolved)
-                            .map(el => Up2PdbDict[repPdbId][repPdbChainId][el]);
+                            .filter(el => Up2PdbDict[repPdbId][labelAsymId].hasOwnProperty(el)) // this accounts not for missing residues in the structure (unresolved)
+                            .map(el => Up2PdbDict[repPdbId][labelAsymId][el]);
 
                         console.log(`Site ${clickedElementId} residues: ${siteSuppPDBResNums}`);
                         for (siteSuppPDBResNum of siteSuppPDBResNums) {
-                            let resSel = {model: protAtomsModel, chain: repPdbChainId, resi: siteSuppPDBResNum}
+                            let resSel = {model: protAtomsModel, chain: authAsymId, resi: siteSuppPDBResNum}
                             let resName = viewer.selectedAtoms(resSel)[0].resn
                             let label = viewer.addLabel(
-                                resName + String(Pdb2UpDict[repPdbId][repPdbChainId][siteSuppPDBResNum]),
+                                resName + String(Pdb2UpDict[repPdbId][labelAsymId][siteSuppPDBResNum]),
                                 {
                                     alignment: 'center', backgroundColor: 'white', backgroundOpacity: 1,
                                     borderColor: 'black', borderOpacity: 1, borderThickness: 2,
@@ -236,7 +236,6 @@ function toggleLabelsVisibility() {
                                 true,
                             );
                             labelsHash[activeModel]["clickedSite"][clickedElementId].push(label);
-                            // console.log(siteSuppPDBResNum, resSel, resName, resName + String(Pdb2UpDict[repPdbId][repPdbChainId][siteSuppPDBResNum]))
                         }
                         viewer.render();
                     }
@@ -338,8 +337,6 @@ function toggleWatersVisibility() {
 
 function toggleLigandsVisibility() {
     if (ligandsVisible) {
-        // ligandButton.value = 'Ligands OFF'; // Change the button text
-        // ligandButton.style = "font-weight: bold; color: #674ea7;";
 
         document.getElementById("ligandButton").textContent = "LIGAND ✘";
         ligandButton.style.borderColor = "#ffa500";
@@ -349,6 +346,7 @@ function toggleLigandsVisibility() {
 
         if (activeModel == "superposition") {
             viewer.addStyle(suppLigsSels["clust"], {stick: {hidden: true, colorscheme: myScheme, radius: stickRadius}});
+            viewer.addStyle(suppLigsSels["clust_ions"], {sphere: {hidden: true, colorscheme: myScheme, radius: ionSphereRadius}});
             // console.log(`Ligands hidden for ${activeModel} model!`);
         }
         else {
@@ -356,14 +354,16 @@ function toggleLigandsVisibility() {
                 {...hetAtomsNotHoh, model: activeModel},
                 {stick: {hidden: true, radius: stickRadius}}
             )
+            viewer.addStyle(
+                {...ionAtoms, model: activeModel},
+                {sphere: {hidden: true, radius: ionSphereRadius}}
+            );
             // console.log(`Ligands hidden for model ${activeModel}!`);
         }
 
         if (contactsVisible) {
-            // contactsButton.value = 'Contacts OFF'; // Change the button text
-            // contactsButton.style = "font-weight: bold; color: #674ea7;";
 
-            document.getElementById("contactsButton").textContent = "CONTACTS ✘";
+            document.getElementById("contactsButton").textContent = "CONTACT ✘";
             contactsButton.style.borderColor = "#ffa500";
             contactsButton.style.fontWeight = "normal";
             contactsButton.style.color = "#ffa500";
@@ -426,22 +426,11 @@ function toggleLigandsVisibility() {
                         
                     }
                 }
-                // for (const [key, value] of Object.entries(surfsDict[activeModel]['lig_inters'])) { // hide surfaces of ligand-interacting residues
-                //     viewer.setSurfaceMaterialStyle(value.surfid, {opacity:0.0});
-                // }
-
-                // surfButton.value = 'Surface OFF'; // Change the button text
-                // surfButton.style = "font-weight: bold; color: #674ea7;";
-
-                
-                // surfaceVisible = !surfaceVisible; // Toggle the visibility state
             }
             contactsVisible = false;
         }
     }
     else {
-        // ligandButton.value = 'Ligands ON'; // Change the button text
-        // ligandButton.style = "font-weight: bold; color:#B22222;";
 
         document.getElementById("ligandButton").textContent = "LIGAND ✓";
         ligandButton.style.fontWeight = "bold";
@@ -449,17 +438,24 @@ function toggleLigandsVisibility() {
         ligandButton.style.borderColor = "#007bff";
         ligandButton.style.borderWidth = "2.5px";
 
-
-
         if (activeModel == "superposition") {
-            viewer.addStyle(suppLigsSels["clust"], {stick: {hidden: false, colorscheme: myScheme, radius: stickRadius}});
+            viewer.addStyle(suppLigsSels["clust"], {
+                stick: {hidden: false, colorscheme: myScheme, radius: stickRadius},
+            });
+            viewer.addStyle(suppLigsSels["clust_ions"],
+                {sphere: {hidden: false, colorscheme: myScheme, radius: ionSphereRadius}
+            });
             // console.log(`Ligands shown for ${activeModel} models!`);
         }
         else {
             viewer.addStyle(
                 {...hetAtomsNotHoh, model: activeModel},
                 {stick: {hidden: false, radius: stickRadius}}
-                );
+            );
+            viewer.addStyle(
+                {...ionAtoms, model: activeModel},
+                {sphere: {hidden: false, radius: ionSphereRadius}}
+            );
             //console.log(`Ligands shown for model ${activeModel}!`);
         }
     }
@@ -540,6 +536,10 @@ async function toggleContactsVisibility() {
             viewer.addStyle(
                 {...hetAtomsNotHoh, model: activeModel},
                 {stick: {hidden: true}}
+            );
+            viewer.addStyle(
+                {...ionAtoms, model: activeModel},
+                {sphere: {hidden: true}}
             );
 
             // turn ligandButton off
@@ -737,8 +737,13 @@ async function toggleContactsVisibility() {
                                 stick: {hidden: false, color: ligColor, radius: stickRadius}
                             }
                         );
-
-                        viewer.addStyle({model: activeModel, resi: ligResi, chain: ligChain, resn: ligMol}, {stick: {hidden: false, color: ligColor, radius: stickRadius}});
+                        if (ionLigs.includes(ligMol)) {
+                            viewer.addStyle({model: activeModel, resi: ligResi, chain: ligChain, resn: ligMol}, {sphere: {hidden: false, color: ligColor, radius: ionSphereRadius}});
+                        }
+                        else {
+                            viewer.addStyle({model: activeModel, resi: ligResi, chain: ligChain, resn: ligMol}, {stick: {hidden: false, color: ligColor, radius: stickRadius}});
+                        }
+                        
                         // add ligand-interacting residues surfaces
                         surfsDict[activeModel]["lig_inters"][ligNam] = viewer.addSurface(
                             $3Dmol.SurfaceType.ISO,
@@ -810,7 +815,12 @@ async function toggleContactsVisibility() {
                             stick: {hidden: false, color: ligCol, radius: stickRadius}
                         }
                     );
-                    viewer.addStyle(ligSel, {stick: {hidden: false, color: ligCol, radius: stickRadius}});
+                    if (ionLigs.includes(ligSel.resn)) {
+                        viewer.addStyle(ligSel, {sphere: {hidden: false, color: ligCol, radius: ionSphereRadius}});
+                    }
+                    else {
+                        viewer.addStyle(ligSel, {stick: {hidden: false, color: ligCol, radius: stickRadius}});
+                    }
                 }
 
                 if (labelsVisible) {

@@ -370,7 +370,9 @@ function openStructure(pdbId) {
                             viewer.getModel(modelID).show(); // Show the model
                         }
                         else {
-                            let model = viewer.addModel(data, "cif",); // Load data
+                            let model = viewer.addModel(data, "cif", {unboundCations: true}); // Load data
+                            let hydrogenAtoms = model.selectedAtoms({elem: "H"}); // Get hydrogen atoms
+                            model.removeAtoms(hydrogenAtoms); // Remove hydrogen atoms
                             modelID = model.getID(); // Gets the ID of the GLModel
                             activeModel = modelID;
                             surfsDict[activeModel] = {"non_binding": {}, "lig_inters": {},}; // Initialize dictionary for the new assembly
@@ -437,6 +439,21 @@ function openStructure(pdbId) {
                         viewer.setHoverable({model: modelID}, true,  // Hovering enabled for new assembly
                             showHoverLabelNoModel,
                             removeHoverLabel,
+                        );
+
+                        viewer.setClickable(
+                            {model: activeModel}, // Select all atoms or define specific criteria
+                            true,      // Enable clicking
+                            function(atom) { 
+                                if (atom && atom.resn) {
+                                    // Construct the URL using the residue name (resn) of the clicked atom
+                                    const url = `${pdbeChemUrlRoot}${atom.resn}`;
+                                    // Open the URL in a new tab or window
+                                    window.open(url, '_blank');
+                                } else {
+                                    console.log("Clicked an atom without a residue name");
+                                }
+                            }
                         );
 
                         slab = viewer.getSlab();

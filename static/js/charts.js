@@ -28,7 +28,7 @@ const newChartCtx = document.getElementById("newChartCanvas").getContext("2d");
 const myChartLims = { 
     RSA: {sugMin: 0, sugMax: 50, min: 0, max: 100},
     DS: {sugMin: 0, sugMax: 50, min: 0, max: 100},
-    MES: {sugMin: 0.05, sugMax: 2, min: 0, max: 5},
+    MES: {sugMin: 1/bssMESAxisLim, sugMax: bssMESAxisLim, min: 1/bssMESAxisLim, max: bssMESAxisLim},
     Size: {sugMin: 1, sugMax: 25, min: 1, max: 70},
     Cluster: {sugMin: 0, sugMax: 5, min: 0, max: 5},
     FS: {sugMin: 0, sugMax: 0.6, min: 0, max: 0.6},
@@ -36,7 +36,9 @@ const myChartLims = {
 
 const newChartLims = {
     DS: {sugMin: 0, sugMax: 50, min: 0, max: 100},
-    MES: {sugMin: 0.05, sugMax: 2, min: 0, max: 5},
+    // MES: {sugMin: 0.05, sugMax: 2, min: 0, max: 5},
+    // MES: computeSymmetricalLogLimits(newChartData["MES"]),
+    MES: {sugMin: 1/bsRessMESAxisLim, sugMax: bsRessMESAxisLim, min: 1/bsRessMESAxisLim, max: bsRessMESAxisLim},
     RSA: {sugMin: 0, sugMax: 75, min: 0, max: 100},
     p: {sugMin: 0.1, sugMax: 0.75, min: 0, max: 1}
 };
@@ -127,7 +129,7 @@ let chartConfig = {
                 },
             },
             y: {
-                type: 'logarithmic',
+                type: chartY === "MES" ? "logarithmic" : "linear",
                 title: {
                     display: true,
                     align: "center",
@@ -179,7 +181,16 @@ let chartConfig = {
                         borderColor: 'black',
                         borderWidth: 1,
                         borderDash: [10, 5],
-                        display: true,
+                        display: chartY === "MES" // Display based on whether chartY is MES
+                    },
+                    line2: {
+                        type: 'line',
+                        xMin: 1,
+                        xMax: 1,
+                        borderColor: 'black',
+                        borderWidth: 1,
+                        borderDash: [10, 5],
+                        display: chartX === "MES" // Display based on whether chartY is MES
                     }
                 }
             },
@@ -260,7 +271,7 @@ let newChartConfig = { // configuration for the new chart
                 },
             },
             y: {
-                type: 'logarithmic',
+                type: newChartY === "MES" ? "logarithmic" : "linear",
                 title: {
                     display: true,
                     align: "center",
@@ -311,7 +322,16 @@ let newChartConfig = { // configuration for the new chart
                         borderColor: 'black',
                         borderWidth: 1,
                         borderDash: [10, 5],
-                        display: true,
+                        display: newChartY === "MES" // Display based on whether chartY is MES
+                    },
+                    line2: {
+                        type: 'line',
+                        xMin: 1,
+                        xMax: 1,
+                        borderColor: 'black',
+                        borderWidth: 1,
+                        borderDash: [10, 5],
+                        display: newChartX === "MES" // Display based on whether chartY is MES
                     }
                 }
             },
@@ -341,6 +361,30 @@ newChart = new Chart(newChartCtx, newChartConfig); // create the new chart
 
 const xAxisTitleDropdown = document.getElementById("xAxisTitle2");
 const yAxisTitleDropdown = document.getElementById("yAxisTitle2");
+
+// function computeSymmetricalLogLimits(data) {
+//     const minValue = Math.min(...data);
+//     const maxValue = Math.max(...data);
+
+//     // Calculate reciprocal of minValue
+//     const reciprocalOfMin = 1 / minValue;
+
+//     // Determine the maximum absolute value
+//     const newMax = Math.max(Math.abs(maxValue), Math.abs(reciprocalOfMin));
+
+//     // Round up the maximum value
+//     const roundedMax = Math.ceil(newMax * 2) / 2;
+
+//     // console.log(newMax, roundedMax);
+
+//     // Calculate symmetrical limits
+//     return {
+//         sugMin: 1 / roundedMax,
+//         sugMax: roundedMax,
+//         min: 1 / roundedMax,
+//         max: roundedMax,
+//     };
+// }
 
 xAxisTitleDropdown.value = newChart.options.scales.x.title.text;
 yAxisTitleDropdown.value = newChart.options.scales.y.title.text;

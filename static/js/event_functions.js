@@ -6,20 +6,32 @@ function updateChart(axes, dropdownElem, myChart, chartData, myChartLims) { // u
 
     if (axes === "x") {
         myChart.data.labels = chartData[selectedTitle];
+        chartX = selectedTitle;
     } else if (axes === "y") {
         myChart.data.datasets[0].data = chartData[selectedTitle];
+        chartY = selectedTitle; 
     }
 
     if (selectedTitle === "MES") {
         myChart.options.scales[axes].type = "logarithmic";
         myChart.options.scales[axes].ticks.autoSkip = true;
         myChart.options.scales[axes].ticks.callback = Chart.Ticks.formatters.logarithmic;
-        myChart.options.plugins.annotation.annotations.line1.display = true;
+        if (axes === "y") {
+            myChart.options.plugins.annotation.annotations.line1.display = true;
+        }
+        else if (axes === "x") {
+            myChart.options.plugins.annotation.annotations.line2.display = true;
+        }
     } else {
         myChart.options.scales[axes].type = "linear";
         myChart.options.scales[axes].ticks.autoSkip = false;
         myChart.options.scales[axes].ticks.callback = Chart.Ticks.formatters.numeric;
-        myChart.options.plugins.annotation.annotations.line1.display = false;
+        if (axes === "y") {
+            myChart.options.plugins.annotation.annotations.line1.display = false;
+        }
+        else if (axes === "x") {
+            myChart.options.plugins.annotation.annotations.line2.display = false;
+        }
     }
 
     myChart.options.scales[axes].title.text = selectedTitle;
@@ -122,6 +134,7 @@ function executeFunction() { // Execute the download function based on the selec
     document.getElementById('menuRow').style.display = 'none';  // Hide menu after selection
 }
 
+const pdbeChemUrlRoot = "https://www.ebi.ac.uk/pdbe-srv/pdbechem/chemicalCompound/show/";
 // Function to update the slab clipping planes
 
 function updateSlab() {

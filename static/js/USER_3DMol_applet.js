@@ -43,7 +43,9 @@ function loadModel(simplePdb) { // Load a structure for each one of the simple p
             success: function(data) {
                 // console.log(data);
                 // console.log("Gonna load PDB " + simplePdb);
-                let model = viewer.addModel(data, "cif"); // Add the model to the viewer
+                let model = viewer.addModel(data, "cif", {unboundCations: true}); // Add the model to the viewer
+                let hydrogenAtoms = model.selectedAtoms({elem: "H"}); // Get hydrogen atoms
+                model.removeAtoms(hydrogenAtoms); // Remove hydrogen atoms
                 let modelID = model.getID(); // Get the model ID. Used throughout to refere to a specific model
                 let baseName = simplePdb.split("/").pop(); // Get the base name of the file (without the path)
                 let pdbID = baseName; // Get the PDB ID
@@ -83,11 +85,13 @@ function loadAllModels(simplePdbs) { // Load all structures
 
         protAtomsProtModelSel = {...protAtoms, model: protAtomsModel}; // this is generating a new selection object including protein atoms of a specific model
         hetAtomsNotHohSuppModelSel = {...hetAtomsNotHoh, model: suppModels}; // this is generating a new selection object including ligands (not water) of a specific model
+        ionAtomsSuppModelsSel = {...ionAtoms, model: suppModels}; // this is generating a new selection object including ion atoms of all models
         protAtomsSuppModelsSel = {...protAtoms, model: suppModelsNoProt}; // this is generating a new selection object including protein atoms of all models
         hohAtomsSuppModelsSel = {...hohAtoms, model: suppModels}; // this is generating a new selection object including water atoms of all models
 
         viewer.setStyle(protAtomsProtModelSel, {cartoon: {hidden: false, style: cartoonStyle, color: defaultColor, arrows: cartoonArrows, tubes: cartoonTubes, thickness: cartoonThickness, opacity: cartoonOpacity}}); // cartoon representation for protein
         viewer.setStyle(hetAtomsNotHohSuppModelSel, {stick: {hidden: true, radius: 0}}); // stick representation for ligands (HETATM), hidden by default
+        viewer.setStyle(ionAtomsSuppModelsSel, {sphere: {hidden: true, radius: sphereRadius}}); // sphere representation for ions, hidden by default
         viewer.setStyle(protAtomsSuppModelsSel, {cartoon: {hidden: true, style: cartoonStyle, arrows: cartoonArrows, tubes: cartoonTubes, thickness: cartoonThickness, opacity: cartoonOpacity}}); // hide protein atoms in the superposition models
         viewer.setStyle(hohAtomsSuppModelsSel, {sphere: {hidden: true, color: waterColor, radius: sphereRadius}}); // sphere representation for water atoms, hidden by default
 
@@ -123,13 +127,21 @@ function loadAllModels(simplePdbs) { // Load all structures
 
             suppLigsSels["clust"] = {...hetAtomsNotHoh, model: suppModels, not: {properties: {bs: -1}}};
 
+            suppLigsSels["clust_ions"] = {...ionAtoms, model: suppModels, not: {properties: {bs: -1}}};
+
             suppLigsSels["not_clust"] = {...hetAtomsNotHoh, model: suppModels, properties: {bs: -1}};
+
+            suppLigsSels["not_clust_ions"] = {...ionAtoms, model: suppModels, properties: {bs: -1}};
             
             suppLigsSels["water"] = {...hohAtoms, model: suppModels};
 
             viewer.addStyle(suppLigsSels["clust"], {stick: {hidden: true, colorscheme: myScheme, radius: stickRadius}});
+
+            viewer.addStyle(suppLigsSels["clust_ions"], {sphere: {hidden: true, colorscheme: myScheme, radius: ionSphereRadius}});
         
             viewer.addStyle(suppLigsSels["not_clust"], {stick: {hidden: true, colorscheme: myScheme, radius: stickRadius}});
+
+            viewer.addStyle(suppLigsSels["not_clust_ions"], {sphere: {hidden: true, colorscheme: myScheme, radius: ionSphereRadius}});
 
             viewer.addStyle(suppLigsSels["water"], {sphere: {hidden: true, color: waterColor, radius: sphereRadius}});
 
@@ -179,6 +191,21 @@ function loadAllModels(simplePdbs) { // Load all structures
                 );
             }
         }
+
+        viewer.setClickable(
+            {model: suppModels}, // Select all atoms or define specific criteria
+            true,      // Enable clicking
+            function(atom) { 
+                if (atom && atom.resn) {
+                    // Construct the URL using the residue name (resn) of the clicked atom
+                    const url = `${pdbeChemUrlRoot}${atom.resn}`;
+                    // Open the URL in a new tab or window
+                    window.open(url, '_blank');
+                } else {
+                    console.log("Clicked an atom without a residue name");
+                }
+            }
+        );
         
         console.log("Surfaces added");
 

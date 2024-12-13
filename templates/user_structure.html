@@ -33,6 +33,12 @@
     let protAtomsStruc = {{ prot_atoms_struc | tojson }}
     let strucCount = {{ struc_count | tojson }}
 
+    const bssMESAxisLim = {{ bss_MES_axis_lim | tojson }}
+    const bsRessMESAxisLim = {{ bs_ress_MES_axis_lim | tojson }}
+
+    const jobResultsDir = {{ job_results_dir | tojson }}
+    const jobVariantsDir = {{ job_variants_dir | tojson }}
+
     // console.log(`Reading SIFTS mapping for ${protAtomsStruc}`);
 
     const Pdb2UpDict = {{ pdb2up_dict | tojson   }}
@@ -94,6 +100,7 @@
     const cartoonTubes = false;
     const stickRadius = 0.25;
     const sphereRadius = 0.20;
+    const ionSphereRadius = 0.50;
     
     const waterColor = 'gold';
     const bboneAtoms = ['N', 'C', 'O']; // backbone atoms that are not displayed as sticks
@@ -125,8 +132,10 @@
     let suppLigsSels = {};
     const canAas = ['CYS', 'MET', 'HIS', 'GLU', 'ASP', 'LYS', 'ARG', 'SER', 'THR', 'ASN', 'GLN', 'TRP', 'TYR', 'PHE', 'ILE', 'LEU', 'VAL', 'ALA', 'PRO', 'GLY'];
     const modAas = ['TPO', 'SEP', 'PTR', 'PYL', 'MLY', 'MSE', 'CSO', 'CME', 'CSD', 'CSW', 'CSX', 'CSS', 'CSH', 'CSL', 'CSZ', 'CSK', 'CSM', 'CSR', 'CSS', 'CSU'];
+    const ionLigs = ['0BE', '3CO', '3NI', '4MO', '4PU', '4TI', '6MO', 'AG', 'AL', 'AM', 'AR', 'ARS', 'AU', 'AU3', 'BA', 'BR', 'BRO', 'BS3', 'CA', 'CD', 'CE','CF', 'CL', 'CLO', 'CO', 'CR', 'CS', 'CU', 'CU1', 'CU3', 'D8U', 'DUM', 'DY', 'ER3', 'EU', 'EU3', 'F', 'FE', 'FE2', 'FLO', 'GA', 'GD', 'GD3', 'H', 'HG', 'HO', 'HO3', 'IDO', 'IN', 'IOD', 'IR', 'IR3', 'K', 'KR', 'LA', 'LI', 'LU', 'MG', 'MN', 'MN3', 'MO', 'NA', 'ND', 'ND4', 'NGN', 'NI', 'O', 'OS', 'OS4', 'OX', 'OXO', 'PB', 'PD', 'PR', 'PT', 'PT4', 'QTR', 'RB', 'RE', 'RH', 'RH3', 'RHF', 'RU', 'S', 'SB', 'SE', 'SM', 'SR', 'TA0', 'TB', 'TE', 'TH', 'TL', 'U1', 'UNX', 'V', 'W', 'XE', 'Y1', 'YB', 'YB2', 'YT3', 'ZCM', 'ZN', 'ZN2', 'ZR'];
     const allAas = canAas.concat(modAas);
-    const protAtoms = {resn: allAas};  
+    const protAtoms = {resn: allAas};
+    const ionAtoms = {resn: ionLigs};
     const hetAtoms = {not: protAtoms}; // all non-protein atoms
     const hetAtomsNotHoh = {and: [hetAtoms, {not: {resn: 'HOH'}}]}; // all non-protein atoms except water
     const hohAtoms = {resn: 'HOH'}; // all water atoms
@@ -391,6 +400,7 @@
             <div class="row mb-3 justify-content-center custom-padding">
                 <div class="col-3 col-md-1 col-lg-3 col-xl-6 d-flex justify-content-center align-items-center" style="padding-left:0px; padding-right:0px">
                     <button class="d-flex align-items-center" style="border: none; background: none; padding: 0;" onclick="downloadCSV(`{{ url_for('static', filename='data/USER_JOBS/OUT/${jobId}/results/${jobId}_bss_table.pkl') }}`)">
+                    <!-- <button class="d-flex align-items-center" style="border: none; background: none; padding: 0;" onclick="downloadCSV(`/${jobResultsDir}/${jobId}_bss_RSA_table.pkl`)"> -->
                         <img
                             src="{{ url_for('static', filename='images/download.svg') }}"
                             alt="Download Icon"
@@ -490,6 +500,7 @@
             <div class="row mb-3 justify-content-around custom-padding">
                 <div class="col-3 col-md-1 col-lg-3 col-xl-auto d-flex justify-content-center align-items-center" style="padding-left:0px; padding-right:0px;">
                     <button class="d-flex align-items-center" style="border: none; background: none; padding: 0; cursor: pointer;" onclick="downloadCSV(`{{ url_for('static', filename='data/USER_JOBS/OUT/${jobId}/results/${jobId}_bss_table.pkl') }}`)">
+                    <!-- <button class="d-flex align-items-center" style="border: none; background: none; padding: 0; cursor: pointer;" onclick="downloadCSV(`/${jobResultsDir}/${jobId}_results_table.pkl`)"> -->
                         <img
                             src="{{ url_for('static', filename='images/download.svg') }}"
                             alt="Download Icon"
@@ -499,13 +510,13 @@
                     </button>
                 </div>
                 <div class="col-3 col-md-1 col-lg-3 col-xl-auto d-flex justify-content-center align-items-center" style="padding-left:0px; padding-right:0px">
-                    <a href="{{ url_for('main.help') }}#sitePanelHelp">
+                    <a href="{{ url_for('main.help') }}#siteResiduesPanelHelp">
                         <img src="{{ url_for('static', filename='images/info.svg') }}" alt="Info Icon" style="width: 1.5rem; height: 1.5rem;">
                         <span style="color: black;">&nbsp;&nbsp;&nbsp;&nbsp;Column Information</span>
                     </a>
                 </div>
                 <div class="col-3 col-md-1 col-lg-3 col-xl-auto d-flex justify-content-center align-items-center" style="padding-left:0px; padding-right:0px;">
-                    <button class="d-flex align-items-center" style="border: none; background: none; padding: 0; cursor: pointer;" onclick="downloadFile(`{{ url_for('static', filename='data/USER_JOBS/OUT/${jobId}/varalign/${jobId}_rf.sto') }}`)">
+                    <button class="d-flex align-items-center" style="border: none; background: none; padding: 0; cursor: pointer;" onclick="downloadFile(`/user-files/${jobId}/varalign/${jobId}_rf.sto`)">
                         <img
                             src="{{ url_for('static', filename='images/download.svg') }}"
                             alt="Download Icon"
