@@ -334,7 +334,7 @@ function openStructure(pdbId) {
         // Example function call to 3DMol.js to load a structure
         console.log("Opening structure:", pdbId);
 
-        let pdbUri = `/static/data/USER_JOBS/OUT/${jobId}/supp_cifs/${pdbId}`; //path to assembly cif. TODO FIXME: THE PATH NEEDS TO CHANGE TO WHEREVER USER RESULTS GET STORED
+        let pdbUri = `${window.appBaseUrl}/user-files/${session_id}/${submission_time}/supp_cifs/${pdbId}`; // Updated path to assembly cif
         
         $.ajax({ // get UniProt residue mappings when loading a new assembly
             type: 'POST', 

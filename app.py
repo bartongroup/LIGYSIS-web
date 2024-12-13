@@ -1360,16 +1360,19 @@ def status(session_id):
                            slivka_url=SLIVKA_URL)
 
 # Route used to serve structures from the user jobs for 3Dmol.js   
-@main.route('/files/<session_id>/<submission_time>/<path:filename>')
-def serve_file(session_id, submission_time, filename):
+@main.route('/user-files/<session_id>/<submission_time>/<file_type>/<path:filename>')
+def serve_file(session_id, submission_time, file_type, filename):
     # Validate session_id and submission_time
     if not is_valid_session_id(session_id) or not is_valid_submission_time(submission_time):
         return "Invalid input", 400
     
+    if file_type not in ['simple_cifs', 'supp_cifs']:
+        return "Invalid file type", 400
+    
     # Sanitize filename
     sanitized_filename = secure_filename(filename)
 
-    directory = os.path.join(SESSIONS_FOLDER, session_id, submission_time, "OUT", "input_structures", "simple_cifs")
+    directory = os.path.join(SESSIONS_FOLDER, session_id, submission_time, "OUT", "input_structures", file_type)
     file_path = os.path.join(directory, sanitized_filename)
     
     try:
@@ -1473,7 +1476,7 @@ def user_results(session_id, submission_time): # route for user results site. Ta
     simple_cifs = os.listdir(job_simple_cifs_dir) # simple PDB file names (single chain)
     simple_cifs = [el for el in simple_cifs if el.endswith(".cif")] # TODO NEED TO FIGURE THIS OUT
 
-    simple_cifs_full_path = [url_for('main.serve_file', session_id=session_id, submission_time=submission_time, filename=el) for el in simple_cifs]
+    simple_cifs_full_path = [url_for('main.serve_file', session_id=session_id, submission_time=submission_time, file_type='simple_cifs', filename=el) for el in simple_cifs]
     if job_simple_cifs_dir.startswith(USER_JOBS_OUT_FOLDER):
         # TODO: This temporary to handle the different paths for user jobs and demo jobs
         simple_cifs_full_path = [url_for('static', filename=f'data/USER_JOBS/OUT/{job_id}/simple_cifs/{el}') for el in simple_cifs]
