@@ -130,12 +130,12 @@ async function selectOption(option) {
                 saveStructureButton.disabled = false;
                 saveStructureButton.style.color = 'black';  // Active font color
                 saveStructureButton.style.borderColor = 'black';  // Active font color
-                saveStructureDownloadIcon.setAttribute('src', '/static/images/download.svg');
+                saveStructureDownloadIcon.setAttribute('src', `${window.appBaseUrl}/static/images/download.svg`);
 
                 saveArpeggioDataButton.disabled = false;
                 saveArpeggioDataButton.style.color = 'black';  // Active font color
                 saveArpeggioDataButton.style.borderColor = 'black';  // Active font color
-                saveStructureContactsDownloadIcon.setAttribute('src', '/static/images/download.svg');
+                saveStructureContactsDownloadIcon.setAttribute('src', `${window.appBaseUrl}/static/images/download.svg`);
             } else {
                 contactsButton.disabled = true;
                 contactsButton.style.borderColor = "darkgray";
@@ -146,12 +146,12 @@ async function selectOption(option) {
                 saveStructureButton.disabled = true;
                 saveStructureButton.style.color = 'darkgray';  // Active font color
                 saveStructureButton.style.borderColor = 'darkgray';  // Active font color
-                saveStructureDownloadIcon.setAttribute('src', '/static/images/download_gray.svg');
+                saveStructureDownloadIcon.setAttribute('src', `${window.appBaseUrl}/static/images/download_gray.svg`);
 
                 saveArpeggioDataButton.disabled = true;
                 saveArpeggioDataButton.style.color = 'darkgray';  // Active font color
                 saveArpeggioDataButton.style.borderColor = 'darkgray';  // Active font color
-                saveStructureContactsDownloadIcon.setAttribute('src', '/static/images/download_gray.svg');
+                saveStructureContactsDownloadIcon.setAttribute('src', `${window.appBaseUrl}/static/images/download_gray.svg`);
             }
 
             
@@ -236,12 +236,12 @@ async function selectOption(option) {
                     saveStructureButton.disabled = false;
                     saveStructureButton.style.color = 'black';  // Active font color
                     saveStructureButton.style.borderColor = 'black';  // Active font color
-                    saveStructureDownloadIcon.setAttribute('src', '/static/images/download.svg');
+                    saveStructureDownloadIcon.setAttribute('src', `${window.appBaseUrl}/static/images/download.svg`);
 
                     saveArpeggioDataButton.disabled = false;
                     saveArpeggioDataButton.style.color = 'black';  // Active font color
                     saveArpeggioDataButton.style.borderColor = 'black';  // Active font color
-                    saveStructureContactsDownloadIcon.setAttribute('src', '/static/images/download.svg');
+                    saveStructureContactsDownloadIcon.setAttribute('src', `${window.appBaseUrl}/static/images/download.svg`);
                 } else {
                     contactsButton.disabled = true;
                     contactsButton.style.borderColor = "darkgray";
@@ -252,12 +252,12 @@ async function selectOption(option) {
                     saveStructureButton.disabled = true;
                     saveStructureButton.style.color = 'darkgray';  // Active font color
                     saveStructureButton.style.borderColor = 'darkgray';  // Active font color
-                    saveStructureDownloadIcon.setAttribute('src', '/static/images/download_gray.svg');
+                    saveStructureDownloadIcon.setAttribute('src', `${window.appBaseUrl}/static/images/download_gray.svg`);
 
                     saveArpeggioDataButton.disabled = true;
                     saveArpeggioDataButton.style.color = 'darkgray';  // Active font color
                     saveArpeggioDataButton.style.borderColor = 'darkgray';  // Active font color
-                    saveStructureContactsDownloadIcon.setAttribute('src', '/static/images/download_gray.svg');
+                    saveStructureContactsDownloadIcon.setAttribute('src', `${window.appBaseUrl}/static/images/download_gray.svg`);
                 }
                 
             }
@@ -274,12 +274,12 @@ async function selectOption(option) {
                 saveStructureButton.disabled = true;
                 saveStructureButton.style.color = 'darkgray';  // Active font color
                 saveStructureButton.style.borderColor = 'darkgray';  // Active font color
-                saveStructureDownloadIcon.setAttribute('src', '/static/images/download_gray.svg');
+                saveStructureDownloadIcon.setAttribute('src', `${window.appBaseUrl}/static/images/download_gray.svg`);
 
                 saveArpeggioDataButton.disabled = true;
                 saveArpeggioDataButton.style.color = 'darkgray';  // Active font color
                 saveArpeggioDataButton.style.borderColor = 'darkgray';  // Active font color
-                saveStructureContactsDownloadIcon.setAttribute('src', '/static/images/download_gray.svg');
+                saveStructureContactsDownloadIcon.setAttribute('src', `${window.appBaseUrl}/static/images/download_gray.svg`);
 
                 console.log(`Reading SIFTS mapping for ${protAtomsStruc}`);
 

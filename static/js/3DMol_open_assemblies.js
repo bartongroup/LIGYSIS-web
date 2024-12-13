@@ -128,13 +128,13 @@ async function selectOption(option) {
             saveAssemblyButton.disabled = false;
             saveAssemblyButton.style.color = 'black';  // Active font color
             saveAssemblyButton.style.borderColor = 'black';  // Active font color
-            saveAssemblyDownloadIcon.setAttribute('src', '/static/images/download.svg');
+            saveAssemblyDownloadIcon.setAttribute('src', `${window.appBaseUrl}/static/images/download.svg`);
 
 
             saveArpeggioDataButton.disabled = false;
             saveArpeggioDataButton.style.color = 'black';  // Active font color
             saveArpeggioDataButton.style.borderColor = 'black';  // Active font color
-            saveAssemblyContactsDownloadIcon.setAttribute('src', '/static/images/download.svg');
+            saveAssemblyContactsDownloadIcon.setAttribute('src', `${window.appBaseUrl}/static/images/download.svg`);
 
             
             for (const model of suppModels) { // hide ligand superposition models using suppModels array
@@ -216,12 +216,12 @@ async function selectOption(option) {
                 saveAssemblyButton.disabled = false;
                 saveAssemblyButton.style.color = 'black';  // Active font color
                 saveAssemblyButton.style.borderColor = 'black';  // Active font color
-                saveAssemblyDownloadIcon.setAttribute('src', '/static/images/download.svg');
+                saveAssemblyDownloadIcon.setAttribute('src', `${window.appBaseUrl}/static/images/download.svg`);
 
                 saveArpeggioDataButton.disabled = false;
                 saveArpeggioDataButton.style.color = 'black';  // Active font color
                 saveArpeggioDataButton.style.borderColor = 'black';  // Active font color
-                saveAssemblyContactsDownloadIcon.setAttribute('src', '/static/images/download.svg');
+                saveAssemblyContactsDownloadIcon.setAttribute('src', `${window.appBaseUrl}/static/images/download.svg`);
             }
             else {
 
@@ -236,12 +236,12 @@ async function selectOption(option) {
                 saveAssemblyButton.disabled = true;
                 saveAssemblyButton.style.color = 'darkgray';  // Active font color
                 saveAssemblyButton.style.borderColor = 'darkgray';  // Active font color
-                saveAssemblyDownloadIcon.setAttribute('src', '/static/images/download_gray.svg');
+                saveAssemblyDownloadIcon.setAttribute('src', `${window.appBaseUrl}/static/images/download_gray.svg`);
 
                 saveArpeggioDataButton.disabled = true;
                 saveArpeggioDataButton.style.color = 'darkgray';  // Active font color
                 saveArpeggioDataButton.style.borderColor = 'darkgray';  // Active font color
-                saveAssemblyContactsDownloadIcon.setAttribute('src', '/static/images/download_gray.svg');
+                saveAssemblyContactsDownloadIcon.setAttribute('src', `${window.appBaseUrl}/static/images/download_gray.svg`);
 
                 console.log(`Reading SIFTS mapping for ${repPdbId} chain ${repPdbChainId}`);
 
