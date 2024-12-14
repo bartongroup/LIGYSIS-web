@@ -578,7 +578,8 @@ def results(prot_id, seg_id): # route for results site. Takes Prot ID and Seg ID
     simple_pdbs = os.listdir(os.path.join(PROTS_FOLDER, prot_id, str(seg_id), "simple")) # simple PDB file names (single chain)
     simple_pdbs = [el for el in simple_pdbs if el.endswith(".cif")]
 
-    simple_pdbs_full_path = [f'/static/data/{prot_id}/{seg_id}/simple/{el}' for el in simple_pdbs]
+    simple_pdbs_full_path = [url_for('main.data_serve_file', prot_id=prot_id, seg_id=seg_id, filename=el) for el in simple_pdbs]
+
 
     n_strucs = len(assembly_pdbs) # number of structures
     # n_ligs = len(load_pickle(os.path.join(DATA_FOLDER, "example", "other", f'{prot_id}_{seg_id}_ALL_inf_ligs_fingerprints.pkl'))) # number of ligands
@@ -616,7 +617,31 @@ def help(): # route for help site
 def contact(): # route for contact site
     return render_template('contact.html')
 
-@app.route('/get-table', methods=['POST'])
+@main.route('/files/<path:filename>')
+def data_serve_file(filename):
+    prot_id = request.args.get('prot_id')
+    seg_id = request.args.get('seg_id')
+    
+    if not prot_id or not seg_id:
+        abort(400, description="Missing required parameters: prot_id and seg_id")
+    
+    # Sanitize filename
+    sanitized_filename = secure_filename(filename)
+    directory = os.path.join(PROTS_FOLDER, prot_id, seg_id, "simple")
+    
+    try:
+        return send_from_directory(directory, sanitized_filename)
+    except FileNotFoundError:
+        abort(404)
+
+@main.route('/assemblies/<path:filename>')
+def serve_assembly(filename):
+    try:
+        return send_from_directory(ASSEMBLY_FOLDER, filename)
+    except FileNotFoundError:
+        abort(404)
+
+@main.route('/get-table', methods=['POST'])
 def get_table(): # route to get binding site residues for a given binding site
 
     lab = request.json.get('label', None)
@@ -1595,7 +1620,7 @@ def user_results(session_id, submission_time): # route for user results site. Ta
     simple_cifs = os.listdir(job_simple_cifs_dir) # simple PDB file names (single chain)
     simple_cifs = [el for el in simple_cifs if el.endswith(".cif")] # TODO NEED TO FIGURE THIS OUT
 
-    simple_cifs_full_path = [f'/static/data/USER_JOBS/OUT/{job_id}/simple_cifs/{el}' for el in simple_cifs]
+    simple_cifs_full_path = [url_for('main.serve_file', session_id=session_id, submission_time=submission_time, file_type='simple_cifs', filename=el) for el in simple_cifs]
 
     n_strucs = len([el for el in os.listdir(job_supp_cifs_dir) if el.endswith(".cif")]) # number of structures
     n_ligs = len(load_pickle(os.path.join(job_results_dir, f"{job_id}_ligs_fingerprints.pkl"))) # number of ligands
@@ -1607,12 +1632,15 @@ def user_results(session_id, submission_time): # route for user results site. Ta
     struc_count = lig_data.groupby(lig_data['struc_name'].str.split('.').str[0]).size().to_dict()
 
     return render_template(
-        'USER_structure.html', data = data1, headings = headings, data2 = data2, cc_new = cc_new, cc_new_sel = cc_new_sel, colors = colors,
-        seg_ress_dict = seg_ress_dict, job_id = job_id, #seg_id = seg_id, segment_reps = segment_reps,
+        'user_structure.html', data = data1, headings = headings, data2 = data2, cc_new = cc_new, cc_new_sel = cc_new_sel, colors = colors,
+        seg_ress_dict = seg_ress_dict, job_id = job_id,
         first_site_data = first_site_data, bs_table_tooltips = bs_table_tooltips, bs_ress_table_tooltips = bs_ress_table_tooltips,
         pdb2up_dict = pdb2up_dict, up2pdb_dict = up2pdb_dict, seg_stats = seg_stats, entry_name = entry_name, upid_name = upid_name, prot_long_name = prot_long_name,
         simple_pdbs = simple_cifs_full_path, assembly_pdb_ids = assembly_pdb_ids, prot_atoms_struc = prot_atoms_struc,
-        prot_acc = uniprot_info["up_id"], prot_entry = uniprot_info["up_entry"], prot_name = uniprot_info["prot_name"], struc_count = struc_count
+        prot_acc = uniprot_info["up_id"], prot_entry = uniprot_info["up_entry"], prot_name = uniprot_info["prot_name"], struc_count = struc_count,
+        session_id = session_id, submission_time = submission_time,
+        job_results_dir = job_results_dir, job_variants_dir = job_variants_dir,  # These may not be needed outside demo jobs
+        bss_MES_axis_lim = bss_MES_axis_lim, bs_ress_MES_axis_lim = bs_ress_MES_axis_lim
     )
 
 @main.route('/user-process-model-order', methods=['POST'])
