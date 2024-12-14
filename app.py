@@ -22,7 +22,7 @@ from flask import Blueprint, Flask, render_template, url_for, request, redirect,
 from flask_cors import CORS
 from werkzeug.utils import secure_filename
 
-from config import BASE_DIR, DATA_FOLDER, SITE_TABLES_FOLDER, RES_TABLES_FOLDER, REP_STRUCS_FOLDER, PROTS_FOLDER, ASSEMBLY_FOLDER, CIF_SIFTS_DIR, CHAIN_MAPPING_DIR, BS_RESS_FOLDER, MAPPINGS_FOLDER, STATS_FOLDER, ENTRY_NAMES_FOLDER, USER_JOBS_OUT_FOLDER, SESSIONS_FOLDER, SLIVKA_URL, STATIC_URL_PATH, URL_PREFIX
+from config import BASE_DIR, DATA_FOLDER, SITE_TABLES_FOLDER, RES_TABLES_FOLDER, REP_STRUCS_FOLDER, PROTS_FOLDER, ASSEMBLY_FOLDER, CIF_SIFTS_DIR, CHAIN_MAPPING_DIR, USER_JOBS_OUT_FOLDER, SESSIONS_FOLDER, SLIVKA_URL, STATIC_URL_PATH, URL_PREFIX
 from filters import datetime_parse, datetime_format
 from forms import LigysisForm
 from logger_config import setup_logging
