@@ -257,7 +257,10 @@ def compute_symmetrical_log_limits(df, col_name = "MES"):
     new_max = max(abs(max_value), abs(reciprocal_of_min))
 
     # Round up to the nearest 0.5
-    rounded_max = math.ceil(new_max * 2) / 2
+    if math.isinf(new_max):
+        rounded_max = 2  # or any large finite value
+    else:
+        rounded_max = math.ceil(new_max * 2) / 2
 
     # Calculate symmetrical limits
     min_limit = 1 / rounded_max
