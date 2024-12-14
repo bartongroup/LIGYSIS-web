@@ -701,6 +701,7 @@ def process_model_order(): # route to process model order data from ChimeraX fil
 
     model_order = extract_open_files(cxc_in) # order in which ChimeraX opens files (important for binding site attribute assignment)
 
+    loaded_order = {key.split('?')[0]: value for key, value in loaded_order.items()}
     result_tuples, bs_ids = transform_lines_3DMol(attr_in, model_order, loaded_order) # binding site attribute data list of tuples
 
     # print(result_tuples, bs_ids)
