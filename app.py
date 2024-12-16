@@ -1409,7 +1409,7 @@ def download_assembly_contact_data(): # route to download contacts data for a gi
             as_attachment=True,
             download_name=f'{prot_id}_{seg_id}_{pdb_id}_contacts.csv'
         )
-    
+
 @main.route('/download-all-assemblies-contact-data', methods=['POST'])
 def download_all_assemblies_contact_data(): # route to download contacts data for all assemblies
     data = request.get_json()

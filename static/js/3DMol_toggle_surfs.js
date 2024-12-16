@@ -557,7 +557,7 @@ async function toggleContactsVisibility() {
         }
         else {
             if (contactCylinders[activeModel].length == 0) { // first time switching contacts on for this model
-                await fetch('/get-contacts', {
+                await fetch(`${window.appBaseUrl}/get-contacts`, {
                     method: 'POST', // Use POST method to send data
                     headers: {
                         'Content-Type': 'application/json'
