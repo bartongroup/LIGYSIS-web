@@ -38,9 +38,9 @@
   let config = { backgroundColor: 'white', keepH: false };
   let viewer = $3Dmol.createViewer(element, config);
   let pdbUris = [
-    '/static/data/Q9UGL1/5fpu_A_trans.cif',
-    '/static/data/Q9UGL1/5fz1_A_trans.cif',
-    '/static/data/Q9UGL1/6ej1_A_trans.cif',
+    "{{ url_for('static', filename='data/Q9UGL1/5fpu_A_trans.cif') }}",
+    "{{ url_for('static', filename='data/Q9UGL1/5fz1_A_trans.cif') }}",
+    "{{ url_for('static', filename='data/Q9UGL1/6ej1_A_trans.cif') }}",
   ];
   let loadedCount = 0; // Counter for loaded structures
   let models = [];

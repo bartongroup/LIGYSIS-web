@@ -20,7 +20,7 @@
     let element = document.querySelector('#container-01');
     let config = { backgroundColor: 'white' , keepH: false};
     let viewer = $3Dmol.createViewer( element, config );
-    let pdbUri = '/static/experiment/7sgw-assembly-1.cif';
+    let pdbUri = "{{ url_for('static', filename='experiment/7sgw-assembly-1.cif') }}";
     jQuery.ajax( pdbUri, { 
       success: function(data) {
         let v = viewer;

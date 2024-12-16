@@ -72,22 +72,22 @@ function loadModel(simplePdb) { // Load a structure for each one of the simple p
 function loadAllModels(simplePdbs) { // Load all structures
     const loadPromises = simplePdbs.map(simplePdb => loadModel(simplePdb)); // Create an array of promises for each structure
 
-    Promise.all(loadPromises).then(() => { // When all promises are resolved (al models have finished loading)
+    Promise.all(loadPromises).then(() => { // When all promises are resolved (all models have finished loading)
         console.log("All structures loaded");
 
         suppModels = Array.from({length: models.length}, (_, i) => 0 + i); // Create an array of model IDs from 0 to N-1 where N is the number of superposition models
 
-        protAtomsModel = modelOrder[`${protAtomsStruc}.cif`] 
+        protAtomsModel = modelOrder[`${protAtomsStruc}.cif`];
 
         suppModelsNoProt = suppModels.filter(model => model !== protAtomsModel); // Create an array of model IDs without the protein atoms model
 
         viewer.setViewStyle({style: "outline", width: outlineWidth, color: outlineColor, "maxpixels": 2}); // cartoon outline
 
-        protAtomsProtModelSel = {...protAtoms, model: protAtomsModel} // this is generating a new selection object including protein atoms of a specific model
-        hetAtomsNotHohSuppModelSel = {...hetAtomsNotHoh, model: suppModels} // this is generating a new selection object including ligands (not water) of a specific model
-        ionAtomsSuppModelsSel = {...ionAtoms, model: suppModels} // this is generating a new selection object including ion atoms of all models
-        protAtomsSuppModelsSel = {...protAtoms, model: suppModelsNoProt} // this is generating a new selection object including protein atoms of all models
-        hohAtomsSuppModelsSel = {...hohAtoms, model: suppModels} // this is generating a new selection object including water atoms of all models
+        protAtomsProtModelSel = {...protAtoms, model: protAtomsModel}; // this is generating a new selection object including protein atoms of a specific model
+        hetAtomsNotHohSuppModelSel = {...hetAtomsNotHoh, model: suppModels}; // this is generating a new selection object including ligands (not water) of a specific model
+        ionAtomsSuppModelsSel = {...ionAtoms, model: suppModels}; // this is generating a new selection object including ion atoms of all models
+        protAtomsSuppModelsSel = {...protAtoms, model: suppModelsNoProt}; // this is generating a new selection object including protein atoms of all models
+        hohAtomsSuppModelsSel = {...hohAtoms, model: suppModels}; // this is generating a new selection object including water atoms of all models
 
         viewer.setStyle(protAtomsProtModelSel, {cartoon: {hidden: false, style: cartoonStyle, color: defaultColor, arrows: cartoonArrows, tubes: cartoonTubes, thickness: cartoonThickness, opacity: cartoonOpacity}}); // cartoon representation for protein
         viewer.setStyle(hetAtomsNotHohSuppModelSel, {stick: {hidden: true, radius: 0}}); // stick representation for ligands (HETATM), hidden by default
@@ -96,12 +96,17 @@ function loadAllModels(simplePdbs) { // Load all structures
         viewer.setStyle(hohAtomsSuppModelsSel, {sphere: {hidden: true, color: waterColor, radius: sphereRadius}}); // sphere representation for water atoms, hidden by default
 
         // Send modelOrder to Flask
-        fetch('/user-process-model-order', {
+        fetch(`${window.appBaseUrl}/user-process-model-order`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
             },
-            body: JSON.stringify({modelOrder: modelOrder, jobId: jobId}),
+            body: JSON.stringify({
+                modelOrder: modelOrder,
+                jobId: jobId,
+                session_id: session_id,
+                submission_time: submission_time
+            }),
         })
         .then(response => response.json())
         .then(data => {
@@ -109,27 +114,26 @@ function loadAllModels(simplePdbs) { // Load all structures
             const resultTuples = data.resultTuples;
             const maxId = data.maxId;
             resultTuples.forEach(([modId, chain, resi, pBs]) => {
-
                 var mySel = viewer.models[modId].atoms.filter(atom => atom.chain === chain & atom.resi === resi);
                 mySel.forEach(atom => {atom.properties["bs"] = pBs;});
             });
-            
+
             myMap = [...Array(maxId+1).keys()].reduce((acc, curr) => {
                 acc[curr] = chartColors[curr];
                 return acc;
             }, {});
             myMap[-1] = "grey";
-            myScheme = {prop: "bs", map: myMap}
+            myScheme = {prop: "bs", map: myMap};
 
-            suppLigsSels["clust"] = {...hetAtomsNotHoh, model: suppModels, not: {properties: {bs: -1}}}
+            suppLigsSels["clust"] = {...hetAtomsNotHoh, model: suppModels, not: {properties: {bs: -1}}};
 
-            suppLigsSels["clust_ions"] = {...ionAtoms, model: suppModels, not: {properties: {bs: -1}}}
+            suppLigsSels["clust_ions"] = {...ionAtoms, model: suppModels, not: {properties: {bs: -1}}};
 
-            suppLigsSels["not_clust"] = {...hetAtomsNotHoh, model: suppModels, properties: {bs: -1}}
+            suppLigsSels["not_clust"] = {...hetAtomsNotHoh, model: suppModels, properties: {bs: -1}};
 
-            suppLigsSels["not_clust_ions"] = {...ionAtoms, model: suppModels, properties: {bs: -1}}
+            suppLigsSels["not_clust_ions"] = {...ionAtoms, model: suppModels, properties: {bs: -1}};
             
-            suppLigsSels["water"] = {...hohAtoms, model: suppModels}
+            suppLigsSels["water"] = {...hohAtoms, model: suppModels};
 
             viewer.addStyle(suppLigsSels["clust"], {stick: {hidden: true, colorscheme: myScheme, radius: stickRadius}});
 

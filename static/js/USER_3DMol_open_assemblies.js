@@ -130,12 +130,12 @@ async function selectOption(option) {
                 saveStructureButton.disabled = false;
                 saveStructureButton.style.color = 'black';  // Active font color
                 saveStructureButton.style.borderColor = 'black';  // Active font color
-                saveStructureDownloadIcon.setAttribute('src', '/static/images/download.svg');
+                saveStructureDownloadIcon.setAttribute('src', `${window.appBaseUrl}/static/images/download.svg`);
 
                 saveArpeggioDataButton.disabled = false;
                 saveArpeggioDataButton.style.color = 'black';  // Active font color
                 saveArpeggioDataButton.style.borderColor = 'black';  // Active font color
-                saveStructureContactsDownloadIcon.setAttribute('src', '/static/images/download.svg');
+                saveStructureContactsDownloadIcon.setAttribute('src', `${window.appBaseUrl}/static/images/download.svg`);
             } else {
                 contactsButton.disabled = true;
                 contactsButton.style.borderColor = "darkgray";
@@ -146,12 +146,12 @@ async function selectOption(option) {
                 saveStructureButton.disabled = true;
                 saveStructureButton.style.color = 'darkgray';  // Active font color
                 saveStructureButton.style.borderColor = 'darkgray';  // Active font color
-                saveStructureDownloadIcon.setAttribute('src', '/static/images/download_gray.svg');
+                saveStructureDownloadIcon.setAttribute('src', `${window.appBaseUrl}/static/images/download_gray.svg`);
 
                 saveArpeggioDataButton.disabled = true;
                 saveArpeggioDataButton.style.color = 'darkgray';  // Active font color
                 saveArpeggioDataButton.style.borderColor = 'darkgray';  // Active font color
-                saveStructureContactsDownloadIcon.setAttribute('src', '/static/images/download_gray.svg');
+                saveStructureContactsDownloadIcon.setAttribute('src', `${window.appBaseUrl}/static/images/download_gray.svg`);
             }
 
             
@@ -236,12 +236,12 @@ async function selectOption(option) {
                     saveStructureButton.disabled = false;
                     saveStructureButton.style.color = 'black';  // Active font color
                     saveStructureButton.style.borderColor = 'black';  // Active font color
-                    saveStructureDownloadIcon.setAttribute('src', '/static/images/download.svg');
+                    saveStructureDownloadIcon.setAttribute('src', `${window.appBaseUrl}/static/images/download.svg`);
 
                     saveArpeggioDataButton.disabled = false;
                     saveArpeggioDataButton.style.color = 'black';  // Active font color
                     saveArpeggioDataButton.style.borderColor = 'black';  // Active font color
-                    saveStructureContactsDownloadIcon.setAttribute('src', '/static/images/download.svg');
+                    saveStructureContactsDownloadIcon.setAttribute('src', `${window.appBaseUrl}/static/images/download.svg`);
                 } else {
                     contactsButton.disabled = true;
                     contactsButton.style.borderColor = "darkgray";
@@ -252,12 +252,12 @@ async function selectOption(option) {
                     saveStructureButton.disabled = true;
                     saveStructureButton.style.color = 'darkgray';  // Active font color
                     saveStructureButton.style.borderColor = 'darkgray';  // Active font color
-                    saveStructureDownloadIcon.setAttribute('src', '/static/images/download_gray.svg');
+                    saveStructureDownloadIcon.setAttribute('src', `${window.appBaseUrl}/static/images/download_gray.svg`);
 
                     saveArpeggioDataButton.disabled = true;
                     saveArpeggioDataButton.style.color = 'darkgray';  // Active font color
                     saveArpeggioDataButton.style.borderColor = 'darkgray';  // Active font color
-                    saveStructureContactsDownloadIcon.setAttribute('src', '/static/images/download_gray.svg');
+                    saveStructureContactsDownloadIcon.setAttribute('src', `${window.appBaseUrl}/static/images/download_gray.svg`);
                 }
                 
             }
@@ -274,12 +274,12 @@ async function selectOption(option) {
                 saveStructureButton.disabled = true;
                 saveStructureButton.style.color = 'darkgray';  // Active font color
                 saveStructureButton.style.borderColor = 'darkgray';  // Active font color
-                saveStructureDownloadIcon.setAttribute('src', '/static/images/download_gray.svg');
+                saveStructureDownloadIcon.setAttribute('src', `${window.appBaseUrl}/static/images/download_gray.svg`);
 
                 saveArpeggioDataButton.disabled = true;
                 saveArpeggioDataButton.style.color = 'darkgray';  // Active font color
                 saveArpeggioDataButton.style.borderColor = 'darkgray';  // Active font color
-                saveStructureContactsDownloadIcon.setAttribute('src', '/static/images/download_gray.svg');
+                saveStructureContactsDownloadIcon.setAttribute('src', `${window.appBaseUrl}/static/images/download_gray.svg`);
 
                 console.log(`Reading SIFTS mapping for ${protAtomsStruc}`);
 
@@ -334,13 +334,19 @@ function openStructure(pdbId) {
         // Example function call to 3DMol.js to load a structure
         console.log("Opening structure:", pdbId);
 
-        let pdbUri = `/static/data/USER_JOBS/OUT/${jobId}/supp_cifs/${pdbId}`; //path to assembly cif. TODO FIXME: THE PATH NEEDS TO CHANGE TO WHEREVER USER RESULTS GET STORED
+        let pdbUri = `${window.appBaseUrl}/user-files/${session_id}/${submission_time}/supp_cifs/${pdbId}`; // Updated path to assembly cif
         
         $.ajax({ // get UniProt residue mappings when loading a new assembly
             type: 'POST', 
-            url: '/user-get-uniprot-mapping', // server route
+            url: `${window.appBaseUrl}/user-get-uniprot-mapping`, // server route
             contentType: 'application/json;charset=UTF-8',
-            data: JSON.stringify({'jobId': jobId, 'pdbFile': pdbId}), // sending PDB, Protein and Segment IDs
+            // data sent to the server
+            data: JSON.stringify({
+                'jobId': jobId,
+                'pdbFile': pdbId,
+                'session_id': session_id,
+                'submission_time': submission_time,
+            }),
             // beforeSend: function() {
             //     toggleSpinner();
             // },

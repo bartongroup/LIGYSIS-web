@@ -73,7 +73,7 @@ function loadAllModels(simplePdbs) { // Load all structures
         viewer.setStyle(hohAtomsSuppModelsSel, {sphere: {hidden: true, color: waterColor, radius: sphereRadius}}); // sphere representation for water atoms, hidden by default
 
         // Send modelOrder to Flask
-        fetch('/process-model-order', {
+        fetch(`${window.appBaseUrl}/process-model-order`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',

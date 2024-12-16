@@ -1,0 +1,9 @@
+Flask
+Flask-CORS
+Flask-WTF
+gevent
+numpy
+pandas
+slivka-client
+WTForms
+tenacity
