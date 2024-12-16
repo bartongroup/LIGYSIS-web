@@ -645,6 +645,14 @@ def serve_assembly(filename):
     except FileNotFoundError:
         abort(404)
 
+@main.route('/alignments/<prot_id>/<seg_id>/<path:filename>')
+def serve_alignment(prot_id, seg_id, filename):
+    ALIGNMENTS_FOLDER = os.path.join(PROTS_FOLDER, prot_id, seg_id, "variants")
+    try:
+        return send_from_directory(ALIGNMENTS_FOLDER, filename)
+    except FileNotFoundError:
+        abort(404)
+
 @main.route('/get-table', methods=['POST'])
 def get_table(): # route to get binding site residues for a given binding site
 
@@ -2553,7 +2561,6 @@ def user_download_all_structures_PyMol(): # route to download PyMol scripts to v
         as_attachment=True,
         download_name=f'{job_id}_all_structures_PyMol.zip'
     )
-    
 # Register blueprint
 app.register_blueprint(main)
 
@@ -2561,5 +2568,5 @@ app.register_blueprint(main)
 
 if __name__ == "__main__":
     app.run(port = 9000, debug = True) # run Flask LIGYSIS app on port 9000
-    
+
 # the end
