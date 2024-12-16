@@ -75,7 +75,7 @@ def extract_open_files(cxc_in, fmt = "cif"): # extracts dictionary of order of o
                     open_files_dict[file_counter] = file_name
                     file_counter += 1
     return open_files_dict
-    
+
 def transform_lines_3DMol(defattr_in, opened_chimX, loaded_3dmol): # gets binding site ID attribute data from .attr, .cxc and 3DMol.js
     """
     reads ChimeraX attribute file (.defattr) and uses ordered loaded

@@ -546,7 +546,7 @@ function saveSuperpositionChimeraX() { // Save the superposition script for Chim
     };
 
     // Send a POST request to the Flask route
-    fetch('/user-download-superposition-ChimeraX', {
+    fetch(`${window.appBaseUrl}/user-download-superposition-ChimeraX`, {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json'
