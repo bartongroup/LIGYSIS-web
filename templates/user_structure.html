@@ -737,11 +737,13 @@ function saveAllStructuresPyMol() { // Save all structures script for PyMol
         // Create an object with all the data you want to send
         const data = {
             jobId: jobId,
+            sessionId: session_id,
+            submissionTime: submission_time,
             assemblyPdbIds: assemblyPdbIds
         };
     
         // Send a POST request to the Flask route
-        fetch('/user-download-all-structures-PyMol', {
+        fetch(`${window.appBaseUrl}/user-download-all-structures-PyMol`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
