@@ -2238,14 +2238,17 @@ def user_download_structure_contact_data(): # route to download contacts data fo
     data = request.get_json()
 
     job_id = data.get('jobId')
+    session_id = data.get('sessionId')
+    submission_time = data.get('submissionTime')
     pdb_id = data.get('pdbId')
 
-    if not job_id or not pdb_id: # Validate the received data
+    if not job_id or not session_id or not submission_time or not pdb_id: # Validate the received data
         return jsonify({'error': 'Missing data'}), 400
 
     struc_name  = os.path.splitext(pdb_id)[0].split(".")[0]
 
-    job_output_dir = os.path.join(USER_JOBS_OUT_FOLDER, job_id)
+    # job_output_dir = os.path.join(USER_JOBS_OUT_FOLDER, job_id)
+    job_output_dir = os.path.join(SESSIONS_FOLDER, session_id, submission_time, "OUT", job_id)
     job_arpeggio_dir = os.path.join(job_output_dir, "arpeggio")
 
     arpeggio_df = pd.read_pickle(f'{job_arpeggio_dir}/{struc_name}_proc.pkl')
