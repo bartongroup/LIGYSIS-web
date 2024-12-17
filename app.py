@@ -1533,6 +1533,15 @@ def serve_file(session_id, submission_time, file_type, filename):
     except FileNotFoundError:
         abort(404)
 
+@main.route('/user-alignments/<session_id>/<submission_time>/<job_id>/<path:filename>')
+def user_serve_alignment(session_id, submission_time, job_id, filename):
+
+    alignment_dir = os.path.join(SESSIONS_FOLDER, session_id, submission_time, "OUT", job_id, "varalign")
+    try:
+        return send_from_directory(alignment_dir, filename)
+    except FileNotFoundError:
+        abort(404)
+
 @main.route('/user-results/<session_id>/<submission_time>', methods = ['POST', 'GET'])
 def user_results(session_id, submission_time): # route for user results site. Takes Job ID
 
