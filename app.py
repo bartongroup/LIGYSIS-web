@@ -1828,9 +1828,12 @@ def user_download_all_structures_contact_data(): # route to download contacts da
     data = request.get_json()
 
     job_id = data.get('jobId')
+    session_id = data.get('sessionId')
+    submission_time = data.get('submissionTime')
     assembly_pdb_ids = data.get('assemblyPdbIds')
 
-    job_output_dir = os.path.join(USER_JOBS_OUT_FOLDER, job_id)
+    # job_output_dir = os.path.join(USER_JOBS_OUT_FOLDER, job_id)
+    job_output_dir = os.path.join(SESSIONS_FOLDER, session_id, submission_time, "OUT", job_id)
     job_arpeggio_dir = os.path.join(job_output_dir, "arpeggio")
 
     memory_file = io.BytesIO()
