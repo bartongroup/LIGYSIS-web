@@ -109,7 +109,7 @@ $(document).ready(function(){ // enables tooltips
 });
 
 function downloadCSV(filepath) { // downloads the file in CSV format by redirecting to the download-csv route
-    window.location.href = '/download-csv?filepath=' + filepath;
+    window.location.href = `${window.appBaseUrl}/download-csv?filepath=` + filepath;
 }
 
 function showMenu(functionName) { // Show the ChimeraX/PyMol menu when a button is clicked
