@@ -2262,9 +2262,12 @@ def user_download_all_structures_ChimeraX(): # route to download ChimeraX script
     data = request.get_json() # Get JSON data from the POST request
     
     job_id = data.get('jobId')
+    session_id = data.get('sessionId')
+    submission_time = data.get('submissionTime')
     assembly_pdb_ids = data.get('assemblyPdbIds')  # This is your array
 
-    job_output_dir = os.path.join(USER_JOBS_OUT_FOLDER, job_id)
+    # job_output_dir = os.path.join(USER_JOBS_OUT_FOLDER, job_id)
+    job_output_dir = os.path.join(SESSIONS_FOLDER, session_id, submission_time, "OUT", job_id)
     job_supp_cifs_dir = os.path.join(job_output_dir, "supp_cifs")
     job_arpeggio_dir = os.path.join(job_output_dir, "arpeggio")
     job_results_dir = os.path.join(job_output_dir, "results")

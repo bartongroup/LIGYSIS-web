@@ -698,11 +698,13 @@ function saveAllStructuresChimeraX() { // Save all structures script for Chimera
     // Create an object with all the data you want to send
     const data = {
         jobId: jobId,
+        sessionId: session_id,
+        submissionTime: submission_time,
         assemblyPdbIds: assemblyPdbIds
     };
 
     // Send a POST request to the Flask route
-    fetch('/user-download-all-structures-ChimeraX', {
+    fetch(`${window.appBaseUrl}/user-download-all-structures-ChimeraX`, {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json'
