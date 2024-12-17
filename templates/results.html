@@ -18,47 +18,43 @@
             </div>
 
             <h2 class="mb-4">Your Results</h2>
-            <div class="card">
-                <div class="card-body">
-                    <table class="table table-bordered">
-                        <thead class="table-light">
+            <table class="table table-bordered">
+                <thead class="table-light">
+                    <tr>
+                        <th>Input</th>
+                        <th>Results</th>
+                        <th>Submission Time</th>
+                        <th>Slivka ID</th>
+                        <th>Status</th>
+                        <th>Expiration Time</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for result in results %}
+                    {% set expiration_datetime = result.expiration_time|datetime_parse %}
+                    {% if expiration_datetime <= current_time %} <tr class="table-danger">
+                        {% elif expiration_datetime <= (current_time + timedelta_24h) %} <tr class="table-warning">
+                            {% else %}
                             <tr>
-                                <th>Input</th>
-                                <th>Results</th>
-                                <th>Submission Time</th>
-                                <th>Slivka ID</th>
-                                <th>Status</th>
-                                <th>Expiration Time</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {% for result in results %}
-                            {% set expiration_datetime = result.expiration_time|datetime_parse %}
-                            {% if expiration_datetime <= current_time %} <tr class="table-danger">
-                                {% elif expiration_datetime <= (current_time + timedelta_24h) %} <tr class="table-warning">
+                                {% endif %}
+                                <td><a href="{{ url_for('main.download', session_id=session_id, submission_time=result.submission_time|datetime_parse|datetime_format, filename=result.filename) }}">{{
+                                        result.filename }}</a></td>
+                                <td>
+                                    {% if result.status == "processed" %}
+                                        <a href="{{ url_for('main.user_results', session_id=session_id, submission_time=result.submission_time|datetime_parse|datetime_format) }}">View</a>
                                     {% else %}
-                                    <tr>
-                                        {% endif %}
-                                        <td><a href="{{ url_for('main.download', session_id=session_id, submission_time=result.submission_time|datetime_parse|datetime_format, filename=result.filename) }}">{{
-                                                result.filename }}</a></td>
-                                        <td>
-                                            {% if result.status == "processed" %}
-                                                <a href="{{ url_for('main.user_results', session_id=session_id, submission_time=result.submission_time|datetime_parse|datetime_format) }}">View</a>
-                                            {% else %}
-                                                Processing, please wait...
-                                            {% endif %}
-                                        </td>
-                                        <td>{{ result.submission_time }}</td>
-                                        <td><a href="{{ slivka_url }}/tryit/{{ result.slivka_id }}/status">{{ result.slivka_id }}</a></td>
-                                        <td>{{ result.status }}</td>
-                                        <td>{{ result.expiration_time }}</td>
-                                        <!-- Add other fields as necessary -->
-                                    </tr>
-                                    {% endfor %}
-                        </tbody>
-                    </table>
-                </div>
-            </div>
+                                        Processing, please wait...
+                                    {% endif %}
+                                </td>
+                                <td>{{ result.submission_time }}</td>
+                                <td><a href="{{ slivka_url }}/tryit/{{ result.slivka_id }}/status">{{ result.slivka_id }}</a></td>
+                                <td>{{ result.status }}</td>
+                                <td>{{ result.expiration_time }}</td>
+                                <!-- Add other fields as necessary -->
+                            </tr>
+                            {% endfor %}
+                </tbody>
+            </table>
         </div>
     </div>
 </div>
