@@ -649,7 +649,7 @@
         };
     
         // Send a POST request to the Flask route
-        fetch('/download-assembly-ChimeraX', {
+        fetch(`${window.appBaseUrl}/download-assembly-ChimeraX`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
@@ -688,7 +688,7 @@
         };
     
         // Send a POST request to the Flask route
-        fetch('/download-assembly-PyMol', {
+        fetch(`${window.appBaseUrl}/download-assembly-PyMol`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
@@ -803,7 +803,7 @@
         };
     
         // Send a POST request to the Flask route
-        fetch('/download-assembly-contact-data', {
+        fetch(`${window.appBaseUrl}/download-assembly-contact-data`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
