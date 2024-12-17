@@ -543,6 +543,8 @@ function saveSuperpositionChimeraX() { // Save the superposition script for Chim
 
     const data = { // need Protein and Segment ID to access correct files
         jobId: jobId,
+        sessionId: session_id,
+        submissionTime: submission_time,
     };
 
     // Send a POST request to the Flask route

@@ -1866,11 +1866,13 @@ def user_download_superposition_ChimeraX(): # route to download ChimeraX script 
     data = request.get_json() # Get JSON data from the POST request
     
     job_id = data.get('jobId')
+    session_id = data.get('sessionId')
+    submission_time = data.get('submissionTime')
 
-    if not job_id: # Validate the received data
+    if not job_id or not session_id or not submission_time: # Validate the received data
         return jsonify({'error': 'Missing data'}), 400
 
-    job_output_dir = os.path.join(USER_JOBS_OUT_FOLDER, job_id)
+    job_output_dir = os.path.join(SESSIONS_FOLDER, session_id, submission_time, "OUT", job_id)
     job_simple_dir = os.path.join(job_output_dir, "simple_cifs")
     job_results_dir = os.path.join(job_output_dir, "results")
     
