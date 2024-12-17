@@ -619,13 +619,15 @@ function saveStructureChimeraX() { // Save the structure script for ChimeraX
     // Create an object with all the data you want to send
     const data = {
         jobId: jobId,
+        sessionId: session_id,
+        submissionTime: submission_time,
         pdbId: pdbId
     };
 
     let strucName = pdbId.split('.')[0];
 
     // Send a POST request to the Flask route
-    fetch('/user-download-structure-ChimeraX', {
+    fetch(`${window.appBaseUrl}/user-download-structure-ChimeraX`, {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json'
