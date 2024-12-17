@@ -34,20 +34,22 @@
     <div class="row">
         <div class="col">
             <form action="{{ url_for('main.index') }}" method="POST" class="text-center" id="UniProtIdForm">
-                <div class="row justify-content-center">
-                    <div class="col-md-4">
-                        <div class="mb-3">
-                            <label for="proteinId" class="form-label">
-                                UniProt ID
-                            </label>
+                <div class="mb-3">
+                    <label for="proteinId" class="form-label">
+                        UniProt ID
+                    </label>
+                    <div class="row justify-content-center align-items-center">
+                        <div class="col-md-4">
                             <input type="text" class="form-control" name="proteinId" id="autocomplete" placeholder="P00517" aria-describedby="proteinIdHelp">
-                            <div id="proteinIdHelp" class="form-text">
-                                Enter the UniProt ID of the protein you want to inspect.
-                            </div>
+                        </div>
+                        <div class="col-md-auto">
+                            <button type="submit" class="btn btn-primary" id="UniProtIdSubmit">Go</button>
                         </div>
                     </div>
+                    <div id="proteinIdHelp" class="form-text">
+                        Enter the UniProt ID of the protein you want to inspect.
+                    </div>
                 </div>
-                <button type="submit" class="btn btn-primary" id="UniProtIdSubmit">Go</button>
             </form>
         </div>
     </div> 
