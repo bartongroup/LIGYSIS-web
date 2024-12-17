@@ -408,7 +408,7 @@
                         src="{{ url_for('static', filename='images/download.svg') }}"
                         alt="Download Icon"
                         style="width: 1.5rem; height: 1.5rem; cursor: pointer;"
-                        onclick="downloadCSV(`static/data/biolip/split/site_tables/${proteinId}_bss.pkl`)"
+                        onclick="downloadCSV(`${bsTablesFolder}/${proteinId}_bss.pkl`)"
                     >
                     &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Download Table
                 </div>
@@ -506,7 +506,7 @@
                         src="{{ url_for('static', filename='images/download.svg') }}"
                         alt="Download Icon"
                         style="width: 1.5rem; height: 1.5rem; cursor: pointer;"
-                        onclick="downloadCSV(`static/data/biolip/split/res_tables/${segmentName}_ress.pkl`)"
+                        onclick="downloadCSV(`${bsRessTablesFolder}/${segmentName}_ress.pkl`)"
                     >
                     &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Download Table
                 </div>
