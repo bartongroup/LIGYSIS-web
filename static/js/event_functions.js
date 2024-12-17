@@ -78,8 +78,15 @@ function clickTableRow(row) { // highlights the table row of the binding site
 function clickTableTowById(pointLabel) { // highlights the table row of the binding site
     var row = document.getElementById(pointLabel);
     if (row) {
-        row.classList.add("clicked-row"); 
+        row.classList.add("clicked-row");
+        row.scrollIntoView({ behavior: "smooth", block: "center" });
     }
+    // remove highlight from any other rows in this table
+    var rows = document.querySelectorAll(".highlighted-row");
+    rows.forEach(function(row) {
+        row.classList.remove("highlighted-row");
+    });
+
 }
 
 function clearClickedRows() {   // clears the highlighted table row
