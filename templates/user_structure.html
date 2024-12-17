@@ -580,10 +580,12 @@ function saveSuperpositionPyMol() { // Save the superposition script for PyMol
 
     const data = { // need Protein and Segment ID to access correct files
         jobId: jobId,
+        sessionId: session_id,
+        submissionTime: submission_time,
     };
 
     // Send a POST request to the Flask route
-    fetch('/user-download-superposition-PyMol', {
+    fetch(`${window.appBaseUrl}/user-download-superposition-PyMol`, {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json'
