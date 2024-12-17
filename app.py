@@ -2128,14 +2128,17 @@ def user_download_structure_PyMol(): # route to download PyMol script to visuali
     data = request.get_json() # Get JSON data from the POST request
     
     job_id = data.get('jobId')
+    session_id = data.get('sessionId')
+    submission_time = data.get('submissionTime')
     pdb_id = data.get('pdbId')
     
-    if not job_id or not pdb_id: # Validate the received data
+    if not job_id or not session_id or not submission_time or not pdb_id: # Validate the received data
         return jsonify({'error': 'Missing data'}), 400
 
     struc_name = os.path.splitext(pdb_id)[0].split(".")[0]
 
-    job_output_dir = os.path.join(USER_JOBS_OUT_FOLDER, job_id)
+    # job_output_dir = os.path.join(USER_JOBS_OUT_FOLDER, job_id)
+    job_output_dir = os.path.join(SESSIONS_FOLDER, session_id, submission_time, "OUT", job_id)
     job_supp_cifs_dir = os.path.join(job_output_dir, "supp_cifs")
     job_arpeggio_dir = os.path.join(job_output_dir, "arpeggio")
     job_results_dir = os.path.join(job_output_dir, "results")

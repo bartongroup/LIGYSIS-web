@@ -659,13 +659,15 @@ function saveStructurePyMol() { // Save the structure script for PyMol
     // Create an object with all the data you want to send
     const data = {
         jobId: jobId,
+        sessionId: session_id,
+        submissionTime: submission_time,
         pdbId: pdbId
     };
     // strucName is pdbId without extension, but there could be other "." on the filename
     let strucName = pdbId.split('.')[0];
 
     // Send a POST request to the Flask route
-    fetch('/user-download-structure-PyMol', {
+    fetch(`${window.appBaseUrl}/user-download-structure-PyMol`, {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json'
