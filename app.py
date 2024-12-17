@@ -1780,10 +1780,13 @@ def user_get_contacts(): # route to get contacts data from Arpeggio table for a 
 
     data = request.json
     job_id = data['jobId']
+    session_id = data.get('sessionId')
+    submission_time = data.get('submissionTime')
     struc_file = data['strucFile']
     struc_name = os.path.splitext(struc_file)[0].split(".")[0]
 
-    job_output_dir = os.path.join(USER_JOBS_OUT_FOLDER, job_id)
+    # job_output_dir = os.path.join(USER_JOBS_OUT_FOLDER, job_id)
+    job_output_dir = os.path.join(SESSIONS_FOLDER, session_id, submission_time, "OUT", job_id)
     job_arpeggio_dir = os.path.join(job_output_dir, "arpeggio")
     job_results_dir = os.path.join(job_output_dir, "results")
     

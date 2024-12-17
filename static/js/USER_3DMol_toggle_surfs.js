@@ -566,7 +566,7 @@ async function toggleContactsVisibility() {
         }
         else {
             if (contactCylinders[activeModel].length == 0) { // first time switching contacts on for this model
-                await fetch('/user-get-contacts', {
+                await fetch(`${window.appBaseUrl}/user-get-contacts`, {
                     method: 'POST', // Use POST method to send data
                     headers: {
                         'Content-Type': 'application/json'
@@ -574,6 +574,8 @@ async function toggleContactsVisibility() {
                     body: JSON.stringify(
                         {
                             jobId: jobId,
+                            sessionId: session_id,
+                            submissionTime: submission_time,
                             strucFile: modelOrderRev[activeModel],
                         }
                     ) // Send the data as JSON
