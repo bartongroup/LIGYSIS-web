@@ -506,6 +506,9 @@ def results(prot_id, seg_id): # route for results site. Takes Prot ID and Seg ID
 
     bss_prot = bss_prot.sort_values(by = "ID") # sorting binding site table rows by ID
 
+    # print(os.path.join(SITE_TABLES_FOLDER, "{}_bss.pkl".format(prot_id)))
+    # print(os.path.join(RES_TABLES_FOLDER, "{}_ress.pkl".format(seg_name)))
+
     # print(bss_prot)
 
     first_site = bss_prot.ID.unique().tolist()[0] # first binding site ID
@@ -536,12 +539,16 @@ def results(prot_id, seg_id): # route for results site. Takes Prot ID and Seg ID
     data2 = prot_ress.to_dict(orient="list")
 
     # bs_ress_dict = load_pickle(os.path.join(DATA_FOLDER, "example", "other", f'{prot_id}_{seg_id}_ALL_inf_bss_ress.pkl'))
-    bs_ress_dict = load_pickle(os.path.join(PROTS_FOLDER, prot_id, seg_id, "results", f'{prot_id}_{seg_id}_ALL_inf_bss_ress.pkl'))
+    # bs_ress_dict = load_pickle(os.path.join(PROTS_FOLDER, prot_id, seg_id, "results", f'{prot_id}_{seg_id}_ALL_inf_bss_ress.pkl'))
+    binding_sites_dict = bss_ress.groupby('binding_sites')['UPResNum'].apply(list).to_dict()
+    binding_sites_dict = {str(key): value for key, value in binding_sites_dict.items()}
+    all_binding = sorted(set(bss_ress['UPResNum']))
+    binding_sites_dict['ALL_BINDING'] = all_binding
 
-    seg_ress_dict = bs_ress_dict#[prot_id][seg_id]
-    seg_ress_dict = {str(key): value for key, value in seg_ress_dict.items()}
+    seg_ress_dict = binding_sites_dict#[prot_id][seg_id]
+    # seg_ress_dict = {str(key): value for key, value in seg_ress_dict.items()}
     
-    seg_ress_dict["ALL_BINDING"] = sorted(list(set([el2 for el in seg_ress_dict.values() for el2 in el]))) # add key: "ALL_BINDING" and value a sorted set of all binding residues
+    # seg_ress_dict["ALL_BINDING"] = sorted(list(set([el2 for el in seg_ress_dict.values() for el2 in el]))) # add key: "ALL_BINDING" and value a sorted set of all binding residues
     
     protein_atoms_dict = load_pickle(os.path.join(DATA_FOLDER, "segment_prot_struc_dict_DEF.pkl"))
 

@@ -428,7 +428,7 @@ document.getElementById('chartCanvas').addEventListener('click', function(e) { /
                 }
             }
 
-            // check is clicked row is the same as the newly clicked data point
+            // check if clicked row is the same as the newly clicked data point
 
             if (clickedPointLabel == pointLabel) { // same binding site is clicked
 

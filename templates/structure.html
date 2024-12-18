@@ -5,12 +5,11 @@
 <title>LIGYSIS results</title>
 
 <script src="https://code.jquery.com/jquery-3.6.1.min.js"></script>
-
-<script src="https://www.kryogenix.org/code/browser/sorttable/sorttable.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/chartjs-plugin-annotation/1.4.0/chartjs-plugin-annotation.js"></script>
 
 <script src="{{ url_for('static', filename='js/event_functions.js') }}"></script>
+<script src="{{ url_for('static', filename='js/sorttable.js') }}"></script>
 
 <script src="https://3Dmol.org/build/3Dmol-min.js"></script>     
 <script src="https://3Dmol.org/build/3Dmol.ui-min.js"></script> 
@@ -408,7 +407,7 @@
                         src="{{ url_for('static', filename='images/download.svg') }}"
                         alt="Download Icon"
                         style="width: 1.5rem; height: 1.5rem; cursor: pointer;"
-                        onclick="downloadCSV(`static/data/biolip/split/site_tables/${proteinId}_bss.pkl`)"
+                        onclick="downloadCSV(`${bsTablesFolder}/${proteinId}_bss.pkl`)"
                     >
                     &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Download Table
                 </div>
@@ -506,7 +505,7 @@
                         src="{{ url_for('static', filename='images/download.svg') }}"
                         alt="Download Icon"
                         style="width: 1.5rem; height: 1.5rem; cursor: pointer;"
-                        onclick="downloadCSV(`static/data/biolip/split/res_tables/${segmentName}_ress.pkl`)"
+                        onclick="downloadCSV(`${bsRessTablesFolder}/${segmentName}_ress.pkl`)"
                     >
                     &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Download Table
                 </div>

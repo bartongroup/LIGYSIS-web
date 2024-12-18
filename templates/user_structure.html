@@ -6,11 +6,11 @@
 
 <script src="https://code.jquery.com/jquery-3.6.1.min.js"></script>
 
-<script src="https://www.kryogenix.org/code/browser/sorttable/sorttable.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/chartjs-plugin-annotation/1.4.0/chartjs-plugin-annotation.js"></script>
 
 <script src="{{ url_for('static', filename='js/event_functions.js') }}"></script>
+<script src="{{ url_for('static', filename='js/sorttable.js') }}"></script>
 
 <script src="https://3Dmol.org/build/3Dmol-min.js"></script>     
 <script src="https://3Dmol.org/build/3Dmol.ui-min.js"></script> 
@@ -399,8 +399,7 @@
             </div>
             <div class="row mb-3 justify-content-center custom-padding">
                 <div class="col-3 col-md-1 col-lg-3 col-xl-6 d-flex justify-content-center align-items-center" style="padding-left:0px; padding-right:0px">
-                    <button class="d-flex align-items-center" style="border: none; background: none; padding: 0;" onclick="downloadCSV(`{{ url_for('static', filename='data/USER_JOBS/OUT/${jobId}/results/${jobId}_bss_table.pkl') }}`)">
-                    <!-- <button class="d-flex align-items-center" style="border: none; background: none; padding: 0;" onclick="downloadCSV(`/${jobResultsDir}/${jobId}_bss_RSA_table.pkl`)"> -->
+                    <button class="d-flex align-items-center" style="border: none; background: none; padding: 0;" onclick="downloadCSV(`/${jobResultsDir}/input_structures_bss_RSA_table.pkl`)">
                         <img
                             src="{{ url_for('static', filename='images/download.svg') }}"
                             alt="Download Icon"
@@ -499,8 +498,7 @@
             </div>
             <div class="row mb-3 justify-content-around custom-padding">
                 <div class="col-3 col-md-1 col-lg-3 col-xl-auto d-flex justify-content-center align-items-center" style="padding-left:0px; padding-right:0px;">
-                    <button class="d-flex align-items-center" style="border: none; background: none; padding: 0; cursor: pointer;" onclick="downloadCSV(`{{ url_for('static', filename='data/USER_JOBS/OUT/${jobId}/results/${jobId}_bss_table.pkl') }}`)">
-                    <!-- <button class="d-flex align-items-center" style="border: none; background: none; padding: 0; cursor: pointer;" onclick="downloadCSV(`/${jobResultsDir}/${jobId}_results_table.pkl`)"> -->
+                    <button class="d-flex align-items-center" style="border: none; background: none; padding: 0; cursor: pointer;" onclick="downloadCSV(`/${jobResultsDir}/input_structures_results_table.pkl`)">
                         <img
                             src="{{ url_for('static', filename='images/download.svg') }}"
                             alt="Download Icon"
