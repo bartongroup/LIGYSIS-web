@@ -18,7 +18,7 @@
             </div>
 
             <h2 class="mb-4">Your Results</h2>
-            <table class="table table-bordered">
+            <table id="resultsTable" class="table table-bordered">
                 <thead class="table-light">
                     <tr>
                         <th>Input</th>
@@ -59,4 +59,25 @@
     </div>
 </div>
 <script src="{{ url_for('static', filename='js/clipboard.js') }}"></script>
+<script>
+    function checkAndReload() {
+        const table = document.getElementById('resultsTable');
+        const rows = table.getElementsByTagName('tr');
+        let shouldReload = false;
+
+        for (let i = 1; i < rows.length; i++) { // Start from 1 to skip the header row
+            const statusCell = rows[i].getElementsByTagName('td')[1]; // Assuming status is the 5th column
+            if (statusCell && statusCell.innerText.trim() === 'Processing, please wait...') {
+                shouldReload = true;
+                break;
+            }
+        }
+
+        if (shouldReload) {
+            location.reload();
+        }
+    }
+
+    setInterval(checkAndReload, 10000); // Check every 10 seconds
+</script>
 {% endblock %}
