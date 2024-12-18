@@ -62,16 +62,6 @@ $('table#bss_table tbody').on('mouseover', 'tr', function () { // event listener
         );
     }
     else {
-        // proteinChains.forEach((element) => { // in case of multiple copies of protein of interest
-        //     let siteAssemblyPDBResNum = seg_ress_dict[rowId]
-        //         .filter(el => Up2PdbMapAssembly[chainsMapAssembly[element]].hasOwnProperty(el)) // filters out site residues not present in this assembly. otherwise mapping is undefined and causes problems later...
-        //         .map(el => Up2PdbMapAssembly[chainsMapAssembly[element]][el]);
-
-        //     siteAssemblyPDBResNums.push([element, siteAssemblyPDBResNum]);
-
-        //     let assemblySel = {model: protAtomsModel, resi: siteAssemblyPDBResNum, chain: element, not: {atom: bboneAtoms}};
-        //     AssemblyHoveredSiteResidues.push(assemblySel);
-        // });
 
         siteAssemblyPDBResNum = seg_ress_dict[rowId]
                     .filter(el => Up2PdbMapAssembly.hasOwnProperty(el))
@@ -83,14 +73,27 @@ $('table#bss_table tbody').on('mouseover', 'tr', function () { // event listener
                     });
         siteAssemblyPDBResNums = siteAssemblyPDBResNum // this is now an array of dictionaries: {chain: chain, resi: resi}
         AssemblyHoveredSiteResidues = siteAssemblyPDBResNums
-
-        viewer.setStyle(
-            {model: activeModel, or: AssemblyHoveredSiteResidues, not: {atom: bboneAtoms}},
-            {
-                cartoon:{style: cartoonStyle, color: siteColor, arrows: cartoonArrows, tubes: cartoonTubes, opacity: cartoonOpacity, thickness: cartoonThickness,},
-                stick:{color: siteColor},
-            }
-        );
+        
+        if (contactsVisible) {
+            let defaultColors = { ...$3Dmol.elementColors.defaultColors }; 
+            defaultColors.C = siteColor;
+            viewer.setStyle(
+                {model: activeModel, or: AssemblyHoveredSiteResidues, not: {atom: bboneAtoms}},
+                {
+                    cartoon:{style: cartoonStyle, color: siteColor, arrows: cartoonArrows, tubes: cartoonTubes, opacity: cartoonOpacity, thickness: cartoonThickness,},
+                    stick:{colorscheme: defaultColors},
+                }
+            );
+        }
+        else {
+            viewer.setStyle(
+                {model: activeModel, or: AssemblyHoveredSiteResidues, not: {atom: bboneAtoms}},
+                {
+                    cartoon:{style: cartoonStyle, color: siteColor, arrows: cartoonArrows, tubes: cartoonTubes, opacity: cartoonOpacity, thickness: cartoonThickness,},
+                    stick:{color: siteColor},
+                }
+            );
+        }
     }
     viewer.render();
     
@@ -127,11 +130,13 @@ $('table#bss_table tbody').on('mouseover', 'tr', function () { // event listener
                 );
                 // colour ligand-binding residues again
                 for (const [key, value] of Object.entries(ligandSitesHash[activeModel])) {
+                    let defaultColors = { ...$3Dmol.elementColors.defaultColors }; 
+                    defaultColors.C = value[2];
                     viewer.setStyle( // displaying and colouring again the ligand-interacting residues
                         {model: activeModel, or: value[0]}, // value[0] are the ligand-binding residues selection
                         {
                             cartoon:{style: cartoonStyle, color: value[2], arrows: cartoonArrows, tubes: cartoonTubes, opacity: cartoonOpacity, thickness: cartoonThickness,},
-                            stick:{hidden: false, color: value[2],} // value[2] is colour of the binding site
+                            stick:{hidden: false, colorscheme: defaultColors,} // value[2] is colour of the binding site
                         }
                     );
                 }
@@ -197,11 +202,22 @@ $('table#bss_table tbody').on('mouseover', 'tr', function () { // event listener
                 );
             }
             else {
-                viewer.setStyle( // colouring the clicked site (necessary as sometimes there is overlap between sites)
-                    {model: activeModel, or: AssemblyClickedSiteResidues, not: {atom: bboneAtoms}},
-                    {cartoon:{style: cartoonStyle, color: clickedSiteColor, arrows: cartoonArrows, tubes: cartoonTubes, opacity: cartoonOpacity, thickness: cartoonThickness,},
-                    stick:{color: clickedSiteColor,}, }
-                );
+                if (contactsVisible) {
+                    let defaultColors = { ...$3Dmol.elementColors.defaultColors }; 
+                    defaultColors.C = clickedSiteColor;
+                    viewer.setStyle( // colouring the clicked site (necessary as sometimes there is overlap between sites)
+                        {model: activeModel, or: AssemblyClickedSiteResidues, not: {atom: bboneAtoms}},
+                        {cartoon:{style: cartoonStyle, color: clickedSiteColor, arrows: cartoonArrows, tubes: cartoonTubes, opacity: cartoonOpacity, thickness: cartoonThickness,},
+                        stick:{colorscheme: defaultColors,}, }
+                    );
+                }
+                else {
+                    viewer.setStyle( // colouring the clicked site (necessary as sometimes there is overlap between sites)
+                        {model: activeModel, or: AssemblyClickedSiteResidues, not: {atom: bboneAtoms}},
+                        {cartoon:{style: cartoonStyle, color: clickedSiteColor, arrows: cartoonArrows, tubes: cartoonTubes, opacity: cartoonOpacity, thickness: cartoonThickness,},
+                        stick:{color: clickedSiteColor,}, }
+                    );
+                }
             }
             if (surfaceVisible) {
                 if (activeModel == "superposition") {
@@ -427,13 +443,27 @@ $('table#bss_table tbody').on('mouseover', 'tr', function () { // event listener
             siteAssemblyPDBResNums = siteAssemblyPDBResNum // this is now an array of dictionaries: {chain: chain, resi: resi}
             AssemblyClickedSiteResidues = siteAssemblyPDBResNums;  
 
-            viewer.setStyle(
-                {model: activeModel, or: AssemblyClickedSiteResidues, not: {atom: bboneAtoms}},
-                {
-                    cartoon:{style: cartoonStyle, color: siteColor, arrows: cartoonArrows, tubes: cartoonTubes, opacity: cartoonOpacity, thickness: cartoonThickness,},
-                    stick:{color: siteColor},
-                }
-            );
+            if (contactsVisible) {
+                let defaultColors = { ...$3Dmol.elementColors.defaultColors }; 
+                defaultColors.C = siteColor;
+                viewer.setStyle(
+                    {model: activeModel, or: AssemblyClickedSiteResidues, not: {atom: bboneAtoms}},
+                    {
+                        cartoon:{style: cartoonStyle, color: siteColor, arrows: cartoonArrows, tubes: cartoonTubes, opacity: cartoonOpacity, thickness: cartoonThickness,},
+                        stick:{colorscheme: defaultColors},
+                    }
+                );
+            }
+            else{
+                
+                viewer.setStyle(
+                    {model: activeModel, or: AssemblyClickedSiteResidues, not: {atom: bboneAtoms}},
+                    {
+                        cartoon:{style: cartoonStyle, color: siteColor, arrows: cartoonArrows, tubes: cartoonTubes, opacity: cartoonOpacity, thickness: cartoonThickness,},
+                        stick:{color: siteColor},
+                    }
+                );
+            }
             viewer.zoomTo({model: activeModel, or: AssemblyClickedSiteResidues, not: {atom: bboneAtoms}});
         }
 
@@ -576,13 +606,27 @@ $('table#bs_ress_table tbody').on('mouseover', 'tr', function () { // event list
                     return { chain: tuple[0], resi: tuple[1] };
                 });
                 AssemblyPDBResNums = AssemblyPDBResNumSel;
-                viewer.setStyle(
-                    {model: activeModel, or: AssemblyPDBResNumSel, not: {atom: bboneAtoms}},
-                    {
-                        cartoon:{style: cartoonStyle, color: rowColorHex, arrows: cartoonArrows, tubes: cartoonTubes, opacity: cartoonOpacity, thickness: cartoonThickness,},
-                        stick:{color: rowColorHex},
-                    }
-                );
+                if (contactsVisible) {
+                    let defaultColors = { ...$3Dmol.elementColors.defaultColors };
+                    defaultColors.C = rowColorHex;
+                    viewer.setStyle(
+                        {model: activeModel, or: AssemblyPDBResNumSel, not: {atom: bboneAtoms}},
+                        {
+                            cartoon:{style: cartoonStyle, color: rowColorHex, arrows: cartoonArrows, tubes: cartoonTubes, opacity: cartoonOpacity, thickness: cartoonThickness,},
+                            stick:{colorscheme: defaultColors},
+                        }
+                    );
+                }
+                else {
+                    viewer.setStyle(
+                        {model: activeModel, or: AssemblyPDBResNumSel, not: {atom: bboneAtoms}},
+                        {
+                            cartoon:{style: cartoonStyle, color: rowColorHex, arrows: cartoonArrows, tubes: cartoonTubes, opacity: cartoonOpacity, thickness: cartoonThickness,},
+                            stick:{color: rowColorHex},
+                        }
+                    );
+                }
+                
             }
             else {
                 console.log("Residue not found in assembly!");
@@ -672,11 +716,13 @@ $('table#bs_ress_table tbody').on('mouseover', 'tr', function () { // event list
                 );
 
                 for (const [key, value] of Object.entries(ligandSitesHash[activeModel])) {
+                    let defaultColors = { ...$3Dmol.elementColors.defaultColors };
+                    defaultColors.C = value[2];
                     viewer.setStyle( // displaying and colouring again the ligand-interacting residues
                         {model: activeModel, or: value[0]}, // value[0] are the ligand-binding residues selection
                         {
                             cartoon:{style: cartoonStyle, color: value[2], arrows: cartoonArrows, tubes: cartoonTubes, opacity: cartoonOpacity, thickness: cartoonThickness,},
-                            stick:{hidden: false, color: value[2],}  // value[2] is colour of the binding site
+                            stick:{hidden: false, colorscheme: defaultColors,}  // value[2] is colour of the binding site
                         }
                     );
                 }

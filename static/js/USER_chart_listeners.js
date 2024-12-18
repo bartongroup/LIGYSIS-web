@@ -186,14 +186,26 @@ document.getElementById('chartCanvas').addEventListener('mousemove', function(e)
                         });
                     });
                 siteAssemblyPDBResNums = siteAssemblyPDBResNum // this is now an array of dictionaries: {chain: chain, resi: resi}
-
-                viewer.setStyle(
-                    {model: activeModel, or: siteAssemblyPDBResNums, not: {atom: bboneAtoms}},
-                    {
-                        cartoon:{style: cartoonStyle, color: siteColor, arrows: cartoonArrows, tubes: cartoonTubes, opacity: cartoonOpacity, thickness: cartoonThickness,},
-                        stick:{color: siteColor},
-                    }
-                );
+                if (contactsVisible) {
+                    let defaultColors = { ...$3Dmol.elementColors.defaultColors }; 
+                    defaultColors.C = siteColor;
+                    viewer.setStyle(
+                        {model: activeModel, or: siteAssemblyPDBResNums, not: {atom: bboneAtoms}},
+                        {
+                            cartoon:{style: cartoonStyle, color: siteColor, arrows: cartoonArrows, tubes: cartoonTubes, opacity: cartoonOpacity, thickness: cartoonThickness,},
+                            stick:{colorscheme: defaultColors,},
+                        }
+                    );
+                }
+                else {
+                    viewer.setStyle(
+                        {model: activeModel, or: siteAssemblyPDBResNums, not: {atom: bboneAtoms}},
+                        {
+                            cartoon:{style: cartoonStyle, color: siteColor, arrows: cartoonArrows, tubes: cartoonTubes, opacity: cartoonOpacity, thickness: cartoonThickness,},
+                            stick:{color: siteColor},
+                        }
+                    );
+                }
             }
             viewer.render();       
             
@@ -233,12 +245,14 @@ document.getElementById('chartCanvas').addEventListener('mousemove', function(e)
                         },
                         {cartoon: {style: cartoonStyle, color: defaultColor, arrows: cartoonArrows, tubes: cartoonTubes, opacity: cartoonOpacity, thickness: cartoonThickness,}}
                     );
+                if (contactsVisible) { // don't want to hide ligand-binding sites if CONTACTS is ON
+                    let defaultColors = { ...$3Dmol.elementColors.defaultColors }; 
+                    defaultColors.C = clickedSiteColor;
                     viewer.setStyle( // colouring the clicked site (necessary as sometimes there is overlap between sites)
                         {model: activeModel, or: AssemblyClickedSiteResidues, not: {atom: bboneAtoms}},
                         {cartoon:{style: cartoonStyle, color: clickedSiteColor, arrows: cartoonArrows, tubes: cartoonTubes, opacity: cartoonOpacity, thickness: cartoonThickness,},
-                        stick:{color: clickedSiteColor,}, }
+                        stick:{colorscheme: defaultColors,}, }
                     );
-                if (contactsVisible) { // don't want to hide ligand-binding sites if CONTACTS is ON
                     viewer.setStyle(
                         {
                             ...protAtoms, model: activeModel, not: {or: AssemblyClickedSiteResidues.concat(allBindingRess)} // all protein residues except clicked site (we want to keep ligands)
@@ -246,14 +260,23 @@ document.getElementById('chartCanvas').addEventListener('mousemove', function(e)
                         {cartoon: {style: cartoonStyle, color: defaultColor, arrows: cartoonArrows, tubes: cartoonTubes, opacity: cartoonOpacity, thickness: cartoonThickness,}}
                     );
                     for (const [key, value] of Object.entries(ligandSitesHash[activeModel])) { // colour again in case some bingind residues are part of another site and got colouterd
+                        let defaultColors = { ...$3Dmol.elementColors.defaultColors }; 
+                        defaultColors.C = value[2];
                         viewer.setStyle(
                             {model: activeModel, or: value[0]},  // value[0] are the ligand-binding residues selection
                             {
                                 cartoon:{style: cartoonStyle, color: value[2], arrows: cartoonArrows, tubes: cartoonTubes, opacity: cartoonOpacity, thickness: cartoonThickness,},
-                                stick:{hidden: false, color: value[2],} // value[2] is colour of the binding site
+                                stick:{hidden: false, colorscheme: defaultColors,} // value[2] is colour of the binding site
                             }
                         );
                     }
+                }
+                else {
+                    viewer.setStyle( // colouring the clicked site (necessary as sometimes there is overlap between sites)
+                        {model: activeModel, or: AssemblyClickedSiteResidues, not: {atom: bboneAtoms}},
+                        {cartoon:{style: cartoonStyle, color: clickedSiteColor, arrows: cartoonArrows, tubes: cartoonTubes, opacity: cartoonOpacity, thickness: cartoonThickness,},
+                        stick:{color: clickedSiteColor,}, }
+                    );
                 }
             }
             if (surfaceVisible) { // if surface is visible (when hovering on a site on the chart and a row is clicked)
@@ -296,11 +319,13 @@ document.getElementById('chartCanvas').addEventListener('mousemove', function(e)
                 );
                 // also recolour the ligand-interacting residues as some might be in multiple sites
                 for (const [key, value] of Object.entries(ligandSitesHash[activeModel])) {
+                    let defaultColors = { ...$3Dmol.elementColors.defaultColors }; 
+                    defaultColors.C = value[2];
                     viewer.setStyle(
                         {model: activeModel, or: value[0]}, // value[0] are the ligand-binding residues selection
                         {
                             cartoon:{style: cartoonStyle, color: value[2], arrows: cartoonArrows, tubes: cartoonTubes, opacity: cartoonOpacity, thickness: cartoonThickness,},
-                            stick:{hidden: false, color: value[2],} // value[2] is colour of the binding site
+                            stick:{hidden: false, colorscheme: defaultColors,} // value[2] is colour of the binding site
                         }
                     );
                 }
@@ -560,14 +585,27 @@ document.getElementById('chartCanvas').addEventListener('click', function(e) { /
                         });
                     siteAssemblyPDBResNums = siteAssemblyPDBResNum // this is now an array of dictionaries: {chain: chain, resi: resi}
                     AssemblyClickedSiteResidues = siteAssemblyPDBResNums;  
-
-                    viewer.setStyle(
-                        {model: activeModel, or: siteAssemblyPDBResNums, not: {atom: bboneAtoms}},
-                        {
-                            cartoon: {style: cartoonStyle, color: pointColor, arrows: cartoonArrows, tubes: cartoonTubes, opacity: cartoonOpacity, thickness: cartoonThickness,},
-                            stick:{color: pointColor},
-                        },
-                    );
+                    
+                    if (contactsVisible) {
+                        let defaultColors = { ...$3Dmol.elementColors.defaultColors }; 
+                        defaultColors.C = pointColor;
+                        viewer.setStyle(
+                            {model: activeModel, or: siteAssemblyPDBResNums, not: {atom: bboneAtoms}},
+                            {
+                                cartoon: {style: cartoonStyle, color: pointColor, arrows: cartoonArrows, tubes: cartoonTubes, opacity: cartoonOpacity, thickness: cartoonThickness,},
+                                stick:{colorscheme: defaultColors},
+                            },
+                        );
+                    }
+                    else {
+                        viewer.setStyle(
+                            {model: activeModel, or: siteAssemblyPDBResNums, not: {atom: bboneAtoms}},
+                            {
+                                cartoon: {style: cartoonStyle, color: pointColor, arrows: cartoonArrows, tubes: cartoonTubes, opacity: cartoonOpacity, thickness: cartoonThickness,},
+                                stick:{color: pointColor},
+                            },
+                        );
+                    }
                     viewer.zoomTo({model: activeModel, or: siteAssemblyPDBResNums});
                 }
                 if (labelsVisible) {
@@ -681,7 +719,6 @@ document.getElementById('chartCanvas').addEventListener('click', function(e) { /
             }
     
             else {
-
                 let siteAssemblyPDBResNum = seg_ress_dict[index]
                     .filter(el => Up2PdbMapAssembly.hasOwnProperty(el))
                     .flatMap(el => {
@@ -692,14 +729,28 @@ document.getElementById('chartCanvas').addEventListener('click', function(e) { /
                     });
                 siteAssemblyPDBResNums = siteAssemblyPDBResNum // this is now an array of dictionaries: {chain: chain, resi: resi}
                 AssemblyClickedSiteResidues = siteAssemblyPDBResNums;
-
-                viewer.setStyle(
-                    {model: activeModel, or: siteAssemblyPDBResNums, not: {atom: bboneAtoms}},
-                    {
-                        cartoon: {style: cartoonStyle, color: pointColor, arrows: cartoonArrows, tubes: cartoonTubes, opacity: cartoonOpacity, thickness: cartoonThickness,},
-                        stick:{color: pointColor},
-                    },
-                );
+                
+                if (contactsVisible) {
+                    let defaultColors = { ...$3Dmol.elementColors.defaultColors };
+                    defaultColors.C = pointColor;
+                    viewer.setStyle(
+                        {model: activeModel, or: siteAssemblyPDBResNums, not: {atom: bboneAtoms}},
+                        {
+                            cartoon: {style: cartoonStyle, color: pointColor, arrows: cartoonArrows, tubes: cartoonTubes, opacity: cartoonOpacity, thickness: cartoonThickness,},
+                            stick:{colorscheme: defaultColors},
+                        },
+                    );
+                }
+                else {
+                    viewer.setStyle(
+                        {model: activeModel, or: siteAssemblyPDBResNums, not: {atom: bboneAtoms}},
+                        {
+                            cartoon: {style: cartoonStyle, color: pointColor, arrows: cartoonArrows, tubes: cartoonTubes, opacity: cartoonOpacity, thickness: cartoonThickness,},
+                            stick:{color: pointColor},
+                        },
+                    );
+                }
+                
                 viewer.zoomTo({model: activeModel, or: siteAssemblyPDBResNums});
             }
 
@@ -860,13 +911,26 @@ document.getElementById('newChartCanvas').addEventListener('mousemove', function
                         });
                         //AssemblyPDBResNums.push([element, AssemblyPDBResNum]);
                         AssemblyPDBResNums = AssemblyPDBResNumSel;
-                        viewer.setStyle(
-                            {model: activeModel, or: AssemblyPDBResNumSel, not: {atom: bboneAtoms}},
-                            {
-                                cartoon:{style: cartoonStyle, color: pointColor, arrows: cartoonArrows, tubes: cartoonTubes, opacity: cartoonOpacity, thickness: cartoonThickness,},
-                                stick:{color: pointColor},
-                            }
-                        );
+                        if (contactsVisible) {
+                            let defaultColors = { ...$3Dmol.elementColors.defaultColors };
+                            defaultColors.C = pointColor;
+                            viewer.setStyle(
+                                {model: activeModel, or: AssemblyPDBResNumSel, not: {atom: bboneAtoms}},
+                                {
+                                    cartoon:{style: cartoonStyle, color: pointColor, arrows: cartoonArrows, tubes: cartoonTubes, opacity: cartoonOpacity, thickness: cartoonThickness,},
+                                    stick:{colorscheme: defaultColors},
+                                }
+                            );
+                        }
+                        else {
+                            viewer.setStyle(
+                                {model: activeModel, or: AssemblyPDBResNumSel, not: {atom: bboneAtoms}},
+                                {
+                                    cartoon:{style: cartoonStyle, color: pointColor, arrows: cartoonArrows, tubes: cartoonTubes, opacity: cartoonOpacity, thickness: cartoonThickness,},
+                                    stick:{color: pointColor},
+                                }
+                            );
+                        }
                     }
                 }
 
@@ -950,11 +1014,13 @@ document.getElementById('newChartCanvas').addEventListener('mousemove', function
                     );
 
                     for (const [key, value] of Object.entries(ligandSitesHash[activeModel])) {
+                        let defaultColors = { ...$3Dmol.elementColors.defaultColors };
+                        defaultColors.C = value[2];
                         viewer.setStyle( // displaying and colouring again the ligand-interacting residues
                             {model: activeModel, or: value[0]}, // value[0] are the ligand-binding residues selection
                             {
                                 cartoon:{style: cartoonStyle, color: value[2], arrows: cartoonArrows, tubes: cartoonTubes, opacity: cartoonOpacity, thickness: cartoonThickness,},
-                                stick:{hidden: false, color: value[2],} // value[2] is colour of the binding site
+                                stick:{hidden: false, colorscheme: defaultColors,} // value[2] is colour of the binding site
                             }
                         );
                     }
