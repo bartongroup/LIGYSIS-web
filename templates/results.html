@@ -19,7 +19,7 @@
 
             <!-- Auto-reload Notice -->
             <div class="alert alert-warning" role="alert">
-                This page will automatically refresh every 10 seconds to update the status of your submitted jobs.
+                This page will automatically refresh every 30 seconds to update the status of your submitted jobs.
             </div>
 
             <h2 class="mb-4">Your Results</h2>
@@ -83,6 +83,6 @@
         }
     }
 
-    setInterval(checkAndReload, 10000); // Check every 10 seconds
+    setInterval(checkAndReload, 30000); // Check every 30 seconds
 </script>
 {% endblock %}
