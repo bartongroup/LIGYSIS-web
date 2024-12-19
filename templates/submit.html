@@ -49,7 +49,20 @@
                         </div>
                         <div class="mb-3">
                             {{ form.files.label(class="form-label") }}
-                            {{ form.files(class="form-control", id="files", multiple=True) }}
+                            <div class="row">
+                                <div class="col">
+                                    {{ form.files(class="form-control", id="files", multiple=True) }}
+                                </div>
+                                <div class="col">
+                                    <!-- {{ form.format.label(class="form-label") }} -->
+                                    {% for subfield in form.format %}
+                                    <tr>
+                                        <td>{{ subfield }}</td>
+                                        <td>{{ subfield.label }}</td>
+                                    </tr>
+                                    {% endfor %}
+                                    </div>
+                                    </div>
                         </div>
                         <div class="mb-3">
                             <div id="dropArea" class="drop-area">
