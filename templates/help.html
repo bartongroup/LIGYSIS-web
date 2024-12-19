@@ -63,17 +63,19 @@
                             <div class="col">
                                 <ul class="mb-0">
                                     <li class="mb-2">
-                                        <b>UniProt Accession</b>: the UniProt Accession Identifier of the protein the structures map to.
+                                        <b>UniProt Accession</b>: the UniProt Accession Identifier of the protein the structures map to. This is necessary if the protein is present
+                                        in UniProt. If the structures map to a protein not present in UniProt, this field can be left empty.
                                     </li>
                                     <li class="mb-2">
-                                        <b>Structure files</b>: the set of structure files to be analysed. LIGYSIS is compatible with either be in <i>mmCIF (.cif)</i> or <i>PDB (.ent, .pdb)</i> format. 
+                                        <b>Structure files</b>: the set of structure files to be analysed. LIGYSIS is compatible with either be in mmCIF (<i>.cif</i>) or DB (<i>P.ent</i>, <i>P.pdb</i>) format. 
                                         However, all files within the set of structures must present the same format. These structures must represent the same protein unit, i.e., a dimer, or monomer,
-                                        bound to the ligands of interest. This is required for the correct superposition of the structures. There is no limit in the number of structures that can be submitted.
-                                        <b>LIGYSIS</b> only supports single protein-ligand complexes, i.e., homomultimers are accepted, but not heteromultimers.
-
+                                        bound to the ligands of interest. This is required for the correct superposition of the structures. The current limit of structures to be submitted in a job are 50.
+                                        <b>LIGYSIS</b> only supports single protein-ligand complexes, i.e., homomultimers are accepted, but not heteromultimers. Files can be selected from the file browser
+                                        or dragged and dropped into the designated area.
                                     </li>
                                 </ul>
                             </div>
+                            <img src="{{ url_for('static', filename='images/job_submission.png') }}" alt="Job submission form">
                         </p>
                     </div>
                 </div>
