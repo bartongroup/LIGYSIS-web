@@ -166,7 +166,7 @@ class SlivkaProcessor:
         self.entry_id = entry_id
         self.config = config or {}
 
-    def process_file(self, input_file_path, output_file_path, submission_directory):
+    def process_file(self, input_file_path, output_file_path, submission_directory, trigger_event=None):
         """Process the given FASTA file using Slivka.
 
         Args:
@@ -188,6 +188,8 @@ class SlivkaProcessor:
 
                 # Submit the job to Slivka 
                 job = self.submit_job_to_slivka(file_object, media_type)
+                if trigger_event:
+                    trigger_event.set()
 
                 # Wait for the job to complete
                 self.wait_for_job_completion(job)
