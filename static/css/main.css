@@ -431,7 +431,7 @@ input[type="range"]::-ms-thumb {
     color: black; /* Optional: Change color on hover */
 }
 
-.alert {
+.alert-custom {
     display: flex; /* Make the alert content a flex container */
     align-items: center; /* Align items vertically to center */
     justify-content: flex-start; /* Align content to the start */
