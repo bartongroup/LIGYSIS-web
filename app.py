@@ -1483,6 +1483,8 @@ def submit():
         submission_handler = SubmissionHandler(session_id, form, service_type='ligysis', config=config, tar_upload=True)
         gevent.spawn(submission_handler.handle_submission)
         submission_handler.metadata_available.wait()
+        submission_handler.slivka_job_triggered.wait()
+        
         return redirect(url_for('main.status', session_id=session_id))
     
     return render_template('submit.html', form=form)
