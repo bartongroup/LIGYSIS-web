@@ -1482,6 +1482,7 @@ def submit():
         
         submission_handler = SubmissionHandler(session_id, form, service_type='ligysis', config=config, tar_upload=True)
         gevent.spawn(submission_handler.handle_submission)
+        gevent.sleep(3)  # Adding a short minimum delay to ensure the user has enough time to read the modal popup
         submission_handler.metadata_available.wait()
         submission_handler.slivka_job_triggered.wait()
         
