@@ -29,9 +29,12 @@
                 Please provide mmCIF files along with the corresponding UniProt ID. Ligysis can analyse proteins not listed in UniProt;
                 however, this feature is not currently supported by this web server. It will be available shortly.
             </div>
-            <div class="alert alert-info" role="alert">
-                Any number of mmCIF files can be uploaded, but the total size of all files must not exceed 50MB. Please <a
+            <div class="alert alert-info alert-dismissible fade show" role="alert">
+                Any number of mmCIF files can be uploaded, but their total size must not exceed 50MB. Please <a
                     href="{{ url_for('main.contact') }}">contact us</a> if you have any questions.
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
             </div>
             <div class="card">
                 <div class="card-header bg-primary text-white">
@@ -159,6 +162,35 @@
     .drop-area.dragging {
         border-color: #000;
         background-color: #e9e9e9;
+    }
+    /* Ensure Bootstrap styles for the close button are applied */
+    .alert .close {
+        font-size: 1.5rem !important;
+        font-weight: 700 !important;
+        line-height: 1 !important;
+        color: #000 !important;
+        text-shadow: 0 1px 0 #fff !important;
+        opacity: 0.5 !important;
+    }
+    
+    .alert .close:hover {
+        color: #000 !important;
+        opacity: 0.75 !important;
+    }
+    
+    .alert-dismissible .close {
+        position: absolute !important;
+        top: 0 !important;
+        right: 0 !important;
+        padding: .75rem 1.25rem !important;
+        color: inherit !important;
+    }
+    
+    button.close {
+        padding: 0 !important;
+        background-color: transparent !important;
+        border: 0 !important;
+        -webkit-appearance: none !important;
     }
 </style>
 {% endblock %}
