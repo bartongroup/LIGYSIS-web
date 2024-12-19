@@ -2610,6 +2610,7 @@ app.register_blueprint(main)
 ######################## LAUNCHING SERVER #########################
 
 if __name__ == "__main__":
-    app.run(port = 9000, debug = True) # run Flask LIGYSIS app on port 9000
+    port = int(os.environ.get('PORT', 9000))
+    app.run(port=port, debug=True)  # run Flask LIGYSIS app on the specified port
 
 # the end
