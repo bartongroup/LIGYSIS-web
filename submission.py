@@ -123,7 +123,7 @@ class SubmissionHandler:
 
     def update_db_status(self):
         """Update the processing status in the database."""
-        update_status(self.entry_id, "processed")
+        update_status(self.entry_id, "Ready")
         custom_logger.info(f"FASTA file processed and status updated for session {self.session_id}.")
 
     def handle_submission(self):
