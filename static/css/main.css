@@ -415,3 +415,25 @@ input[type="range"]::-ms-thumb {
     z-index: 5; /* Below the spinner but above the canvas */
     display: flex; /* Initially hidden */
 }
+
+.custom-close {
+    font-weight: bold; /* Make the X bold */
+    font-size: 38px; /* Increase size of the X */
+    color: black; /* Set X color */
+    background: none; /* Remove default button background */
+    border: none; /* Remove default button border */
+    cursor: pointer; /* Add pointer cursor on hover */
+    line-height: 1; /* Center-align the button text */
+    padding: 0; /* Remove default padding */
+}
+
+.custom-close:hover {
+    color: black; /* Optional: Change color on hover */
+}
+
+.alert {
+    display: flex; /* Make the alert content a flex container */
+    align-items: center; /* Align items vertically to center */
+    justify-content: flex-start; /* Align content to the start */
+    gap: 10px; /* Add spacing between the close button and text */
+}

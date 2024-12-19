@@ -37,7 +37,7 @@
                 <div class="mb-3">
                     <div class="row justify-content-center align-items-center">
                         <div class="col-md-4">
-                            <input type="text" class="form-control" name="proteinId" id="autocomplete" placeholder="P00517" aria-describedby="proteinIdHelp">
+                            <input type="text" class="form-control" name="proteinId" id="autocomplete" placeholder="P02699" aria-describedby="proteinIdHelp">
                         </div>
                         <div class="col-md-auto">
                             <button type="submit" class="btn btn-primary" id="UniProtIdSubmit">Go</button>
@@ -92,5 +92,18 @@
 </div>
 
 <script src="{{ url_for('static', filename='js/input_autocomplete.js') }}"></script>
+
+<div class="container">
+    <div class="row">
+        <div class="col">
+            <div class="alert alert-primary position-relative" role="alert">
+                <button type="button" class="btn-close custom-close" aria-label="Close" onclick="this.parentElement.style.display='none';">×</button>
+                LIGYSIS-web uses third-party cookies to ensure a user-friendly experience. By continuing to use our server, you agree to our use of cookies. 
+                <br>Cookie settings can be adjusted in your browser preferences.
+            </div>
+        </div>
+    </div>
+</div>
+
 
 {% endblock%}

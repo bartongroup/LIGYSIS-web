@@ -702,6 +702,8 @@ async function toggleContactsVisibility() {
                         let protRess = ligDat[0];
                         let bingingSite = ligDat[1];
                         let ligColor = chartColors[Number(bingingSite)];
+                        let defaultColors = { ...$3Dmol.elementColors.defaultColors }; 
+                        defaultColors.C = ligColor;
                         ligandSitesHash[activeModel][ligNam] = [[], ]; // i = 0 will be ligand-binding selection, i = 1 will be ligand molecule, and i = 2 color
                         for (let i = 0; i < protRess.length; i++) {
                             let protRes = protRess[i];
@@ -734,14 +736,18 @@ async function toggleContactsVisibility() {
                             {model: activeModel, or:ligandSitesHash[activeModel][ligNam][0]},
                             {
                                 cartoon:{hidden: false, style: cartoonStyle, color: ligColor, arrows: cartoonArrows, tubes: cartoonTubes, opacity: cartoonOpacity, thickness: cartoonThickness,},
-                                stick: {hidden: false, color: ligColor, radius: stickRadius}
+                                stick: {hidden: false, colorscheme: defaultColors, radius: stickRadius}
                             }
                         );
                         if (ionLigs.includes(ligMol)) {
-                            viewer.addStyle({model: activeModel, resi: ligResi, chain: ligChain, resn: ligMol}, {sphere: {hidden: false, color: ligColor, radius: ionSphereRadius}});
+                            viewer.addStyle(
+                                {model: activeModel, resi: ligResi, chain: ligChain, resn: ligMol},
+                                {sphere: {hidden: false, colorscheme: defaultColors, radius: ionSphereRadius}});
                         }
                         else {
-                            viewer.addStyle({model: activeModel, resi: ligResi, chain: ligChain, resn: ligMol}, {stick: {hidden: false, color: ligColor, radius: stickRadius}});
+                            viewer.addStyle(
+                                {model: activeModel, resi: ligResi, chain: ligChain, resn: ligMol},
+                                {stick: {hidden: false, colorscheme: defaultColors, radius: stickRadius}});
                         }
                         
                         // add ligand-interacting residues surfaces
@@ -808,18 +814,20 @@ async function toggleContactsVisibility() {
                 }
 
                 for (const [resSel, ligSel, ligCol] of Object.values(ligandSitesHash[activeModel])) {
+                    let defaultColors = { ...$3Dmol.elementColors.defaultColors }; 
+                    defaultColors.C = ligCol;
                     viewer.addStyle(
                         {model: activeModel, or: resSel},
                         {
                             cartoon:{hidden: false, color: ligCol, style: cartoonStyle, arrows: cartoonArrows, tubes: cartoonTubes, thickness: cartoonThickness, opacity: cartoonOpacity},
-                            stick: {hidden: false, color: ligCol, radius: stickRadius}
+                            stick: {hidden: false, colorscheme: defaultColors, radius: stickRadius}
                         }
                     );
                     if (ionLigs.includes(ligSel.resn)) {
-                        viewer.addStyle(ligSel, {sphere: {hidden: false, color: ligCol, radius: ionSphereRadius}});
+                        viewer.addStyle(ligSel, {sphere: {hidden: false, colorscheme: defaultColors, radius: ionSphereRadius}});
                     }
                     else {
-                        viewer.addStyle(ligSel, {stick: {hidden: false, color: ligCol, radius: stickRadius}});
+                        viewer.addStyle(ligSel, {stick: {hidden: false, colorscheme: defaultColors, radius: stickRadius}});
                     }
                 }
 
