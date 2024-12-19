@@ -1467,28 +1467,34 @@ def submit():
     
     session_id = session['session_id']
     form = LigysisForm()
+    error = False
 
     if form.validate_on_submit():
-        config = {
-            'uniprot_id': request.form.get('uniprot_id', 'Q9UGL1'),
-            'format': request.form.get('format', 'mmcif'),
-            'variants': request.form.get('variants', True),
-            'override': request.form.get('override', True),
-            'clust_method': request.form.get('clust_method', 'average'),
-            'clust_dist': request.form.get('clust_dist', 0.5),
-            'hmm_iters': request.form.get('hmm_iters', 3),
-            'file_key_override': 'input_dir'  # Custom file key for ligysis service
-        }
-        
-        submission_handler = SubmissionHandler(session_id, form, service_type='ligysis', config=config, tar_upload=True)
-        gevent.spawn(submission_handler.handle_submission)
-        gevent.sleep(3)  # Adding a short minimum delay to ensure the user has enough time to read the modal popup
-        submission_handler.metadata_available.wait()
-        submission_handler.slivka_job_triggered.wait()
-        
-        return redirect(url_for('main.status', session_id=session_id))
+        try:
+            config = {
+                'uniprot_id': request.form.get('uniprot_id', 'Q9UGL1'),
+                'format': request.form.get('format', 'mmcif'),
+                'variants': request.form.get('variants', True),
+                'override': request.form.get('override', True),
+                'clust_method': request.form.get('clust_method', 'average'),
+                'clust_dist': request.form.get('clust_dist', 0.5),
+                'hmm_iters': request.form.get('hmm_iters', 3),
+                'file_key_override': 'input_dir'  # Custom file key for ligysis service
+            }
+            
+            submission_handler = SubmissionHandler(session_id, form, service_type='ligysis', config=config, tar_upload=True)
+            gevent.spawn(submission_handler.handle_submission)
+            gevent.sleep(3)  # Adding a short minimum delay to ensure the user has enough time to read the modal popup
+            submission_handler.metadata_available.wait()
+            submission_handler.slivka_job_triggered.wait()
+            
+            return redirect(url_for('main.status', session_id=session_id))
+        except Exception as e:
+            error = True
+    elif request.method == 'POST':
+        error = True
     
-    return render_template('submit.html', form=form)
+    return render_template('submit.html', form=form, error=error)
 
 # Route used to download submission tar on status page
 @main.route('/download/<session_id>/<submission_time>/<filename>')
