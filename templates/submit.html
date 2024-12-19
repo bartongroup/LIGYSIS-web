@@ -1,6 +1,13 @@
 {% extends "base.html" %}
 
-{% block head %}<title>Ligysis Analysis Submission</title>{% endblock %}
+{% block head %}
+<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+
+<title>Ligysis Analysis Submission</title>
+
+{% endblock %}
 
 {% block main %}
 <div class="container">
@@ -36,14 +43,38 @@
     </div>
 </div>
 
-<!-- JavaScript for button feedback -->
+<!-- Modal -->
+<div class="modal fade" id="submissionModal" tabindex="-1" role="dialog" aria-labelledby="submissionModalLabel"
+    aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="submissionModalLabel">Submitting Your Job</h5>
+            </div>
+            <div class="modal-body">
+                You will be redirected to the results page shortly. If you are not, then please <a
+                    href="{{ url_for('main.status', session_id=session['session_id']) }}">click here</a>.
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- JavaScript for modal and button feedback -->
 <script>
-    $(document).ready(function () {
-        $("#ligysisForm").submit(function (event) {
-            $("#submitButton").text("Processing...").prop("disabled", true);
+    document.addEventListener('DOMContentLoaded', function () {
+        var form = document.getElementById('ligysisForm');
+        var submitButton = document.getElementById('submitButton');
+
+        form.addEventListener('submit', function (event) {
+            // Show the modal
+            $('#submissionModal').modal('show');
+            // Change the button text and disable it
+            submitButton.textContent = "Processing...";
+            submitButton.disabled = true;
         });
     });
 </script>
+
 <!-- JavaScript for drag and drop -->
 <script>
     document.addEventListener('DOMContentLoaded', function () {
