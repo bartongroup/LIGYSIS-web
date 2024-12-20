@@ -48,7 +48,8 @@
                             {{ form.uniprot_id(class="form-control", rows=5, **{'data-drag-drop': 'true'}) }}
                         </div>
                         <div class="mb-3">
-                            {{ form.files.label(class="form-label") }}
+                            <!-- {{ form.files.label(class="form-label") }} -->
+                            <p class="form-label">and upload mmCIF or PDB files of your complexes</p>
                             <div class="row">
                                 <div class="col">
                                     {{ form.files(class="form-control", id="files", multiple=True) }}
