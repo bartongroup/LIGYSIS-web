@@ -125,7 +125,7 @@ class SubmissionHandler:
     def update_db_status(self):
         """Update the processing status in the database."""
         update_status(self.entry_id, "Ready")
-        custom_logger.info(f"FASTA file processed and status updated for session {self.session_id}.")
+        custom_logger.info(f"Status updated for session {self.session_id}.")
 
     def handle_submission(self):
         """Handle the submission by orchestrating the various steps.
@@ -203,10 +203,10 @@ class SlivkaProcessor:
                 return True
         except FileNotFoundError as e:
             custom_logger.error(f"File not found: {e.filename}")
-            custom_logger.error(f"An error occurred while processing the FASTA file: {str(e)}")
+            custom_logger.error(f"An error occurred while processing the submission: {str(e)}")
             return False
         except Exception as e:
-            custom_logger.error(f"An unexpected error occurred while processing the results file: {str(e)}")
+            custom_logger.error(f"An unexpected error occurred while processing the submission: {str(e)}")
             return False
 
     @retry(stop=stop_after_attempt(5), wait=wait_exponential(min=1, max=10), retry=retry_if_exception_type((RequestException, HTTPError, ConnectionError, Timeout)))
