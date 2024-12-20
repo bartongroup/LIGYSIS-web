@@ -256,6 +256,8 @@ class SlivkaProcessor:
             
             sleep(3)  # Polling interval
 
+        # Update the status one last time after the loop ends
+        update_status(self.entry_id, job.status)
         custom_logger.info(f"Completion Time: {job.completion_time}")
 
     @retry(stop=stop_after_attempt(5), wait=wait_exponential(min=1, max=10), retry=retry_if_exception_type((RequestException, HTTPError, ConnectionError, Timeout)))
