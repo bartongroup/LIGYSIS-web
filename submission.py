@@ -193,7 +193,11 @@ class SlivkaProcessor:
                     trigger_event.set()
 
                 # Wait for the job to complete
-                self.wait_for_job_completion(job)
+                status = self.wait_for_job_completion(job)
+                custom_logger.info(f"Job {job.id} completed with status: {job.status}")
+                if status == 'FAILED':
+                    custom_logger.error(f"Job {job.id} failed.")
+                    return False
 
                 # TODO: Handle job failure
                 # TODO: Download could be done on demand when the user requests the results...
@@ -259,6 +263,8 @@ class SlivkaProcessor:
         # Update the status one last time after the loop ends
         update_status(self.entry_id, job.status)
         custom_logger.info(f"Completion Time: {job.completion_time}")
+
+        return job.status
 
     @retry(stop=stop_after_attempt(5), wait=wait_exponential(min=1, max=10), retry=retry_if_exception_type((RequestException, HTTPError, ConnectionError, Timeout)))
     def download_job_results(self, job, subbmission_directory):
