@@ -141,6 +141,7 @@
     document.addEventListener('DOMContentLoaded', function () {
         var dropArea = document.getElementById('dropArea');
         var input = document.getElementById('files');
+        var formatOptions = document.querySelectorAll('input[name="format"]');
 
         dropArea.addEventListener('dragover', function (event) {
             event.preventDefault();
@@ -161,7 +162,27 @@
 
             var files = event.dataTransfer.files;
             input.files = files;
+            updateFormatOptions(files);
         });
+
+        input.addEventListener('change', function () {
+            var files = input.files;
+            updateFormatOptions(files);
+        });
+
+        function updateFormatOptions(files) {
+            var extensions = Array.from(files).map(file => file.name.split('.').pop().toLowerCase());
+            var mmcifSelected = extensions.includes('cif');
+            var pdbSelected = extensions.includes('pdb') || extensions.includes('ent');
+
+            formatOptions.forEach(option => {
+                if (option.value === 'mmcif') {
+                    option.checked = mmcifSelected;
+                } else if (option.value === 'pdb') {
+                    option.checked = pdbSelected;
+                }
+            });
+        }
     });
 </script>
 
