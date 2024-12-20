@@ -52,9 +52,11 @@
                                         result.filename }}</a></td>
                                 <td>
                                     {% if result.status == "Ready" %}
-                                        <a href="{{ url_for('main.user_results', session_id=session_id, submission_time=result.submission_time|datetime_parse|datetime_format) }}">View</a>
+                                    <a href="{{ url_for('main.user_results', session_id=session_id, submission_time=result.submission_time|datetime_parse|datetime_format) }}">View</a>
+                                    {% elif result.status == "Failed" %}
+                                    <a href="{{ slivka_url }}/tryit/{{ result.slivka_id }}/files">Browse Files</a> (Incomplete)
                                     {% else %}
-                                        Processing, please wait...
+                                    Processing, please wait...
                                     {% endif %}
                                 </td>
                                 <td>{{ result.submission_time }}</td>

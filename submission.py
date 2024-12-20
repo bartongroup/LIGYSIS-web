@@ -42,6 +42,7 @@ class SubmissionHandler:
         self.file_path = None
         self.metadata_available = Event()  # Create an event to signal metadata availability
         self.slivka_job_triggered = Event()  # Create an event to signal Slivka job submission
+        self.job_success = None
 
     def create_directory(self):
         """Create a directory for the submission session.
@@ -120,12 +121,12 @@ class SubmissionHandler:
         """Process the FASTA file content and save the results."""
         processor = SlivkaProcessor(SLIVKA_URL, service=self.service_type, session_id=self.session_id, filename=self.filename, entry_id=self.entry_id, config=self.config)
         output_file_path = os.path.join(self.submission_directory, 'output.fasta')
-        success = processor.process_file(self.file_path, output_file_path, self.submission_directory, trigger_event=self.slivka_job_triggered)
+        self.job_success = processor.process_file(self.file_path, output_file_path, self.submission_directory, trigger_event=self.slivka_job_triggered)
 
-    def update_db_status(self):
+    def update_db_status(self, status):
         """Update the processing status in the database."""
-        update_status(self.entry_id, "Ready")
-        custom_logger.info(f"FASTA file processed and status updated for session {self.session_id}.")
+        update_status(self.entry_id, status)
+        custom_logger.info(f"Status updated for session {self.session_id}.")
 
     def handle_submission(self):
         """Handle the submission by orchestrating the various steps.
@@ -140,7 +141,8 @@ class SubmissionHandler:
             self.store_submission_metadata()
             fasta_content = self.read_cached_submission()
             self.process_and_save_results(fasta_content)
-            self.update_db_status()
+            status = 'Ready' if self.job_success else 'Failed'
+            self.update_db_status(status)
             result.update({
                 'status': 'success',
                 'message': 'File processed successfully.',
@@ -193,7 +195,11 @@ class SlivkaProcessor:
                     trigger_event.set()
 
                 # Wait for the job to complete
-                self.wait_for_job_completion(job)
+                status = self.wait_for_job_completion(job)
+                custom_logger.info(f"Job {job.id} completed with status: {job.status}")
+                if status == 'FAILED':
+                    custom_logger.error(f"Job {job.id} failed.")
+                    return False
 
                 # TODO: Handle job failure
                 # TODO: Download could be done on demand when the user requests the results...
@@ -203,10 +209,10 @@ class SlivkaProcessor:
                 return True
         except FileNotFoundError as e:
             custom_logger.error(f"File not found: {e.filename}")
-            custom_logger.error(f"An error occurred while processing the FASTA file: {str(e)}")
+            custom_logger.error(f"An error occurred while processing the submission: {str(e)}")
             return False
         except Exception as e:
-            custom_logger.error(f"An unexpected error occurred while processing the results file: {str(e)}")
+            custom_logger.error(f"An unexpected error occurred while processing the submission: {str(e)}")
             return False
 
     @retry(stop=stop_after_attempt(5), wait=wait_exponential(min=1, max=10), retry=retry_if_exception_type((RequestException, HTTPError, ConnectionError, Timeout)))
@@ -256,7 +262,11 @@ class SlivkaProcessor:
             
             sleep(3)  # Polling interval
 
+        # Update the status one last time after the loop ends
+        update_status(self.entry_id, job.status)
         custom_logger.info(f"Completion Time: {job.completion_time}")
+
+        return job.status
 
     @retry(stop=stop_after_attempt(5), wait=wait_exponential(min=1, max=10), retry=retry_if_exception_type((RequestException, HTTPError, ConnectionError, Timeout)))
     def download_job_results(self, job, subbmission_directory):
