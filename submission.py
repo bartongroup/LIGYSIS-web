@@ -123,9 +123,9 @@ class SubmissionHandler:
         output_file_path = os.path.join(self.submission_directory, 'output.fasta')
         self.job_success = processor.process_file(self.file_path, output_file_path, self.submission_directory, trigger_event=self.slivka_job_triggered)
 
-    def update_db_status(self):
+    def update_db_status(self, status):
         """Update the processing status in the database."""
-        update_status(self.entry_id, "Ready")
+        update_status(self.entry_id, status)
         custom_logger.info(f"Status updated for session {self.session_id}.")
 
     def handle_submission(self):
@@ -141,7 +141,8 @@ class SubmissionHandler:
             self.store_submission_metadata()
             fasta_content = self.read_cached_submission()
             self.process_and_save_results(fasta_content)
-            self.update_db_status()
+            status = 'Ready' if self.job_success else 'Failed'
+            self.update_db_status(status)
             result.update({
                 'status': 'success',
                 'message': 'File processed successfully.',
