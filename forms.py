@@ -1,10 +1,11 @@
 from flask_wtf import FlaskForm
-from wtforms import StringField, MultipleFileField, SubmitField
+from wtforms import StringField, MultipleFileField, SubmitField, RadioField
 
 
 class LigysisForm(FlaskForm):
     uniprot_id = StringField('Enter UniProt ID')
-    files = MultipleFileField('and upload mmCiF files')
+    files = MultipleFileField('and upload mmCIF files')
+    format = RadioField('Select format', choices=[('mmcif', 'mmCIF'), ('pdb', 'PDB (Legacy)')], default='mmcif')
     submit = SubmitField('Submit')
 
     # Custom validator
@@ -18,7 +19,7 @@ class LigysisForm(FlaskForm):
 
         # If either field is missing, add a form-wide error
         if not (self.uniprot_id.data and self.files.data):
-            self.uniprot_id.errors.append('Please enter UniProt ID and upload mmCiF files.')
+            self.uniprot_id.errors.append('Please enter UniProt ID and upload mmCIF files.')
             return False
 
         return False
