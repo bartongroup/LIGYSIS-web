@@ -81,6 +81,29 @@
     </div>
 </div>
 
+<!-- Pre-Submission Modal -->
+<div class="modal fade" id="preSubmissionModal" tabindex="-1" role="dialog" aria-labelledby="preSubmissionModalLabel"
+    aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="preSubmissionModalLabel">Review Your Submission</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div id="preFileList"></div> <!-- Placeholder for filenames -->
+                <div id="preFormatOptions"></div> <!-- Placeholder for format options -->
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                <button type="button" class="btn btn-primary" id="finalSubmitButton">Submit</button>
+            </div>
+        </div>
+    </div>
+</div>
+
 <!-- Success Modal -->
 <div class="modal fade" id="submissionModal" tabindex="-1" role="dialog" aria-labelledby="submissionModalLabel"
     aria-hidden="true">
@@ -120,15 +143,41 @@
     document.addEventListener('DOMContentLoaded', function () {
         var form = document.getElementById('ligysisForm');
         var submitButton = document.getElementById('submitButton');
-
-        form.addEventListener('submit', function (event) {
-            // Show the modal
+        var finalSubmitButton = document.getElementById('finalSubmitButton');
+        var input = document.getElementById('files');
+        var preFileList = document.getElementById('preFileList');
+        var preFormatOptions = document.getElementById('preFormatOptions');
+        var formatOptions = document.querySelectorAll('input[name="format"]');
+    
+        submitButton.addEventListener('click', function (event) {
+            event.preventDefault();
+    
+            // Populate the file list in the pre-submission modal
+            var files = input.files;
+            var fileNames = Array.from(files).map(file => file.name).join('<br>');
+            preFileList.innerHTML = '<strong>Files:</strong><br>' + fileNames;
+    
+            // Populate the format options in the pre-submission modal
+            var selectedFormats = Array.from(formatOptions).filter(option => option.checked).map(option => option.value).join(', ');
+            preFormatOptions.innerHTML = '<strong>Selected Formats:</strong><br>' + selectedFormats;
+    
+            // Show the pre-submission modal
+            $('#preSubmissionModal').modal('show');
+        });
+    
+        finalSubmitButton.addEventListener('click', function () {
+            // Show the submission modal
+            $('#preSubmissionModal').modal('hide');
             $('#submissionModal').modal('show');
+    
             // Change the button text and disable it
             submitButton.textContent = "Processing...";
             submitButton.disabled = true;
+    
+            // Submit the form
+            form.submit();
         });
-
+    
         // Show error modal if error flag is set after form submission
         if ({{ error|tojson }}) {
             $('#errorModal').modal('show');
