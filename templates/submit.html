@@ -105,8 +105,8 @@
 </div>
 
 <script>
-    $(document).ready(function () {
-        $('#preSubmissionModal').modal({
+    document.addEventListener('DOMContentLoaded', function () {
+        var preSubmissionModal = new bootstrap.Modal(document.getElementById('preSubmissionModal'), {
             backdrop: 'static',
             keyboard: false
         });
