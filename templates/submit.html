@@ -87,13 +87,13 @@
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title" id="preSubmissionModalLabel">Review Your Submission</h5>
-                <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
-                <div id="preFileList"></div> <!-- Placeholder for filenames -->
-                <div id="preFormatOptions"></div> <!-- Placeholder for format options -->
+                <p class="mb-3">Please review your submission before proceeding. Once you have ensured everything is correct, click
+                    "Submit".</p>
+                <div id="preFileList" class="mb-3"></div> <!-- Placeholder for filenames -->
+                <div id="preFormatOptions" class="mb-3"></div> <!-- Placeholder for format options -->
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
@@ -162,13 +162,12 @@
     
             // Populate the file list in the pre-submission modal
             var files = input.files;
-            var fileNames = Array.from(files).map(file => file.name).join('<br>');
-            preFileList.innerHTML = '<strong>Files:</strong><br>' + fileNames;
-    
+            var fileNames = Array.from(files).map(file => '<li>' + file.name + '</li>').join('');
+            preFileList.innerHTML = 'Uploaded files:<ul>' + fileNames + '</ul>';
+
             // Populate the format options in the pre-submission modal
             var selectedFormats = Array.from(formatOptions).filter(option => option.checked).map(option => option.value).join(', ');
-            preFormatOptions.innerHTML = '<strong>Selected Formats:</strong><br>' + selectedFormats;
-    
+            preFormatOptions.innerHTML = 'Structure format: <b>' + selectedFormats + '</b>';
             // Show the pre-submission modal
             $('#preSubmissionModal').modal('show');
         });
