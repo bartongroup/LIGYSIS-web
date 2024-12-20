@@ -1004,15 +1004,15 @@ def download_assembly_ChimeraX(): # route to download ChimeraX script to visuali
     cxc_lines = "\n".join(
         [
             f'open {pdb_id}_bio.cif',
+            'rib', 'style all stick', # some structures have settings to not show cartoon and style as spheres
             'color white', 
             f'open {pseudobond_file}',
             'set bgColor white',
             'set silhouette ON',
             'set silhouettewidth 2',
             '~disp',
-            #'surface',
             'transparency 30',
-        ]  + aas_str + ligs_str + ['~sel']
+        ]  + aas_str + ligs_str + ['~sel', 'color byhet', 'del H']
     )
 
     cxc_file = f'{prot_id}_{seg_id}_{pdb_id}.cxc'
@@ -1238,15 +1238,15 @@ def download_all_assemblies_ChimeraX(): # route to download ChimeraX scripts to 
             cxc_lines = "\n".join(
                 [
                     f'open {pdb_id}_bio.cif',
+                    'rib', 'style all stick', # some structures have settings to not show cartoon and style as spheres
                     'color white', 
                     f'open {pseudobond_file}',
                     'set bgColor white',
                     'set silhouette ON',
                     'set silhouettewidth 2',
                     '~disp',
-                    #'surface',
                     'transparency 30',
-                ]  + aas_str + ligs_str + ['~sel']
+                ]  + aas_str + ligs_str + ['~sel', 'color byhet', 'del H']
             )
 
             cxc_file = f'{prot_id}_{seg_id}_{pdb_id}.cxc'
@@ -2095,15 +2095,15 @@ def user_download_structure_ChimeraX(): # route to download ChimeraX script to v
     cxc_lines = "\n".join(
         [
             f'open {struc_name}.supp.cif',
+            'rib', 'style all stick', # some structures have settings to not show cartoon and style as spheres
             'color white', 
             f'open {pseudobond_file}',
             'set bgColor white',
             'set silhouette ON',
             'set silhouettewidth 2',
             '~disp',
-            'surf',
             'transparency 30',
-        ]  + aas_str + ligs_str + ['~sel', '~surf', ]
+        ]  + aas_str + ligs_str + ['~sel', 'color byhet', 'del H']
     )
 
     cxc_file = f'{job_id}_{struc_name}.cxc'
@@ -2378,15 +2378,15 @@ def user_download_all_structures_ChimeraX(): # route to download ChimeraX script
                 cxc_lines = "\n".join(
                     [
                         f'open {struc_name}.supp.cif',
+                        'rib', 'style all stick', # some structures have settings to not show cartoon and style as spheres
                         'color white', 
                         f'open {pseudobond_file}',
                         'set bgColor white',
                         'set silhouette ON',
                         'set silhouettewidth 2',
                         '~disp',
-                        'surf',
                         'transparency 30',
-                    ]  + aas_str + ligs_str + ['~sel', '~surf', ]
+                    ]  + aas_str + ligs_str + ['~sel', 'color byhet', 'del H']
                 )
 
                 cxc_file = f'{job_id}_{struc_name}.cxc'
@@ -2419,15 +2419,15 @@ def user_download_all_structures_ChimeraX(): # route to download ChimeraX script
                 cxc_lines = "\n".join(
                     [
                         f'open {struc_name}.supp.cif',
+                        'rib', 'style all stick', # some structures have settings to not show cartoon and style as spheres
                         'color white', 
-                        # f'open {pseudobond_file}',
                         'set bgColor white',
                         'set silhouette ON',
                         'set silhouettewidth 2',
                         '~disp',
-                        'surf',
                         'transparency 30',
-                        '~surf',
+                        'color byhet',
+                        'del H'
                     ]
                 )
 
