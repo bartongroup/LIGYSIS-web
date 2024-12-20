@@ -42,6 +42,8 @@
                 <div class="card-body">
                     <form action="{{ url_for('main.submit') }}" method="post" enctype="multipart/form-data" id="ligysisForm">
                         {{ form.hidden_tag() }}
+                        <input type="hidden" id="exampleFile1" value="{{ url_for('static', filename='data/example-uploads/mmcif/example-mmcif-input-Q9UGL1/5fy9_updated.cif') }}">
+                        <input type="hidden" id="exampleFile2" value="{{ url_for('static', filename='data/example-uploads/mmcif/example-mmcif-input-Q9UGL1/5fyu_updated.cif') }}">
                         <div class="mb-3">
                             {{ form.uniprot_id.label(class="form-label") }}
                             {{ form.uniprot_id(class="form-control", rows=5, **{'data-drag-drop': 'true'}) }}
@@ -257,21 +259,26 @@
         var fillExampleDataButton = document.getElementById('fillExampleDataButton');
         var uniprotIdInput = document.querySelector('input[name="uniprot_id"]');
         var filesInput = document.getElementById('files');
-        var exampleFiles = [
-            new File([""], "5fy9_updated.cif", { type: "chemical/x-cif" }),
-            new File([""], "5fyu_updated.cif", { type: "chemical/x-cif" }),
-        ];
+        var exampleFile1 = document.getElementById('exampleFile1').value;
+        var exampleFile2 = document.getElementById('exampleFile2').value;
 
         fillExampleDataButton.addEventListener('click', function () {
             uniprotIdInput.value = "Q9UGL1";
 
             // Create a DataTransfer object to simulate file input
             var dataTransfer = new DataTransfer();
-            exampleFiles.forEach(file => dataTransfer.items.add(file));
-            filesInput.files = dataTransfer.files;
+            fetch(exampleFile1).then(response => response.blob()).then(blob => {
+                var file1 = new File([blob], "5fy9_updated.cif", { type: "chemical/x-cif" });
+                dataTransfer.items.add(file1);
+                return fetch(exampleFile2);
+            }).then(response => response.blob()).then(blob => {
+                var file2 = new File([blob], "5fyu_updated.cif", { type: "chemical/x-cif" });
+                dataTransfer.items.add(file2);
+                filesInput.files = dataTransfer.files;
 
-            // Update format options based on example files
-            updateFormatOptions(filesInput.files);
+                // Update format options based on example files
+                updateFormatOptions(filesInput.files);
+            });
         });
 
         function updateFormatOptions(files) {
