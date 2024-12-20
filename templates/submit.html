@@ -80,6 +80,7 @@
                                 <a href="{{ url_for('static', filename='data/example-uploads/pdb/example-pdb-input-Q9UGL1/pdb5fy9.ent') }}">PDB-1</a>, 
                                 <a href="{{ url_for('static', filename='data/example-uploads/pdb/example-pdb-input-Q9UGL1/pdb5fyu.ent') }}">PDB-2</a>
                             </p>
+                            <a href="#" class="small" id="fillExampleDataButton">Fill with Example Data</a>
                         </div>
                     </form>
                 </div>
@@ -239,6 +240,46 @@
             var mmcifSelected = extensions.includes('cif');
             var pdbSelected = extensions.includes('pdb') || extensions.includes('ent');
 
+            formatOptions.forEach(option => {
+                if (option.value === 'mmcif') {
+                    option.checked = mmcifSelected;
+                } else if (option.value === 'pdb') {
+                    option.checked = pdbSelected;
+                }
+            });
+        }
+    });
+</script>
+
+<!-- JavaScript for example data -->
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        var fillExampleDataButton = document.getElementById('fillExampleDataButton');
+        var uniprotIdInput = document.querySelector('input[name="uniprot_id"]');
+        var filesInput = document.getElementById('files');
+        var exampleFiles = [
+            new File([""], "5fy9_updated.cif", { type: "chemical/x-cif" }),
+            new File([""], "5fyu_updated.cif", { type: "chemical/x-cif" }),
+        ];
+
+        fillExampleDataButton.addEventListener('click', function () {
+            uniprotIdInput.value = "Q9UGL1";
+
+            // Create a DataTransfer object to simulate file input
+            var dataTransfer = new DataTransfer();
+            exampleFiles.forEach(file => dataTransfer.items.add(file));
+            filesInput.files = dataTransfer.files;
+
+            // Update format options based on example files
+            updateFormatOptions(filesInput.files);
+        });
+
+        function updateFormatOptions(files) {
+            var extensions = Array.from(files).map(file => file.name.split('.').pop().toLowerCase());
+            var mmcifSelected = extensions.includes('cif');
+            var pdbSelected = extensions.includes('pdb') || extensions.includes('ent');
+
+            var formatOptions = document.querySelectorAll('input[name="format"]');
             formatOptions.forEach(option => {
                 if (option.value === 'mmcif') {
                     option.checked = mmcifSelected;
