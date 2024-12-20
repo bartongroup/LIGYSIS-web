@@ -82,7 +82,8 @@
                                 <a href="{{ url_for('static', filename='data/example-uploads/pdb/example-pdb-input-Q9UGL1/pdb5fy9.ent') }}">PDB-1</a>, 
                                 <a href="{{ url_for('static', filename='data/example-uploads/pdb/example-pdb-input-Q9UGL1/pdb5fyu.ent') }}">PDB-2</a>
                             </p>
-                            <a href="#" class="small" id="fillExampleDataButton">Fill with Example Data</a>
+                            <a href="#" class="small" id="fillExampleDataButton">Fill with example data</a> | 
+                            <a href="{{ url_for('main.results', prot_id='P02699', seg_id='1') }}" class="small">View demo in database</a>
                         </div>
                     </form>
                 </div>
