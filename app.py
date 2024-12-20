@@ -347,6 +347,26 @@ pymol_looks = [
     "set cartoon_discrete_colors, 1",
 ]
 
+pymol_atom_colors = [ # grabbed from ChimeraX which were grabbed from JMol
+    "set_color N_color, [48,80,248]", "color N_color, elem N", # N - Nitrogen
+    "set_color O_color, [255,13,13]", "color O_color, elem O", # O - Oxygen
+    "set_color S_color, [255,255,48]", "color S_color, elem S", # S - Sulfur
+    "set_color P_color, [255,128,0]", "color P_color, elem P", # P - Phosphorus
+    "set_color Na_color, [171,92,242]", "color Na_color, elem Na", # Na - Sodium
+    "set_color Cl_color, [31,240,31]", "color Cl_color, elem Cl", # Cl - Chlorine
+    "set_color K_color, [143,64,212]", "color K_color, elem K", # K - Potassium
+    "set_color Zn_color, [125,128,176]", "color Zn_color, elem Zn", # Zn - Zinc
+    "set_color Mg_color, [138,255,0]", "color Mg_color, elem Mg", # Mg - Magnesium
+    "set_color Ca_color, [61,255,0]", "color Ca_color, elem Ca", # Ca - Calcium
+    "set_color Se_color, [255,161,0]", "color Se_color, elem Se", # Se - Selenium
+    "set_color Fe_color, [224,102,51]", "color Fe_color, elem Fe", # Fe - Iron
+    "set_color F_color, [144,224,80]", "color F_color, elem F", # F - Fluorine
+    "set_color Mn_color, [156,122,199]", "color Mn_color, elem Mn", # Mn - Manganese
+    "set_color Br_color, [166,41,41]", "color Br_color, elem Br", # Br - Bromine
+    "set_color Ni_color, [80,208,80]", "color Ni_color, elem Ni", # Ni - Nickel
+    "set_color Cu_color, [200,128,51]", "color Cu_color, elem Cu", # Cu - Copper
+]
+
 pymol_formats = [
     "color white, all",
     "hide everything, all",
@@ -956,7 +976,8 @@ def download_assembly_ChimeraX(): # route to download ChimeraX script to visuali
     arpeggio_cons_filt = arpeggio_cons[
         (arpeggio_cons['contact'].apply(lambda x: x != ["proximal"])) &
         (arpeggio_cons['interacting_entities'] == "INTER") &
-        (arpeggio_cons['type'] == "atom-atom")
+        (arpeggio_cons['type'] == "atom-atom") & 
+        (~arpeggio_cons['auth_atom_id_end'].isin(['N', 'O',]))
     ].copy()
 
     pseudobond_lines = "\n".join(generate_pseudobond_lines_ChimeraX(arpeggio_cons_filt))
@@ -1004,15 +1025,15 @@ def download_assembly_ChimeraX(): # route to download ChimeraX script to visuali
     cxc_lines = "\n".join(
         [
             f'open {pdb_id}_bio.cif',
+            'rib', 'style all stick', # some structures have settings to not show cartoon and style as spheres
             'color white', 
             f'open {pseudobond_file}',
             'set bgColor white',
             'set silhouette ON',
             'set silhouettewidth 2',
             '~disp',
-            #'surface',
             'transparency 30',
-        ]  + aas_str + ligs_str + ['~sel']
+        ]  + aas_str + ligs_str + ['~sel', 'color byhet', 'del H']
     )
 
     cxc_file = f'{prot_id}_{seg_id}_{pdb_id}.cxc'
@@ -1080,7 +1101,8 @@ def download_assembly_PyMol(): # route to download PyMol script to visualise ass
     arpeggio_cons_filt = arpeggio_cons[
         (arpeggio_cons['contact'].apply(lambda x: x != ["proximal"])) &
         (arpeggio_cons['interacting_entities'] == "INTER") &
-        (arpeggio_cons['type'] == "atom-atom")
+        (arpeggio_cons['type'] == "atom-atom") & 
+        (~arpeggio_cons['auth_atom_id_end'].isin(['C', 'N', 'O',]))
     ].copy()
 
     distance_lines = generate_distance_lines_PyMol(arpeggio_cons_filt, mult = 1) #1.5 is too thick
@@ -1130,7 +1152,7 @@ def download_assembly_PyMol(): # route to download PyMol script to visualise ass
 
     load_line = [f'load {os.path.basename(assembly_file)}']
 
-    pml_lines = pymol_looks + pymol_dash + load_line + basic_pymol_format + distance_lines + ligs_lines + aas_lines + ["deselect",]
+    pml_lines = pymol_looks + pymol_dash + load_line + basic_pymol_format + distance_lines + ligs_lines + aas_lines + ["hide sticks, name N+O+C", "deselect",] + pymol_atom_colors
     pml_string = "\n".join(pml_lines)
 
     pml_file = f'{prot_id}_{seg_id}_{pdb_id}.pml'
@@ -1196,7 +1218,8 @@ def download_all_assemblies_ChimeraX(): # route to download ChimeraX scripts to 
             arpeggio_cons_filt = arpeggio_cons[
                 (arpeggio_cons['contact'].apply(lambda x: x != ["proximal"])) &
                 (arpeggio_cons['interacting_entities'] == "INTER") &
-                (arpeggio_cons['type'] == "atom-atom")
+                (arpeggio_cons['type'] == "atom-atom") & 
+                (~arpeggio_cons['auth_atom_id_end'].isin(['N', 'O',]))
             ].copy()
 
             pseudobond_lines = "\n".join(generate_pseudobond_lines_ChimeraX(arpeggio_cons_filt))
@@ -1238,15 +1261,15 @@ def download_all_assemblies_ChimeraX(): # route to download ChimeraX scripts to 
             cxc_lines = "\n".join(
                 [
                     f'open {pdb_id}_bio.cif',
+                    'rib', 'style all stick', # some structures have settings to not show cartoon and style as spheres
                     'color white', 
                     f'open {pseudobond_file}',
                     'set bgColor white',
                     'set silhouette ON',
                     'set silhouettewidth 2',
                     '~disp',
-                    #'surface',
                     'transparency 30',
-                ]  + aas_str + ligs_str + ['~sel']
+                ]  + aas_str + ligs_str + ['~sel', 'color byhet', 'del H']
             )
 
             cxc_file = f'{prot_id}_{seg_id}_{pdb_id}.cxc'
@@ -1320,7 +1343,8 @@ def download_all_assemblies_PyMol(): # route to download PyMol scripts to visual
             arpeggio_cons_filt = arpeggio_cons[
                 (arpeggio_cons['contact'].apply(lambda x: x != ["proximal"])) &
                 (arpeggio_cons['interacting_entities'] == "INTER") &
-                (arpeggio_cons['type'] == "atom-atom")
+                (arpeggio_cons['type'] == "atom-atom") & 
+                (~arpeggio_cons['auth_atom_id_end'].isin(['C', 'N', 'O',]))
             ].copy()
 
             distance_lines = generate_distance_lines_PyMol(arpeggio_cons_filt, mult = 1.5)
@@ -1365,7 +1389,7 @@ def download_all_assemblies_PyMol(): # route to download PyMol scripts to visual
 
             load_line = [f'load {os.path.basename(assembly_file)}']
 
-            pml_lines = pymol_looks + pymol_dash + load_line + basic_pymol_format + distance_lines + ligs_lines + aas_lines + ["deselect",]
+            pml_lines = pymol_looks + pymol_dash + load_line + basic_pymol_format + distance_lines + ligs_lines + aas_lines + ["hide sticks, name N+O+C", "deselect",]  + pymol_atom_colors
             pml_string = "\n".join(pml_lines)
 
             pml_file = f'{prot_id}_{seg_id}_{pdb_id}.pml'
@@ -2047,7 +2071,8 @@ def user_download_structure_ChimeraX(): # route to download ChimeraX script to v
     arpeggio_cons_filt = arpeggio_cons[
         (arpeggio_cons['contact'].apply(lambda x: x != ["proximal"])) &
         (arpeggio_cons['interacting_entities'] == "INTER") &
-        (arpeggio_cons['type'] == "atom-atom")
+        (arpeggio_cons['type'] == "atom-atom") & 
+        (~arpeggio_cons['auth_atom_id_end'].isin(['N', 'O',]))
     ].copy()
 
     pseudobond_lines = "\n".join(generate_pseudobond_lines_ChimeraX(arpeggio_cons_filt))
@@ -2095,15 +2120,15 @@ def user_download_structure_ChimeraX(): # route to download ChimeraX script to v
     cxc_lines = "\n".join(
         [
             f'open {struc_name}.supp.cif',
+            'rib', 'style all stick', # some structures have settings to not show cartoon and style as spheres
             'color white', 
             f'open {pseudobond_file}',
             'set bgColor white',
             'set silhouette ON',
             'set silhouettewidth 2',
             '~disp',
-            'surf',
             'transparency 30',
-        ]  + aas_str + ligs_str + ['~sel', '~surf', ]
+        ]  + aas_str + ligs_str + ['~sel', 'color byhet', 'del H']
     )
 
     cxc_file = f'{job_id}_{struc_name}.cxc'
@@ -2178,7 +2203,8 @@ def user_download_structure_PyMol(): # route to download PyMol script to visuali
     arpeggio_cons_filt = arpeggio_cons[
         (arpeggio_cons['contact'].apply(lambda x: x != ["proximal"])) &
         (arpeggio_cons['interacting_entities'] == "INTER") &
-        (arpeggio_cons['type'] == "atom-atom")
+        (arpeggio_cons['type'] == "atom-atom") & 
+        (~arpeggio_cons['auth_atom_id_end'].isin(['C', 'N', 'O',]))
     ].copy()
 
     distance_lines = generate_distance_lines_PyMol(arpeggio_cons_filt, mult = 1.5)
@@ -2228,7 +2254,7 @@ def user_download_structure_PyMol(): # route to download PyMol script to visuali
 
     load_line = [f'load {os.path.basename(assembly_file)}']
 
-    pml_lines = pymol_looks + pymol_dash + load_line + basic_pymol_format + distance_lines + ligs_lines + aas_lines + ["deselect",]
+    pml_lines = pymol_looks + pymol_dash + load_line + basic_pymol_format + distance_lines + ligs_lines + aas_lines + ["hide sticks, name N+O+C", "deselect",] + pymol_atom_colors
     pml_string = "\n".join(pml_lines)
 
     pml_file = f'{job_id}_{struc_name}.pml'
@@ -2336,7 +2362,8 @@ def user_download_all_structures_ChimeraX(): # route to download ChimeraX script
                 arpeggio_cons_filt = arpeggio_cons[
                     (arpeggio_cons['contact'].apply(lambda x: x != ["proximal"])) &
                     (arpeggio_cons['interacting_entities'] == "INTER") &
-                    (arpeggio_cons['type'] == "atom-atom")
+                    (arpeggio_cons['type'] == "atom-atom") & 
+                    (~arpeggio_cons['auth_atom_id_end'].isin(['N', 'O',]))
                 ].copy()
 
                 pseudobond_lines = "\n".join(generate_pseudobond_lines_ChimeraX(arpeggio_cons_filt))
@@ -2378,15 +2405,15 @@ def user_download_all_structures_ChimeraX(): # route to download ChimeraX script
                 cxc_lines = "\n".join(
                     [
                         f'open {struc_name}.supp.cif',
+                        'rib', 'style all stick', # some structures have settings to not show cartoon and style as spheres
                         'color white', 
                         f'open {pseudobond_file}',
                         'set bgColor white',
                         'set silhouette ON',
                         'set silhouettewidth 2',
                         '~disp',
-                        'surf',
                         'transparency 30',
-                    ]  + aas_str + ligs_str + ['~sel', '~surf', ]
+                    ]  + aas_str + ligs_str + ['~sel', 'color byhet', 'del H']
                 )
 
                 cxc_file = f'{job_id}_{struc_name}.cxc'
@@ -2419,15 +2446,15 @@ def user_download_all_structures_ChimeraX(): # route to download ChimeraX script
                 cxc_lines = "\n".join(
                     [
                         f'open {struc_name}.supp.cif',
+                        'rib', 'style all stick', # some structures have settings to not show cartoon and style as spheres
                         'color white', 
-                        # f'open {pseudobond_file}',
                         'set bgColor white',
                         'set silhouette ON',
                         'set silhouettewidth 2',
                         '~disp',
-                        'surf',
                         'transparency 30',
-                        '~surf',
+                        'color byhet',
+                        'del H'
                     ]
                 )
 
@@ -2506,7 +2533,8 @@ def user_download_all_structures_PyMol(): # route to download PyMol scripts to v
                 arpeggio_cons_filt = arpeggio_cons[
                     (arpeggio_cons['contact'].apply(lambda x: x != ["proximal"])) &
                     (arpeggio_cons['interacting_entities'] == "INTER") &
-                    (arpeggio_cons['type'] == "atom-atom")
+                    (arpeggio_cons['type'] == "atom-atom") & 
+                    (~arpeggio_cons['auth_atom_id_end'].isin(['C', 'N', 'O',]))
                 ].copy()
 
                 distance_lines = generate_distance_lines_PyMol(arpeggio_cons_filt, mult = 1.5)
@@ -2551,7 +2579,7 @@ def user_download_all_structures_PyMol(): # route to download PyMol scripts to v
 
                 load_line = [f'load {os.path.basename(assembly_file)}']
 
-                pml_lines = pymol_looks + pymol_dash + load_line + basic_pymol_format + distance_lines + ligs_lines + aas_lines + ["deselect",]
+                pml_lines = pymol_looks + pymol_dash + load_line + basic_pymol_format + distance_lines + ligs_lines + aas_lines + ["hide sticks, name N+O+C", "deselect",] + pymol_atom_colors
                 pml_string = "\n".join(pml_lines)
 
                 pml_file = f'{job_id}_{struc_name}.pml'
