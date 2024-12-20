@@ -5,7 +5,7 @@
 <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>
 
-<title>Ligysis Analysis Submission</title>
+<title>LIGYSIS Analysis Submission</title>
 
 {% endblock %}
 
@@ -25,7 +25,7 @@
     <div class="row justify-content-center">
         <div class="col-md-6">
             <div class="alert alert-info" role="alert">
-                Please provide mmCIF files along with the corresponding UniProt ID. Ligysis can analyse proteins not listed in UniProt;
+                Please provide mmCIF files along with the corresponding UniProt ID. LIGYSIS can analyse proteins not listed in UniProt;
                 however, this feature is not currently supported by this web server. It will be available shortly.
             </div>
             <div class="alert alert-info alert-dismissible fade show" role="alert">
@@ -37,7 +37,7 @@
             </div>
             <div class="card">
                 <div class="card-header bg-primary text-white">
-                    Ligysis Analysis Submission
+                    LIGYSIS Analysis Submission
                 </div>
                 <div class="card-body">
                     <form action="{{ url_for('main.submit') }}" method="post" enctype="multipart/form-data" id="ligysisForm">
