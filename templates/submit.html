@@ -5,7 +5,7 @@
 <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>
 
-<title>Ligysis Analysis Submission</title>
+<title>LIGYSIS Analysis Submission</title>
 
 {% endblock %}
 
@@ -25,7 +25,7 @@
     <div class="row justify-content-center">
         <div class="col-md-6">
             <div class="alert alert-info" role="alert">
-                Please provide mmCIF files along with the corresponding UniProt ID. Ligysis can analyse proteins not listed in UniProt;
+                Please provide mmCIF files along with the corresponding UniProt ID. LIGYSIS can analyse proteins not listed in UniProt;
                 however, this feature is not currently supported by this web server. It will be available shortly.
             </div>
             <div class="alert alert-info alert-dismissible fade show" role="alert">
@@ -37,11 +37,13 @@
             </div>
             <div class="card">
                 <div class="card-header bg-primary text-white">
-                    Ligysis Analysis Submission
+                    LIGYSIS Analysis Submission
                 </div>
                 <div class="card-body">
                     <form action="{{ url_for('main.submit') }}" method="post" enctype="multipart/form-data" id="ligysisForm">
                         {{ form.hidden_tag() }}
+                        <input type="hidden" id="exampleFile1" value="{{ url_for('static', filename='data/example-uploads/mmcif/example-mmcif-input-Q9UGL1/5fy9_updated.cif') }}">
+                        <input type="hidden" id="exampleFile2" value="{{ url_for('static', filename='data/example-uploads/mmcif/example-mmcif-input-Q9UGL1/5fyu_updated.cif') }}">
                         <div class="mb-3">
                             {{ form.uniprot_id.label(class="form-label") }}
                             {{ form.uniprot_id(class="form-control", rows=5, **{'data-drag-drop': 'true'}) }}
@@ -72,6 +74,16 @@
                         </div>
                         <div class="mb-3">
                             <button type="submit" class="btn btn-primary" id="submitButton">Submit</button>
+                        </div>
+                            <div class="mb-3">
+                            <p class="small">Example input for Q9UGL1: 
+                                <a href="{{ url_for('static', filename='data/example-uploads/mmcif/example-mmcif-input-Q9UGL1/5fy9_updated.cif') }}">mmCIF-1</a>, 
+                                <a href="{{ url_for('static', filename='data/example-uploads/mmcif/example-mmcif-input-Q9UGL1/5fyu_updated.cif') }}">mmCIF-2</a> | 
+                                <a href="{{ url_for('static', filename='data/example-uploads/pdb/example-pdb-input-Q9UGL1/pdb5fy9.ent') }}">PDB-1</a>, 
+                                <a href="{{ url_for('static', filename='data/example-uploads/pdb/example-pdb-input-Q9UGL1/pdb5fyu.ent') }}">PDB-2</a>
+                            </p>
+                            <a href="#" class="small" id="fillExampleDataButton">Fill with example data</a> | 
+                            <a href="{{ url_for('main.results', prot_id='P02699', seg_id='1') }}" class="small">View demo in database</a>
                         </div>
                     </form>
                 </div>
@@ -231,6 +243,51 @@
             var mmcifSelected = extensions.includes('cif');
             var pdbSelected = extensions.includes('pdb') || extensions.includes('ent');
 
+            formatOptions.forEach(option => {
+                if (option.value === 'mmcif') {
+                    option.checked = mmcifSelected;
+                } else if (option.value === 'pdb') {
+                    option.checked = pdbSelected;
+                }
+            });
+        }
+    });
+</script>
+
+<!-- JavaScript for example data -->
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        var fillExampleDataButton = document.getElementById('fillExampleDataButton');
+        var uniprotIdInput = document.querySelector('input[name="uniprot_id"]');
+        var filesInput = document.getElementById('files');
+        var exampleFile1 = document.getElementById('exampleFile1').value;
+        var exampleFile2 = document.getElementById('exampleFile2').value;
+
+        fillExampleDataButton.addEventListener('click', function () {
+            uniprotIdInput.value = "Q9UGL1";
+
+            // Create a DataTransfer object to simulate file input
+            var dataTransfer = new DataTransfer();
+            fetch(exampleFile1).then(response => response.blob()).then(blob => {
+                var file1 = new File([blob], "5fy9_updated.cif", { type: "chemical/x-cif" });
+                dataTransfer.items.add(file1);
+                return fetch(exampleFile2);
+            }).then(response => response.blob()).then(blob => {
+                var file2 = new File([blob], "5fyu_updated.cif", { type: "chemical/x-cif" });
+                dataTransfer.items.add(file2);
+                filesInput.files = dataTransfer.files;
+
+                // Update format options based on example files
+                updateFormatOptions(filesInput.files);
+            });
+        });
+
+        function updateFormatOptions(files) {
+            var extensions = Array.from(files).map(file => file.name.split('.').pop().toLowerCase());
+            var mmcifSelected = extensions.includes('cif');
+            var pdbSelected = extensions.includes('pdb') || extensions.includes('ent');
+
+            var formatOptions = document.querySelectorAll('input[name="format"]');
             formatOptions.forEach(option => {
                 if (option.value === 'mmcif') {
                     option.checked = mmcifSelected;
