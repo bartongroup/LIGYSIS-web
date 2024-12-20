@@ -42,6 +42,7 @@ class SubmissionHandler:
         self.file_path = None
         self.metadata_available = Event()  # Create an event to signal metadata availability
         self.slivka_job_triggered = Event()  # Create an event to signal Slivka job submission
+        self.job_success = None
 
     def create_directory(self):
         """Create a directory for the submission session.
@@ -120,7 +121,7 @@ class SubmissionHandler:
         """Process the FASTA file content and save the results."""
         processor = SlivkaProcessor(SLIVKA_URL, service=self.service_type, session_id=self.session_id, filename=self.filename, entry_id=self.entry_id, config=self.config)
         output_file_path = os.path.join(self.submission_directory, 'output.fasta')
-        success = processor.process_file(self.file_path, output_file_path, self.submission_directory, trigger_event=self.slivka_job_triggered)
+        self.job_success = processor.process_file(self.file_path, output_file_path, self.submission_directory, trigger_event=self.slivka_job_triggered)
 
     def update_db_status(self):
         """Update the processing status in the database."""
