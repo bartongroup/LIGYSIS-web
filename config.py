@@ -49,3 +49,7 @@ DATABASE_PATH = os.environ.get('APP_DATABASE_PATH', DATABASE_PATH)
 
 SLIVKA_URL = os.environ.get('SLIVKA_URL', 'http://localhost:3203')
 EXPIRATION_DAYS = float(os.environ.get('APP_EXPIRATION_DAYS', 7))
+
+# Analytics configuration
+ANALYTICS_DOMAIN = os.environ.get('ANALYTICS_DOMAIN')
+ANALYTICS_SCRIPT_URL = os.environ.get('ANALYTICS_SCRIPT_URL')
