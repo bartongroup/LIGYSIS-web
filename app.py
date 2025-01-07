@@ -22,7 +22,7 @@ from flask import Blueprint, Flask, render_template, url_for, request, redirect,
 from flask_cors import CORS
 from werkzeug.utils import secure_filename
 
-from config import BASE_DIR, DATA_FOLDER, SITE_TABLES_FOLDER, RES_TABLES_FOLDER, REP_STRUCS_FOLDER, PROTS_FOLDER, ASSEMBLY_FOLDER, CIF_SIFTS_DIR, CHAIN_MAPPING_DIR, USER_JOBS_OUT_FOLDER, SESSIONS_FOLDER, SLIVKA_URL, STATIC_URL_PATH, URL_PREFIX
+from config import ANALYTICS_DOMAIN, ANALYTICS_SCRIPT_URL, BASE_DIR, DATA_FOLDER, SITE_TABLES_FOLDER, RES_TABLES_FOLDER, REP_STRUCS_FOLDER, PROTS_FOLDER, ASSEMBLY_FOLDER, CIF_SIFTS_DIR, CHAIN_MAPPING_DIR, USER_JOBS_OUT_FOLDER, SESSIONS_FOLDER, SLIVKA_URL, STATIC_URL_PATH, URL_PREFIX
 from filters import datetime_parse, datetime_format
 from forms import LigysisForm
 from logger_config import setup_logging
@@ -444,6 +444,16 @@ app.config['SESSION_COOKIE_NAME'] = 'ligysis_session'
 CORS(app, resources={rf"{URL_PREFIX}/*": {"origins": ["http://www-dev.compbio.dundee.ac.uk",
                                                       "http://www.compbio.dundee.ac.uk",
                                                       "https://www.compbio.dundee.ac.uk"]}})
+
+
+# Analytics configuration
+@app.context_processor
+def inject_config():
+    return {
+        'ANALYTICS_DOMAIN': ANALYTICS_DOMAIN,
+        'ANALYTICS_SCRIPT_URL': ANALYTICS_SCRIPT_URL
+    }
+
 
 # Use Blueprint to add URL prefix to serve site from a sub-directory
 main = Blueprint('main', __name__, url_prefix=URL_PREFIX, static_url_path=STATIC_URL_PATH, static_folder='static')
