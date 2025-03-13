@@ -11,6 +11,18 @@
             .hidden{
                 display: none;
             }
+            #serviceNotice {
+                transition: height 0.3s ease-in-out; /* Smooth expansion */
+                overflow: hidden; /* Prevents jerky resizing */
+                padding: 0; /* Reduced padding */
+                margin: 0; /* Reduced margin */
+            }
+            h4.alert-heading {
+                margin-bottom: 0.25rem; /* Reduce space below heading */
+            }
+            #serviceNotice p {
+                margin-top: 0.25rem; /* Reduce space above paragraph */
+            }
         </style>
         {% block head %}
         {% endblock%}
@@ -26,6 +38,20 @@
         {% endif %}
     </head>
     <body>
+        <div class="alert alert-danger" role="alert">
+            <h4 class="alert-heading d-flex justify-content-between">
+                Service status: Degraded
+                <button class="btn btn-sm btn-outline-dark" type="button" data-bs-toggle="collapse" data-bs-target="#serviceNotice">
+                    More details
+                </button>
+            </h4>
+            <div id="serviceNotice" class="collapse hide">
+                <p>Job submission is temporarily unavailable, but you can still access our 
+                   <a href="{{ url_for('main.index') }}" class="alert-link">pre-calculated results</a> while we resolve this issue.
+                   <br><small><i>Updated: Thursday, March 13th 2025, 22:00</i></small>
+                </p>
+            </div>
+        </div>
         <header style="padding-top: 0em; padding-bottom: 0em">
             <div class="container-fluid">
                 <nav class="navbar navbar-expand-md navbar-light justify-content-center">
