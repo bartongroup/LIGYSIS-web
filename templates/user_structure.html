@@ -54,7 +54,7 @@
     let surfaceVisible = false;
     let labelsVisible = false;
     let watersVisible = false;
-    let ligandsVisible = false;
+    let ligandsVisible = true;
     let sitePointClicked = false;
     let siteRowClicked = false;
     let wholeSurf;
@@ -213,31 +213,31 @@
                 </div>
 
                 <div class="col-auto justify-content-start" style="padding-left:0px; padding-right:0px;">
-                    <button id="surfButton" style="border: 1px solid black; border-width: 1; border-color: #ffa500; color: #ffa500; font-weight: normal; display: flex; align-items: center; border-radius: 5px; padding: 5px 10px;" onclick="toggleSurfaceVisibility()">
+                    <button id="surfButton" style="border: 1px solid #ffa500; color: #ffa500; font-weight: normal; display: flex; align-items: center; border-radius: 5px; padding: 5px 10px;" onclick="toggleSurfaceVisibility()">
                         SURF ✘
                     </button>
                 </div>
                 
                 <div class="col-auto justify-content-center" style="padding-left:0px; padding-right:0px;">
-                    <button id="labelButton" style="border: 1px solid black; border-width: 1; border-color: #ffa500; color: #ffa500; font-weight: normal; display: flex; align-items: center; border-radius: 5px; padding: 5px 10px;" onclick="toggleLabelsVisibility()">
+                    <button id="labelButton" style="border: 1px solid #ffa500; color: #ffa500; font-weight: normal; display: flex; align-items: center; border-radius: 5px; padding: 5px 10px;" onclick="toggleLabelsVisibility()">
                         LABEL ✘
                     </button>
                 </div>
                 
                 <div class="col-auto justify-content-center" style="padding-left:0px; padding-right:0px;">
-                    <button id="ligandButton" style="border: 1px solid black; border-width: 1; border-color: #ffa500; color: #ffa500; font-weight: normal; display: flex; align-items: center; border-radius: 5px; padding: 5px 10px;" onclick="toggleLigandsVisibility()">
-                        LIGAND ✘
+                    <button id="ligandButton" style="border: 2.5px solid #007bff; color: #007bff; font-weight: bold; display: flex; align-items: center; border-radius: 5px; padding: 5px 10px;" onclick="toggleLigandsVisibility()">
+                        LIGAND ✓
                     </button>
                 </div>
                 
                 <div class="col-auto justify-content-center" style="padding-left:0px; padding-right:0px;">
-                    <button id="waterButton" style="border: 1px solid black; border-width: 1; border-color: #ffa500; color: #ffa500; font-weight: normal; display: flex; align-items: center; border-radius: 5px; padding: 5px 10px;" onclick="toggleWatersVisibility()">
+                    <button id="waterButton" style="border: 1px solid #ffa500; color: #ffa500; font-weight: normal; display: flex; align-items: center; border-radius: 5px; padding: 5px 10px;" onclick="toggleWatersVisibility()">
                         HOH ✘
                     </button>
                 </div>
                 
                 <div class="col-auto justify-content-end" style="padding-left:0px; padding-right:0px;">
-                    <button id="contactsButton" style="border: 1px solid darkgray; border-width: 1; color: darkgray; font-weight: normal; display: flex; align-items: center; border-radius: 5px; padding: 5px 10px;" onclick="toggleContactsVisibility()" disabled>
+                    <button id="contactsButton" style="border: 1px solid darkgray; font-weight: normal; display: flex; align-items: center; border-radius: 5px; padding: 5px 10px;" onclick="toggleContactsVisibility()" disabled>
                         CONTACT ✘
                     </button>
                 </div>

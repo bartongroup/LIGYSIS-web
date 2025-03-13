@@ -71,7 +71,8 @@ function loadAllModels(simplePdbs) { // Load all structures
         viewer.setStyle(ionAtomsSuppModelsSel, {sphere: {hidden: true, radius: sphereRadius}}); // sphere representation for ions, hidden by default
         viewer.setStyle(protAtomsSuppModelsSel, {cartoon: {hidden: true, style: cartoonStyle, arrows: cartoonArrows, tubes: cartoonTubes, thickness: cartoonThickness, opacity: cartoonOpacity}}); // hide protein atoms in the superposition models
         viewer.setStyle(hohAtomsSuppModelsSel, {sphere: {hidden: true, color: waterColor, radius: sphereRadius}}); // sphere representation for water atoms, hidden by default
-
+        viewer.zoomTo(); 
+        viewer.render();
         // Send modelOrder to Flask
         fetch(`${window.appBaseUrl}/process-model-order`, {
             method: 'POST',
@@ -108,9 +109,9 @@ function loadAllModels(simplePdbs) { // Load all structures
             
             suppLigsSels["water"] = {...hohAtoms, model: suppModels}
 
-            viewer.addStyle(suppLigsSels["clust"], {stick: {hidden: true, colorscheme: myScheme, radius: stickRadius}});
+            viewer.addStyle(suppLigsSels["clust"], {stick: {hidden: false, colorscheme: myScheme, radius: stickRadius}});
 
-            viewer.addStyle(suppLigsSels["clust_ions"], {sphere: {hidden: true, colorscheme: myScheme, radius: ionSphereRadius}});
+            viewer.addStyle(suppLigsSels["clust_ions"], {sphere: {hidden: false, colorscheme: myScheme, radius: ionSphereRadius}});
         
             viewer.addStyle(suppLigsSels["not_clust"], {stick: {hidden: true, colorscheme: myScheme, radius: stickRadius}});
 
@@ -118,66 +119,67 @@ function loadAllModels(simplePdbs) { // Load all structures
 
             viewer.addStyle(suppLigsSels["water"], {sphere: {hidden: true, color: waterColor, radius: sphereRadius}});
 
+            // viewer.render();
+
+            for (const [key, value] of Object.entries(seg_ress_dict)) { 
+                let PDBResNums = seg_ress_dict[key]
+                    .filter(el => Up2PdbDict[repPdbId][labelAsymId].hasOwnProperty(el))
+                    .map(el => Up2PdbDict[repPdbId][labelAsymId][el]);
+                if (key == "ALL_BINDING") {
+    
+                    let surfSel = {...protAtoms, model: protAtomsModel, not: {resi: PDBResNums}, chain: authAsymId}
+            
+                    surfsDict["superposition"]["non_binding"] = viewer.addSurface(
+                        $3Dmol.SurfaceType.ISO,
+                        {
+                            color: defaultColor,
+                            opacity: surfHiddenOpacity,
+                        },
+                        surfSel,
+                        surfSel,
+                    );
+                }
+                else {
+                    let surfSel = {...protAtoms, model: protAtomsModel, resi: PDBResNums, chain: authAsymId}
+    
+                    let siteColor = chartColors[Number(key.split("_").pop())];
+                    surfsDict["superposition"][key] = viewer.addSurface(
+                        $3Dmol.SurfaceType.ISO,
+                        {
+                            color: siteColor,
+                            opacity: surfHiddenOpacity,
+                        },
+                        surfSel,
+                        surfSel,
+                    );
+                }
+            }
+    
+            viewer.setClickable(
+                {model: suppModels}, // Select all atoms or define specific criteria
+                true,      // Enable clicking
+                function(atom) { 
+                    if (atom && atom.resn) {
+                        // Construct the URL using the residue name (resn) of the clicked atom
+                        const url = `${pdbeChemUrlRoot}${atom.resn}`;
+                        // Open the URL in a new tab or window
+                        window.open(url, '_blank');
+                    } else {
+                        console.log("Clicked an atom without a residue name");
+                    }
+                }
+            );
+            
+            console.log("Surfaces added");
+    
+            viewer.zoomTo(); 
             viewer.render();
+            toggleSpinner1();
 
         })
         .catch(error => {
             console.error('Error:', error);
         });
-
-        for (const [key, value] of Object.entries(seg_ress_dict)) { 
-            let PDBResNums = seg_ress_dict[key]
-                .filter(el => Up2PdbDict[repPdbId][labelAsymId].hasOwnProperty(el))
-                .map(el => Up2PdbDict[repPdbId][labelAsymId][el]);
-            if (key == "ALL_BINDING") {
-
-                let surfSel = {...protAtoms, model: protAtomsModel, not: {resi: PDBResNums}, chain: authAsymId}
-        
-                surfsDict["superposition"]["non_binding"] = viewer.addSurface(
-                    $3Dmol.SurfaceType.ISO,
-                    {
-                        color: defaultColor,
-                        opacity: surfHiddenOpacity,
-                    },
-                    surfSel,
-                    surfSel,
-                );
-            }
-            else {
-                let surfSel = {...protAtoms, model: protAtomsModel, resi: PDBResNums, chain: authAsymId}
-
-                let siteColor = chartColors[Number(key.split("_").pop())];
-                surfsDict["superposition"][key] = viewer.addSurface(
-                    $3Dmol.SurfaceType.ISO,
-                    {
-                        color: siteColor,
-                        opacity: surfHiddenOpacity,
-                    },
-                    surfSel,
-                    surfSel,
-                );
-            }
-        }
-
-        viewer.setClickable(
-            {model: suppModels}, // Select all atoms or define specific criteria
-            true,      // Enable clicking
-            function(atom) { 
-                if (atom && atom.resn) {
-                    // Construct the URL using the residue name (resn) of the clicked atom
-                    const url = `${pdbeChemUrlRoot}${atom.resn}`;
-                    // Open the URL in a new tab or window
-                    window.open(url, '_blank');
-                } else {
-                    console.log("Clicked an atom without a residue name");
-                }
-            }
-        );
-        
-        console.log("Surfaces added");
-
-        viewer.zoomTo(); 
-        viewer.render();
 
         labelsHash['superposition'] = {"clickedSite": {}, "hoveredRes": [], };
 
@@ -197,10 +199,10 @@ function loadAllModels(simplePdbs) { // Load all structures
 
     }).catch(error => {
         console.error('Error loading one or more models:', error);
-    }).finally(() => {
+    });//.finally(() => {
         // Hide spinner after all models are loaded or if an error occurs
-        toggleSpinner1();
-    });
+        // toggleSpinner1();
+    //});
 }
 
 // VIEWER
