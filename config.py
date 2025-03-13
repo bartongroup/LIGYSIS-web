@@ -53,3 +53,6 @@ EXPIRATION_DAYS = float(os.environ.get('APP_EXPIRATION_DAYS', 7))
 # Analytics configuration
 ANALYTICS_DOMAIN = os.environ.get('ANALYTICS_DOMAIN')
 ANALYTICS_SCRIPT_URL = os.environ.get('ANALYTICS_SCRIPT_URL')
+
+# Config for the job queue
+SUBMISSIONS_ENABLED = os.environ.get('SUBMISSIONS_ENABLED', 'false').lower() == 'true'
