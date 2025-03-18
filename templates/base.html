@@ -38,6 +38,7 @@
         {% endif %}
     </head>
     <body>
+        {% if SERVICE_NOTICE %}
         <div class="alert {{ SERVICE_ALERT_CLASS | default('alert-info') }}" role="alert">
             <h4 class="alert-heading d-flex justify-content-between">
                 Service status: {{ SERVICE_STATUS }}
@@ -51,6 +52,7 @@
                 </p>
             </div>
         </div>
+        {% endif %}
         <header style="padding-top: 0em; padding-bottom: 0em">
             <div class="container-fluid">
                 <nav class="navbar navbar-expand-md navbar-light justify-content-center">
