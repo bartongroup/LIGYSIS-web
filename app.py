@@ -23,6 +23,7 @@ from flask_cors import CORS
 from werkzeug.utils import secure_filename
 
 from config import ANALYTICS_DOMAIN, ANALYTICS_SCRIPT_URL, BASE_DIR, DATA_FOLDER, SITE_TABLES_FOLDER, RES_TABLES_FOLDER, REP_STRUCS_FOLDER, PROTS_FOLDER, ASSEMBLY_FOLDER, CIF_SIFTS_DIR, CHAIN_MAPPING_DIR, USER_JOBS_OUT_FOLDER, SESSIONS_FOLDER, SLIVKA_URL, SUBMISSIONS_ENABLED, STATIC_URL_PATH, URL_PREFIX
+from config import SERVICE_STATUS, SERVICE_NOTICE, SERVICE_NOTICE_UPDATED, SERVICE_ALERT_CLASS
 from filters import datetime_parse, datetime_format
 from forms import LigysisForm
 from logger_config import setup_logging
@@ -457,6 +458,15 @@ def inject_config():
 @app.context_processor
 def inject_globals():
     return dict(SUBMISSIONS_ENABLED=SUBMISSIONS_ENABLED)
+
+@app.context_processor
+def inject_service_status():
+    return {
+        'SERVICE_STATUS': SERVICE_STATUS,
+        'SERVICE_NOTICE': SERVICE_NOTICE,
+        'SERVICE_NOTICE_UPDATED': SERVICE_NOTICE_UPDATED,
+        'SERVICE_ALERT_CLASS': SERVICE_ALERT_CLASS
+    }
 
 # Use Blueprint to add URL prefix to serve site from a sub-directory
 main = Blueprint('main', __name__, url_prefix=URL_PREFIX, static_url_path=STATIC_URL_PATH, static_folder='static')

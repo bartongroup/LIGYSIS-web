@@ -38,16 +38,16 @@
         {% endif %}
     </head>
     <body>
-        <div class="alert alert-success" role="alert">
+        <div class="alert {{ SERVICE_ALERT_CLASS | default('alert-info') }}" role="alert">
             <h4 class="alert-heading d-flex justify-content-between">
-                Service status: Normal
+                Service status: {{ SERVICE_STATUS }}
                 <button class="btn btn-sm btn-outline-dark" type="button" data-bs-toggle="collapse" data-bs-target="#serviceNotice">
                     More details
                 </button>
             </h4>
             <div id="serviceNotice" class="collapse hide">
-                <p>Job submission is restored! Thank you for your patience.
-                   <br><small><i>Updated: Friday, March 14th 2025, 15:53</i></small>
+                <p>{{ SERVICE_NOTICE }}
+                   <br><small><i>{{ SERVICE_NOTICE_UPDATED }}</i></small>
                 </p>
             </div>
         </div>
