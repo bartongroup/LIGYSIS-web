@@ -172,7 +172,7 @@ function loadAllModels(simplePdbs) { // Load all structures
             
             console.log("Surfaces added");
     
-            viewer.zoomTo(); 
+            viewer.zoomTo({model: protAtomsModel}); 
             viewer.render();
             toggleSpinner1();
 
