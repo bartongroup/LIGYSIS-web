@@ -15,7 +15,9 @@ if DATA_FOLDER == EXAMPLES:
 else:
     SPLIT_FOLDER = DATA_FOLDER
 
-ASSEMBLY_FOLDER = os.path.join(DATA_FOLDER, "data", "structures", "assembly") # IN EXAMPLE & CLUSTER
+#ASSEMBLY_FOLDER = os.path.join(DATA_FOLDER, "data", "structures", "assembly") # IN EXAMPLE & CLUSTER
+ASSEMBLY_FOLDER = os.path.join(DATA_FOLDER, "data", "structures", "assembly_split") # TRYING THIS WITH TRANSFORMED ASSEMBLIES FOR EACH PROTEIN
+MATS_FOLDER = os.path.join(DATA_FOLDER, "data", "structures", "assembly_mats") # IN EXAMPLE & CLUSTER
 CIF_SIFTS_DIR = os.path.join(DATA_FOLDER, "data", "cif_sifts") # IN CLUSTER
 CHAIN_MAPPING_DIR = os.path.join(DATA_FOLDER, "data", "chain_remapping") # IN CLUSTER
 

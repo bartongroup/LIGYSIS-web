@@ -279,8 +279,8 @@ async function selectOption(option) {
                 viewer.addStyle(suppLigsSels["clust"], {stick: {hidden: false, colorscheme: myScheme, radius: stickRadius}}); 
                 viewer.addStyle(suppLigsSels["clust_ions"], {sphere: {hidden: false, colorscheme: myScheme, radius: ionSphereRadius}});
 
-                viewer.center({model: protAtomsModel}); // center on suppModels again
-                viewer.zoomTo({model: protAtomsModel});
+                //viewer.center({model: protAtomsModel}); // center on suppModels again
+                //viewer.zoomTo({model: protAtomsModel});
 
                 slab = viewer.getSlab();
                 initialNearSlab = slab['near'];
@@ -314,7 +314,8 @@ function openStructure(pdbId) {
         console.log("Opening structure:", pdbId);
         //let path = '/static/data/' + proteinId + '/' + segmentId + '/assemblies/' + pdbId + '_bio.cif';
         // let pdbUri = `/static/data/${proteinId}/${segmentId}/assemblies/${pdbId}_bio.cif`; //path to assembly cif
-        let pdbUri = `${window.appBaseUrl}/assemblies/${pdbId}_bio.cif`; //path to assembly cif
+        //let pdbUri = `${window.appBaseUrl}/assemblies/${pdbId}_bio.cif`; //path to assembly cif
+        let pdbUri = `${window.appBaseUrl}/assemblies/${proteinId}/${segmentId}/${pdbId}_bio.cif`; //path to assembly cif
         
         let cifName = `${pdbId}_bio.cif`;
         
@@ -410,8 +411,8 @@ function openStructure(pdbId) {
             
                         viewer.setStyle({model: modelID}, {cartoon: {hidden: false, style: cartoonStyle, color: defaultColor, arrows: cartoonArrows, tubes: cartoonTubes, thickness: cartoonThickness, opacity: cartoonOpacity}});
                         // viewer.addStyle({model: modelID, elem:"H"},{stick:{hidden:true},sphere:{hidden:true}}); // Hide hydrogens
-                        viewer.center({model: modelID});
-                        viewer.zoomTo({model: modelID})
+                        //viewer.center({model: modelID});
+                        //viewer.zoomTo({model: modelID})
             
                         viewer.setHoverable({model: modelID}, true,  // Hovering enabled for new assembly
                             showHoverLabel,

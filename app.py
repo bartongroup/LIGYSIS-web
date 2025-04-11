@@ -22,7 +22,7 @@ from flask import Blueprint, Flask, render_template, url_for, request, redirect,
 from flask_cors import CORS
 from werkzeug.utils import secure_filename
 
-from config import ANALYTICS_DOMAIN, ANALYTICS_SCRIPT_URL, BASE_DIR, DATA_FOLDER, SITE_TABLES_FOLDER, RES_TABLES_FOLDER, REP_STRUCS_FOLDER, PROTS_FOLDER, ASSEMBLY_FOLDER, CIF_SIFTS_DIR, CHAIN_MAPPING_DIR, USER_JOBS_OUT_FOLDER, SESSIONS_FOLDER, SLIVKA_URL, STATIC_URL_PATH, URL_PREFIX
+from config import ANALYTICS_DOMAIN, ANALYTICS_SCRIPT_URL, BASE_DIR, DATA_FOLDER, SITE_TABLES_FOLDER, RES_TABLES_FOLDER, REP_STRUCS_FOLDER, PROTS_FOLDER, ASSEMBLY_FOLDER, CIF_SIFTS_DIR, CHAIN_MAPPING_DIR, USER_JOBS_OUT_FOLDER, SESSIONS_FOLDER, SLIVKA_URL, STATIC_URL_PATH, URL_PREFIX, MATS_FOLDER
 from filters import datetime_parse, datetime_format
 from forms import LigysisForm
 from logger_config import setup_logging
@@ -277,6 +277,54 @@ def get_all_bs_ress(results_df, job_id):
     all_bs_ress.UniProt_ResNum = all_bs_ress.UniProt_ResNum.astype(int)
     all_bs_ress["RSA"].values[all_bs_ress["RSA"].values > 100] = 100
     return all_bs_ress
+
+### TRANSFORMATION FUNCTIONS ###
+
+def transform_coordinates(df, rotation, translation):
+    """
+    Transforms the 'coords_end' and 'coords_bgn' columns in a DataFrame using a rotation matrix and translation vector.
+
+    Parameters:
+    - df: pandas DataFrame with columns 'coords_end' and 'coords_bgn', each containing [x, y, z] coordinates.
+    - rotation: 3x3 NumPy array (rotation matrix).
+    - translation: 1D NumPy array of length 3 (translation vector).
+
+    Returns:
+    - A new DataFrame with transformed coordinates.
+    """
+    def apply_transform(coord):
+        try:
+            arr = np.array(coord, dtype=np.float64)
+            return np.dot(rotation, arr) + translation
+        except Exception as e:
+            raise ValueError(f"Invalid coordinate format: {coord} — {e}")
+
+    df_transformed = df.copy()
+    df_transformed["coords_end"] = df_transformed["coords_end"].apply(apply_transform)
+    df_transformed["coords_bgn"] = df_transformed["coords_bgn"].apply(apply_transform)
+    return df_transformed
+
+def parse_custom_matrix(filepath):
+    """
+    Parses a .mat file with custom format:
+    m  t[m]  u[m][0]  u[m][1]  u[m][2]
+    Returns (rotation_matrix, translation_vector)
+    """
+    with open(filepath, 'r') as f:
+        lines = f.readlines()
+
+    # Skip to the actual matrix lines (after header + column names)
+    matrix_lines = [line.strip() for line in lines if line.strip() and line[0].isdigit()]
+    
+    rotation = []
+    translation = []
+
+    for line in matrix_lines:
+        parts = line.split()
+        translation.append(float(parts[1]))
+        rotation.append([float(parts[2]), float(parts[3]), float(parts[4])])
+
+    return np.array(rotation), np.array(translation)
 
 ### SOME FIXED VARIABLES ###
 
@@ -610,7 +658,7 @@ def results(prot_id, seg_id): # route for results site. Takes Prot ID and Seg ID
     # assembly_pdbs = os.listdir(os.path.join(DATA_FOLDER, prot_id, str(seg_id), "assemblies")) # CIF bio assembly file names
     # assembly_pdbs = os.listdir(os.path.join(PROTS_FOLDER, prot_id, str(seg_id), "assemblies")) # CIF bio assembly file names
     # assembly_pdbs = [el for el in assembly_pdbs if el.endswith(".cif")]
-    assembly_pdbs = [os.path.join(ASSEMBLY_FOLDER, f'{el}_bio.cif') for el in arpeggio_proc_pdbs]
+    assembly_pdbs = [os.path.join(ASSEMBLY_FOLDER, prot_id, seg_id, f'{el}_bio.cif') for el in arpeggio_proc_pdbs]
 
     # assembly_pdb_ids = sorted(list(set([el.split("_")[0] for el in assembly_pdbs])),) # sorted unique PDB IDs
     assembly_pdb_ids = sorted(arpeggio_proc_pdbs) # sorted unique PDB IDs
@@ -677,8 +725,11 @@ def data_serve_file(filename):
 
 @main.route('/assemblies/<path:filename>')
 def serve_assembly(filename):
+    #print(ASSEMBLY_FOLDER, filename)
+    full_ASSEMBLY_FOLDER = os.path.join(ASSEMBLY_FOLDER, os.path.dirname(filename))
+    print(full_ASSEMBLY_FOLDER, os.path.basename(filename))
     try:
-        return send_from_directory(ASSEMBLY_FOLDER, filename)
+        return send_from_directory(full_ASSEMBLY_FOLDER, os.path.basename(filename))
     except FileNotFoundError:
         abort(404)
 
@@ -781,7 +832,17 @@ def get_contacts(): # route to get contacts data from Arpeggio table for a given
         (~arpeggio_cons['auth_atom_id_end'].isin(['N', 'O',]))
     ].copy()
 
+    rot, trans = parse_custom_matrix(os.path.join(MATS_FOLDER, prot_id, seg_id, f'{active_model}_bio.mat'))
+
+    #print(rot, trans)
+    print(f'{PROTS_FOLDER}/{prot_id}/{seg_id}/arpeggio/{active_model}_bio_proc.pkl')
+    print(os.path.join(MATS_FOLDER, prot_id, seg_id, f'{active_model}_bio.mat'))
+
+    arpeggio_cons_filt = transform_coordinates(arpeggio_cons_filt, rot, trans)
+
     json_cons = arpeggio_cons_filt[arpeggio_cols].to_json(orient='records')
+
+    #print(arpeggio_cons_filt[arpeggio_cols])
 
     # bs_membership = pd.read_pickle(f'{DATA_FOLDER}/example/other/{prot_id}_{seg_id}_ALL_inf_bss_membership.pkl')
     bs_membership = pd.read_pickle(f'{PROTS_FOLDER}/{prot_id}/{seg_id}/results/{prot_id}_{seg_id}_ALL_inf_bss_membership.pkl')
@@ -978,7 +1039,7 @@ def download_assembly_ChimeraX(): # route to download ChimeraX script to visuali
         return jsonify({'error': 'Missing data'}), 400
 
     # assembly_file = f'{DATA_FOLDER}/{prot_id}/{seg_id}/assemblies/{pdb_id}_bio.cif' # assembly cif file
-    assembly_file = f'{ASSEMBLY_FOLDER}/{pdb_id}_bio.cif' # assembly cif file
+    assembly_file = f'{ASSEMBLY_FOLDER}/{prot_id}/{seg_id}/{pdb_id}_bio.cif' # assembly cif file
 
     # arpeggio_cons = pd.read_pickle(f'{DATA_FOLDER}/{prot_id}/{seg_id}/arpeggio/{pdb_id}_bio_proc.pkl')
     arpeggio_cons = pd.read_pickle(f'{PROTS_FOLDER}/{prot_id}/{seg_id}/arpeggio/{pdb_id}_bio_proc.pkl')
@@ -1103,7 +1164,7 @@ def download_assembly_PyMol(): # route to download PyMol script to visualise ass
         return jsonify({'error': 'Missing data'}), 400
 
     # assembly_file = f'{DATA_FOLDER}/{prot_id}/{seg_id}/assemblies/{pdb_id}_bio.cif' # assembly cif file
-    assembly_file = f'{ASSEMBLY_FOLDER}/{pdb_id}_bio.cif' # assembly cif file
+    assembly_file = f'{ASSEMBLY_FOLDER}/{prot_id}/{seg_id}/{pdb_id}_bio.cif' # assembly cif file
 
     # arpeggio_cons = pd.read_pickle(f'{DATA_FOLDER}/{prot_id}/{seg_id}/arpeggio/{pdb_id}_bio_proc.pkl')
     arpeggio_cons = pd.read_pickle(f'{PROTS_FOLDER}/{prot_id}/{seg_id}/arpeggio/{pdb_id}_bio_proc.pkl')
@@ -1220,7 +1281,7 @@ def download_all_assemblies_ChimeraX(): # route to download ChimeraX scripts to 
             folder_name = f'{pdb_id}'
 
             # assembly_file = f'{DATA_FOLDER}/{prot_id}/{seg_id}/assemblies/{pdb_id}_bio.cif' # assembly cif file
-            assembly_file = f'{ASSEMBLY_FOLDER}/{pdb_id}_bio.cif' # assembly cif file
+            assembly_file = f'{ASSEMBLY_FOLDER}/{prot_id}/{seg_id}/{pdb_id}_bio.cif' # assembly cif file
 
             # arpeggio_cons = pd.read_pickle(f'{DATA_FOLDER}/{prot_id}/{seg_id}/arpeggio/{pdb_id}_bio_proc.pkl')
             arpeggio_cons = pd.read_pickle(f'{PROTS_FOLDER}/{prot_id}/{seg_id}/arpeggio/{pdb_id}_bio_proc.pkl')
