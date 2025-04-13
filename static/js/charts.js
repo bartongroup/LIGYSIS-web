@@ -63,7 +63,7 @@ let chartConfig = {
         labels: chartData[chartX],
         datasets: [
             {
-                label: "Binding sites",
+                label: "",
                 radius: function(context) { // radius will depend on whether the point is clicked or not
                     if (context.dataIndex === clickedPointLabel) {
                         return 16; // Custom radius for clicked point
@@ -168,7 +168,7 @@ let chartConfig = {
                 callbacks: {
                     title: function(context) {
                         let dataIndex = context[0].dataIndex; // Assuming you are only hovering over a single point
-                        return chartData[chartLab][dataIndex]; // Use the 'lab' property from your data
+                        return "Binding Site " + chartData[chartLab][dataIndex]; // Use the 'lab' property from your data
                     },
                 }
             },
