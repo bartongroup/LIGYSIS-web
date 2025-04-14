@@ -214,7 +214,13 @@ async function selectOption(option) {
                 contactsButton.style.color = "#ffa500";
                 contactsButton.style.borderWidth = "1px";
 
-
+                document.getElementById("ligandButton").textContent = "LIGAND ✘"; // NOW, LIGANDS ALWAYS  SHOWN AFTER GOING BACK TO SUPERPOSITION
+                ligandButton.style.borderColor = "##ffa500";
+                ligandButton.style.fontWeight = "normal";
+                ligandButton.style.color = "##ffa500";
+                ligandButton.style.borderWidth = "1px";
+                ligandsVisible = false;
+                
                 saveAssemblyButton.disabled = false;
                 saveAssemblyButton.style.color = 'black';  // Active font color
                 saveAssemblyButton.style.borderColor = 'black';  // Active font color
@@ -227,9 +233,14 @@ async function selectOption(option) {
             }
             else {
 
-                contactsButton.disabled = true;
+                document.getElementById("ligandButton").textContent = "LIGAND ✓"; // NOW, LIGANDS ALWAYS  SHOWN AFTER GOING BACK TO SUPERPOSITION
+                ligandButton.style.borderColor = "#007bff";
+                ligandButton.style.fontWeight = "bold";
+                ligandButton.style.color = "#007bff";
+                ligandButton.style.borderWidth = "2.5px";
+                ligandsVisible = true;
 
-                document.getElementById("ligandButton").textContent = "LIGAND ✘";
+                contactsButton.disabled = true;
                 contactsButton.style.borderColor = "darkgray";
                 contactsButton.style.fontWeight = "normal";
                 contactsButton.style.color = "darkgray";
@@ -265,7 +276,11 @@ async function selectOption(option) {
                     {cartoon: {hidden: false, style: cartoonStyle, color: defaultColor, arrows: cartoonArrows, tubes: cartoonTubes, thickness: cartoonThickness, opacity: cartoonOpacity}}
                 );
 
+                viewer.addStyle(suppLigsSels["clust"], {stick: {hidden: false, colorscheme: myScheme, radius: stickRadius}}); 
+                viewer.addStyle(suppLigsSels["clust_ions"], {sphere: {hidden: false, colorscheme: myScheme, radius: ionSphereRadius}});
+
                 viewer.center({model: protAtomsModel}); // center on suppModels again
+                viewer.zoomTo({model: protAtomsModel});
 
                 slab = viewer.getSlab();
                 initialNearSlab = slab['near'];
