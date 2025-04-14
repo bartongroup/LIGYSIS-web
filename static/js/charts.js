@@ -224,7 +224,7 @@ let newChartConfig = { // configuration for the new chart
         labels: newChartData[newChartX],
         datasets: [
             {
-                label: "Binding residues",
+                label: "",
                 radius: 8,
                 data: newChartData[newChartY],
                 backgroundColor: chartColors[0],
@@ -309,7 +309,7 @@ let newChartConfig = { // configuration for the new chart
                 callbacks: {
                     title: function(context) {
                         let dataIndex = context[0].dataIndex; // Assuming you are only hovering over a single point
-                        return newChartData[newChartLab][dataIndex]; // Use the 'UniProt_ResNum' property from your data
+                        return "Residue " + newChartData[newChartLab][dataIndex]; // Use the 'UniProt_ResNum' property from your data
                     },
                 }
             },

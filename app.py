@@ -527,7 +527,7 @@ def results(prot_id, seg_id): # route for results site. Takes Prot ID and Seg ID
     bss_data = bss_data.fillna("NaN") # pre-processing could also be done before saving the pickle
     bss_data.columns = headings # changing table column names
 
-    bss_prot = bss_data[bss_data.ID.str.contains(seg_name)].copy() # extracting Segment of interest rows from table
+    bss_prot = bss_data[bss_data.ID.str.contains(seg_name+"_")].copy() # extracting Segment of interest rows from table
 
     bss_prot.ID = bss_prot.ID.str.split("_").str[2] # extracting binding site ID from binding site name, which is UniProt ID _ Segment ID _ Binding Site ID
 
