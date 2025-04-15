@@ -53,3 +53,12 @@ EXPIRATION_DAYS = float(os.environ.get('APP_EXPIRATION_DAYS', 7))
 # Analytics configuration
 ANALYTICS_DOMAIN = os.environ.get('ANALYTICS_DOMAIN')
 ANALYTICS_SCRIPT_URL = os.environ.get('ANALYTICS_SCRIPT_URL')
+
+# Config for the job queue
+SUBMISSIONS_ENABLED = os.environ.get('SUBMISSIONS_ENABLED', 'true').lower() == 'true'
+
+# Service status and notice configuration
+SERVICE_STATUS = os.environ.get('SERVICE_STATUS', 'Testing')
+SERVICE_NOTICE = os.environ.get('SERVICE_NOTICE', 'This is a test notice. Control this notice with the SERVICE_NOTICE environment variable.')
+SERVICE_NOTICE_UPDATED = os.environ.get('SERVICE_NOTICE_UPDATED', 'Updated: Tuesday, March 18th 2025, 12:34')
+SERVICE_ALERT_CLASS = os.environ.get('SERVICE_ALERT_CLASS', 'alert-success')
