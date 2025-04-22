@@ -224,7 +224,7 @@ let newChartConfig = { // configuration for the new chart
         labels: newChartData[newChartX],
         datasets: [
             {
-                label: "Binding residues",
+                label: "",
                 radius: 8,
                 data: newChartData[newChartY],
                 backgroundColor: chartColors[0],
