@@ -475,7 +475,7 @@ LIGYSIS_prots_data = load_pickle(f'{DATA_FOLDER}/LIGYSIS_protein_names_dict.pkl'
 
 LIGYSIS_prots_dat_EXT = load_pickle(f'{DATA_FOLDER}/LIGYSIS_protein_names_dict_RF3.pkl')
 
-LIGYSIS_rep_chain_mappings = load_pickle(f'{DATA_FOLDER}/LIGYSIS_rep_chain_mappings.pkl')
+LIGYSIS_rep_chain_mappings = load_pickle(f'{DATA_FOLDER}/LIGYSIS_rep_chain_mappings_05_2025.pkl')
 
 # prot_ids = sorted(list(LIGYSIS_prots_data.keys()))
 prot_ids = sorted(list(set(list(LIGYSIS_prots_dat_EXT.keys()))))
@@ -628,7 +628,7 @@ def results(prot_id, seg_id): # route for results site. Takes Prot ID and Seg ID
     
     # seg_ress_dict["ALL_BINDING"] = sorted(list(set([el2 for el in seg_ress_dict.values() for el2 in el]))) # add key: "ALL_BINDING" and value a sorted set of all binding residues
     
-    protein_atoms_dict = load_pickle(os.path.join(DATA_FOLDER, "segment_prot_struc_dict_DEF.pkl"))
+    protein_atoms_dict = load_pickle(os.path.join(DATA_FOLDER, "segment_prot_struc_dict_DEF_05_2025.pkl"))
 
     prot_atoms_rep = list(protein_atoms_dict[prot_id][seg_id].keys())[0]
 
