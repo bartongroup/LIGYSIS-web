@@ -24,9 +24,9 @@ async function selectOption(option) {
         const button = document.querySelector('.dropup-button');
         button.textContent = option;
 
-        // TODO: DON'T HIDE ANYMORE THE PREVIOUSLY CLICKED SITE, BUT STILL NEED TO SHOW IT FOR THE NEW ASSEMBLY / SUPERPOSITION
+        // TODO: DON'T HIDE ANYMORE THE PREVIOUSLY CLICKED SITE, BUT STILL NEED TO SHOW IT IN STRUCTURE FOR THE NEW ASSEMBLY / SUPERPOSITION
 
-        // let clickedElements = document.getElementsByClassName("clicked-row");
+        let clickedElements = document.getElementsByClassName("clicked-row");
         // if (clickedElements.length > 0) {
         //     let clickedPointLabel = chartData[chartLab][clickedElements[0].id]; // label of the clicked binding site row
         //     resetChartStyles(myChart, clickedPointLabel, "black", 1, 12); // changes chart styles to default for the previously clicked site
@@ -150,6 +150,28 @@ async function selectOption(option) {
             }
 
             await openStructure(option); // act here if model is already open
+
+            if (clickedElements.length > 0) {
+                let clickedPointLabel = chartData[chartLab][clickedElements[0].id]; // label of the clicked binding site row
+                let pointColor = chartColors[clickedPointLabel]; // color of the clicked data point
+                proteinChains.forEach((element) => { // in case of multiple copies of protein of interest
+                    let siteAssemblyPDBResNum = seg_ress_dict[clickedPointLabel]
+                        .filter(el => Up2PdbMapAssembly[chainsMapAssembly[element]].hasOwnProperty(el))
+                        .map(el => Up2PdbMapAssembly[chainsMapAssembly[element]][el]);
+                    siteAssemblyPDBResNums.push([element, siteAssemblyPDBResNum]);
+                
+                    let assemblySel = {model: activeModel, resi: siteAssemblyPDBResNum, chain: element, not: {atom: bboneAtoms}};
+                    AssemblyClickedSiteResidues.push(assemblySel);
+                });
+                viewer.setStyle(
+                    {model: activeModel, or: AssemblyClickedSiteResidues},
+                    {
+                        cartoon: {style: cartoonStyle, color: pointColor, arrows: cartoonArrows, tubes: cartoonTubes, opacity: cartoonOpacity, thickness: cartoonThickness,},
+                        stick:{color: pointColor},
+                    },
+                );
+                viewer.render();
+            }
         }
 
         if (previousSelection !== 'Superposition') {
@@ -207,7 +229,7 @@ async function selectOption(option) {
                 removeHoverLabel,
             );
 
-            if (option !== 'Superposition') {
+            if (option !== 'Superposition') { // CHANGINF FROM ASSEMBLY TO A DIFFERENT ASSEMBLY
 
                 viewer.getModel(activeModel).hide(); // Hide the active assembly
 
@@ -236,9 +258,31 @@ async function selectOption(option) {
                 saveArpeggioDataButton.style.color = 'black';  // Active font color
                 saveArpeggioDataButton.style.borderColor = 'black';  // Active font color
                 saveAssemblyContactsDownloadIcon.setAttribute('src', `${window.appBaseUrl}/static/images/download.svg`);
-            }
-            else {
 
+                //let clickedElements = document.getElementsByClassName("clicked-row");
+                if (clickedElements.length > 0) {
+                    let clickedPointLabel = chartData[chartLab][clickedElements[0].id]; // label of the clicked binding site row
+                    let pointColor = chartColors[clickedPointLabel]; // color of the clicked data point
+                    proteinChains.forEach((element) => { // in case of multiple copies of protein of interest
+                        let siteAssemblyPDBResNum = seg_ress_dict[clickedPointLabel]
+                            .filter(el => Up2PdbMapAssembly[chainsMapAssembly[element]].hasOwnProperty(el))
+                            .map(el => Up2PdbMapAssembly[chainsMapAssembly[element]][el]);
+                        siteAssemblyPDBResNums.push([element, siteAssemblyPDBResNum]);
+                    
+                        let assemblySel = {model: activeModel, resi: siteAssemblyPDBResNum, chain: element, not: {atom: bboneAtoms}};
+                        AssemblyClickedSiteResidues.push(assemblySel);
+                    });
+                    viewer.setStyle(
+                        {model: activeModel, or: AssemblyClickedSiteResidues},
+                        {
+                            cartoon: {style: cartoonStyle, color: pointColor, arrows: cartoonArrows, tubes: cartoonTubes, opacity: cartoonOpacity, thickness: cartoonThickness,},
+                            stick:{color: pointColor},
+                        },
+                    );
+                    viewer.render();
+                } 
+            }
+            else { // CHANGING FROM ASSEMBLY TO SUPERPOSITION
                 document.getElementById("ligandButton").textContent = "LIGAND ✓"; // NOW, LIGANDS ALWAYS  SHOWN AFTER GOING BACK TO SUPERPOSITION
                 ligandButton.style.borderColor = "#007bff";
                 ligandButton.style.fontWeight = "bold";
@@ -291,6 +335,24 @@ async function selectOption(option) {
 
                 //viewer.center({model: protAtomsModel}); // center on suppModels again
                 //viewer.zoomTo({model: protAtomsModel});
+                if (clickedElements.length > 0) {
+                    let clickedPointLabel = chartData[chartLab][clickedElements[0].id]; // label of the clicked binding site row
+                    let pointColor = chartColors[clickedPointLabel]; // color of the clicked data point
+                        siteSuppPDBResNums = seg_ress_dict[clickedPointLabel]
+                        .filter(el => Up2PdbDict[repPdbId][labelAsymId].hasOwnProperty(el)) // this accounts not for missing residues in the structure (unresolved)
+                        .map(el => Up2PdbDict[repPdbId][labelAsymId][el]);
+                    
+                    SuppClickedSiteResidues = {model: protAtomsModel, resi: siteSuppPDBResNums, chain: authAsymId, not: {atom: bboneAtoms}};
+
+                    viewer.setStyle(
+                        SuppClickedSiteResidues,
+                        {
+                            cartoon: {style: cartoonStyle, color: pointColor, arrows: cartoonArrows, tubes: cartoonTubes, opacity: cartoonOpacity, thickness: cartoonThickness,},
+                            stick:{color: pointColor},
+                        },
+                    );
+                    viewer.render();
+                } 
 
                 slab = viewer.getSlab();
                 initialNearSlab = slab['near'];
