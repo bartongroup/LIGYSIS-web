@@ -24,25 +24,29 @@ async function selectOption(option) {
         const button = document.querySelector('.dropup-button');
         button.textContent = option;
 
-        let clickedElements = document.getElementsByClassName("clicked-row");
-        if (clickedElements.length > 0) {
-            let clickedPointLabel = chartData[chartLab][clickedElements[0].id]; // label of the clicked binding site row
-            resetChartStyles(myChart, clickedPointLabel, "black", 1, 12); // changes chart styles to default for the previously clicked site
-            clickedElements[0].classList.remove("clicked-row"); // unclick the clicked row
-            clickedSite = null; // reset clickedSite
-        } 
+        // TODO: DON'T HIDE ANYMORE THE PREVIOUSLY CLICKED SITE, BUT STILL NEED TO SHOW IT FOR THE NEW ASSEMBLY / SUPERPOSITION
+
+        // let clickedElements = document.getElementsByClassName("clicked-row");
+        // if (clickedElements.length > 0) {
+        //     let clickedPointLabel = chartData[chartLab][clickedElements[0].id]; // label of the clicked binding site row
+        //     resetChartStyles(myChart, clickedPointLabel, "black", 1, 12); // changes chart styles to default for the previously clicked site
+        //     clickedElements[0].classList.remove("clicked-row"); // unclick the clicked row
+        //     clickedSite = null; // reset clickedSite
+        // } 
 
         if (watersVisible) { // if waters were visible, hide them
 
             viewer.addStyle({resn: "HOH"}, {sphere: {hidden: true, color: waterColor, radius: sphereRadius}}); // hide all water molecules from superposition
 
-            document.getElementById("waterButton").textContent = "HOH ✘";
-            waterButton.style.borderColor = "#ffa500";
-            waterButton.style.fontWeight = "normal";
-            waterButton.style.color = "#ffa500";
-            waterButton.style.borderWidth = "1px";
+            // TODO: DON'T CHANGE ANYMORE THE WATER BUTTOON TEXT, BUT STILL NEET TO SHOW WATER MOLECULES FOR THE NEW ASSEMBLY / SUPERPOSITION
+            
+            // document.getElementById("waterButton").textContent = "HOH ✘";
+            // waterButton.style.borderColor = "#ffa500";
+            // waterButton.style.fontWeight = "normal";
+            // waterButton.style.color = "#ffa500";
+            // waterButton.style.borderWidth = "1px";
 
-            watersVisible = false;
+            // watersVisible = false;
         }
 
         if (labelsVisible) { // if labels were visible, hide them
@@ -67,13 +71,15 @@ async function selectOption(option) {
                 }
             }
 
-            document.getElementById("labelButton").textContent = "LABEL ✘";
-            labelButton.style.borderColor = "#ffa500";
-            labelButton.style.fontWeight = "normal";
-            labelButton.style.color = "#ffa500";
-            labelButton.style.borderWidth = "1px";
+            // TODO: DON'T CHANGE ANYMORE THE LABEL BUTTON TEXT, BUT STILL NEED TO SHOW LABELS FOR THE NEW ASSEMBLY / SUPERPOSITION
 
-            labelsVisible = false;
+            // document.getElementById("labelButton").textContent = "LABEL ✘";
+            // labelButton.style.borderColor = "#ffa500";
+            // labelButton.style.fontWeight = "normal";
+            // labelButton.style.color = "#ffa500";
+            // labelButton.style.borderWidth = "1px";
+
+            // labelsVisible = false;
         }
 
         if (previousSelection === 'Superposition') { // changing from Ligand Superposition to any assembly
@@ -279,6 +285,10 @@ async function selectOption(option) {
                 viewer.addStyle(suppLigsSels["clust"], {stick: {hidden: false, colorscheme: myScheme, radius: stickRadius}}); 
                 viewer.addStyle(suppLigsSels["clust_ions"], {sphere: {hidden: false, colorscheme: myScheme, radius: ionSphereRadius}});
 
+                if (watersVisible) { // if waters were visible, show them
+                    viewer.addStyle(suppLigsSels["water"], {sphere: {hidden: false, color: waterColor, radius: sphereRadius}});
+                }
+
                 //viewer.center({model: protAtomsModel}); // center on suppModels again
                 //viewer.zoomTo({model: protAtomsModel});
 
@@ -410,6 +420,10 @@ function openStructure(pdbId) {
                         }
             
                         viewer.setStyle({model: modelID}, {cartoon: {hidden: false, style: cartoonStyle, color: defaultColor, arrows: cartoonArrows, tubes: cartoonTubes, thickness: cartoonThickness, opacity: cartoonOpacity}});
+                        
+                        if (watersVisible) { // if waters were visible, show them
+                            viewer.addStyle({model: activeModel, resn: "HOH"}, {sphere: {hidden: false, color: waterColor, radius: sphereRadius}});
+                        }
                         // viewer.addStyle({model: modelID, elem:"H"},{stick:{hidden:true},sphere:{hidden:true}}); // Hide hydrogens
                         //viewer.center({model: modelID});
                         //viewer.zoomTo({model: modelID})
