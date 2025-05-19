@@ -24,29 +24,10 @@ async function selectOption(option) {
         const button = document.querySelector('.dropup-button');
         button.textContent = option;
 
-        // TODO: DON'T HIDE ANYMORE THE PREVIOUSLY CLICKED SITE, BUT STILL NEED TO SHOW IT IN STRUCTURE FOR THE NEW ASSEMBLY / SUPERPOSITION
-
         let clickedElements = document.getElementsByClassName("clicked-row");
-        // if (clickedElements.length > 0) {
-        //     let clickedPointLabel = chartData[chartLab][clickedElements[0].id]; // label of the clicked binding site row
-        //     resetChartStyles(myChart, clickedPointLabel, "black", 1, 12); // changes chart styles to default for the previously clicked site
-        //     clickedElements[0].classList.remove("clicked-row"); // unclick the clicked row
-        //     clickedSite = null; // reset clickedSite
-        // } 
 
         if (watersVisible) { // if waters were visible, hide them
-
             viewer.addStyle({resn: "HOH"}, {sphere: {hidden: true, color: waterColor, radius: sphereRadius}}); // hide all water molecules from superposition
-
-            // TODO: DON'T CHANGE ANYMORE THE WATER BUTTOON TEXT, BUT STILL NEET TO SHOW WATER MOLECULES FOR THE NEW ASSEMBLY / SUPERPOSITION
-            
-            // document.getElementById("waterButton").textContent = "HOH ✘";
-            // waterButton.style.borderColor = "#ffa500";
-            // waterButton.style.fontWeight = "normal";
-            // waterButton.style.color = "#ffa500";
-            // waterButton.style.borderWidth = "1px";
-
-            // watersVisible = false;
         }
 
         if (labelsVisible) { // if labels were visible, hide them
@@ -171,6 +152,50 @@ async function selectOption(option) {
                     },
                 );
                 viewer.render();
+
+                if (labelsVisible) {
+                    for (var i = 0; i < clickedElements.length; i++) {  
+                        var clickedElementId = clickedElements[i].id;
+                        let siteColor = chartColors[Number(clickedElementId.split("_").pop())];
+        
+                        if (labelsHash[activeModel]["clickedSite"].hasOwnProperty(clickedElementId)) {
+                            console.log(`Site ${clickedElementId} already clicked and labels exist`);
+                            for (const label of labelsHash[activeModel]["clickedSite"][clickedElementId]) {
+                                label.show();
+                            }
+                        }
+                        else {
+                            // console.log(`Site ${clickedElementId} not clicked yet. Creating labels...`);
+                            labelsHash[activeModel]["clickedSite"][clickedElementId] = [];
+                            siteAssemblyPDBResNums = [];
+                            proteinChains.forEach((element) => { // in case of multiple copies of protein of interest
+                                let siteAssemblyPDBResNum = seg_ress_dict[clickedElementId]
+                                    .filter(el => Up2PdbMapAssembly[chainsMapAssembly[element]].hasOwnProperty(el))
+                                    .map(el => Up2PdbMapAssembly[chainsMapAssembly[element]][el]);
+                                siteAssemblyPDBResNums.push([element, siteAssemblyPDBResNum]);
+                            });
+                            for ([element, siteAssemblyPDBResNum] of siteAssemblyPDBResNums) {
+                                for (siteAssemblyPDBResNumber of siteAssemblyPDBResNum) { // variable name not ideal as siteAssemblyPDBResNum is an array
+                                    let resSel = {model: activeModel, resi: siteAssemblyPDBResNumber, chain: element}
+                                    let resName = viewer.selectedAtoms(resSel)[0].resn
+                                    let label = viewer.addLabel(
+                                        resName + String(Pdb2UpMapAssembly[chainsMapAssembly[element]][siteAssemblyPDBResNumber]),
+                                        {
+                                            alignment: 'center', backgroundColor: 'white', backgroundOpacity: 1,
+                                            borderColor: 'black', borderOpacity: 1, borderThickness: 2,
+                                            font: 'Arial', fontColor: siteColor, fontOpacity: 1, fontSize: 12,
+                                            inFront: true, screenOffset: [0, 0, 0], showBackground: true
+                                        },
+                                        resSel,
+                                        true,
+                                    );
+                                    labelsHash[activeModel]["clickedSite"][clickedElementId].push(label);
+                                }
+                            }
+                        }
+                    viewer.render();
+                    }
+                }
             }
         }
 
@@ -280,6 +305,49 @@ async function selectOption(option) {
                         },
                     );
                     viewer.render();
+                    if (labelsVisible) {
+                        for (var i = 0; i < clickedElements.length; i++) {  
+                            var clickedElementId = clickedElements[i].id;
+                            let siteColor = chartColors[Number(clickedElementId.split("_").pop())];
+            
+                            if (labelsHash[activeModel]["clickedSite"].hasOwnProperty(clickedElementId)) {
+                                console.log(`Site ${clickedElementId} already clicked and labels exist`);
+                                for (const label of labelsHash[activeModel]["clickedSite"][clickedElementId]) {
+                                    label.show();
+                                }
+                            }
+                            else {
+                                // console.log(`Site ${clickedElementId} not clicked yet. Creating labels...`);
+                                labelsHash[activeModel]["clickedSite"][clickedElementId] = [];
+                                siteAssemblyPDBResNums = [];
+                                proteinChains.forEach((element) => { // in case of multiple copies of protein of interest
+                                    let siteAssemblyPDBResNum = seg_ress_dict[clickedElementId]
+                                        .filter(el => Up2PdbMapAssembly[chainsMapAssembly[element]].hasOwnProperty(el))
+                                        .map(el => Up2PdbMapAssembly[chainsMapAssembly[element]][el]);
+                                    siteAssemblyPDBResNums.push([element, siteAssemblyPDBResNum]);
+                                });
+                                for ([element, siteAssemblyPDBResNum] of siteAssemblyPDBResNums) {
+                                    for (siteAssemblyPDBResNumber of siteAssemblyPDBResNum) { // variable name not ideal as siteAssemblyPDBResNum is an array
+                                        let resSel = {model: activeModel, resi: siteAssemblyPDBResNumber, chain: element}
+                                        let resName = viewer.selectedAtoms(resSel)[0].resn
+                                        let label = viewer.addLabel(
+                                            resName + String(Pdb2UpMapAssembly[chainsMapAssembly[element]][siteAssemblyPDBResNumber]),
+                                            {
+                                                alignment: 'center', backgroundColor: 'white', backgroundOpacity: 1,
+                                                borderColor: 'black', borderOpacity: 1, borderThickness: 2,
+                                                font: 'Arial', fontColor: siteColor, fontOpacity: 1, fontSize: 12,
+                                                inFront: true, screenOffset: [0, 0, 0], showBackground: true
+                                            },
+                                            resSel,
+                                            true,
+                                        );
+                                        labelsHash[activeModel]["clickedSite"][clickedElementId].push(label);
+                                    }
+                                }
+                            }
+                        viewer.render();
+                        }
+                    }
                 } 
             }
             else { // CHANGING FROM ASSEMBLY TO SUPERPOSITION
@@ -352,6 +420,46 @@ async function selectOption(option) {
                         },
                     );
                     viewer.render();
+
+                    if (labelsVisible) {
+                        for (var i = 0; i < clickedElements.length; i++) {
+                            var clickedElementId = clickedElements[i].id;
+                            let siteColor = chartColors[Number(clickedElementId.split("_").pop())];
+            
+                            if (labelsHash[activeModel]["clickedSite"].hasOwnProperty(clickedElementId)) {
+                                console.log(`Site ${clickedElementId} already clicked and labels exist`);
+                                for (const label of labelsHash[activeModel]["clickedSite"][clickedElementId]) {
+                                    label.show();
+                                }
+                            }
+                            else {
+                                // console.log(`Site ${clickedElementId} not clicked yet. Creating labels...`);
+                                labelsHash[activeModel]["clickedSite"][clickedElementId] = [];
+                                let siteSuppPDBResNums = seg_ress_dict[clickedElementId]
+                                    .filter(el => Up2PdbDict[repPdbId][labelAsymId].hasOwnProperty(el)) // this accounts not for missing residues in the structure (unresolved)
+                                    .map(el => Up2PdbDict[repPdbId][labelAsymId][el]);
+        
+                                console.log(`Site ${clickedElementId} residues: ${siteSuppPDBResNums}`);
+                                for (siteSuppPDBResNum of siteSuppPDBResNums) {
+                                    let resSel = {model: protAtomsModel, chain: authAsymId, resi: siteSuppPDBResNum}
+                                    let resName = viewer.selectedAtoms(resSel)[0].resn
+                                    let label = viewer.addLabel(
+                                        resName + String(Pdb2UpDict[repPdbId][labelAsymId][siteSuppPDBResNum]),
+                                        {
+                                            alignment: 'center', backgroundColor: 'white', backgroundOpacity: 1,
+                                            borderColor: 'black', borderOpacity: 1, borderThickness: 2,
+                                            font: 'Arial', fontColor: siteColor, fontOpacity: 1, fontSize: 12,
+                                            inFront: true, screenOffset: [0, 0, 0], showBackground: true
+                                        },
+                                        resSel,
+                                        true,
+                                    );
+                                    labelsHash[activeModel]["clickedSite"][clickedElementId].push(label);
+                                }
+                            }
+                            viewer.render();
+                        }
+                    }
                 } 
 
                 slab = viewer.getSlab();
