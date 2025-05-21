@@ -800,7 +800,6 @@ document.getElementById('chartCanvas').addEventListener('click', function(e) { /
                                 }
                             }
                         }
-                        
                     }
                 }
             }

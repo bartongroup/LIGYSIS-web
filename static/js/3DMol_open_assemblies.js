@@ -51,16 +51,6 @@ async function selectOption(option) {
                     }
                 }
             }
-
-            // TODO: DON'T CHANGE ANYMORE THE LABEL BUTTON TEXT, BUT STILL NEED TO SHOW LABELS FOR THE NEW ASSEMBLY / SUPERPOSITION
-
-            // document.getElementById("labelButton").textContent = "LABEL ✘";
-            // labelButton.style.borderColor = "#ffa500";
-            // labelButton.style.fontWeight = "normal";
-            // labelButton.style.color = "#ffa500";
-            // labelButton.style.borderWidth = "1px";
-
-            // labelsVisible = false;
         }
 
         if (previousSelection === 'Superposition') { // changing from Ligand Superposition to any assembly
@@ -76,14 +66,16 @@ async function selectOption(option) {
                         viewer.setSurfaceMaterialStyle(surfsDict["superposition"][key].surfid, {color: siteColor, opacity: surfHiddenOpacity});
                     }
                 }
+                
+                // NOT CHANGING SURF BUTTON TEXT HERE, BUT STILL NEED TO SHOW RELEVANT SURFACES
 
-                document.getElementById("surfButton").textContent = "SURF ✘";
-                surfButton.style.borderColor = "#ffa500";
-                surfButton.style.fontWeight = "normal";
-                surfButton.style.color = "#ffa500";
-                surfButton.style.borderWidth = "1px";
+                // document.getElementById("surfButton").textContent = "SURF ✘";
+                // surfButton.style.borderColor = "#ffa500";
+                // surfButton.style.fontWeight = "normal";
+                // surfButton.style.color = "#ffa500";
+                // surfButton.style.borderWidth = "1px";
 
-                surfaceVisible = false;
+                // surfaceVisible = false;
             }
 
             if (ligandsVisible) { // if ligands were visible, hide them
@@ -151,7 +143,6 @@ async function selectOption(option) {
                         stick:{color: pointColor},
                     },
                 );
-                viewer.render();
 
                 if (labelsVisible) {
                     for (var i = 0; i < clickedElements.length; i++) {  
@@ -193,10 +184,48 @@ async function selectOption(option) {
                                 }
                             }
                         }
-                    viewer.render();
+                    // viewer.render();
+                    }
+                }
+
+                if (surfaceVisible) {
+                    // let clickedPointLabel = chartData[chartLab][clickedElements[0].id]; // label of the clicked binding site row
+                    // let pointColor = chartColors[clickedPointLabel]; // color of the clicked data point
+                    for (const [key, value] of Object.entries(surfsDict[activeModel])) {
+                        if (key == "lig_inters") {
+                            // pass
+                        }
+                        else {
+                            for (const [key2, value2] of Object.entries(value)) {
+                                if (key == clickedPointLabel) {
+                                    viewer.setSurfaceMaterialStyle(value2.surfid, {color: pointColor, opacity: surfHighOpacity});
+                                }
+                                else {
+                                    viewer.setSurfaceMaterialStyle(value2.surfid, {color: defaultColor, opacity: surfHiddenOpacity});
+                                }
+                            }
+                        }
                     }
                 }
             }
+            else {
+                if (surfaceVisible) {
+                    for (const [key, value] of Object.entries(surfsDict[activeModel])) {
+                        if (key !== "lig_inters") {
+                            for (const [key2, value2] of Object.entries(value)) {
+                                if (key == "non_binding") {
+                                    viewer.setSurfaceMaterialStyle(surfsDict[activeModel][key][key2].surfid, {color: defaultColor, opacity: surfLowOpacity});
+                                }
+                                else {
+                                    let siteColor = chartColors[Number(key.split("_").pop())];
+                                    viewer.setSurfaceMaterialStyle(surfsDict[activeModel][key][key2].surfid, {color: siteColor, opacity: surfMediumOpacity});
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+            viewer.render();
         }
 
         if (previousSelection !== 'Superposition') {
@@ -224,13 +253,13 @@ async function selectOption(option) {
                     }
                 }
 
-                document.getElementById("surfButton").textContent = "SURF ✘";
-                surfButton.style.borderColor = "#ffa500";
-                surfButton.style.fontWeight = "normal";
-                surfButton.style.color = "#ffa500";
-                surfButton.style.borderWidth = "1px";
+                // document.getElementById("surfButton").textContent = "SURF ✘";
+                // surfButton.style.borderColor = "#ffa500";
+                // surfButton.style.fontWeight = "normal";
+                // surfButton.style.color = "#ffa500";
+                // surfButton.style.borderWidth = "1px";
 
-                surfaceVisible = false;
+                // surfaceVisible = false;
                 // console.log("Assembly surfaces removed!");
             }
 
@@ -304,7 +333,6 @@ async function selectOption(option) {
                             stick:{color: pointColor},
                         },
                     );
-                    viewer.render();
                     if (labelsVisible) {
                         for (var i = 0; i < clickedElements.length; i++) {  
                             var clickedElementId = clickedElements[i].id;
@@ -345,10 +373,45 @@ async function selectOption(option) {
                                     }
                                 }
                             }
-                        viewer.render();
                         }
                     }
+                    if (surfaceVisible) {
+                        for (const [key, value] of Object.entries(surfsDict[activeModel])) {
+                            if (key == "lig_inters") {
+                                // pass
+                            }
+                            else {
+                                for (const [key2, value2] of Object.entries(value)) {
+                                    if (key == clickedPointLabel) {
+                                        viewer.setSurfaceMaterialStyle(value2.surfid, {color: pointColor, opacity: surfHighOpacity});
+                                    }
+                                    else {
+                                        viewer.setSurfaceMaterialStyle(value2.surfid, {color: defaultColor, opacity: surfHiddenOpacity});
+                                    }
+                                }
+                            }
+                        }
+                    }
+                    viewer.render();
                 } 
+                else {
+                    if (surfaceVisible) {
+                        for (const [key, value] of Object.entries(surfsDict[activeModel])) {
+                            if (key !== "lig_inters") {
+                                for (const [key2, value2] of Object.entries(value)) {
+                                    if (key == "non_binding") {
+                                        viewer.setSurfaceMaterialStyle(surfsDict[activeModel][key][key2].surfid, {color: defaultColor, opacity: surfLowOpacity});
+                                    }
+                                    else {
+                                        let siteColor = chartColors[Number(key.split("_").pop())];
+                                        viewer.setSurfaceMaterialStyle(surfsDict[activeModel][key][key2].surfid, {color: siteColor, opacity: surfMediumOpacity});
+                                    }
+                                }
+                            }
+                        }
+                    }
+                    viewer.render();
+                }
             }
             else { // CHANGING FROM ASSEMBLY TO SUPERPOSITION
                 document.getElementById("ligandButton").textContent = "LIGAND ✓"; // NOW, LIGANDS ALWAYS  SHOWN AFTER GOING BACK TO SUPERPOSITION
@@ -419,8 +482,6 @@ async function selectOption(option) {
                             stick:{color: pointColor},
                         },
                     );
-                    viewer.render();
-
                     if (labelsVisible) {
                         for (var i = 0; i < clickedElements.length; i++) {
                             var clickedElementId = clickedElements[i].id;
@@ -457,10 +518,27 @@ async function selectOption(option) {
                                     labelsHash[activeModel]["clickedSite"][clickedElementId].push(label);
                                 }
                             }
-                            viewer.render();
                         }
                     }
-                } 
+                    if (surfaceVisible) {
+                        let surfid = surfsDict["superposition"][clickedPointLabel].surfid;
+                        viewer.setSurfaceMaterialStyle(surfid, {color: pointColor, opacity: surfHighOpacity}); // show ONLY surface of clicked row
+                    }
+                    viewer.render();
+                }
+                else {
+                    if (surfaceVisible) {
+                        for (const [key, value] of Object.entries(surfsDict["superposition"])) {
+                            if (key == "non_binding") {
+                                viewer.setSurfaceMaterialStyle(surfsDict["superposition"][key].surfid, {color: defaultColor, opacity: surfLowOpacity});
+                            }
+                            else {
+                                let siteColor = chartColors[Number(key.split("_").pop())];
+                                viewer.setSurfaceMaterialStyle(surfsDict["superposition"][key].surfid, {color: siteColor, opacity: surfMediumOpacity});
+                            }
+                        }
+                    }
+                }
 
                 slab = viewer.getSlab();
                 initialNearSlab = slab['near'];
