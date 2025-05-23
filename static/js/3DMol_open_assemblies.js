@@ -66,16 +66,6 @@ async function selectOption(option) {
                         viewer.setSurfaceMaterialStyle(surfsDict["superposition"][key].surfid, {color: siteColor, opacity: surfHiddenOpacity});
                     }
                 }
-                
-                // NOT CHANGING SURF BUTTON TEXT HERE, BUT STILL NEED TO SHOW RELEVANT SURFACES
-
-                // document.getElementById("surfButton").textContent = "SURF ✘";
-                // surfButton.style.borderColor = "#ffa500";
-                // surfButton.style.fontWeight = "normal";
-                // surfButton.style.color = "#ffa500";
-                // surfButton.style.borderWidth = "1px";
-
-                // surfaceVisible = false;
             }
 
             if (ligandsVisible) { // if ligands were visible, hide them
@@ -85,13 +75,15 @@ async function selectOption(option) {
                 viewer.addStyle(suppLigsSels["clust_ions"], {sphere: {hidden: true, colorscheme: myScheme, radius: ionSphereRadius}});
                 viewer.addStyle(suppLigsSels["not_clust_ions"], {sphere: {hidden: true, colorscheme: myScheme, radius: ionSphereRadius}});
 
-                document.getElementById("ligandButton").textContent = "LIGAND ✘";
-                ligandButton.style.borderColor = "#ffa500";
-                ligandButton.style.fontWeight = "normal";
-                ligandButton.style.color = "#ffa500";
-                ligandButton.style.borderWidth = "1px";
+                // Not changing the ligand button text here, but still need to show them!
+                
+                // document.getElementById("ligandButton").textContent = "LIGAND ✘";
+                // ligandButton.style.borderColor = "#ffa500";
+                // ligandButton.style.fontWeight = "normal";
+                // ligandButton.style.color = "#ffa500";
+                // ligandButton.style.borderWidth = "1px";
 
-                ligandsVisible = false;
+                // ligandsVisible = false;
             }
 
             viewer.setHoverable({model: suppModels}, false, // Hovering disabled for ligand superposition models (otherwise get wrong labels)
@@ -111,13 +103,11 @@ async function selectOption(option) {
             saveAssemblyButton.style.borderColor = 'black';  // Active font color
             saveAssemblyDownloadIcon.setAttribute('src', `${window.appBaseUrl}/static/images/download.svg`);
 
-
             saveArpeggioDataButton.disabled = false;
             saveArpeggioDataButton.style.color = 'black';  // Active font color
             saveArpeggioDataButton.style.borderColor = 'black';  // Active font color
             saveAssemblyContactsDownloadIcon.setAttribute('src', `${window.appBaseUrl}/static/images/download.svg`);
 
-            
             for (const model of suppModels) { // hide ligand superposition models using suppModels array
                 viewer.getModel(model).hide();
             }
@@ -225,6 +215,16 @@ async function selectOption(option) {
                     }
                 }
             }
+            if (ligandsVisible) { // if ligands were visible, show them
+                viewer.addStyle(
+                    {...hetAtomsNotHoh, model: activeModel},
+                    {stick: {hidden: false, radius: stickRadius}}
+                );
+                viewer.addStyle(
+                    {...ionAtoms, model: activeModel},
+                    {sphere: {hidden: false, radius: ionSphereRadius}}
+                );
+            }
             viewer.render();
         }
 
@@ -252,15 +252,6 @@ async function selectOption(option) {
                         viewer.setSurfaceMaterialStyle(value2.surfid, {opacity: surfHiddenOpacity});
                     }
                 }
-
-                // document.getElementById("surfButton").textContent = "SURF ✘";
-                // surfButton.style.borderColor = "#ffa500";
-                // surfButton.style.fontWeight = "normal";
-                // surfButton.style.color = "#ffa500";
-                // surfButton.style.borderWidth = "1px";
-
-                // surfaceVisible = false;
-                // console.log("Assembly surfaces removed!");
             }
 
             if (ligandsVisible) { // if ligands were visible, hide them
@@ -269,13 +260,13 @@ async function selectOption(option) {
                     {stick: {hidden: true, colorscheme: myScheme, radius: stickRadius}}
                 );
 
-                document.getElementById("ligandButton").textContent = "LIGAND ✘";
-                ligandButton.style.borderColor = "#ffa500";
-                ligandButton.style.fontWeight = "normal";
-                ligandButton.style.color = "#ffa500";
-                ligandButton.style.borderWidth = "1px";
+                // document.getElementById("ligandButton").textContent = "LIGAND ✘";
+                // ligandButton.style.borderColor = "#ffa500";
+                // ligandButton.style.fontWeight = "normal";
+                // ligandButton.style.color = "#ffa500";
+                // ligandButton.style.borderWidth = "1px";
 
-                ligandsVisible = false;
+                // ligandsVisible = false;
             }
 
             viewer.setHoverable({model: activeModel}, false, // Hovering disabled for previous assembly
@@ -296,12 +287,12 @@ async function selectOption(option) {
                 contactsButton.style.color = "#ffa500";
                 contactsButton.style.borderWidth = "1px";
 
-                document.getElementById("ligandButton").textContent = "LIGAND ✘"; // NOW, LIGANDS ALWAYS  SHOWN AFTER GOING BACK TO SUPERPOSITION
-                ligandButton.style.borderColor = "##ffa500";
-                ligandButton.style.fontWeight = "normal";
-                ligandButton.style.color = "##ffa500";
-                ligandButton.style.borderWidth = "1px";
-                ligandsVisible = false;
+                // document.getElementById("ligandButton").textContent = "LIGAND ✘"; // NOW, LIGANDS ALWAYS  SHOWN AFTER GOING BACK TO SUPERPOSITION
+                // ligandButton.style.borderColor = "##ffa500";
+                // ligandButton.style.fontWeight = "normal";
+                // ligandButton.style.color = "##ffa500";
+                // ligandButton.style.borderWidth = "1px";
+                // ligandsVisible = false;
 
                 saveAssemblyButton.disabled = false;
                 saveAssemblyButton.style.color = 'black';  // Active font color
@@ -410,8 +401,18 @@ async function selectOption(option) {
                             }
                         }
                     }
-                    viewer.render();
                 }
+                if (ligandsVisible) { // if ligands were visible, show them
+                    viewer.addStyle(
+                        {...hetAtomsNotHoh, model: activeModel},
+                        {stick: {hidden: false, radius: stickRadius}}
+                    );
+                    viewer.addStyle(
+                        {...ionAtoms, model: activeModel},
+                        {sphere: {hidden: false, radius: ionSphereRadius}}
+                    );
+                }
+                viewer.render();
             }
             else { // CHANGING FROM ASSEMBLY TO SUPERPOSITION
                 document.getElementById("ligandButton").textContent = "LIGAND ✓"; // NOW, LIGANDS ALWAYS  SHOWN AFTER GOING BACK TO SUPERPOSITION
