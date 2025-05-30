@@ -94,8 +94,8 @@ function loadAllModels(simplePdbs) { // Load all structures
         viewer.setStyle(ionAtomsSuppModelsSel, {sphere: {hidden: true, radius: sphereRadius}}); // sphere representation for ions, hidden by default
         viewer.setStyle(protAtomsSuppModelsSel, {cartoon: {hidden: true, style: cartoonStyle, arrows: cartoonArrows, tubes: cartoonTubes, thickness: cartoonThickness, opacity: cartoonOpacity}}); // hide protein atoms in the superposition models
         viewer.setStyle(hohAtomsSuppModelsSel, {sphere: {hidden: true, color: waterColor, radius: sphereRadius}}); // sphere representation for water atoms, hidden by default
-        viewer.zoomTo(); 
-        viewer.render();
+        // viewer.zoomTo(); 
+        // viewer.render();
         // Send modelOrder to Flask
         fetch(`${window.appBaseUrl}/user-process-model-order`, {
             method: 'POST',
@@ -205,7 +205,7 @@ function loadAllModels(simplePdbs) { // Load all structures
             
             console.log("Surfaces added");
     
-            viewer.zoomTo(); 
+            viewer.zoomTo({model: protAtomsModel}); 
             viewer.render();
             toggleSpinner1();
 

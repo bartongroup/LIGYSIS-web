@@ -380,19 +380,38 @@ function toggleLigandsVisibility() {
             contactsButton.style.color = "#ffa500";
             contactsButton.style.borderWidth = "1px";
 
-
             // loop through contactCylinders and delete using removeShape, then empty list
             for (const cylinder of contactCylinders[activeModel]) {
                 cylinder.updateStyle({hidden: true})
             }
 
-            viewer.addStyle(
-                {...protAtomsModel, model: activeModel},
-                {
-                    cartoon: {color: defaultColor},
-                    stick: {hidden: true}
-                }
-            ); // remove ligand-interacting sticks and colour cartoon white
+            // viewer.addStyle( // this also removed clicked site residues
+            //     {...protAtomsModel, model: activeModel},
+            //     {
+            //         cartoon: {color: defaultColor},
+            //         stick: {hidden: true}
+            //     }
+            // ); // remove ligand-interacting sticks and colour cartoon white
+
+            let clickedElements = document.getElementsByClassName("clicked-row");
+            if (clickedElements.length > 0) {
+                viewer.addStyle(
+                    {...protAtoms, model: activeModel, not: {or: siteAssemblyPDBResNums}},
+                    {
+                        cartoon: {color: defaultColor},
+                        stick: {hidden: true}
+                    }
+                ); // remove ligand-interacting sticks and colour cartoon white (except for clicked site)
+            }
+            else {
+                viewer.addStyle(
+                    {...protAtoms, model: activeModel},
+                    {
+                        cartoon: {color: defaultColor},
+                        stick: {hidden: true}
+                    }
+                ); // remove ligand-interacting sticks and colour cartoon white
+            }
 
             if (labelsVisible) {
                 for (label of labelsHash[activeModel]["contactSites"]) {
