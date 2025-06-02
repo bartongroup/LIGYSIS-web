@@ -100,7 +100,7 @@ If you use the **LIGYSIS** web application, please cite:
 
 **Utgés JS**, Barton GJ. Comparative evaluation of methods for the prediction of protein-ligand binding sites. <i>J. Cheminform.</i> 2024 Nov 11;16(1):126. doi: [10.1186/s13321-024-00923-z](https://jcheminf.biomedcentral.com/articles/10.1186/s13321-024-00923-z). PMID: 39529176; PMCID: PMC11552181.
 
-**,Utgés JS**,, MacGowan SA, Barton GJ. LIGYSIS-web: a resource for the analysis of protein-ligand binding sites. <i>Nucleic Acids Res.</i> 2025 May 16:gkaf411. doi: [10.1093/nar/gkaf411](https://doi.org/10.1093/nar/gkaf411). Epub ahead of print. PMID: 40377089.
+**Utgés JS**, MacGowan SA, Barton GJ. LIGYSIS-web: a resource for the analysis of protein-ligand binding sites. <i>Nucleic Acids Res.</i> 2025 May 16:gkaf411. doi: [10.1093/nar/gkaf411](https://doi.org/10.1093/nar/gkaf411). Epub ahead of print. PMID: 40377089.
 
 ## References
 
