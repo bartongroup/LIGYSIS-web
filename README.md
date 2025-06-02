@@ -3,7 +3,7 @@
 # ![LIGYSIS_prot_alph](./static/images/LIGYSIS_web_prot_alph.png)
 Details on how to generate these protein alphabet figures [here](https://davidhoksza.github.io/BioAlphabet/).
 
-This is the repository for our ligand binding site analysis, **LIGYSIS**, [web server](https://www.compbio.dundee.ac.uk/ligysis/). LIGYSIS is a Python [Flask](https://flask.palletsprojects.com/en/stable/) Web application.
+This is the repository for our ligand binding site analysis, **LIGYSIS**, [web server](https://www.compbio.dundee.ac.uk/ligysis/) published in [Nucleic Acids Research](https://doi.org/10.1093/nar/gkaf411). LIGYSIS is a Python [Flask](https://flask.palletsprojects.com/en/stable/) Web application.
 
 [![DOI](https://zenodo.org/badge/684660405.svg)](https://doi.org/10.5281/zenodo.14178404)
 
@@ -96,11 +96,11 @@ This panel is very similar to the Binding Sites Panel in structure. It is also f
 
 If you use the **LIGYSIS** web application, please cite:
 
-**Utgés JS**, MacGowan SA, Ives CM, Barton GJ. Classification of likely functional class for ligand binding sites identified from fragment screening. Commun Biol. 2024 Mar 13;7(1):320. doi: [10.1038/s42003-024-05970-8](https://www.nature.com/articles/s42003-024-05970-8). PMID: 38480979; PMCID: PMC10937669.
+**Utgés JS**, MacGowan SA, Ives CM, Barton GJ. Classification of likely functional class for ligand binding sites identified from fragment screening. <i>Commun. Biol.<i> 2024 Mar 13;7(1):320. doi: [10.1038/s42003-024-05970-8](https://www.nature.com/articles/s42003-024-05970-8). PMID: 38480979; PMCID: PMC10937669.
 
-**Utgés JS**, Barton GJ. Comparative evaluation of methods for the prediction of protein-ligand binding sites. J Cheminform. 2024 Nov 11;16(1):126. doi: [10.1186/s13321-024-00923-z](https://jcheminf.biomedcentral.com/articles/10.1186/s13321-024-00923-z). PMID: 39529176; PMCID: PMC11552181.
+**Utgés JS**, Barton GJ. Comparative evaluation of methods for the prediction of protein-ligand binding sites. <i>J. Cheminform. <i> 2024 Nov 11;16(1):126. doi: [10.1186/s13321-024-00923-z](https://jcheminf.biomedcentral.com/articles/10.1186/s13321-024-00923-z). PMID: 39529176; PMCID: PMC11552181.
 
-**Utgés JS**, MacGowan SA, Barton GJ. LIGYSIS-web: a resource for the analysis of protein-ligand binding sites. 2025. <i>Work in progress...</i>.
+**,Utgés JS**,, MacGowan SA, Barton GJ. LIGYSIS-web: a resource for the analysis of protein-ligand binding sites. <i>Nucleic Acids Res.<i> 2025 May 16:gkaf411. doi: [10.1093/nar/gkaf411](https://doi.org/10.1093/nar/gkaf411). Epub ahead of print. PMID: 40377089.
 
 ## References
 
