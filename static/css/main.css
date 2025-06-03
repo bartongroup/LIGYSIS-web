@@ -92,6 +92,16 @@ strong {
     font-weight: bold;
 }
 
+/* click state */
+.clicked-residue-row {
+  /* colour when *not* hovered */
+  --bs-table-bg:        #bfd4cb;
+  /* colour when hovered */
+  --bs-table-hover-bg:  #bfd4cb;
+  font-weight: bold;
+}
+
+
 .scroll-y{
     overflow-y: scroll;
 }

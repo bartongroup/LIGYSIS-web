@@ -168,7 +168,7 @@ async function selectOption(option) {
 
                 viewer.setStyle( // colouring the clicked site (necessary as sometimes there is overlap between sites)
                     {model: activeModel, or: AssemblyClickedSiteResidues, not: {atom: bboneAtoms}},
-                    {cartoon:{style: cartoonStyle, color: clickedSiteColor, arrows: cartoonArrows, tubes: cartoonTubes, opacity: cartoonOpacity, thickness: cartoonThickness,},
+                    {cartoon:{style: cartoonStyle, color: clickedSiteColor, arrows: cartoonArrows, tubes: cartoonTubes, opacity: cartoonOpacity, thickness: cartoonThickness, gapcutoff: gapCutOff},
                     stick:{color: clickedSiteColor,}, }
                 );
                 
@@ -383,7 +383,7 @@ async function selectOption(option) {
 
                     viewer.setStyle( // colouring the clicked site (necessary as sometimes there is overlap between sites)
                         {model: activeModel, or: AssemblyClickedSiteResidues, not: {atom: bboneAtoms}},
-                        {cartoon:{style: cartoonStyle, color: clickedSiteColor, arrows: cartoonArrows, tubes: cartoonTubes, opacity: cartoonOpacity, thickness: cartoonThickness,},
+                        {cartoon:{style: cartoonStyle, color: clickedSiteColor, arrows: cartoonArrows, tubes: cartoonTubes, opacity: cartoonOpacity, thickness: cartoonThickness, gapcutoff: gapCutOff},
                         stick:{color: clickedSiteColor,}, }
                     );
                     
@@ -522,7 +522,7 @@ async function selectOption(option) {
 
                 viewer.setStyle(
                     {model: protAtomsModel},
-                    {cartoon: {hidden: false, style: cartoonStyle, color: defaultColor, arrows: cartoonArrows, tubes: cartoonTubes, thickness: cartoonThickness, opacity: cartoonOpacity}}
+                    {cartoon: {hidden: false, style: cartoonStyle, color: defaultColor, arrows: cartoonArrows, tubes: cartoonTubes, thickness: cartoonThickness, opacity: cartoonOpacity, gapcutoff: gapCutOff}}
                 );
 
                 //viewer.center({model: protAtomsModel}); // center on suppModels again
@@ -745,7 +745,7 @@ function openStructure(pdbId) {
                             contactCylinders[activeModel] = []; // Initialize contactCylinders for the new assembly (previous ones are untouched and keep their cylinders)
                         }
             
-                        viewer.setStyle({model: modelID}, {cartoon: {hidden: false, style: cartoonStyle, color: defaultColor, arrows: cartoonArrows, tubes: cartoonTubes, thickness: cartoonThickness, opacity: cartoonOpacity}});
+                        viewer.setStyle({model: modelID}, {cartoon: {hidden: false, style: cartoonStyle, color: defaultColor, arrows: cartoonArrows, tubes: cartoonTubes, thickness: cartoonThickness, opacity: cartoonOpacity, gapcutoff: gapCutOff}});
                         
                         if (watersVisible) { // if waters were visible, show them
                             viewer.addStyle({model: activeModel, resn: "HOH"}, {sphere: {hidden: false, color: waterColor, radius: sphereRadius}});

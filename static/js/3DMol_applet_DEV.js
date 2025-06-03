@@ -4,7 +4,7 @@ function showHoverLabel(atom, viewer) { // show label of hovered atom
     if(!atom.label) {
         atom.label = viewer.addLabel(
             modelOrderRev[atom.model] + " " + atom.chain + " " + atom.resn + " " + atom.resi + " " + atom.atom,
-            {position: atom, backgroundColor: 'mintcream', fontColor:'black', borderColor: 'black', borderThickness: 2}
+            {position: atom, backgroundColor: 'mintcream', fontColor:'black', borderColor: outlineColor, borderThickness: 2}
         );
     }
 }
@@ -66,7 +66,7 @@ function loadAllModels(simplePdbs) { // Load all structures
         hohAtomsSuppModelsSel = {...hohAtoms, model: suppModels} // this is generating a new selection object including water atoms of all models
         ionAtomsSuppModelsSel = {...ionAtoms, model: suppModels} // this is generating a new selection object including ion atoms of all models
 
-        viewer.setStyle(protAtomsProtModelSel, {cartoon: {hidden: false, style: cartoonStyle, color: defaultColor, arrows: cartoonArrows, tubes: cartoonTubes, thickness: cartoonThickness, opacity: cartoonOpacity}}); // cartoon representation for protein
+        viewer.setStyle(protAtomsProtModelSel, {cartoon: {hidden: false, style: cartoonStyle, color: defaultColor, arrows: cartoonArrows, tubes: cartoonTubes, thickness: cartoonThickness, opacity: cartoonOpacity, gapcutoff: gapCutOff}}); // cartoon representation for protein
         viewer.setStyle(hetAtomsNotHohSuppModelSel, {stick: {hidden: true, radius: 0}}); // stick representation for ligands (HETATM), hidden by default
         viewer.setStyle(ionAtomsSuppModelsSel, {sphere: {hidden: true, radius: sphereRadius}}); // sphere representation for ions, hidden by default
         viewer.setStyle(protAtomsSuppModelsSel, {cartoon: {hidden: true, style: cartoonStyle, arrows: cartoonArrows, tubes: cartoonTubes, thickness: cartoonThickness, opacity: cartoonOpacity}}); // hide protein atoms in the superposition models
@@ -181,7 +181,7 @@ function loadAllModels(simplePdbs) { // Load all structures
             console.error('Error:', error);
         });
 
-        labelsHash['superposition'] = {"clickedSite": {}, "hoveredRes": [], };
+        labelsHash['superposition'] = {"clickedSite": {}, "hoveredRes": [], "clickedResidues": {0: {}, }}; // Initialize labels hash for superposition
 
         slab = viewer.getSlab();
         initialNearSlab = slab['near'];

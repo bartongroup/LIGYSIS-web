@@ -184,6 +184,13 @@ function toggleLabelsVisibility() {
                     }
                 }
             }
+            else if (key === 'clickedResidues') {
+                for (const [key2, value2] of Object.entries(value)) { // displayed site is key
+                    for (const [key3, label] of Object.entries(value2)) { // clicked residue is key
+                        label.hide(); // hide the label
+                    }
+                }
+            }
             else if (key === 'contactSites') {
                 for (const label of value) {
                     label.hide();
@@ -265,6 +272,42 @@ function toggleLabelsVisibility() {
                                 labelsHash[activeModel]["clickedSite"][clickedElementId].push(label);
                             }
                         }
+                    }
+                }
+                viewer.render();
+            }
+        }
+        if (clickedBindingRess) { // any individual binding site residue is clicked
+            var DisplayedSiteId = CurrentDisplayedSite;
+            let siteColor = chartColors[Number(DisplayedSiteId)];
+            for (var i = 0; i < clickedBindingRess.length; i++) {
+                var clickedResidue = clickedBindingRess[i];
+                if (labelsHash[activeModel]["clickedResidues"][CurrentDisplayedSite].hasOwnProperty(clickedResidue)) {
+                    console.log(`Residue ${clickedResidue} from Site ${CurrentDisplayedSite} already clicked and labels exist`);
+                    var label = labelsHash[activeModel]["clickedResidues"][CurrentDisplayedSite][clickedResidue];
+                    label.show();
+                }
+                else{
+                    if (activeModel == "superposition") {
+                        var clickedResiduePDBResnum = Up2PdbDict[repPdbId][labelAsymId][clickedResidue];
+                        if (clickedResiduePDBResnum !== undefined) { // check if residue is not missing in the structure
+                            let resSel = {model: protAtomsModel, chain: authAsymId, resi: clickedResiduePDBResnum};
+                            let resName = viewer.selectedAtoms(resSel)[0].resn;
+                            let label = viewer.addLabel(
+                                resName + String(Pdb2UpDict[repPdbId][labelAsymId][clickedResiduePDBResnum]),
+                                {
+                                    alignment: 'center', backgroundColor: 'white', backgroundOpacity: 1,
+                                    borderColor: 'black', borderOpacity: 1, borderThickness: 2,
+                                    font: 'Arial', fontColor: siteColor, fontOpacity: 1, fontSize: 12,
+                                    inFront: true, screenOffset: [0, 0, 0], showBackground: true
+                                },
+                                resSel,
+                                true,
+                            );
+                            labelsHash[activeModel]["clickedResidues"][CurrentDisplayedSite][clickedResidue] = label;
+                        }
+                    }
+                    else {
                     }
                 }
                 viewer.render();

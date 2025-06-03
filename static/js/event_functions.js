@@ -55,6 +55,12 @@ function clearHighlightedRow() {   // clears the highlighted table row
     }
 }
 
+function clearHighlightedResidueRow(row) {   // clears the passed highlighted residue table row
+    if (row) {
+        row.classList.remove("highlighted-row");
+    }
+}  
+
 function whenNotHovering() {    // clears highlighted table row when not hovering over an atom
 
     clearHighlightedRow(); // clears highlighted table row
@@ -71,8 +77,18 @@ function highlightTableRow(pointLabel) { // highlights the table row of the bind
     }
 }
 
+function highlightResidueTableRow(row) { // highlights the table row of the binding site
+    if (row) {
+        row.classList.add("highlighted-row");
+    }
+}
+
 function clickTableRow(row) { // highlights the table row of the binding site
     row.classList.add("clicked-row"); 
+}
+
+function clickResiduesTableRow(row) { // highlights the table row of the binding site
+    row.classList.add("clicked-residue-row"); 
 }
 
 function clickTableTowById(pointLabel) { // highlights the table row of the binding site
@@ -93,6 +109,12 @@ function clearClickedRows() {   // clears the highlighted table row
     var clickedRow = document.querySelector(".clicked-row");
     if (clickedRow) {
         clickedRow.classList.remove("clicked-row");
+    }
+}
+
+function clearClickedResidueRow(row) {   // clears the passed clicked residue table row
+    if (row) {
+        row.classList.remove("clicked-residue-row");
     }
 }
 

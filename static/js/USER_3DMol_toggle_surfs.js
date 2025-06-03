@@ -232,7 +232,7 @@ function toggleLabelsVisibility() {
                                 resName + String(Pdb2UpDict[resChain][resNum]),
                                 {
                                     alignment: 'center', backgroundColor: 'white', backgroundOpacity: 1,
-                                    borderColor: 'black', borderOpacity: 1, borderThickness: 2,
+                                    borderColor: outlineColor, borderOpacity: 1, borderThickness: 2,
                                     font: 'Arial', fontColor: siteColor, fontOpacity: 1, fontSize: 12,
                                     inFront: true, screenOffset: [0, 0, 0], showBackground: true
                                 },
@@ -265,7 +265,7 @@ function toggleLabelsVisibility() {
                                 resName + String(Pdb2UpMapAssembly[resChain][resNum]),
                                 {
                                     alignment: 'center', backgroundColor: 'white', backgroundOpacity: 1,
-                                    borderColor: 'black', borderOpacity: 1, borderThickness: 2,
+                                    borderColor: outlineColor, borderOpacity: 1, borderThickness: 2,
                                     font: 'Arial', fontColor: siteColor, fontOpacity: 1, fontSize: 12,
                                     inFront: true, screenOffset: [0, 0, 0], showBackground: true
                                 },
@@ -287,7 +287,7 @@ function toggleLabelsVisibility() {
                         bindingRes.resn + String(Pdb2UpMapAssembly[bindingRes.chain][bindingRes.resi]),
                         {
                             alignment: 'center', backgroundColor: 'white', backgroundOpacity: 1,
-                            borderColor: 'black', borderOpacity: 1, borderThickness: 2,
+                            borderColor: outlineColor, borderOpacity: 1, borderThickness: 2,
                             font: 'Arial', fontColor: value[2], fontOpacity: 1, fontSize: 12,
                             inFront: true, screenOffset: [0, 0, 0], showBackground: true
                         },
@@ -673,10 +673,10 @@ async function toggleContactsVisibility() {
                                             y: this.stylespec.userData.contactBgnCoords[1],
                                             z: this.stylespec.userData.contactBgnCoords[2]
                                         },
-                                        alignment: "center", borderColor: "black",
+                                        alignment: "center", borderColor: outlineColor,
                                         borderThickness: 2, fontSize: 12, 
                                         backgroundColor: 'white',
-                                        fontColor: "black",
+                                        fontColor: outlineColor,
                                     }
                                 );
 
@@ -703,10 +703,10 @@ async function toggleContactsVisibility() {
                                             y: this.stylespec.userData.contactEndCoords[1],
                                             z: this.stylespec.userData.contactEndCoords[2]
                                         },
-                                        alignment: "center", borderColor: "black",
+                                        alignment: "center", borderColor: outlineColor,
                                         borderThickness: 2, fontSize: 12, 
                                         backgroundColor: 'white',
-                                        fontColor: "black",
+                                        fontColor: outlineColor,
                                     }
                                 );
 
@@ -748,7 +748,7 @@ async function toggleContactsVisibility() {
                                     protResn + String(Pdb2UpMapAssembly[protChain][protResi]),
                                     {
                                         alignment: 'center', backgroundColor: 'white', backgroundOpacity: 1,
-                                        borderColor: 'black', borderOpacity: 1, borderThickness: 2,
+                                        borderColor: outlineColor, borderOpacity: 1, borderThickness: 2,
                                         font: 'Arial', fontColor: ligColor, fontOpacity: 1, fontSize: 12,
                                         inFront: true, screenOffset: [0, 0, 0], showBackground: true
                                     },
