@@ -225,12 +225,29 @@ let newChartConfig = { // configuration for the new chart
         datasets: [
             {
                 label: "",
-                radius: 8,
+                radius: function(context) { // radius will depend on whether the point is clicked or not
+                    if (clickedBindingRess.includes(newChartData["UPResNum"][context.dataIndex])) {
+                        return 16; // Custom radius for clicked point
+                    }
+                    return 8; // Default
+                },
                 data: newChartData[newChartY],
                 backgroundColor: chartColors[0],
                 pointHoverBackgroundColor: chartColors[0],
-                borderColor: "black",
-                borderWidth: 2,
+                borderColor: function(context) { // border color will depend on whether the point is clicked or not
+                    // console.log(newChartData["UPResNum"][context.dataIndex], clickedBindingRess);
+                    if (clickedBindingRess.includes(newChartData["UPResNum"][context.dataIndex])) {
+                        return "#bfd4cb"; // border color for clicked point
+                    }
+                    return "black"; // Default 
+                },
+                borderWidth: function(context) {
+                    // console.log(context.dataIndex, clickedPointLabel);
+                    if (clickedBindingRess.includes(newChartData["UPResNum"][context.dataIndex])) {
+                        return 10; // border width for clicked point
+                    }
+                    return 2; // Default
+                },
                 hoverRadius: 16,
                 hoverBorderWidth: 10,
                 hoverBorderColor: "#ffff99",

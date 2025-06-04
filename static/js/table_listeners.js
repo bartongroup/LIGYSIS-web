@@ -671,8 +671,8 @@ $('table#bs_ress_table tbody').on('mouseover', 'tr', function () { // event list
         if (surfaceVisible) {
             if (activeModel == "superposition") {
                 // show the surface for the hovered residue
-                if (surfsDict["superposition"]["single_residues"].hasOwnProperty(rowId)) {
-                    viewer.setSurfaceMaterialStyle(surfsDict["superposition"]["single_residues"][rowId].surfid, {color: rowColorHex, opacity: surfHighOpacity});
+                if (surfsDict["superposition"]["single_residues"][CurrentDisplayedSite].hasOwnProperty(rowId)) {
+                    viewer.setSurfaceMaterialStyle(surfsDict["superposition"]["single_residues"][CurrentDisplayedSite][rowId].surfid, {color: rowColorHex, opacity: surfHighOpacity});
                 }
                 else { // create a new surface for the hovered residue
                     let surfSel = {model: protAtomsModel, resi: SuppPDBResNum, chain: authAsymId};
@@ -680,7 +680,7 @@ $('table#bs_ress_table tbody').on('mouseover', 'tr', function () { // event list
                         .filter(el => Up2PdbDict[repPdbId][labelAsymId].hasOwnProperty(el))
                         .map(el => Up2PdbDict[repPdbId][labelAsymId][el]);
                     let SiteSel = {model: protAtomsModel, chain: authAsymId, resi: SitePDBResNums};
-                    surfsDict["superposition"]["single_residues"][rowId] = viewer.addSurface(
+                    surfsDict["superposition"]["single_residues"][CurrentDisplayedSite][rowId] = viewer.addSurface(
                         $3Dmol.SurfaceType.ISO,
                         {
                             color: rowColorHex,
@@ -770,8 +770,8 @@ $('table#bs_ress_table tbody').on('mouseover', 'tr', function () { // event list
         }
         else {
             if (activeModel == "superposition") {
-                if (surfsDict["superposition"]["single_residues"].hasOwnProperty(rowId)) {
-                    viewer.setSurfaceMaterialStyle(surfsDict["superposition"]["single_residues"][rowId].surfid, {opacity: surfHiddenOpacity});
+                if (surfsDict["superposition"]["single_residues"][CurrentDisplayedSite].hasOwnProperty(rowId)) {
+                    viewer.setSurfaceMaterialStyle(surfsDict["superposition"]["single_residues"][CurrentDisplayedSite][rowId].surfid, {opacity: surfHiddenOpacity});
                 }
             }
             // else {
@@ -801,18 +801,18 @@ $('table#bs_ress_table tbody').on('mouseover', 'tr', function () { // event list
         if (labelsVisible) {
             labelsHash[activeModel]["clickedResidues"][CurrentDisplayedSite][rowId].hide(); // hides the label for the clicked residue
         }
-        if (surfaceVisible) {
-            if (activeModel == "superposition") {
-                if (surfsDict["superposition"]["single_residues"].hasOwnProperty(rowId)) {
-                    viewer.setSurfaceMaterialStyle(surfsDict["superposition"]["single_residues"][rowId].surfid, {opacity: surfHiddenOpacity});
-                }
-            }
-            // else {
-            //     if (surfsDict[activeModel]["single_residues"].hasOwnProperty(rowId)) {
-            //         viewer.setSurfaceMaterialStyle(surfsDict[activeModel]["single_residues"][rowId].surfid, {color: defaultColor, opacity: surfHiddenOpacity});
-            //     }
-            // }
-        }
+        // if (surfaceVisible) {
+        //     if (activeModel == "superposition") {
+        //         if (surfsDict["superposition"]["single_residues"][CurrentDisplayedSite].hasOwnProperty(rowId)) {
+        //             viewer.setSurfaceMaterialStyle(surfsDict["superposition"]["single_residues"][CurrentDisplayedSite][rowId].surfid, {opacity: surfHiddenOpacity});
+        //         }
+        //     }
+        //     else {
+        //         if (surfsDict[activeModel]["single_residues"].hasOwnProperty(rowId)) {
+        //             viewer.setSurfaceMaterialStyle(surfsDict[activeModel]["single_residues"][rowId].surfid, {color: defaultColor, opacity: surfHiddenOpacity});
+        //         }
+        //     }
+        // }
         viewer.render();
     }
     else {
@@ -870,8 +870,8 @@ $('table#bs_ress_table tbody').on('mouseover', 'tr', function () { // event list
                             viewer.setSurfaceMaterialStyle(surfsDict["superposition"][key].surfid, {color: siteColor, opacity: surfHiddenOpacity});
                         }
                     }
-                    if (surfsDict["superposition"]["single_residues"].hasOwnProperty(rowId)) {
-                        viewer.setSurfaceMaterialStyle(surfsDict["superposition"]["single_residues"][rowId].surfid, {color: rowColorHex, opacity: surfHighOpacity});
+                    if (surfsDict["superposition"]["single_residues"][CurrentDisplayedSite].hasOwnProperty(rowId)) {
+                        viewer.setSurfaceMaterialStyle(surfsDict["superposition"]["single_residues"][CurrentDisplayedSite][rowId].surfid, {color: rowColorHex, opacity: surfHighOpacity});
                     }
                     else {
                         // create a new surface for the clicked residue
@@ -880,7 +880,7 @@ $('table#bs_ress_table tbody').on('mouseover', 'tr', function () { // event list
                             .filter(el => Up2PdbDict[repPdbId][labelAsymId].hasOwnProperty(el))
                             .map(el => Up2PdbDict[repPdbId][labelAsymId][el]);
                         let SiteSel = {model: protAtomsModel, chain: authAsymId, resi: SitePDBResNums};
-                        surfsDict["superposition"]["single_residues"][rowId] = viewer.addSurface(
+                        surfsDict["superposition"]["single_residues"][CurrentDisplayedSite][rowId] = viewer.addSurface(
                             $3Dmol.SurfaceType.ISO,
                             {
                                 color: rowColorHex,
