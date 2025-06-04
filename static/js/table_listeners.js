@@ -323,6 +323,12 @@ $('table#bss_table tbody').on('mouseover', 'tr', function () { // event listener
         else {
             labelsHash[activeModel]["clickedResidues"][rowId] = {}; // create an empty array for clicked residues if it doesn't exist
         }
+        if (surfsDict["superposition"]["single_residues"].hasOwnProperty(rowId)) {
+            //
+        }
+        else {
+            surfsDict["superposition"]["single_residues"][rowId] = {}; // create an empty object for clicked residues if it doesn't exist
+        }
         $.ajax({ // AJAX request to get the table data from the server
             type: 'POST', // POST request
             url: `${window.appBaseUrl}/get-table`, // URL to send the request to
@@ -662,6 +668,30 @@ $('table#bs_ress_table tbody').on('mouseover', 'tr', function () { // event list
                 });
             }
         }
+        if (surfaceVisible) {
+            if (activeModel == "superposition") {
+                // show the surface for the hovered residue
+                if (surfsDict["superposition"]["single_residues"].hasOwnProperty(rowId)) {
+                    viewer.setSurfaceMaterialStyle(surfsDict["superposition"]["single_residues"][rowId].surfid, {color: rowColorHex, opacity: surfHighOpacity});
+                }
+                else { // create a new surface for the hovered residue
+                    let surfSel = {model: protAtomsModel, resi: SuppPDBResNum, chain: authAsymId};
+                    let SitePDBResNums = seg_ress_dict[CurrentDisplayedSite]
+                        .filter(el => Up2PdbDict[repPdbId][labelAsymId].hasOwnProperty(el))
+                        .map(el => Up2PdbDict[repPdbId][labelAsymId][el]);
+                    let SiteSel = {model: protAtomsModel, chain: authAsymId, resi: SitePDBResNums};
+                    surfsDict["superposition"]["single_residues"][rowId] = viewer.addSurface(
+                        $3Dmol.SurfaceType.ISO,
+                        {
+                            color: rowColorHex,
+                            opacity: surfHighOpacity,
+                        },
+                        surfSel,
+                        SiteSel,
+                    );
+                }
+            }
+        }
         viewer.render();
     }
 
@@ -734,6 +764,28 @@ $('table#bs_ress_table tbody').on('mouseover', 'tr', function () { // event list
         }
         labelsHash[activeModel]["hoveredRes"] = [];
     }
+    if (surfaceVisible) {
+        if (clickedBindingRess.includes(rowId)) {
+            //
+        }
+        else {
+            if (activeModel == "superposition") {
+                if (surfsDict["superposition"]["single_residues"].hasOwnProperty(rowId)) {
+                    viewer.setSurfaceMaterialStyle(surfsDict["superposition"]["single_residues"][rowId].surfid, {opacity: surfHiddenOpacity});
+                }
+            }
+            // else {
+            //     for (const [key, value] of Object.entries(surfsDict[activeModel])) {
+            //         for (const [key2, value2] of Object.entries(value)) {
+            //             if (key == rowId) {
+            //                 viewer.setSurfaceMaterialStyle(value2.surfid, {color: defaultColor, opacity: surfHiddenOpacity});
+            //             }
+            //         }
+            //     }
+            // }
+        }
+        viewer.render();
+    }
 }).on('click', 'tr', function () { // implementing new click event listener for binding site residues table rows
     let rowId = Number(this.id);  // gets the row ID of the table row that is hovered over (this corresponds to the UniProt residue number of this row)
     let index = newChartData[newChartLab].indexOf(rowId); // gets the index of the row id in the chart data
@@ -749,6 +801,19 @@ $('table#bs_ress_table tbody').on('mouseover', 'tr', function () { // event list
         if (labelsVisible) {
             labelsHash[activeModel]["clickedResidues"][CurrentDisplayedSite][rowId].hide(); // hides the label for the clicked residue
         }
+        if (surfaceVisible) {
+            if (activeModel == "superposition") {
+                if (surfsDict["superposition"]["single_residues"].hasOwnProperty(rowId)) {
+                    viewer.setSurfaceMaterialStyle(surfsDict["superposition"]["single_residues"][rowId].surfid, {opacity: surfHiddenOpacity});
+                }
+            }
+            // else {
+            //     if (surfsDict[activeModel]["single_residues"].hasOwnProperty(rowId)) {
+            //         viewer.setSurfaceMaterialStyle(surfsDict[activeModel]["single_residues"][rowId].surfid, {color: defaultColor, opacity: surfHiddenOpacity});
+            //     }
+            // }
+        }
+        viewer.render();
     }
     else {
         clickedBindingRess.push(rowId); // adds the row id to the clicked binding residues array
@@ -791,6 +856,41 @@ $('table#bs_ress_table tbody').on('mouseover', 'tr', function () { // event list
                         labelsHash[activeModel]["clickedResidues"][CurrentDisplayedSite][rowId] = label; // store the label in the hash
                     }
                 }
+                if (surfaceVisible) { // create new surface just for the clicked residue
+                    // need to hide all other surfaces first
+                    for (const [key, value] of Object.entries(surfsDict["superposition"])) {
+                        if (key == "non_binding") {
+                            viewer.setSurfaceMaterialStyle(surfsDict["superposition"][key].surfid, {color: defaultColor, opacity: surfHiddenOpacity});
+                        }
+                        else if (key == "single_residues") {
+                            // do nothing for these surfaces
+                        }
+                        else {
+                            let siteColor = chartColors[Number(key.split("_").pop())];
+                            viewer.setSurfaceMaterialStyle(surfsDict["superposition"][key].surfid, {color: siteColor, opacity: surfHiddenOpacity});
+                        }
+                    }
+                    if (surfsDict["superposition"]["single_residues"].hasOwnProperty(rowId)) {
+                        viewer.setSurfaceMaterialStyle(surfsDict["superposition"]["single_residues"][rowId].surfid, {color: rowColorHex, opacity: surfHighOpacity});
+                    }
+                    else {
+                        // create a new surface for the clicked residue
+                        let surfSel = {model: protAtomsModel, resi: SuppPDBResNum, chain: authAsymId};
+                        let SitePDBResNums = seg_ress_dict[CurrentDisplayedSite]
+                            .filter(el => Up2PdbDict[repPdbId][labelAsymId].hasOwnProperty(el))
+                            .map(el => Up2PdbDict[repPdbId][labelAsymId][el]);
+                        let SiteSel = {model: protAtomsModel, chain: authAsymId, resi: SitePDBResNums};
+                        surfsDict["superposition"]["single_residues"][rowId] = viewer.addSurface(
+                            $3Dmol.SurfaceType.ISO,
+                            {
+                                color: rowColorHex,
+                                opacity: surfHighOpacity,
+                            },
+                            surfSel,
+                            SiteSel,
+                        );
+                    }
+                }
             }
             else {
                 console.log("Residue not found in structure!");
@@ -827,6 +927,7 @@ $('table#bs_ress_table tbody').on('mouseover', 'tr', function () { // event list
                 }
             });
         }
+        viewer.render();
     }
 });
 

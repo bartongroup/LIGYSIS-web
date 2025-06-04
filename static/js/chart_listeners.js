@@ -403,6 +403,12 @@ document.getElementById('chartCanvas').addEventListener('click', function(e) { /
         else {
             labelsHash[activeModel]["clickedResidues"][pointLabel] = {}; // create an empty array for clicked residues if it doesn't exist
         }
+        if (surfsDict["superposition"]["single_residues"].hasOwnProperty(pointLabel)) {
+            //
+        }
+        else {
+            surfsDict["superposition"]["single_residues"][pointLabel] = {}; // create an empty object for clicked residues if it doesn't exist
+        }
         $.ajax({ // AJAX request to get the table data from the server
             type: 'POST', // POST request
             url: `${window.appBaseUrl}/get-table`, // URL to send the request to
