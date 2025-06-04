@@ -723,7 +723,6 @@ $('table#bs_ress_table tbody').on('mouseover', 'tr', function () { // event list
                     {...protAtoms, model: activeModel},
                     {cartoon: {style: cartoonStyle, color: defaultColor, arrows: cartoonArrows, tubes: cartoonTubes, opacity: cartoonOpacity, thickness: cartoonThickness,}}
                 );
-                
             }
         }
         viewer.render();
@@ -747,8 +746,9 @@ $('table#bs_ress_table tbody').on('mouseover', 'tr', function () { // event list
             resetChartStyles(newChart, index, "#ffff99", 10, 16); // changes chart styles to highlight the binding site
         }
         clearClickedResidueRow(this); // clears the clicked residue row styles
-        //highlightResidueTableRow(this); // highlights the residue in the table row
-        //highlightTableRow(rowId); // highlights the table row of the binding site
+        if (labelsVisible) {
+            labelsHash[activeModel]["clickedResidues"][CurrentDisplayedSite][rowId].hide(); // hides the label for the clicked residue
+        }
     }
     else {
         clickedBindingRess.push(rowId); // adds the row id to the clicked binding residues array
@@ -768,6 +768,29 @@ $('table#bs_ress_table tbody').on('mouseover', 'tr', function () { // event list
                         stick:{color: rowColorHex},
                     }
                 );
+                if (labelsVisible) {
+                    if (labelsHash[activeModel]["clickedResidues"][CurrentDisplayedSite].hasOwnProperty(rowId)) {
+                        console.log(`Residue ${rowId} already clicked and label exists`);
+                        labelsHash[activeModel]["clickedResidues"][CurrentDisplayedSite][rowId].show();
+                    }
+                    else {
+                        //console.log(`Residue ${rowId} not clicked yet. Creating label...`);
+                        let resSel = {model: protAtomsModel, resi: SuppPDBResNum, chain: authAsymId}
+                        let resName = viewer.selectedAtoms(resSel)[0].resn
+                        let label = viewer.addLabel(
+                            resName + String(Pdb2UpDict[repPdbId][labelAsymId][SuppPDBResNum]),
+                            {
+                                alignment: 'center', backgroundColor: 'white', backgroundOpacity: 1,
+                                borderColor: outlineColor, borderOpacity: 1, borderThickness: 2,
+                                font: 'Arial', fontColor: rowColorHex, fontOpacity: 1, fontSize: 12,
+                                inFront: true, screenOffset: [0, 0, 0], showBackground: true
+                            },
+                            resSel,
+                            false,
+                        );
+                        labelsHash[activeModel]["clickedResidues"][CurrentDisplayedSite][rowId] = label; // store the label in the hash
+                    }
+                }
             }
             else {
                 console.log("Residue not found in structure!");
