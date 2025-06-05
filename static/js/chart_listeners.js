@@ -119,21 +119,48 @@ document.getElementById('chartCanvas').addEventListener('mousemove', function(e)
                     );   
                 }
                 else {
-                    viewer.setStyle(
-                        protAtoms,
-                        {cartoon:{style: cartoonStyle, color: defaultColor, arrows: cartoonArrows, tubes: cartoonTubes, opacity: cartoonOpacity, thickness: cartoonThickness,},}
-                    );
+                    if (clickedBindingRess.length == 0) {
+                        viewer.setStyle(
+                            protAtoms,
+                            {cartoon:{style: cartoonStyle, color: defaultColor, arrows: cartoonArrows, tubes: cartoonTubes, opacity: cartoonOpacity, thickness: cartoonThickness,},}
+                        );
+                    }
+                    else {
+                        let clickedBindingRessSel = clickedBindingRess.map(res => Up2PdbDict[repPdbId][labelAsymId][res]);
+                        viewer.setStyle(
+                            {...protAtoms, model: protAtomsModel, not: {resi: clickedBindingRessSel}},
+                            {cartoon:{style: cartoonStyle, color: defaultColor, arrows: cartoonArrows, tubes: cartoonTubes, opacity: cartoonOpacity, thickness: cartoonThickness,},}
+                        );
+                    }
+                    
                 }
                 if (surfaceVisible) { // if surface is visible
                     if (activeModel == "superposition") {
+                        if (clickedBindingRess.length > 0) { // if binding residues are clicked, hide all their surfaces
+                            let commonRess = clickedBindingRess.filter(res => seg_ress_dict[pointLabel].includes(res)); // find common residues between clicked binding residues and hovered binding site
+                            if (commonRess.length > 0) { // if there are common residues, show their surfaces
+                                for (const commonRes of commonRess) {
+                                    if (surfsDict["superposition"]["single_residues"][CurrentDisplayedSite].hasOwnProperty(commonRes)) {
+                                        var surfObject = surfsDict["superposition"]["single_residues"][CurrentDisplayedSite][commonRes];
+                                        var currentSiteColor = chartColors[Number(CurrentDisplayedSite)];
+                                        viewer.setSurfaceMaterialStyle(surfObject.surfid, {color: currentSiteColor, opacity: surfHiddenOpacity});
+                                    }
+                                }
+                            }
+                        }
                         for (const [key, value] of Object.entries(surfsDict["superposition"])) {
                             if (key == pointLabel) {
                                 viewer.setSurfaceMaterialStyle(value.surfid, {color: siteColor, opacity: surfHighOpacity}); // change the surface color of the hovered binding site row
                             }
-                            else if (key == previousPointLabel) {
-                                viewer.setSurfaceMaterialStyle(value.surfid, {color: previousSiteColor, opacity: surfMediumOpacity}); // change the surface color of the previously hovered binding site row
-                            }
                         }
+                        // for (const [key, value] of Object.entries(surfsDict["superposition"])) {
+                        //     if (key == pointLabel) {
+                        //         viewer.setSurfaceMaterialStyle(value.surfid, {color: siteColor, opacity: surfHighOpacity}); // change the surface color of the hovered binding site row
+                        //     }
+                        //     // else if (key == previousPointLabel) {
+                        //     //     viewer.setSurfaceMaterialStyle(value.surfid, {color: previousSiteColor, opacity: surfMediumOpacity}); // change the surface color of the previously hovered binding site row
+                        //     // }
+                        // }
                     }
                     else {
                         for (const [key, value] of Object.entries(surfsDict[activeModel])) {
@@ -228,11 +255,22 @@ document.getElementById('chartCanvas').addEventListener('mousemove', function(e)
                     },
                     {cartoon: {style: cartoonStyle, color: defaultColor, arrows: cartoonArrows, tubes: cartoonTubes, opacity: cartoonOpacity, thickness: cartoonThickness,}}
                 );
+                
                 viewer.setStyle( // colouring the clicked site (necessary as sometimes there is overlap between sites)
                     SuppClickedSiteResidues,
                     {cartoon:{style: cartoonStyle, color: clickedSiteColor, arrows: cartoonArrows, tubes: cartoonTubes, opacity: cartoonOpacity, thickness: cartoonThickness,},
                     stick:{color: clickedSiteColor,}, }
                 );
+                // colour again clicked residues
+                if (!clickedBindingRess.length == 0) {
+                    let clickedBindingRessSel = clickedBindingRess.map(res => Up2PdbDict[repPdbId][labelAsymId][res]);
+                    let displayedSiteColour = chartColors[Number(CurrentDisplayedSite)]; // colour of the clicked binding site
+                    viewer.setStyle(
+                        {...protAtoms, model: protAtomsModel, resi: clickedBindingRessSel, not: {atom: bboneAtoms}},
+                        {cartoon: {style: cartoonStyle, color: displayedSiteColour, arrows: cartoonArrows, tubes: cartoonTubes, opacity: cartoonOpacity, thickness: cartoonThickness,},
+                        stick: {color: displayedSiteColour},}
+                    ); 
+                }
             }
             else {
                     viewer.setStyle(
@@ -330,17 +368,43 @@ document.getElementById('chartCanvas').addEventListener('mousemove', function(e)
                     protAtoms,
                     {cartoon: {style: cartoonStyle, color: defaultColor, arrows: cartoonArrows, tubes: cartoonTubes, opacity: cartoonOpacity, thickness: cartoonThickness,}}
                 ); // remove sidechains and colour white everything except ligands (all protein atoms)
+
+                // colour again clicked residues
+                if (!clickedBindingRess.length == 0) {
+                    let clickedBindingRessSel = clickedBindingRess.map(res => Up2PdbDict[repPdbId][labelAsymId][res]);
+                    let displayedSiteColour = chartColors[Number(CurrentDisplayedSite)]; // colour of the clicked binding site
+                    viewer.setStyle(
+                        {...protAtoms, model: protAtomsModel, resi: clickedBindingRessSel, not: {atom: bboneAtoms}},
+                        {cartoon: {style: cartoonStyle, color: displayedSiteColour, arrows: cartoonArrows, tubes: cartoonTubes, opacity: cartoonOpacity, thickness: cartoonThickness,},
+                        stick: {color: displayedSiteColour},}
+                    ); 
+                }
             }
 
             if (surfaceVisible) { // if surface is visible
                 if (activeModel == "superposition") {
                     for (const [key, value] of Object.entries(surfsDict["superposition"])) {
-                        if (key == 'non_binding') {
-                            viewer.setSurfaceMaterialStyle(value.surfid, {color: defaultColor, opacity: surfLowOpacity});
+                        if (clickedBindingRess.length == 0) { // if no binding residues are clicked, show all surfaces
+                            for (const [key, value] of Object.entries(surfsDict["superposition"])) {
+                                if (key == "non_binding") {
+                                    viewer.setSurfaceMaterialStyle(value.surfid, {color: defaultColor, opacity: surfLowOpacity});
+                                }
+                                else {
+                                    let siteColor = chartColors[Number(key.split("_").pop())];
+                                    viewer.setSurfaceMaterialStyle(value.surfid, {color: siteColor, opacity: surfMediumOpacity});
+                                }
+                            }
                         }
-                        else {
-                            let siteColor = chartColors[Number(key.split("_").pop())];
-                            viewer.setSurfaceMaterialStyle(value.surfid, {color: siteColor, opacity: surfMediumOpacity});
+                        else {// if binding residues are clicked, hide the un-hovered site surface (clicked residue surfaces will remain)
+                            //show surfaces of all clicked binding residues. loop through clickedBindingRess
+                            for (const rowId of clickedBindingRess) {
+                                if (surfsDict["superposition"]["single_residues"][CurrentDisplayedSite].hasOwnProperty(rowId)) {
+                                    var surfObject = surfsDict["superposition"]["single_residues"][CurrentDisplayedSite][rowId];
+                                    var currentSiteColor = chartColors[Number(CurrentDisplayedSite)];
+                                    viewer.setSurfaceMaterialStyle(surfObject.surfid, {color: currentSiteColor, opacity: surfHighOpacity});
+                                }
+                            }                        
+                            viewer.setSurfaceMaterialStyle(surfsDict["superposition"][lastHoveredPoint1].surfid, {opacity: surfHiddenOpacity});
                         }
                     }
                 }
