@@ -1021,6 +1021,20 @@ document.getElementById('newChartCanvas').addEventListener('mousemove', function
                     if (surfsDict["superposition"]["single_residues"][CurrentDisplayedSite].hasOwnProperty(newPointLabel)) {
                         viewer.setSurfaceMaterialStyle(surfsDict["superposition"]["single_residues"][CurrentDisplayedSite][newPointLabel].surfid, {opacity: surfHiddenOpacity});
                     }
+                    if (clickedBindingRess.length == 0) { // no binding site residues are clicked
+                        for (const [key, value] of Object.entries(surfsDict["superposition"])) {
+                            if (key == "non_binding") {
+                                viewer.setSurfaceMaterialStyle(value.surfid, {color: defaultColor, opacity: surfLowOpacity});
+                            }
+                            else if (key == "single_residues") {
+                                //
+                            }
+                            else {
+                                let siteColor = chartColors[Number(key.split("_").pop())];
+                                viewer.setSurfaceMaterialStyle(value.surfid, {color: siteColor, opacity: surfMediumOpacity});
+                            }
+                        }
+                    }
                 }
                 // else {
                 //     for (const [key, value] of Object.entries(surfsDict[activeModel])) {

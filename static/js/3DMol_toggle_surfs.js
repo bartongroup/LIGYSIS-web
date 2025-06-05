@@ -134,12 +134,12 @@ function toggleSurfaceVisibility() {
                         }
                         else {
                             // create surface for this residue
-                            let surfSel = {model: protAtomsModel, resi: SuppPclickedResiduePDBResnumDBResNum, chain: authAsymId};
+                            let surfSel = {model: protAtomsModel, resi: clickedResiduePDBResnum, chain: authAsymId};
                             let SitePDBResNums = seg_ress_dict[CurrentDisplayedSite]
                                 .filter(el => Up2PdbDict[repPdbId][labelAsymId].hasOwnProperty(el))
                                 .map(el => Up2PdbDict[repPdbId][labelAsymId][el]);
                             let SiteSel = {model: protAtomsModel, chain: authAsymId, resi: SitePDBResNums};
-                            surfsDict["superposition"]["single_residues"][CurrentDisplayedSite][rowId] = viewer.addSurface(
+                            surfsDict["superposition"]["single_residues"][CurrentDisplayedSite][clickedResidue] = viewer.addSurface(
                                 $3Dmol.SurfaceType.ISO,
                                 {
                                     color: siteColor,
