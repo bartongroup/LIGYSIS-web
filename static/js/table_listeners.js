@@ -184,11 +184,34 @@ $('table#bss_table tbody').on('mouseover', 'tr', function () { // event listener
                     else {// if binding residues are clicked, hide the un-hovered site surface (clicked residue surfaces will remain)
                         //show surfaces of all clicked binding residues. loop through clickedBindingRess
                         for (const rowId of clickedBindingRess) {
-                            if (surfsDict["superposition"]["single_residues"][CurrentDisplayedSite].hasOwnProperty(rowId)) {
-                                var surfObject = surfsDict["superposition"]["single_residues"][CurrentDisplayedSite][rowId];
-                                var currentSiteColor = chartColors[Number(CurrentDisplayedSite)];
-                                viewer.setSurfaceMaterialStyle(surfObject.surfid, {color: currentSiteColor, opacity: surfHighOpacity});
+                            let SuppPDBResNum = Up2PdbDict[repPdbId][labelAsymId][rowId];
+                            if (SuppPDBResNum !== undefined) {
+                                if (surfsDict["superposition"]["single_residues"][CurrentDisplayedSite].hasOwnProperty(rowId)) {
+                                    var surfObject = surfsDict["superposition"]["single_residues"][CurrentDisplayedSite][rowId];
+                                    var currentSiteColor = chartColors[Number(CurrentDisplayedSite)];
+                                    viewer.setSurfaceMaterialStyle(surfObject.surfid, {color: currentSiteColor, opacity: surfHighOpacity});
+                                }
+                                else { // need to create surfaces because they were not created before since site was already clicked
+                                    let surfSel = {model: protAtomsModel, resi: SuppPDBResNum, chain: authAsymId};
+                                    let SitePDBResNums = seg_ress_dict[CurrentDisplayedSite]
+                                        .filter(el => Up2PdbDict[repPdbId][labelAsymId].hasOwnProperty(el))
+                                        .map(el => Up2PdbDict[repPdbId][labelAsymId][el]);
+                                    let SiteSel = {model: protAtomsModel, chain: authAsymId, resi: SitePDBResNums};
+                                    surfsDict["superposition"]["single_residues"][CurrentDisplayedSite][rowId] = viewer.addSurface(
+                                        $3Dmol.SurfaceType.ISO,
+                                        {
+                                            color: siteColor,
+                                            opacity: surfHighOpacity,
+                                        },
+                                        surfSel,
+                                        SiteSel,
+                                    );
+                                }
                             }
+                            else { // if the surface already exists, just show it
+                                //
+                            }
+                            
                         }                        
                         viewer.setSurfaceMaterialStyle(surfsDict["superposition"][rowId].surfid, {color: siteColor, opacity: surfHiddenOpacity});
                     }
@@ -283,6 +306,32 @@ $('table#bss_table tbody').on('mouseover', 'tr', function () { // event listener
             for (const label of labelsHash[activeModel]["clickedSite"][clickedSite]) {
                 label.hide();
             }
+            if (clickedBindingRess.length > 0) { // but there are clicked binding residues. We need to create/show their labels
+                for (const res of clickedBindingRess) {
+                    SuppPDBResNum = Up2PdbDict[repPdbId][labelAsymId][res];
+                    if (SuppPDBResNum !== undefined) {
+                        if (labelsHash[activeModel]["clickedResidues"][CurrentDisplayedSite].hasOwnProperty(res)) {
+                            labelsHash[activeModel]["clickedResidues"][CurrentDisplayedSite][res].show(); // show the label if it exists
+                        }
+                        else{
+                            let resSel = {model: protAtomsModel, resi: SuppPDBResNum, chain: authAsymId}
+                            let resName = viewer.selectedAtoms(resSel)[0].resn
+                            let label = viewer.addLabel(
+                                resName + String(Pdb2UpDict[repPdbId][labelAsymId][SuppPDBResNum]),
+                                {
+                                    alignment: 'center', backgroundColor: 'white', backgroundOpacity: 1,
+                                    borderColor: outlineColor, borderOpacity: 1, borderThickness: 2,
+                                    font: 'Arial', fontColor: siteColor, fontOpacity: 1, fontSize: 12,
+                                    inFront: true, screenOffset: [0, 0, 0], showBackground: true
+                                },
+                                resSel,
+                                false,
+                            );
+                            labelsHash[activeModel]["clickedResidues"][CurrentDisplayedSite][res] = label; // store the label in the hash
+                        }
+                    }
+                }
+            }
         }
     }
     
@@ -353,6 +402,7 @@ $('table#bss_table tbody').on('mouseover', 'tr', function () { // event listener
                 }
             }
         }
+
 
         if (activeModel == "superposition") {
             viewer.zoomTo({model: protAtomsModel});
@@ -553,8 +603,6 @@ $('table#bss_table tbody').on('mouseover', 'tr', function () { // event listener
                 // if clicked site is the same as displayed site (on residues table), don't need to remove labels
             }
             else {
-                //console.log(`Clicked site ${rowId} is different from displayed site ${CurrentDisplayedSite}. Removing labels...`);
-                // loop throuth labelsHash[activeModel]["clickedResidues"][CurrentDisplayedSite] dictionary
                 for (const [key, label] of Object.entries(labelsHash[activeModel]["clickedResidues"][previouslyDisplayedSite])) {
                     label.hide();
                 }
@@ -665,6 +713,8 @@ $('table#bs_ress_table tbody').on('mouseover', 'tr', function () { // event list
     let rowColor = window.getComputedStyle(this).getPropertyValue('color');
     let rowColorHex = rgbToHex(rowColor);
 
+    let clickedElements = document.getElementsByClassName("clicked-row");
+
     AssemblyPDBResNums = [];
 
     if (index !== -1) { // will always be true if we hover over a row
@@ -770,27 +820,38 @@ $('table#bs_ress_table tbody').on('mouseover', 'tr', function () { // event list
             }
         }
         if (surfaceVisible) {
-            if (activeModel == "superposition") {
-                // show the surface for the hovered residue
-                if (surfsDict["superposition"]["single_residues"][CurrentDisplayedSite].hasOwnProperty(rowId)) {
-                    viewer.setSurfaceMaterialStyle(surfsDict["superposition"]["single_residues"][CurrentDisplayedSite][rowId].surfid, {color: rowColorHex, opacity: surfHighOpacity});
+            // only show individual residue surfaces if a site is not clicked
+            if (clickedElements.length == 0) {
+
+                console.log("THIS IS BEING EXECUTED");                
+                if (activeModel == "superposition") {
+                    // show the surface for the hovered residue
+                    if (surfsDict["superposition"]["single_residues"][CurrentDisplayedSite].hasOwnProperty(rowId)) {
+                        viewer.setSurfaceMaterialStyle(surfsDict["superposition"]["single_residues"][CurrentDisplayedSite][rowId].surfid, {color: rowColorHex, opacity: surfHighOpacity});
+                    }
+                    else { // create a new surface for the hovered residue
+                        let surfSel = {model: protAtomsModel, resi: SuppPDBResNum, chain: authAsymId};
+                        let SitePDBResNums = seg_ress_dict[CurrentDisplayedSite]
+                            .filter(el => Up2PdbDict[repPdbId][labelAsymId].hasOwnProperty(el))
+                            .map(el => Up2PdbDict[repPdbId][labelAsymId][el]);
+                        let SiteSel = {model: protAtomsModel, chain: authAsymId, resi: SitePDBResNums};
+                        surfsDict["superposition"]["single_residues"][CurrentDisplayedSite][rowId] = viewer.addSurface(
+                            $3Dmol.SurfaceType.ISO,
+                            {
+                                color: rowColorHex,
+                                opacity: surfHighOpacity,
+                            },
+                            surfSel,
+                            SiteSel,
+                        );
+                    }
                 }
-                else { // create a new surface for the hovered residue
-                    let surfSel = {model: protAtomsModel, resi: SuppPDBResNum, chain: authAsymId};
-                    let SitePDBResNums = seg_ress_dict[CurrentDisplayedSite]
-                        .filter(el => Up2PdbDict[repPdbId][labelAsymId].hasOwnProperty(el))
-                        .map(el => Up2PdbDict[repPdbId][labelAsymId][el]);
-                    let SiteSel = {model: protAtomsModel, chain: authAsymId, resi: SitePDBResNums};
-                    surfsDict["superposition"]["single_residues"][CurrentDisplayedSite][rowId] = viewer.addSurface(
-                        $3Dmol.SurfaceType.ISO,
-                        {
-                            color: rowColorHex,
-                            opacity: surfHighOpacity,
-                        },
-                        surfSel,
-                        SiteSel,
-                    );
+                else {
+                    // need to implement this for assembly models
                 }
+            }
+            else {
+                console.log("Clicked elements exist, not showing individual residue surfaces");
             }
         }
         viewer.render();
@@ -858,6 +919,14 @@ $('table#bs_ress_table tbody').on('mouseover', 'tr', function () { // event list
         }
         viewer.render();
     }
+    else { // there is a clicked row
+        if (clickedBindingRess.includes(rowId)) { // if the binding site residue is clicked, we do not reset the style
+            //
+        }
+        else {
+            resetChartStyles(newChart, index, "black", 2, 8); // resets chart styles to default
+        }
+    }
 
     if (labelsVisible) {
         for (const label of labelsHash[activeModel]["hoveredRes"]) {
@@ -866,38 +935,43 @@ $('table#bs_ress_table tbody').on('mouseover', 'tr', function () { // event list
         labelsHash[activeModel]["hoveredRes"] = [];
     }
     if (surfaceVisible) {
-        if (clickedBindingRess.includes(rowId)) {
-            //
-        }
-        else {
-            if (activeModel == "superposition") {
-                if (surfsDict["superposition"]["single_residues"][CurrentDisplayedSite].hasOwnProperty(rowId)) {
-                    viewer.setSurfaceMaterialStyle(surfsDict["superposition"]["single_residues"][CurrentDisplayedSite][rowId].surfid, {opacity: surfHiddenOpacity});
-                }
-                if (clickedBindingRess.length == 0) { // no binding site residues are clicked
-                    for (const [key, value] of Object.entries(surfsDict["superposition"])) {
-                        if (key == "non_binding") {
-                            viewer.setSurfaceMaterialStyle(value.surfid, {color: defaultColor, opacity: surfLowOpacity});
-                        }
-                        else if (key == "single_residues") {
-                            //
-                        }
-                        else {
-                            let siteColor = chartColors[Number(key.split("_").pop())];
-                            viewer.setSurfaceMaterialStyle(value.surfid, {color: siteColor, opacity: surfMediumOpacity});
+        if (clickedElements.length == 0) { // no binding sites are clicked
+            if (clickedBindingRess.includes(rowId)) {
+                //
+            }
+            else {
+                if (activeModel == "superposition") {
+                    if (surfsDict["superposition"]["single_residues"][CurrentDisplayedSite].hasOwnProperty(rowId)) {
+                        viewer.setSurfaceMaterialStyle(surfsDict["superposition"]["single_residues"][CurrentDisplayedSite][rowId].surfid, {opacity: surfHiddenOpacity});
+                    }
+                    if (clickedBindingRess.length == 0) { // no binding site residues are clicked
+                        for (const [key, value] of Object.entries(surfsDict["superposition"])) {
+                            if (key == "non_binding") {
+                                viewer.setSurfaceMaterialStyle(value.surfid, {color: defaultColor, opacity: surfLowOpacity});
+                            }
+                            else if (key == "single_residues") {
+                                //
+                            }
+                            else {
+                                let siteColor = chartColors[Number(key.split("_").pop())];
+                                viewer.setSurfaceMaterialStyle(value.surfid, {color: siteColor, opacity: surfMediumOpacity});
+                            }
                         }
                     }
                 }
+                // else {
+                //     for (const [key, value] of Object.entries(surfsDict[activeModel])) {
+                //         for (const [key2, value2] of Object.entries(value)) {
+                //             if (key == rowId) {
+                //                 viewer.setSurfaceMaterialStyle(value2.surfid, {color: defaultColor, opacity: surfHiddenOpacity});
+                //             }
+                //         }
+                //     }
+                // }
             }
-            // else {
-            //     for (const [key, value] of Object.entries(surfsDict[activeModel])) {
-            //         for (const [key2, value2] of Object.entries(value)) {
-            //             if (key == rowId) {
-            //                 viewer.setSurfaceMaterialStyle(value2.surfid, {color: defaultColor, opacity: surfHiddenOpacity});
-            //             }
-            //         }
-            //     }
-            // }
+        }
+        else {
+            // do not touch surfaces if a site is clicked
         }
         viewer.render();
     }
@@ -906,6 +980,8 @@ $('table#bs_ress_table tbody').on('mouseover', 'tr', function () { // event list
     let index = newChartData[newChartLab].indexOf(rowId); // gets the index of the row id in the chart data
     let rowColor = window.getComputedStyle(this).getPropertyValue('color');
     let rowColorHex = rgbToHex(rowColor);
+
+    let clickedElements = document.getElementsByClassName("clicked-row");
 
     if (clickedBindingRess.includes(rowId)) {
         clickedBindingRess = clickedBindingRess.filter(res => res !== rowId); // removes the row id from the clicked binding residues array
@@ -942,76 +1018,78 @@ $('table#bs_ress_table tbody').on('mouseover', 'tr', function () { // event list
         clickResiduesTableRow(this);
 
         if (activeModel == "superposition") { // in this case, only one residue as this is a supperposition of single chains
-            SuppPDBResNum = Up2PdbDict[repPdbId][labelAsymId][rowId];
-            if (SuppPDBResNum !== undefined) {
-                viewer.setStyle(
-                    {model: protAtomsModel, chain: authAsymId, resi: SuppPDBResNum, not: {atom: bboneAtoms}},
-                    {
-                        cartoon:{style: cartoonStyle, color: rowColorHex, arrows: cartoonArrows, tubes: cartoonTubes, opacity: cartoonOpacity, thickness: cartoonThickness,},
-                        stick:{color: rowColorHex},
-                    }
-                );
-                if (labelsVisible) {
-                    if (labelsHash[activeModel]["clickedResidues"][CurrentDisplayedSite].hasOwnProperty(rowId)) {
-                        console.log(`Residue ${rowId} already clicked and label exists`);
-                        labelsHash[activeModel]["clickedResidues"][CurrentDisplayedSite][rowId].show();
-                    }
-                    else {
-                        //console.log(`Residue ${rowId} not clicked yet. Creating label...`);
-                        let resSel = {model: protAtomsModel, resi: SuppPDBResNum, chain: authAsymId}
-                        let resName = viewer.selectedAtoms(resSel)[0].resn
-                        let label = viewer.addLabel(
-                            resName + String(Pdb2UpDict[repPdbId][labelAsymId][SuppPDBResNum]),
-                            {
-                                alignment: 'center', backgroundColor: 'white', backgroundOpacity: 1,
-                                borderColor: outlineColor, borderOpacity: 1, borderThickness: 2,
-                                font: 'Arial', fontColor: rowColorHex, fontOpacity: 1, fontSize: 12,
-                                inFront: true, screenOffset: [0, 0, 0], showBackground: true
-                            },
-                            resSel,
-                            false,
-                        );
-                        labelsHash[activeModel]["clickedResidues"][CurrentDisplayedSite][rowId] = label; // store the label in the hash
-                    }
-                }
-                if (surfaceVisible) { // create new surface just for the clicked residue
-                    // need to hide all other surfaces first
-                    for (const [key, value] of Object.entries(surfsDict["superposition"])) {
-                        if (key == "non_binding") {
-                            viewer.setSurfaceMaterialStyle(surfsDict["superposition"][key].surfid, {color: defaultColor, opacity: surfHiddenOpacity});
+            if (clickedElements.length == 0){ // only do this if no binding sites are clicked
+                SuppPDBResNum = Up2PdbDict[repPdbId][labelAsymId][rowId];
+                if (SuppPDBResNum !== undefined) {
+                    viewer.setStyle(
+                        {model: protAtomsModel, chain: authAsymId, resi: SuppPDBResNum, not: {atom: bboneAtoms}},
+                        {
+                            cartoon:{style: cartoonStyle, color: rowColorHex, arrows: cartoonArrows, tubes: cartoonTubes, opacity: cartoonOpacity, thickness: cartoonThickness,},
+                            stick:{color: rowColorHex},
                         }
-                        else if (key == "single_residues") {
-                            // do nothing for these surfaces
+                    );
+                    if (labelsVisible) {
+                        if (labelsHash[activeModel]["clickedResidues"][CurrentDisplayedSite].hasOwnProperty(rowId)) {
+                            console.log(`Residue ${rowId} already clicked and label exists`);
+                            labelsHash[activeModel]["clickedResidues"][CurrentDisplayedSite][rowId].show();
                         }
                         else {
-                            let siteColor = chartColors[Number(key.split("_").pop())];
-                            viewer.setSurfaceMaterialStyle(surfsDict["superposition"][key].surfid, {color: siteColor, opacity: surfHiddenOpacity});
+                            //console.log(`Residue ${rowId} not clicked yet. Creating label...`);
+                            let resSel = {model: protAtomsModel, resi: SuppPDBResNum, chain: authAsymId}
+                            let resName = viewer.selectedAtoms(resSel)[0].resn
+                            let label = viewer.addLabel(
+                                resName + String(Pdb2UpDict[repPdbId][labelAsymId][SuppPDBResNum]),
+                                {
+                                    alignment: 'center', backgroundColor: 'white', backgroundOpacity: 1,
+                                    borderColor: outlineColor, borderOpacity: 1, borderThickness: 2,
+                                    font: 'Arial', fontColor: rowColorHex, fontOpacity: 1, fontSize: 12,
+                                    inFront: true, screenOffset: [0, 0, 0], showBackground: true
+                                },
+                                resSel,
+                                false,
+                            );
+                            labelsHash[activeModel]["clickedResidues"][CurrentDisplayedSite][rowId] = label; // store the label in the hash
                         }
                     }
-                    if (surfsDict["superposition"]["single_residues"][CurrentDisplayedSite].hasOwnProperty(rowId)) {
-                        viewer.setSurfaceMaterialStyle(surfsDict["superposition"]["single_residues"][CurrentDisplayedSite][rowId].surfid, {color: rowColorHex, opacity: surfHighOpacity});
-                    }
-                    else {
-                        // create a new surface for the clicked residue
-                        let surfSel = {model: protAtomsModel, resi: SuppPDBResNum, chain: authAsymId};
-                        let SitePDBResNums = seg_ress_dict[CurrentDisplayedSite]
-                            .filter(el => Up2PdbDict[repPdbId][labelAsymId].hasOwnProperty(el))
-                            .map(el => Up2PdbDict[repPdbId][labelAsymId][el]);
-                        let SiteSel = {model: protAtomsModel, chain: authAsymId, resi: SitePDBResNums};
-                        surfsDict["superposition"]["single_residues"][CurrentDisplayedSite][rowId] = viewer.addSurface(
-                            $3Dmol.SurfaceType.ISO,
-                            {
-                                color: rowColorHex,
-                                opacity: surfHighOpacity,
-                            },
-                            surfSel,
-                            SiteSel,
-                        );
+                    if (surfaceVisible) { // create new surface just for the clicked residue
+                        // need to hide all other surfaces first
+                        for (const [key, value] of Object.entries(surfsDict["superposition"])) {
+                            if (key == "non_binding") {
+                                viewer.setSurfaceMaterialStyle(surfsDict["superposition"][key].surfid, {color: defaultColor, opacity: surfHiddenOpacity});
+                            }
+                            else if (key == "single_residues") {
+                                // do nothing for these surfaces
+                            }
+                            else {
+                                let siteColor = chartColors[Number(key.split("_").pop())];
+                                viewer.setSurfaceMaterialStyle(surfsDict["superposition"][key].surfid, {color: siteColor, opacity: surfHiddenOpacity});
+                            }
+                        }
+                        if (surfsDict["superposition"]["single_residues"][CurrentDisplayedSite].hasOwnProperty(rowId)) {
+                            viewer.setSurfaceMaterialStyle(surfsDict["superposition"]["single_residues"][CurrentDisplayedSite][rowId].surfid, {color: rowColorHex, opacity: surfHighOpacity});
+                        }
+                        else {
+                            // create a new surface for the clicked residue
+                            let surfSel = {model: protAtomsModel, resi: SuppPDBResNum, chain: authAsymId};
+                            let SitePDBResNums = seg_ress_dict[CurrentDisplayedSite]
+                                .filter(el => Up2PdbDict[repPdbId][labelAsymId].hasOwnProperty(el))
+                                .map(el => Up2PdbDict[repPdbId][labelAsymId][el]);
+                            let SiteSel = {model: protAtomsModel, chain: authAsymId, resi: SitePDBResNums};
+                            surfsDict["superposition"]["single_residues"][CurrentDisplayedSite][rowId] = viewer.addSurface(
+                                $3Dmol.SurfaceType.ISO,
+                                {
+                                    color: rowColorHex,
+                                    opacity: surfHighOpacity,
+                                },
+                                surfSel,
+                                SiteSel,
+                            );
+                        }
                     }
                 }
-            }
-            else {
-                console.log("Residue not found in structure!");
+                else {
+                    console.log("Residue not found in structure!");
+                }
             }
         }
         else {

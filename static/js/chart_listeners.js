@@ -77,17 +77,23 @@ document.getElementById('chartCanvas').addEventListener('mousemove', function(e)
                     
                 if (surfaceVisible) {
                     if (activeModel == "superposition") {
-                        for (const [key, value] of Object.entries(surfsDict["superposition"])) {
-                            if (key == pointLabel) {
-                                viewer.setSurfaceMaterialStyle(value.surfid, {color: siteColor, opacity: surfMediumOpacity}); // show surface of hovered site visible at 80% opacity
-                            }
-                            else if (key == clickedPointLabel) {
-                                viewer.setSurfaceMaterialStyle(value.surfid, {color: clickedSiteColor, opacity: surfHighOpacity}); // keep surface of clicked table row site visible at 90% opacity
-                            }
-                            else {
-                                viewer.setSurfaceMaterialStyle(value.surfid, {color: defaultColor, opacity: surfHiddenOpacity}); // hide all other surfaces
-                            }
+                        if (pointLabel == clickedPointLabel) {
+                            // no need to show surface
                         }
+                        else {
+                            viewer.setSurfaceMaterialStyle(surfsDict["superposition"][pointLabel].surfid, {color: siteColor, opacity: surfMediumOpacity}); // hide surface of the hovered binding site row
+                        }
+                        // for (const [key, value] of Object.entries(surfsDict["superposition"])) {
+                        //     if (key == pointLabel) {
+                        //         viewer.setSurfaceMaterialStyle(value.surfid, {color: siteColor, opacity: surfMediumOpacity}); // show surface of hovered site visible at 80% opacity
+                        //     }
+                        //     else if (key == clickedPointLabel) {
+                        //         viewer.setSurfaceMaterialStyle(value.surfid, {color: clickedSiteColor, opacity: surfHighOpacity}); // keep surface of clicked table row site visible at 90% opacity
+                        //     }
+                        //     else {
+                        //         viewer.setSurfaceMaterialStyle(value.surfid, {color: defaultColor, opacity: surfHiddenOpacity}); // hide all other surfaces
+                        //     }
+                        // }
                     }
                     else {
                         for (const [key, value] of Object.entries(surfsDict[activeModel])) {
@@ -403,6 +409,27 @@ document.getElementById('chartCanvas').addEventListener('mousemove', function(e)
                                     var currentSiteColor = chartColors[Number(CurrentDisplayedSite)];
                                     viewer.setSurfaceMaterialStyle(surfObject.surfid, {color: currentSiteColor, opacity: surfHighOpacity});
                                 }
+                                else { // residues were clicked on as site as clicked, so surfaces do not exist
+                                    let clickedResiduePDBResnum = Up2PdbDict[repPdbId][labelAsymId][rowId];
+                                    if (clickedResiduePDBResnum !== undefined) { // check if residue is not missing in the structure
+                                        // create surface for this residue
+                                        let surfSel = {model: protAtomsModel, resi: clickedResiduePDBResnum, chain: authAsymId};
+                                        let SitePDBResNums = seg_ress_dict[CurrentDisplayedSite]
+                                            .filter(el => Up2PdbDict[repPdbId][labelAsymId].hasOwnProperty(el))
+                                            .map(el => Up2PdbDict[repPdbId][labelAsymId][el]);
+                                        let SiteSel = {model: protAtomsModel, chain: authAsymId, resi: SitePDBResNums};
+                                        surfsDict["superposition"]["single_residues"][CurrentDisplayedSite][rowId] = viewer.addSurface(
+                                            $3Dmol.SurfaceType.ISO,
+                                            {
+                                                color: currentSiteColor,
+                                                opacity: surfHighOpacity,
+                                            },
+                                            surfSel,
+                                            SiteSel,
+                                        );
+                                        
+                                    }
+                                }
                             }                        
                             viewer.setSurfaceMaterialStyle(surfsDict["superposition"][lastHoveredPoint1].surfid, {opacity: surfHiddenOpacity});
                         }
@@ -462,6 +489,8 @@ document.getElementById('chartCanvas').addEventListener('click', function(e) { /
 
         let fullPointLabel = segmentName + "_" + pointLabel;
 
+        let previouslyDisplayedSite = CurrentDisplayedSite; // store the previously clicked site before changing it
+        
         CurrentDisplayedSite = pointLabel; // assigning new value to CurrentDisplayedSite so that we keep track of which site is displayed. Necessary to remove labels when another site is clicked
         if (labelsHash[activeModel]["clickedResidues"].hasOwnProperty(pointLabel)) {
             //
@@ -475,42 +504,47 @@ document.getElementById('chartCanvas').addEventListener('click', function(e) { /
         else {
             surfsDict["superposition"]["single_residues"][pointLabel] = {}; // create an empty object for clicked residues if it doesn't exist
         }
-        $.ajax({ // AJAX request to get the table data from the server
-            type: 'POST', // POST request
-            url: `${window.appBaseUrl}/get-table`, // URL to send the request to
-            contentType: 'application/json;charset=UTF-8', // content type
-            data: JSON.stringify({'label': fullPointLabel}), // data to send
-            success: function(response) { // function to execute when the request is successful
-                const keyOrder = cc; // order of the keys in the response object
-                let tableBody = $('#bs_ress_table tbody'); // tbody of the table
-                tableBody.empty(); // empty the tbody
-                for (var i = 0; i < response[keyOrder[0]].length; i++) { // First loop to iterate through rows
-                    let newRow = $('<tr class="table__row">'); // Create a new row
-                    newRow.attr('id', response[newChartLab][i]); // Assign ID dynamically to each row
-                    $.each(keyOrder, function(j, key) { // Second loop to iterate through keys (columns)
-                        newRow.append('<td class="table__cell">' + response[key][i] + '</td>');
-                    });
-                    newRow[0].style.setProperty('color', pointColor, "important");
-                    newRow[0].style.setProperty('--bs-table-color', pointColor);
-                    newRow[0].style.setProperty('--bs-table-hover-color', pointColor);
-                    tableBody.append(newRow); // Append the new row to the table body
-                }
+        if (previouslyDisplayedSite == pointLabel) {
+            //
+        }
+        else {
+            $.ajax({ // AJAX request to get the table data from the server
+                type: 'POST', // POST request
+                url: `${window.appBaseUrl}/get-table`, // URL to send the request to
+                contentType: 'application/json;charset=UTF-8', // content type
+                data: JSON.stringify({'label': fullPointLabel}), // data to send
+                success: function(response) { // function to execute when the request is successful
+                    const keyOrder = cc; // order of the keys in the response object
+                    let tableBody = $('#bs_ress_table tbody'); // tbody of the table
+                    tableBody.empty(); // empty the tbody
+                    for (var i = 0; i < response[keyOrder[0]].length; i++) { // First loop to iterate through rows
+                        let newRow = $('<tr class="table__row">'); // Create a new row
+                        newRow.attr('id', response[newChartLab][i]); // Assign ID dynamically to each row
+                        $.each(keyOrder, function(j, key) { // Second loop to iterate through keys (columns)
+                            newRow.append('<td class="table__cell">' + response[key][i] + '</td>');
+                        });
+                        newRow[0].style.setProperty('color', pointColor, "important");
+                        newRow[0].style.setProperty('--bs-table-color', pointColor);
+                        newRow[0].style.setProperty('--bs-table-hover-color', pointColor);
+                        tableBody.append(newRow); // Append the new row to the table body
+                    }
 
-                newChartData = response;
-                newChart.data.datasets[0].data = newChartData[newChartY];  // New data
-                newChart.data.datasets[0].backgroundColor = pointColor;
-                newChart.data.datasets[0].pointHoverBackgroundColor = pointColor;
-                newChart.data.labels = newChartData[newChartX];  // New labels (if needed)
-                newChart.update(); // Update the chart
+                    newChartData = response;
+                    newChart.data.datasets[0].data = newChartData[newChartY];  // New data
+                    newChart.data.datasets[0].backgroundColor = pointColor;
+                    newChart.data.datasets[0].pointHoverBackgroundColor = pointColor;
+                    newChart.data.labels = newChartData[newChartX];  // New labels (if needed)
+                    newChart.update(); // Update the chart
 
-            },
-            error: function(jqXHR, textStatus, errorThrown) {
-                console.error('Request failed:');
-                console.error('Status:', textStatus);
-                console.error('Error:', errorThrown);
-                console.error('Response:', jqXHR.responseText);
-            },
-        });
+                },
+                error: function(jqXHR, textStatus, errorThrown) {
+                    console.error('Request failed:');
+                    console.error('Status:', textStatus);
+                    console.error('Error:', errorThrown);
+                    console.error('Response:', jqXHR.responseText);
+                },
+            });
+        }
 
         // I want to replace the binding site of the clicked row when a data point on this chart is clicked on
 
@@ -530,6 +564,33 @@ document.getElementById('chartCanvas').addEventListener('click', function(e) { /
                 for (label of labelsHash[activeModel]["clickedSite"][clickedSite]) {
                     label.hide();
                 }
+                // since residues were clicked when site was clicked, single residue labels do not exist and need to be created
+                if (clickedBindingRess.length > 0) {
+                    for (const res of clickedBindingRess) {
+                        if (labelsHash[activeModel]["clickedResidues"][CurrentDisplayedSite].hasOwnProperty(res)) {
+                            labelsHash[activeModel]["clickedResidues"][CurrentDisplayedSite][res].hide();
+                        }
+                        else {
+                            SuppPDBResNum = Up2PdbDict[repPdbId][labelAsymId][res];
+                            if (SuppPDBResNum !== undefined) {
+                                let resSel = {model: protAtomsModel, resi: SuppPDBResNum, chain: authAsymId}
+                                let resName = viewer.selectedAtoms(resSel)[0].resn
+                                let label = viewer.addLabel(
+                                    resName + String(Pdb2UpDict[repPdbId][labelAsymId][SuppPDBResNum]),
+                                    {
+                                        alignment: 'center', backgroundColor: 'white', backgroundOpacity: 1,
+                                        borderColor: outlineColor, borderOpacity: 1, borderThickness: 2,
+                                        font: 'Arial', fontColor: pointColor, fontOpacity: 1, fontSize: 12,
+                                        inFront: true, screenOffset: [0, 0, 0], showBackground: true
+                                    },
+                                    resSel,
+                                    false,
+                                );
+                                labelsHash[activeModel]["clickedResidues"][CurrentDisplayedSite][res] = label; // store the label in the hash
+                            }
+                        }
+                    }
+                }
             }
 
             // check if clicked row is the same as the newly clicked data point
@@ -538,14 +599,28 @@ document.getElementById('chartCanvas').addEventListener('click', function(e) { /
 
                 if (surfaceVisible) { // here if surface is active: go back to show surfaces as by default
                     if (activeModel == "superposition") {
-                        for (const [key, value] of Object.entries(surfsDict["superposition"])) {
-                            if (key == "non_binding") {
-                                viewer.setSurfaceMaterialStyle(surfsDict["superposition"][key].surfid, {color: defaultColor, opacity: surfLowOpacity});
+                        if (clickedBindingRess.length == 0) { // if no binding residues are clicked, show all surfaces
+                            for (const [key, value] of Object.entries(surfsDict["superposition"])) {
+                                if (key == "non_binding") {
+                                    viewer.setSurfaceMaterialStyle(surfsDict["superposition"][key].surfid, {color: defaultColor, opacity: surfLowOpacity});
+                                }
+                                else {
+                                    let siteColor = chartColors[Number(key.split("_").pop())];
+                                    viewer.setSurfaceMaterialStyle(surfsDict["superposition"][key].surfid, {color: siteColor, opacity: surfMediumOpacity});
+                                }
                             }
-                            else {
-                                let siteColor = chartColors[Number(key.split("_").pop())];
-                                viewer.setSurfaceMaterialStyle(surfsDict["superposition"][key].surfid, {color: siteColor, opacity: surfMediumOpacity});
+                        }
+                        else {
+                            // hide clicked residue surfaces
+                            for (const clickedRes of clickedBindingRess) {
+                                if (surfsDict["superposition"]["single_residues"][CurrentDisplayedSite].hasOwnProperty(clickedRes)) {
+                                    var surfObject = surfsDict["superposition"]["single_residues"][CurrentDisplayedSite][clickedRes];
+                                    var currentSiteColor = chartColors[Number(CurrentDisplayedSite)];
+                                    viewer.setSurfaceMaterialStyle(surfObject.surfid, {color: currentSiteColor, opacity: surfHiddenOpacity});
+                                }
                             }
+                            // show surface of just unclicked site
+                            viewer.setSurfaceMaterialStyle(surfsDict["superposition"][pointLabel].surfid, {color: pointColor, opacity: surfHighOpacity});
                         }
                     }
                     else{
@@ -767,6 +842,28 @@ document.getElementById('chartCanvas').addEventListener('click', function(e) { /
                         stick:{color: pointColor},
                     },
                 );
+
+                if (pointLabel != previouslyDisplayedSite) { // if clicked site is different from previously displayed site, remove labels of previously displayed site
+                    if (clickedBindingRess.length > 0) {
+                        let clickedBindingRessSel = clickedBindingRess.map(res => Up2PdbDict[repPdbId][labelAsymId][res]);
+                        // hide sidechains of clicked residues and colour back to default
+                        viewer.setStyle({...protAtoms, model: protAtomsModel, resi: clickedBindingRessSel}, // hide sidechains of clicked residues
+                            {cartoon: {style: cartoonStyle, color: defaultColor, arrows: cartoonArrows, tubes: cartoonTubes, opacity: cartoonOpacity, thickness: cartoonThickness,},
+                            stick: {color: defaultColor, hidden: true},}
+                        );
+                        if (surfaceVisible) { // hide previously displayed site clicked residue surfaces
+                            for (const clickedRes of clickedBindingRess) {
+                                if (surfsDict["superposition"]["single_residues"][previouslyDisplayedSite].hasOwnProperty(clickedRes)) {
+                                    var surfObject = surfsDict["superposition"]["single_residues"][previouslyDisplayedSite][clickedRes];
+                                    var previousSiteColor = chartColors[Number(previouslyDisplayedSite)];
+                                    viewer.setSurfaceMaterialStyle(surfObject.surfid, {color: previousSiteColor, opacity: surfHiddenOpacity});
+                                }
+                            }
+                        }
+                        clickedBindingRess = []; // clear clicked binding residues, since we are in a new site
+                    }
+                }
+
                 viewer.zoomTo(SuppClickedSiteResidues);
             }
     
@@ -804,6 +901,14 @@ document.getElementById('chartCanvas').addEventListener('click', function(e) { /
             }
 
             if (labelsVisible) {
+                if (pointLabel == previouslyDisplayedSite) {
+                    // if clicked site is the same as displayed site (on residues table), don't need to remove labels
+                }
+                else {
+                    for (const [key, label] of Object.entries(labelsHash[activeModel]["clickedResidues"][previouslyDisplayedSite])) {
+                        label.hide();
+                    }
+                }
                 if (labelsHash[activeModel]["clickedSite"].hasOwnProperty(index)) {
                     console.log(`Site ${index} already clicked and labels exist`);
                     for (const label of labelsHash[activeModel]["clickedSite"][index]) {
@@ -1082,22 +1187,27 @@ document.getElementById('newChartCanvas').addEventListener('mousemove', function
             }
             else {
                 if (activeModel == "superposition") {
-                    if (surfsDict["superposition"]["single_residues"][CurrentDisplayedSite].hasOwnProperty(newPointLabel)) {
-                        viewer.setSurfaceMaterialStyle(surfsDict["superposition"]["single_residues"][CurrentDisplayedSite][newPointLabel].surfid, {opacity: surfHiddenOpacity});
-                    }
-                    if (clickedBindingRess.length == 0) { // no binding site residues are clicked
-                        for (const [key, value] of Object.entries(surfsDict["superposition"])) {
-                            if (key == "non_binding") {
-                                viewer.setSurfaceMaterialStyle(value.surfid, {color: defaultColor, opacity: surfLowOpacity});
-                            }
-                            else if (key == "single_residues") {
-                                //
-                            }
-                            else {
-                                let siteColor = chartColors[Number(key.split("_").pop())];
-                                viewer.setSurfaceMaterialStyle(value.surfid, {color: siteColor, opacity: surfMediumOpacity});
+                    if (clickedElements.length == 0) { // no binding site rows are clicked
+                        if (surfsDict["superposition"]["single_residues"][CurrentDisplayedSite].hasOwnProperty(newPointLabel)) {
+                            viewer.setSurfaceMaterialStyle(surfsDict["superposition"]["single_residues"][CurrentDisplayedSite][newPointLabel].surfid, {opacity: surfHiddenOpacity});
+                        }
+                        if (clickedBindingRess.length == 0) { // no binding site residues are clicked
+                            for (const [key, value] of Object.entries(surfsDict["superposition"])) {
+                                if (key == "non_binding") {
+                                    viewer.setSurfaceMaterialStyle(value.surfid, {color: defaultColor, opacity: surfLowOpacity});
+                                }
+                                else if (key == "single_residues") {
+                                    //
+                                }
+                                else {
+                                    let siteColor = chartColors[Number(key.split("_").pop())];
+                                    viewer.setSurfaceMaterialStyle(value.surfid, {color: siteColor, opacity: surfMediumOpacity});
+                                }
                             }
                         }
+                    }
+                    else {
+                        // a binding site row is clicked
                     }
                 }
                 // else {
@@ -1173,6 +1283,8 @@ document.getElementById('newChartCanvas').addEventListener('mousemove', function
 document.getElementById('newChartCanvas').addEventListener('click', function(e) { // when the cursor clicks over the binding residues chart canvas
     let newChartElement = newChart.getElementsAtEventForMode(e, 'nearest', { intersect: true }, true); // gets the chart element that is closest to the cursor
 
+    let clickedElements = document.getElementsByClassName("clicked-row");
+
     if (newChartElement.length > 0) { // cursor is hovering over a data point
         let newFirstPoint = newChartElement[0];
         let pointColor = newChart.data.datasets[0].backgroundColor;
@@ -1187,7 +1299,9 @@ document.getElementById('newChartCanvas').addEventListener('click', function(e) 
                 clearClickedResidueRow(ResiduesTable.querySelector(`tr[id="${pointLabel}"]`)); // clears the clicked residue row styles
             }
             if (labelsVisible) {
-                labelsHash[activeModel]["clickedResidues"][CurrentDisplayedSite][pointLabel].hide(); // hides the label for the clicked residue
+                if (labelsHash[activeModel]["clickedResidues"][CurrentDisplayedSite].hasOwnProperty(pointLabel)) { // if site was clicked before, individual residue labels are not created
+                    labelsHash[activeModel]["clickedResidues"][CurrentDisplayedSite][pointLabel].hide(); // hides the label for the clicked residue
+                }
             }
             if (surfaceVisible) {
                 if (activeModel == "superposition") {
@@ -1210,58 +1324,60 @@ document.getElementById('newChartCanvas').addEventListener('click', function(e) 
             clickResiduesTableRow(ResiduesTable.querySelector(`tr[id="${pointLabel}"]`));
             
             if (activeModel == "superposition") {
-                SuppPDBResNum = Up2PdbDict[repPdbId][labelAsymId][pointLabel];
-                if (SuppPDBResNum !== undefined) {
-                    viewer.setStyle(
-                        {model: protAtomsModel, chain: authAsymId, resi: SuppPDBResNum, not: {atom: bboneAtoms}},
-                        {
-                            cartoon:{style: cartoonStyle, color: pointColor, arrows: cartoonArrows, tubes: cartoonTubes, opacity: cartoonOpacity, thickness: cartoonThickness,},
-                            stick:{color: pointColor},
-                        }
-                    );
-                    if (labelsVisible) {
-                        if (labelsHash[activeModel]["clickedResidues"][CurrentDisplayedSite].hasOwnProperty(pointLabel)) {
-                            console.log(`Residue ${pointLabel} already clicked and label exists`);
-                            labelsHash[activeModel]["clickedResidues"][CurrentDisplayedSite][pointLabel].show();
-                        }
-                        else {
-                            //console.log(`Residue ${pointLabel} not clicked yet. Creating label...`);
-                            let resSel = {model: protAtomsModel, resi: SuppPDBResNum, chain: authAsymId}
-                            let resName = viewer.selectedAtoms(resSel)[0].resn
-                            let label = viewer.addLabel(
-                                resName + String(Pdb2UpDict[repPdbId][labelAsymId][SuppPDBResNum]),
-                                {
-                                    alignment: 'center', backgroundColor: 'white', backgroundOpacity: 1,
-                                    borderColor: outlineColor, borderOpacity: 1, borderThickness: 2,
-                                    font: 'Arial', fontColor: pointColor, fontOpacity: 1, fontSize: 12,
-                                    inFront: true, screenOffset: [0, 0, 0], showBackground: true
-                                },
-                                resSel,
-                                false,
-                            );
-                            labelsHash[activeModel]["clickedResidues"][CurrentDisplayedSite][pointLabel] = label; // store the label in the hash
-                        }
-                    }
-                    if (surfaceVisible) {
-                        // need to hide other surfaces first
-                        for (const [key, value] of Object.entries(surfsDict["superposition"])) {
-                            if (key == "non_binding") {
-                                viewer.setSurfaceMaterialStyle(surfsDict["superposition"][key].surfid, {color: defaultColor, opacity: surfHiddenOpacity});
+                if (clickedElements.length == 0){
+                    SuppPDBResNum = Up2PdbDict[repPdbId][labelAsymId][pointLabel];
+                    if (SuppPDBResNum !== undefined) {
+                        viewer.setStyle(
+                            {model: protAtomsModel, chain: authAsymId, resi: SuppPDBResNum, not: {atom: bboneAtoms}},
+                            {
+                                cartoon:{style: cartoonStyle, color: pointColor, arrows: cartoonArrows, tubes: cartoonTubes, opacity: cartoonOpacity, thickness: cartoonThickness,},
+                                stick:{color: pointColor},
                             }
-                            else if (key == "single_residues") {
-                                // do nothing for these surfaces
+                        );
+                        if (labelsVisible) {
+                            if (labelsHash[activeModel]["clickedResidues"][CurrentDisplayedSite].hasOwnProperty(pointLabel)) {
+                                console.log(`Residue ${pointLabel} already clicked and label exists`);
+                                labelsHash[activeModel]["clickedResidues"][CurrentDisplayedSite][pointLabel].show();
                             }
                             else {
-                                let siteColor = chartColors[Number(key.split("_").pop())];
-                                viewer.setSurfaceMaterialStyle(surfsDict["superposition"][key].surfid, {color: siteColor, opacity: surfHiddenOpacity});
+                                //console.log(`Residue ${pointLabel} not clicked yet. Creating label...`);
+                                let resSel = {model: protAtomsModel, resi: SuppPDBResNum, chain: authAsymId}
+                                let resName = viewer.selectedAtoms(resSel)[0].resn
+                                let label = viewer.addLabel(
+                                    resName + String(Pdb2UpDict[repPdbId][labelAsymId][SuppPDBResNum]),
+                                    {
+                                        alignment: 'center', backgroundColor: 'white', backgroundOpacity: 1,
+                                        borderColor: outlineColor, borderOpacity: 1, borderThickness: 2,
+                                        font: 'Arial', fontColor: pointColor, fontOpacity: 1, fontSize: 12,
+                                        inFront: true, screenOffset: [0, 0, 0], showBackground: true
+                                    },
+                                    resSel,
+                                    false,
+                                );
+                                labelsHash[activeModel]["clickedResidues"][CurrentDisplayedSite][pointLabel] = label; // store the label in the hash
                             }
                         }
-                        // I think there is no need to create a new surface here, as the surface for the residue should already exist. It is created when the residue is hovered on.
+                        if (surfaceVisible) {
+                            // need to hide other surfaces first
+                            for (const [key, value] of Object.entries(surfsDict["superposition"])) {
+                                if (key == "non_binding") {
+                                    viewer.setSurfaceMaterialStyle(surfsDict["superposition"][key].surfid, {color: defaultColor, opacity: surfHiddenOpacity});
+                                }
+                                else if (key == "single_residues") {
+                                    // do nothing for these surfaces
+                                }
+                                else {
+                                    let siteColor = chartColors[Number(key.split("_").pop())];
+                                    viewer.setSurfaceMaterialStyle(surfsDict["superposition"][key].surfid, {color: siteColor, opacity: surfHiddenOpacity});
+                                }
+                            }
+                            // I think there is no need to create a new surface here, as the surface for the residue should already exist. It is created when the residue is hovered on.
+                        }
+                        viewer.render();
                     }
-                    viewer.render();
-                }
-                else {
-                    console.log("Residue not found in structure!");
+                    else {
+                        console.log("Residue not found in structure!");
+                    }
                 }
             }
             else {

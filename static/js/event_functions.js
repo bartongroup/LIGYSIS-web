@@ -95,14 +95,13 @@ function clickTableTowById(pointLabel) { // highlights the table row of the bind
     var row = document.getElementById(pointLabel);
     if (row) {
         row.classList.add("clicked-row");
-        row.scrollIntoView({ behavior: "smooth", block: "center" });
+        // row.scrollIntoView({ behavior: "smooth", block: "center" });
     }
     // remove highlight from any other rows in this table
     var rows = document.querySelectorAll(".highlighted-row");
     rows.forEach(function(row) {
         row.classList.remove("highlighted-row");
     });
-
 }
 
 function clearClickedRows() {   // clears the highlighted table row
