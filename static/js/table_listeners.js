@@ -278,7 +278,7 @@ $('table#bss_table tbody').on('mouseover', 'tr', function () { // event listener
     let classList = this.classList;
     let clickedElements = document.getElementsByClassName("clicked-row");
 
-    if (clickedSite !== null) {
+    if (clickedSite !== null) { // if there is already clicked site, remove its labels
         if (labelsVisible) {
             for (const label of labelsHash[activeModel]["clickedSite"][clickedSite]) {
                 label.hide();
@@ -302,14 +302,28 @@ $('table#bss_table tbody').on('mouseover', 'tr', function () { // event listener
 
         if (surfaceVisible) {
             if (activeModel == "superposition") {
-                for (const [key, value] of Object.entries(surfsDict["superposition"])) {
-                    if (key == "non_binding") {
-                        viewer.setSurfaceMaterialStyle(surfsDict["superposition"][key].surfid, {color: defaultColor, opacity: surfLowOpacity});
+                if (clickedBindingRess.length == 0) { // if no binding residues are clicked, show all surfaces
+                    for (const [key, value] of Object.entries(surfsDict["superposition"])) {
+                        if (key == "non_binding") {
+                            viewer.setSurfaceMaterialStyle(surfsDict["superposition"][key].surfid, {color: defaultColor, opacity: surfLowOpacity});
+                        }
+                        else {
+                            let siteColor = chartColors[Number(key.split("_").pop())];
+                            viewer.setSurfaceMaterialStyle(surfsDict["superposition"][key].surfid, {color: siteColor, opacity: surfMediumOpacity});
+                        }
                     }
-                    else {
-                        let siteColor = chartColors[Number(key.split("_").pop())];
-                        viewer.setSurfaceMaterialStyle(surfsDict["superposition"][key].surfid, {color: siteColor, opacity: surfMediumOpacity});
+                }
+                else {
+                    // hide clicked residue surfaces
+                    for (const clickedRes of clickedBindingRess) {
+                        if (surfsDict["superposition"]["single_residues"][CurrentDisplayedSite].hasOwnProperty(clickedRes)) {
+                            var surfObject = surfsDict["superposition"]["single_residues"][CurrentDisplayedSite][clickedRes];
+                            var currentSiteColor = chartColors[Number(CurrentDisplayedSite)];
+                            viewer.setSurfaceMaterialStyle(surfObject.surfid, {color: currentSiteColor, opacity: surfHiddenOpacity});
+                        }
                     }
+                    // show surface of just unclicked site
+                    viewer.setSurfaceMaterialStyle(surfsDict["superposition"][rowId].surfid, {color: siteColor, opacity: surfHighOpacity});
                 }
             }
             else {
@@ -350,6 +364,7 @@ $('table#bss_table tbody').on('mouseover', 'tr', function () { // event listener
         viewer.render();
     }
     else {
+        let previouslyDisplayedSite = CurrentDisplayedSite; // store the previously clicked site before changing it
         let fullPointLabel = segmentName + "_" + rowId;
         CurrentDisplayedSite = Number(rowId); // changing displayed site
         if (labelsHash[activeModel]["clickedResidues"].hasOwnProperty(rowId)) {
@@ -364,41 +379,47 @@ $('table#bss_table tbody').on('mouseover', 'tr', function () { // event listener
         else {
             surfsDict["superposition"]["single_residues"][rowId] = {}; // create an empty object for clicked residues if it doesn't exist
         }
-        $.ajax({ // AJAX request to get the table data from the server
-            type: 'POST', // POST request
-            url: `${window.appBaseUrl}/get-table`, // URL to send the request to
-            contentType: 'application/json;charset=UTF-8', // content type
-            data: JSON.stringify({'label': fullPointLabel}), // data to send
-            success: function(response) { // function to execute when the request is successful
-                const keyOrder = cc; // order of the keys in the response object
-                let tableBody = $('#bs_ress_table tbody'); // tbody of the table
-                tableBody.empty(); // empty the tbody
-                for (var i = 0; i < response[keyOrder[0]].length; i++) { // First loop to iterate through rows
-                    let newRow = $('<tr class="table__row">'); // Create a new row
-                    newRow.attr('id', response[newChartLab][i]); // Assign ID dynamically to each row
-                    $.each(keyOrder, function(j, key) { // Second loop to iterate through keys (columns)
-                        newRow.append('<td class="table__cell">' + response[key][i] + '</td>');
-                    });
-                    newRow[0].style.setProperty('color', siteColor, "important");
-                    newRow[0].style.setProperty('--bs-table-color', siteColor);
-                    newRow[0].style.setProperty('--bs-table-hover-color', siteColor);
-                    tableBody.append(newRow); // Append the new row to the table body
-                }
+        // do the AJAX  call only if the clicked site is not the same as the previously displayed site
+        if (previouslyDisplayedSite == rowId) {
+            //
+        }
+        else {
+            $.ajax({ // AJAX request to get the table data from the server
+                type: 'POST', // POST request
+                url: `${window.appBaseUrl}/get-table`, // URL to send the request to
+                contentType: 'application/json;charset=UTF-8', // content type
+                data: JSON.stringify({'label': fullPointLabel}), // data to send
+                success: function(response) { // function to execute when the request is successful
+                    const keyOrder = cc; // order of the keys in the response object
+                    let tableBody = $('#bs_ress_table tbody'); // tbody of the table
+                    tableBody.empty(); // empty the tbody
+                    for (var i = 0; i < response[keyOrder[0]].length; i++) { // First loop to iterate through rows
+                        let newRow = $('<tr class="table__row">'); // Create a new row
+                        newRow.attr('id', response[newChartLab][i]); // Assign ID dynamically to each row
+                        $.each(keyOrder, function(j, key) { // Second loop to iterate through keys (columns)
+                            newRow.append('<td class="table__cell">' + response[key][i] + '</td>');
+                        });
+                        newRow[0].style.setProperty('color', siteColor, "important");
+                        newRow[0].style.setProperty('--bs-table-color', siteColor);
+                        newRow[0].style.setProperty('--bs-table-hover-color', siteColor);
+                        tableBody.append(newRow); // Append the new row to the table body
+                    }
 
-                newChartData = response;
-                newChart.data.datasets[0].data = newChartData[newChartY];  // New data
-                newChart.data.datasets[0].backgroundColor = siteColor;
-                newChart.data.datasets[0].pointHoverBackgroundColor = siteColor;
-                newChart.data.labels = newChartData[newChartX];  // New labels (if needed)
-                newChart.update(); // Update the chart
-            },
-            error: function(jqXHR, textStatus, errorThrown) {
-                console.error('Request failed:');
-                console.error('Status:', textStatus);
-                console.error('Error:', errorThrown);
-                console.error('Response:', jqXHR.responseText);
-            },
-        });
+                    newChartData = response;
+                    newChart.data.datasets[0].data = newChartData[newChartY];  // New data
+                    newChart.data.datasets[0].backgroundColor = siteColor;
+                    newChart.data.datasets[0].pointHoverBackgroundColor = siteColor;
+                    newChart.data.labels = newChartData[newChartX];  // New labels (if needed)
+                    newChart.update(); // Update the chart
+                },
+                error: function(jqXHR, textStatus, errorThrown) {
+                    console.error('Request failed:');
+                    console.error('Status:', textStatus);
+                    console.error('Error:', errorThrown);
+                    console.error('Response:', jqXHR.responseText);
+                },
+            });
+        }
         clearHighlightedRow(); // clears highlighting from table row, before applying clicked styles
         if (clickedElements) { // any OTHER row is already clicked
             for (var i = 0; i < clickedElements.length; i++) {
@@ -459,6 +480,27 @@ $('table#bss_table tbody').on('mouseover', 'tr', function () { // event listener
                     stick:{color: siteColor},
                 }
             );
+
+            if (rowId != previouslyDisplayedSite) { // if clicked site is different from previously displayed site, remove labels of previously displayed site
+                if (clickedBindingRess.length > 0) {
+                    let clickedBindingRessSel = clickedBindingRess.map(res => Up2PdbDict[repPdbId][labelAsymId][res]);
+                    // hide sidechains of clicked residues and colour back to default
+                    viewer.setStyle({...protAtoms, model: protAtomsModel, resi: clickedBindingRessSel}, // hide sidechains of clicked residues
+                        {cartoon: {style: cartoonStyle, color: defaultColor, arrows: cartoonArrows, tubes: cartoonTubes, opacity: cartoonOpacity, thickness: cartoonThickness,},
+                        stick: {color: defaultColor, hidden: true},}
+                    );
+                    if (surfaceVisible) { // hide previously displayed site clicked residue surfaces
+                        for (const clickedRes of clickedBindingRess) {
+                            if (surfsDict["superposition"]["single_residues"][previouslyDisplayedSite].hasOwnProperty(clickedRes)) {
+                                var surfObject = surfsDict["superposition"]["single_residues"][previouslyDisplayedSite][clickedRes];
+                                var previousSiteColor = chartColors[Number(previouslyDisplayedSite)];
+                                viewer.setSurfaceMaterialStyle(surfObject.surfid, {color: previousSiteColor, opacity: surfHiddenOpacity});
+                            }
+                        }
+                    }
+                    clickedBindingRess = []; // clear clicked binding residues, since we are in a new site
+                }
+            }
             viewer.zoomTo(SuppClickedSiteResidues);
         }
     
@@ -505,6 +547,18 @@ $('table#bss_table tbody').on('mouseover', 'tr', function () { // event listener
         // I DO NOT COLOUR THE CLICKED SITE, BECAUSE IN PRINCIPLE, YOU CAN'T CLICK WITHOUT HOVERING FIRST, SO THE SITE IS ALREADY COLOURED.
 
         if (labelsVisible) {
+
+            // dealing with labels of clicked individual residues
+            if (rowId == previouslyDisplayedSite) {
+                // if clicked site is the same as displayed site (on residues table), don't need to remove labels
+            }
+            else {
+                //console.log(`Clicked site ${rowId} is different from displayed site ${CurrentDisplayedSite}. Removing labels...`);
+                // loop throuth labelsHash[activeModel]["clickedResidues"][CurrentDisplayedSite] dictionary
+                for (const [key, label] of Object.entries(labelsHash[activeModel]["clickedResidues"][previouslyDisplayedSite])) {
+                    label.hide();
+                }
+            }
             for (const label of labelsHash[activeModel]["hoveredRes"]) { // don't know how, I guess fast hovering from residues table/chart might leave one label left
                 viewer.removeLabel(label);
             }
@@ -562,6 +616,18 @@ $('table#bss_table tbody').on('mouseover', 'tr', function () { // event listener
         }
         if (surfaceVisible) {
             if (activeModel == "superposition") {
+                // if (rowId != previouslyDisplayedSite) { // if clicked site is different from previously displayed site, remove surfaces of previously displayed site
+                //     if (clickedBindingRess.length > 0) {
+                //         // hide clicked residue surfaces
+                //         for (const clickedRes of clickedBindingRess) {
+                //             if (surfsDict["superposition"]["single_residues"][previouslyDisplayedSite].hasOwnProperty(clickedRes)) {
+                //                 var surfObject = surfsDict["superposition"]["single_residues"][previouslyDisplayedSite][clickedRes];
+                //                 var previousSiteColor = chartColors[Number(previouslyDisplayedSite)];
+                //                 viewer.setSurfaceMaterialStyle(surfObject.surfid, {color: previousSiteColor, opacity: surfHiddenOpacity});
+                //             }
+                //         }
+                //     }
+                // }
                 for (const [key, value] of Object.entries(surfsDict["superposition"])) {
                     if (key == rowId) {
                         viewer.setSurfaceMaterialStyle(value.surfid, {color: siteColor, opacity: surfHighOpacity});
@@ -848,7 +914,10 @@ $('table#bs_ress_table tbody').on('mouseover', 'tr', function () { // event list
         }
         clearClickedResidueRow(this); // clears the clicked residue row styles
         if (labelsVisible) {
-            labelsHash[activeModel]["clickedResidues"][CurrentDisplayedSite][rowId].hide(); // hides the label for the clicked residue
+            // need to check whether the label for the clicked residue exists
+            if (labelsHash[activeModel]["clickedResidues"][CurrentDisplayedSite].hasOwnProperty(rowId)) {
+                labelsHash[activeModel]["clickedResidues"][CurrentDisplayedSite][rowId].hide(); // hides the label for the clicked residue
+            }
         }
         // if (surfaceVisible) {
         //     if (activeModel == "superposition") {
