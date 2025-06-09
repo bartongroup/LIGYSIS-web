@@ -41,6 +41,21 @@ $('table#bss_table tbody').on('mouseover', 'tr', function () { // event listener
                 }
             }
             else {
+                if (clickedBindingRess.length > 0) { // if binding residues are clicked, hide all their surfaces
+                    let commonRess = clickedBindingRess.filter(res => seg_ress_dict[rowId].includes(res)); // find common residues between clicked binding residues and hovered binding site
+                    if (commonRess.length > 0) { // if there are common residues, show their surfaces
+                        proteinChains.forEach((element) => { // in case of multiple copies of protein of interest
+                            for (const commonRes of commonRess) {
+                                let ResKey = element + "_" + commonRes; // create a key for the residue
+                                if (surfsDict[activeModel]["single_residues"][CurrentDisplayedSite].hasOwnProperty(ResKey)) {
+                                    var surfObject = surfsDict[activeModel]["single_residues"][CurrentDisplayedSite][ResKey];
+                                    var currentSiteColor = chartColors[Number(CurrentDisplayedSite)];
+                                    viewer.setSurfaceMaterialStyle(surfObject.surfid, {color: currentSiteColor, opacity: surfHiddenOpacity});
+                                }
+                            }
+                        });
+                    }
+                }
                 for (const [key, value] of Object.entries(surfsDict[activeModel])) {
                     for (const [key2, value2] of Object.entries(value)) {
                         if (key == rowId) {
@@ -63,7 +78,7 @@ $('table#bss_table tbody').on('mouseover', 'tr', function () { // event listener
         viewer.setStyle(
             SuppHoveredSiteResidues,
             {
-                cartoon:{style: cartoonStyle, color: siteColor, arrows: cartoonArrows, tubes: cartoonTubes, opacity: cartoonOpacity, thickness: cartoonThickness,},
+                cartoon:{style: cartoonStyle, color: siteColor, arrows: cartoonArrows, tubes: cartoonTubes, opacity: cartoonOpacity, thickness: cartoonThickness, gapcutoff: gapCutOff},
                 stick:{color: siteColor},
             }
         );
@@ -85,7 +100,7 @@ $('table#bss_table tbody').on('mouseover', 'tr', function () { // event listener
             viewer.setStyle(
                 {model: activeModel, or: AssemblyHoveredSiteResidues},
                 {
-                    cartoon:{style: cartoonStyle, color: siteColor, arrows: cartoonArrows, tubes: cartoonTubes, opacity: cartoonOpacity, thickness: cartoonThickness,},
+                    cartoon:{style: cartoonStyle, color: siteColor, arrows: cartoonArrows, tubes: cartoonTubes, opacity: cartoonOpacity, thickness: cartoonThickness, gapcutoff: gapCutOff},
                     stick:{colorscheme: defaultColors},
                 }
             );
@@ -94,7 +109,7 @@ $('table#bss_table tbody').on('mouseover', 'tr', function () { // event listener
             viewer.setStyle(
                 {model: activeModel, or: AssemblyHoveredSiteResidues},
                 {
-                    cartoon:{style: cartoonStyle, color: siteColor, arrows: cartoonArrows, tubes: cartoonTubes, opacity: cartoonOpacity, thickness: cartoonThickness,},
+                    cartoon:{style: cartoonStyle, color: siteColor, arrows: cartoonArrows, tubes: cartoonTubes, opacity: cartoonOpacity, thickness: cartoonThickness, gapcutoff: gapCutOff},
                     stick:{color: siteColor},
                 }
             );
@@ -122,7 +137,7 @@ $('table#bss_table tbody').on('mouseover', 'tr', function () { // event listener
             viewer.setStyle(
                 SuppHoveredSiteResidues,
                 {
-                    cartoon: {style: cartoonStyle, color: defaultColor, arrows: cartoonArrows, tubes: cartoonTubes, opacity: cartoonOpacity, thickness: cartoonThickness,}
+                    cartoon: {style: cartoonStyle, color: defaultColor, arrows: cartoonArrows, tubes: cartoonTubes, opacity: cartoonOpacity, thickness: cartoonThickness, gapcutoff: gapCutOff}
                 }
             );
             // colour again clicked residues
@@ -131,19 +146,25 @@ $('table#bss_table tbody').on('mouseover', 'tr', function () { // event listener
                 let displayedSiteColour = chartColors[Number(CurrentDisplayedSite)]; // colour of the clicked binding site
                 viewer.setStyle(
                     {...protAtoms, model: protAtomsModel, resi: clickedBindingRessSel, not: {atom: bboneAtoms}},
-                    {cartoon: {style: cartoonStyle, color: displayedSiteColour, arrows: cartoonArrows, tubes: cartoonTubes, opacity: cartoonOpacity, thickness: cartoonThickness,},
+                    {cartoon: {style: cartoonStyle, color: displayedSiteColour, arrows: cartoonArrows, tubes: cartoonTubes, opacity: cartoonOpacity, thickness: cartoonThickness, gapcutoff: gapCutOff},
                     stick: {color: displayedSiteColour},}
                 ); 
             }
         }
-        else{
+        else {
+            viewer.setStyle(
+                {model: activeModel, or: AssemblyHoveredSiteResidues},
+                {
+                    cartoon:{style: cartoonStyle, color: defaultColor, arrows: cartoonArrows, tubes: cartoonTubes, opacity: cartoonOpacity, thickness: cartoonThickness, gapcutoff: gapCutOff},
+                }
+            );
             if (contactsVisible) {
-                viewer.setStyle(
-                    {model: activeModel, or: AssemblyHoveredSiteResidues}, // hiding all the hovered site residues
-                    {
-                        cartoon:{style: cartoonStyle, color: defaultColor, arrows: cartoonArrows, tubes: cartoonTubes, opacity: cartoonOpacity, thickness: cartoonThickness,},
-                    }
-                );
+                // viewer.setStyle(
+                //     {model: activeModel, or: AssemblyHoveredSiteResidues}, // hiding all the hovered site residues
+                //     {
+                //         cartoon:{style: cartoonStyle, color: defaultColor, arrows: cartoonArrows, tubes: cartoonTubes, opacity: cartoonOpacity, thickness: cartoonThickness, gapcutoff: gapCutOff},
+                //     }
+                // );
                 // colour ligand-binding residues again
                 for (const [key, value] of Object.entries(ligandSitesHash[activeModel])) {
                     let defaultColors = { ...$3Dmol.elementColors.defaultColors }; 
@@ -151,19 +172,30 @@ $('table#bss_table tbody').on('mouseover', 'tr', function () { // event listener
                     viewer.setStyle( // displaying and colouring again the ligand-interacting residues
                         {model: activeModel, or: value[0]}, // value[0] are the ligand-binding residues selection
                         {
-                            cartoon:{style: cartoonStyle, color: value[2], arrows: cartoonArrows, tubes: cartoonTubes, opacity: cartoonOpacity, thickness: cartoonThickness,},
+                            cartoon:{style: cartoonStyle, color: value[2], arrows: cartoonArrows, tubes: cartoonTubes, opacity: cartoonOpacity, thickness: cartoonThickness, gapcutoff: gapCutOff},
                             stick:{hidden: false, colorscheme: defaultColors,} // value[2] is colour of the binding site
                         }
                     );
                 }
             }
             else {
-                viewer.setStyle(
-                    {model: activeModel, or: AssemblyHoveredSiteResidues},
-                    {
-                        cartoon:{style: cartoonStyle, color: defaultColor, arrows: cartoonArrows, tubes: cartoonTubes, opacity: cartoonOpacity, thickness: cartoonThickness,},
-                    }
-                );
+                // viewer.setStyle(
+                //     {model: activeModel, or: AssemblyHoveredSiteResidues},
+                //     {
+                //         cartoon:{style: cartoonStyle, color: defaultColor, arrows: cartoonArrows, tubes: cartoonTubes, opacity: cartoonOpacity, thickness: cartoonThickness, gapcutoff: gapCutOff},
+                //     }
+                // );
+            }
+            if (!clickedBindingRess.length == 0) {
+                proteinChains.forEach((element) => { // in case of multiple copies of protein of interest
+                    let clickedBindingRessSel = clickedBindingRess.map(res => Up2PdbMapAssembly[chainsMapAssembly[element]][res]);
+                    let displayedSiteColour = chartColors[Number(CurrentDisplayedSite)]; // colour of the clicked binding site
+                    viewer.setStyle(
+                        {model: activeModel, resi: clickedBindingRessSel, chain: element, not: {atom: bboneAtoms}},
+                        {cartoon: {style: cartoonStyle, color: displayedSiteColour, arrows: cartoonArrows, tubes: cartoonTubes, opacity: cartoonOpacity, thickness: cartoonThickness, gapcutoff: gapCutOff},
+                        stick: {color: displayedSiteColour},}
+                    );
+                });
             }
         }
 
@@ -208,7 +240,7 @@ $('table#bss_table tbody').on('mouseover', 'tr', function () { // event listener
                                     );
                                 }
                             }
-                            else { // if the surface already exists, just show it
+                            else {
                                 //
                             }
                             
@@ -217,25 +249,88 @@ $('table#bss_table tbody').on('mouseover', 'tr', function () { // event listener
                     }
                 }
                 else {
+                    var currentSiteColor = chartColors[Number(CurrentDisplayedSite)];
                     if (contactsVisible) {
-                        for (const [key, value] of Object.entries(surfsDict[activeModel][rowId])) {
-                            viewer.setSurfaceMaterialStyle(value.surfid, {color: siteColor, opacity: surfHiddenOpacity});
+                        for (const [key, value] of Object.entries(surfsDict[activeModel][rowId])) { // one per chain in assembly
+                            viewer.setSurfaceMaterialStyle(value.surfid, {color: siteColor, opacity: surfHiddenOpacity}); // just hide the hovered binding site surface (the ligand-binding residues surfaces will remain)
+                        }
+                        if (clickedBindingRess.length > 0) {
+                            proteinChains.forEach((element) => { // in case of multiple copies of protein of interest
+                                for (const clickedRes of clickedBindingRess) {
+                                    let ResKey = element + "_" + clickedRes; // create a key for the residue
+                                    if (surfsDict[activeModel]["single_residues"][CurrentDisplayedSite].hasOwnProperty(ResKey)) {
+                                        var surfObject = surfsDict[activeModel]["single_residues"][CurrentDisplayedSite][ResKey];
+                                        viewer.setSurfaceMaterialStyle(surfObject.surfid, {color: currentSiteColor, opacity: surfHighOpacity});
+                                    }
+                                    else { // need to create surfaces because they were not created before since site was already clicked
+                                        let surfSel = {model: activeModel, resi: Up2PdbMapAssembly[chainsMapAssembly[element]][clickedRes], chain: element};
+                                        let SitePDBResNums = seg_ress_dict[CurrentDisplayedSite]
+                                            .filter(el => Up2PdbMapAssembly[chainsMapAssembly[element]].hasOwnProperty(el))
+                                            .map(el => Up2PdbMapAssembly[chainsMapAssembly[element]][el]);
+                                        let SiteSel = {model: activeModel, chain: element, resi: SitePDBResNums};
+                                        surfsDict[activeModel]["single_residues"][CurrentDisplayedSite][ResKey] = viewer.addSurface(
+                                            $3Dmol.SurfaceType.ISO,
+                                            {
+                                                color: currentSiteColor,
+                                                opacity: surfHighOpacity,
+                                            },
+                                            surfSel,
+                                            SiteSel,
+                                        );    
+                                    }
+                                }
+                            });
                         }
                     }
-                    else {
-                        for (const [key, value] of Object.entries(surfsDict[activeModel])) {
-                            for (const [key2, value2] of Object.entries(value)) {
-                                if (key == "lig_inters") { // do nothing for these surfaces
-                                    // pass
-                                }
-                                else if (key == "non_binding") {
-                                    viewer.setSurfaceMaterialStyle(value2.surfid, {color: defaultColor, opacity: surfLowOpacity});
-                                }
-                                else {
-                                    let siteColor = chartColors[Number(key.split("_").pop())];
-                                    viewer.setSurfaceMaterialStyle(value2.surfid, {color: siteColor, opacity: surfMediumOpacity});
+                    else { // if contacts are not visible, show all surfaces
+                        if (clickedBindingRess.length == 0) { // if no binding residues are clicked, show all surfaces}
+                            for (const [key, value] of Object.entries(surfsDict[activeModel])) {
+                                for (const [key2, value2] of Object.entries(value)) {
+                                    if (key == "lig_inters") { // do nothing for these surfaces
+                                        // pass
+                                    }
+                                    else if (key == "non_binding") {
+                                        viewer.setSurfaceMaterialStyle(value2.surfid, {color: defaultColor, opacity: surfLowOpacity});
+                                    }
+                                    else if (key == "single_residues") { // do nothing for these surfaces
+                                        // pass
+                                    }
+                                    else {
+                                        let siteColor = chartColors[Number(key.split("_").pop())];
+                                        viewer.setSurfaceMaterialStyle(value2.surfid, {color: siteColor, opacity: surfMediumOpacity});
+                                    }
                                 }
                             }
+                        }
+                        else { // there are binding residues clicked, hide the un-hovered site surface (clicked residue surfaces will remain or might need to create)
+                            for (const [key, value] of Object.entries(surfsDict[activeModel][rowId])) { // one per chain in assembly
+                                viewer.setSurfaceMaterialStyle(value.surfid, {color: siteColor, opacity: surfHiddenOpacity}); // just hide the hovered binding site surface (the ligand-binding residues surfaces will remain)
+                            }
+                            proteinChains.forEach((element) => { // in case of multiple copies of protein of interest
+                                for (const clickedRes of clickedBindingRess) {
+                                    let ResKey = element + "_" + clickedRes; // create a key for the residue
+                                    if (surfsDict[activeModel]["single_residues"][CurrentDisplayedSite].hasOwnProperty(ResKey)) {
+                                        var surfObject = surfsDict[activeModel]["single_residues"][CurrentDisplayedSite][ResKey];
+                                        viewer.setSurfaceMaterialStyle(surfObject.surfid, {color: currentSiteColor, opacity: surfHighOpacity});
+                                    }
+                                    else { // need to create surfaces because they were not created before since site was already clicked
+                                        let surfSel = {model: activeModel, resi: Up2PdbMapAssembly[chainsMapAssembly[element]][clickedRes], chain: element};
+                                        let SitePDBResNums = seg_ress_dict[CurrentDisplayedSite]
+                                            .filter(el => Up2PdbMapAssembly[chainsMapAssembly[element]].hasOwnProperty(el))
+                                            .map(el => Up2PdbMapAssembly[chainsMapAssembly[element]][el]);
+                                        let SiteSel = {model: activeModel, chain: element, resi: SitePDBResNums};
+                                        surfsDict[activeModel]["single_residues"][CurrentDisplayedSite][ResKey] = viewer.addSurface(
+                                            $3Dmol.SurfaceType.ISO,
+                                            {
+                                                color: currentSiteColor,
+                                                opacity: surfHighOpacity,
+                                            },
+                                            surfSel,
+                                            SiteSel,
+                                        );    
+                                    }
+                                }
+                            });
                         }
                     }
                 }
@@ -249,7 +344,7 @@ $('table#bss_table tbody').on('mouseover', 'tr', function () { // event listener
             if (activeModel == "superposition") {
                 viewer.setStyle( // colouring the clicked site (necessary as sometimes there is overlap between sites)
                     SuppClickedSiteResidues,
-                    {cartoon:{style: cartoonStyle, color: clickedSiteColor, arrows: cartoonArrows, tubes: cartoonTubes, opacity: cartoonOpacity, thickness: cartoonThickness,},
+                    {cartoon:{style: cartoonStyle, color: clickedSiteColor, arrows: cartoonArrows, tubes: cartoonTubes, opacity: cartoonOpacity, thickness: cartoonThickness, gapcutoff: gapCutOff},
                     stick:{color: clickedSiteColor,}, }
                 );
             }
@@ -259,14 +354,14 @@ $('table#bss_table tbody').on('mouseover', 'tr', function () { // event listener
                     defaultColors.C = ligCol;
                     viewer.setStyle( // colouring the clicked site (necessary as sometimes there is overlap between sites)
                         {model: activeModel, or: AssemblyClickedSiteResidues},
-                        {cartoon:{style: cartoonStyle, color: clickedSiteColor, arrows: cartoonArrows, tubes: cartoonTubes, opacity: cartoonOpacity, thickness: cartoonThickness,},
+                        {cartoon:{style: cartoonStyle, color: clickedSiteColor, arrows: cartoonArrows, tubes: cartoonTubes, opacity: cartoonOpacity, thickness: cartoonThickness, gapcutoff: gapCutOff},
                         stick:{colorscheme: defaultColors,}, }
                     );
                 }
                 else {
                     viewer.setStyle( // colouring the clicked site (necessary as sometimes there is overlap between sites)
                         {model: activeModel, or: AssemblyClickedSiteResidues},
-                        {cartoon:{style: cartoonStyle, color: clickedSiteColor, arrows: cartoonArrows, tubes: cartoonTubes, opacity: cartoonOpacity, thickness: cartoonThickness,},
+                        {cartoon:{style: cartoonStyle, color: clickedSiteColor, arrows: cartoonArrows, tubes: cartoonTubes, opacity: cartoonOpacity, thickness: cartoonThickness, gapcutoff: gapCutOff},
                         stick:{color: clickedSiteColor,}, }
                     );
                 }
@@ -307,29 +402,57 @@ $('table#bss_table tbody').on('mouseover', 'tr', function () { // event listener
                 label.hide();
             }
             if (clickedBindingRess.length > 0) { // but there are clicked binding residues. We need to create/show their labels
-                for (const res of clickedBindingRess) {
-                    SuppPDBResNum = Up2PdbDict[repPdbId][labelAsymId][res];
-                    if (SuppPDBResNum !== undefined) {
-                        if (labelsHash[activeModel]["clickedResidues"][CurrentDisplayedSite].hasOwnProperty(res)) {
-                            labelsHash[activeModel]["clickedResidues"][CurrentDisplayedSite][res].show(); // show the label if it exists
-                        }
-                        else{
-                            let resSel = {model: protAtomsModel, resi: SuppPDBResNum, chain: authAsymId}
-                            let resName = viewer.selectedAtoms(resSel)[0].resn
-                            let label = viewer.addLabel(
-                                resName + String(Pdb2UpDict[repPdbId][labelAsymId][SuppPDBResNum]),
-                                {
-                                    alignment: 'center', backgroundColor: 'white', backgroundOpacity: 1,
-                                    borderColor: outlineColor, borderOpacity: 1, borderThickness: 2,
-                                    font: 'Arial', fontColor: siteColor, fontOpacity: 1, fontSize: 12,
-                                    inFront: true, screenOffset: [0, 0, 0], showBackground: true
-                                },
-                                resSel,
-                                false,
-                            );
-                            labelsHash[activeModel]["clickedResidues"][CurrentDisplayedSite][res] = label; // store the label in the hash
+                if (activeModel == "superposition") {
+                    for (const res of clickedBindingRess) {
+                        SuppPDBResNum = Up2PdbDict[repPdbId][labelAsymId][res];
+                        if (SuppPDBResNum !== undefined) {
+                            if (labelsHash[activeModel]["clickedResidues"][CurrentDisplayedSite].hasOwnProperty(res)) {
+                                labelsHash[activeModel]["clickedResidues"][CurrentDisplayedSite][res].show(); // show the label if it exists
+                            }
+                            else{
+                                let resSel = {model: protAtomsModel, resi: SuppPDBResNum, chain: authAsymId}
+                                let resName = viewer.selectedAtoms(resSel)[0].resn
+                                let label = viewer.addLabel(
+                                    resName + String(Pdb2UpDict[repPdbId][labelAsymId][SuppPDBResNum]),
+                                    {
+                                        alignment: 'center', backgroundColor: 'white', backgroundOpacity: 1,
+                                        borderColor: outlineColor, borderOpacity: 1, borderThickness: 2,
+                                        font: 'Arial', fontColor: siteColor, fontOpacity: 1, fontSize: 12,
+                                        inFront: true, screenOffset: [0, 0, 0], showBackground: true
+                                    },
+                                    resSel,
+                                    false,
+                                );
+                                labelsHash[activeModel]["clickedResidues"][CurrentDisplayedSite][res] = label; // store the label in the hash
+                            }
                         }
                     }
+                }
+                else {
+                    proteinChains.forEach((element) => { // in case of multiple copies of protein of interest
+                        for (const res of clickedBindingRess) {
+                            let ResKey = element + "_" + res; // create a key for the residue
+                            let resSel = {model: activeModel, resi: Up2PdbMapAssembly[chainsMapAssembly[element]][res], chain: element}
+                            let resName = viewer.selectedAtoms(resSel)[0].resn
+                            if (labelsHash[activeModel]["clickedResidues"][CurrentDisplayedSite].hasOwnProperty(ResKey)) {
+                                labelsHash[activeModel]["clickedResidues"][CurrentDisplayedSite][ResKey].show(); // show the label if it exists
+                            }
+                            else{
+                                let label = viewer.addLabel(
+                                    resName + String(Pdb2UpMapAssembly[chainsMapAssembly[element]][res]),
+                                    {
+                                        alignment: 'center', backgroundColor: 'white', backgroundOpacity: 1,
+                                        borderColor: outlineColor, borderOpacity: 1, borderThickness: 2,
+                                        font: 'Arial', fontColor: siteColor, fontOpacity: 1, fontSize: 12,
+                                        inFront: true, screenOffset: [0, 0, 0], showBackground: true
+                                    },
+                                    resSel,
+                                    false,
+                                );
+                                labelsHash[activeModel]["clickedResidues"][CurrentDisplayedSite][ResKey] = label; // store the label in the hash
+                            }
+                        }
+                    });
                 }
             }
         }
@@ -376,21 +499,25 @@ $('table#bss_table tbody').on('mouseover', 'tr', function () { // event listener
                 }
             }
             else {
+                /////////////// CONTINUE HERE. IT IS A MESS!
                 for (const [key, value] of Object.entries(surfsDict[activeModel])) {
                     for (const [key2, value2] of Object.entries(value)) {
                         if (contactsVisible) {
-                            if (key == "lig_inters") { // do nothing for these surfaces
-                                // pass
-                            }
-                            else if (key == rowId) {
+                            // if (key == "lig_inters") { // do nothing for these surfaces
+                            //     // pass
+                            // }
+                            if (key == rowId) {
                                 viewer.setSurfaceMaterialStyle(value2.surfid, {color: siteColor, opacity: surfHiddenOpacity});
+                            }
+                            else {
+                                //
                             }
                         }
                         else {
-                            if (key == "lig_inters") { // do nothing for these surfaces
-                                // pass
-                            }
-                            else if (key == "non_binding") {
+                            // if (key == "lig_inters") { // do nothing for these surfaces
+                            //     // pass
+                            // }
+                            if (key == "non_binding") {
                                 viewer.setSurfaceMaterialStyle(value2.surfid, {color: defaultColor, opacity: surfLowOpacity});
                             }
                             else {
@@ -422,11 +549,11 @@ $('table#bss_table tbody').on('mouseover', 'tr', function () { // event listener
         else {
             labelsHash[activeModel]["clickedResidues"][rowId] = {}; // create an empty array for clicked residues if it doesn't exist
         }
-        if (surfsDict["superposition"]["single_residues"].hasOwnProperty(rowId)) {
+        if (surfsDict[activeModel]["single_residues"].hasOwnProperty(rowId)) {
             //
         }
         else {
-            surfsDict["superposition"]["single_residues"][rowId] = {}; // create an empty object for clicked residues if it doesn't exist
+            surfsDict[activeModel]["single_residues"][rowId] = {}; // create an empty object for clicked residues if it doesn't exist
         }
         // do the AJAX  call only if the clicked site is not the same as the previously displayed site
         if (previouslyDisplayedSite == rowId) {
@@ -477,7 +604,7 @@ $('table#bss_table tbody').on('mouseover', 'tr', function () { // event listener
                     viewer.setStyle( // colour white previously clicked site residues
                         SuppClickedSiteResidues,
                         {
-                            cartoon: {style: cartoonStyle, color: defaultColor, arrows: cartoonArrows, tubes: cartoonTubes, opacity: cartoonOpacity, thickness: cartoonThickness,}
+                            cartoon: {style: cartoonStyle, color: defaultColor, arrows: cartoonArrows, tubes: cartoonTubes, opacity: cartoonOpacity, thickness: cartoonThickness, gapcutoff: gapCutOff}
                         }
                     );
                 }
@@ -487,7 +614,7 @@ $('table#bss_table tbody').on('mouseover', 'tr', function () { // event listener
                         viewer.setStyle(
                             {model: activeModel, or: AssemblyClickedSiteResidues, not: {or: allBindingRess}},  
                             {
-                                cartoon: {style: cartoonStyle, color: defaultColor, arrows: cartoonArrows, tubes: cartoonTubes, opacity: cartoonOpacity, thickness: cartoonThickness,}
+                                cartoon: {style: cartoonStyle, color: defaultColor, arrows: cartoonArrows, tubes: cartoonTubes, opacity: cartoonOpacity, thickness: cartoonThickness, gapcutoff: gapCutOff}
                             }
                         );
                     }
@@ -495,7 +622,7 @@ $('table#bss_table tbody').on('mouseover', 'tr', function () { // event listener
                         viewer.setStyle(
                             {model: activeModel, or: AssemblyClickedSiteResidues},
                             {
-                                cartoon: {style: cartoonStyle, color: defaultColor, arrows: cartoonArrows, tubes: cartoonTubes, opacity: cartoonOpacity, thickness: cartoonThickness,}
+                                cartoon: {style: cartoonStyle, color: defaultColor, arrows: cartoonArrows, tubes: cartoonTubes, opacity: cartoonOpacity, thickness: cartoonThickness, gapcutoff: gapCutOff}
                             }
                         );
                     }
@@ -525,7 +652,7 @@ $('table#bss_table tbody').on('mouseover', 'tr', function () { // event listener
             viewer.setStyle(
                 SuppClickedSiteResidues,
                 {
-                    cartoon:{style: cartoonStyle, color: siteColor, arrows: cartoonArrows, tubes: cartoonTubes, opacity: cartoonOpacity, thickness: cartoonThickness,},
+                    cartoon:{style: cartoonStyle, color: siteColor, arrows: cartoonArrows, tubes: cartoonTubes, opacity: cartoonOpacity, thickness: cartoonThickness, gapcutoff: gapCutOff},
                     stick:{color: siteColor},
                 }
             );
@@ -535,7 +662,7 @@ $('table#bss_table tbody').on('mouseover', 'tr', function () { // event listener
                     let clickedBindingRessSel = clickedBindingRess.map(res => Up2PdbDict[repPdbId][labelAsymId][res]);
                     // hide sidechains of clicked residues and colour back to default
                     viewer.setStyle({...protAtoms, model: protAtomsModel, resi: clickedBindingRessSel}, // hide sidechains of clicked residues
-                        {cartoon: {style: cartoonStyle, color: defaultColor, arrows: cartoonArrows, tubes: cartoonTubes, opacity: cartoonOpacity, thickness: cartoonThickness,},
+                        {cartoon: {style: cartoonStyle, color: defaultColor, arrows: cartoonArrows, tubes: cartoonTubes, opacity: cartoonOpacity, thickness: cartoonThickness, gapcutoff: gapCutOff},
                         stick: {color: defaultColor, hidden: true},}
                     );
                     if (surfaceVisible) { // hide previously displayed site clicked residue surfaces
@@ -569,7 +696,7 @@ $('table#bss_table tbody').on('mouseover', 'tr', function () { // event listener
                 viewer.setStyle(
                     {model: activeModel, or: AssemblyClickedSiteResidues},
                     {
-                        cartoon:{style: cartoonStyle, color: siteColor, arrows: cartoonArrows, tubes: cartoonTubes, opacity: cartoonOpacity, thickness: cartoonThickness,},
+                        cartoon:{style: cartoonStyle, color: siteColor, arrows: cartoonArrows, tubes: cartoonTubes, opacity: cartoonOpacity, thickness: cartoonThickness, gapcutoff: gapCutOff,},
                         stick:{colorscheme: defaultColors},
                     }
                 );
@@ -578,7 +705,7 @@ $('table#bss_table tbody').on('mouseover', 'tr', function () { // event listener
                 viewer.setStyle(
                     {model: activeModel, or: AssemblyClickedSiteResidues},
                     {
-                        cartoon:{style: cartoonStyle, color: siteColor, arrows: cartoonArrows, tubes: cartoonTubes, opacity: cartoonOpacity, thickness: cartoonThickness,},
+                        cartoon:{style: cartoonStyle, color: siteColor, arrows: cartoonArrows, tubes: cartoonTubes, opacity: cartoonOpacity, thickness: cartoonThickness, gapcutoff: gapCutOff},
                         stick:{color: siteColor},
                     }
                 );
@@ -731,7 +858,7 @@ $('table#bs_ress_table tbody').on('mouseover', 'tr', function () { // event list
                 viewer.setStyle(
                     {model: protAtomsModel, chain: authAsymId, resi: SuppPDBResNum, not: {atom: bboneAtoms}},
                     {
-                        cartoon:{style: cartoonStyle, color: rowColorHex, arrows: cartoonArrows, tubes: cartoonTubes, opacity: cartoonOpacity, thickness: cartoonThickness,},
+                        cartoon:{style: cartoonStyle, color: rowColorHex, arrows: cartoonArrows, tubes: cartoonTubes, opacity: cartoonOpacity, thickness: cartoonThickness, gapcutoff: gapCutOff},
                         stick:{color: rowColorHex},
                     }
                 );
@@ -751,7 +878,7 @@ $('table#bs_ress_table tbody').on('mouseover', 'tr', function () { // event list
                         viewer.setStyle(
                             {model: activeModel, resi: AssemblyPDBResNum, chain: element, not: {atom: bboneAtoms}},
                             {
-                                cartoon:{style: cartoonStyle, color: rowColorHex, arrows: cartoonArrows, tubes: cartoonTubes, opacity: cartoonOpacity, thickness: cartoonThickness,},
+                                cartoon:{style: cartoonStyle, color: rowColorHex, arrows: cartoonArrows, tubes: cartoonTubes, opacity: cartoonOpacity, thickness: cartoonThickness, gapcutoff: gapCutOff},
                                 stick:{colorscheme: defaultColors},
                             }
                         );
@@ -760,7 +887,7 @@ $('table#bs_ress_table tbody').on('mouseover', 'tr', function () { // event list
                         viewer.setStyle(
                             {model: activeModel, resi: AssemblyPDBResNum, chain: element, not: {atom: bboneAtoms}},
                             {
-                                cartoon:{style: cartoonStyle, color: rowColorHex, arrows: cartoonArrows, tubes: cartoonTubes, opacity: cartoonOpacity, thickness: cartoonThickness,},
+                                cartoon:{style: cartoonStyle, color: rowColorHex, arrows: cartoonArrows, tubes: cartoonTubes, opacity: cartoonOpacity, thickness: cartoonThickness, gapcutoff: gapCutOff},
                                 stick:{color: rowColorHex},
                             }
                         );
@@ -846,7 +973,29 @@ $('table#bs_ress_table tbody').on('mouseover', 'tr', function () { // event list
                     }
                 }
                 else {
-                    // need to implement this for assembly models
+                    proteinChains.forEach((element) => { // in case of multiple copies of protein of interest
+                        let ResKey = element + "_" + rowId; // key for the residue in the surface dictionary
+                        if (surfsDict[activeModel]["single_residues"][CurrentDisplayedSite].hasOwnProperty(ResKey)) {
+                            viewer.setSurfaceMaterialStyle(surfsDict[activeModel]["single_residues"][CurrentDisplayedSite][ResKey].surfid, {color: rowColorHex, opacity: surfHighOpacity});
+                        }
+                        else {
+                            let AssemblyResnum = Up2PdbMapAssembly[chainsMapAssembly[element]][rowId];
+                            let surfSel = {model: activeModel, resi: AssemblyResnum, chain: element};
+                            let SitePDBResNums = seg_ress_dict[CurrentDisplayedSite]
+                                .filter(el => Up2PdbMapAssembly[chainsMapAssembly[element]].hasOwnProperty(el))
+                                .map(el => Up2PdbMapAssembly[chainsMapAssembly[element]][el]);
+                            let SiteSel = {model: activeModel, chain: element, resi: SitePDBResNums};
+                            surfsDict[activeModel]["single_residues"][CurrentDisplayedSite][ResKey] = viewer.addSurface(
+                                $3Dmol.SurfaceType.ISO,
+                                {
+                                    color: rowColorHex,
+                                    opacity: surfHighOpacity,
+                                },
+                                surfSel,
+                                SiteSel,
+                            );
+                        }
+                    });
                 }
             }
             else {
@@ -879,23 +1028,43 @@ $('table#bs_ress_table tbody').on('mouseover', 'tr', function () { // event list
             if (clickedBindingRess.length == 0) { // no binding site residues are clicked
                 viewer.setStyle(
                     {...protAtoms, model: protAtomsModel},
-                    {cartoon: {style: cartoonStyle, color: defaultColor, arrows: cartoonArrows, tubes: cartoonTubes, opacity: cartoonOpacity, thickness: cartoonThickness,}}
+                    {cartoon: {style: cartoonStyle, color: defaultColor, arrows: cartoonArrows, tubes: cartoonTubes, opacity: cartoonOpacity, thickness: cartoonThickness, gapcutoff: gapCutOff}}
                 );
             }
             else {
                 let clickedBindingRessSel = clickedBindingRess.map(res => Up2PdbDict[repPdbId][labelAsymId][res]);
                 viewer.setStyle(
                     {...protAtoms, model: protAtomsModel, not: {resi: clickedBindingRessSel}},
-                    {cartoon: {style: cartoonStyle, color: defaultColor, arrows: cartoonArrows, tubes: cartoonTubes, opacity: cartoonOpacity, thickness: cartoonThickness,}}
+                    {cartoon: {style: cartoonStyle, color: defaultColor, arrows: cartoonArrows, tubes: cartoonTubes, opacity: cartoonOpacity, thickness: cartoonThickness, gapcutoff: gapCutOff}}
                 );
             }
         }
         else {
             if (contactsVisible) {
-                viewer.setStyle(
-                    {...protAtoms, model: activeModel, not: {or: allBindingRess}},
-                    {cartoon: {style: cartoonStyle, color: defaultColor, arrows: cartoonArrows, tubes: cartoonTubes, opacity: cartoonOpacity, thickness: cartoonThickness,}}
-                );
+                if (clickedBindingRess.length == 0) { // no binding site residues are clicked
+                    viewer.setStyle(
+                        {...protAtoms, model: activeModel, not: {or: allBindingRess}},
+                        {cartoon: {style: cartoonStyle, color: defaultColor, arrows: cartoonArrows, tubes: cartoonTubes, opacity: cartoonOpacity, thickness: cartoonThickness, gapcutoff: gapCutOff}}
+                    );
+                }
+                else {
+                    let AssemblyClickedResidues = []; // clear the clicked residues array
+                    // clickedBindingRessSel needs to take into account all chains
+                    proteinChains.forEach((element) => { // in case of multiple copies of protein of interest
+                        //loop through clickedBindingRess
+                        for (const clickedBindingRes of clickedBindingRess) {
+                            let clickedPDBRes = Up2PdbMapAssembly[chainsMapAssembly[element]][clickedBindingRes];
+                            if (clickedPDBRes !== undefined) {
+                                let clickedResSel = {model: activeModel, resi: clickedPDBRes, chain: element, not: {atom: bboneAtoms}};
+                                AssemblyClickedResidues.push(clickedResSel);
+                            }
+                        }
+                    });
+                    viewer.setStyle(
+                        {...protAtoms, model: activeModel, not: {or: allBindingRess}, not: {or: AssemblyClickedResidues}},
+                        {cartoon: {style: cartoonStyle, color: defaultColor, arrows: cartoonArrows, tubes: cartoonTubes, opacity: cartoonOpacity, thickness: cartoonThickness, gapcutoff: gapCutOff}}
+                    );
+                }
 
                 for (const [key, value] of Object.entries(ligandSitesHash[activeModel])) {
                     let defaultColors = { ...$3Dmol.elementColors.defaultColors };
@@ -903,7 +1072,7 @@ $('table#bs_ress_table tbody').on('mouseover', 'tr', function () { // event list
                     viewer.setStyle( // displaying and colouring again the ligand-interacting residues
                         {model: activeModel, or: value[0]}, // value[0] are the ligand-binding residues selection
                         {
-                            cartoon:{style: cartoonStyle, color: value[2], arrows: cartoonArrows, tubes: cartoonTubes, opacity: cartoonOpacity, thickness: cartoonThickness,},
+                            cartoon:{style: cartoonStyle, color: value[2], arrows: cartoonArrows, tubes: cartoonTubes, opacity: cartoonOpacity, thickness: cartoonThickness, gapcutoff: gapCutOff},
                             stick:{hidden: false, colorscheme: defaultColors,}  // value[2] is colour of the binding site
                         }
                     );
@@ -913,7 +1082,7 @@ $('table#bs_ress_table tbody').on('mouseover', 'tr', function () { // event list
                 if (clickedBindingRess.length == 0) { // no binding site residues are clicked
                     viewer.setStyle(
                         {...protAtoms, model: activeModel},
-                        {cartoon: {style: cartoonStyle, color: defaultColor, arrows: cartoonArrows, tubes: cartoonTubes, opacity: cartoonOpacity, thickness: cartoonThickness,}}
+                        {cartoon: {style: cartoonStyle, color: defaultColor, arrows: cartoonArrows, tubes: cartoonTubes, opacity: cartoonOpacity, thickness: cartoonThickness, gapcutoff: gapCutOff}}
                     );
                 }
                 else {
@@ -922,7 +1091,6 @@ $('table#bs_ress_table tbody').on('mouseover', 'tr', function () { // event list
                     proteinChains.forEach((element) => { // in case of multiple copies of protein of interest
                         //loop through clickedBindingRess
                         for (const clickedBindingRes of clickedBindingRess) {
-
                             let clickedPDBRes = Up2PdbMapAssembly[chainsMapAssembly[element]][clickedBindingRes];
                             if (clickedPDBRes !== undefined) {
                                 let clickedResSel = {model: activeModel, resi: clickedPDBRes, chain: element, not: {atom: bboneAtoms}};
@@ -932,7 +1100,7 @@ $('table#bs_ress_table tbody').on('mouseover', 'tr', function () { // event list
                     });
                     viewer.setStyle(
                         {...protAtoms, model: activeModel, not: {or: AssemblyClickedResidues}},
-                        {cartoon: {style: cartoonStyle, color: defaultColor, arrows: cartoonArrows, tubes: cartoonTubes, opacity: cartoonOpacity, thickness: cartoonThickness,}}
+                        {cartoon: {style: cartoonStyle, color: defaultColor, arrows: cartoonArrows, tubes: cartoonTubes, opacity: cartoonOpacity, thickness: cartoonThickness, gapcutoff: gapCutOff}}
                     );
                 }
             }
@@ -979,15 +1147,33 @@ $('table#bs_ress_table tbody').on('mouseover', 'tr', function () { // event list
                         }
                     }
                 }
-                // else {
-                //     for (const [key, value] of Object.entries(surfsDict[activeModel])) {
-                //         for (const [key2, value2] of Object.entries(value)) {
-                //             if (key == rowId) {
-                //                 viewer.setSurfaceMaterialStyle(value2.surfid, {color: defaultColor, opacity: surfHiddenOpacity});
-                //             }
-                //         }
-                //     }
-                // }
+                else {
+                    // loop thorugh protein chains
+                    proteinChains.forEach((element) => { // in case of multiple copies of protein of interest
+                        let ResKey = element + "_" + rowId;
+                        if (surfsDict[activeModel]["single_residues"][CurrentDisplayedSite].hasOwnProperty(ResKey)) {
+                            viewer.setSurfaceMaterialStyle(surfsDict[activeModel]["single_residues"][CurrentDisplayedSite][ResKey].surfid, {opacity: surfHiddenOpacity});
+                        }
+                        if (clickedBindingRess.length == 0) { // no binding site residues are clicked
+                            // TODO: implement this
+                            for (const [key, value] of Object.entries(surfsDict[activeModel])) {
+                            if (key == "non_binding") {
+                                viewer.setSurfaceMaterialStyle(value[element].surfid, {color: defaultColor, opacity: surfLowOpacity});
+                            }
+                            else if (key == "single_residues") {
+                                //
+                            }
+                            else if (key == "lig_inters") {
+                                // pass
+                            }
+                            else {
+                                let siteColor = chartColors[Number(key.split("_").pop())];
+                                viewer.setSurfaceMaterialStyle(value[element].surfid, {color: siteColor, opacity: surfMediumOpacity});
+                            }
+                        }
+                        }
+                    });
+                }
             }
         }
         else {
@@ -1010,23 +1196,21 @@ $('table#bs_ress_table tbody').on('mouseover', 'tr', function () { // event list
         }
         clearClickedResidueRow(this); // clears the clicked residue row styles
         if (labelsVisible) {
-            // need to check whether the label for the clicked residue exists
-            if (labelsHash[activeModel]["clickedResidues"][CurrentDisplayedSite].hasOwnProperty(rowId)) {
-                labelsHash[activeModel]["clickedResidues"][CurrentDisplayedSite][rowId].hide(); // hides the label for the clicked residue
+            if (activeModel == "superposition") {
+                // need to check whether the label for the clicked residue exists
+                if (labelsHash[activeModel]["clickedResidues"][CurrentDisplayedSite].hasOwnProperty(rowId)) {
+                    labelsHash[activeModel]["clickedResidues"][CurrentDisplayedSite][rowId].hide(); // hides the label for the clicked residue
+                }
+            }
+            else {
+                proteinChains.forEach((element) => { // in case of multiple copies of protein of interest
+                    let ResKey = element + "_" + rowId; // key for the residue in the labels hash
+                    if (labelsHash[activeModel]["clickedResidues"][CurrentDisplayedSite].hasOwnProperty(ResKey)) {
+                        labelsHash[activeModel]["clickedResidues"][CurrentDisplayedSite][ResKey].hide(); // hides the label for the clicked residue
+                    }
+                });
             }
         }
-        // if (surfaceVisible) {
-        //     if (activeModel == "superposition") {
-        //         if (surfsDict["superposition"]["single_residues"][CurrentDisplayedSite].hasOwnProperty(rowId)) {
-        //             viewer.setSurfaceMaterialStyle(surfsDict["superposition"]["single_residues"][CurrentDisplayedSite][rowId].surfid, {opacity: surfHiddenOpacity});
-        //         }
-        //     }
-        //     else {
-        //         if (surfsDict[activeModel]["single_residues"].hasOwnProperty(rowId)) {
-        //             viewer.setSurfaceMaterialStyle(surfsDict[activeModel]["single_residues"][rowId].surfid, {color: defaultColor, opacity: surfHiddenOpacity});
-        //         }
-        //     }
-        // }
         viewer.render();
     }
     else {
@@ -1044,7 +1228,7 @@ $('table#bs_ress_table tbody').on('mouseover', 'tr', function () { // event list
                     viewer.setStyle(
                         {model: protAtomsModel, chain: authAsymId, resi: SuppPDBResNum, not: {atom: bboneAtoms}},
                         {
-                            cartoon:{style: cartoonStyle, color: rowColorHex, arrows: cartoonArrows, tubes: cartoonTubes, opacity: cartoonOpacity, thickness: cartoonThickness,},
+                            cartoon:{style: cartoonStyle, color: rowColorHex, arrows: cartoonArrows, tubes: cartoonTubes, opacity: cartoonOpacity, thickness: cartoonThickness, gapcutoff: gapCutOff},
                             stick:{color: rowColorHex},
                         }
                     );
@@ -1120,21 +1304,21 @@ $('table#bs_ress_table tbody').on('mouseover', 'tr', function () { // event list
                     if (AssemblyPDBResNum !== undefined) {
                         let ResKey = element + "_" + rowId;
                         if (contactsVisible) {
-                            // let defaultColors = { ...$3Dmol.elementColors.defaultColors };
-                            // defaultColors.C = rowColorHex;
-                            // viewer.setStyle(
-                            //     {model: activeModel, resi: AssemblyPDBResNum, chain: element, not: {atom: bboneAtoms}},
-                            //     {
-                            //         cartoon:{style: cartoonStyle, color: rowColorHex, arrows: cartoonArrows, tubes: cartoonTubes, opacity: cartoonOpacity, thickness: cartoonThickness,},
-                            //         stick:{colorscheme: defaultColors},
-                            //     }
-                            // );
+                            let defaultColors = { ...$3Dmol.elementColors.defaultColors };
+                            defaultColors.C = rowColorHex;
+                            viewer.setStyle(
+                                {model: activeModel, resi: AssemblyPDBResNum, chain: element, not: {atom: bboneAtoms}},
+                                {
+                                    cartoon:{style: cartoonStyle, color: rowColorHex, arrows: cartoonArrows, tubes: cartoonTubes, opacity: cartoonOpacity, thickness: cartoonThickness, gapcutoff: gapCutOff},
+                                    stick:{colorscheme: defaultColors},
+                                }
+                            );
                         }
                         else {
                             viewer.setStyle(
                                 {model: activeModel, resi: AssemblyPDBResNum, chain: element, not: {atom: bboneAtoms}},
                                 {
-                                    cartoon:{style: cartoonStyle, color: rowColorHex, arrows: cartoonArrows, tubes: cartoonTubes, opacity: cartoonOpacity, thickness: cartoonThickness,},
+                                    cartoon:{style: cartoonStyle, color: rowColorHex, arrows: cartoonArrows, tubes: cartoonTubes, opacity: cartoonOpacity, thickness: cartoonThickness, gapcutoff: gapCutOff},
                                     stick:{color: rowColorHex},
                                 }
                             );
@@ -1170,7 +1354,9 @@ $('table#bs_ress_table tbody').on('mouseover', 'tr', function () { // event list
                             // need to hide all other surfaces first
                             for (const [key, value] of Object.entries(surfsDict[activeModel])) {
                                 if (key == "non_binding") {
-                                    viewer.setSurfaceMaterialStyle(surfsDict[activeModel][key].surfid, {color: defaultColor, opacity: surfHiddenOpacity});
+                                    proteinChains.forEach((element) => { // in case of multiple copies of protein of interest
+                                        viewer.setSurfaceMaterialStyle(surfsDict[activeModel][key][element].surfid, {color: defaultColor, opacity: surfHiddenOpacity});
+                                    });
                                 }
                                 else if (key == "single_residues") {
                                     // do nothing for these surfaces
@@ -1180,7 +1366,9 @@ $('table#bs_ress_table tbody').on('mouseover', 'tr', function () { // event list
                                 }
                                 else {
                                     let siteColor = chartColors[Number(key.split("_").pop())];
-                                    viewer.setSurfaceMaterialStyle(surfsDict[activeModel][key].surfid, {color: siteColor, opacity: surfHiddenOpacity});
+                                    proteinChains.forEach((element) => { // in case of multiple copies of protein of interest
+                                        viewer.setSurfaceMaterialStyle(surfsDict[activeModel][key][element].surfid, {color: siteColor, opacity: surfHiddenOpacity});
+                                    });
                                 }
                             }
                             if (surfsDict[activeModel]["single_residues"][CurrentDisplayedSite].hasOwnProperty(ResKey)) {

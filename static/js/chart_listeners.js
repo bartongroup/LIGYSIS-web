@@ -49,7 +49,7 @@ document.getElementById('chartCanvas').addEventListener('mousemove', function(e)
                     viewer.setStyle(// colour everything white except for clicked site. To make disappear before hovering on other site (can happen when two sites are close in the graph)
                         {...protAtoms, model: protAtomsModel, not: SuppClickedSiteResidues},
                         {
-                            cartoon: {style: cartoonStyle, color: defaultColor, arrows: cartoonArrows, tubes: cartoonTubes, opacity: cartoonOpacity, thickness: cartoonThickness,},
+                            cartoon: {style: cartoonStyle, color: defaultColor, arrows: cartoonArrows, tubes: cartoonTubes, opacity: cartoonOpacity, thickness: cartoonThickness, gapcutoff: gapCutOff},
                             stick: {color: defaultColor, hidden: true},
                         }
                     );     
@@ -59,7 +59,7 @@ document.getElementById('chartCanvas').addEventListener('mousemove', function(e)
                         viewer.setStyle(
                             {...protAtoms, model: activeModel, not: {or: AssemblyClickedSiteResidues.concat(allBindingRess)},},
                             {
-                                cartoon: {style: cartoonStyle, color: defaultColor, arrows: cartoonArrows, tubes: cartoonTubes, opacity: cartoonOpacity, thickness: cartoonThickness,},
+                                cartoon: {style: cartoonStyle, color: defaultColor, arrows: cartoonArrows, tubes: cartoonTubes, opacity: cartoonOpacity, thickness: cartoonThickness, gapcutoff: gapCutOff},
                                 stick: {color: defaultColor, hidden: true},
                             }
                         );
@@ -68,7 +68,7 @@ document.getElementById('chartCanvas').addEventListener('mousemove', function(e)
                         viewer.setStyle(// colour everything white except for clicked site. To make disappear before hovering on other site (can happen when two sites are close in the graph)
                             {...protAtoms, model: activeModel, not: {or: AssemblyClickedSiteResidues},},
                             {
-                                cartoon: {style: cartoonStyle, color: defaultColor, arrows: cartoonArrows, tubes: cartoonTubes, opacity: cartoonOpacity, thickness: cartoonThickness,},
+                                cartoon: {style: cartoonStyle, color: defaultColor, arrows: cartoonArrows, tubes: cartoonTubes, opacity: cartoonOpacity, thickness: cartoonThickness, gapcutoff: gapCutOff},
                                 stick: {color: defaultColor, hidden: true},
                             }
                         );
@@ -121,21 +121,21 @@ document.getElementById('chartCanvas').addEventListener('mousemove', function(e)
                 if (contactsVisible) { // don't want to hide ligand-binding sites if CONTACTS is ON
                     viewer.setStyle(
                         {...protAtoms, model: activeModel, not:{or:allBindingRess}},
-                        {cartoon:{style: cartoonStyle, color: defaultColor, arrows: cartoonArrows, tubes: cartoonTubes, opacity: cartoonOpacity, thickness: cartoonThickness,},}
+                        {cartoon:{style: cartoonStyle, color: defaultColor, arrows: cartoonArrows, tubes: cartoonTubes, opacity: cartoonOpacity, thickness: cartoonThickness, gapcutoff: gapCutOff},}
                     );   
                 }
                 else {
                     if (clickedBindingRess.length == 0) {
                         viewer.setStyle(
                             protAtoms,
-                            {cartoon:{style: cartoonStyle, color: defaultColor, arrows: cartoonArrows, tubes: cartoonTubes, opacity: cartoonOpacity, thickness: cartoonThickness,},}
+                            {cartoon:{style: cartoonStyle, color: defaultColor, arrows: cartoonArrows, tubes: cartoonTubes, opacity: cartoonOpacity, thickness: cartoonThickness, gapcutoff: gapCutOff},}
                         );
                     }
                     else {
                         let clickedBindingRessSel = clickedBindingRess.map(res => Up2PdbDict[repPdbId][labelAsymId][res]);
                         viewer.setStyle(
                             {...protAtoms, model: protAtomsModel, not: {resi: clickedBindingRessSel}},
-                            {cartoon:{style: cartoonStyle, color: defaultColor, arrows: cartoonArrows, tubes: cartoonTubes, opacity: cartoonOpacity, thickness: cartoonThickness,},}
+                            {cartoon:{style: cartoonStyle, color: defaultColor, arrows: cartoonArrows, tubes: cartoonTubes, opacity: cartoonOpacity, thickness: cartoonThickness, gapcutoff: gapCutOff},}
                         );
                     }
                     
@@ -200,7 +200,7 @@ document.getElementById('chartCanvas').addEventListener('mousemove', function(e)
                 viewer.setStyle(
                     SuppHoveredSiteResidues,
                     {
-                        cartoon:{style: cartoonStyle, color: siteColor, arrows: cartoonArrows, tubes: cartoonTubes, opacity: cartoonOpacity, thickness: cartoonThickness,},
+                        cartoon:{style: cartoonStyle, color: siteColor, arrows: cartoonArrows, tubes: cartoonTubes, opacity: cartoonOpacity, thickness: cartoonThickness, gapcutoff: gapCutOff},
                         stick:{color: siteColor,},
                     }
                 );
@@ -221,7 +221,7 @@ document.getElementById('chartCanvas').addEventListener('mousemove', function(e)
                     viewer.setStyle(
                         {model: activeModel, or: AssemblyHoveredSiteResidues},
                         {
-                            cartoon:{style: cartoonStyle, color: siteColor, arrows: cartoonArrows, tubes: cartoonTubes, opacity: cartoonOpacity, thickness: cartoonThickness,},
+                            cartoon:{style: cartoonStyle, color: siteColor, arrows: cartoonArrows, tubes: cartoonTubes, opacity: cartoonOpacity, thickness: cartoonThickness, gapcutoff: gapCutOff},
                             stick:{colorscheme: defaultColors},
                         }
                     );
@@ -230,7 +230,7 @@ document.getElementById('chartCanvas').addEventListener('mousemove', function(e)
                     viewer.setStyle(
                         {model: activeModel, or: AssemblyHoveredSiteResidues},
                         {
-                            cartoon:{style: cartoonStyle, color: siteColor, arrows: cartoonArrows, tubes: cartoonTubes, opacity: cartoonOpacity, thickness: cartoonThickness,},
+                            cartoon:{style: cartoonStyle, color: siteColor, arrows: cartoonArrows, tubes: cartoonTubes, opacity: cartoonOpacity, thickness: cartoonThickness, gapcutoff: gapCutOff},
                             stick:{color: siteColor},
                         }
                     );
@@ -259,12 +259,12 @@ document.getElementById('chartCanvas').addEventListener('mousemove', function(e)
                     {
                         ...protAtoms, model: protAtomsModel, not: SuppClickedSiteResidues, // all protein residues except clicked site (we want to keep ligands),
                     },
-                    {cartoon: {style: cartoonStyle, color: defaultColor, arrows: cartoonArrows, tubes: cartoonTubes, opacity: cartoonOpacity, thickness: cartoonThickness,}}
+                    {cartoon: {style: cartoonStyle, color: defaultColor, arrows: cartoonArrows, tubes: cartoonTubes, opacity: cartoonOpacity, thickness: cartoonThickness, gapcutoff: gapCutOff}}
                 );
                 
                 viewer.setStyle( // colouring the clicked site (necessary as sometimes there is overlap between sites)
                     SuppClickedSiteResidues,
-                    {cartoon:{style: cartoonStyle, color: clickedSiteColor, arrows: cartoonArrows, tubes: cartoonTubes, opacity: cartoonOpacity, thickness: cartoonThickness,},
+                    {cartoon:{style: cartoonStyle, color: clickedSiteColor, arrows: cartoonArrows, tubes: cartoonTubes, opacity: cartoonOpacity, thickness: cartoonThickness, gapcutoff: gapCutOff},
                     stick:{color: clickedSiteColor,}, }
                 );
                 // colour again clicked residues
@@ -273,7 +273,7 @@ document.getElementById('chartCanvas').addEventListener('mousemove', function(e)
                     let displayedSiteColour = chartColors[Number(CurrentDisplayedSite)]; // colour of the clicked binding site
                     viewer.setStyle(
                         {...protAtoms, model: protAtomsModel, resi: clickedBindingRessSel, not: {atom: bboneAtoms}},
-                        {cartoon: {style: cartoonStyle, color: displayedSiteColour, arrows: cartoonArrows, tubes: cartoonTubes, opacity: cartoonOpacity, thickness: cartoonThickness,},
+                        {cartoon: {style: cartoonStyle, color: displayedSiteColour, arrows: cartoonArrows, tubes: cartoonTubes, opacity: cartoonOpacity, thickness: cartoonThickness, gapcutoff: gapCutOff},
                         stick: {color: displayedSiteColour},}
                     ); 
                 }
@@ -283,7 +283,7 @@ document.getElementById('chartCanvas').addEventListener('mousemove', function(e)
                         {
                            ...protAtoms, model: activeModel, not: {or: AssemblyClickedSiteResidues}, // all protein residues except clicked site (we want to keep ligands)
                         },
-                        {cartoon: {style: cartoonStyle, color: defaultColor, arrows: cartoonArrows, tubes: cartoonTubes, opacity: cartoonOpacity, thickness: cartoonThickness,}}
+                        {cartoon: {style: cartoonStyle, color: defaultColor, arrows: cartoonArrows, tubes: cartoonTubes, opacity: cartoonOpacity, thickness: cartoonThickness, gapcutoff: gapCutOff}}
                     );
                     
                 if (contactsVisible) { // don't want to hide ligand-binding sites if CONTACTS is ON
@@ -291,20 +291,20 @@ document.getElementById('chartCanvas').addEventListener('mousemove', function(e)
                         {
                             ...protAtoms, model: activeModel, not: {or: AssemblyClickedSiteResidues.concat(allBindingRess)} // all protein residues except clicked site (we want to keep ligands)
                         },
-                        {cartoon: {style: cartoonStyle, color: defaultColor, arrows: cartoonArrows, tubes: cartoonTubes, opacity: cartoonOpacity, thickness: cartoonThickness,}}
+                        {cartoon: {style: cartoonStyle, color: defaultColor, arrows: cartoonArrows, tubes: cartoonTubes, opacity: cartoonOpacity, thickness: cartoonThickness, gapcutoff: gapCutOff}}
                     );
                     let defaultColors = { ...$3Dmol.elementColors.defaultColors }; 
                     defaultColors.C = clickedSiteColor;
                     viewer.setStyle( // colouring the clicked site (necessary as sometimes there is overlap between sites)
                         {model: activeModel, or: AssemblyClickedSiteResidues},
-                        {cartoon:{style: cartoonStyle, color: clickedSiteColor, arrows: cartoonArrows, tubes: cartoonTubes, opacity: cartoonOpacity, thickness: cartoonThickness,},
+                        {cartoon:{style: cartoonStyle, color: clickedSiteColor, arrows: cartoonArrows, tubes: cartoonTubes, opacity: cartoonOpacity, thickness: cartoonThickness, gapcutoff: gapCutOff},
                         stick:{colorscheme: defaultColors,}, }
                     );
                     for (const [key, value] of Object.entries(ligandSitesHash[activeModel])) { // colour again in case some bingind residues are part of another site and got colouterd
                         viewer.setStyle(
                             {model: activeModel, or: value[0]},  // value[0] are the ligand-binding residues selection
                             {
-                                cartoon:{style: cartoonStyle, color: value[2], arrows: cartoonArrows, tubes: cartoonTubes, opacity: cartoonOpacity, thickness: cartoonThickness,},
+                                cartoon:{style: cartoonStyle, color: value[2], arrows: cartoonArrows, tubes: cartoonTubes, opacity: cartoonOpacity, thickness: cartoonThickness, gapcutoff: gapCutOff},
                                 stick:{hidden: false, color: value[2],} // value[2] is colour of the binding site
                             }
                         );
@@ -313,7 +313,7 @@ document.getElementById('chartCanvas').addEventListener('mousemove', function(e)
                 else {
                     viewer.setStyle( // colouring the clicked site (necessary as sometimes there is overlap between sites)
                         {model: activeModel, or: AssemblyClickedSiteResidues},
-                        {cartoon:{style: cartoonStyle, color: clickedSiteColor, arrows: cartoonArrows, tubes: cartoonTubes, opacity: cartoonOpacity, thickness: cartoonThickness,},
+                        {cartoon:{style: cartoonStyle, color: clickedSiteColor, arrows: cartoonArrows, tubes: cartoonTubes, opacity: cartoonOpacity, thickness: cartoonThickness, gapcutoff: gapCutOff},
                         stick:{color: clickedSiteColor,}, }
                     );
                 }
@@ -354,7 +354,7 @@ document.getElementById('chartCanvas').addEventListener('mousemove', function(e)
             if (contactsVisible) { // don't want to hide ligand-binding sites if CONTACTS is ON
                 viewer.setStyle(
                     {...protAtoms, model: activeModel, not:{or: allBindingRess}},
-                    {cartoon:{style: cartoonStyle, color: defaultColor, arrows: cartoonArrows, tubes: cartoonTubes, opacity: cartoonOpacity, thickness: cartoonThickness,},}
+                    {cartoon:{style: cartoonStyle, color: defaultColor, arrows: cartoonArrows, tubes: cartoonTubes, opacity: cartoonOpacity, thickness: cartoonThickness, gapcutoff: gapCutOff},}
                 );
                 // also recolour the ligand-interacting residues as some might be in multiple sites
                 for (const [key, value] of Object.entries(ligandSitesHash[activeModel])) {
@@ -363,7 +363,7 @@ document.getElementById('chartCanvas').addEventListener('mousemove', function(e)
                     viewer.setStyle(
                         {model: activeModel, or: value[0]}, // value[0] are the ligand-binding residues selection
                         {
-                            cartoon:{style: cartoonStyle, color: value[2], arrows: cartoonArrows, tubes: cartoonTubes, opacity: cartoonOpacity, thickness: cartoonThickness,},
+                            cartoon:{style: cartoonStyle, color: value[2], arrows: cartoonArrows, tubes: cartoonTubes, opacity: cartoonOpacity, thickness: cartoonThickness, gapcutoff: gapCutOff},
                             stick:{hidden: false, colorscheme: defaultColors,} // value[2] is colour of the binding site
                         }
                     );
@@ -372,7 +372,7 @@ document.getElementById('chartCanvas').addEventListener('mousemove', function(e)
             else {
                 viewer.setStyle( // this generic selection works are CONTACTS are OFF and no row is clicked
                     protAtoms,
-                    {cartoon: {style: cartoonStyle, color: defaultColor, arrows: cartoonArrows, tubes: cartoonTubes, opacity: cartoonOpacity, thickness: cartoonThickness,}}
+                    {cartoon: {style: cartoonStyle, color: defaultColor, arrows: cartoonArrows, tubes: cartoonTubes, opacity: cartoonOpacity, thickness: cartoonThickness, gapcutoff: gapCutOff}}
                 ); // remove sidechains and colour white everything except ligands (all protein atoms)
 
                 // colour again clicked residues
@@ -381,7 +381,7 @@ document.getElementById('chartCanvas').addEventListener('mousemove', function(e)
                     let displayedSiteColour = chartColors[Number(CurrentDisplayedSite)]; // colour of the clicked binding site
                     viewer.setStyle(
                         {...protAtoms, model: protAtomsModel, resi: clickedBindingRessSel, not: {atom: bboneAtoms}},
-                        {cartoon: {style: cartoonStyle, color: displayedSiteColour, arrows: cartoonArrows, tubes: cartoonTubes, opacity: cartoonOpacity, thickness: cartoonThickness,},
+                        {cartoon: {style: cartoonStyle, color: displayedSiteColour, arrows: cartoonArrows, tubes: cartoonTubes, opacity: cartoonOpacity, thickness: cartoonThickness, gapcutoff: gapCutOff},
                         stick: {color: displayedSiteColour},}
                     ); 
                 }
@@ -498,11 +498,11 @@ document.getElementById('chartCanvas').addEventListener('click', function(e) { /
         else {
             labelsHash[activeModel]["clickedResidues"][pointLabel] = {}; // create an empty array for clicked residues if it doesn't exist
         }
-        if (surfsDict["superposition"]["single_residues"].hasOwnProperty(pointLabel)) {
+        if (surfsDict[activeModel]["single_residues"].hasOwnProperty(pointLabel)) {
             //
         }
         else {
-            surfsDict["superposition"]["single_residues"][pointLabel] = {}; // create an empty object for clicked residues if it doesn't exist
+            surfsDict[activeModel]["single_residues"][pointLabel] = {}; // create an empty object for clicked residues if it doesn't exist
         }
         if (previouslyDisplayedSite == pointLabel) {
             //
@@ -672,7 +672,7 @@ document.getElementById('chartCanvas').addEventListener('click', function(e) { /
                     viewer.setStyle( // colour white previously clicked site residues
                             SuppClickedSiteResidues,
                             {
-                                cartoon: {style: cartoonStyle, color: defaultColor, arrows: cartoonArrows, tubes: cartoonTubes, opacity: cartoonOpacity, thickness: cartoonThickness,}
+                                cartoon: {style: cartoonStyle, color: defaultColor, arrows: cartoonArrows, tubes: cartoonTubes, opacity: cartoonOpacity, thickness: cartoonThickness, gapcutoff: gapCutOff}
                             }
                         );
                 }
@@ -680,7 +680,7 @@ document.getElementById('chartCanvas').addEventListener('click', function(e) { /
                     viewer.setStyle(
                         {model: activeModel, or: AssemblyClickedSiteResidues},
                         {
-                            cartoon: {style: cartoonStyle, color: defaultColor, arrows: cartoonArrows, tubes: cartoonTubes, opacity: cartoonOpacity, thickness: cartoonThickness,}
+                            cartoon: {style: cartoonStyle, color: defaultColor, arrows: cartoonArrows, tubes: cartoonTubes, opacity: cartoonOpacity, thickness: cartoonThickness, gapcutoff: gapCutOff}
                         }
                     );
                 }
@@ -704,7 +704,7 @@ document.getElementById('chartCanvas').addEventListener('click', function(e) { /
                     viewer.setStyle(
                         SuppClickedSiteResidues,
                         {
-                            cartoon: {style: cartoonStyle, color: pointColor, arrows: cartoonArrows, tubes: cartoonTubes, opacity: cartoonOpacity, thickness: cartoonThickness,},
+                            cartoon: {style: cartoonStyle, color: pointColor, arrows: cartoonArrows, tubes: cartoonTubes, opacity: cartoonOpacity, thickness: cartoonThickness, gapcutoff: gapCutOff},
                             stick:{color: pointColor},
                         },
                     );
@@ -726,7 +726,7 @@ document.getElementById('chartCanvas').addEventListener('click', function(e) { /
                         viewer.setStyle(
                             {model: activeModel, or: AssemblyClickedSiteResidues},
                             {
-                                cartoon: {style: cartoonStyle, color: pointColor, arrows: cartoonArrows, tubes: cartoonTubes, opacity: cartoonOpacity, thickness: cartoonThickness,},
+                                cartoon: {style: cartoonStyle, color: pointColor, arrows: cartoonArrows, tubes: cartoonTubes, opacity: cartoonOpacity, thickness: cartoonThickness, gapcutoff: gapCutOff},
                                 stick:{colorscheme: defaultColors},
                             },
                         );
@@ -735,7 +735,7 @@ document.getElementById('chartCanvas').addEventListener('click', function(e) { /
                         viewer.setStyle(
                             {model: activeModel, or: AssemblyClickedSiteResidues},
                             {
-                                cartoon: {style: cartoonStyle, color: pointColor, arrows: cartoonArrows, tubes: cartoonTubes, opacity: cartoonOpacity, thickness: cartoonThickness,},
+                                cartoon: {style: cartoonStyle, color: pointColor, arrows: cartoonArrows, tubes: cartoonTubes, opacity: cartoonOpacity, thickness: cartoonThickness, gapcutoff: gapCutOff},
                                 stick:{color: pointColor},
                             },
                         );
@@ -838,7 +838,7 @@ document.getElementById('chartCanvas').addEventListener('click', function(e) { /
                 viewer.setStyle(
                     SuppClickedSiteResidues,
                     {
-                        cartoon: {style: cartoonStyle, color: pointColor, arrows: cartoonArrows, tubes: cartoonTubes, opacity: cartoonOpacity, thickness: cartoonThickness,},
+                        cartoon: {style: cartoonStyle, color: pointColor, arrows: cartoonArrows, tubes: cartoonTubes, opacity: cartoonOpacity, thickness: cartoonThickness, gapcutoff: gapCutOff},
                         stick:{color: pointColor},
                     },
                 );
@@ -848,7 +848,7 @@ document.getElementById('chartCanvas').addEventListener('click', function(e) { /
                         let clickedBindingRessSel = clickedBindingRess.map(res => Up2PdbDict[repPdbId][labelAsymId][res]);
                         // hide sidechains of clicked residues and colour back to default
                         viewer.setStyle({...protAtoms, model: protAtomsModel, resi: clickedBindingRessSel}, // hide sidechains of clicked residues
-                            {cartoon: {style: cartoonStyle, color: defaultColor, arrows: cartoonArrows, tubes: cartoonTubes, opacity: cartoonOpacity, thickness: cartoonThickness,},
+                            {cartoon: {style: cartoonStyle, color: defaultColor, arrows: cartoonArrows, tubes: cartoonTubes, opacity: cartoonOpacity, thickness: cartoonThickness, gapcutoff: gapCutOff},
                             stick: {color: defaultColor, hidden: true},}
                         );
                         if (surfaceVisible) { // hide previously displayed site clicked residue surfaces
@@ -883,7 +883,7 @@ document.getElementById('chartCanvas').addEventListener('click', function(e) { /
                     viewer.setStyle(
                         {model: activeModel, or: AssemblyClickedSiteResidues},
                         {
-                            cartoon: {style: cartoonStyle, color: pointColor, arrows: cartoonArrows, tubes: cartoonTubes, opacity: cartoonOpacity, thickness: cartoonThickness,},
+                            cartoon: {style: cartoonStyle, color: pointColor, arrows: cartoonArrows, tubes: cartoonTubes, opacity: cartoonOpacity, thickness: cartoonThickness, gapcutoff: gapCutOff},
                             stick:{colorscheme: defaultColors},
                         },
                     );
@@ -892,7 +892,7 @@ document.getElementById('chartCanvas').addEventListener('click', function(e) { /
                     viewer.setStyle(
                         {model: activeModel, or: AssemblyClickedSiteResidues},
                         {
-                            cartoon: {style: cartoonStyle, color: pointColor, arrows: cartoonArrows, tubes: cartoonTubes, opacity: cartoonOpacity, thickness: cartoonThickness,},
+                            cartoon: {style: cartoonStyle, color: pointColor, arrows: cartoonArrows, tubes: cartoonTubes, opacity: cartoonOpacity, thickness: cartoonThickness, gapcutoff: gapCutOff},
                             stick:{color: pointColor},
                         },
                     );
@@ -1024,13 +1024,13 @@ document.getElementById('newChartCanvas').addEventListener('mousemove', function
                         let clickedBindingRessSel = clickedBindingRess.map(res => Up2PdbDict[repPdbId][labelAsymId][res]);
                         viewer.setStyle(
                             {...protAtoms, model: protAtomsModel, not: {resi: clickedBindingRessSel}},
-                            {cartoon: {style: cartoonStyle, color: defaultColor, arrows: cartoonArrows, tubes: cartoonTubes, opacity: cartoonOpacity, thickness: cartoonThickness,}}
+                            {cartoon: {style: cartoonStyle, color: defaultColor, arrows: cartoonArrows, tubes: cartoonTubes, opacity: cartoonOpacity, thickness: cartoonThickness, gapcutoff: gapCutOff}}
                         );
                     }
                     else {
                         viewer.setStyle(
                             {...protAtoms, model: protAtomsModel},
-                            {cartoon: {style: cartoonStyle, color: defaultColor, arrows: cartoonArrows, tubes: cartoonTubes, opacity: cartoonOpacity, thickness: cartoonThickness,}}
+                            {cartoon: {style: cartoonStyle, color: defaultColor, arrows: cartoonArrows, tubes: cartoonTubes, opacity: cartoonOpacity, thickness: cartoonThickness, gapcutoff: gapCutOff}}
                         ); // this is done so only a single point is highlighted when hovered on (some are really close.)
                     }
                     SuppPDBResNum = Up2PdbDict[repPdbId][labelAsymId][newPointLabel];
@@ -1038,7 +1038,7 @@ document.getElementById('newChartCanvas').addEventListener('mousemove', function
                         viewer.setStyle(
                             {model: protAtomsModel, chain: authAsymId, resi: SuppPDBResNum, not: {atom: bboneAtoms}},
                             {
-                                cartoon:{style: cartoonStyle, color: pointColor, arrows: cartoonArrows, tubes: cartoonTubes, opacity: cartoonOpacity, thickness: cartoonThickness,},
+                                cartoon:{style: cartoonStyle, color: pointColor, arrows: cartoonArrows, tubes: cartoonTubes, opacity: cartoonOpacity, thickness: cartoonThickness, gapcutoff: gapCutOff},
                                 stick:{color: pointColor},
                             }
                         );
@@ -1051,13 +1051,13 @@ document.getElementById('newChartCanvas').addEventListener('mousemove', function
                     if (contactsVisible) {
                         viewer.setStyle(
                             {...protAtoms, model: activeModel, not: {or: allBindingRess}},
-                            {cartoon: {style: cartoonStyle, color: defaultColor, arrows: cartoonArrows, tubes: cartoonTubes, opacity: cartoonOpacity, thickness: cartoonThickness,}}
+                            {cartoon: {style: cartoonStyle, color: defaultColor, arrows: cartoonArrows, tubes: cartoonTubes, opacity: cartoonOpacity, thickness: cartoonThickness, gapcutoff: gapCutOff}}
                         );
                     }
                     else {
                         viewer.setStyle(
                             {...protAtoms, model: activeModel},
-                            {cartoon: {style: cartoonStyle, color: defaultColor, arrows: cartoonArrows, tubes: cartoonTubes, opacity: cartoonOpacity, thickness: cartoonThickness,}}
+                            {cartoon: {style: cartoonStyle, color: defaultColor, arrows: cartoonArrows, tubes: cartoonTubes, opacity: cartoonOpacity, thickness: cartoonThickness, gapcutoff: gapCutOff}}
                         );
                     }
                     proteinChains.forEach((element) => { // in case of multiple copies of protein of interest
@@ -1070,7 +1070,7 @@ document.getElementById('newChartCanvas').addEventListener('mousemove', function
                                 viewer.setStyle(
                                     {model: activeModel, resi: AssemblyPDBResNum, chain: element, not: {atom: bboneAtoms}},
                                     {
-                                        cartoon:{style: cartoonStyle, color: pointColor, arrows: cartoonArrows, tubes: cartoonTubes, opacity: cartoonOpacity, thickness: cartoonThickness,},
+                                        cartoon:{style: cartoonStyle, color: pointColor, arrows: cartoonArrows, tubes: cartoonTubes, opacity: cartoonOpacity, thickness: cartoonThickness, gapcutoff: gapCutOff},
                                         stick:{colorscheme: defaultColors},
                                     }
                                 );
@@ -1079,7 +1079,7 @@ document.getElementById('newChartCanvas').addEventListener('mousemove', function
                                 viewer.setStyle(
                                     {model: activeModel, resi: AssemblyPDBResNum, chain: element, not: {atom: bboneAtoms}},
                                     {
-                                        cartoon:{style: cartoonStyle, color: pointColor, arrows: cartoonArrows, tubes: cartoonTubes, opacity: cartoonOpacity, thickness: cartoonThickness,},
+                                        cartoon:{style: cartoonStyle, color: pointColor, arrows: cartoonArrows, tubes: cartoonTubes, opacity: cartoonOpacity, thickness: cartoonThickness, gapcutoff: gapCutOff},
                                         stick:{color: pointColor},
                                     }
                                 );
@@ -1231,14 +1231,14 @@ document.getElementById('newChartCanvas').addEventListener('mousemove', function
                 if (clickedBindingRess.length == 0) { // no binding site residues are clicked
                     viewer.setStyle(
                         {...protAtoms, model: protAtomsModel},
-                        {cartoon: {style: cartoonStyle, color: defaultColor, arrows: cartoonArrows, tubes: cartoonTubes, opacity: cartoonOpacity, thickness: cartoonThickness,}}
+                        {cartoon: {style: cartoonStyle, color: defaultColor, arrows: cartoonArrows, tubes: cartoonTubes, opacity: cartoonOpacity, thickness: cartoonThickness, gapcutoff: gapCutOff}}
                     );
                 }
                 else { // some binding site residues are clicked
                     let clickedBindingRessSel = clickedBindingRess.map(res => Up2PdbDict[repPdbId][labelAsymId][res]);
                     viewer.setStyle(
                         {...protAtoms, model: protAtomsModel, not: {resi: clickedBindingRessSel}},
-                        {cartoon: {style: cartoonStyle, color: defaultColor, arrows: cartoonArrows, tubes: cartoonTubes, opacity: cartoonOpacity, thickness: cartoonThickness,}}
+                        {cartoon: {style: cartoonStyle, color: defaultColor, arrows: cartoonArrows, tubes: cartoonTubes, opacity: cartoonOpacity, thickness: cartoonThickness, gapcutoff: gapCutOff}}
                     );
                 }
             }
@@ -1246,7 +1246,7 @@ document.getElementById('newChartCanvas').addEventListener('mousemove', function
                 if (contactsVisible) {
                     viewer.setStyle(
                         {...protAtoms, model: activeModel, not: {or: allBindingRess}},
-                        {cartoon: {style: cartoonStyle, color: defaultColor, arrows: cartoonArrows, tubes: cartoonTubes, opacity: cartoonOpacity, thickness: cartoonThickness,}}
+                        {cartoon: {style: cartoonStyle, color: defaultColor, arrows: cartoonArrows, tubes: cartoonTubes, opacity: cartoonOpacity, thickness: cartoonThickness, gapcutoff: gapCutOff}}
                     );
 
                     for (const [key, value] of Object.entries(ligandSitesHash[activeModel])) {
@@ -1255,7 +1255,7 @@ document.getElementById('newChartCanvas').addEventListener('mousemove', function
                         viewer.setStyle( // displaying and colouring again the ligand-interacting residues
                             {model: activeModel, or: value[0]}, // value[0] are the ligand-binding residues selection
                             {
-                                cartoon:{style: cartoonStyle, color: value[2], arrows: cartoonArrows, tubes: cartoonTubes, opacity: cartoonOpacity, thickness: cartoonThickness,},
+                                cartoon:{style: cartoonStyle, color: value[2], arrows: cartoonArrows, tubes: cartoonTubes, opacity: cartoonOpacity, thickness: cartoonThickness, gapcutoff: gapCutOff},
                                 stick:{hidden: false, colorscheme: defaultColors,} // value[2] is colour of the binding site
                             }
                         );
@@ -1264,7 +1264,7 @@ document.getElementById('newChartCanvas').addEventListener('mousemove', function
                 else {
                     viewer.setStyle(
                         {...protAtoms, model: activeModel},
-                        {cartoon: {style: cartoonStyle, color: defaultColor, arrows: cartoonArrows, tubes: cartoonTubes, opacity: cartoonOpacity, thickness: cartoonThickness,}}
+                        {cartoon: {style: cartoonStyle, color: defaultColor, arrows: cartoonArrows, tubes: cartoonTubes, opacity: cartoonOpacity, thickness: cartoonThickness, gapcutoff: gapCutOff}}
                     );
                 }
             }
@@ -1330,7 +1330,7 @@ document.getElementById('newChartCanvas').addEventListener('click', function(e) 
                         viewer.setStyle(
                             {model: protAtomsModel, chain: authAsymId, resi: SuppPDBResNum, not: {atom: bboneAtoms}},
                             {
-                                cartoon:{style: cartoonStyle, color: pointColor, arrows: cartoonArrows, tubes: cartoonTubes, opacity: cartoonOpacity, thickness: cartoonThickness,},
+                                cartoon:{style: cartoonStyle, color: pointColor, arrows: cartoonArrows, tubes: cartoonTubes, opacity: cartoonOpacity, thickness: cartoonThickness, gapcutoff: gapCutOff},
                                 stick:{color: pointColor},
                             }
                         );
