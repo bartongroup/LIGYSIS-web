@@ -81,7 +81,7 @@ document.getElementById('chartCanvas').addEventListener('mousemove', function(e)
                             // no need to show surface
                         }
                         else {
-                            viewer.setSurfaceMaterialStyle(surfsDict["superposition"][pointLabel].surfid, {color: siteColor, opacity: surfMediumOpacity}); // hide surface of the hovered binding site row
+                            viewer.setSurfaceMaterialStyle(surfsDict["superposition"][pointLabel].surfid, {color: siteColor, opacity: surfHighOpacity}); // hide surface of the hovered binding site row
                         }
                         // for (const [key, value] of Object.entries(surfsDict["superposition"])) {
                         //     if (key == pointLabel) {
@@ -568,7 +568,7 @@ document.getElementById('chartCanvas').addEventListener('click', function(e) { /
                 if (clickedBindingRess.length > 0) {
                     for (const res of clickedBindingRess) {
                         if (labelsHash[activeModel]["clickedResidues"][CurrentDisplayedSite].hasOwnProperty(res)) {
-                            labelsHash[activeModel]["clickedResidues"][CurrentDisplayedSite][res].hide();
+                            labelsHash[activeModel]["clickedResidues"][CurrentDisplayedSite][res].show();
                         }
                         else {
                             SuppPDBResNum = Up2PdbDict[repPdbId][labelAsymId][res];

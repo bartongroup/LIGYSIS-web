@@ -823,7 +823,7 @@ $('table#bs_ress_table tbody').on('mouseover', 'tr', function () { // event list
             // only show individual residue surfaces if a site is not clicked
             if (clickedElements.length == 0) {
 
-                console.log("THIS IS BEING EXECUTED");                
+                //console.log("THIS IS BEING EXECUTED");                
                 if (activeModel == "superposition") {
                     // show the surface for the hovered residue
                     if (surfsDict["superposition"]["single_residues"][CurrentDisplayedSite].hasOwnProperty(rowId)) {
