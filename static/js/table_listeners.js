@@ -403,7 +403,6 @@ $('table#bss_table tbody').on('mouseover', 'tr', function () { // event listener
             }
         }
 
-
         if (activeModel == "superposition") {
             viewer.zoomTo({model: protAtomsModel});
         }
@@ -874,7 +873,7 @@ $('table#bs_ress_table tbody').on('mouseover', 'tr', function () { // event list
             resetChartStyles(newChart, index, "black", 2, 8); // resets chart styles to default
         }
 
-        let PDBResNum = Up2PdbDict[repPdbId][labelAsymId][rowId];
+        //let PDBResNum = Up2PdbDict[repPdbId][labelAsymId][rowId];
 
         if (activeModel == "superposition") {
             if (clickedBindingRess.length == 0) { // no binding site residues are clicked
@@ -911,10 +910,31 @@ $('table#bs_ress_table tbody').on('mouseover', 'tr', function () { // event list
                 }
             }
             else {
-                viewer.setStyle(
-                    {...protAtoms, model: activeModel},
-                    {cartoon: {style: cartoonStyle, color: defaultColor, arrows: cartoonArrows, tubes: cartoonTubes, opacity: cartoonOpacity, thickness: cartoonThickness,}}
-                );
+                if (clickedBindingRess.length == 0) { // no binding site residues are clicked
+                    viewer.setStyle(
+                        {...protAtoms, model: activeModel},
+                        {cartoon: {style: cartoonStyle, color: defaultColor, arrows: cartoonArrows, tubes: cartoonTubes, opacity: cartoonOpacity, thickness: cartoonThickness,}}
+                    );
+                }
+                else {
+                    let AssemblyClickedResidues = []; // clear the clicked residues array
+                    // clickedBindingRessSel needs to take into account all chains
+                    proteinChains.forEach((element) => { // in case of multiple copies of protein of interest
+                        //loop through clickedBindingRess
+                        for (const clickedBindingRes of clickedBindingRess) {
+
+                            let clickedPDBRes = Up2PdbMapAssembly[chainsMapAssembly[element]][clickedBindingRes];
+                            if (clickedPDBRes !== undefined) {
+                                let clickedResSel = {model: activeModel, resi: clickedPDBRes, chain: element, not: {atom: bboneAtoms}};
+                                AssemblyClickedResidues.push(clickedResSel);
+                            }
+                        }
+                    });
+                    viewer.setStyle(
+                        {...protAtoms, model: activeModel, not: {or: AssemblyClickedResidues}},
+                        {cartoon: {style: cartoonStyle, color: defaultColor, arrows: cartoonArrows, tubes: cartoonTubes, opacity: cartoonOpacity, thickness: cartoonThickness,}}
+                    );
+                }
             }
         }
         viewer.render();
@@ -1093,35 +1113,103 @@ $('table#bs_ress_table tbody').on('mouseover', 'tr', function () { // event list
             }
         }
         else {
-            proteinChains.forEach((element) => { // in case of multiple copies of protein of interest
-                let AssemblyPDBResNum = Up2PdbMapAssembly[chainsMapAssembly[element]][rowId]
-                AssemblyPDBResNums.push([element, AssemblyPDBResNum]);
-                if (AssemblyPDBResNum !== undefined) {
-                    if (contactsVisible) {
-                        let defaultColors = { ...$3Dmol.elementColors.defaultColors };
-                        defaultColors.C = rowColorHex;
-                        viewer.setStyle(
-                            {model: activeModel, resi: AssemblyPDBResNum, chain: element, not: {atom: bboneAtoms}},
-                            {
-                                cartoon:{style: cartoonStyle, color: rowColorHex, arrows: cartoonArrows, tubes: cartoonTubes, opacity: cartoonOpacity, thickness: cartoonThickness,},
-                                stick:{colorscheme: defaultColors},
+            if (clickedElements.length == 0) { // only do this if no binding sites are clicked
+                proteinChains.forEach((element) => { // in case of multiple copies of protein of interest
+                    let AssemblyPDBResNum = Up2PdbMapAssembly[chainsMapAssembly[element]][rowId]
+                    AssemblyPDBResNums.push([element, AssemblyPDBResNum]);
+                    if (AssemblyPDBResNum !== undefined) {
+                        let ResKey = element + "_" + rowId;
+                        if (contactsVisible) {
+                            // let defaultColors = { ...$3Dmol.elementColors.defaultColors };
+                            // defaultColors.C = rowColorHex;
+                            // viewer.setStyle(
+                            //     {model: activeModel, resi: AssemblyPDBResNum, chain: element, not: {atom: bboneAtoms}},
+                            //     {
+                            //         cartoon:{style: cartoonStyle, color: rowColorHex, arrows: cartoonArrows, tubes: cartoonTubes, opacity: cartoonOpacity, thickness: cartoonThickness,},
+                            //         stick:{colorscheme: defaultColors},
+                            //     }
+                            // );
+                        }
+                        else {
+                            viewer.setStyle(
+                                {model: activeModel, resi: AssemblyPDBResNum, chain: element, not: {atom: bboneAtoms}},
+                                {
+                                    cartoon:{style: cartoonStyle, color: rowColorHex, arrows: cartoonArrows, tubes: cartoonTubes, opacity: cartoonOpacity, thickness: cartoonThickness,},
+                                    stick:{color: rowColorHex},
+                                }
+                            );
+                        }
+                        if (labelsVisible) {
+                            if (labelsHash[activeModel]["clickedResidues"][CurrentDisplayedSite].hasOwnProperty(ResKey)) {
+                                console.log(`Residue ${ResKey} already clicked and label exists`);
+                                labelsHash[activeModel]["clickedResidues"][CurrentDisplayedSite][ResKey].show();
                             }
-                        );
+                            else {
+                                console.log(`Residue ${ResKey} not clicked yet. Creating label...`);
+                                //AssemblyPDBResNums.forEach(([chain, resNum]) => {
+                                    //if (resNum !== undefined) {
+                                let resSel = {model: activeModel, resi: AssemblyPDBResNum, chain: element}
+                                let resName = viewer.selectedAtoms(resSel)[0].resn
+                                let label = viewer.addLabel(
+                                    resName + String(Pdb2UpMapAssembly[chainsMapAssembly[element]][AssemblyPDBResNum]),
+                                    {
+                                        alignment: 'center', backgroundColor: 'white', backgroundOpacity: 1,
+                                        borderColor: outlineColor, borderOpacity: 1, borderThickness: 2,
+                                        font: 'Arial', fontColor: rowColorHex, fontOpacity: 1, fontSize: 12,
+                                        inFront: true, screenOffset: [0, 0, 0], showBackground: true
+                                    },
+                                    resSel,
+                                    true,
+                                );
+                                labelsHash[activeModel]["clickedResidues"][CurrentDisplayedSite][ResKey] = label; // store the label in the hash
+                                    //}
+                                //});
+                            }
+                        }
+                        if (surfaceVisible) { // create new surface just for the clicked residue
+                            // need to hide all other surfaces first
+                            for (const [key, value] of Object.entries(surfsDict[activeModel])) {
+                                if (key == "non_binding") {
+                                    viewer.setSurfaceMaterialStyle(surfsDict[activeModel][key].surfid, {color: defaultColor, opacity: surfHiddenOpacity});
+                                }
+                                else if (key == "single_residues") {
+                                    // do nothing for these surfaces
+                                }
+                                else if (key == "lig_inters") {
+                                    // do nothing for these surfaces: TODO: need to check!!!
+                                }
+                                else {
+                                    let siteColor = chartColors[Number(key.split("_").pop())];
+                                    viewer.setSurfaceMaterialStyle(surfsDict[activeModel][key].surfid, {color: siteColor, opacity: surfHiddenOpacity});
+                                }
+                            }
+                            if (surfsDict[activeModel]["single_residues"][CurrentDisplayedSite].hasOwnProperty(ResKey)) {
+                                viewer.setSurfaceMaterialStyle(surfsDict[activeModel]["single_residues"][CurrentDisplayedSite][ResKey].surfid, {color: rowColorHex, opacity: surfHighOpacity});
+                            }
+                            else {
+                                // create a new surface for the clicked residue
+                                let surfSel = {model: activeModel, resi: AssemblyPDBResNum, chain: element};
+                                let surfAssemblyPDBResNums = seg_ress_dict[CurrentDisplayedSite]
+                                    .filter(el => Up2PdbMapAssembly[chainsMapAssembly[element]].hasOwnProperty(el))
+                                    .map(el => Up2PdbMapAssembly[chainsMapAssembly[element]][el]);
+                                let SiteSel = {model: activeModel, chain: element, resi: surfAssemblyPDBResNums};
+                                surfsDict[activeModel]["single_residues"][CurrentDisplayedSite][ResKey] = viewer.addSurface(
+                                    $3Dmol.SurfaceType.ISO,
+                                    {
+                                        color: rowColorHex,
+                                        opacity: surfHighOpacity,
+                                    },
+                                    surfSel,
+                                    SiteSel,
+                                );
+                            }
+                        }
                     }
                     else {
-                        viewer.setStyle(
-                            {model: activeModel, resi: AssemblyPDBResNum, chain: element, not: {atom: bboneAtoms}},
-                            {
-                                cartoon:{style: cartoonStyle, color: rowColorHex, arrows: cartoonArrows, tubes: cartoonTubes, opacity: cartoonOpacity, thickness: cartoonThickness,},
-                                stick:{color: rowColorHex},
-                            }
-                        );
+                        console.log("Residue not found in assembly!");
                     }
-                }
-                else {
-                    console.log("Residue not found in assembly!");
-                }
-            });
+                });
+            }
         }
         viewer.render();
     }
