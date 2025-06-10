@@ -119,10 +119,28 @@ document.getElementById('chartCanvas').addEventListener('mousemove', function(e)
             }
             else { // no row is clicked
                 if (contactsVisible) { // don't want to hide ligand-binding sites if CONTACTS is ON
-                    viewer.setStyle(
-                        {...protAtoms, model: activeModel, not:{or:allBindingRess}},
-                        {cartoon:{style: cartoonStyle, color: defaultColor, arrows: cartoonArrows, tubes: cartoonTubes, opacity: cartoonOpacity, thickness: cartoonThickness, gapcutoff: gapCutOff},}
-                    );   
+                    if (clickedBindingRess.length == 0) { // if no binding residues are clicked, show all surfaces
+                        viewer.setStyle(
+                            {...protAtoms, model: activeModel, not:{or:allBindingRess}},
+                            {cartoon:{style: cartoonStyle, color: defaultColor, arrows: cartoonArrows, tubes: cartoonTubes, opacity: cartoonOpacity, thickness: cartoonThickness, gapcutoff: gapCutOff},}
+                        );
+                    }
+                    else {
+                        let clickedBindingRessSel = [];
+                        proteinChains.forEach((element) => { // in case of multiple copies of protein of interest
+                            for (const res of clickedBindingRess) {
+                                if (Up2PdbMapAssembly[chainsMapAssembly[element]].hasOwnProperty(res)) {
+                                    let resNum = Up2PdbMapAssembly[chainsMapAssembly[element]][res];
+                                    let resSel = {model: activeModel, resi: resNum, chain: element, not: {atom: bboneAtoms}};
+                                    clickedBindingRessSel.push(resSel);
+                                }
+                            }
+                        });
+                        viewer.setStyle(
+                            {...protAtoms, model: activeModel, not: {or: allBindingRess.concat(clickedBindingRessSel)}}, // all protein residues except clicked binding residues (we want to keep ligands)
+                            {cartoon:{style: cartoonStyle, color: defaultColor, arrows: cartoonArrows, tubes: cartoonTubes, opacity: cartoonOpacity, thickness: cartoonThickness, gapcutoff: gapCutOff},}
+                        );
+                    }
                 }
                 else {
                     if (clickedBindingRess.length == 0) {
@@ -132,13 +150,30 @@ document.getElementById('chartCanvas').addEventListener('mousemove', function(e)
                         );
                     }
                     else {
-                        let clickedBindingRessSel = clickedBindingRess.map(res => Up2PdbDict[repPdbId][labelAsymId][res]);
-                        viewer.setStyle(
-                            {...protAtoms, model: protAtomsModel, not: {resi: clickedBindingRessSel}},
-                            {cartoon:{style: cartoonStyle, color: defaultColor, arrows: cartoonArrows, tubes: cartoonTubes, opacity: cartoonOpacity, thickness: cartoonThickness, gapcutoff: gapCutOff},}
-                        );
+                        if (activeModel == "superposition") {
+                            let clickedBindingRessSel = clickedBindingRess.map(res => Up2PdbDict[repPdbId][labelAsymId][res]);
+                            viewer.setStyle(
+                                {...protAtoms, model: protAtomsModel, not: {resi: clickedBindingRessSel}},
+                                {cartoon:{style: cartoonStyle, color: defaultColor, arrows: cartoonArrows, tubes: cartoonTubes, opacity: cartoonOpacity, thickness: cartoonThickness, gapcutoff: gapCutOff},}
+                            );
+                        }
+                        else {
+                            let clickedBindingRessSel = [];
+                            proteinChains.forEach((element) => { // in case of multiple copies of protein of interest
+                                for (const res of clickedBindingRess) {
+                                    if (Up2PdbMapAssembly[chainsMapAssembly[element]].hasOwnProperty(res)) {
+                                        let resNum = Up2PdbMapAssembly[chainsMapAssembly[element]][res];
+                                        let resSel = {model: activeModel, resi: resNum, chain: element, not: {atom: bboneAtoms}};
+                                        clickedBindingRessSel.push(resSel);
+                                    }
+                                }
+                            });
+                            viewer.setStyle(
+                                {...protAtoms, model: activeModel, not: {or: clickedBindingRessSel}}, // all protein residues except clicked binding residues (we want to keep ligands)
+                                {cartoon:{style: cartoonStyle, color: defaultColor, arrows: cartoonArrows, tubes: cartoonTubes, opacity: cartoonOpacity, thickness: cartoonThickness, gapcutoff: gapCutOff},}
+                            );
+                        }
                     }
-                    
                 }
                 if (surfaceVisible) { // if surface is visible
                     if (activeModel == "superposition") {
@@ -154,36 +189,50 @@ document.getElementById('chartCanvas').addEventListener('mousemove', function(e)
                                 }
                             }
                         }
-                        for (const [key, value] of Object.entries(surfsDict["superposition"])) {
-                            if (key == pointLabel) {
-                                viewer.setSurfaceMaterialStyle(value.surfid, {color: siteColor, opacity: surfHighOpacity}); // change the surface color of the hovered binding site row
-                            }
-                        }
+
                         // for (const [key, value] of Object.entries(surfsDict["superposition"])) {
                         //     if (key == pointLabel) {
                         //         viewer.setSurfaceMaterialStyle(value.surfid, {color: siteColor, opacity: surfHighOpacity}); // change the surface color of the hovered binding site row
                         //     }
-                        //     // else if (key == previousPointLabel) {
-                        //     //     viewer.setSurfaceMaterialStyle(value.surfid, {color: previousSiteColor, opacity: surfMediumOpacity}); // change the surface color of the previously hovered binding site row
-                        //     // }
                         // }
+                        
+                        viewer.setSurfaceMaterialStyle(surfsDict["superposition"][pointLabel].surfid, {color: siteColor, opacity: surfHighOpacity}); // change the surface color of the hovered binding site row
                     }
                     else {
-                        for (const [key, value] of Object.entries(surfsDict[activeModel])) {
-                            for (const [key2, value2] of Object.entries(value)) {
-                                if (key == pointLabel) {
-                                    viewer.setSurfaceMaterialStyle(value2.surfid, {color: siteColor, opacity: surfHighOpacity}); // change the surface color of the hovered binding site row
-                                }
-                                else if (key == previousPointLabel) {
-                                    if (contactsVisible) {
-                                        viewer.setSurfaceMaterialStyle(value2.surfid, {opacity: surfHiddenOpacity}); // change the surface color of the hovered binding site row
+                        for (const [key2, value2] of Object.entries(surfsDict[activeModel][pointLabel])) {
+                            viewer.setSurfaceMaterialStyle(value2.surfid, {color: siteColor, opacity: surfHighOpacity}); // change the surface color of the hovered binding site row
+                        }
+                        if (clickedBindingRess.length > 0) { // if binding residues are clicked, hide all their surfaces
+                            let commonRess = clickedBindingRess.filter(res => seg_ress_dict[pointLabel].includes(res)); // find common residues between clicked binding residues and hovered binding site
+                            if (commonRess.length > 0) { // if there are common residues, show their surfaces
+                                proteinChains.forEach((element) => { // in case of multiple copies of protein of interest
+                                    for (const res of commonRess) {
+                                        let ResKey = element + "_" + res;
+                                        if (surfsDict[activeModel]["single_residues"][CurrentDisplayedSite].hasOwnProperty(ResKey)) {
+                                            var surfObject = surfsDict[activeModel]["single_residues"][CurrentDisplayedSite][ResKey];
+                                            var currentSiteColor = chartColors[Number(CurrentDisplayedSite)];
+                                            viewer.setSurfaceMaterialStyle(surfObject.surfid, {color: currentSiteColor, opacity: surfHiddenOpacity});
+                                        }
                                     }
-                                    else {
-                                        viewer.setSurfaceMaterialStyle(value2.surfid, {color: previousSiteColor, opacity: surfMediumOpacity}); // change the surface color of the previously hovered binding site row
-                                    }
-                                }
+                                });
                             }
                         }
+
+                        // for (const [key, value] of Object.entries(surfsDict[activeModel])) {
+                        //     for (const [key2, value2] of Object.entries(value)) {
+                        //         if (key == pointLabel) {
+                        //             viewer.setSurfaceMaterialStyle(value2.surfid, {color: siteColor, opacity: surfHighOpacity}); // change the surface color of the hovered binding site row
+                        //         }
+                        //         else if (key == previousPointLabel) {
+                        //             if (contactsVisible) {
+                        //                 viewer.setSurfaceMaterialStyle(value2.surfid, {opacity: surfHiddenOpacity}); // change the surface color of the hovered binding site row
+                        //             }
+                        //             else {
+                        //                 viewer.setSurfaceMaterialStyle(value2.surfid, {color: previousSiteColor, opacity: surfMediumOpacity}); // change the surface color of the previously hovered binding site row
+                        //             }
+                        //         }
+                        //     }
+                        // }
                     }
                 }
             }
@@ -267,7 +316,7 @@ document.getElementById('chartCanvas').addEventListener('mousemove', function(e)
                     {cartoon:{style: cartoonStyle, color: clickedSiteColor, arrows: cartoonArrows, tubes: cartoonTubes, opacity: cartoonOpacity, thickness: cartoonThickness, gapcutoff: gapCutOff},
                     stick:{color: clickedSiteColor,}, }
                 );
-                // colour again clicked residues
+                // colour again clicked residues. Is this even necessary? The site is already clicked.
                 if (!clickedBindingRess.length == 0) {
                     let clickedBindingRessSel = clickedBindingRess.map(res => Up2PdbDict[repPdbId][labelAsymId][res]);
                     let displayedSiteColour = chartColors[Number(CurrentDisplayedSite)]; // colour of the clicked binding site
@@ -279,12 +328,12 @@ document.getElementById('chartCanvas').addEventListener('mousemove', function(e)
                 }
             }
             else {
-                    viewer.setStyle(
-                        {
-                           ...protAtoms, model: activeModel, not: {or: AssemblyClickedSiteResidues}, // all protein residues except clicked site (we want to keep ligands)
-                        },
-                        {cartoon: {style: cartoonStyle, color: defaultColor, arrows: cartoonArrows, tubes: cartoonTubes, opacity: cartoonOpacity, thickness: cartoonThickness, gapcutoff: gapCutOff}}
-                    );
+                    // viewer.setStyle(
+                    //     {
+                    //        ...protAtoms, model: activeModel, not: {or: AssemblyClickedSiteResidues}, // all protein residues except clicked site (we want to keep ligands)
+                    //     },
+                    //     {cartoon: {style: cartoonStyle, color: defaultColor, arrows: cartoonArrows, tubes: cartoonTubes, opacity: cartoonOpacity, thickness: cartoonThickness, gapcutoff: gapCutOff}}
+                    // );
                     
                 if (contactsVisible) { // don't want to hide ligand-binding sites if CONTACTS is ON
                     viewer.setStyle(
@@ -311,6 +360,13 @@ document.getElementById('chartCanvas').addEventListener('mousemove', function(e)
                     }
                 }
                 else {
+                    viewer.setStyle(
+                        {
+                           ...protAtoms, model: activeModel, not: {or: AssemblyClickedSiteResidues}, // all protein residues except clicked site (we want to keep ligands)
+                        },
+                        {cartoon: {style: cartoonStyle, color: defaultColor, arrows: cartoonArrows, tubes: cartoonTubes, opacity: cartoonOpacity, thickness: cartoonThickness, gapcutoff: gapCutOff}}
+                    );
+                    
                     viewer.setStyle( // colouring the clicked site (necessary as sometimes there is overlap between sites)
                         {model: activeModel, or: AssemblyClickedSiteResidues},
                         {cartoon:{style: cartoonStyle, color: clickedSiteColor, arrows: cartoonArrows, tubes: cartoonTubes, opacity: cartoonOpacity, thickness: cartoonThickness, gapcutoff: gapCutOff},
@@ -349,7 +405,7 @@ document.getElementById('chartCanvas').addEventListener('mousemove', function(e)
             }
             resetChartStyles(myChart, clickedPointLabel, "#bfd4cb", 10, 16); // changes chart styles to highlight the newly clicked site
         }
-        else { // no row is clicked
+        else { // no row is clicked // CONTINUE FROM HERE
 
             if (contactsVisible) { // don't want to hide ligand-binding sites if CONTACTS is ON
                 viewer.setStyle(
