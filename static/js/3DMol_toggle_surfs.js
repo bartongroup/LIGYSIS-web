@@ -719,10 +719,35 @@ async function toggleContactsVisibility() {
                 );      
             }
             else {
-                viewer.addStyle(
-                    {...protAtomsModel, model: activeModel},
-                    {cartoon: {color: defaultColor}, stick: {hidden: true}}
-                ); // needs to change if site is clicked
+                if (clickedBindingRess.length == 0) { // no individual binding site residues clicked
+                    viewer.addStyle(
+                        {...protAtomsModel, model: activeModel},
+                        {cartoon: {color: defaultColor}, stick: {hidden: true}}
+                    ); // needs to change if site is clicked
+                }
+                else {
+                    let clickedRessSels = [];
+                    proteinChains.forEach((element) => { // in case of multiple copies of protein of interest
+                        clickedBindingRess.forEach((clickedResidue) => {
+                            let clickedResiduePDBResnum = Up2PdbMapAssembly[chainsMapAssembly[element]][clickedResidue];
+                            if (clickedResiduePDBResnum !== undefined) { // check if residue is not missing in the structure
+                                clickedRessSels.push({model: activeModel, resi: clickedResiduePDBResnum, chain: element});
+                            }
+                        });
+                    });
+                    viewer.addStyle(
+                        {...protAtomsModel, model: activeModel, not: {or: clickedRessSels}},
+                        {cartoon: {color: defaultColor}, stick: {hidden: true}}
+                    );
+                    let siteColor = chartColors[Number(CurrentDisplayedSite)];
+                    viewer.setStyle(
+                        {model: activeModel, or: clickedRessSels},
+                        {
+                            cartoon:{style: cartoonStyle, color: siteColor, arrows: cartoonArrows, tubes: cartoonTubes, opacity: cartoonOpacity, thickness: cartoonThickness, gapcutoff: gapCutOff},
+                            stick:{color: siteColor, hidden: false, radius: stickRadius},
+                        }
+                    ); // colour clicked binding site residues again
+                }
             }
             viewer.addStyle(
                 {...hetAtomsNotHoh, model: activeModel},
