@@ -66,25 +66,37 @@ function toggleSurfaceVisibility() {
             }
         }
         else {
-            if (contactsVisible) { // if contacts are visible, show only surface of ligand interacting residues
-                for (const [key, value] of Object.entries(surfsDict[activeModel])) {
-                    for (const [key2, value2] of Object.entries(value)) {
-                        viewer.setSurfaceMaterialStyle(value2.surfid, {opacity: surfHiddenOpacity});
-                    }
-                }
-            }
-            else {
-                for (const [key, value] of Object.entries(surfsDict[activeModel])) {
-                    if (key !== "lig_inters") {
-                        for (const [key2, value2] of Object.entries(value)) {
-                            if (key == "non_binding") {
-                                viewer.setSurfaceMaterialStyle(surfsDict[activeModel][key][key2].surfid, {color: defaultColor, opacity: surfHiddenOpacity}); // hide ligand-binding residues surface
-                            }
-                            else {
-                                let siteColor = chartColors[Number(key.split("_").pop())];
-                                viewer.setSurfaceMaterialStyle(surfsDict[activeModel][key][key2].surfid, {color: siteColor, opacity: surfHiddenOpacity});
-                            }
+            // if (contactsVisible) { // if contacts are visible, show only surface of ligand interacting residues
+            //     for (const [key, value] of Object.entries(surfsDict[activeModel])) {
+            //         for (const [key2, value2] of Object.entries(value)) {
+            //             viewer.setSurfaceMaterialStyle(value2.surfid, {opacity: surfHiddenOpacity});
+            //         }
+            //     }
+            // }
+            // else {
+            //     for (const [key, value] of Object.entries(surfsDict[activeModel])) {
+            //         if (key !== "lig_inters") {
+            //             for (const [key2, value2] of Object.entries(value)) {
+            //                 if (key == "non_binding") {
+            //                     viewer.setSurfaceMaterialStyle(surfsDict[activeModel][key][key2].surfid, {color: defaultColor, opacity: surfHiddenOpacity}); // hide ligand-binding residues surface
+            //                 }
+            //                 else {
+            //                     let siteColor = chartColors[Number(key.split("_").pop())];
+            //                     viewer.setSurfaceMaterialStyle(surfsDict[activeModel][key][key2].surfid, {color: siteColor, opacity: surfHiddenOpacity});
+            //                 }
+            //             }
+            //         }
+            //     }
+            // }
+            for (const [key, value] of Object.entries(surfsDict[activeModel])) {
+                for (const [key2, value2] of Object.entries(value)) {
+                    if (key == "single_residues") {
+                        for (const [key3, value3] of Object.entries(value2)) {
+                            viewer.setSurfaceMaterialStyle(value3.surfid, {opacity: surfHiddenOpacity});
                         }
+                    }
+                    else {
+                        viewer.setSurfaceMaterialStyle(surfsDict[activeModel][key][key2].surfid, {opacity: surfHiddenOpacity});
                     }
                 }
             }
@@ -152,8 +164,43 @@ function toggleSurfaceVisibility() {
                     }
                 }
             }
-            else {
-                //
+            else { // implement for assembly models
+                proteinChains.forEach((element) => { // in case of multiple copies of protein of interest
+                    for (const clickedResidue of clickedBindingRess) {
+                        let ResKey = element + "_" + clickedResidue;
+                        if (surfsDict[activeModel]["single_residues"][CurrentDisplayedSite].hasOwnProperty(ResKey)) {
+                            let resSurf = surfsDict[activeModel]["single_residues"][CurrentDisplayedSite][ResKey];
+                            viewer.setSurfaceMaterialStyle(resSurf.surfid, {color: siteColor, opacity: surfHighOpacity}); // show ONLY surface of clicked residue
+                        }
+                        else {
+                            // create surface for this residue
+                            let clickedResiduePDBResnum = Up2PdbMapAssembly[chainsMapAssembly[element]][clickedResidue];
+                            if (clickedResiduePDBResnum !== undefined) { // check if residue is not missing in the structure
+                                let surfSel = {model: activeModel, resi: clickedResiduePDBResnum, chain: element};
+                                let SitePDBResNums = seg_ress_dict[CurrentDisplayedSite]
+                                    .filter(el => Up2PdbMapAssembly[chainsMapAssembly[element]].hasOwnProperty(el))
+                                    .map(el => Up2PdbMapAssembly[chainsMapAssembly[element]][el]);
+                                let SiteSel = {model: activeModel, chain: element, resi: SitePDBResNums};
+                                surfsDict[activeModel]["single_residues"][CurrentDisplayedSite][ResKey] = viewer.addSurface(
+                                    $3Dmol.SurfaceType.ISO,
+                                    {
+                                        color: siteColor,
+                                        opacity: surfHighOpacity,
+                                    },
+                                    surfSel,
+                                    SiteSel,
+                                );
+                            }
+                        }
+                    }
+                });
+                // also need to show contact residues surfaces
+                if (contactsVisible) { // if contacts are visible, show only surface of ligand interacting residues
+                    for (const [key, value] of Object.entries(surfsDict[activeModel]['lig_inters'])) {
+                        let ligColor = ligandSitesHash[activeModel][key][2]
+                        viewer.setSurfaceMaterialStyle(value.surfid, {color: ligColor, opacity: surfHighOpacity});
+                    }
+                }
             }
         }
         else {
@@ -267,7 +314,6 @@ function toggleLabelsVisibility() {
                         let siteSuppPDBResNums = seg_ress_dict[clickedElementId]
                             .filter(el => Up2PdbDict[repPdbId][labelAsymId].hasOwnProperty(el)) // this accounts not for missing residues in the structure (unresolved)
                             .map(el => Up2PdbDict[repPdbId][labelAsymId][el]);
-
                         console.log(`Site ${clickedElementId} residues: ${siteSuppPDBResNums}`);
                         for (siteSuppPDBResNum of siteSuppPDBResNums) {
                             let resSel = {model: protAtomsModel, chain: authAsymId, resi: siteSuppPDBResNum}
@@ -321,15 +367,15 @@ function toggleLabelsVisibility() {
         if (clickedBindingRess) { // any individual binding site residue is clicked
             var DisplayedSiteId = CurrentDisplayedSite;
             let siteColor = chartColors[Number(DisplayedSiteId)];
-            for (var i = 0; i < clickedBindingRess.length; i++) {
-                var clickedResidue = clickedBindingRess[i];
-                if (labelsHash[activeModel]["clickedResidues"][CurrentDisplayedSite].hasOwnProperty(clickedResidue)) {
-                    // console.log(`Residue ${clickedResidue} from Site ${CurrentDisplayedSite} already clicked and labels exist`);
-                    var label = labelsHash[activeModel]["clickedResidues"][CurrentDisplayedSite][clickedResidue];
-                    label.show();
-                }
-                else{
-                    if (activeModel == "superposition") {
+            if (activeModel == "superposition") {
+                for (var i = 0; i < clickedBindingRess.length; i++) {
+                    var clickedResidue = clickedBindingRess[i];
+                    if (labelsHash[activeModel]["clickedResidues"][CurrentDisplayedSite].hasOwnProperty(clickedResidue)) {
+                        // console.log(`Residue ${clickedResidue} from Site ${CurrentDisplayedSite} already clicked and labels exist`);
+                        var label = labelsHash[activeModel]["clickedResidues"][CurrentDisplayedSite][clickedResidue];
+                        label.show();
+                    }
+                    else{
                         var clickedResiduePDBResnum = Up2PdbDict[repPdbId][labelAsymId][clickedResidue];
                         if (clickedResiduePDBResnum !== undefined) { // check if residue is not missing in the structure
                             let resSel = {model: protAtomsModel, chain: authAsymId, resi: clickedResiduePDBResnum};
@@ -348,11 +394,40 @@ function toggleLabelsVisibility() {
                             labelsHash[activeModel]["clickedResidues"][CurrentDisplayedSite][clickedResidue] = label;
                         }
                     }
-                    else {
-                    }
                 }
-                viewer.render();
             }
+            else {
+                proteinChains.forEach((element) => { // in case of multiple copies of protein of interest
+                    for (const clickedResidue of clickedBindingRess) {
+                        let ResKey = element + "_" + clickedResidue;
+                        if (labelsHash[activeModel]["clickedResidues"][CurrentDisplayedSite].hasOwnProperty(ResKey)) {
+                            // console.log(`Residue ${clickedResidue} from Site ${CurrentDisplayedSite} already clicked and labels exist`);
+                            var label = labelsHash[activeModel]["clickedResidues"][CurrentDisplayedSite][ResKey];
+                            label.show();
+                        }
+                        else {
+                            let clickedResiduePDBResnum = Up2PdbMapAssembly[chainsMapAssembly[element]][clickedResidue];
+                            if (clickedResiduePDBResnum !== undefined) { // check if residue is not missing in the structure
+                                let resSel = {model: activeModel, resi: clickedResiduePDBResnum, chain: element};
+                                let resName = viewer.selectedAtoms(resSel)[0].resn;
+                                let label = viewer.addLabel(
+                                    resName + String(Pdb2UpMapAssembly[chainsMapAssembly[element]][clickedResiduePDBResnum]),
+                                    {
+                                        alignment: 'center', backgroundColor: 'white', backgroundOpacity: 1,
+                                        borderColor: 'black', borderOpacity: 1, borderThickness: 2,
+                                        font: 'Arial', fontColor: siteColor, fontOpacity: 1, fontSize: 12,
+                                        inFront: true, screenOffset: [0, 0, 0], showBackground: true
+                                    },
+                                    resSel,
+                                    true,
+                                );
+                                labelsHash[activeModel]["clickedResidues"][CurrentDisplayedSite][ResKey] = label;
+                            }
+                        }
+                    }
+                });
+            }
+            viewer.render();
         }
         if (contactsVisible) { // show labels if CONTACTS is on
             for (const [key, value] of Object.entries(ligandSitesHash[activeModel])) {
@@ -375,7 +450,6 @@ function toggleLabelsVisibility() {
         }
     }
     labelsVisible = !labelsVisible; // Toggle the visibility state
-
 }
 
 function toggleWatersVisibility() {
@@ -592,18 +666,23 @@ async function toggleContactsVisibility() {
                     for (const [key, value] of Object.entries(surfsDict[activeModel])) { 
                         if (key == "lig_inters") { // hide surfaces of ligand-interacting residues
                             for (const [key2, value2] of Object.entries(value)) {
-                                viewer.setSurfaceMaterialStyle(value2.surfid, {opacity:0.0});
+                                viewer.setSurfaceMaterialStyle(value2.surfid, {opacity: surfHiddenOpacity});
                             }
                         }
                         else { // show binding site definition surfaces
-                            for (const [key2, value2] of Object.entries(value)) {
-                                if (key == "non_binding") {
-                                    viewer.setSurfaceMaterialStyle(value2.surfid, {color: defaultColor, opacity: surfLowOpacity});
+                            if (clickedBindingRess.length == 0) {
+                                for (const [key2, value2] of Object.entries(value)) {
+                                    if (key == "non_binding") {
+                                        viewer.setSurfaceMaterialStyle(value2.surfid, {color: defaultColor, opacity: surfLowOpacity});
+                                    }
+                                    else {
+                                        let siteColor = chartColors[Number(key.split("_").pop())];
+                                        viewer.setSurfaceMaterialStyle(value2.surfid, {color: siteColor, opacity: surfMediumOpacity});
+                                    }
                                 }
-                                else {
-                                    let siteColor = chartColors[Number(key.split("_").pop())];
-                                    viewer.setSurfaceMaterialStyle(value2.surfid, {color: siteColor, opacity: surfMediumOpacity});
-                                }
+                            }
+                            else {
+                                // if there are clicked residues, don't need to show other surfaces
                             }
                         }
                     }
@@ -628,7 +707,16 @@ async function toggleContactsVisibility() {
                         cartoon:{color: defaultColor},
                         stick: {hidden: true}
                     }
-                );            
+                );
+                // colour clicked binding site residues again
+                let siteColor = chartColors[Number(CurrentDisplayedSite)];
+                viewer.setStyle(
+                    {model: activeModel, or: AssemblyHoveredSiteResidues},
+                    {
+                        cartoon:{style: cartoonStyle, color: siteColor, arrows: cartoonArrows, tubes: cartoonTubes, opacity: cartoonOpacity, thickness: cartoonThickness, gapcutoff: gapCutOff},
+                        stick:{color: siteColor},
+                    }
+                );      
             }
             else {
                 viewer.addStyle(
