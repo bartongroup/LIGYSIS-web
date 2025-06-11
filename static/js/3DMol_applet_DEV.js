@@ -183,11 +183,14 @@ function loadAllModels(simplePdbs) { // Load all structures
 
         labelsHash['superposition'] = {"clickedSite": {}, "hoveredRes": [], "clickedResidues": {0: {}, }}; // Initialize labels hash for superposition
 
-        slab = viewer.getSlab();
-        initialNearSlab = slab['near'];
-        initialFarSlab = slab['far'];
+        //slab = viewer.getSlab();
+        // initialNearSlab = slab['near'];
+        // initialFarSlab = slab['far'];
+        initialNearSlab = -1000; // Set initial near slab to -1000
+        initialFarSlab = 1000; // Set initial far slab to 1000
         nearPlane = Math.trunc(initialNearSlab);
         farPlane = Math.trunc(initialFarSlab);
+        viewer.setSlab(initialNearSlab, initialFarSlab); // Set slab clipping planes
 
         nearSlider.min = initialNearSlab;
         nearSlider.max = initialFarSlab;

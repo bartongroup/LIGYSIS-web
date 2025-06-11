@@ -31,6 +31,11 @@ document.getElementById('chartCanvas').addEventListener('mousemove', function(e)
 
             let siteColor = chartColors[Number(pointLabel)];
 
+             // last hovered point back to default style
+            if (lastHoveredPoint1 !== null) { // if there was a previously hovered point
+                resetChartStyles(myChart, lastHoveredPoint1, "black", 1, 12); // resets the style of the last hovered point
+            }
+
             let previousSiteColor = chartColors[Number(previousPointLabel)];
 
             resetChartStyles(myChart, firstPoint.index, "#ffff99", 10, 16); // changes chart styles to highlight the binding site
@@ -81,19 +86,31 @@ document.getElementById('chartCanvas').addEventListener('mousemove', function(e)
                             // no need to show surface
                         }
                         else {
-                            viewer.setSurfaceMaterialStyle(surfsDict["superposition"][pointLabel].surfid, {color: siteColor, opacity: surfHighOpacity}); // hide surface of the hovered binding site row
+                            for (const [key, value] of Object.entries(surfsDict["superposition"])) {
+                                if (key == "lig_inters") {
+                                    // pass
+                                }
+                                else if (key == "non_binding") {
+                                    // pass
+                                }
+                                else if (key == "single_residues") {
+                                    // pass
+                                }
+                                else if (key == clickedPointLabel) {
+                                    // pass
+                                }
+                                else {
+                                    if (key == pointLabel) {
+                                        viewer.setSurfaceMaterialStyle(value.surfid, {color: siteColor, opacity: surfHighOpacity}); // change the surface color of the hovered binding site row
+                                    }
+                                    else {
+                                        let surfColour = chartColors[Number(key)];
+                                        viewer.setSurfaceMaterialStyle(value.surfid, {color: surfColour, opacity: surfHiddenOpacity}); // hide all other surfaces
+                                    }
+                                }
+                            }
+                            //viewer.setSurfaceMaterialStyle(surfsDict["superposition"][pointLabel].surfid, {color: siteColor, opacity: surfHighOpacity}); // hide surface of the hovered binding site row
                         }
-                        // for (const [key, value] of Object.entries(surfsDict["superposition"])) {
-                        //     if (key == pointLabel) {
-                        //         viewer.setSurfaceMaterialStyle(value.surfid, {color: siteColor, opacity: surfMediumOpacity}); // show surface of hovered site visible at 80% opacity
-                        //     }
-                        //     else if (key == clickedPointLabel) {
-                        //         viewer.setSurfaceMaterialStyle(value.surfid, {color: clickedSiteColor, opacity: surfHighOpacity}); // keep surface of clicked table row site visible at 90% opacity
-                        //     }
-                        //     else {
-                        //         viewer.setSurfaceMaterialStyle(value.surfid, {color: defaultColor, opacity: surfHiddenOpacity}); // hide all other surfaces
-                        //     }
-                        // }
                     }
                     else {
                         for (const [key, value] of Object.entries(surfsDict[activeModel])) {
@@ -189,14 +206,33 @@ document.getElementById('chartCanvas').addEventListener('mousemove', function(e)
                                 }
                             }
                         }
-
-                        // for (const [key, value] of Object.entries(surfsDict["superposition"])) {
-                        //     if (key == pointLabel) {
-                        //         viewer.setSurfaceMaterialStyle(value.surfid, {color: siteColor, opacity: surfHighOpacity}); // change the surface color of the hovered binding site row
-                        //     }
-                        // }
+                        for (const [key, value] of Object.entries(surfsDict["superposition"])) {
+                            if (key == "lig_inters") {
+                                // pass
+                            }
+                            else if (key == "non_binding") {
+                                // pass
+                            }
+                            else if (key == "single_residues") {
+                                // pass
+                            }
+                            else {
+                                if (key == pointLabel) {
+                                    viewer.setSurfaceMaterialStyle(value.surfid, {color: siteColor, opacity: surfHighOpacity}); // change the surface color of the hovered binding site row
+                                }
+                                else {
+                                    let surfColour = chartColors[Number(key)];
+                                    if (clickedBindingRess.length > 0) { // if binding residues are clicked, hide all their surfaces
+                                        viewer.setSurfaceMaterialStyle(value.surfid, {color: surfColour, opacity: surfHiddenOpacity}); // hide all other surfaces
+                                    }
+                                    else {
+                                        viewer.setSurfaceMaterialStyle(value.surfid, {color: surfColour, opacity: surfMediumOpacity}); // hide all other surfaces
+                                    } 
+                                }
+                            }
+                        }
                         
-                        viewer.setSurfaceMaterialStyle(surfsDict["superposition"][pointLabel].surfid, {color: siteColor, opacity: surfHighOpacity}); // change the surface color of the hovered binding site row
+                        // viewer.setSurfaceMaterialStyle(surfsDict["superposition"][pointLabel].surfid, {color: siteColor, opacity: surfHighOpacity}); // change the surface color of the hovered binding site row
                     }
                     else {
                         if (clickedBindingRess.length > 0) { // if binding residues are clicked, hide all their surfaces
@@ -259,6 +295,28 @@ document.getElementById('chartCanvas').addEventListener('mousemove', function(e)
                                                 let surfColour = chartColors[Number(key)];
                                                 viewer.setSurfaceMaterialStyle(value2.surfid, {color: surfColour, opacity: surfMediumOpacity}); // make them medium opacity
                                             }
+                                        }
+                                    }
+                                }
+                            }
+                            else {
+                                for (const [key, value] of Object.entries(surfsDict[activeModel])) {
+                                    if (key == "lig_inters") {
+                                        // pass
+                                    }
+                                    else if (key == "non_binding") {
+                                        // pass
+                                    }
+                                    else if (key == "single_residues") {
+                                        // pass
+                                    }
+                                    else if (key == pointLabel) {
+                                        // pass
+                                    }
+                                    else {
+                                        let surfColour = chartColors[Number(key)];
+                                        for (const [key2, value2] of Object.entries(value)) {
+                                            viewer.setSurfaceMaterialStyle(value2.surfid, {color: surfColour, opacity: surfHiddenOpacity}); // hide all other surfaces
                                         }
                                     }
                                 }
