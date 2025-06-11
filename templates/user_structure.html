@@ -39,8 +39,6 @@
     const jobResultsDir = {{ job_results_dir | tojson }}
     const jobVariantsDir = {{ job_variants_dir | tojson }}
 
-    // console.log(`Reading SIFTS mapping for ${protAtomsStruc}`);
-
     const Pdb2UpDict = {{ pdb2up_dict | tojson   }}
     const Up2PdbDict = {{ up2pdb_dict  | tojson  }}
 
@@ -74,6 +72,7 @@
     let labelsHash = {};
 
     let clickedSite = null;
+    let clickedBindingRess = []; // array that stores residues clicked in the binding site residues table
 
     let AssemblyPDBResNums;
     let SuppPDBResNum;
@@ -85,6 +84,7 @@
     let AssemblyClickedResidue = [];
     let AssebmlyHoveredResidue = [];
 
+    let CurrentDisplayedSite = 0; // displayed site by default is BS0
     let SuppClickedSiteResidues = null;
     let SuppHoveredSiteResidues = null;
     let SuppClickedResidue = null;
@@ -101,6 +101,7 @@
     const stickRadius = 0.25;
     const sphereRadius = 0.20;
     const ionSphereRadius = 0.50;
+    const gapCutOff = 25; // maximum number of amino acids missing for which a dashed cylinder is drawn between disconnected residues
     
     const waterColor = 'gold';
     const bboneAtoms = ['N', 'C', 'O']; // backbone atoms that are not displayed as sticks

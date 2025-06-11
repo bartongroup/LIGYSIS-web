@@ -322,6 +322,13 @@ $('table#bss_table tbody').on('mouseover', 'tr', function () { // event listener
     }
     else {
         let fullPointLabel = jobId + "_" + rowId;
+        CurrentDisplayedSite = Number(rowId); // changing displayed site
+        if (labelsHash[activeModel]["clickedResidues"].hasOwnProperty(rowId)) {
+            //
+        }
+        else {
+            labelsHash[activeModel]["clickedResidues"][rowId] = {}; // create an empty array for clicked residues if it doesn't exist
+        }
         $.ajax({ // AJAX request to get the table data from the server
             type: 'POST', // POST request
             url: `${window.appBaseUrl}/user-get-table`, // URL to send the request to
@@ -502,7 +509,7 @@ $('table#bss_table tbody').on('mouseover', 'tr', function () { // event listener
                             resName + String(Pdb2UpDict[resChain][resNum]),
                             {
                                 alignment: 'center', backgroundColor: 'white', backgroundOpacity: 1,
-                                borderColor: 'black', borderOpacity: 1, borderThickness: 2,
+                                borderColor: outlineColor, borderOpacity: 1, borderThickness: 2,
                                 font: 'Arial', fontColor: siteColor, fontOpacity: 1, fontSize: 12,
                                 inFront: true, screenOffset: [0, 0, 0], showBackground: true
                             },
@@ -522,7 +529,7 @@ $('table#bss_table tbody').on('mouseover', 'tr', function () { // event listener
                             resName + String(Pdb2UpMapAssembly[resChain][resNum]),
                             {
                                 alignment: 'center', backgroundColor: 'white', backgroundOpacity: 1,
-                                borderColor: 'black', borderOpacity: 1, borderThickness: 2,
+                                borderColor: outlineColor, borderOpacity: 1, borderThickness: 2,
                                 font: 'Arial', fontColor: siteColor, fontOpacity: 1, fontSize: 12,
                                 inFront: true, screenOffset: [0, 0, 0], showBackground: true
                             },
@@ -578,7 +585,12 @@ $('table#bs_ress_table tbody').on('mouseover', 'tr', function () { // event list
 
     if (index !== -1) { // will always be true if we hover over a row
         
-        resetChartStyles(newChart, index, "#ffff99", 10, 16); // changes chart styles to highlight the binding site
+        if (clickedBindingRess.includes(rowId)) {
+            //
+        }
+        else { 
+            resetChartStyles(newChart, index, "#ffff99", 10, 16); // changes chart styles to highlight the binding site
+        }
 
         if (activeModel == "superposition") { // in this case, only one residue as this is a supperposition of single chains
             SuppPDBResNum = Up2PdbDict[rowId]; // this is an array of tuples, anticipating multimeric structures
@@ -655,7 +667,7 @@ $('table#bs_ress_table tbody').on('mouseover', 'tr', function () { // event list
                             resName + String(Pdb2UpDict[resChain][resNum]),
                             {
                                 alignment: 'center', backgroundColor: 'white', backgroundOpacity: 1,
-                                borderColor: 'black', borderOpacity: 1, borderThickness: 2,
+                                borderColor: outlineColor, borderOpacity: 1, borderThickness: 2,
                                 font: 'Arial', fontColor: rowColorHex, fontOpacity: 1, fontSize: 12,
                                 inFront: true, screenOffset: [0, 0, 0], showBackground: true
                             },
@@ -676,7 +688,7 @@ $('table#bs_ress_table tbody').on('mouseover', 'tr', function () { // event list
                         resName + String(Pdb2UpMapAssembly[resChain][resNum]),
                         {
                             alignment: 'center', backgroundColor: 'white', backgroundOpacity: 1,
-                            borderColor: 'black', borderOpacity: 1, borderThickness: 2,
+                            borderColor: outlineColor, borderOpacity: 1, borderThickness: 2,
                             font: 'Arial', fontColor: rowColorHex, fontOpacity: 1, fontSize: 12,
                             inFront: true, screenOffset: [0, 0, 0], showBackground: true
                         },
@@ -696,17 +708,37 @@ $('table#bs_ress_table tbody').on('mouseover', 'tr', function () { // event list
 
     let index = newChartData[newChartLab].indexOf(rowId); // gets the index of the row id in the chart data
 
-    resetChartStyles(newChart, index, "black", 2, 8); // resets chart styles to default
-
     let clickedElements = document.getElementsByClassName("clicked-row");
 
     if (clickedElements.length == 0) {
 
+        if (clickedBindingRess.includes(rowId)) { // if the binding site residue is clicked, we do not reset the styleAdd commentMore actions
+            //
+        }
+        else {
+            resetChartStyles(newChart, index, "black", 2, 8); // resets chart styles to default
+        }
+
         if (activeModel == "superposition") {
-            viewer.setStyle(
-                {...protAtoms, model: protAtomsModel},
-                {cartoon: {style: cartoonStyle, color: defaultColor, arrows: cartoonArrows, tubes: cartoonTubes, opacity: cartoonOpacity, thickness: cartoonThickness,}}
-            );
+            if (clickedBindingRess.length == 0) { // no binding site residues are clicked
+                viewer.setStyle(
+                    {...protAtoms, model: protAtomsModel},
+                    {cartoon: {style: cartoonStyle, color: defaultColor, arrows: cartoonArrows, tubes: cartoonTubes, opacity: cartoonOpacity, thickness: cartoonThickness,}}
+                );
+            }
+            else {
+                let clickedRessSels = []
+                for (const res of clickedBindingRess) {
+                    if (Up2PdbDict.hasOwnProperty(res)) {
+                        let dataArray = Up2PdbDict[res];
+                        clickedRessSels.push(...dataArray.map(data => ({ chain: data[0], resi: data[1] })));
+                    }
+                }
+                viewer.setStyle(
+                    {model: protAtomsModel, not: {or: clickedRessSels}},
+                    {cartoon: {style: cartoonStyle, color: defaultColor, arrows: cartoonArrows, tubes: cartoonTubes, opacity: cartoonOpacity, thickness: cartoonThickness,}}
+                );
+            }
         }
         else {
             if (contactsVisible) {
@@ -743,6 +775,80 @@ $('table#bs_ress_table tbody').on('mouseover', 'tr', function () { // event list
             viewer.removeLabel(label);
         }
         labelsHash[activeModel]["hoveredRes"] = [];
+    }
+}).on('click', 'tr', function () { // implementing new click event listener for binding site residues table rowsAdd commentMore actions
+    let rowId = Number(this.id);  // gets the row ID of the table row that is hovered over (this corresponds to the UniProt residue number of this row)
+    let index = newChartData[newChartLab].indexOf(rowId); // gets the index of the row id in the chart data
+    let rowColor = window.getComputedStyle(this).getPropertyValue('color');
+    let rowColorHex = rgbToHex(rowColor);
+
+    if (clickedBindingRess.includes(rowId)) {
+        clickedBindingRess = clickedBindingRess.filter(res => res !== rowId); // removes the row id from the clicked binding residues array
+        if (index !== -1) {
+            resetChartStyles(newChart, index, "#ffff99", 10, 16); // changes chart styles to highlight the binding site
+        }
+        clearClickedResidueRow(this); // clears the clicked residue row styles
+        //highlightResidueTableRow(this); // highlights the residue in the table row
+        //highlightTableRow(rowId); // highlights the table row of the binding site
+    }
+    else {
+        clickedBindingRess.push(rowId); // adds the row id to the clicked binding residues array
+        if (index !== -1) {
+            resetChartStyles(newChart, index, "#bfd4cb", 10, 16); // changes chart styles to highlight the clicked binding site
+        }
+        clearHighlightedResidueRow(this); // clears the highlighted residue row styles before applying clicked styles
+        clickResiduesTableRow(this);
+
+        if (activeModel == "superposition") { // in this case, only one residue as this is a supperposition of single chains
+            SuppPDBResNum = Up2PdbDict[rowId]; // this is now an array (anticipating multimeric structures)
+            if (SuppPDBResNum !== undefined) {
+                let SuppPDBResNumSel = SuppPDBResNum.map(tuple => {
+                        return { chain: tuple[0], resi: tuple[1] };
+                    });
+                viewer.setStyle(
+                    {model: protAtomsModel, or: SuppPDBResNumSel, not: {atom: bboneAtoms}},
+                    {
+                        cartoon:{style: cartoonStyle, color: rowColorHex, arrows: cartoonArrows, tubes: cartoonTubes, opacity: cartoonOpacity, thickness: cartoonThickness,},
+                        stick:{color: rowColorHex},
+                    }
+                );
+            }
+            else {
+                console.log("Residue not found in structure!");
+            }
+        }
+        else {
+            let AssemblyPDBResNum = Up2PdbMapAssembly[rowId];
+            if (AssemblyPDBResNum !== undefined) {
+                if (contactsVisible) {
+                    let defaultColors = { ...$3Dmol.elementColors.defaultColors };
+                    defaultColors.C = rowColorHex;
+                    for (const element of AssemblyPDBResNum) {
+                        viewer.setStyle(
+                            {model: activeModel, resi: element[1], chain: element[0], not: {atom: bboneAtoms}},
+                            {
+                                cartoon:{style: cartoonStyle, color: rowColorHex, arrows: cartoonArrows, tubes: cartoonTubes, opacity: cartoonOpacity, thickness: cartoonThickness,},
+                                stick:{colorscheme: defaultColors},
+                            }
+                        );
+                    }
+                }
+                else {
+                    for (const element of AssemblyPDBResNum) {
+                        viewer.setStyle(
+                            {model: activeModel, resi: element[1], chain: element[0], not: {atom: bboneAtoms}},
+                            {
+                                cartoon:{style: cartoonStyle, color: rowColorHex, arrows: cartoonArrows, tubes: cartoonTubes, opacity: cartoonOpacity, thickness: cartoonThickness,},
+                                stick:{color: rowColorHex},
+                            }
+                        );
+                    }                   
+                }
+            }
+            else {
+                console.log("Residue not found in assembly!");
+            }
+        }
     }
 });
 

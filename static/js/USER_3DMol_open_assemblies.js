@@ -550,7 +550,7 @@ async function selectOption(option) {
                     viewer.setStyle(
                         SuppClickedSiteResidues,
                         {
-                            cartoon: {style: cartoonStyle, color: clickedSiteColor, arrows: cartoonArrows, tubes: cartoonTubes, opacity: cartoonOpacity, thickness: cartoonThickness,},
+                            cartoon: {style: cartoonStyle, color: clickedSiteColor, arrows: cartoonArrows, tubes: cartoonTubes, opacity: cartoonOpacity, thickness: cartoonThickness, gapcutoff: gapCutOff},
                             stick:{color: clickedSiteColor},
                         },
                     );

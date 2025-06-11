@@ -403,6 +403,14 @@ document.getElementById('chartCanvas').addEventListener('click', function(e) { /
 
         let fullPointLabel = jobId + "_" + pointLabel;
 
+        CurrentDisplayedSite = pointLabel; // assigning new value to CurrentDisplayedSite so that we keep track of which site is displayed. Necessary to remove labels when another site is clickedAdd commentMore actions
+        if (labelsHash[activeModel]["clickedResidues"].hasOwnProperty(pointLabel)) {
+            //
+        }
+        else {
+            labelsHash[activeModel]["clickedResidues"][pointLabel] = {}; // create an empty array for clicked residues if it doesn't exist
+        }
+
         $.ajax({ // AJAX request to get the table data from the server
             type: 'POST', // POST request
             url: `${window.appBaseUrl}/user-get-table`, // URL to send the request to
@@ -627,7 +635,7 @@ document.getElementById('chartCanvas').addEventListener('click', function(e) { /
                                     resName + String(Pdb2UpDict[resChain][resNum]),
                                     {
                                         alignment: 'center', backgroundColor: 'white', backgroundOpacity: 1,
-                                        borderColor: 'black', borderOpacity: 1, borderThickness: 2,
+                                        borderColor: outlineColor, borderOpacity: 1, borderThickness: 2,
                                         font: 'Arial', fontColor: pointColor, fontOpacity: 1, fontSize: 12,
                                         inFront: true, screenOffset: [0, 0, 0], showBackground: true
                                     },
@@ -647,7 +655,7 @@ document.getElementById('chartCanvas').addEventListener('click', function(e) { /
                                     resName + String(Pdb2UpMapAssembly[resChain][resNum]),
                                     {
                                         alignment: 'center', backgroundColor: 'white', backgroundOpacity: 1,
-                                        borderColor: 'black', borderOpacity: 1, borderThickness: 2,
+                                        borderColor: outlineColor, borderOpacity: 1, borderThickness: 2,
                                         font: 'Arial', fontColor: pointColor, fontOpacity: 1, fontSize: 12,
                                         inFront: true, screenOffset: [0, 0, 0], showBackground: true
                                     },
@@ -773,7 +781,7 @@ document.getElementById('chartCanvas').addEventListener('click', function(e) { /
                             resName + String(Pdb2UpDict[resChain][resNum]),
                                 {
                                     alignment: 'center', backgroundColor: 'white', backgroundOpacity: 1,
-                                    borderColor: 'black', borderOpacity: 1, borderThickness: 2,
+                                    borderColor: outlineColor, borderOpacity: 1, borderThickness: 2,
                                     font: 'Arial', fontColor: pointColor, fontOpacity: 1, fontSize: 12,
                                     inFront: true, screenOffset: [0, 0, 0], showBackground: true
                                 },
@@ -793,7 +801,7 @@ document.getElementById('chartCanvas').addEventListener('click', function(e) { /
                                 resName + String(Pdb2UpMapAssembly[resChain][resNum]),
                                 {
                                     alignment: 'center', backgroundColor: 'white', backgroundOpacity: 1,
-                                    borderColor: 'black', borderOpacity: 1, borderThickness: 2,
+                                    borderColor: outlineColor, borderOpacity: 1, borderThickness: 2,
                                     font: 'Arial', fontColor: pointColor, fontOpacity: 1, fontSize: 12,
                                     inFront: true, screenOffset: [0, 0, 0], showBackground: true
                                 },
@@ -954,7 +962,7 @@ document.getElementById('newChartCanvas').addEventListener('mousemove', function
                                     resName + String(Pdb2UpDict[resChain][resNum]),
                                     {
                                         alignment: 'center', backgroundColor: 'white', backgroundOpacity: 1,
-                                        borderColor: 'black', borderOpacity: 1, borderThickness: 2,
+                                        borderColor: outlineColor, borderOpacity: 1, borderThickness: 2,
                                         font: 'Arial', fontColor: pointColor, fontOpacity: 1, fontSize: 12,
                                         inFront: true, screenOffset: [0, 0, 0], showBackground: true
                                     },
@@ -978,7 +986,7 @@ document.getElementById('newChartCanvas').addEventListener('mousemove', function
                                 resName + String(Pdb2UpMapAssembly[resChain][resNum]),
                                 {
                                     alignment: 'center', backgroundColor: 'white', backgroundOpacity: 1,
-                                    borderColor: 'black', borderOpacity: 1, borderThickness: 2,
+                                    borderColor: outlineColor, borderOpacity: 1, borderThickness: 2,
                                     font: 'Arial', fontColor: pointColor, fontOpacity: 1, fontSize: 12,
                                     inFront: true, screenOffset: [0, 0, 0], showBackground: true
                                 },
