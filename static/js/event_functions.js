@@ -77,6 +77,13 @@ function highlightTableRow(pointLabel) { // highlights the table row of the bind
     }
 }
 
+function removeHighlightFromTableRow(pointLabel) { // removes the highlight from the table row of the binding site
+    var row = document.getElementById(pointLabel);
+    if (row) {
+        row.classList.remove("highlighted-row");
+    }
+}
+
 function highlightResidueTableRow(row) { // highlights the table row of the binding site
     if (row) {
         row.classList.add("highlighted-row");

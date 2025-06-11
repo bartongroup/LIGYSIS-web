@@ -1274,22 +1274,23 @@ $('table#bs_ress_table tbody').on('mouseover', 'tr', function () { // event list
                             viewer.setSurfaceMaterialStyle(surfsDict[activeModel]["single_residues"][CurrentDisplayedSite][ResKey].surfid, {opacity: surfHiddenOpacity});
                         }
                         if (clickedBindingRess.length == 0) { // no binding site residues are clicked
-                            // TODO: implement this
-                            for (const [key, value] of Object.entries(surfsDict[activeModel])) {
-                            if (key == "non_binding") {
-                                viewer.setSurfaceMaterialStyle(value[element].surfid, {color: defaultColor, opacity: surfLowOpacity});
+                            if (!contactsVisible) { // if contacts are not visible, we can show the non-binding surface. Otherwise, just show ligand-interacting surfaces
+                                for (const [key, value] of Object.entries(surfsDict[activeModel])) {
+                                    if (key == "non_binding") {
+                                        viewer.setSurfaceMaterialStyle(value[element].surfid, {color: defaultColor, opacity: surfLowOpacity});
+                                    }
+                                    else if (key == "single_residues") {
+                                        //
+                                    }
+                                    else if (key == "lig_inters") {
+                                        // pass
+                                    }
+                                    else {
+                                        let siteColor = chartColors[Number(key.split("_").pop())];
+                                        viewer.setSurfaceMaterialStyle(value[element].surfid, {color: siteColor, opacity: surfMediumOpacity});
+                                    }
+                                }
                             }
-                            else if (key == "single_residues") {
-                                //
-                            }
-                            else if (key == "lig_inters") {
-                                // pass
-                            }
-                            else {
-                                let siteColor = chartColors[Number(key.split("_").pop())];
-                                viewer.setSurfaceMaterialStyle(value[element].surfid, {color: siteColor, opacity: surfMediumOpacity});
-                            }
-                        }
                         }
                     });
                 }

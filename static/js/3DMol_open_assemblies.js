@@ -613,8 +613,8 @@ function openStructure(pdbId) {
                             model.removeAtoms(hydrogenAtoms); // Remove hydrogen atoms
                             modelID = model.getID(); // Gets the ID of the GLModel
                             activeModel = modelID;
-                            surfsDict[activeModel] = {"non_binding": {}, "lig_inters": {}, "single_residues": {0: {}}}; // Initialize dictionary for the new assembly
-                            labelsHash[activeModel] =  {"clickedSite": {}, "hoveredRes": [], "contactSites": [], "clickedResidues": {0:{}}};
+                            surfsDict[activeModel] = {"non_binding": {}, "lig_inters": {}, "single_residues": {[CurrentDisplayedSite]: {}}}; // Initialize dictionary for the new assembly
+                            labelsHash[activeModel] =  {"clickedSite": {}, "hoveredRes": [], "contactSites": [], "clickedResidues": {[CurrentDisplayedSite]:{}}};
 
                             // implement surface addition for binding sites
                 
