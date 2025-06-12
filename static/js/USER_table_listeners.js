@@ -788,8 +788,30 @@ $('table#bs_ress_table tbody').on('mouseover', 'tr', function () { // event list
             resetChartStyles(newChart, index, "#ffff99", 10, 16); // changes chart styles to highlight the binding site
         }
         clearClickedResidueRow(this); // clears the clicked residue row styles
-        //highlightResidueTableRow(this); // highlights the residue in the table row
-        //highlightTableRow(rowId); // highlights the table row of the binding site
+        if (labelsVisible) {
+            if (activeModel == "superposition") {
+                SuppPDBResNum = Up2PdbDict[rowId]; // this is now an array (anticipating multimeric structures)
+                if (SuppPDBResNum !== undefined) {
+                    for (const tuple of SuppPDBResNum) {
+                        let resChain = tuple[0];
+                        let resNum = tuple[1];
+                        let ResKey = resChain + "_" + resNum;
+                        labelsHash[activeModel]["clickedResidues"][CurrentDisplayedSite][ResKey].hide(); // hides the label for the clicked residue
+                    }
+                }
+            }
+            else {
+                let AssemblyPDBResNum = Up2PdbMapAssembly[rowId];
+                if (AssemblyPDBResNum !== undefined) {
+                    for (const tuple of AssemblyPDBResNum) {
+                        let resChain = tuple[0];
+                        let resNum = tuple[1];
+                        let ResKey = resChain + "_" + resNum;
+                        labelsHash[activeModel]["clickedResidues"][CurrentDisplayedSite][ResKey].hide(); // hides the label for the clicked residue
+                    }
+                }
+            }
+        }
     }
     else {
         clickedBindingRess.push(rowId); // adds the row id to the clicked binding residues array
@@ -812,6 +834,32 @@ $('table#bs_ress_table tbody').on('mouseover', 'tr', function () { // event list
                         stick:{color: rowColorHex},
                     }
                 );
+                if (labelsVisible) {
+                    for (const tuple of SuppPDBResNum) {
+                        let resChain = tuple[0];
+                        let resNum = tuple[1];
+                        let ResKey = resChain + "_" + resNum;
+                        if (labelsHash[activeModel]["clickedResidues"][CurrentDisplayedSite].hasOwnProperty(ResKey)) {
+                            labelsHash[activeModel]["clickedResidues"][CurrentDisplayedSite][ResKey].show(); // shows the label for the clicked residue
+                        }
+                        else {
+                            let resSel = {model: protAtomsModel, resi: resNum, chain: resChain};
+                            let resName = viewer.selectedAtoms(resSel)[0].resn
+                            let label = viewer.addLabel(
+                                resName + String(Pdb2UpDict[resChain][resNum]),
+                                {
+                                    alignment: 'center', backgroundColor: 'white', backgroundOpacity: 1,
+                                    borderColor: outlineColor, borderOpacity: 1, borderThickness: 2,
+                                    font: 'Arial', fontColor: rowColorHex, fontOpacity: 1, fontSize: 12,
+                                    inFront: true, screenOffset: [0, 0, 0], showBackground: true
+                                },
+                                {model: protAtomsModel, resi: resNum, chain: resChain, atom: 'CA'},
+                                false,
+                            );
+                            labelsHash[activeModel]["clickedResidues"][CurrentDisplayedSite][ResKey] = label;
+                        }
+                    }
+                }
             }
             else {
                 console.log("Residue not found in structure!");
