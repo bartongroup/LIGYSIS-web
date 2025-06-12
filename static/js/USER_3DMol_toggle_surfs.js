@@ -53,6 +53,12 @@ function toggleSurfaceVisibility() {
                 if (key == "non_binding") {
                     viewer.setSurfaceMaterialStyle(surfsDict["superposition"][key].surfid, {color: defaultColor, opacity: surfHiddenOpacity});
                 }
+                else if (key == "single_residues") {
+                    var displayedSiteSurfs = surfsDict["superposition"][key][CurrentDisplayedSite];
+                    for (const [key2, value2] of Object.entries(displayedSiteSurfs)) {
+                        viewer.setSurfaceMaterialStyle(value2.surfid, {color: defaultColor, opacity: surfHiddenOpacity});
+                    }
+                }
                 else {
                     let siteColor = chartColors[Number(key.split("_").pop())];
                     viewer.setSurfaceMaterialStyle(surfsDict["superposition"][key].surfid, {color: siteColor, opacity: surfHiddenOpacity});
@@ -113,6 +119,47 @@ function toggleSurfaceVisibility() {
                     let surfid = value.surfid;
                     viewer.setSurfaceMaterialStyle(surfid, {color: siteColor, opacity: surfHighOpacity}); // show ONLY surface of clicked row
                 }
+            }
+        }
+        else if (clickedBindingRess.length > 0) { // show surface of clicked binding residues
+            let siteColor = chartColors[Number(CurrentDisplayedSite)];
+            if (activeModel == "superposition") {
+                for (const clickedResidue of clickedBindingRess) {
+                    let clickedResiduePDBResnum = Up2PdbDict[clickedResidue]; // this is now an array (anticipating multimeric structures)
+                    if (clickedResiduePDBResnum !== undefined) { // check if residue is not missing in the structure
+                        for (const [chain, resi] of clickedResiduePDBResnum) {
+                            let ResKey = chain + "_" + resi; // key for the label
+                            if (surfsDict["superposition"]["single_residues"][CurrentDisplayedSite].hasOwnProperty(ResKey)) {
+                                let resSurf = surfsDict["superposition"]["single_residues"][CurrentDisplayedSite][ResKey];
+                                viewer.setSurfaceMaterialStyle(resSurf.surfid, {color: siteColor, opacity: surfHighOpacity}); // show ONLY surface of clicked residue
+                            }
+                            else { // create surface for this residue
+                                let surfSel = {model: protAtomsModel, resi: resi, chain: chain};
+                                let sitePDBResNums = seg_ress_dict[CurrentDisplayedSite]
+                                    .filter(el => Up2PdbDict.hasOwnProperty(el))
+                                    .flatMap(el => {
+                                        let dataArray = Up2PdbDict[el]; // Get the array of tuples
+                                        return dataArray.map(data => {
+                                            return { chain: data[0], resi: data[1] }; // Extract chain and resi for each element
+                                        });
+                                    });
+                                let SiteSel = {model: protAtomsModel, or: sitePDBResNums};
+                                surfsDict["superposition"]["single_residues"][CurrentDisplayedSite][ResKey] = viewer.addSurface(
+                                    $3Dmol.SurfaceType.ISO,
+                                    {
+                                        color: siteColor,
+                                        opacity: surfHighOpacity,
+                                    },
+                                    surfSel,
+                                    SiteSel,
+                                );
+                            }
+                        }
+                    }
+                }
+            }
+            else {
+                //
             }
         }
         else {
@@ -213,7 +260,7 @@ function toggleLabelsVisibility() {
                 let siteColor = chartColors[Number(clickedElementId.split("_").pop())];
 
                 if (labelsHash[activeModel]["clickedSite"].hasOwnProperty(clickedElementId)) {
-                    console.log(`Site ${clickedElementId} already clicked and labels exist`);
+                    // console.log(`Site ${clickedElementId} already clicked and labels exist`);
                     for (const label of labelsHash[activeModel]["clickedSite"][clickedElementId]) {
                         label.show();
                     }
@@ -293,13 +340,13 @@ function toggleLabelsVisibility() {
             for (var i = 0; i < clickedBindingRess.length; i++) {
                 var clickedResidue = clickedBindingRess[i];
                 if (labelsHash[activeModel]["clickedResidues"][CurrentDisplayedSite].hasOwnProperty(clickedResidue)) {
-                    console.log(`Residue ${clickedResidue} from Site ${CurrentDisplayedSite} already clicked and labels exist`);
+                    // console.log(`Residue ${clickedResidue} from Site ${CurrentDisplayedSite} already clicked and labels exist`);
                     var label = labelsHash[activeModel]["clickedResidues"][CurrentDisplayedSite][clickedResidue];
                     label.show();
                 }
                 else{
                     if (activeModel == "superposition") {
-                        var clickedResiduePDBResnum = Up2PdbDict[newPointLabel]; // this is now an array (anticipating multimeric structures)
+                        var clickedResiduePDBResnum = Up2PdbDict[clickedResidue]; // this is now an array (anticipating multimeric structures)
                         if (clickedResiduePDBResnum !== undefined) { // check if residue is not missing in the structure
                             for (const res of clickedResiduePDBResnum) {
                                 let labelAsymId = res[0];
