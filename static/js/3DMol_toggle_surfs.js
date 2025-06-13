@@ -736,7 +736,7 @@ async function toggleContactsVisibility() {
                         });
                     });
                     viewer.addStyle(
-                        {...protAtomsModel, model: activeModel, not: {or: clickedRessSels}},
+                        {...protAtoms, model: activeModel, not: {or: clickedRessSels}},
                         {cartoon: {color: defaultColor}, stick: {hidden: true}}
                     );
                     let siteColor = chartColors[Number(CurrentDisplayedSite)];

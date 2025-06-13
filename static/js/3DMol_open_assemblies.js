@@ -289,7 +289,7 @@ async function selectOption(option) {
                         );
                     });
                 }
-        }
+            }
             if (ligandsVisible) { // if ligands were visible, show them
                 viewer.addStyle(
                     {...hetAtomsNotHoh, model: activeModel},
