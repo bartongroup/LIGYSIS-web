@@ -203,7 +203,7 @@ document.getElementById('chartCanvas').addEventListener('mousemove', function(e)
                                 for (const commonRes of commonRess) {
                                     let commonResPDBResNum = Up2PdbDict[commonRes];
                                     for (const [chain, resi] of commonResPDBResNum) {
-                                        let ResKey = chain + "_" + resi; // create a key for the common residue
+                                        let ResKey = chain + "_" + commonRes; // create a key for the common residue
                                         if (surfsDict["superposition"]["single_residues"][CurrentDisplayedSite].hasOwnProperty(ResKey)) { // check if the surface for the common residue exists
                                             var surfObject = surfsDict["superposition"]["single_residues"][CurrentDisplayedSite][ResKey];
                                             var currentSiteColor = chartColors[Number(CurrentDisplayedSite)];
@@ -272,7 +272,7 @@ document.getElementById('chartCanvas').addEventListener('mousemove', function(e)
                                     let commonResPDBResNum = Up2PdbMapAssembly[commonRes];
                                     if (commonResPDBResNum !== undefined) { // check if commonResPDBResNum is defined
                                         for (const [chain, resi] of commonResPDBResNum) {
-                                            let ResKey = chain + "_" + resi; // create a key for the common residue
+                                            let ResKey = chain + "_" + commonRes; // create a key for the common residue
                                             if (surfsDict[activeModel]["single_residues"][CurrentDisplayedSite].hasOwnProperty(ResKey)) { // check if the surface for the common residue exists
                                                 var surfObject = surfsDict[activeModel]["single_residues"][CurrentDisplayedSite][ResKey];
                                                 var currentSiteColor = chartColors[Number(CurrentDisplayedSite)];
@@ -627,7 +627,7 @@ document.getElementById('chartCanvas').addEventListener('mousemove', function(e)
                                 let bindingResPDBResNum = Up2PdbDict[bindingRes];
                                 if (bindingResPDBResNum !== undefined) { // check if bindingResPDBResNum is defined
                                     for (const [chain, resi] of bindingResPDBResNum) {
-                                        let ResKey = chain + "_" + resi; // create a key for the clicked residue
+                                        let ResKey = chain + "_" + bindingRes; // create a key for the clicked residue
                                         if (surfsDict["superposition"]["single_residues"][CurrentDisplayedSite].hasOwnProperty(ResKey)) { // check if the surface for the clicked residue exists
                                             var surfObject = surfsDict["superposition"]["single_residues"][CurrentDisplayedSite][ResKey];
                                             // var currentSiteColor = chartColors[Number(CurrentDisplayedSite)];
@@ -672,7 +672,7 @@ document.getElementById('chartCanvas').addEventListener('mousemove', function(e)
                                 let bindingResPDBResNum = Up2PdbMapAssembly[bindingRes];
                                 if (bindingResPDBResNum !== undefined) { // check if bindingResPDBResNum is defined
                                     for (const [chain, resi] of bindingResPDBResNum) {
-                                        let ResKey = chain + "_" + resi; // create a key for the clicked residue
+                                        let ResKey = chain + "_" + bindingRes; // create a key for the clicked residue
                                         if (surfsDict[activeModel]["single_residues"][CurrentDisplayedSite].hasOwnProperty(ResKey)) { // check if the surface for the clicked residue exists
                                             var surfObject = surfsDict[activeModel]["single_residues"][CurrentDisplayedSite][ResKey];
                                             var currentSiteColor = chartColors[Number(CurrentDisplayedSite)];
@@ -728,7 +728,7 @@ document.getElementById('chartCanvas').addEventListener('mousemove', function(e)
                                 let bindingResPDBResNum = Up2PdbMapAssembly[bindingRes];
                                 if (bindingResPDBResNum !== undefined) { // check if bindingResPDBResNum is defined
                                     for (const [chain, resi] of bindingResPDBResNum) {
-                                        let ResKey = chain + "_" + resi; // create a key for the clicked residue
+                                        let ResKey = chain + "_" + bindingRes; // create a key for the clicked residue
                                         if (surfsDict[activeModel]["single_residues"][CurrentDisplayedSite].hasOwnProperty(ResKey)) { // check if the surface for the clicked residue exists
                                             var surfObject = surfsDict[activeModel]["single_residues"][CurrentDisplayedSite][ResKey];
                                             var currentSiteColor = chartColors[Number(CurrentDisplayedSite)];
@@ -885,7 +885,7 @@ document.getElementById('chartCanvas').addEventListener('click', function(e) { /
                         if (resPDBResNum !== undefined) { // check if resPDBResNum is defined
                             for (const [chain, resi] of resPDBResNum) {
                                 clickedBindingRessSel.push({model: protAtomsModel, chain: chain, resi: resi});
-                                let ResKey = chain + "_" + resi; // create a key for the clicked residue
+                                let ResKey = chain + "_" + res; // create a key for the clicked residue
                                 if (surfaceVisible) {
                                     if (surfsDict["superposition"]["single_residues"][previouslyDisplayedSite].hasOwnProperty(ResKey)) {
                                         var surfObject = surfsDict["superposition"]["single_residues"][previouslyDisplayedSite][ResKey];
@@ -915,7 +915,7 @@ document.getElementById('chartCanvas').addEventListener('click', function(e) { /
                         if (resPDBResNum !== undefined) { // check if resPDBResNum is defined
                             for (const [chain, resi] of resPDBResNum) {
                                 clickedBindingRessSel.push({model: activeModel, chain: chain, resi: resi});
-                                let ResKey = chain + "_" + resi; // create a key for the clicked residue
+                                let ResKey = chain + "_" + res; // create a key for the clicked residue
                                 if (surfaceVisible) {
                                     if (surfsDict[activeModel]["single_residues"][previouslyDisplayedSite].hasOwnProperty(ResKey)) {
                                         var surfObject = surfsDict[activeModel]["single_residues"][previouslyDisplayedSite][ResKey];
@@ -962,7 +962,7 @@ document.getElementById('chartCanvas').addEventListener('click', function(e) { /
                             let resPDBResNum = Up2PdbDict[res];
                             if (resPDBResNum !== undefined) { // check if resPDBResNum is defined
                                 for (const [chain, resi] of resPDBResNum) {
-                                    let ResKey = chain + "_" + resi; // create a key for the clicked residue
+                                    let ResKey = chain + "_" + res; // create a key for the clicked residue
                                     if (labelsHash[activeModel]["clickedResidues"][CurrentDisplayedSite].hasOwnProperty(ResKey)) {
                                         labelsHash[activeModel]["clickedResidues"][CurrentDisplayedSite][ResKey].show();
                                     }
@@ -991,7 +991,7 @@ document.getElementById('chartCanvas').addEventListener('click', function(e) { /
                             let resPDBResNum = Up2PdbMapAssembly[res];
                             if (resPDBResNum !== undefined) { // check if resPDBResNum is defined
                                 for (const [chain, resi] of resPDBResNum) {
-                                    let ResKey = chain + "_" + resi; // create a key for the clicked residue
+                                    let ResKey = chain + "_" + res; // create a key for the clicked residue
                                     if (labelsHash[activeModel]["clickedResidues"][CurrentDisplayedSite].hasOwnProperty(ResKey)) {
                                         labelsHash[activeModel]["clickedResidues"][CurrentDisplayedSite][ResKey].show();
                                     }
@@ -1041,7 +1041,7 @@ document.getElementById('chartCanvas').addEventListener('click', function(e) { /
                                 let clickedResPDBResNum = Up2PdbDict[clickedRes];
                                 if (clickedResPDBResNum !== undefined) { // check if clickedResPDBResNum is defined
                                     for (const [chain, resi] of clickedResPDBResNum) {
-                                        let ResKey = chain + "_" + resi; // create a key for the clicked residue
+                                        let ResKey = chain + "_" + clickedRes; // create a key for the clicked residue
                                         if (surfsDict["superposition"]["single_residues"][CurrentDisplayedSite].hasOwnProperty(ResKey)) { // check if the surface for the clicked residue exists
                                             var surfObject = surfsDict["superposition"]["single_residues"][CurrentDisplayedSite][ResKey];
                                             var currentSiteColor = chartColors[Number(CurrentDisplayedSite)];
@@ -1062,7 +1062,13 @@ document.getElementById('chartCanvas').addEventListener('click', function(e) { /
                                         // pass
                                     }
                                     else { // hide other surfaces
-                                        viewer.setSurfaceMaterialStyle(value2.surfid, {color: defaultColor, opacity: surfHiddenOpacity});
+                                        if (key == pointLabel) {
+                                            let siteColor = chartColors[Number(pointLabel)];
+                                            viewer.setSurfaceMaterialStyle(value2.surfid, {color: siteColor, opacity: surfMediumOpacity});
+                                        }
+                                        else {
+                                            viewer.setSurfaceMaterialStyle(value2.surfid, {color: defaultColor, opacity: surfHiddenOpacity});
+                                        }
                                     }
                                 }
                                 else {
@@ -1101,6 +1107,9 @@ document.getElementById('chartCanvas').addEventListener('click', function(e) { /
 
                 clickedPointLabel = null; // reset clickedPointLabel
                 clickedSite = null; // reset clickedSite
+
+                resetChartStyles(myChart, pointLabel, "#ffff99", 10, 16); // changes chart styles to highlight the newly clicked site
+                highlightTableRow(pointLabel); // highlight the table row of the newly clicked data point
             }
 
             else {
@@ -1629,7 +1638,7 @@ document.getElementById('newChartCanvas').addEventListener('mousemove', function
                     if (activeModel == "superposition") {
                         for (const [key, value] of Object.entries(surfsDict["superposition"]["single_residues"][CurrentDisplayedSite])) {
                             var numericKey = Number(key.split("_").pop());
-                            if (clickedBindingRess.includes(numericKey)) { // if the residue is clicked, do not hide the surfaceAdd commentMore actions
+                            if (clickedBindingRess.includes(numericKey)) { // if the residue is clicked, do not hide the surface
                                 // pass
                             }
                             else { // hide the surface for the previously hovered residue (might happen when data points are very close to each other)
@@ -1640,7 +1649,7 @@ document.getElementById('newChartCanvas').addEventListener('mousemove', function
                         let SuppPDBResNum = Up2PdbDict[newPointLabel]; // this is now an array (anticipating multimeric structures)
                         if (SuppPDBResNum != undefined) {
                             for (const [chain, resi] of SuppPDBResNum) {
-                                let ResKey = chain + "_" + resi;
+                                let ResKey = chain + "_" + newPointLabel;
                                 if (surfsDict["superposition"]["single_residues"][CurrentDisplayedSite].hasOwnProperty(ResKey)) {
                                     let surfid = surfsDict["superposition"]["single_residues"][CurrentDisplayedSite][ResKey].surfid;
                                     viewer.setSurfaceMaterialStyle(surfid, {color: pointColor, opacity: surfHighOpacity});
@@ -1686,7 +1695,7 @@ document.getElementById('newChartCanvas').addEventListener('mousemove', function
                         let AssemblyPDBResNum = Up2PdbMapAssembly[newPointLabel];
                         if (AssemblyPDBResNum != undefined) {
                             for (const [chain, resi] of AssemblyPDBResNum) {
-                                let ResKey = chain + "_" + resi;
+                                let ResKey = chain + "_" + newPointLabel;
                                 if (surfsDict[activeModel]["single_residues"][CurrentDisplayedSite].hasOwnProperty(ResKey)) {
                                     let surfid = surfsDict[activeModel]["single_residues"][CurrentDisplayedSite][ResKey].surfid;
                                     viewer.setSurfaceMaterialStyle(surfid, {color: pointColor, opacity: surfHighOpacity});
@@ -1734,7 +1743,7 @@ document.getElementById('newChartCanvas').addEventListener('mousemove', function
                         let SuppPDBResNum = Up2PdbDict[newPointLabel]; // this is now an array (anticipating multimeric structures)
                         if (SuppPDBResNum != undefined) {
                             for (const [chain, resi] of SuppPDBResNum) {
-                                let ResKey = chain + "_" + resi;
+                                let ResKey = chain + "_" + newPointLabel;
                                 if (surfsDict["superposition"]["single_residues"][CurrentDisplayedSite].hasOwnProperty(ResKey)) {
                                     let surfid = surfsDict["superposition"]["single_residues"][CurrentDisplayedSite][ResKey].surfid;
                                     viewer.setSurfaceMaterialStyle(surfid, {opacity: surfHiddenOpacity});
@@ -1765,7 +1774,7 @@ document.getElementById('newChartCanvas').addEventListener('mousemove', function
                         let AssemblyPDBResNum = Up2PdbMapAssembly[newPointLabel];
                         if (AssemblyPDBResNum != undefined) {
                             for (const [chain, resi] of AssemblyPDBResNum) {
-                                let ResKey = chain + "_" + resi;
+                                let ResKey = chain + "_" + newPointLabel;
                                 if (surfsDict[activeModel]["single_residues"][CurrentDisplayedSite].hasOwnProperty(ResKey)) {
                                     viewer.setSurfaceMaterialStyle(surfsDict[activeModel]["single_residues"][CurrentDisplayedSite][ResKey].surfid, {opacity: surfHiddenOpacity});
                                 }
@@ -1925,7 +1934,7 @@ document.getElementById('newChartCanvas').addEventListener('click', function(e) 
                     let SuppPDBResNum = Up2PdbDict[pointLabel]; // this is now an array (anticipating multimeric structures)
                     if (SuppPDBResNum != undefined) {
                         for (const [chain, resi] of SuppPDBResNum) {
-                            let ResKey = chain + "_" + resi;
+                            let ResKey = chain + "_" + pointLabel;
                             if (labelsHash[activeModel]["clickedResidues"][CurrentDisplayedSite].hasOwnProperty(ResKey)) {
                                 labelsHash[activeModel]["clickedResidues"][CurrentDisplayedSite][ResKey].hide(); // hides the label for the clicked residue
                             }
@@ -1936,7 +1945,7 @@ document.getElementById('newChartCanvas').addEventListener('click', function(e) 
                     let AssemblyPDBResNum = Up2PdbMapAssembly[pointLabel];
                     if (AssemblyPDBResNum != undefined) {
                         for (const [chain, resi] of AssemblyPDBResNum) {
-                            let ResKey = chain + "_" + resi;
+                            let ResKey = chain + "_" + pointLabel;
                             if (labelsHash[activeModel]["clickedResidues"][CurrentDisplayedSite].hasOwnProperty(ResKey)) {
                                 labelsHash[activeModel]["clickedResidues"][CurrentDisplayedSite][ResKey].hide(); // hides the label for the clicked residue
                             }
@@ -1949,7 +1958,7 @@ document.getElementById('newChartCanvas').addEventListener('click', function(e) 
                     let SuppPDBResNum = Up2PdbDict[pointLabel]; // this is now an array (anticipating multimeric structures)
                     if (SuppPDBResNum != undefined) {
                         for (const [chain, resi] of SuppPDBResNum) {
-                            let ResKey = chain + "_" + resi;
+                            let ResKey = chain + "_" + pointLabel;
                             if (surfsDict["superposition"]["single_residues"][CurrentDisplayedSite].hasOwnProperty(ResKey)) {
                                 viewer.setSurfaceMaterialStyle(surfsDict["superposition"]["single_residues"][CurrentDisplayedSite][ResKey].surfid, {opacity: surfHiddenOpacity});
                             }
@@ -1960,7 +1969,7 @@ document.getElementById('newChartCanvas').addEventListener('click', function(e) 
                     let AssemblyPDBResNum = Up2PdbMapAssembly[pointLabel];
                     if (AssemblyPDBResNum != undefined) {
                         for (const [chain, resi] of AssemblyPDBResNum) {
-                            let ResKey = chain + "_" + resi;
+                            let ResKey = chain + "_" + pointLabel;
                             if (surfsDict[activeModel]["single_residues"][CurrentDisplayedSite].hasOwnProperty(ResKey)) {
                                 viewer.setSurfaceMaterialStyle(surfsDict[activeModel]["single_residues"][CurrentDisplayedSite][ResKey].surfid, {opacity: surfHiddenOpacity});
                             }
@@ -1981,7 +1990,7 @@ document.getElementById('newChartCanvas').addEventListener('click', function(e) 
                     SuppPDBResNum = Up2PdbDict[pointLabel]; // this is now an array (anticipating multimeric structures)
                     if (SuppPDBResNum !== undefined) {
                         for (const [chain, resi] of SuppPDBResNum) {
-                            let ResKey = chain + "_" + resi;
+                            let ResKey = chain + "_" + pointLabel;
                             viewer.setStyle(
                                 {model: protAtomsModel, chain: chain, resi: resi, not: {atom: bboneAtoms}},
                                 {
@@ -2041,7 +2050,7 @@ document.getElementById('newChartCanvas').addEventListener('click', function(e) 
                     let AssemblyPDBResNum = Up2PdbMapAssembly[pointLabel];
                     if (AssemblyPDBResNum !== undefined) {
                         for (const [chain, resi] of AssemblyPDBResNum) {
-                            let ResKey = chain + "_" + resi;
+                            let ResKey = chain + "_" + pointLabel;
                             viewer.setStyle(
                                 {model: activeModel, chain: chain, resi: resi, not: {atom: bboneAtoms}},
                                 {

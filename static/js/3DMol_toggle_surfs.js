@@ -532,32 +532,64 @@ function toggleLigandsVisibility() {
                 cylinder.updateStyle({hidden: true})
             }
 
-            // viewer.addStyle(
-            //     {...protAtoms, model: activeModel},
-            //     {
-            //         cartoon: {color: defaultColor},
-            //         stick: {hidden: true}
-            //     }
-            // ); // remove ligand-interacting sticks and colour cartoon white
-
             let clickedElements = document.getElementsByClassName("clicked-row");
             if (clickedElements.length > 0) {
-                viewer.addStyle(
-                    {...protAtoms, model: activeModel, not: {or: AssemblyClickedSiteResidues}},
-                    {
-                        cartoon: {color: defaultColor},
-                        stick: {hidden: true}
-                    }
-                ); // remove ligand-interacting sticks and colour cartoon white (except for clicked site)
+                if (clickedBindingRess.length > 0) { // if individual binding site residues are clicked
+                    let clickedRessSels = [];
+                    proteinChains.forEach((element) => { // in case of multiple copies of protein of interest
+                        clickedBindingRess.forEach((clickedResidue) => {
+                            let clickedResiduePDBResnum = Up2PdbMapAssembly[chainsMapAssembly[element]][clickedResidue];
+                            if (clickedResiduePDBResnum !== undefined) { // check if residue is not missing in the structure
+                                clickedRessSels.push({model: activeModel, resi: clickedResiduePDBResnum, chain: element});
+                            }
+                        });
+                    });
+                    viewer.addStyle(
+                        {model: activeModel, not: {or: AssemblyClickedSiteResidues.concat(clickedRessSels)}},
+                        {
+                            cartoon:{color: defaultColor},
+                            stick: {hidden: true}
+                        }
+                    ); // remove ligand-interacting sticks and colour cartoon white (except for clicked site)
+                }
+                else {
+                    viewer.addStyle(
+                        {...protAtoms, model: activeModel, not: {or: AssemblyClickedSiteResidues}},
+                        {
+                            cartoon: {color: defaultColor},
+                            stick: {hidden: true}
+                        }
+                    ); // remove ligand-interacting sticks and colour cartoon white (except for clicked site)
+                }
             }
             else {
-                viewer.addStyle(
-                    {...protAtoms, model: activeModel},
-                    {
-                        cartoon: {color: defaultColor},
-                        stick: {hidden: true}
-                    }
-                ); // remove ligand-interacting sticks and colour cartoon white
+                if (clickedBindingRess.length > 0) { // if individual binding site residues are clicked
+                    let clickedRessSels = [];
+                    proteinChains.forEach((element) => { // in case of multiple copies of protein of interest
+                        clickedBindingRess.forEach((clickedResidue) => {
+                            let clickedResiduePDBResnum = Up2PdbMapAssembly[chainsMapAssembly[element]][clickedResidue];
+                            if (clickedResiduePDBResnum !== undefined) { // check if residue is not missing in the structure
+                                clickedRessSels.push({model: activeModel, resi: clickedResiduePDBResnum, chain: element});
+                            }
+                        });
+                    });
+                    viewer.addStyle(
+                        {model: activeModel, not: {or: clickedRessSels}},
+                        {
+                            cartoon:{color: defaultColor},
+                            stick: {hidden: true}
+                        }
+                    ); // remove ligand-interacting sticks and colour cartoon white
+                }
+                else {
+                    viewer.addStyle(
+                        {...protAtoms, model: activeModel},
+                        {
+                            cartoon: {color: defaultColor},
+                            stick: {hidden: true}
+                        }
+                    ); // remove ligand-interacting sticks and colour cartoon white
+                }
             }
 
             if (labelsVisible) {
@@ -568,13 +600,16 @@ function toggleLigandsVisibility() {
 
             if (surfaceVisible) {
                 for (const [key, value] of Object.entries(surfsDict[activeModel])) { // hide surfaces of ligand-interacting residues
-                    if (key == "lig_inters") {
+                    if (key == "single_residues") {
+                        //
+                    }
+                    else if (key == "lig_inters") {
                         for (const [key2, value2] of Object.entries(value)) {
                             viewer.setSurfaceMaterialStyle(value2.surfid, {opacity: surfHiddenOpacity});
                         }
                     }
                     else if (key == "non_binding") {
-                        if (clickedSite == null) {
+                        if (clickedBindingRess.length == 0 && clickedSite == null) {
                             for (const [key2, value2] of Object.entries(value)) {
                                 viewer.setSurfaceMaterialStyle(value2.surfid, {opacity:surfLowOpacity, color: defaultColor});
                             }
@@ -587,9 +622,16 @@ function toggleLigandsVisibility() {
                     }
                     else {
                         if (clickedSite == null) {
-                            for (const [key2, value2] of Object.entries(value)) {
-                                let siteColor = chartColors[Number(key.split("_").pop())];
-                                viewer.setSurfaceMaterialStyle(value2.surfid, {opacity:surfMediumOpacity, color: siteColor});
+                            if (clickedBindingRess.length == 0) { // no individual binding site residues clicked
+                                for (const [key2, value2] of Object.entries(value)) {
+                                    let siteColor = chartColors[Number(key.split("_").pop())];
+                                    viewer.setSurfaceMaterialStyle(value2.surfid, {opacity:surfMediumOpacity, color: siteColor});
+                                }
+                            }
+                            else {
+                                for (const [key2, value2] of Object.entries(value)) {
+                                    viewer.setSurfaceMaterialStyle(value2.surfid, {opacity:surfHiddenOpacity});
+                                }
                             }
                         }
                         else {

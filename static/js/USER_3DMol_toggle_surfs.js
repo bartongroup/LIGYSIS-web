@@ -66,28 +66,6 @@ function toggleSurfaceVisibility() {
             }
         }
         else {
-            // if (contactsVisible) { // if contacts are visible, show only surface of ligand interacting residues
-            //     for (const [key, value] of Object.entries(surfsDict[activeModel])) {
-            //         for (const [key2, value2] of Object.entries(value)) {
-            //             viewer.setSurfaceMaterialStyle(value2.surfid, {opacity: surfHiddenOpacity});
-            //         }
-            //     }
-            // }
-            // else {
-            //     for (const [key, value] of Object.entries(surfsDict[activeModel])) {
-            //         if (key !== "lig_inters") {
-            //             for (const [key2, value2] of Object.entries(value)) {
-            //                 if (key == "non_binding") {
-            //                     viewer.setSurfaceMaterialStyle(surfsDict[activeModel][key][key2].surfid, {color: defaultColor, opacity: surfHiddenOpacity}); // hide ligand-binding residues surface
-            //                 }
-            //                 else {
-            //                     let siteColor = chartColors[Number(key.split("_").pop())];
-            //                     viewer.setSurfaceMaterialStyle(surfsDict[activeModel][key][key2].surfid, {color: siteColor, opacity: surfHiddenOpacity});
-            //                 }
-            //             }
-            //         }
-            //     }
-            // }
             for (const [key, value] of Object.entries(surfsDict[activeModel])) {
                 for (const [key2, value2] of Object.entries(value)) {
                     if (key == "single_residues") {
@@ -140,7 +118,7 @@ function toggleSurfaceVisibility() {
                     let clickedResiduePDBResnum = Up2PdbDict[clickedResidue]; // this is now an array (anticipating multimeric structures)
                     if (clickedResiduePDBResnum !== undefined) { // check if residue is not missing in the structure
                         for (const [chain, resi] of clickedResiduePDBResnum) {
-                            let ResKey = chain + "_" + resi; // key for the label
+                            let ResKey = chain + "_" + clickedResidue; // key for the label
                             if (surfsDict["superposition"]["single_residues"][CurrentDisplayedSite].hasOwnProperty(ResKey)) {
                                 let resSurf = surfsDict["superposition"]["single_residues"][CurrentDisplayedSite][ResKey];
                                 viewer.setSurfaceMaterialStyle(resSurf.surfid, {color: siteColor, opacity: surfHighOpacity}); // show ONLY surface of clicked residue
@@ -175,7 +153,7 @@ function toggleSurfaceVisibility() {
                     let clickedResiduePDBResnum = Up2PdbMapAssembly[clickedResidue]; // this is now an array (anticipating multimeric structures)
                     if (clickedResiduePDBResnum !== undefined) { // check if residue is not missing in the structure
                         for (const [chain, resi] of clickedResiduePDBResnum) {
-                            let ResKey = chain + "_" + resi; // key for the label
+                            let ResKey = chain + "_" + clickedResidue; // key for the label
                             if (surfsDict[activeModel]["single_residues"][CurrentDisplayedSite].hasOwnProperty(ResKey)) {
                                 let resSurf = surfsDict[activeModel]["single_residues"][CurrentDisplayedSite][ResKey];
                                 viewer.setSurfaceMaterialStyle(resSurf.surfid, {color: siteColor, opacity: surfHighOpacity}); // show ONLY surface of clicked residue
@@ -403,7 +381,7 @@ function toggleLabelsVisibility() {
                                 let PDBResnum = res[1];
                                 let resSel = {model: protAtomsModel, chain: labelAsymId, resi: PDBResnum};
                                 let resName = viewer.selectedAtoms(resSel)[0].resn;
-                                let ResKey = labelAsymId + "_" + PDBResnum; // key for the label
+                                let ResKey = labelAsymId + "_" + clickedResidue; // key for the label
                                 let label = viewer.addLabel(
                                     resName + String(Pdb2UpDict[labelAsymId][PDBResnum]),
                                     {
@@ -429,7 +407,7 @@ function toggleLabelsVisibility() {
                         for (const res of clickedResiduePDBResnum) {
                             let labelAsymId = res[0];
                             let PDBResnum = res[1];
-                            let ResKey = labelAsymId + "_" + PDBResnum; // key for the label
+                            let ResKey = labelAsymId + "_" + clickedResidue; // key for the label
                             if (labelsHash[activeModel]["clickedResidues"][CurrentDisplayedSite].hasOwnProperty(ResKey)) {
                                 // console.log(`Residue ${clickedResidue} from Site ${CurrentDisplayedSite} already clicked and labels exist`);
                                 var label = labelsHash[activeModel]["clickedResidues"][CurrentDisplayedSite][ResKey];
@@ -561,32 +539,68 @@ function toggleLigandsVisibility() {
                 cylinder.updateStyle({hidden: true})
             }
 
-            // viewer.addStyle( // this also removed clicked site residues
-            //     {...protAtomsModel, model: activeModel},
-            //     {
-            //         cartoon: {color: defaultColor},
-            //         stick: {hidden: true}
-            //     }
-            // ); // remove ligand-interacting sticks and colour cartoon white
-
             let clickedElements = document.getElementsByClassName("clicked-row");
             if (clickedElements.length > 0) {
-                viewer.addStyle(
-                    {...protAtoms, model: activeModel, not: {or: siteAssemblyPDBResNums}},
-                    {
-                        cartoon: {color: defaultColor},
-                        stick: {hidden: true}
+                if (clickedBindingRess.length > 0) { // if individual binding site residues are clicked
+                    let clickedBindingRessSels = []
+                    for (const clickedResidue of clickedBindingRess) {
+                        let clickedResiduePDBResnum = Up2PdbMapAssembly[clickedResidue]; // this is now an array (anticipating multimeric structures)
+                        if (clickedResiduePDBResnum !== undefined) { // check if residue is not missing in the structure
+                            for (const res of clickedResiduePDBResnum) {
+                                let resChain = res[0];
+                                let resNum = res[1];
+                                clickedBindingRessSels.push({model: activeModel, chain: resChain, resi: resNum});
+                            }
+                        }
                     }
-                ); // remove ligand-interacting sticks and colour cartoon white (except for clicked site)
+                    viewer.addStyle(
+                        {...protAtoms, model: activeModel, not: {or: siteAssemblyPDBResNums.concat(clickedBindingRessSels)}},
+                        {
+                            cartoon: {color: defaultColor},
+                            stick: {hidden: true}
+                        }
+                    ); // remove ligand-interacting sticks and colour cartoon white (except for clicked sit
+                }
+                else {
+                    viewer.addStyle(
+                        {...protAtoms, model: activeModel, not: {or: siteAssemblyPDBResNums}},
+                        {
+                            cartoon: {color: defaultColor},
+                            stick: {hidden: true}
+                        }
+                    ); // remove ligand-interacting sticks and colour cartoon white (except for clicked site)
+                }
             }
             else {
-                viewer.addStyle(
-                    {...protAtoms, model: activeModel},
-                    {
-                        cartoon: {color: defaultColor},
-                        stick: {hidden: true}
+                if (clickedBindingRess.length > 0) { // if individual binding site residues are clicked
+                    let clickedBindingRessSels = []
+                    for (const clickedResidue of clickedBindingRess) {
+                        let clickedResiduePDBResnum = Up2PdbMapAssembly[clickedResidue]; // this is now an array (anticipating multimeric structures)
+                        if (clickedResiduePDBResnum !== undefined) { // check if residue is not missing in the structure
+                            for (const res of clickedResiduePDBResnum) {
+                                let resChain = res[0];
+                                let resNum = res[1];
+                                clickedBindingRessSels.push({model: activeModel, chain: resChain, resi: resNum});
+                            }
+                        }
                     }
-                ); // remove ligand-interacting sticks and colour cartoon white
+                    viewer.addStyle(
+                        {...protAtoms, model: activeModel, not: {or: clickedBindingRessSels}},
+                        {
+                            cartoon: {color: defaultColor},
+                            stick: {hidden: true}
+                        }
+                    ); // remove ligand-interacting sticks and colour cartoon white (except for clicked binding residues)
+                }
+                else {
+                    viewer.addStyle(
+                        {...protAtoms, model: activeModel},
+                        {
+                            cartoon: {color: defaultColor},
+                            stick: {hidden: true}
+                        }
+                    ); // remove ligand-interacting sticks and colour cartoon white
+                }
             }
 
             if (labelsVisible) {
@@ -597,13 +611,16 @@ function toggleLigandsVisibility() {
 
             if (surfaceVisible) {
                 for (const [key, value] of Object.entries(surfsDict[activeModel])) { // hide surfaces of ligand-interacting residues
-                    if (key == "lig_inters") {
+                    if (key == "single_residues") {
+                        // pass
+                    }
+                    else if (key == "lig_inters") { // always hide ligand-interacting residues surfaces
                         for (const [key2, value2] of Object.entries(value)) {
                             viewer.setSurfaceMaterialStyle(value2.surfid, {opacity: surfHiddenOpacity});
                         }
                     }
-                    else if (key == "non_binding") {
-                        if (clickedSite == null) {
+                    else if (key == "non_binding") { // show non-binding surface if no site is clicked and clickedBindingRess.length == 0
+                        if (clickedBindingRess.length == 0 && clickedSite == null) {
                             for (const [key2, value2] of Object.entries(value)) {
                                 viewer.setSurfaceMaterialStyle(value2.surfid, {opacity:surfLowOpacity, color: defaultColor});
                             }
@@ -616,9 +633,16 @@ function toggleLigandsVisibility() {
                     }
                     else {
                         if (clickedSite == null) {
-                            for (const [key2, value2] of Object.entries(value)) {
-                                let siteColor = chartColors[Number(key.split("_").pop())];
-                                viewer.setSurfaceMaterialStyle(value2.surfid, {opacity:surfMediumOpacity, color: siteColor});
+                            if (clickedBindingRess.length == 0) { // no individual binding site residues clicked
+                                for (const [key2, value2] of Object.entries(value)) {
+                                    let siteColor = chartColors[Number(key.split("_").pop())];
+                                    viewer.setSurfaceMaterialStyle(value2.surfid, {opacity:surfMediumOpacity, color: siteColor});
+                                }
+                            }
+                            else { // individual binding site residues clicked
+                                for (const [key2, value2] of Object.entries(value)) {
+                                    viewer.setSurfaceMaterialStyle(value2.surfid, {opacity:surfHiddenOpacity});
+                                }
                             }
                         }
                         else {
@@ -755,7 +779,7 @@ async function toggleContactsVisibility() {
                 else {
                     let clickedRessSels = [];
                     for (const bindingRes of clickedBindingRess) {
-                        let bindingResPDBResnum = Pdb2UpMapAssembly[bindingRes]; // this is now an array (anticipating multimeric structures)
+                        let bindingResPDBResnum = Up2PdbMapAssembly[bindingRes]; // this is now an array (anticipating multimeric structures)
                         if (bindingResPDBResnum !== undefined) { // check if residue is not missing in the structure
                             for (const res of bindingResPDBResnum) {
                                 let resChain = res[0];
@@ -770,7 +794,7 @@ async function toggleContactsVisibility() {
                     );
                     let SiteColor = chartColors[Number(CurrentDisplayedSite)];
                     viewer.setStyle(
-                        {model: activeModel, or: clickedRessSels},
+                        {model: activeModel, or: clickedRessSels, not: {atom: bboneAtoms}},
                         {
                             cartoon:{style: cartoonStyle, color: SiteColor, arrows: cartoonArrows, tubes: cartoonTubes, opacity: cartoonOpacity, thickness: cartoonThickness, gapcutoff: gapCutOff},
                             stick:{color: SiteColor, hidden: false, radius: stickRadius},

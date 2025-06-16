@@ -1005,7 +1005,13 @@ document.getElementById('chartCanvas').addEventListener('click', function(e) { /
                                         // pass
                                     }
                                     else { // hide other surfaces
-                                        viewer.setSurfaceMaterialStyle(value2.surfid, {color: defaultColor, opacity: surfHiddenOpacity});
+                                        if (key == pointLabel) {
+                                            let siteColor = chartColors[Number(pointLabel)];
+                                            viewer.setSurfaceMaterialStyle(value2.surfid, {color: siteColor, opacity: surfMediumOpacity});
+                                        }
+                                        else {
+                                            viewer.setSurfaceMaterialStyle(value2.surfid, {color: defaultColor, opacity: surfHiddenOpacity});
+                                        }
                                     }
                                 }
                                 else {
@@ -1045,6 +1051,9 @@ document.getElementById('chartCanvas').addEventListener('click', function(e) { /
 
                 clickedPointLabel = null; // reset clickedPointLabel
                 clickedSite = null; // reset clickedSite
+
+                resetChartStyles(myChart, pointLabel, "#ffff99", 10, 16); // changes chart styles to highlight the newly clicked site
+                highlightTableRow(pointLabel); // highlight the table row of the newly clicked data point
             }
 
             else {

@@ -28,7 +28,7 @@ $('table#bss_table tbody').on('mouseover', 'tr', function () { // event listener
                         for (const commonRes of commonRess) {
                             let commonRessPDBResNum = Up2PdbDict[commonRes];
                             for (const [chain, resi] of commonRessPDBResNum) {
-                                let ResKey = chain + "_" + resi; // create a key for the residue
+                                let ResKey = chain + "_" + commonRes; // create a key for the residue
                                 if (surfsDict["superposition"]["single_residues"][CurrentDisplayedSite].hasOwnProperty(ResKey)) {
                                     var surfObject = surfsDict["superposition"]["single_residues"][CurrentDisplayedSite][ResKey];
                                     var currentSiteColor = chartColors[Number(CurrentDisplayedSite)];
@@ -52,7 +52,7 @@ $('table#bss_table tbody').on('mouseover', 'tr', function () { // event listener
                             let commonRessPDBResNum = Up2PdbDict[commonRes];
                             if (commonRessPDBResNum !== undefined) { // check if commonRessPDBResNum is defined
                                 for (const [chain, resi] of commonRessPDBResNum) {
-                                    let ResKey = chain + "_" + resi; // create a key for the residue
+                                    let ResKey = chain + "_" + commonRes; // create a key for the residue
                                     if (surfsDict[activeModel]["single_residues"][CurrentDisplayedSite].hasOwnProperty(ResKey)) {
                                         var surfObject = surfsDict[activeModel]["single_residues"][CurrentDisplayedSite][ResKey];
                                         var currentSiteColor = chartColors[Number(CurrentDisplayedSite)];
@@ -180,13 +180,6 @@ $('table#bss_table tbody').on('mouseover', 'tr', function () { // event listener
                     }
                 );
             if (contactsVisible) {
-                // viewer.setStyle(
-                //     {model: activeModel, or: AssemblyHoveredSiteResidues, not: {atom: bboneAtoms}}, // hiding all the hovered site residues
-                //     {
-                //         cartoon:{style: cartoonStyle, color: defaultColor, arrows: cartoonArrows, tubes: cartoonTubes, opacity: cartoonOpacity, thickness: cartoonThickness, gapcutoff: gapCutOff},
-                //     }
-                // );
-                // colour ligand-binding residues again
                 for (const [key, value] of Object.entries(ligandSitesHash[activeModel])) {
                     let defaultColors = { ...$3Dmol.elementColors.defaultColors }; 
                     defaultColors.C = value[2];
@@ -200,12 +193,7 @@ $('table#bss_table tbody').on('mouseover', 'tr', function () { // event listener
                 }
             }
             else {
-                // viewer.setStyle(
-                //     {model: activeModel, or: AssemblyHoveredSiteResidues, not: {atom: bboneAtoms}},
-                //     {
-                //         cartoon:{style: cartoonStyle, color: defaultColor, arrows: cartoonArrows, tubes: cartoonTubes, opacity: cartoonOpacity, thickness: cartoonThickness, gapcutoff: gapCutOff},
-                //     }
-                // );
+                //
             }
             if (!clickedBindingRess.length == 0) {
                 let clickedBindingRessSel = [];
@@ -248,7 +236,7 @@ $('table#bss_table tbody').on('mouseover', 'tr', function () { // event listener
                             let clickedBindingRessPDBResNum = Up2PdbDict[rowId];
                             if (clickedBindingRessPDBResNum !== undefined) { // check if clickedBindingRessPDBResNum is defined
                                 for (const [chain, resi] of clickedBindingRessPDBResNum) {
-                                    let ResKey = chain + "_" + resi; // create a key for the residue
+                                    let ResKey = chain + "_" + rowId; // create a key for the residue
                                     if (surfsDict["superposition"]["single_residues"][CurrentDisplayedSite].hasOwnProperty(ResKey)) {
                                         var surfObject = surfsDict["superposition"]["single_residues"][CurrentDisplayedSite][ResKey];
                                         var currentSiteColor = chartColors[Number(CurrentDisplayedSite)];
@@ -293,7 +281,7 @@ $('table#bss_table tbody').on('mouseover', 'tr', function () { // event listener
                                 let clickedBindingRessPDBResNum = Up2PdbDict[rowId];
                                 if (clickedBindingRessPDBResNum !== undefined) { // check if clickedBindingRessPDBResNum is defined
                                     for (const [chain, resi] of clickedBindingRessPDBResNum) {
-                                        let ResKey = chain + "_" + resi; // create a key for the residue
+                                        let ResKey = chain + "_" + rowId; // create a key for the residue
                                         if (surfsDict[activeModel]["single_residues"][CurrentDisplayedSite].hasOwnProperty(ResKey)) {
                                             var surfObject = surfsDict[activeModel]["single_residues"][CurrentDisplayedSite][ResKey];
                                             viewer.setSurfaceMaterialStyle(surfObject.surfid, {color: currentSiteColor, opacity: surfHighOpacity}); // change the surface color of the hovered binding site row
@@ -349,7 +337,7 @@ $('table#bss_table tbody').on('mouseover', 'tr', function () { // event listener
                                 let clickedBindingRessPDBResNum = Up2PdbDict[rowId];
                                 if (clickedBindingRessPDBResNum !== undefined) { // check if clickedBindingRessPDBResNum is defined
                                     for (const [chain, resi] of clickedBindingRessPDBResNum) {
-                                        let ResKey = chain + "_" + resi; // create a key for the residue
+                                        let ResKey = chain + "_" + rowId; // create a key for the residue
                                         if (surfsDict[activeModel]["single_residues"][CurrentDisplayedSite].hasOwnProperty(ResKey)) {
                                             var surfObject = surfsDict[activeModel]["single_residues"][CurrentDisplayedSite][ResKey];
                                             viewer.setSurfaceMaterialStyle(surfObject.surfid, {color: currentSiteColor, opacity: surfHighOpacity}); // change the surface color of the hovered binding site row
@@ -453,7 +441,7 @@ $('table#bss_table tbody').on('mouseover', 'tr', function () { // event listener
                     if (activeModel == "superposition") {
                         let resPDBResNum = Up2PdbDict[res];
                         for (const [chain, resi] of resPDBResNum) {
-                            let ResKey = chain + "_" + resi; // create a key for the residue
+                            let ResKey = chain + "_" + res; // create a key for the residue
                             if (labelsHash[activeModel]["clickedResidues"][CurrentDisplayedSite].hasOwnProperty(ResKey)) {
                                 labelsHash[activeModel]["clickedResidues"][CurrentDisplayedSite][ResKey].show(); // show the label if it exists
                             }
@@ -479,7 +467,7 @@ $('table#bss_table tbody').on('mouseover', 'tr', function () { // event listener
                         let resPDBResNum = Up2PdbMapAssembly[res];
                         if (resPDBResNum !== undefined) { // check if resPDBResNum is defined
                             for (const [chain, resi] of resPDBResNum) {
-                                let ResKey = chain + "_" + resi; // create a key for the residue
+                                let ResKey = chain + "_" + res; // create a key for the residue
                                 if (labelsHash[activeModel]["clickedResidues"][CurrentDisplayedSite].hasOwnProperty(ResKey)) {
                                     labelsHash[activeModel]["clickedResidues"][CurrentDisplayedSite][ResKey].show(); // show the label if it exists
                                 }
@@ -539,7 +527,7 @@ $('table#bss_table tbody').on('mouseover', 'tr', function () { // event listener
                     for (const clickedRes of clickedBindingRess) {
                         let clickedResPDBResNum = Up2PdbDict[clickedRes];
                         for (const [chain, resi] of clickedResPDBResNum) {
-                            let ResKey = chain + "_" + resi; // create a key for the residue
+                            let ResKey = chain + "_" + clickedRes; // create a key for the residue
                             if (surfsDict["superposition"]["single_residues"][CurrentDisplayedSite].hasOwnProperty(ResKey)) {
                                 var surfObject = surfsDict["superposition"]["single_residues"][CurrentDisplayedSite][ResKey];
                                 var currentSiteColor = chartColors[Number(CurrentDisplayedSite)];
@@ -551,34 +539,7 @@ $('table#bss_table tbody').on('mouseover', 'tr', function () { // event listener
                     viewer.setSurfaceMaterialStyle(surfsDict["superposition"][rowId].surfid, {color: siteColor, opacity: surfHighOpacity});
                 }
             }
-            else { /////////////// CONTINUE HERE. IT IS A MESS!
-                // for (const [key, value] of Object.entries(surfsDict[activeModel])) {
-                //     for (const [key2, value2] of Object.entries(value)) {
-                //         if (contactsVisible) {
-                //             // if (key == "lig_inters") { // do nothing for these surfaces
-                //             //     // pass
-                //             // }
-                //             if (key == rowId) {
-                //                 viewer.setSurfaceMaterialStyle(value2.surfid, {color: siteColor, opacity: surfHiddenOpacity});
-                //             }
-                //             else {
-                //                 //
-                //             }
-                //         }
-                //         else {
-                //             // if (key == "lig_inters") { // do nothing for these surfaces
-                //             //     // pass
-                //             // }
-                //             if (key == "non_binding") {
-                //                 viewer.setSurfaceMaterialStyle(value2.surfid, {color: defaultColor, opacity: surfLowOpacity});
-                //             }
-                //             else {
-                //                 let siteColor = chartColors[Number(key.split("_").pop())];
-                //                 viewer.setSurfaceMaterialStyle(value2.surfid, {color: siteColor, opacity: surfMediumOpacity});
-                //             }
-                //         }
-                //     }
-                // }
+            else {
                 for (const [key, value] of Object.entries(surfsDict[activeModel])) {
                     for (const [key2, value2] of Object.entries(value)) {
                         if (key == "lig_inters") { // do nothing for these surfacesAdd commentMore actions
@@ -587,7 +548,7 @@ $('table#bss_table tbody').on('mouseover', 'tr', function () { // event listener
                         if (contactsVisible) {
                             if (key == rowId) {
                                 for (const [key2, value2] of Object.entries(value)) {
-                                    viewer.setSurfaceMaterialStyle(value2.surfid, {color: siteColor, opacity: surfHiddenOpacity});
+                                    viewer.setSurfaceMaterialStyle(value2.surfid, {color: siteColor, opacity: surfMediumOpacity});
                                 }
                             }
                             else if (key == "single_residues") {
@@ -595,39 +556,39 @@ $('table#bss_table tbody').on('mouseover', 'tr', function () { // event listener
                                     // pass
                                 }
                                 else {
-                                    for (const clickedRes of clickedBindingRess) {
-                                        let clickedResPDBResNum = Up2PdbMapAssembly[clickedRes];
-                                        if (clickedResPDBResNum !== undefined) { // check if clickedResPDBResNum is defined
-                                            for (const [chain, resi] of clickedResPDBResNum) {
-                                                let ResKey = chain + "_" + resi; // create a key for the residue
-                                                if (surfsDict[activeModel]["single_residues"][CurrentDisplayedSite].hasOwnProperty(ResKey)) {
-                                                    var surfObject = surfsDict[activeModel]["single_residues"][CurrentDisplayedSite][ResKey];
-                                                    viewer.setSurfaceMaterialStyle(surfObject.surfid, {color: siteColor, opacity: surfHighOpacity});
-                                                }
-                                                else {
-                                                    let surfSel = {model: activeModel, resi: resi, chain: chain};
-                                                    let SitePDBResNums = seg_ress_dict[CurrentDisplayedSite]
-                                                        .filter(el => Up2PdbMapAssembly.hasOwnProperty(el))
-                                                        .flatMap(el => {
-                                                            let dataArray = Up2PdbMapAssembly[el]; // Get the array of tuples
-                                                            return dataArray.map(data => {
-                                                                return { chain: data[0], resi: data[1] }; // Extract chain and resi for each element
-                                                            });
-                                                        });
-                                                    let SiteSel = {model: activeModel, or: SitePDBResNums};
-                                                    surfsDict[activeModel]["single_residues"][CurrentDisplayedSite][ResKey] = viewer.addSurface(
-                                                        $3Dmol.SurfaceType.ISO,
-                                                        {
-                                                            color: siteColor,
-                                                            opacity: surfHighOpacity,
-                                                        },
-                                                        surfSel,
-                                                        SiteSel,
-                                                    );
-                                                }
-                                            }
-                                        }
-                                    }
+                                    // for (const clickedRes of clickedBindingRess) {
+                                    //     let clickedResPDBResNum = Up2PdbMapAssembly[clickedRes];
+                                    //     if (clickedResPDBResNum !== undefined) { // check if clickedResPDBResNum is defined
+                                    //         for (const [chain, resi] of clickedResPDBResNum) {
+                                    //             let ResKey = chain + "_" + clickedRes; // create a key for the residue
+                                    //             if (surfsDict[activeModel]["single_residues"][CurrentDisplayedSite].hasOwnProperty(ResKey)) {
+                                    //                 var surfObject = surfsDict[activeModel]["single_residues"][CurrentDisplayedSite][ResKey];
+                                    //                 viewer.setSurfaceMaterialStyle(surfObject.surfid, {color: siteColor, opacity: surfHighOpacity});
+                                    //             }
+                                    //             else {
+                                    //                 let surfSel = {model: activeModel, resi: resi, chain: chain};
+                                    //                 let SitePDBResNums = seg_ress_dict[CurrentDisplayedSite]
+                                    //                     .filter(el => Up2PdbMapAssembly.hasOwnProperty(el))
+                                    //                     .flatMap(el => {
+                                    //                         let dataArray = Up2PdbMapAssembly[el]; // Get the array of tuples
+                                    //                         return dataArray.map(data => {
+                                    //                             return { chain: data[0], resi: data[1] }; // Extract chain and resi for each element
+                                    //                         });
+                                    //                     });
+                                    //                 let SiteSel = {model: activeModel, or: SitePDBResNums};
+                                    //                 surfsDict[activeModel]["single_residues"][CurrentDisplayedSite][ResKey] = viewer.addSurface(
+                                    //                     $3Dmol.SurfaceType.ISO,
+                                    //                     {
+                                    //                         color: siteColor,
+                                    //                         opacity: surfHighOpacity,
+                                    //                     },
+                                    //                     surfSel,
+                                    //                     SiteSel,
+                                    //                 );
+                                    //             }
+                                    //         }
+                                    //     }
+                                    // }
                                 }
                             }
                             else {
@@ -657,7 +618,7 @@ $('table#bss_table tbody').on('mouseover', 'tr', function () { // event listener
                                         let clickedResPDBResNum = Up2PdbMapAssembly[clickedRes];
                                         if (clickedResPDBResNum !== undefined) { // check if clickedResPDBResNum is defined
                                             for (const [chain, resi] of clickedResPDBResNum) {
-                                                let ResKey = chain + "_" + resi; // create a key for the residue
+                                                let ResKey = chain + "_" + clickedRes; // create a key for the residue
                                                 if (surfsDict[activeModel]["single_residues"][CurrentDisplayedSite].hasOwnProperty(ResKey)) {
                                                     var surfObject = surfsDict[activeModel]["single_residues"][CurrentDisplayedSite][ResKey];
                                                     viewer.setSurfaceMaterialStyle(surfObject.surfid, {color: siteColor, opacity: surfHighOpacity});
@@ -853,7 +814,7 @@ $('table#bss_table tbody').on('mouseover', 'tr', function () { // event listener
                         for (const res of clickedBindingRess) {
                             let resPDBResNum = Up2PdbDict[res];
                             for (const [chain, resi] of resPDBResNum) {
-                                let ResKey = chain + "_" + resi; // create a key for the residue
+                                let ResKey = chain + "_" + res; // create a key for the residue
                                 if (surfsDict["superposition"]["single_residues"][previouslyDisplayedSite].hasOwnProperty(ResKey)) {
                                     var surfObject = surfsDict["superposition"]["single_residues"][previouslyDisplayedSite][ResKey];
                                     var previousSiteColor = chartColors[Number(previouslyDisplayedSite)];
@@ -909,7 +870,7 @@ $('table#bss_table tbody').on('mouseover', 'tr', function () { // event listener
                         let resPDBResNum = Up2PdbMapAssembly[clickedRes];
                         if (resPDBResNum !== undefined) { // check if resPDBResNum is defined
                             for (const [chain, resi] of resPDBResNum) {
-                                let ResKey = chain + "_" + resi; // create a key for the residue
+                                let ResKey = chain + "_" + clickedRes; // create a key for the residue
                                 if (surfaceVisible) {
                                     if (surfsDict[activeModel]["single_residues"][previouslyDisplayedSite].hasOwnProperty(ResKey)) {
                                         var surfObject = surfsDict[activeModel]["single_residues"][previouslyDisplayedSite][ResKey];
@@ -1193,7 +1154,7 @@ $('table#bs_ress_table tbody').on('mouseover', 'tr', function () { // event list
                     SuppPDBResNum = Up2PdbDict[rowId]; // this is an array of tuples, anticipating multimeric structures
                     if (SuppPDBResNum !== undefined) {
                         for (const [resChain, resNum] of SuppPDBResNum) {
-                            let ResKey = resChain + "_" + resNum;
+                            let ResKey = resChain + "_" + rowId;
                             if (surfsDict["superposition"]["single_residues"][CurrentDisplayedSite].hasOwnProperty(ResKey)) {
                                 viewer.setSurfaceMaterialStyle(surfsDict["superposition"]["single_residues"][CurrentDisplayedSite][ResKey].surfid, {color: rowColorHex, opacity: surfHighOpacity});
                             }
@@ -1225,7 +1186,7 @@ $('table#bs_ress_table tbody').on('mouseover', 'tr', function () { // event list
                     let AssemblyPDBResNum = Up2PdbMapAssembly[rowId];
                     if (AssemblyPDBResNum !== undefined) {
                         for (const [resChain, resNum] of AssemblyPDBResNum) {
-                            let ResKey = resChain + "_" + resNum;
+                            let ResKey = resChain + "_" + rowId;
                             if (surfsDict[activeModel]["single_residues"][CurrentDisplayedSite].hasOwnProperty(ResKey)) {
                                 viewer.setSurfaceMaterialStyle(surfsDict[activeModel]["single_residues"][CurrentDisplayedSite][ResKey].surfid, {color: rowColorHex, opacity: surfHighOpacity});
                             }
@@ -1384,7 +1345,7 @@ $('table#bs_ress_table tbody').on('mouseover', 'tr', function () { // event list
                     let SuppPDBResNum = Up2PdbDict[rowId]; // this is an array of tuples, anticipating multimeric structures
                     if (SuppPDBResNum !== undefined) {
                         for (const [resChain, resNum] of SuppPDBResNum) {
-                            let ResKey = resChain + "_" + resNum;
+                            let ResKey = resChain + "_" + rowId;
                             if (surfsDict["superposition"]["single_residues"][CurrentDisplayedSite].hasOwnProperty(ResKey)) {
                                 viewer.setSurfaceMaterialStyle(surfsDict["superposition"]["single_residues"][CurrentDisplayedSite][ResKey].surfid, {opacity: surfHiddenOpacity});
                             }
@@ -1409,7 +1370,7 @@ $('table#bs_ress_table tbody').on('mouseover', 'tr', function () { // event list
                     let AssemblyPDBResNum = Up2PdbMapAssembly[rowId];
                     if (AssemblyPDBResNum !== undefined) {
                         for (const [resChain, resNum] of AssemblyPDBResNum) {
-                            let ResKey = resChain + "_" + resNum;
+                            let ResKey = resChain + "_" + rowId;
                             if (surfsDict[activeModel]["single_residues"][CurrentDisplayedSite].hasOwnProperty(ResKey)) {
                                 viewer.setSurfaceMaterialStyle(surfsDict[activeModel]["single_residues"][CurrentDisplayedSite][ResKey].surfid, {opacity: surfHiddenOpacity});
                             }
@@ -1424,7 +1385,10 @@ $('table#bs_ress_table tbody').on('mouseover', 'tr', function () { // event list
                                     }
                                 }
                                 else if (key == "single_residues") {
-                                    continue; // do not touch single residues surfaces
+                                    //
+                                }
+                                else if (key == "lig_inters") {
+                                    //
                                 }
                                 else {
                                     let siteColor = chartColors[Number(key.split("_").pop())];
@@ -1464,7 +1428,7 @@ $('table#bs_ress_table tbody').on('mouseover', 'tr', function () { // event list
                     for (const tuple of SuppPDBResNum) {
                         let resChain = tuple[0];
                         let resNum = tuple[1];
-                        let ResKey = resChain + "_" + resNum;
+                        let ResKey = resChain + "_" + rowId;
                         if (labelsHash[activeModel]["clickedResidues"][CurrentDisplayedSite].hasOwnProperty(ResKey)) {
                             labelsHash[activeModel]["clickedResidues"][CurrentDisplayedSite][ResKey].hide(); // hides the label for the clicked residue
                         }
@@ -1477,7 +1441,7 @@ $('table#bs_ress_table tbody').on('mouseover', 'tr', function () { // event list
                     for (const tuple of AssemblyPDBResNum) {
                         let resChain = tuple[0];
                         let resNum = tuple[1];
-                        let ResKey = resChain + "_" + resNum;
+                        let ResKey = resChain + "_" + rowId;
                         labelsHash[activeModel]["clickedResidues"][CurrentDisplayedSite][ResKey].hide(); // hides the label for the clicked residue
                     }
                 }
@@ -1511,7 +1475,7 @@ $('table#bs_ress_table tbody').on('mouseover', 'tr', function () { // event list
                         for (const tuple of SuppPDBResNum) {
                             let resChain = tuple[0];
                             let resNum = tuple[1];
-                            let ResKey = resChain + "_" + resNum;
+                            let ResKey = resChain + "_" + rowId;
                             if (labelsHash[activeModel]["clickedResidues"][CurrentDisplayedSite].hasOwnProperty(ResKey)) {
                                 labelsHash[activeModel]["clickedResidues"][CurrentDisplayedSite][ResKey].show(); // shows the label for the clicked residue
                             }
@@ -1548,7 +1512,7 @@ $('table#bs_ress_table tbody').on('mouseover', 'tr', function () { // event list
                             }
                         }
                         for (const [resChain, resNum] of SuppPDBResNum) {
-                            let ResKey = resChain + "_" + resNum;
+                            let ResKey = resChain + "_" + rowId;
                             if (surfsDict["superposition"]["single_residues"][CurrentDisplayedSite].hasOwnProperty(ResKey)) {
                                 viewer.setSurfaceMaterialStyle(surfsDict["superposition"]["single_residues"][CurrentDisplayedSite][ResKey].surfid, {color: rowColorHex, opacity: surfHighOpacity});
                             }
@@ -1613,7 +1577,7 @@ $('table#bs_ress_table tbody').on('mouseover', 'tr', function () { // event list
                         AssemblyPDBResNum.forEach((residue) => {
                             let resChain = residue[0];
                             let resNum = residue[1];
-                            let ResKey = resChain + "_" + resNum;
+                            let ResKey = resChain + "_" + rowId;
                             if (labelsHash[activeModel]["clickedResidues"][CurrentDisplayedSite].hasOwnProperty(ResKey)) {
                                 labelsHash[activeModel]["clickedResidues"][CurrentDisplayedSite][ResKey].show(); // shows the label for the clicked residue
                             }
@@ -1659,7 +1623,7 @@ $('table#bs_ress_table tbody').on('mouseover', 'tr', function () { // event list
                         for (const element of AssemblyPDBResNum) {
                             let resChain = element[0];
                             let resNum = element[1];
-                            let ResKey = resChain + "_" + resNum;
+                            let ResKey = resChain + "_" + rowId;
                             if (surfsDict[activeModel]["single_residues"][CurrentDisplayedSite].hasOwnProperty(ResKey)) {
                                 viewer.setSurfaceMaterialStyle(surfsDict[activeModel]["single_residues"][CurrentDisplayedSite][ResKey].surfid, {color: rowColorHex, opacity: surfHighOpacity});
                             }

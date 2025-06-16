@@ -499,34 +499,6 @@ $('table#bss_table tbody').on('mouseover', 'tr', function () { // event listener
                 }
             }
             else {
-                /////////////// CONTINUE HERE. IT IS A MESS!
-                // for (const [key, value] of Object.entries(surfsDict[activeModel])) {
-                //     for (const [key2, value2] of Object.entries(value)) {
-                //         if (contactsVisible) {
-                //             // if (key == "lig_inters") { // do nothing for these surfaces
-                //             //     // pass
-                //             // }
-                //             if (key == rowId) {
-                //                 viewer.setSurfaceMaterialStyle(value2.surfid, {color: siteColor, opacity: surfHiddenOpacity});
-                //             }
-                //             else {
-                //                 //
-                //             }
-                //         }
-                //         else {
-                //             // if (key == "lig_inters") { // do nothing for these surfaces
-                //             //     // pass
-                //             // }
-                //             if (key == "non_binding") {
-                //                 viewer.setSurfaceMaterialStyle(value2.surfid, {color: defaultColor, opacity: surfLowOpacity});
-                //             }
-                //             else {
-                //                 let siteColor = chartColors[Number(key.split("_").pop())];
-                //                 viewer.setSurfaceMaterialStyle(value2.surfid, {color: siteColor, opacity: surfMediumOpacity});
-                //             }
-                //         }
-                //     }
-                // }
                 for (const [key, value] of Object.entries(surfsDict[activeModel])) {
                     if (key == "lig_inters") { // do nothing for these surfaces
                         continue;
@@ -534,7 +506,7 @@ $('table#bss_table tbody').on('mouseover', 'tr', function () { // event listener
                     if (contactsVisible) {
                         if (key == rowId) {
                             for (const [key2, value2] of Object.entries(value)) {
-                                viewer.setSurfaceMaterialStyle(value2.surfid, {color: siteColor, opacity: surfHiddenOpacity});
+                                viewer.setSurfaceMaterialStyle(value2.surfid, {color: siteColor, opacity: surfMediumOpacity});
                             }
                         }
                         else if (key == "single_residues") {
@@ -542,31 +514,31 @@ $('table#bss_table tbody').on('mouseover', 'tr', function () { // event listener
                                 // pass
                             }
                             else {
-                                proteinChains.forEach((element) => { // in case of multiple copies of protein of interest
-                                    for (const clickedRes of clickedBindingRess) {
-                                        let ResKey = element + "_" + clickedRes; // create a key for the residue
-                                        if (surfsDict[activeModel]["single_residues"][CurrentDisplayedSite].hasOwnProperty(ResKey)) {
-                                            var surfObject = surfsDict[activeModel]["single_residues"][CurrentDisplayedSite][ResKey];
-                                            viewer.setSurfaceMaterialStyle(surfObject.surfid, {color: siteColor, opacity: surfHighOpacity});
-                                        }
-                                        else { // need to create surfaces because they were not created before since site was already clicked
-                                            let surfSel = {model: activeModel, resi: Up2PdbMapAssembly[chainsMapAssembly[element]][clickedRes], chain: element};
-                                            let SitePDBResNums = seg_ress_dict[CurrentDisplayedSite]
-                                                .filter(el => Up2PdbMapAssembly[chainsMapAssembly[element]].hasOwnProperty(el))
-                                                .map(el => Up2PdbMapAssembly[chainsMapAssembly[element]][el]);
-                                            let SiteSel = {model: activeModel, chain: element, resi: SitePDBResNums};
-                                            surfsDict[activeModel]["single_residues"][CurrentDisplayedSite][ResKey] = viewer.addSurface(
-                                                $3Dmol.SurfaceType.ISO,
-                                                {
-                                                    color: siteColor,
-                                                    opacity: surfHighOpacity,
-                                                },
-                                                surfSel,
-                                                SiteSel,
-                                            );    
-                                        }
-                                    }
-                                });
+                                // proteinChains.forEach((element) => { // in case of multiple copies of protein of interest
+                                //     for (const clickedRes of clickedBindingRess) {
+                                //         let ResKey = element + "_" + clickedRes; // create a key for the residue
+                                //         if (surfsDict[activeModel]["single_residues"][CurrentDisplayedSite].hasOwnProperty(ResKey)) {
+                                //             var surfObject = surfsDict[activeModel]["single_residues"][CurrentDisplayedSite][ResKey];
+                                //             viewer.setSurfaceMaterialStyle(surfObject.surfid, {color: siteColor, opacity: surfHighOpacity});
+                                //         }
+                                //         else { // need to create surfaces because they were not created before since site was already clicked
+                                //             let surfSel = {model: activeModel, resi: Up2PdbMapAssembly[chainsMapAssembly[element]][clickedRes], chain: element};
+                                //             let SitePDBResNums = seg_ress_dict[CurrentDisplayedSite]
+                                //                 .filter(el => Up2PdbMapAssembly[chainsMapAssembly[element]].hasOwnProperty(el))
+                                //                 .map(el => Up2PdbMapAssembly[chainsMapAssembly[element]][el]);
+                                //             let SiteSel = {model: activeModel, chain: element, resi: SitePDBResNums};
+                                //             surfsDict[activeModel]["single_residues"][CurrentDisplayedSite][ResKey] = viewer.addSurface(
+                                //                 $3Dmol.SurfaceType.ISO,
+                                //                 {
+                                //                     color: siteColor,
+                                //                     opacity: surfHighOpacity,
+                                //                 },
+                                //                 surfSel,
+                                //                 SiteSel,
+                                //             );    
+                                //         }
+                                //     }
+                                // });
                             }
                         }
                         else {

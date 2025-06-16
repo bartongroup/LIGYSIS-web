@@ -353,14 +353,16 @@ async function selectOption(option) {
                     if (key == "lig_inters") {
                         //
                     }
-                    if (key !== "single_residues") { // hide all surfaces except single residuesAdd commentMore actions
+                    if (key !== "single_residues") {
                         for (const [key2, value2] of Object.entries(value)) {
                             viewer.setSurfaceMaterialStyle(value2.surfid, {opacity: surfHiddenOpacity});
                         }
                     }
                     else {
                         let currentSiteColor = chartColors[Number(CurrentDisplayedSite)];
-                        viewer.setSurfaceMaterialStyle(value.surfid, {color: currentSiteColor, opacity: surfHiddenOpacity}); // hiding surfaces of assembly single residues
+                        for (const [key2, value2] of Object.entries(value[CurrentDisplayedSite])) {
+                            viewer.setSurfaceMaterialStyle(value2.surfid, {color: currentSiteColor, opacity: surfHiddenOpacity}); // hiding surfaces of assembly single residues
+                        }
                     }
                 }
             }
