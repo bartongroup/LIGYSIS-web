@@ -8,9 +8,12 @@ from gevent.pywsgi import WSGIServer
 import os
 import re
 import io
+from io import StringIO
 import csv
+from Bio import AlignIO
 import math
 import pickle
+import scipy
 import uuid
 import zipfile
 import numpy as np
@@ -740,6 +743,199 @@ def serve_alignment(prot_id, seg_id, filename):
         return send_from_directory(ALIGNMENTS_FOLDER, filename)
     except FileNotFoundError:
         abort(404)
+
+@main.route('/alignments/fasta/<prot_id>/<seg_id>')
+def serve_fasta_alignment(prot_id, seg_id):
+    ALIGNMENTS_FOLDER = os.path.join(PROTS_FOLDER, prot_id, seg_id, "variants")
+    sto_filename = f'{prot_id}_{seg_id}_rf.sto'
+    sto_path = os.path.join(ALIGNMENTS_FOLDER, sto_filename)
+
+    if not os.path.exists(sto_path):
+        abort(404)
+
+    try:
+        # Read .sto alignment and convert to FASTA in memory
+        alignment = AlignIO.read(sto_path, "stockholm")
+        fasta_io = StringIO()
+        AlignIO.write(alignment, fasta_io, "fasta")
+        fasta_str = fasta_io.getvalue()
+    except Exception as e:
+        print(f"Error reading or converting alignment: {e}")
+        abort(500)
+
+    # Serve as downloadable file
+    fasta_filename = f"{prot_id}_{seg_id}.fasta"
+    return Response(
+        fasta_str,
+        mimetype='text/plain',
+        headers={"Content-Disposition": f"attachment;filename={fasta_filename}"}
+    )
+
+@main.route('/structures/<prot_id>/<seg_id>/<path:filename>')
+def serve_structure(prot_id, seg_id, filename):
+    STRUCTURES_FOLDER = os.path.join(PROTS_FOLDER, prot_id, seg_id, "trans")
+    try:
+        return send_from_directory(STRUCTURES_FOLDER, filename)
+    except FileNotFoundError:
+        abort(404)
+
+@main.route('/trees/<prot_id>/<seg_id>')
+def serve_newick_tree(prot_id, seg_id):
+    results_dir = os.path.join(PROTS_FOLDER, prot_id, seg_id, "results") 
+
+    try:
+        irel_matrix = pd.read_pickle(os.path.join(results_dir, f'{prot_id}_{seg_id}_ALL_inf_irel_matrix.pkl'))
+        fingerprints = pd.read_pickle(os.path.join(results_dir, f'{prot_id}_{seg_id}_ALL_inf_ligs_fingerprints.pkl'))
+    except FileNotFoundError:
+        abort(404)
+
+    try:
+        irel_df = pd.DataFrame(irel_matrix)
+        dist_df = 1 - irel_df
+        condensed_dist_mat = scipy.spatial.distance.squareform(dist_df)
+        linkage = scipy.cluster.hierarchy.linkage(condensed_dist_mat, method='average', optimal_ordering=True)
+
+        leaf_names = list(fingerprints.keys())
+        tree = scipy.cluster.hierarchy.to_tree(linkage, rd=False)
+        newick_str = get_newick(tree, tree.dist, leaf_names)
+    except  Exception as e:
+        abort(500)
+
+    return Response(
+        newick_str,
+        mimetype='text/plain',
+        headers={"Content-Disposition": f"attachment;filename={prot_id}_{seg_id}_LIG_CLUST.txt"}
+    )
+
+@main.route('/jvls/<prot_id>/<seg_id>')
+def serve_jalview_JVL(prot_id, seg_id):
+    try:
+        # Optional: validate existence of required files
+        results_dir = os.path.join(PROTS_FOLDER, prot_id, seg_id, "results")
+        _ = pd.read_pickle(os.path.join(results_dir, f"{prot_id}_{seg_id}_ALL_inf_results_table.pkl"))
+    except FileNotFoundError:
+        abort(404)
+
+    base_url = f"http://localhost:{port}{URL_PREFIX}" # TODO: THIS SHOULS NOT BE HARD CODED. JUST FOR DEV.
+
+    # Build JVL content
+    lines = [
+        "jalview.apparg=--open",
+        f"jalview.apparg={base_url}/alignments/fasta/{prot_id}/{seg_id}",
+        "jalview.apparg=--annotations",
+        f"jalview.apparg={base_url}/annotations/{prot_id}/{seg_id}/FINGERPRINT",
+        "jalview.apparg=--annotations",
+        f"jalview.apparg={base_url}/annotations/{prot_id}/{seg_id}/MES",
+        "jalview.apparg=--annotations",
+        f"jalview.apparg={base_url}/annotations/{prot_id}/{seg_id}/SHENKIN",
+        "jalview.apparg=--annotations",
+        f"jalview.apparg={base_url}/annotations/{prot_id}/{seg_id}/RSA",
+        "jalview.apparg=--colour",
+        "jalview.apparg=clustal",
+        "jalview.apparg=--tree",
+        f"jalview.apparg={base_url}/trees/{prot_id}/{seg_id}",
+        "jalview.apparg=--structure",
+        "jalview.apparg=6pel_A_trans.cif",  # Optional: make this dynamic if needed
+        "jalview.apparg=--seqid",
+        f"jalview.apparg={prot_id}_{seg_id}ln6_A",  # Optional: make dynamic if needed
+        "jalview.apparg=--structureviewer",
+        "jalview.apparg=chimerax"
+    ]
+
+    content = '\n'.join(lines)
+
+    filename = f"{prot_id}_{seg_id}.jvl"
+    return Response(
+        content,
+        mimetype='text/plain',
+        headers={"Content-Disposition": f"attachment;filename={filename}"}
+    )
+
+def get_newick(node, parent_dist, leaf_names, newick='') -> str:
+    """
+    Convert sciply.cluster.hierarchy.to_tree()-output to Newick format.
+
+    :param node: output of sciply.cluster.hierarchy.to_tree()
+    :param parent_dist: output of sciply.cluster.hierarchy.to_tree().dist
+    :param leaf_names: list of leaf names
+    :param newick: leave empty, this variable is used in recursion.
+    :returns: tree in Newick format
+    """
+    if node.is_leaf():
+        return "%s:%.2f%s" % (leaf_names[node.id], parent_dist - node.dist, newick)
+    else:
+        if len(newick) > 0:
+            newick = "):%.2f%s" % (parent_dist - node.dist, newick)
+        else:
+            newick = ");"
+        newick = get_newick(node.get_left(), node.dist, leaf_names, newick=newick)
+        newick = get_newick(node.get_right(), node.dist, leaf_names, newick=",%s" % (newick))
+        newick = "(%s" % (newick)
+        return newick
+
+def get_rsa_annotation_str(RSA):
+    output = StringIO()
+    output.write("JALVIEW_ANNOTATION\n")
+    stri = "BAR_GRAPH\tRSA\tRelative solvent accessibility (%)\t"
+    stri += ''.join(f'{float(el)},{float(el)},|' for el in RSA)
+    output.write(stri + '\n')
+    output.write("COLOUR\tRSA\t008000\n")
+    return output.getvalue()
+
+def get_mes_annotation_str(MES):
+    output = StringIO()
+    output.write("JALVIEW_ANNOTATION\n")
+    stri = "BAR_GRAPH\tMES\tMissense enrichment score (odds ratio)\t"
+    stri += ''.join(f'{round(float(el)-1, 2)},{float(el)},|' for el in MES)
+    output.write(stri + '\n')
+    output.write("GRAPHLINE\tMES\t0.0\tthreshold\tblack\n")
+    output.write("COLOUR\tMES\t1520A6\n")
+    return output.getvalue()
+
+def get_shenkin_annotation_str(shenkin):
+    output = StringIO()
+    output.write("JALVIEW_ANNOTATION\n")
+    stri = "BAR_GRAPH\tEvolutionary Divergence\tEvolutionary divergence, calculated with normalised Shenkin divergence score\t"
+    stri += ''.join(f'{float(el)},{float(el)},|' for el in shenkin)
+    output.write(stri + '\n')
+    output.write("COLOUR\tEvolutionary Divergence\t800000\n")
+    return output.getvalue()
+
+def get_fingerprint_annotation_str(binary_labs):
+    output = StringIO()
+    output.write("JALVIEW_ANNOTATION\n")
+    stri = "BAR_GRAPH\tLigand fingerprint\tLigand Binding Fingerprint\t"
+    stri += ''.join(f'{float(el)},{float(el)},|' for el in binary_labs)
+    output.write(stri + '\n')
+    output.write("COLOUR\tLigand fingerprint\t000000\n")
+    return output.getvalue()
+
+@main.route('/annotations/<prot_id>/<seg_id>/<ann_type>')
+def serve_annotation(prot_id, seg_id, ann_type):
+    results_dir = os.path.join(PROTS_FOLDER, prot_id, seg_id, "results")    
+    try:
+        df = pd.read_pickle(os.path.join(results_dir, f"{prot_id}_{seg_id}_ALL_inf_results_table.pkl"))
+        df['binds_ligand'] = df['binding_sites'].notna().astype(int)
+    except FileNotFoundError:
+        abort(404)
+
+    if ann_type == "RSA":
+        content = get_rsa_annotation_str(df["RSA"].tolist())
+    elif ann_type == "MES":
+        content = get_mes_annotation_str(df["oddsratio"].tolist())
+    elif ann_type == "SHENKIN":
+        content = get_shenkin_annotation_str(df["abs_norm_shenkin"].tolist())
+    elif ann_type == "FINGERPRINT":
+        content = get_fingerprint_annotation_str(df["binds_ligand"].tolist())
+    else:
+        abort(404)
+
+    filename = f"{prot_id}_{seg_id}_{ann_type}.txt"
+    return Response(
+        content,
+        mimetype='text/plain',
+        headers={"Content-Disposition": f"attachment;filename={filename}"}
+    )
 
 @main.route('/get-table', methods=['POST'])
 def get_table(): # route to get binding site residues for a given binding site
@@ -2710,6 +2906,7 @@ def user_download_all_structures_PyMol(): # route to download PyMol scripts to v
         as_attachment=True,
         download_name=f'{job_id}_all_structures_PyMol.zip'
     )
+
 # Register blueprint
 app.register_blueprint(main)
 
@@ -2717,6 +2914,7 @@ app.register_blueprint(main)
 
 if __name__ == "__main__":
     port = int(os.environ.get('PORT', 9000))
+    # print(f'http://localhost:{port}{URL_PREFIX}')
     app.run(port=port, debug=True)  # run Flask LIGYSIS app on the specified port
 
 # the end
