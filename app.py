@@ -873,60 +873,128 @@ def get_newick(node, parent_dist, leaf_names, newick='') -> str:
         newick = "(%s" % (newick)
         return newick
 
-def get_rsa_annotation_str(RSA):
+# def get_rsa_annotation_str(RSA):
+#     output = StringIO()
+#     output.write("JALVIEW_ANNOTATION\n")
+#     stri = "BAR_GRAPH\tRSA\tRelative solvent accessibility (%)\t"
+#     stri += ''.join(f'{float(el)},{float(el)},|' for el in RSA)
+#     output.write(stri + '\n')
+#     output.write("COLOUR\tRSA\t008000\n")
+#     return output.getvalue()
+
+# def get_mes_annotation_str(MES):
+#     output = StringIO()
+#     output.write("JALVIEW_ANNOTATION\n")
+#     stri = "BAR_GRAPH\tMES\tMissense enrichment score (odds ratio)\t"
+#     stri += ''.join(f'{round(float(el)-1, 2)},{float(el)},|' for el in MES)
+#     output.write(stri + '\n')
+#     output.write("GRAPHLINE\tMES\t0.0\tthreshold\tblack\n")
+#     output.write("COLOUR\tMES\t1520A6\n")
+#     return output.getvalue()
+
+# def get_shenkin_annotation_str(shenkin):
+#     output = StringIO()
+#     output.write("JALVIEW_ANNOTATION\n")
+#     stri = "BAR_GRAPH\tEvolutionary Divergence\tEvolutionary divergence, calculated with normalised Shenkin divergence score\t"
+#     stri += ''.join(f'{float(el)},{float(el)},|' for el in shenkin)
+#     output.write(stri + '\n')
+#     output.write("COLOUR\tEvolutionary Divergence\t800000\n")
+#     return output.getvalue()
+
+# def get_fingerprint_annotation_str(binary_labs):
+#     output = StringIO()
+#     output.write("JALVIEW_ANNOTATION\n")
+#     stri = "BAR_GRAPH\tLigand fingerprint\tLigand Binding Fingerprint\t"
+#     stri += ''.join(f'{float(el)},{float(el)},|' for el in binary_labs)
+#     output.write(stri + '\n')
+#     output.write("COLOUR\tLigand fingerprint\t000000\n")
+#     return output.getvalue()
+
+def get_n_columns(msa_path, msa_fmt = "stockholm"):
+    MSA = AlignIO.read(msa_path, msa_fmt)
+    n_cols = MSA.get_alignment_length()
+    return n_cols
+
+def get_rsa_annotation_str(RSA, col_idx, n_cols):
     output = StringIO()
     output.write("JALVIEW_ANNOTATION\n")
     stri = "BAR_GRAPH\tRSA\tRelative solvent accessibility (%)\t"
-    stri += ''.join(f'{float(el)},{float(el)},|' for el in RSA)
+    for i in range(1, n_cols + 1):
+        if i in col_idx:
+            el = RSA[col_idx.index(i)]
+            stri += f'{float(el)},{float(el)},|'
+        else:
+            stri += '|'
     output.write(stri + '\n')
     output.write("COLOUR\tRSA\t008000\n")
     return output.getvalue()
 
-def get_mes_annotation_str(MES):
+def get_mes_annotation_str(MES, col_idx, n_cols):
     output = StringIO()
     output.write("JALVIEW_ANNOTATION\n")
     stri = "BAR_GRAPH\tMES\tMissense enrichment score (odds ratio)\t"
-    stri += ''.join(f'{round(float(el)-1, 2)},{float(el)},|' for el in MES)
+    for i in range(1, n_cols + 1):
+        if i in col_idx:
+            el = MES[col_idx.index(i)]
+            stri += f'{round(float(el)-1, 2)},{float(el)},|'
+        else:
+            stri += '|'
     output.write(stri + '\n')
     output.write("GRAPHLINE\tMES\t0.0\tthreshold\tblack\n")
     output.write("COLOUR\tMES\t1520A6\n")
     return output.getvalue()
 
-def get_shenkin_annotation_str(shenkin):
+def get_shenkin_annotation_str(shenkin, col_idx, n_cols):
     output = StringIO()
     output.write("JALVIEW_ANNOTATION\n")
     stri = "BAR_GRAPH\tEvolutionary Divergence\tEvolutionary divergence, calculated with normalised Shenkin divergence score\t"
-    stri += ''.join(f'{float(el)},{float(el)},|' for el in shenkin)
+    for i in range(1, n_cols + 1):
+        if i in col_idx:
+            el = shenkin[col_idx.index(i)]
+            stri += f'{float(el)},{float(el)},|'
+        else:
+            stri += '|'
     output.write(stri + '\n')
     output.write("COLOUR\tEvolutionary Divergence\t800000\n")
     return output.getvalue()
 
-def get_fingerprint_annotation_str(binary_labs):
+def get_fingerprint_annotation_str(binary_labs, col_idx, n_cols):
     output = StringIO()
     output.write("JALVIEW_ANNOTATION\n")
     stri = "BAR_GRAPH\tLigand fingerprint\tLigand Binding Fingerprint\t"
-    stri += ''.join(f'{float(el)},{float(el)},|' for el in binary_labs)
+    for i in range(1, n_cols + 1):
+        if i in col_idx:
+            el = binary_labs[col_idx.index(i)]
+            stri += f'{float(el)},{float(el)},|'
+        else:
+            stri += '|'
     output.write(stri + '\n')
     output.write("COLOUR\tLigand fingerprint\t000000\n")
     return output.getvalue()
 
 @main.route('/annotations/<prot_id>/<seg_id>/<ann_type>')
 def serve_annotation(prot_id, seg_id, ann_type):
-    results_dir = os.path.join(PROTS_FOLDER, prot_id, seg_id, "results")    
+    results_dir = os.path.join(PROTS_FOLDER, prot_id, seg_id, "results")
+    variants_dir = os.path.join(PROTS_FOLDER, prot_id, seg_id, "variants")   
+    msa_path = os.path.join(variants_dir, f"{prot_id}_{seg_id}_rf.sto")
     try:
         df = pd.read_pickle(os.path.join(results_dir, f"{prot_id}_{seg_id}_ALL_inf_results_table.pkl"))
         df['binds_ligand'] = df['binding_sites'].notna().astype(int)
+
+        n_MSA_cols = get_n_columns(msa_path)
     except FileNotFoundError:
         abort(404)
 
+    col_idx = df.alignment_column.tolist()
+
     if ann_type == "RSA":
-        content = get_rsa_annotation_str(df["RSA"].tolist())
+        content = get_rsa_annotation_str(df["RSA"].tolist(), col_idx, n_MSA_cols)
     elif ann_type == "MES":
-        content = get_mes_annotation_str(df["oddsratio"].tolist())
+        content = get_mes_annotation_str(df["oddsratio"].tolist(), col_idx, n_MSA_cols)
     elif ann_type == "SHENKIN":
-        content = get_shenkin_annotation_str(df["abs_norm_shenkin"].tolist())
+        content = get_shenkin_annotation_str(df["abs_norm_shenkin"].tolist(), col_idx, n_MSA_cols)
     elif ann_type == "FINGERPRINT":
-        content = get_fingerprint_annotation_str(df["binds_ligand"].tolist())
+        content = get_fingerprint_annotation_str(df["binds_ligand"].tolist(), col_idx, n_MSA_cols)
     else:
         abort(404)
 
