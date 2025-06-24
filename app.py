@@ -736,6 +736,22 @@ def serve_assembly(filename):
     except FileNotFoundError:
         abort(404)
 
+@main.route('/single_chains/full/<prot_id>/<seg_id>/<path:filename>')
+def serve_single_chain_full(prot_id, seg_id, filename):
+    SINGLE_CHAIN_FOLDER_FULL = os.path.join(PROTS_FOLDER, prot_id, seg_id, "trans")
+    try:
+        return send_from_directory(SINGLE_CHAIN_FOLDER_FULL, filename)
+    except FileNotFoundError:
+        abort(404)
+
+@main.route('/single_chains/simple/<prot_id>/<seg_id>/<path:filename>')
+def serve_single_chain_simple(prot_id, seg_id, filename):
+    SINGLE_CHAIN_FOLDER_SIMPLE = os.path.join(PROTS_FOLDER, prot_id, seg_id, "simple")
+    try:
+        return send_from_directory(SINGLE_CHAIN_FOLDER_SIMPLE, filename)
+    except FileNotFoundError:
+        abort(404)
+
 @main.route('/alignments/<prot_id>/<seg_id>/<path:filename>')
 def serve_alignment(prot_id, seg_id, filename):
     ALIGNMENTS_FOLDER = os.path.join(PROTS_FOLDER, prot_id, seg_id, "variants")
@@ -809,17 +825,20 @@ def serve_newick_tree(prot_id, seg_id):
 
 @main.route('/jvls/<prot_id>/<seg_id>')
 def serve_jalview_JVL(prot_id, seg_id):
-    try:
-        # Optional: validate existence of required files
-        results_dir = os.path.join(PROTS_FOLDER, prot_id, seg_id, "results")
-        _ = pd.read_pickle(os.path.join(results_dir, f"{prot_id}_{seg_id}_ALL_inf_results_table.pkl"))
-    except FileNotFoundError:
-        abort(404)
+    # results_dir = os.path.join(PROTS_FOLDER, prot_id, seg_id, "results")
+    # try:
+    #     # Optional: validate existence of required files
+    #     _ = pd.read_pickle(os.path.join(results_dir, f"{prot_id}_{seg_id}_ALL_inf_results_table.pkl"))
+    # except FileNotFoundError:
+    #     abort(404)
+
+    trans_dir = os.path.join(PROTS_FOLDER, prot_id, seg_id, "trans")
+    trans_dir_files = [f for f in os.listdir(trans_dir) if f.endswith('.cif')]
 
     base_url = f"http://localhost:{port}{URL_PREFIX}" # TODO: THIS SHOULS NOT BE HARD CODED. JUST FOR DEV.
 
     # Build JVL content
-    lines = [
+    sequence_lines = [
         "jalview.apparg=--open",
         f"jalview.apparg={base_url}/alignments/fasta/{prot_id}/{seg_id}",
         "jalview.apparg=--annotations",
@@ -833,16 +852,30 @@ def serve_jalview_JVL(prot_id, seg_id):
         "jalview.apparg=--colour",
         "jalview.apparg=clustal",
         "jalview.apparg=--tree",
-        f"jalview.apparg={base_url}/trees/{prot_id}/{seg_id}",
-        "jalview.apparg=--structure",
-        "jalview.apparg=6pel_A_trans.cif",  # Optional: make this dynamic if needed
-        "jalview.apparg=--seqid",
-        f"jalview.apparg={prot_id}_{seg_id}ln6_A",  # Optional: make dynamic if needed
-        "jalview.apparg=--structureviewer",
-        "jalview.apparg=chimerax"
+        f"jalview.apparg={base_url}/trees/{prot_id}/{seg_id}"
     ]
 
-    content = '\n'.join(lines)
+    structure_lines = []
+
+    struc_line = "jalview.apparg=--structure"
+    seqid_line = "jalview.apparg=--seqid"
+    for trans_file in trans_dir_files:
+        structure_lines.extend([
+            struc_line,
+            f'jalview.apparg={base_url}/single_chains/full/{prot_id}/{seg_id}/{trans_file}',
+            seqid_line,
+            f"jalview.apparg=sp|P02699|OPSD_BOVIN/1-348",  # Optional: make dynamic if needed
+            "jalview.apparg=--structureviewer",
+            "jalview.apparg=chimerax"
+        ])
+    # structure_lines.extend([
+    #     "jalview.apparg=--structureviewer",
+    #     "jalview.apparg=chimerax"
+    # ])
+
+    all_lines = sequence_lines + structure_lines
+
+    content = '\n'.join(all_lines)
 
     filename = f"{prot_id}_{seg_id}.jvl"
     return Response(
@@ -872,43 +905,6 @@ def get_newick(node, parent_dist, leaf_names, newick='') -> str:
         newick = get_newick(node.get_right(), node.dist, leaf_names, newick=",%s" % (newick))
         newick = "(%s" % (newick)
         return newick
-
-# def get_rsa_annotation_str(RSA):
-#     output = StringIO()
-#     output.write("JALVIEW_ANNOTATION\n")
-#     stri = "BAR_GRAPH\tRSA\tRelative solvent accessibility (%)\t"
-#     stri += ''.join(f'{float(el)},{float(el)},|' for el in RSA)
-#     output.write(stri + '\n')
-#     output.write("COLOUR\tRSA\t008000\n")
-#     return output.getvalue()
-
-# def get_mes_annotation_str(MES):
-#     output = StringIO()
-#     output.write("JALVIEW_ANNOTATION\n")
-#     stri = "BAR_GRAPH\tMES\tMissense enrichment score (odds ratio)\t"
-#     stri += ''.join(f'{round(float(el)-1, 2)},{float(el)},|' for el in MES)
-#     output.write(stri + '\n')
-#     output.write("GRAPHLINE\tMES\t0.0\tthreshold\tblack\n")
-#     output.write("COLOUR\tMES\t1520A6\n")
-#     return output.getvalue()
-
-# def get_shenkin_annotation_str(shenkin):
-#     output = StringIO()
-#     output.write("JALVIEW_ANNOTATION\n")
-#     stri = "BAR_GRAPH\tEvolutionary Divergence\tEvolutionary divergence, calculated with normalised Shenkin divergence score\t"
-#     stri += ''.join(f'{float(el)},{float(el)},|' for el in shenkin)
-#     output.write(stri + '\n')
-#     output.write("COLOUR\tEvolutionary Divergence\t800000\n")
-#     return output.getvalue()
-
-# def get_fingerprint_annotation_str(binary_labs):
-#     output = StringIO()
-#     output.write("JALVIEW_ANNOTATION\n")
-#     stri = "BAR_GRAPH\tLigand fingerprint\tLigand Binding Fingerprint\t"
-#     stri += ''.join(f'{float(el)},{float(el)},|' for el in binary_labs)
-#     output.write(stri + '\n')
-#     output.write("COLOUR\tLigand fingerprint\t000000\n")
-#     return output.getvalue()
 
 def get_n_columns(msa_path, msa_fmt = "stockholm"):
     MSA = AlignIO.read(msa_path, msa_fmt)
