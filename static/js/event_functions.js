@@ -202,19 +202,45 @@ function spinViewer() {
     }
 }
 
+function setElementDisplay(id, display) {
+    const element = document.getElementById(id);
+    if (element) {
+        element.style.display = display;
+    }
+}
+
+function toggleElementDisplay(id, visibleDisplay = 'flex') {
+    const element = document.getElementById(id);
+    if (element) {
+        element.style.display = element.style.display === 'none' ? visibleDisplay : 'none';
+    }
+}
+
 function toggleSpinner1() {
-    spinner1.style.display = spinner1.style.display === 'none' ? 'flex' : 'none';
-    spinnerImage1.style.display = spinnerImage1.style.display === 'none' ? 'flex' : 'none';
+    toggleElementDisplay('spinner1');
+    toggleElementDisplay('spinnerImage1');
+}
+
+function hideSpinner2() {
+    setElementDisplay('spinner2', 'none');
+    setElementDisplay('spinnerImage2', 'none');
+    setElementDisplay('overlay2', 'none');
 }
 
 function toggleSpinner2() {
-    spinner2.style.display = spinner2.style.display === 'none' ? 'flex' : 'none';
-    spinnerImage2.style.display = spinnerImage2.style.display === 'none' ? 'flex' : 'none';
-    overlay2.style.display = overlay2.style.display === 'none' ? 'flex' : 'none';    
+    toggleElementDisplay('spinner2');
+    toggleElementDisplay('spinnerImage2');
+    toggleElementDisplay('overlay2');
+}
+
+function hideSpinner3() {
+    setElementDisplay('spinner3', 'none');
+    setElementDisplay('spinnerImage3', 'none');
+    setElementDisplay('overlay3', 'none');
 }
 
 function toggleSpinner3() {
-    spinner3.style.display = spinner3.style.display === 'none' ? 'flex' : 'none';
-    spinnerImage3.style.display = spinnerImage3.style.display === 'none' ? 'flex' : 'none';
-    overlay3.style.display = overlay3.style.display === 'none' ? 'flex' : 'none';    
+    toggleElementDisplay('spinner3');
+    toggleElementDisplay('spinnerImage3');
+    toggleElementDisplay('overlay3');
 }

@@ -209,10 +209,9 @@ let chartConfig = {
     plugins: [chartAreaBorder, {
         id: 'afterRenderPlugin',
         afterRender: function(chart, args, options) {
-            // Call toggleSpinner2 only on the initial render
             if (isInitialRender2) {
-                toggleSpinner2();
-                isInitialRender2 = false; // Set flag to false after first render
+                hideSpinner2();
+                isInitialRender2 = false;
             }
         }
     }],
@@ -363,10 +362,9 @@ let newChartConfig = { // configuration for the new chart
     plugins: [chartAreaBorder, {
         id: 'afterRenderPlugin',
         afterRender: function(chart, args, options) {
-            // Call toggleSpinner2 only on the initial render
             if (isInitialRender3) {
-                toggleSpinner3();
-                isInitialRender3 = false; // Set flag to false after first render
+                hideSpinner3();
+                isInitialRender3 = false;
             }
         }
     }],
